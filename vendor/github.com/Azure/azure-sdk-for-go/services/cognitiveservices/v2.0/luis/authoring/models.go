@@ -25,6 +25,9 @@ import (
 	"io"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/luis/authoring"
+
 // OperationStatusType enumerates the values for operation status type.
 type OperationStatusType string
 
@@ -469,8 +472,6 @@ type ApplicationPublishObject struct {
 	VersionID *string `json:"versionId,omitempty"`
 	// IsStaging - Indicates if the staging slot should be used, instead of the Production one.
 	IsStaging *bool `json:"isStaging,omitempty"`
-	// Region - The target region that the application is published to.
-	Region *string `json:"region,omitempty"`
 }
 
 // ApplicationSettings the application settings.
@@ -496,6 +497,14 @@ type ApplicationUpdateObject struct {
 	Description *string `json:"description,omitempty"`
 }
 
+// AppVersionSettingObject object model of an application version setting.
+type AppVersionSettingObject struct {
+	// Name - The application version setting name.
+	Name *string `json:"name,omitempty"`
+	// Value - The application version setting value.
+	Value *string `json:"value,omitempty"`
+}
+
 // AvailableCulture available culture for using in a new application.
 type AvailableCulture struct {
 	// Name - The language name.
@@ -512,6 +521,16 @@ type AvailablePrebuiltEntityModel struct {
 	Description *string `json:"description,omitempty"`
 	// Examples - Usage examples.
 	Examples *string `json:"examples,omitempty"`
+}
+
+// AzureAccountInfoObject defines the azure account information object.
+type AzureAccountInfoObject struct {
+	// AzureSubscriptionID - The id for the azure subscription.
+	AzureSubscriptionID *string `json:"azureSubscriptionId,omitempty"`
+	// ResourceGroup - The azure resource group name.
+	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	// AccountName - The azure account name.
+	AccountName *string `json:"accountName,omitempty"`
 }
 
 // BatchLabelExample response when adding a batch of labeled examples.
@@ -642,6 +661,8 @@ type EndpointInfo struct {
 	AssignedEndpointKey *string `json:"assignedEndpointKey,omitempty"`
 	// EndpointRegion - The endpoint's region.
 	EndpointRegion *string `json:"endpointRegion,omitempty"`
+	// FailedRegions - Regions where publishing failed.
+	FailedRegions *string `json:"failedRegions,omitempty"`
 	// PublishedDateTime - Timestamp when was last published.
 	PublishedDateTime *string `json:"publishedDateTime,omitempty"`
 }
@@ -770,13 +791,49 @@ func (er ErrorResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for ErrorResponse struct.
+func (er *ErrorResponse) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if er.AdditionalProperties == nil {
+					er.AdditionalProperties = make(map[string]interface{})
+				}
+				er.AdditionalProperties[k] = additionalProperties
+			}
+		case "errorType":
+			if v != nil {
+				var errorType string
+				err = json.Unmarshal(*v, &errorType)
+				if err != nil {
+					return err
+				}
+				er.ErrorType = &errorType
+			}
+		}
+	}
+
+	return nil
+}
+
 // ExampleLabelObject a labeled example.
 type ExampleLabelObject struct {
 	// Text - The sample's utterance.
 	Text *string `json:"text,omitempty"`
-	// EntityLabels - The idenfied entities within the utterance.
+	// EntityLabels - The identified entities within the utterance.
 	EntityLabels *[]EntityLabelObject `json:"entityLabels,omitempty"`
-	// IntentName - The idenfitied intent representing the utterance.
+	// IntentName - The identified intent representing the utterance.
 	IntentName *string `json:"intentName,omitempty"`
 }
 
@@ -999,6 +1056,12 @@ type ListApplicationInfoResponse struct {
 	Value             *[]ApplicationInfoResponse `json:"value,omitempty"`
 }
 
+// ListAppVersionSettingObject ...
+type ListAppVersionSettingObject struct {
+	autorest.Response `json:"-"`
+	Value             *[]AppVersionSettingObject `json:"value,omitempty"`
+}
+
 // ListAvailableCulture ...
 type ListAvailableCulture struct {
 	autorest.Response `json:"-"`
@@ -1009,6 +1072,12 @@ type ListAvailableCulture struct {
 type ListAvailablePrebuiltEntityModel struct {
 	autorest.Response `json:"-"`
 	Value             *[]AvailablePrebuiltEntityModel `json:"value,omitempty"`
+}
+
+// ListAzureAccountInfoObject ...
+type ListAzureAccountInfoObject struct {
+	autorest.Response `json:"-"`
+	Value             *[]AzureAccountInfoObject `json:"value,omitempty"`
 }
 
 // ListBatchLabelExample ...
@@ -1246,6 +1315,168 @@ func (la LuisApp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for LuisApp struct.
+func (la *LuisApp) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if la.AdditionalProperties == nil {
+					la.AdditionalProperties = make(map[string]interface{})
+				}
+				la.AdditionalProperties[k] = additionalProperties
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				la.Name = &name
+			}
+		case "versionId":
+			if v != nil {
+				var versionID string
+				err = json.Unmarshal(*v, &versionID)
+				if err != nil {
+					return err
+				}
+				la.VersionID = &versionID
+			}
+		case "desc":
+			if v != nil {
+				var desc string
+				err = json.Unmarshal(*v, &desc)
+				if err != nil {
+					return err
+				}
+				la.Desc = &desc
+			}
+		case "culture":
+			if v != nil {
+				var culture string
+				err = json.Unmarshal(*v, &culture)
+				if err != nil {
+					return err
+				}
+				la.Culture = &culture
+			}
+		case "intents":
+			if v != nil {
+				var intents []HierarchicalModel
+				err = json.Unmarshal(*v, &intents)
+				if err != nil {
+					return err
+				}
+				la.Intents = &intents
+			}
+		case "entities":
+			if v != nil {
+				var entities []HierarchicalModel
+				err = json.Unmarshal(*v, &entities)
+				if err != nil {
+					return err
+				}
+				la.Entities = &entities
+			}
+		case "closedLists":
+			if v != nil {
+				var closedLists []ClosedList
+				err = json.Unmarshal(*v, &closedLists)
+				if err != nil {
+					return err
+				}
+				la.ClosedLists = &closedLists
+			}
+		case "composites":
+			if v != nil {
+				var composites []HierarchicalModel
+				err = json.Unmarshal(*v, &composites)
+				if err != nil {
+					return err
+				}
+				la.Composites = &composites
+			}
+		case "patternAnyEntities":
+			if v != nil {
+				var patternAnyEntities []PatternAny
+				err = json.Unmarshal(*v, &patternAnyEntities)
+				if err != nil {
+					return err
+				}
+				la.PatternAnyEntities = &patternAnyEntities
+			}
+		case "regex_entities":
+			if v != nil {
+				var regexEntities []RegexEntity
+				err = json.Unmarshal(*v, &regexEntities)
+				if err != nil {
+					return err
+				}
+				la.RegexEntities = &regexEntities
+			}
+		case "prebuiltEntities":
+			if v != nil {
+				var prebuiltEntities []PrebuiltEntity
+				err = json.Unmarshal(*v, &prebuiltEntities)
+				if err != nil {
+					return err
+				}
+				la.PrebuiltEntities = &prebuiltEntities
+			}
+		case "regex_features":
+			if v != nil {
+				var regexFeatures []JSONRegexFeature
+				err = json.Unmarshal(*v, &regexFeatures)
+				if err != nil {
+					return err
+				}
+				la.RegexFeatures = &regexFeatures
+			}
+		case "model_features":
+			if v != nil {
+				var modelFeatures []JSONModelFeature
+				err = json.Unmarshal(*v, &modelFeatures)
+				if err != nil {
+					return err
+				}
+				la.ModelFeatures = &modelFeatures
+			}
+		case "patterns":
+			if v != nil {
+				var patterns []PatternRule
+				err = json.Unmarshal(*v, &patterns)
+				if err != nil {
+					return err
+				}
+				la.Patterns = &patterns
+			}
+		case "utterances":
+			if v != nil {
+				var utterances []JSONUtterance
+				err = json.Unmarshal(*v, &utterances)
+				if err != nil {
+					return err
+				}
+				la.Utterances = &utterances
+			}
+		}
+	}
+
+	return nil
+}
+
 // ModelCreateObject object model for creating a new entity extractor.
 type ModelCreateObject struct {
 	// Name - Name of the new entity extractor.
@@ -1435,8 +1666,8 @@ type PatternUpdateObject struct {
 	IsActive *bool `json:"isActive,omitempty"`
 }
 
-// PersonalAssistantsResponse response containing user's endpoint keys and the endpoint URLs of the prebuilt
-// Cortana applications.
+// PersonalAssistantsResponse response containing user's endpoint keys and the endpoint URLs of the
+// prebuilt Cortana applications.
 type PersonalAssistantsResponse struct {
 	autorest.Response `json:"-"`
 	EndpointKeys      *[]uuid.UUID       `json:"endpointKeys,omitempty"`
@@ -1502,14 +1733,15 @@ type PrebuiltDomain struct {
 	Entities    *[]PrebuiltDomainItem `json:"entities,omitempty"`
 }
 
-// PrebuiltDomainCreateBaseObject a model object containing the name of the custom prebuilt entity and the name of
-// the domain to which this model belongs.
+// PrebuiltDomainCreateBaseObject a model object containing the name of the custom prebuilt entity and the
+// name of the domain to which this model belongs.
 type PrebuiltDomainCreateBaseObject struct {
 	// DomainName - The domain name.
 	DomainName *string `json:"domainName,omitempty"`
 }
 
-// PrebuiltDomainCreateObject a prebuilt domain create object containing the name and culture of the domain.
+// PrebuiltDomainCreateObject a prebuilt domain create object containing the name and culture of the
+// domain.
 type PrebuiltDomainCreateObject struct {
 	// DomainName - The domain name.
 	DomainName *string `json:"domainName,omitempty"`
@@ -1524,8 +1756,8 @@ type PrebuiltDomainItem struct {
 	Examples    *string `json:"examples,omitempty"`
 }
 
-// PrebuiltDomainModelCreateObject a model object containing the name of the custom prebuilt intent or entity and
-// the name of the domain to which this model belongs.
+// PrebuiltDomainModelCreateObject a model object containing the name of the custom prebuilt intent or
+// entity and the name of the domain to which this model belongs.
 type PrebuiltDomainModelCreateObject struct {
 	// DomainName - The domain name.
 	DomainName *string `json:"domainName,omitempty"`
@@ -1574,6 +1806,8 @@ type ProductionOrStagingEndpointInfo struct {
 	AssignedEndpointKey *string `json:"assignedEndpointKey,omitempty"`
 	// EndpointRegion - The endpoint's region.
 	EndpointRegion *string `json:"endpointRegion,omitempty"`
+	// FailedRegions - Regions where publishing failed.
+	FailedRegions *string `json:"failedRegions,omitempty"`
 	// PublishedDateTime - Timestamp when was last published.
 	PublishedDateTime *string `json:"publishedDateTime,omitempty"`
 }
@@ -1583,7 +1817,7 @@ type PublishSettings struct {
 	autorest.Response `json:"-"`
 	// ID - The application ID.
 	ID *uuid.UUID `json:"id,omitempty"`
-	// IsSentimentAnalysisEnabled - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the resopnse
+	// IsSentimentAnalysisEnabled - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the response
 	IsSentimentAnalysisEnabled *bool `json:"sentimentAnalysis,omitempty"`
 	// IsSpeechEnabled - Setting speech as public enables speech priming in your app
 	IsSpeechEnabled *bool `json:"speech,omitempty"`
@@ -1593,7 +1827,7 @@ type PublishSettings struct {
 
 // PublishSettingUpdateObject object model for updating an application's publish settings.
 type PublishSettingUpdateObject struct {
-	// SentimentAnalysis - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the resopnse
+	// SentimentAnalysis - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the response
 	SentimentAnalysis *bool `json:"sentimentAnalysis,omitempty"`
 	// Speech - Setting speech as public enables speech priming in your app
 	Speech *bool `json:"speech,omitempty"`
@@ -1764,7 +1998,9 @@ func (vi VersionInfo) MarshalJSON() ([]byte, error) {
 	if vi.AssignedEndpointKey != nil {
 		objectMap["assignedEndpointKey"] = vi.AssignedEndpointKey
 	}
-	objectMap["externalApiKeys"] = vi.ExternalAPIKeys
+	if vi.ExternalAPIKeys != nil {
+		objectMap["externalApiKeys"] = vi.ExternalAPIKeys
+	}
 	if vi.IntentsCount != nil {
 		objectMap["intentsCount"] = vi.IntentsCount
 	}

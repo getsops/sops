@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<p>Amazon Athena is an interactive query service that lets you use standard SQL to analyze data directly in Amazon S3. You can point Athena at your data in Amazon S3 and run ad-hoc queries and get results in seconds. Athena is serverless, so there is no infrastructure to set up or manage. You pay only for the queries you run. Athena scales automatically—executing queries in parallel—so results are fast, even with large datasets and complex queries. For more information, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/what-is.html\">What is Amazon Athena</a> in the <i>Amazon Athena User Guide</i>.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>",
+  "service": "<p>Amazon Athena is an interactive query service that lets you use standard SQL to analyze data directly in Amazon S3. You can point Athena at your data in Amazon S3 and run ad-hoc queries and get results in seconds. Athena is serverless, so there is no infrastructure to set up or manage. You pay only for the queries you run. Athena scales automatically—executing queries in parallel—so results are fast, even with large datasets and complex queries. For more information, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/what-is.html\">What is Amazon Athena</a> in the <i>Amazon Athena User Guide</i>.</p> <p>If you connect to Athena using the JDBC driver, use version 1.1.0 of the driver or later with the Amazon Athena API. Earlier version drivers do not support the API. For more information and to download the driver, see <a href=\"https://docs.aws.amazon.com/athena/latest/ug/connect-with-jdbc.html\">Accessing Amazon Athena with JDBC</a>.</p> <p>For code samples using the AWS SDK for Java, see <a href=\"https://docs.aws.amazon.com/athena/latest/ug/code-samples.html\">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>",
   "operations": {
     "BatchGetNamedQuery": "<p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>",
     "BatchGetQueryExecution": "<p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>",
@@ -50,7 +50,7 @@
     "ColumnInfoList": {
       "base": null,
       "refs": {
-        "ResultSetMetadata$ColumnInfo": "<p>Information about the columns in a query execution result.</p>"
+        "ResultSetMetadata$ColumnInfo": "<p>Information about the columns returned in a query result metadata.</p>"
       }
     },
     "ColumnNullable": {
@@ -108,9 +108,9 @@
       }
     },
     "EncryptionConfiguration": {
-      "base": "<p>If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption option used.</p>",
+      "base": "<p>If query results are encrypted in Amazon S3, indicates the encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code>) and key information.</p>",
       "refs": {
-        "ResultConfiguration$EncryptionConfiguration": "<p>If query results are encrypted in S3, indicates the S3 encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code> and key information.</p>"
+        "ResultConfiguration$EncryptionConfiguration": "<p>If query results are encrypted in Amazon S3, indicates the encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code>) and key information.</p>"
       }
     },
     "EncryptionOption": {
@@ -120,7 +120,7 @@
       }
     },
     "ErrorCode": {
-      "base": null,
+      "base": "<p>The error code returned when the query execution failed to process, or when the processing request for the named query failed.</p>",
       "refs": {
         "InvalidRequestException$AthenaErrorCode": null,
         "UnprocessedNamedQueryId$ErrorCode": "<p>The error code returned when the processing request for the named query failed, if applicable.</p>",
@@ -214,6 +214,7 @@
     "Long": {
       "base": null,
       "refs": {
+        "GetQueryResultsOutput$UpdateCount": "<p>The number of rows inserted with a CREATE TABLE AS SELECT statement. </p>",
         "QueryExecutionStatistics$EngineExecutionTimeInMillis": "<p>The number of milliseconds that the query took to execute.</p>",
         "QueryExecutionStatistics$DataScannedInBytes": "<p>The number of bytes in the data that was queried.</p>"
       }
@@ -316,13 +317,13 @@
     "QueryExecutionState": {
       "base": null,
       "refs": {
-        "QueryExecutionStatus$State": "<p>The state of query execution. <code>SUBMITTED</code> indicates that the query is queued for execution. <code>RUNNING</code> indicates that the query is scanning data and returning results. <code>SUCCEEDED</code> indicates that the query completed without error. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that user input interrupted query execution.</p>"
+        "QueryExecutionStatus$State": "<p>The state of query execution. <code>QUEUED</code> state is listed but is not used by Athena and is reserved for future use. <code>RUNNING</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>SUCCEEDED</code> indicates that the query completed without error. <code>FAILED</code> indicates that the query experienced an error and did not complete processing.<code>CANCELLED</code> indicates that user input interrupted query execution. </p>"
       }
     },
     "QueryExecutionStatistics": {
-      "base": "<p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>",
+      "base": "<p>The amount of data scanned during the query execution and the amount of time that it took to execute, and the type of statement that was run.</p>",
       "refs": {
-        "QueryExecution$Statistics": "<p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>"
+        "QueryExecution$Statistics": "<p>The amount of data scanned during the query execution and the amount of time that it took to execute, and the type of statement that was run.</p>"
       }
     },
     "QueryExecutionStatus": {
@@ -354,7 +355,7 @@
       }
     },
     "ResultSetMetadata": {
-      "base": "<p>The metadata that describes the column structure and data types of a table of query results.</p>",
+      "base": "<p>The metadata that describes the column structure and data types of a table of query results. </p>",
       "refs": {
         "ResultSet$ResultSetMetadata": "<p>The metadata that describes the column structure and data types of a table of query results.</p>"
       }
@@ -381,6 +382,12 @@
       "refs": {
       }
     },
+    "StatementType": {
+      "base": null,
+      "refs": {
+        "QueryExecution$StatementType": "<p>The type of query statement that was run. <code>DDL</code> indicates DDL query statements. <code>DML</code> indicates DML (Data Manipulation Language) query statements, such as <code>CREATE TABLE AS SELECT</code>. <code>UTILITY</code> indicates query statements other than DDL and DML, such as <code>SHOW CREATE TABLE</code>, or <code>DESCRIBE &lt;table&gt;</code>.</p>"
+      }
+    },
     "StopQueryExecutionInput": {
       "base": null,
       "refs": {
@@ -402,11 +409,11 @@
         "ColumnInfo$Type": "<p>The data type of the column.</p>",
         "EncryptionConfiguration$KmsKey": "<p>For <code>SSE-KMS</code> and <code>CSE-KMS</code>, this is the KMS key ARN or ID.</p>",
         "QueryExecutionStatus$StateChangeReason": "<p>Further detail about the status of the query.</p>",
-        "ResultConfiguration$OutputLocation": "<p>The location in S3 where query results are stored.</p>"
+        "ResultConfiguration$OutputLocation": "<p>The location in Amazon S3 where your query results are stored, such as <code>s3://path/to/query/bucket/</code>. For more information, see <a href=\"http://docs.aws.amazon.com/athena/latest/ug/querying.html\">Queries and Query Result Files. </a> </p>"
       }
     },
     "ThrottleReason": {
-      "base": null,
+      "base": "<p>The reason for the query throttling, for example, when it exceeds the concurrent query limit.</p>",
       "refs": {
         "TooManyRequestsException$Reason": null
       }
@@ -423,7 +430,7 @@
       }
     },
     "TooManyRequestsException": {
-      "base": "<p>Indicates that the request was throttled.</p>",
+      "base": "<p>Indicates that the request was throttled and includes the reason for throttling, for example, the limit of concurrent queries has been exceeded.</p>",
       "refs": {
       }
     },

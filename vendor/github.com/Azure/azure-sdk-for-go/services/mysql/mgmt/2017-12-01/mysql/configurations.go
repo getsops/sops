@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) C
 // configurationName - the name of the server configuration.
 // parameters - the required parameters for updating a server configuration.
 func (client ConfigurationsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, configurationName string, parameters Configuration) (result ConfigurationsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, configurationName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "mysql.ConfigurationsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -97,10 +108,6 @@ func (client ConfigurationsClient) CreateOrUpdateSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -125,6 +132,16 @@ func (client ConfigurationsClient) CreateOrUpdateResponder(resp *http.Response) 
 // serverName - the name of the server.
 // configurationName - the name of the server configuration.
 func (client ConfigurationsClient) Get(ctx context.Context, resourceGroupName string, serverName string, configurationName string) (result Configuration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, configurationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "mysql.ConfigurationsClient", "Get", nil, "Failure preparing request")
@@ -194,6 +211,16 @@ func (client ConfigurationsClient) GetResponder(resp *http.Response) (result Con
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ConfigurationsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result ConfigurationListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "mysql.ConfigurationsClient", "ListByServer", nil, "Failure preparing request")

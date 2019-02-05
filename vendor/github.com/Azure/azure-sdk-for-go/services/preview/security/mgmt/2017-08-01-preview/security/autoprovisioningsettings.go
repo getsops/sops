@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewAutoProvisioningSettingsClientWithBaseURI(baseURI string, subscriptionID
 // settingName - auto provisioning setting key
 // setting - auto provisioning setting key
 func (client AutoProvisioningSettingsClient) Create(ctx context.Context, settingName string, setting AutoProvisioningSetting) (result AutoProvisioningSetting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoProvisioningSettingsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -118,6 +129,16 @@ func (client AutoProvisioningSettingsClient) CreateResponder(resp *http.Response
 // Parameters:
 // settingName - auto provisioning setting key
 func (client AutoProvisioningSettingsClient) Get(ctx context.Context, settingName string) (result AutoProvisioningSetting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoProvisioningSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -187,6 +208,16 @@ func (client AutoProvisioningSettingsClient) GetResponder(resp *http.Response) (
 
 // List exposes the auto provisioning settings of the subscriptions
 func (client AutoProvisioningSettingsClient) List(ctx context.Context) (result AutoProvisioningSettingListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoProvisioningSettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.apsl.Response.Response != nil {
+				sc = result.apsl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -255,8 +286,8 @@ func (client AutoProvisioningSettingsClient) ListResponder(resp *http.Response) 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AutoProvisioningSettingsClient) listNextResults(lastResults AutoProvisioningSettingList) (result AutoProvisioningSettingList, err error) {
-	req, err := lastResults.autoProvisioningSettingListPreparer()
+func (client AutoProvisioningSettingsClient) listNextResults(ctx context.Context, lastResults AutoProvisioningSettingList) (result AutoProvisioningSettingList, err error) {
+	req, err := lastResults.autoProvisioningSettingListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.AutoProvisioningSettingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -277,6 +308,16 @@ func (client AutoProvisioningSettingsClient) listNextResults(lastResults AutoPro
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AutoProvisioningSettingsClient) ListComplete(ctx context.Context) (result AutoProvisioningSettingListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoProvisioningSettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

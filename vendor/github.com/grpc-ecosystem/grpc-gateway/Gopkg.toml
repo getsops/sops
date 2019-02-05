@@ -1,0 +1,66 @@
+required = [
+  "github.com/golang/protobuf/protoc-gen-go",
+]
+
+[prune]
+  go-tests = true
+  unused-packages = true
+
+# Constrained versions that are defined in WORKSPACE are at the top
+
+[[constraint]]
+  # Also defined in WORKSPACE
+  revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
+  name = "github.com/ghodss/yaml"
+
+[[constraint]]
+  # Also defined in WORKSPACE
+  revision = "f8815663de1e64d57cdd4ee9e2b2fa96977a030e"
+  name = "github.com/go-resty/resty"
+
+[[constraint]]
+  # Also defined in WORKSPACE
+  revision = "6724a57986aff9bff1a1770e9347036def7c89f6"
+  name = "github.com/rogpeppe/fastuuid"
+
+[[constraint]]
+  # Also defined in WORKSPACE
+  revision = "383e8b2c3b9e36c4076b235b32537292176bae20"
+  name = "google.golang.org/genproto"
+
+[[override]]
+  # Also defined in WORKSPACE
+  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+  name = "gopkg.in/yaml.v2"
+
+# These versions are constrained transitively by bazelbuild/rules_go
+
+[[constraint]]
+  # Also defined in bazelbuild/rules_go
+  # https://github.com/bazelbuild/rules_go/blob/109c520465fcb418f2c4be967f3744d959ad66d3/go/private/repositories.bzl#L52
+  revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
+  name = "github.com/golang/protobuf"
+
+[[constraint]]
+  # Also defined in bazelbuild/rules_go
+  # https://github.com/bazelbuild/rules_go/blob/109c520465fcb418f2c4be967f3744d959ad66d3/go/private/repositories.bzl#L96
+  revision = "4dfa2610cdf3b287375bbba5b8f2a14d3b01d8de"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  # Also defined in bazelbuild/rules_go
+  # https://github.com/bazelbuild/rules_go/blob/109c520465fcb418f2c4be967f3744d959ad66d3/go/private/repositories.bzl#L123
+  version = "1.15.0"
+  name = "google.golang.org/grpc"
+
+[[constraint]]
+  # Also defined in bazelbuild/rules_go
+  # https://github.com/bazelbuild/rules_go/blob/109c520465fcb418f2c4be967f3744d959ad66d3/go/private/repositories.bzl#L160
+  revision = "23def4e6c14b4da8ac2ed8007337bc5eb5007998"
+  name = "github.com/golang/glog"
+
+[[override]]
+  # Also defined in bazelbuild/rules_go
+  # https://github.com/bazelbuild/rules_go/blob/109c520465fcb418f2c4be967f3744d959ad66d3/go/private/repositories.bzl#L117
+  version = "0.3.0"
+  name = "golang.org/x/text"

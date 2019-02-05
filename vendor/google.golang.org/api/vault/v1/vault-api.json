@@ -890,11 +890,141 @@
               }
             }
           }
+        },
+        "savedQueries": {
+          "methods": {
+            "create": {
+              "description": "Creates a saved query.",
+              "flatPath": "v1/matters/{matterId}/savedQueries",
+              "httpMethod": "POST",
+              "id": "vault.matters.savedQueries.create",
+              "parameterOrder": [
+                "matterId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved query is to be\ncreated.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries",
+              "request": {
+                "$ref": "SavedQuery"
+              },
+              "response": {
+                "$ref": "SavedQuery"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery"
+              ]
+            },
+            "delete": {
+              "description": "Deletes a saved query by Id.",
+              "flatPath": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "httpMethod": "DELETE",
+              "id": "vault.matters.savedQueries.delete",
+              "parameterOrder": [
+                "matterId",
+                "savedQueryId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved query is to be\ndeleted.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "savedQueryId": {
+                  "description": "Id of the saved query to be deleted.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "response": {
+                "$ref": "Empty"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery"
+              ]
+            },
+            "get": {
+              "description": "Retrieves a saved query by Id.",
+              "flatPath": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "httpMethod": "GET",
+              "id": "vault.matters.savedQueries.get",
+              "parameterOrder": [
+                "matterId",
+                "savedQueryId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved query is to be\nretrieved.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "savedQueryId": {
+                  "description": "Id of the saved query to be retrieved.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "response": {
+                "$ref": "SavedQuery"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery",
+                "https://www.googleapis.com/auth/ediscovery.readonly"
+              ]
+            },
+            "list": {
+              "description": "Lists saved queries within a matter. An empty page token in\nListSavedQueriesResponse denotes no more saved queries to list.",
+              "flatPath": "v1/matters/{matterId}/savedQueries",
+              "httpMethod": "GET",
+              "id": "vault.matters.savedQueries.list",
+              "parameterOrder": [
+                "matterId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved queries are to be\nretrieved.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "pageSize": {
+                  "description": "The maximum number of saved queries to return.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "The pagination token as returned in the previous response.\nAn empty token means start from the beginning.",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries",
+              "response": {
+                "$ref": "ListSavedQueriesResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery",
+                "https://www.googleapis.com/auth/ediscovery.readonly"
+              ]
+            }
+          }
         }
       }
     }
   },
-  "revision": "20180731",
+  "revision": "20181128",
   "rootUrl": "https://vault.googleapis.com/",
   "schemas": {
     "AccountInfo": {
@@ -1170,6 +1300,22 @@
         "mailOptions": {
           "$ref": "MailExportOptions",
           "description": "Option available for mail export."
+        },
+        "region": {
+          "description": "The requested export location.",
+          "enum": [
+            "EXPORT_REGION_UNSPECIFIED",
+            "ANY",
+            "US",
+            "EUROPE"
+          ],
+          "enumDescriptions": [
+            "The region is unspecified. Will be treated the same as ANY.",
+            "Any region.",
+            "US region.",
+            "Europe region."
+          ],
+          "type": "string"
         }
       },
       "type": "object"
@@ -1480,6 +1626,24 @@
       },
       "type": "object"
     },
+    "ListSavedQueriesResponse": {
+      "description": "Definition of the response for method ListSaveQuery.",
+      "id": "ListSavedQueriesResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Page token to retrieve the next page of results in the list.\nIf this is empty, then there are no more saved queries to list.",
+          "type": "string"
+        },
+        "savedQueries": {
+          "description": "List of output saved queries.",
+          "items": {
+            "$ref": "SavedQuery"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "MailExportOptions": {
       "description": "The options for mail export.",
       "id": "MailExportOptions",
@@ -1749,6 +1913,34 @@
         "matter": {
           "$ref": "Matter",
           "description": "The updated matter, with state OPEN."
+        }
+      },
+      "type": "object"
+    },
+    "SavedQuery": {
+      "description": "Definition of the saved query.",
+      "id": "SavedQuery",
+      "properties": {
+        "createTime": {
+          "description": "Output only. The server generated timestamp at which saved query was\ncreated.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "Name of the saved query.",
+          "type": "string"
+        },
+        "matterId": {
+          "description": "Output only. The matter id of the associated matter.\nThe server does not look at this field during create and always uses matter\nid in the URL.",
+          "type": "string"
+        },
+        "query": {
+          "$ref": "Query",
+          "description": "The underlying Query object which contains all the information of the saved\nquery."
+        },
+        "savedQueryId": {
+          "description": "A unique identifier for the saved query.",
+          "type": "string"
         }
       },
       "type": "object"

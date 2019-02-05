@@ -11,4 +11,4 @@ mockgen -package mocks google.golang.org/genproto/googleapis/devtools/cloudprofi
 
 Then re-add the copyright header in the file. You also need to either run the
 commands above using Golang 1.6 or manually change the "context" import to
-"golang.org/x/net/context" to ensure the compatibility with Go 1.6.
+"context" to ensure the compatibility with Go 1.6.

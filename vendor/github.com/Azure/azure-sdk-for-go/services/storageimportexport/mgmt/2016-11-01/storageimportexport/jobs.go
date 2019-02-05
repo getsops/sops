@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewJobsClientWithBaseURI(baseURI string, subscriptionID string, acceptLangu
 // body - the parameters used for creating the job
 // clientTenantID - the tenant ID of the client making the request.
 func (client JobsClient) Create(ctx context.Context, jobName string, resourceGroupName string, body PutJobParameters, clientTenantID string) (result JobResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.Properties", Name: validation.Null, Rule: false,
@@ -166,6 +177,16 @@ func (client JobsClient) CreateResponder(resp *http.Response) (result JobRespons
 // resourceGroupName - the resource group name uniquely identifies the resource group within the user
 // subscription.
 func (client JobsClient) Delete(ctx context.Context, jobName string, resourceGroupName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, jobName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storageimportexport.JobsClient", "Delete", nil, "Failure preparing request")
@@ -237,6 +258,16 @@ func (client JobsClient) DeleteResponder(resp *http.Response) (result autorest.R
 // resourceGroupName - the resource group name uniquely identifies the resource group within the user
 // subscription.
 func (client JobsClient) Get(ctx context.Context, jobName string, resourceGroupName string) (result JobResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, jobName, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storageimportexport.JobsClient", "Get", nil, "Failure preparing request")
@@ -310,6 +341,16 @@ func (client JobsClient) GetResponder(resp *http.Response) (result JobResponse, 
 // top - an integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
 // filter - can be used to restrict the results to certain conditions.
 func (client JobsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, top *int32, filter string) (result ListJobsResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.ljr.Response.Response != nil {
+				sc = result.ljr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, top, filter)
 	if err != nil {
@@ -383,8 +424,8 @@ func (client JobsClient) ListByResourceGroupResponder(resp *http.Response) (resu
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client JobsClient) listByResourceGroupNextResults(lastResults ListJobsResponse) (result ListJobsResponse, err error) {
-	req, err := lastResults.listJobsResponsePreparer()
+func (client JobsClient) listByResourceGroupNextResults(ctx context.Context, lastResults ListJobsResponse) (result ListJobsResponse, err error) {
+	req, err := lastResults.listJobsResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "storageimportexport.JobsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -405,6 +446,16 @@ func (client JobsClient) listByResourceGroupNextResults(lastResults ListJobsResp
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, top *int32, filter string) (result ListJobsResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, top, filter)
 	return
 }
@@ -414,6 +465,16 @@ func (client JobsClient) ListByResourceGroupComplete(ctx context.Context, resour
 // top - an integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
 // filter - can be used to restrict the results to certain conditions.
 func (client JobsClient) ListBySubscription(ctx context.Context, top *int32, filter string) (result ListJobsResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.ljr.Response.Response != nil {
+				sc = result.ljr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx, top, filter)
 	if err != nil {
@@ -486,8 +547,8 @@ func (client JobsClient) ListBySubscriptionResponder(resp *http.Response) (resul
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client JobsClient) listBySubscriptionNextResults(lastResults ListJobsResponse) (result ListJobsResponse, err error) {
-	req, err := lastResults.listJobsResponsePreparer()
+func (client JobsClient) listBySubscriptionNextResults(ctx context.Context, lastResults ListJobsResponse) (result ListJobsResponse, err error) {
+	req, err := lastResults.listJobsResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "storageimportexport.JobsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -508,6 +569,16 @@ func (client JobsClient) listBySubscriptionNextResults(lastResults ListJobsRespo
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListBySubscriptionComplete(ctx context.Context, top *int32, filter string) (result ListJobsResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx, top, filter)
 	return
 }
@@ -521,6 +592,16 @@ func (client JobsClient) ListBySubscriptionComplete(ctx context.Context, top *in
 // subscription.
 // body - the parameters to update in the job
 func (client JobsClient) Update(ctx context.Context, jobName string, resourceGroupName string, body UpdateJobParameters) (result JobResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, jobName, resourceGroupName, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storageimportexport.JobsClient", "Update", nil, "Failure preparing request")

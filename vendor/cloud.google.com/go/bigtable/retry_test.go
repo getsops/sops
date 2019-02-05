@@ -16,6 +16,7 @@ limitations under the License.
 package bigtable
 
 import (
+	"context"
 	"strings"
 	"testing"
 	"time"
@@ -25,7 +26,6 @@ import (
 	"cloud.google.com/go/internal/testutil"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/google/go-cmp/cmp"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	btpb "google.golang.org/genproto/googleapis/bigtable/v2"
 	rpcpb "google.golang.org/genproto/googleapis/rpc/status"

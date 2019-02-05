@@ -1754,6 +1754,9 @@
     "shapes": {
       "InputShape": {
         "type": "structure",
+        "required": [
+            "URIFooEnum"
+        ],
         "members": {
           "HeaderEnum": {
             "shape": "EnumType",
@@ -1824,15 +1827,96 @@
           },
           "http": {
             "method": "POST",
-            "requestUri": "/path"
+            "requestUri": "/Enum/{URIEnum}"
           },
           "name": "OperationName"
         },
         "params": {
+          "URIFooEnum": "bar"
+        },
+        "serialized": {
+          "uri": "/Enum/bar",
+          "headers": {}
+        }
+      }
+    ]
+  },
+  {
+    "description": "Endpoint host trait",
+    "metadata": {
+      "protocol": "rest-xml",
+      "apiVersion": "2014-01-01"
+    },
+    "clientEndpoint": "https://service.region.amazonaws.com",
+    "shapes": {
+      "StaticInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType"
+          }
+        }
+      },
+      "MemberRefInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType",
+            "hostLabel": true
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "name": "StaticOp",
+          "input": {
+            "shape": "StaticInputShape",
+            "locationName": "StaticOpRequest"
+          },
+          "http": {
+            "method": "POST",
+            "requestUri": "/path"
+          },
+          "endpoint":{
+              "hostPrefix": "data-"
+          }
+        },
+        "params": {
+          "Name": "myname"
         },
         "serialized": {
           "uri": "/path",
-          "headers": {}
+          "body": "<StaticOpRequest><Name>myname</Name></StaticOpRequest>",
+          "host": "data-service.region.amazonaws.com"
+        }
+      },
+      {
+        "given": {
+          "name": "MemberRefOp",
+          "input": {
+            "shape": "MemberRefInputShape",
+            "locationName": "MemberRefOpRequest"
+          },
+          "http": {
+            "method": "GET",
+            "requestUri": "/path"
+          },
+          "endpoint":{
+              "hostPrefix": "foo-{Name}."
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/path",
+          "body": "<MemberRefOpRequest><Name>myname</Name></MemberRefOpRequest>",
+          "host": "foo-myname.service.region.amazonaws.com"
         }
       }
     ]

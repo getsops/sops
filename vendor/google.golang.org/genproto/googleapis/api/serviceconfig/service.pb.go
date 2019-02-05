@@ -133,7 +133,7 @@ func (m *Service) Reset()         { *m = Service{} }
 func (m *Service) String() string { return proto.CompactTextString(m) }
 func (*Service) ProtoMessage()    {}
 func (*Service) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d556deeebe545813, []int{0}
+	return fileDescriptor_service_e641d3f3e04723a1, []int{0}
 }
 func (m *Service) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Service.Unmarshal(m, b)
@@ -141,8 +141,8 @@ func (m *Service) XXX_Unmarshal(b []byte) error {
 func (m *Service) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Service.Marshal(b, m, deterministic)
 }
-func (m *Service) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Service.Merge(m, src)
+func (dst *Service) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Service.Merge(dst, src)
 }
 func (m *Service) XXX_Size() int {
 	return xxx_messageInfo_Service.Size(m)
@@ -332,9 +332,9 @@ func init() {
 	proto.RegisterType((*Service)(nil), "google.api.Service")
 }
 
-func init() { proto.RegisterFile("google/api/service.proto", fileDescriptor_d556deeebe545813) }
+func init() { proto.RegisterFile("google/api/service.proto", fileDescriptor_service_e641d3f3e04723a1) }
 
-var fileDescriptor_d556deeebe545813 = []byte{
+var fileDescriptor_service_e641d3f3e04723a1 = []byte{
 	// 791 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x95, 0xdd, 0x6e, 0xdb, 0x36,
 	0x14, 0xc7, 0x61, 0xd7, 0x6e, 0x6a, 0xba, 0xcd, 0x12, 0xc6, 0x49, 0x19, 0xd7, 0x1b, 0xd2, 0x7d,

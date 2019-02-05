@@ -36,7 +36,7 @@ func (m *UploadRef) Reset()         { *m = UploadRef{} }
 func (m *UploadRef) String() string { return proto.CompactTextString(m) }
 func (*UploadRef) ProtoMessage()    {}
 func (*UploadRef) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{0}
+	return fileDescriptor_resources_8db553b896211977, []int{0}
 }
 func (m *UploadRef) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UploadRef.Unmarshal(m, b)
@@ -44,8 +44,8 @@ func (m *UploadRef) XXX_Unmarshal(b []byte) error {
 func (m *UploadRef) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UploadRef.Marshal(b, m, deterministic)
 }
-func (m *UploadRef) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UploadRef.Merge(m, src)
+func (dst *UploadRef) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UploadRef.Merge(dst, src)
 }
 func (m *UploadRef) XXX_Size() int {
 	return xxx_messageInfo_UploadRef.Size(m)
@@ -76,7 +76,7 @@ func (m *PhotoId) Reset()         { *m = PhotoId{} }
 func (m *PhotoId) String() string { return proto.CompactTextString(m) }
 func (*PhotoId) ProtoMessage()    {}
 func (*PhotoId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{1}
+	return fileDescriptor_resources_8db553b896211977, []int{1}
 }
 func (m *PhotoId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PhotoId.Unmarshal(m, b)
@@ -84,8 +84,8 @@ func (m *PhotoId) XXX_Unmarshal(b []byte) error {
 func (m *PhotoId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PhotoId.Marshal(b, m, deterministic)
 }
-func (m *PhotoId) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PhotoId.Merge(m, src)
+func (dst *PhotoId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PhotoId.Merge(dst, src)
 }
 func (m *PhotoId) XXX_Size() int {
 	return xxx_messageInfo_PhotoId.Size(m)
@@ -122,7 +122,7 @@ func (m *Level) Reset()         { *m = Level{} }
 func (m *Level) String() string { return proto.CompactTextString(m) }
 func (*Level) ProtoMessage()    {}
 func (*Level) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{2}
+	return fileDescriptor_resources_8db553b896211977, []int{2}
 }
 func (m *Level) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Level.Unmarshal(m, b)
@@ -130,8 +130,8 @@ func (m *Level) XXX_Unmarshal(b []byte) error {
 func (m *Level) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Level.Marshal(b, m, deterministic)
 }
-func (m *Level) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Level.Merge(m, src)
+func (dst *Level) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Level.Merge(dst, src)
 }
 func (m *Level) XXX_Size() int {
 	return xxx_messageInfo_Level.Size(m)
@@ -192,7 +192,7 @@ func (m *Pose) Reset()         { *m = Pose{} }
 func (m *Pose) String() string { return proto.CompactTextString(m) }
 func (*Pose) ProtoMessage()    {}
 func (*Pose) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{3}
+	return fileDescriptor_resources_8db553b896211977, []int{3}
 }
 func (m *Pose) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Pose.Unmarshal(m, b)
@@ -200,8 +200,8 @@ func (m *Pose) XXX_Unmarshal(b []byte) error {
 func (m *Pose) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Pose.Marshal(b, m, deterministic)
 }
-func (m *Pose) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Pose.Merge(m, src)
+func (dst *Pose) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Pose.Merge(dst, src)
 }
 func (m *Pose) XXX_Size() int {
 	return xxx_messageInfo_Pose.Size(m)
@@ -268,7 +268,7 @@ func (m *Place) Reset()         { *m = Place{} }
 func (m *Place) String() string { return proto.CompactTextString(m) }
 func (*Place) ProtoMessage()    {}
 func (*Place) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{4}
+	return fileDescriptor_resources_8db553b896211977, []int{4}
 }
 func (m *Place) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Place.Unmarshal(m, b)
@@ -276,8 +276,8 @@ func (m *Place) XXX_Unmarshal(b []byte) error {
 func (m *Place) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Place.Marshal(b, m, deterministic)
 }
-func (m *Place) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Place.Merge(m, src)
+func (dst *Place) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Place.Merge(dst, src)
 }
 func (m *Place) XXX_Size() int {
 	return xxx_messageInfo_Place.Size(m)
@@ -309,7 +309,7 @@ func (m *Connection) Reset()         { *m = Connection{} }
 func (m *Connection) String() string { return proto.CompactTextString(m) }
 func (*Connection) ProtoMessage()    {}
 func (*Connection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{5}
+	return fileDescriptor_resources_8db553b896211977, []int{5}
 }
 func (m *Connection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Connection.Unmarshal(m, b)
@@ -317,8 +317,8 @@ func (m *Connection) XXX_Unmarshal(b []byte) error {
 func (m *Connection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Connection.Marshal(b, m, deterministic)
 }
-func (m *Connection) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Connection.Merge(m, src)
+func (dst *Connection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Connection.Merge(dst, src)
 }
 func (m *Connection) XXX_Size() int {
 	return xxx_messageInfo_Connection.Size(m)
@@ -374,7 +374,7 @@ func (m *Photo) Reset()         { *m = Photo{} }
 func (m *Photo) String() string { return proto.CompactTextString(m) }
 func (*Photo) ProtoMessage()    {}
 func (*Photo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56f2b10d5439612a, []int{6}
+	return fileDescriptor_resources_8db553b896211977, []int{6}
 }
 func (m *Photo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Photo.Unmarshal(m, b)
@@ -382,8 +382,8 @@ func (m *Photo) XXX_Unmarshal(b []byte) error {
 func (m *Photo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Photo.Marshal(b, m, deterministic)
 }
-func (m *Photo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Photo.Merge(m, src)
+func (dst *Photo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Photo.Merge(dst, src)
 }
 func (m *Photo) XXX_Size() int {
 	return xxx_messageInfo_Photo.Size(m)
@@ -475,10 +475,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/streetview/publish/v1/resources.proto", fileDescriptor_56f2b10d5439612a)
+	proto.RegisterFile("google/streetview/publish/v1/resources.proto", fileDescriptor_resources_8db553b896211977)
 }
 
-var fileDescriptor_56f2b10d5439612a = []byte{
+var fileDescriptor_resources_8db553b896211977 = []byte{
 	// 651 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xdb, 0x6a, 0xdb, 0x4c,
 	0x10, 0xc6, 0xf1, 0x29, 0x1e, 0xf9, 0x3f, 0xb0, 0xff, 0x4f, 0x51, 0x4c, 0x43, 0x53, 0x85, 0x52,

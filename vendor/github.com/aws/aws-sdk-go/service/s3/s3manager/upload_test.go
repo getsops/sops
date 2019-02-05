@@ -785,52 +785,44 @@ func TestUploadInputS3PutObjectInputPairity(t *testing.T) {
 }
 
 type testIncompleteReader struct {
-	Buf   []byte
-	Count int
+	Size int64
+	read int64
 }
 
 func (r *testIncompleteReader) Read(p []byte) (n int, err error) {
-	if r.Count < 0 {
-		return 0, io.ErrUnexpectedEOF
+	r.read += int64(len(p))
+	if r.read >= r.Size {
+		return int(r.read - r.Size), io.ErrUnexpectedEOF
 	}
-
-	r.Count--
-	return copy(p, r.Buf), nil
+	return len(p), nil
 }
 
 func TestUploadUnexpectedEOF(t *testing.T) {
-	s, ops, args := loggingSvc(emptyList)
+	s, ops, _ := loggingSvc(emptyList)
 	mgr := s3manager.NewUploaderWithClient(s, func(u *s3manager.Uploader) {
 		u.Concurrency = 1
+		u.PartSize = s3manager.MinUploadPartSize
 	})
 	_, err := mgr.Upload(&s3manager.UploadInput{
 		Bucket: aws.String("Bucket"),
 		Key:    aws.String("Key"),
 		Body: &testIncompleteReader{
-			Buf:   make([]byte, 1024*1024*5),
-			Count: 1,
+			Size: int64(s3manager.MinUploadPartSize + 1),
 		},
 	})
-
 	if err == nil {
 		t.Error("Expected error, but received none")
 	}
 
+	// Ensure upload started.
 	if e, a := "CreateMultipartUpload", (*ops)[0]; e != a {
 		t.Errorf("Expected %q, but received %q", e, a)
 	}
 
-	if e, a := "UploadPart", (*ops)[1]; e != a {
-		t.Errorf("Expected %q, but received %q", e, a)
-	}
-
+	// Part may or may not be sent because of timing of sending parts and
+	// reading next part in upload manager. Just check for the last abort.
 	if e, a := "AbortMultipartUpload", (*ops)[len(*ops)-1]; e != a {
 		t.Errorf("Expected %q, but received %q", e, a)
-	}
-
-	// Part lengths
-	if e, a := 1024*1024*5, buflen(val((*args)[1], "Body")); e != a {
-		t.Errorf("Expected %d, but received %d", e, a)
 	}
 }
 

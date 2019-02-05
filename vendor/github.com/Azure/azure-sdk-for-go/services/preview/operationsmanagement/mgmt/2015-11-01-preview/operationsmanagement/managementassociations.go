@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewManagementAssociationsClientWithBaseURI(baseURI string, subscriptionID s
 // managementAssociationName - user ManagementAssociation Name.
 // parameters - the parameters required to create ManagementAssociation extension.
 func (client ManagementAssociationsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, managementAssociationName string, parameters ManagementAssociation) (result ManagementAssociation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementAssociationsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -129,6 +140,16 @@ func (client ManagementAssociationsClient) CreateOrUpdateResponder(resp *http.Re
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // managementAssociationName - user ManagementAssociation Name.
 func (client ManagementAssociationsClient) Delete(ctx context.Context, resourceGroupName string, managementAssociationName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementAssociationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -206,6 +227,16 @@ func (client ManagementAssociationsClient) DeleteResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // managementAssociationName - user ManagementAssociation Name.
 func (client ManagementAssociationsClient) Get(ctx context.Context, resourceGroupName string, managementAssociationName string) (result ManagementAssociation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementAssociationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -279,8 +310,18 @@ func (client ManagementAssociationsClient) GetResponder(resp *http.Response) (re
 	return
 }
 
-// ListBySubscription retrieves the ManagementAssociatons list.
+// ListBySubscription retrieves the ManagementAssociations list.
 func (client ManagementAssociationsClient) ListBySubscription(ctx context.Context) (result ManagementAssociationPropertiesList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ManagementAssociationsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationsmanagement.ManagementAssociationsClient", "ListBySubscription", nil, "Failure preparing request")

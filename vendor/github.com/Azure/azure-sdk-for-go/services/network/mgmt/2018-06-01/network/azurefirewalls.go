@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewAzureFirewallsClientWithBaseURI(baseURI string, subscriptionID string) A
 // azureFirewallName - the name of the Azure Firewall.
 // parameters - parameters supplied to the create or update Azure Firewall operation.
 func (client AzureFirewallsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, azureFirewallName string, parameters AzureFirewall) (result AzureFirewallsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, azureFirewallName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.AzureFirewallsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -92,10 +103,6 @@ func (client AzureFirewallsClient) CreateOrUpdateSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -118,6 +125,16 @@ func (client AzureFirewallsClient) CreateOrUpdateResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // azureFirewallName - the name of the Azure Firewall.
 func (client AzureFirewallsClient) Delete(ctx context.Context, resourceGroupName string, azureFirewallName string) (result AzureFirewallsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, azureFirewallName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.AzureFirewallsClient", "Delete", nil, "Failure preparing request")
@@ -163,10 +180,6 @@ func (client AzureFirewallsClient) DeleteSender(req *http.Request) (future Azure
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -188,6 +201,16 @@ func (client AzureFirewallsClient) DeleteResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the resource group.
 // azureFirewallName - the name of the Azure Firewall.
 func (client AzureFirewallsClient) Get(ctx context.Context, resourceGroupName string, azureFirewallName string) (result AzureFirewall, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, azureFirewallName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.AzureFirewallsClient", "Get", nil, "Failure preparing request")
@@ -254,6 +277,16 @@ func (client AzureFirewallsClient) GetResponder(resp *http.Response) (result Azu
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client AzureFirewallsClient) List(ctx context.Context, resourceGroupName string) (result AzureFirewallListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.List")
+		defer func() {
+			sc := -1
+			if result.aflr.Response.Response != nil {
+				sc = result.aflr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -317,8 +350,8 @@ func (client AzureFirewallsClient) ListResponder(resp *http.Response) (result Az
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AzureFirewallsClient) listNextResults(lastResults AzureFirewallListResult) (result AzureFirewallListResult, err error) {
-	req, err := lastResults.azureFirewallListResultPreparer()
+func (client AzureFirewallsClient) listNextResults(ctx context.Context, lastResults AzureFirewallListResult) (result AzureFirewallListResult, err error) {
+	req, err := lastResults.azureFirewallListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.AzureFirewallsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -339,12 +372,32 @@ func (client AzureFirewallsClient) listNextResults(lastResults AzureFirewallList
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AzureFirewallsClient) ListComplete(ctx context.Context, resourceGroupName string) (result AzureFirewallListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName)
 	return
 }
 
 // ListAll gets all the Azure Firewalls in a subscription.
 func (client AzureFirewallsClient) ListAll(ctx context.Context) (result AzureFirewallListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.ListAll")
+		defer func() {
+			sc := -1
+			if result.aflr.Response.Response != nil {
+				sc = result.aflr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAllNextResults
 	req, err := client.ListAllPreparer(ctx)
 	if err != nil {
@@ -407,8 +460,8 @@ func (client AzureFirewallsClient) ListAllResponder(resp *http.Response) (result
 }
 
 // listAllNextResults retrieves the next set of results, if any.
-func (client AzureFirewallsClient) listAllNextResults(lastResults AzureFirewallListResult) (result AzureFirewallListResult, err error) {
-	req, err := lastResults.azureFirewallListResultPreparer()
+func (client AzureFirewallsClient) listAllNextResults(ctx context.Context, lastResults AzureFirewallListResult) (result AzureFirewallListResult, err error) {
+	req, err := lastResults.azureFirewallListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.AzureFirewallsClient", "listAllNextResults", nil, "Failure preparing next results request")
 	}
@@ -429,6 +482,16 @@ func (client AzureFirewallsClient) listAllNextResults(lastResults AzureFirewallL
 
 // ListAllComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AzureFirewallsClient) ListAllComplete(ctx context.Context) (result AzureFirewallListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AzureFirewallsClient.ListAll")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAll(ctx)
 	return
 }

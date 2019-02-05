@@ -46,7 +46,6 @@ var Database_State_name = map[int32]string{
 	1: "CREATING",
 	2: "READY",
 }
-
 var Database_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"CREATING":          1,
@@ -56,9 +55,8 @@ var Database_State_value = map[string]int32{
 func (x Database_State) String() string {
 	return proto.EnumName(Database_State_name, int32(x))
 }
-
 func (Database_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{0, 0}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{0, 0}
 }
 
 // A Cloud Spanner database.
@@ -80,7 +78,7 @@ func (m *Database) Reset()         { *m = Database{} }
 func (m *Database) String() string { return proto.CompactTextString(m) }
 func (*Database) ProtoMessage()    {}
 func (*Database) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{0}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{0}
 }
 func (m *Database) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Database.Unmarshal(m, b)
@@ -88,8 +86,8 @@ func (m *Database) XXX_Unmarshal(b []byte) error {
 func (m *Database) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Database.Marshal(b, m, deterministic)
 }
-func (m *Database) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Database.Merge(m, src)
+func (dst *Database) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Database.Merge(dst, src)
 }
 func (m *Database) XXX_Size() int {
 	return xxx_messageInfo_Database.Size(m)
@@ -135,7 +133,7 @@ func (m *ListDatabasesRequest) Reset()         { *m = ListDatabasesRequest{} }
 func (m *ListDatabasesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListDatabasesRequest) ProtoMessage()    {}
 func (*ListDatabasesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{1}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{1}
 }
 func (m *ListDatabasesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDatabasesRequest.Unmarshal(m, b)
@@ -143,8 +141,8 @@ func (m *ListDatabasesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListDatabasesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListDatabasesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListDatabasesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListDatabasesRequest.Merge(m, src)
+func (dst *ListDatabasesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListDatabasesRequest.Merge(dst, src)
 }
 func (m *ListDatabasesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListDatabasesRequest.Size(m)
@@ -193,7 +191,7 @@ func (m *ListDatabasesResponse) Reset()         { *m = ListDatabasesResponse{} }
 func (m *ListDatabasesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListDatabasesResponse) ProtoMessage()    {}
 func (*ListDatabasesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{2}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{2}
 }
 func (m *ListDatabasesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDatabasesResponse.Unmarshal(m, b)
@@ -201,8 +199,8 @@ func (m *ListDatabasesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListDatabasesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListDatabasesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListDatabasesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListDatabasesResponse.Merge(m, src)
+func (dst *ListDatabasesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListDatabasesResponse.Merge(dst, src)
 }
 func (m *ListDatabasesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListDatabasesResponse.Size(m)
@@ -252,7 +250,7 @@ func (m *CreateDatabaseRequest) Reset()         { *m = CreateDatabaseRequest{} }
 func (m *CreateDatabaseRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateDatabaseRequest) ProtoMessage()    {}
 func (*CreateDatabaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{3}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{3}
 }
 func (m *CreateDatabaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDatabaseRequest.Unmarshal(m, b)
@@ -260,8 +258,8 @@ func (m *CreateDatabaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateDatabaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateDatabaseRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateDatabaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateDatabaseRequest.Merge(m, src)
+func (dst *CreateDatabaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateDatabaseRequest.Merge(dst, src)
 }
 func (m *CreateDatabaseRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateDatabaseRequest.Size(m)
@@ -307,7 +305,7 @@ func (m *CreateDatabaseMetadata) Reset()         { *m = CreateDatabaseMetadata{}
 func (m *CreateDatabaseMetadata) String() string { return proto.CompactTextString(m) }
 func (*CreateDatabaseMetadata) ProtoMessage()    {}
 func (*CreateDatabaseMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{4}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{4}
 }
 func (m *CreateDatabaseMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDatabaseMetadata.Unmarshal(m, b)
@@ -315,8 +313,8 @@ func (m *CreateDatabaseMetadata) XXX_Unmarshal(b []byte) error {
 func (m *CreateDatabaseMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateDatabaseMetadata.Marshal(b, m, deterministic)
 }
-func (m *CreateDatabaseMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateDatabaseMetadata.Merge(m, src)
+func (dst *CreateDatabaseMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateDatabaseMetadata.Merge(dst, src)
 }
 func (m *CreateDatabaseMetadata) XXX_Size() int {
 	return xxx_messageInfo_CreateDatabaseMetadata.Size(m)
@@ -348,7 +346,7 @@ func (m *GetDatabaseRequest) Reset()         { *m = GetDatabaseRequest{} }
 func (m *GetDatabaseRequest) String() string { return proto.CompactTextString(m) }
 func (*GetDatabaseRequest) ProtoMessage()    {}
 func (*GetDatabaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{5}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{5}
 }
 func (m *GetDatabaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDatabaseRequest.Unmarshal(m, b)
@@ -356,8 +354,8 @@ func (m *GetDatabaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetDatabaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetDatabaseRequest.Marshal(b, m, deterministic)
 }
-func (m *GetDatabaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetDatabaseRequest.Merge(m, src)
+func (dst *GetDatabaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDatabaseRequest.Merge(dst, src)
 }
 func (m *GetDatabaseRequest) XXX_Size() int {
 	return xxx_messageInfo_GetDatabaseRequest.Size(m)
@@ -425,7 +423,7 @@ func (m *UpdateDatabaseDdlRequest) Reset()         { *m = UpdateDatabaseDdlReque
 func (m *UpdateDatabaseDdlRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateDatabaseDdlRequest) ProtoMessage()    {}
 func (*UpdateDatabaseDdlRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{6}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{6}
 }
 func (m *UpdateDatabaseDdlRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateDatabaseDdlRequest.Unmarshal(m, b)
@@ -433,8 +431,8 @@ func (m *UpdateDatabaseDdlRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateDatabaseDdlRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateDatabaseDdlRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateDatabaseDdlRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateDatabaseDdlRequest.Merge(m, src)
+func (dst *UpdateDatabaseDdlRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateDatabaseDdlRequest.Merge(dst, src)
 }
 func (m *UpdateDatabaseDdlRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateDatabaseDdlRequest.Size(m)
@@ -487,7 +485,7 @@ func (m *UpdateDatabaseDdlMetadata) Reset()         { *m = UpdateDatabaseDdlMeta
 func (m *UpdateDatabaseDdlMetadata) String() string { return proto.CompactTextString(m) }
 func (*UpdateDatabaseDdlMetadata) ProtoMessage()    {}
 func (*UpdateDatabaseDdlMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{7}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{7}
 }
 func (m *UpdateDatabaseDdlMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateDatabaseDdlMetadata.Unmarshal(m, b)
@@ -495,8 +493,8 @@ func (m *UpdateDatabaseDdlMetadata) XXX_Unmarshal(b []byte) error {
 func (m *UpdateDatabaseDdlMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateDatabaseDdlMetadata.Marshal(b, m, deterministic)
 }
-func (m *UpdateDatabaseDdlMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateDatabaseDdlMetadata.Merge(m, src)
+func (dst *UpdateDatabaseDdlMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateDatabaseDdlMetadata.Merge(dst, src)
 }
 func (m *UpdateDatabaseDdlMetadata) XXX_Size() int {
 	return xxx_messageInfo_UpdateDatabaseDdlMetadata.Size(m)
@@ -541,7 +539,7 @@ func (m *DropDatabaseRequest) Reset()         { *m = DropDatabaseRequest{} }
 func (m *DropDatabaseRequest) String() string { return proto.CompactTextString(m) }
 func (*DropDatabaseRequest) ProtoMessage()    {}
 func (*DropDatabaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{8}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{8}
 }
 func (m *DropDatabaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DropDatabaseRequest.Unmarshal(m, b)
@@ -549,8 +547,8 @@ func (m *DropDatabaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *DropDatabaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DropDatabaseRequest.Marshal(b, m, deterministic)
 }
-func (m *DropDatabaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DropDatabaseRequest.Merge(m, src)
+func (dst *DropDatabaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DropDatabaseRequest.Merge(dst, src)
 }
 func (m *DropDatabaseRequest) XXX_Size() int {
 	return xxx_messageInfo_DropDatabaseRequest.Size(m)
@@ -581,7 +579,7 @@ func (m *GetDatabaseDdlRequest) Reset()         { *m = GetDatabaseDdlRequest{} }
 func (m *GetDatabaseDdlRequest) String() string { return proto.CompactTextString(m) }
 func (*GetDatabaseDdlRequest) ProtoMessage()    {}
 func (*GetDatabaseDdlRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{9}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{9}
 }
 func (m *GetDatabaseDdlRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDatabaseDdlRequest.Unmarshal(m, b)
@@ -589,8 +587,8 @@ func (m *GetDatabaseDdlRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetDatabaseDdlRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetDatabaseDdlRequest.Marshal(b, m, deterministic)
 }
-func (m *GetDatabaseDdlRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetDatabaseDdlRequest.Merge(m, src)
+func (dst *GetDatabaseDdlRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDatabaseDdlRequest.Merge(dst, src)
 }
 func (m *GetDatabaseDdlRequest) XXX_Size() int {
 	return xxx_messageInfo_GetDatabaseDdlRequest.Size(m)
@@ -622,7 +620,7 @@ func (m *GetDatabaseDdlResponse) Reset()         { *m = GetDatabaseDdlResponse{}
 func (m *GetDatabaseDdlResponse) String() string { return proto.CompactTextString(m) }
 func (*GetDatabaseDdlResponse) ProtoMessage()    {}
 func (*GetDatabaseDdlResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9422939aee7fc2d7, []int{10}
+	return fileDescriptor_spanner_database_admin_db75fb46f8a72a5d, []int{10}
 }
 func (m *GetDatabaseDdlResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDatabaseDdlResponse.Unmarshal(m, b)
@@ -630,8 +628,8 @@ func (m *GetDatabaseDdlResponse) XXX_Unmarshal(b []byte) error {
 func (m *GetDatabaseDdlResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetDatabaseDdlResponse.Marshal(b, m, deterministic)
 }
-func (m *GetDatabaseDdlResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetDatabaseDdlResponse.Merge(m, src)
+func (dst *GetDatabaseDdlResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDatabaseDdlResponse.Merge(dst, src)
 }
 func (m *GetDatabaseDdlResponse) XXX_Size() int {
 	return xxx_messageInfo_GetDatabaseDdlResponse.Size(m)
@@ -1075,10 +1073,10 @@ var _DatabaseAdmin_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/spanner/admin/database/v1/spanner_database_admin.proto", fileDescriptor_9422939aee7fc2d7)
+	proto.RegisterFile("google/spanner/admin/database/v1/spanner_database_admin.proto", fileDescriptor_spanner_database_admin_db75fb46f8a72a5d)
 }
 
-var fileDescriptor_9422939aee7fc2d7 = []byte{
+var fileDescriptor_spanner_database_admin_db75fb46f8a72a5d = []byte{
 	// 1033 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x96, 0xcf, 0x6f, 0x1b, 0x45,
 	0x14, 0xc7, 0x19, 0xa7, 0xa9, 0x92, 0x17, 0x27, 0x75, 0x06, 0x1c, 0xb9, 0x5b, 0x5a, 0xcc, 0x82,

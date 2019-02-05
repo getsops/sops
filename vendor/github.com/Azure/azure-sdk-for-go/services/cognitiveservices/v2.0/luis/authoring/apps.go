@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -42,6 +43,16 @@ func NewAppsClient(endpoint string) AppsClient {
 // (optional), Domain (optional) and initial version ID (optional) of the application. Default value for the
 // version ID is 0.1. Note: the culture cannot be changed after the app is created.
 func (client AppsClient) Add(ctx context.Context, applicationCreateObject ApplicationCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: applicationCreateObject,
 			Constraints: []validation.Constraint{{Target: "applicationCreateObject.Culture", Name: validation.Null, Rule: true, Chain: nil},
@@ -109,6 +120,16 @@ func (client AppsClient) AddResponder(resp *http.Response) (result UUID, err err
 // Parameters:
 // prebuiltDomainCreateObject - a prebuilt domain create object containing the name and culture of the domain.
 func (client AppsClient) AddCustomPrebuiltDomain(ctx context.Context, prebuiltDomainCreateObject PrebuiltDomainCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.AddCustomPrebuiltDomain")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddCustomPrebuiltDomainPreparer(ctx, prebuiltDomainCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "AddCustomPrebuiltDomain", nil, "Failure preparing request")
@@ -168,8 +189,19 @@ func (client AppsClient) AddCustomPrebuiltDomainResponder(resp *http.Response) (
 // Delete deletes an application.
 // Parameters:
 // appID - the application ID.
-func (client AppsClient) Delete(ctx context.Context, appID uuid.UUID) (result OperationStatus, err error) {
-	req, err := client.DeletePreparer(ctx, appID)
+// force - a flag to indicate whether to force an operation.
+func (client AppsClient) Delete(ctx context.Context, appID uuid.UUID, force *bool) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.DeletePreparer(ctx, appID, force)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "Delete", nil, "Failure preparing request")
 		return
@@ -191,7 +223,7 @@ func (client AppsClient) Delete(ctx context.Context, appID uuid.UUID) (result Op
 }
 
 // DeletePreparer prepares the Delete request.
-func (client AppsClient) DeletePreparer(ctx context.Context, appID uuid.UUID) (*http.Request, error) {
+func (client AppsClient) DeletePreparer(ctx context.Context, appID uuid.UUID, force *bool) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"Endpoint": client.Endpoint,
 	}
@@ -200,10 +232,18 @@ func (client AppsClient) DeletePreparer(ctx context.Context, appID uuid.UUID) (*
 		"appId": autorest.Encode("path", appID),
 	}
 
+	queryParameters := map[string]interface{}{}
+	if force != nil {
+		queryParameters["force"] = autorest.Encode("query", *force)
+	} else {
+		queryParameters["force"] = autorest.Encode("query", false)
+	}
+
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
 		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
-		autorest.WithPathParameters("/apps/{appId}", pathParameters))
+		autorest.WithPathParameters("/apps/{appId}", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
@@ -231,6 +271,16 @@ func (client AppsClient) DeleteResponder(resp *http.Response) (result OperationS
 // Parameters:
 // appID - the application ID.
 func (client AppsClient) DownloadQueryLogs(ctx context.Context, appID uuid.UUID) (result ReadCloser, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.DownloadQueryLogs")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DownloadQueryLogsPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "DownloadQueryLogs", nil, "Failure preparing request")
@@ -292,6 +342,16 @@ func (client AppsClient) DownloadQueryLogsResponder(resp *http.Response) (result
 // Parameters:
 // appID - the application ID.
 func (client AppsClient) Get(ctx context.Context, appID uuid.UUID) (result ApplicationInfoResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "Get", nil, "Failure preparing request")
@@ -354,6 +414,16 @@ func (client AppsClient) GetResponder(resp *http.Response) (result ApplicationIn
 // Parameters:
 // appID - the application ID.
 func (client AppsClient) GetPublishSettings(ctx context.Context, appID uuid.UUID) (result PublishSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.GetPublishSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPublishSettingsPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "GetPublishSettings", nil, "Failure preparing request")
@@ -416,6 +486,16 @@ func (client AppsClient) GetPublishSettingsResponder(resp *http.Response) (resul
 // Parameters:
 // appID - the application ID.
 func (client AppsClient) GetSettings(ctx context.Context, appID uuid.UUID) (result ApplicationSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.GetSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetSettingsPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "GetSettings", nil, "Failure preparing request")
@@ -474,12 +554,22 @@ func (client AppsClient) GetSettingsResponder(resp *http.Response) (result Appli
 	return
 }
 
-// Import imports an application to LUIS, the application's structure should be included in in the request body.
+// Import imports an application to LUIS, the application's structure should be included in the request body.
 // Parameters:
 // luisApp - a LUIS application structure.
 // appName - the application name to create. If not specified, the application name will be read from the
 // imported object.
 func (client AppsClient) Import(ctx context.Context, luisApp LuisApp, appName string) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Import")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ImportPreparer(ctx, luisApp, appName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "Import", nil, "Failure preparing request")
@@ -547,6 +637,16 @@ func (client AppsClient) ImportResponder(resp *http.Response) (result UUID, err 
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client AppsClient) List(ctx context.Context, skip *int32, take *int32) (result ListApplicationInfoResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -628,6 +728,16 @@ func (client AppsClient) ListResponder(resp *http.Response) (result ListApplicat
 
 // ListAvailableCustomPrebuiltDomains gets all the available custom prebuilt domains for all cultures.
 func (client AppsClient) ListAvailableCustomPrebuiltDomains(ctx context.Context) (result ListPrebuiltDomain, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListAvailableCustomPrebuiltDomains")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListAvailableCustomPrebuiltDomainsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListAvailableCustomPrebuiltDomains", nil, "Failure preparing request")
@@ -686,6 +796,16 @@ func (client AppsClient) ListAvailableCustomPrebuiltDomainsResponder(resp *http.
 // Parameters:
 // culture - culture.
 func (client AppsClient) ListAvailableCustomPrebuiltDomainsForCulture(ctx context.Context, culture string) (result ListPrebuiltDomain, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListAvailableCustomPrebuiltDomainsForCulture")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListAvailableCustomPrebuiltDomainsForCulturePreparer(ctx, culture)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListAvailableCustomPrebuiltDomainsForCulture", nil, "Failure preparing request")
@@ -746,6 +866,16 @@ func (client AppsClient) ListAvailableCustomPrebuiltDomainsForCultureResponder(r
 
 // ListCortanaEndpoints gets the endpoint URLs for the prebuilt Cortana applications.
 func (client AppsClient) ListCortanaEndpoints(ctx context.Context) (result PersonalAssistantsResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListCortanaEndpoints")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListCortanaEndpointsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListCortanaEndpoints", nil, "Failure preparing request")
@@ -802,6 +932,16 @@ func (client AppsClient) ListCortanaEndpointsResponder(resp *http.Response) (res
 
 // ListDomains gets the available application domains.
 func (client AppsClient) ListDomains(ctx context.Context) (result ListString, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListDomains")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListDomainsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListDomains", nil, "Failure preparing request")
@@ -860,6 +1000,16 @@ func (client AppsClient) ListDomainsResponder(resp *http.Response) (result ListS
 // Parameters:
 // appID - the application ID.
 func (client AppsClient) ListEndpoints(ctx context.Context, appID uuid.UUID) (result SetString, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListEndpoints")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListEndpointsPreparer(ctx, appID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListEndpoints", nil, "Failure preparing request")
@@ -920,6 +1070,16 @@ func (client AppsClient) ListEndpointsResponder(resp *http.Response) (result Set
 
 // ListSupportedCultures gets the supported application cultures.
 func (client AppsClient) ListSupportedCultures(ctx context.Context) (result ListAvailableCulture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListSupportedCultures")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListSupportedCulturesPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListSupportedCultures", nil, "Failure preparing request")
@@ -976,6 +1136,16 @@ func (client AppsClient) ListSupportedCulturesResponder(resp *http.Response) (re
 
 // ListUsageScenarios gets the application available usage scenarios.
 func (client AppsClient) ListUsageScenarios(ctx context.Context) (result ListString, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListUsageScenarios")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListUsageScenariosPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "ListUsageScenarios", nil, "Failure preparing request")
@@ -1030,12 +1200,168 @@ func (client AppsClient) ListUsageScenariosResponder(resp *http.Response) (resul
 	return
 }
 
+// PackagePublishedApplicationAsGzip packages published LUIS application as GZip.
+// Parameters:
+// appID - the application ID.
+// slotName - the publishing slot name.
+func (client AppsClient) PackagePublishedApplicationAsGzip(ctx context.Context, appID uuid.UUID, slotName uuid.UUID) (result ReadCloser, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.PackagePublishedApplicationAsGzip")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.PackagePublishedApplicationAsGzipPreparer(ctx, appID, slotName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "PackagePublishedApplicationAsGzip", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.PackagePublishedApplicationAsGzipSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "PackagePublishedApplicationAsGzip", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.PackagePublishedApplicationAsGzipResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "PackagePublishedApplicationAsGzip", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// PackagePublishedApplicationAsGzipPreparer prepares the PackagePublishedApplicationAsGzip request.
+func (client AppsClient) PackagePublishedApplicationAsGzipPreparer(ctx context.Context, appID uuid.UUID, slotName uuid.UUID) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	pathParameters := map[string]interface{}{
+		"appId":    autorest.Encode("path", appID),
+		"slotName": autorest.Encode("path", slotName),
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
+		autorest.WithPathParameters("/package/{appId}/slot/{slotName}/gzip", pathParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// PackagePublishedApplicationAsGzipSender sends the PackagePublishedApplicationAsGzip request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) PackagePublishedApplicationAsGzipSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// PackagePublishedApplicationAsGzipResponder handles the response to the PackagePublishedApplicationAsGzip request. The method always
+// closes the http.Response Body.
+func (client AppsClient) PackagePublishedApplicationAsGzipResponder(resp *http.Response) (result ReadCloser, err error) {
+	result.Value = &resp.Body
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK))
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// PackageTrainedApplicationAsGzip packages trained LUIS application as GZip.
+// Parameters:
+// appID - the application ID.
+// versionID - the version ID.
+func (client AppsClient) PackageTrainedApplicationAsGzip(ctx context.Context, appID uuid.UUID, versionID string) (result ReadCloser, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.PackageTrainedApplicationAsGzip")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.PackageTrainedApplicationAsGzipPreparer(ctx, appID, versionID)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "PackageTrainedApplicationAsGzip", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.PackageTrainedApplicationAsGzipSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "PackageTrainedApplicationAsGzip", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.PackageTrainedApplicationAsGzipResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "PackageTrainedApplicationAsGzip", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// PackageTrainedApplicationAsGzipPreparer prepares the PackageTrainedApplicationAsGzip request.
+func (client AppsClient) PackageTrainedApplicationAsGzipPreparer(ctx context.Context, appID uuid.UUID, versionID string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	pathParameters := map[string]interface{}{
+		"appId":     autorest.Encode("path", appID),
+		"versionId": autorest.Encode("path", versionID),
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
+		autorest.WithPathParameters("/package/{appId}/versions/{versionId}/gzip", pathParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// PackageTrainedApplicationAsGzipSender sends the PackageTrainedApplicationAsGzip request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) PackageTrainedApplicationAsGzipSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// PackageTrainedApplicationAsGzipResponder handles the response to the PackageTrainedApplicationAsGzip request. The method always
+// closes the http.Response Body.
+func (client AppsClient) PackageTrainedApplicationAsGzipResponder(resp *http.Response) (result ReadCloser, err error) {
+	result.Value = &resp.Body
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK))
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // Publish publishes a specific version of the application.
 // Parameters:
 // appID - the application ID.
 // applicationPublishObject - the application publish object. The region is the target region that the
 // application is published to.
 func (client AppsClient) Publish(ctx context.Context, appID uuid.UUID, applicationPublishObject ApplicationPublishObject) (result ProductionOrStagingEndpointInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Publish")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PublishPreparer(ctx, appID, applicationPublishObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "Publish", nil, "Failure preparing request")
@@ -1089,7 +1415,7 @@ func (client AppsClient) PublishResponder(resp *http.Response) (result Productio
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusMultiStatus),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
@@ -1101,6 +1427,16 @@ func (client AppsClient) PublishResponder(resp *http.Response) (result Productio
 // appID - the application ID.
 // applicationUpdateObject - a model containing Name and Description of the application.
 func (client AppsClient) Update(ctx context.Context, appID uuid.UUID, applicationUpdateObject ApplicationUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, appID, applicationUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "Update", nil, "Failure preparing request")
@@ -1166,6 +1502,16 @@ func (client AppsClient) UpdateResponder(resp *http.Response) (result OperationS
 // appID - the application ID.
 // publishSettingUpdateObject - an object containing the new publish application settings.
 func (client AppsClient) UpdatePublishSettings(ctx context.Context, appID uuid.UUID, publishSettingUpdateObject PublishSettingUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.UpdatePublishSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePublishSettingsPreparer(ctx, appID, publishSettingUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "UpdatePublishSettings", nil, "Failure preparing request")
@@ -1231,6 +1577,16 @@ func (client AppsClient) UpdatePublishSettingsResponder(resp *http.Response) (re
 // appID - the application ID.
 // applicationSettingUpdateObject - an object containing the new application settings.
 func (client AppsClient) UpdateSettings(ctx context.Context, appID uuid.UUID, applicationSettingUpdateObject ApplicationSettingUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.UpdateSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateSettingsPreparer(ctx, appID, applicationSettingUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.AppsClient", "UpdateSettings", nil, "Failure preparing request")

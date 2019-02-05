@@ -12,10 +12,10 @@
   "baseUrl": "https://www.googleapis.com/androidpublisher/v1.1/applications/",
   "batchPath": "batch/androidpublisher/v1.1",
   "canonicalName": "Android Publisher",
-  "description": "Lets Android application developers access their Google Play accounts.",
+  "description": "Accesses Android application developers' Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/0bfZdFWLay6o3-v5bg8HgVXuqtg\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/SlWD_44AAZzh33wX5EZhE-9oiU0\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -189,7 +189,7 @@
       }
     }
   },
-  "revision": "20180501",
+  "revision": "20190120",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "InappPurchase": {
@@ -225,7 +225,7 @@
           "type": "string"
         },
         "purchaseType": {
-          "description": "The type of purchase of the inapp product. This field is only set if this purchase was not made using the standard in-app billing flow. Possible values are:  \n- Test (i.e. purchased from a license testing account) \n- Promo (i.e. purchased using a promo code)",
+          "description": "The type of purchase of the inapp product. This field is only set if this purchase was not made using the standard in-app billing flow. Possible values are:  \n- Test (i.e. purchased from a license testing account) \n- Promo (i.e. purchased using a promo code) \n- Rewarded (i.e. from watching a video ad instead of paying)",
           "format": "int32",
           "type": "integer"
         }

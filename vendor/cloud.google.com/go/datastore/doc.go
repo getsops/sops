@@ -33,19 +33,19 @@ to be generated for that entity, with a non-zero IntID.
 
 An entity's contents are a mapping from case-sensitive field names to values.
 Valid value types are:
-  - signed integers (int, int8, int16, int32 and int64),
-  - bool,
-  - string,
-  - float32 and float64,
-  - []byte (up to 1 megabyte in length),
-  - any type whose underlying type is one of the above predeclared types,
-  - *Key,
-  - GeoPoint,
-  - time.Time (stored with microsecond precision, retrieved as local time),
-  - structs whose fields are all valid value types,
-  - pointers to structs whose fields are all valid value types,
-  - slices of any of the above,
-  - pointers to a signed integer, bool, string, float32, or float64.
+  - Signed integers (int, int8, int16, int32 and int64)
+  - bool
+  - string
+  - float32 and float64
+  - []byte (up to 1 megabyte in length)
+  - Any type whose underlying type is one of the above predeclared types
+  - *Key
+  - GeoPoint
+  - time.Time (stored with microsecond precision, retrieved as local time)
+  - Structs whose fields are all valid value types
+  - Pointers to structs whose fields are all valid value types
+  - Slices of any of the above
+  - Pointers to a signed integer, bool, string, float32, or float64
 
 Slices of structs are valid, as are structs that contain slices.
 
@@ -99,8 +99,8 @@ An entity's contents can be represented by a variety of types. These are
 typically struct pointers, but can also be any type that implements the
 PropertyLoadSaver interface. If using a struct pointer, you do not have to
 explicitly implement the PropertyLoadSaver interface; the datastore will
-automatically convert via reflection. If a struct pointer does implement that
-interface then those methods will be used in preference to the default
+automatically convert via reflection. If a struct pointer does implement
+PropertyLoadSaver then those methods will be used in preference to the default
 behavior for struct pointers. Struct pointers are more strongly typed and are
 easier to use; PropertyLoadSavers are more flexible.
 
@@ -124,19 +124,19 @@ field name. A "-" tag name means that the datastore will ignore that field.
 
 The only valid options are "omitempty", "noindex" and "flatten".
 
-If the options include "omitempty" and the value of the field is empty, then the
-field will be omitted on Save. The empty values are false, 0, any nil pointer or
-interface value, and any array, slice, map, or string of length zero. Struct field
-values will never be empty, except for nil pointers.
+If the options include "omitempty" and the value of the field is a zero value,
+then the field will be omitted on Save. Zero values are best defined in the
+golang spec (https://golang.org/ref/spec#The_zero_value). Struct field values
+will never be empty, except for nil pointers.
 
-If options include "noindex" then the field will not be indexed. All fields are indexed
-by default. Strings or byte slices longer than 1500 bytes cannot be indexed;
-fields used to store long strings and byte slices must be tagged with "noindex"
-or they will cause Put operations to fail.
+If options include "noindex" then the field will not be indexed. All fields
+are indexed by default. Strings or byte slices longer than 1500 bytes cannot
+be indexed; fields used to store long strings and byte slices must be tagged
+with "noindex" or they will cause Put operations to fail.
 
-For a nested struct field, the options may also include "flatten". This indicates
-that the immediate fields and any nested substruct fields of the nested struct should be
-flattened. See below for examples.
+For a nested struct field, the options may also include "flatten". This
+indicates that the immediate fields and any nested substruct fields of the
+nested struct should be flattened. See below for examples.
 
 To use multiple options together, separate them by a comma.
 The order does not matter.
@@ -426,7 +426,9 @@ Example code:
 		q := datastore.NewQuery("Widget").
 			Filter("Price <", 1000).
 			Order("-Price")
-		for t := client.Run(ctx, q); ; {
+
+		t := client.Run(ctx, q)
+		for {
 			var x Widget
 			key, err := t.Next(&x)
 			if err == iterator.Done {

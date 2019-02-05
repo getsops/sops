@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewArtifactsClientWithBaseURI(baseURI string, subscriptionID string) Artifa
 // name - the name of the artifact.
 // generateArmTemplateRequest - parameters for generating an ARM template for deploying artifacts.
 func (client ArtifactsClient) GenerateArmTemplate(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, name string, generateArmTemplateRequest GenerateArmTemplateRequest) (result ArmTemplateInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactsClient.GenerateArmTemplate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GenerateArmTemplatePreparer(ctx, resourceGroupName, labName, artifactSourceName, name, generateArmTemplateRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArtifactsClient", "GenerateArmTemplate", nil, "Failure preparing request")
@@ -122,6 +133,16 @@ func (client ArtifactsClient) GenerateArmTemplateResponder(resp *http.Response) 
 // name - the name of the artifact.
 // expand - specify the $expand query. Example: 'properties($select=title)'
 func (client ArtifactsClient) Get(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, name string, expand string) (result Artifact, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, artifactSourceName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArtifactsClient", "Get", nil, "Failure preparing request")
@@ -199,6 +220,16 @@ func (client ArtifactsClient) GetResponder(resp *http.Response) (result Artifact
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client ArtifactsClient) List(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationArtifactPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactsClient.List")
+		defer func() {
+			sc := -1
+			if result.rwca.Response.Response != nil {
+				sc = result.rwca.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, artifactSourceName, expand, filter, top, orderby)
 	if err != nil {
@@ -276,8 +307,8 @@ func (client ArtifactsClient) ListResponder(resp *http.Response) (result Respons
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ArtifactsClient) listNextResults(lastResults ResponseWithContinuationArtifact) (result ResponseWithContinuationArtifact, err error) {
-	req, err := lastResults.responseWithContinuationArtifactPreparer()
+func (client ArtifactsClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationArtifact) (result ResponseWithContinuationArtifact, err error) {
+	req, err := lastResults.responseWithContinuationArtifactPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.ArtifactsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -298,6 +329,16 @@ func (client ArtifactsClient) listNextResults(lastResults ResponseWithContinuati
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ArtifactsClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationArtifactIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArtifactsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, artifactSourceName, expand, filter, top, orderby)
 	return
 }

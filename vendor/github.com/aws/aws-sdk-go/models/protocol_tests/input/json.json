@@ -620,5 +620,90 @@
         }
       }
     ]
+  },
+  {
+    "description": "Endpoint host trait static prefix",
+    "metadata": {
+      "protocol": "json",
+      "jsonVersion": "1.1",
+      "targetPrefix": "com.amazonaws.foo"
+    },
+    "clientEndpoint": "https://service.region.amazonaws.com",
+    "shapes": {
+      "StaticInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType"
+          }
+        }
+      },
+      "MemberRefInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType",
+            "hostLabel": true
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "name": "StaticOp",
+          "input": {
+            "shape": "StaticInputShape"
+          },
+          "http": {
+            "method": "POST"
+          },
+          "endpoint":{
+              "hostPrefix": "data-"
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "headers": {
+            "X-Amz-Target": "com.amazonaws.foo.StaticOp",
+            "Content-Type": "application/x-amz-json-1.1"
+          },
+          "uri": "/",
+          "body": "{\"Name\": \"myname\"}",
+          "host": "data-service.region.amazonaws.com"
+        }
+      },
+      {
+        "given": {
+          "name": "MemberRefOp",
+          "input": {
+            "shape": "MemberRefInputShape"
+          },
+          "http": {
+            "method": "POST"
+          },
+          "endpoint":{
+              "hostPrefix": "foo-{Name}."
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "headers": {
+            "X-Amz-Target": "com.amazonaws.foo.MemberRefOp",
+            "Content-Type": "application/x-amz-json-1.1"
+          },
+          "uri": "/",
+          "body": "{\"Name\": \"myname\"}",
+          "host": "foo-myname.service.region.amazonaws.com"
+        }
+      }
+    ]
   }
 ]

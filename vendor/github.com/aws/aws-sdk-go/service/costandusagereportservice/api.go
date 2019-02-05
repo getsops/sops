@@ -6,6 +6,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opDeleteReportDefinition = "DeleteReportDefinition"
@@ -13,7 +15,7 @@ const opDeleteReportDefinition = "DeleteReportDefinition"
 // DeleteReportDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteReportDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -97,7 +99,7 @@ const opDescribeReportDefinitions = "DescribeReportDefinitions"
 // DescribeReportDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReportDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -232,7 +234,7 @@ const opPutReportDefinition = "PutReportDefinition"
 // PutReportDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the PutReportDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -266,6 +268,7 @@ func (c *CostandUsageReportService) PutReportDefinitionRequest(input *PutReportD
 
 	output = &PutReportDefinitionOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 

@@ -47,7 +47,7 @@ func (m *LoginProfile) Reset()         { *m = LoginProfile{} }
 func (m *LoginProfile) String() string { return proto.CompactTextString(m) }
 func (*LoginProfile) ProtoMessage()    {}
 func (*LoginProfile) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{0}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{0}
 }
 func (m *LoginProfile) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LoginProfile.Unmarshal(m, b)
@@ -55,8 +55,8 @@ func (m *LoginProfile) XXX_Unmarshal(b []byte) error {
 func (m *LoginProfile) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LoginProfile.Marshal(b, m, deterministic)
 }
-func (m *LoginProfile) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LoginProfile.Merge(m, src)
+func (dst *LoginProfile) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LoginProfile.Merge(dst, src)
 }
 func (m *LoginProfile) XXX_Size() int {
 	return xxx_messageInfo_LoginProfile.Size(m)
@@ -110,7 +110,7 @@ func (m *DeletePosixAccountRequest) Reset()         { *m = DeletePosixAccountReq
 func (m *DeletePosixAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*DeletePosixAccountRequest) ProtoMessage()    {}
 func (*DeletePosixAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{1}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{1}
 }
 func (m *DeletePosixAccountRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeletePosixAccountRequest.Unmarshal(m, b)
@@ -118,8 +118,8 @@ func (m *DeletePosixAccountRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeletePosixAccountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeletePosixAccountRequest.Marshal(b, m, deterministic)
 }
-func (m *DeletePosixAccountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeletePosixAccountRequest.Merge(m, src)
+func (dst *DeletePosixAccountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeletePosixAccountRequest.Merge(dst, src)
 }
 func (m *DeletePosixAccountRequest) XXX_Size() int {
 	return xxx_messageInfo_DeletePosixAccountRequest.Size(m)
@@ -152,7 +152,7 @@ func (m *DeleteSshPublicKeyRequest) Reset()         { *m = DeleteSshPublicKeyReq
 func (m *DeleteSshPublicKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteSshPublicKeyRequest) ProtoMessage()    {}
 func (*DeleteSshPublicKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{2}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{2}
 }
 func (m *DeleteSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteSshPublicKeyRequest.Unmarshal(m, b)
@@ -160,8 +160,8 @@ func (m *DeleteSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteSshPublicKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteSshPublicKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteSshPublicKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteSshPublicKeyRequest.Merge(m, src)
+func (dst *DeleteSshPublicKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteSshPublicKeyRequest.Merge(dst, src)
 }
 func (m *DeleteSshPublicKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteSshPublicKeyRequest.Size(m)
@@ -192,7 +192,7 @@ func (m *GetLoginProfileRequest) Reset()         { *m = GetLoginProfileRequest{}
 func (m *GetLoginProfileRequest) String() string { return proto.CompactTextString(m) }
 func (*GetLoginProfileRequest) ProtoMessage()    {}
 func (*GetLoginProfileRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{3}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{3}
 }
 func (m *GetLoginProfileRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetLoginProfileRequest.Unmarshal(m, b)
@@ -200,8 +200,8 @@ func (m *GetLoginProfileRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetLoginProfileRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetLoginProfileRequest.Marshal(b, m, deterministic)
 }
-func (m *GetLoginProfileRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLoginProfileRequest.Merge(m, src)
+func (dst *GetLoginProfileRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetLoginProfileRequest.Merge(dst, src)
 }
 func (m *GetLoginProfileRequest) XXX_Size() int {
 	return xxx_messageInfo_GetLoginProfileRequest.Size(m)
@@ -234,7 +234,7 @@ func (m *GetSshPublicKeyRequest) Reset()         { *m = GetSshPublicKeyRequest{}
 func (m *GetSshPublicKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSshPublicKeyRequest) ProtoMessage()    {}
 func (*GetSshPublicKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{4}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{4}
 }
 func (m *GetSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetSshPublicKeyRequest.Unmarshal(m, b)
@@ -242,8 +242,8 @@ func (m *GetSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetSshPublicKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetSshPublicKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetSshPublicKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSshPublicKeyRequest.Merge(m, src)
+func (dst *GetSshPublicKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSshPublicKeyRequest.Merge(dst, src)
 }
 func (m *GetSshPublicKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetSshPublicKeyRequest.Size(m)
@@ -278,7 +278,7 @@ func (m *ImportSshPublicKeyRequest) Reset()         { *m = ImportSshPublicKeyReq
 func (m *ImportSshPublicKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*ImportSshPublicKeyRequest) ProtoMessage()    {}
 func (*ImportSshPublicKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{5}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{5}
 }
 func (m *ImportSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImportSshPublicKeyRequest.Unmarshal(m, b)
@@ -286,8 +286,8 @@ func (m *ImportSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *ImportSshPublicKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImportSshPublicKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *ImportSshPublicKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImportSshPublicKeyRequest.Merge(m, src)
+func (dst *ImportSshPublicKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportSshPublicKeyRequest.Merge(dst, src)
 }
 func (m *ImportSshPublicKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_ImportSshPublicKeyRequest.Size(m)
@@ -332,7 +332,7 @@ func (m *ImportSshPublicKeyResponse) Reset()         { *m = ImportSshPublicKeyRe
 func (m *ImportSshPublicKeyResponse) String() string { return proto.CompactTextString(m) }
 func (*ImportSshPublicKeyResponse) ProtoMessage()    {}
 func (*ImportSshPublicKeyResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{6}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{6}
 }
 func (m *ImportSshPublicKeyResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImportSshPublicKeyResponse.Unmarshal(m, b)
@@ -340,8 +340,8 @@ func (m *ImportSshPublicKeyResponse) XXX_Unmarshal(b []byte) error {
 func (m *ImportSshPublicKeyResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImportSshPublicKeyResponse.Marshal(b, m, deterministic)
 }
-func (m *ImportSshPublicKeyResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImportSshPublicKeyResponse.Merge(m, src)
+func (dst *ImportSshPublicKeyResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportSshPublicKeyResponse.Merge(dst, src)
 }
 func (m *ImportSshPublicKeyResponse) XXX_Size() int {
 	return xxx_messageInfo_ImportSshPublicKeyResponse.Size(m)
@@ -378,7 +378,7 @@ func (m *UpdateSshPublicKeyRequest) Reset()         { *m = UpdateSshPublicKeyReq
 func (m *UpdateSshPublicKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateSshPublicKeyRequest) ProtoMessage()    {}
 func (*UpdateSshPublicKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9929680849ee8c07, []int{7}
+	return fileDescriptor_oslogin_9160791ccb698e5f, []int{7}
 }
 func (m *UpdateSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateSshPublicKeyRequest.Unmarshal(m, b)
@@ -386,8 +386,8 @@ func (m *UpdateSshPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateSshPublicKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateSshPublicKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateSshPublicKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateSshPublicKeyRequest.Merge(m, src)
+func (dst *UpdateSshPublicKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateSshPublicKeyRequest.Merge(dst, src)
 }
 func (m *UpdateSshPublicKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateSshPublicKeyRequest.Size(m)
@@ -689,10 +689,10 @@ var _OsLoginService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/oslogin/v1alpha/oslogin.proto", fileDescriptor_9929680849ee8c07)
+	proto.RegisterFile("google/cloud/oslogin/v1alpha/oslogin.proto", fileDescriptor_oslogin_9160791ccb698e5f)
 }
 
-var fileDescriptor_9929680849ee8c07 = []byte{
+var fileDescriptor_oslogin_9160791ccb698e5f = []byte{
 	// 779 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcd, 0x6a, 0xdb, 0x4a,
 	0x14, 0x46, 0x76, 0x6e, 0x48, 0xc6, 0x4e, 0x72, 0x99, 0x45, 0x70, 0x74, 0x73, 0xc1, 0x88, 0xd0,

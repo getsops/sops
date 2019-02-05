@@ -44,7 +44,7 @@ func (m *SetIamPolicyRequest) Reset()         { *m = SetIamPolicyRequest{} }
 func (m *SetIamPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*SetIamPolicyRequest) ProtoMessage()    {}
 func (*SetIamPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2728eb97d748a32, []int{0}
+	return fileDescriptor_iam_policy_58547b5cf2e9d67a, []int{0}
 }
 func (m *SetIamPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetIamPolicyRequest.Unmarshal(m, b)
@@ -52,8 +52,8 @@ func (m *SetIamPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetIamPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetIamPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *SetIamPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetIamPolicyRequest.Merge(m, src)
+func (dst *SetIamPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetIamPolicyRequest.Merge(dst, src)
 }
 func (m *SetIamPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_SetIamPolicyRequest.Size(m)
@@ -93,7 +93,7 @@ func (m *GetIamPolicyRequest) Reset()         { *m = GetIamPolicyRequest{} }
 func (m *GetIamPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetIamPolicyRequest) ProtoMessage()    {}
 func (*GetIamPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2728eb97d748a32, []int{1}
+	return fileDescriptor_iam_policy_58547b5cf2e9d67a, []int{1}
 }
 func (m *GetIamPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetIamPolicyRequest.Unmarshal(m, b)
@@ -101,8 +101,8 @@ func (m *GetIamPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetIamPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetIamPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetIamPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetIamPolicyRequest.Merge(m, src)
+func (dst *GetIamPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetIamPolicyRequest.Merge(dst, src)
 }
 func (m *GetIamPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetIamPolicyRequest.Size(m)
@@ -140,7 +140,7 @@ func (m *TestIamPermissionsRequest) Reset()         { *m = TestIamPermissionsReq
 func (m *TestIamPermissionsRequest) String() string { return proto.CompactTextString(m) }
 func (*TestIamPermissionsRequest) ProtoMessage()    {}
 func (*TestIamPermissionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2728eb97d748a32, []int{2}
+	return fileDescriptor_iam_policy_58547b5cf2e9d67a, []int{2}
 }
 func (m *TestIamPermissionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TestIamPermissionsRequest.Unmarshal(m, b)
@@ -148,8 +148,8 @@ func (m *TestIamPermissionsRequest) XXX_Unmarshal(b []byte) error {
 func (m *TestIamPermissionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TestIamPermissionsRequest.Marshal(b, m, deterministic)
 }
-func (m *TestIamPermissionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TestIamPermissionsRequest.Merge(m, src)
+func (dst *TestIamPermissionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TestIamPermissionsRequest.Merge(dst, src)
 }
 func (m *TestIamPermissionsRequest) XXX_Size() int {
 	return xxx_messageInfo_TestIamPermissionsRequest.Size(m)
@@ -188,7 +188,7 @@ func (m *TestIamPermissionsResponse) Reset()         { *m = TestIamPermissionsRe
 func (m *TestIamPermissionsResponse) String() string { return proto.CompactTextString(m) }
 func (*TestIamPermissionsResponse) ProtoMessage()    {}
 func (*TestIamPermissionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d2728eb97d748a32, []int{3}
+	return fileDescriptor_iam_policy_58547b5cf2e9d67a, []int{3}
 }
 func (m *TestIamPermissionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TestIamPermissionsResponse.Unmarshal(m, b)
@@ -196,8 +196,8 @@ func (m *TestIamPermissionsResponse) XXX_Unmarshal(b []byte) error {
 func (m *TestIamPermissionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TestIamPermissionsResponse.Marshal(b, m, deterministic)
 }
-func (m *TestIamPermissionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TestIamPermissionsResponse.Merge(m, src)
+func (dst *TestIamPermissionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TestIamPermissionsResponse.Merge(dst, src)
 }
 func (m *TestIamPermissionsResponse) XXX_Size() int {
 	return xxx_messageInfo_TestIamPermissionsResponse.Size(m)
@@ -376,9 +376,11 @@ var _IAMPolicy_serviceDesc = grpc.ServiceDesc{
 	Metadata: "google/iam/v1/iam_policy.proto",
 }
 
-func init() { proto.RegisterFile("google/iam/v1/iam_policy.proto", fileDescriptor_d2728eb97d748a32) }
+func init() {
+	proto.RegisterFile("google/iam/v1/iam_policy.proto", fileDescriptor_iam_policy_58547b5cf2e9d67a)
+}
 
-var fileDescriptor_d2728eb97d748a32 = []byte{
+var fileDescriptor_iam_policy_58547b5cf2e9d67a = []byte{
 	// 411 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4b, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0xcf, 0x4c, 0xcc, 0xd5, 0x2f, 0x33, 0x04, 0x51, 0xf1, 0x05, 0xf9, 0x39, 0x99,

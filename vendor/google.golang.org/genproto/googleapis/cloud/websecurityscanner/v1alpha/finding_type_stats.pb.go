@@ -37,7 +37,7 @@ func (m *FindingTypeStats) Reset()         { *m = FindingTypeStats{} }
 func (m *FindingTypeStats) String() string { return proto.CompactTextString(m) }
 func (*FindingTypeStats) ProtoMessage()    {}
 func (*FindingTypeStats) Descriptor() ([]byte, []int) {
-	return fileDescriptor_91da39ac488bf6ea, []int{0}
+	return fileDescriptor_finding_type_stats_94c253b9b7add3fc, []int{0}
 }
 func (m *FindingTypeStats) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FindingTypeStats.Unmarshal(m, b)
@@ -45,8 +45,8 @@ func (m *FindingTypeStats) XXX_Unmarshal(b []byte) error {
 func (m *FindingTypeStats) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FindingTypeStats.Marshal(b, m, deterministic)
 }
-func (m *FindingTypeStats) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FindingTypeStats.Merge(m, src)
+func (dst *FindingTypeStats) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindingTypeStats.Merge(dst, src)
 }
 func (m *FindingTypeStats) XXX_Size() int {
 	return xxx_messageInfo_FindingTypeStats.Size(m)
@@ -76,10 +76,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/finding_type_stats.proto", fileDescriptor_91da39ac488bf6ea)
+	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/finding_type_stats.proto", fileDescriptor_finding_type_stats_94c253b9b7add3fc)
 }
 
-var fileDescriptor_91da39ac488bf6ea = []byte{
+var fileDescriptor_finding_type_stats_94c253b9b7add3fc = []byte{
 	// 256 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x72, 0x48, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x4f, 0xce, 0xc9, 0x2f, 0x4d, 0xd1, 0x2f, 0x4f, 0x4d, 0x2a, 0x4e, 0x4d, 0x2e,

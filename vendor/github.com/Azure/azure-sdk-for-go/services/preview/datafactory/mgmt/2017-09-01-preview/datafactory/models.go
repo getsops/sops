@@ -18,14 +18,19 @@ package datafactory
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datafactory/mgmt/2017-09-01-preview/datafactory"
 
 // AuthenticationType enumerates the values for authentication type.
 type AuthenticationType string
@@ -944,21 +949,6 @@ const (
 // PossibleSparkThriftTransportProtocolValues returns an array of possible values for the SparkThriftTransportProtocol const type.
 func PossibleSparkThriftTransportProtocolValues() []SparkThriftTransportProtocol {
 	return []SparkThriftTransportProtocol{SparkThriftTransportProtocolBinary, SparkThriftTransportProtocolHTTP, SparkThriftTransportProtocolSASL}
-}
-
-// SSISExecutionRuntime enumerates the values for ssis execution runtime.
-type SSISExecutionRuntime string
-
-const (
-	// X64 ...
-	X64 SSISExecutionRuntime = "x64"
-	// X86 ...
-	X86 SSISExecutionRuntime = "x86"
-)
-
-// PossibleSSISExecutionRuntimeValues returns an array of possible values for the SSISExecutionRuntime const type.
-func PossibleSSISExecutionRuntimeValues() []SSISExecutionRuntime {
-	return []SSISExecutionRuntime{X64, X86}
 }
 
 // StoredProcedureParameterType enumerates the values for stored procedure parameter type.
@@ -2038,6 +2028,69 @@ func (a Activity) AsBasicActivity() (BasicActivity, bool) {
 	return &a, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for Activity struct.
+func (a *Activity) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if a.AdditionalProperties == nil {
+					a.AdditionalProperties = make(map[string]interface{})
+				}
+				a.AdditionalProperties[k] = additionalProperties
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				a.Name = &name
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				a.Description = &description
+			}
+		case "dependsOn":
+			if v != nil {
+				var dependsOn []ActivityDependency
+				err = json.Unmarshal(*v, &dependsOn)
+				if err != nil {
+					return err
+				}
+				a.DependsOn = &dependsOn
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicActivity
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				a.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // ActivityDependency activity dependency information.
 type ActivityDependency struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -2063,6 +2116,51 @@ func (ad ActivityDependency) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for ActivityDependency struct.
+func (ad *ActivityDependency) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ad.AdditionalProperties == nil {
+					ad.AdditionalProperties = make(map[string]interface{})
+				}
+				ad.AdditionalProperties[k] = additionalProperties
+			}
+		case "activity":
+			if v != nil {
+				var activity string
+				err = json.Unmarshal(*v, &activity)
+				if err != nil {
+					return err
+				}
+				ad.Activity = &activity
+			}
+		case "dependencyConditions":
+			if v != nil {
+				var dependencyConditions []DependencyCondition
+				err = json.Unmarshal(*v, &dependencyConditions)
+				if err != nil {
+					return err
+				}
+				ad.DependencyConditions = &dependencyConditions
+			}
+		}
+	}
+
+	return nil
+}
+
 // ActivityPolicy execution policy for an activity.
 type ActivityPolicy struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -2080,8 +2178,12 @@ type ActivityPolicy struct {
 // MarshalJSON is the custom marshaler for ActivityPolicy.
 func (ap ActivityPolicy) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["timeout"] = ap.Timeout
-	objectMap["retry"] = ap.Retry
+	if ap.Timeout != nil {
+		objectMap["timeout"] = ap.Timeout
+	}
+	if ap.Retry != nil {
+		objectMap["retry"] = ap.Retry
+	}
 	if ap.RetryIntervalInSeconds != nil {
 		objectMap["retryIntervalInSeconds"] = ap.RetryIntervalInSeconds
 	}
@@ -2092,6 +2194,69 @@ func (ap ActivityPolicy) MarshalJSON() ([]byte, error) {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for ActivityPolicy struct.
+func (ap *ActivityPolicy) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ap.AdditionalProperties == nil {
+					ap.AdditionalProperties = make(map[string]interface{})
+				}
+				ap.AdditionalProperties[k] = additionalProperties
+			}
+		case "timeout":
+			if v != nil {
+				var timeout interface{}
+				err = json.Unmarshal(*v, &timeout)
+				if err != nil {
+					return err
+				}
+				ap.Timeout = timeout
+			}
+		case "retry":
+			if v != nil {
+				var retry interface{}
+				err = json.Unmarshal(*v, &retry)
+				if err != nil {
+					return err
+				}
+				ap.Retry = retry
+			}
+		case "retryIntervalInSeconds":
+			if v != nil {
+				var retryIntervalInSeconds int32
+				err = json.Unmarshal(*v, &retryIntervalInSeconds)
+				if err != nil {
+					return err
+				}
+				ap.RetryIntervalInSeconds = &retryIntervalInSeconds
+			}
+		case "secureOutput":
+			if v != nil {
+				var secureOutput bool
+				err = json.Unmarshal(*v, &secureOutput)
+				if err != nil {
+					return err
+				}
+				ap.SecureOutput = &secureOutput
+			}
+		}
+	}
+
+	return nil
 }
 
 // ActivityRun information about an activity run in a pipeline.
@@ -2159,13 +2324,163 @@ func (ar ActivityRun) MarshalJSON() ([]byte, error) {
 	if ar.DurationInMs != nil {
 		objectMap["durationInMs"] = ar.DurationInMs
 	}
-	objectMap["input"] = ar.Input
-	objectMap["output"] = ar.Output
-	objectMap["error"] = ar.Error
+	if ar.Input != nil {
+		objectMap["input"] = ar.Input
+	}
+	if ar.Output != nil {
+		objectMap["output"] = ar.Output
+	}
+	if ar.Error != nil {
+		objectMap["error"] = ar.Error
+	}
 	for k, v := range ar.AdditionalProperties {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for ActivityRun struct.
+func (ar *ActivityRun) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ar.AdditionalProperties == nil {
+					ar.AdditionalProperties = make(map[string]interface{})
+				}
+				ar.AdditionalProperties[k] = additionalProperties
+			}
+		case "pipelineName":
+			if v != nil {
+				var pipelineName string
+				err = json.Unmarshal(*v, &pipelineName)
+				if err != nil {
+					return err
+				}
+				ar.PipelineName = &pipelineName
+			}
+		case "pipelineRunId":
+			if v != nil {
+				var pipelineRunID string
+				err = json.Unmarshal(*v, &pipelineRunID)
+				if err != nil {
+					return err
+				}
+				ar.PipelineRunID = &pipelineRunID
+			}
+		case "activityName":
+			if v != nil {
+				var activityName string
+				err = json.Unmarshal(*v, &activityName)
+				if err != nil {
+					return err
+				}
+				ar.ActivityName = &activityName
+			}
+		case "activityType":
+			if v != nil {
+				var activityType string
+				err = json.Unmarshal(*v, &activityType)
+				if err != nil {
+					return err
+				}
+				ar.ActivityType = &activityType
+			}
+		case "activityRunId":
+			if v != nil {
+				var activityRunID string
+				err = json.Unmarshal(*v, &activityRunID)
+				if err != nil {
+					return err
+				}
+				ar.ActivityRunID = &activityRunID
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName string
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				ar.LinkedServiceName = &linkedServiceName
+			}
+		case "status":
+			if v != nil {
+				var status string
+				err = json.Unmarshal(*v, &status)
+				if err != nil {
+					return err
+				}
+				ar.Status = &status
+			}
+		case "activityRunStart":
+			if v != nil {
+				var activityRunStart date.Time
+				err = json.Unmarshal(*v, &activityRunStart)
+				if err != nil {
+					return err
+				}
+				ar.ActivityRunStart = &activityRunStart
+			}
+		case "activityRunEnd":
+			if v != nil {
+				var activityRunEnd date.Time
+				err = json.Unmarshal(*v, &activityRunEnd)
+				if err != nil {
+					return err
+				}
+				ar.ActivityRunEnd = &activityRunEnd
+			}
+		case "durationInMs":
+			if v != nil {
+				var durationInMs int32
+				err = json.Unmarshal(*v, &durationInMs)
+				if err != nil {
+					return err
+				}
+				ar.DurationInMs = &durationInMs
+			}
+		case "input":
+			if v != nil {
+				var input interface{}
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				ar.Input = input
+			}
+		case "output":
+			if v != nil {
+				var output interface{}
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				ar.Output = output
+			}
+		case "error":
+			if v != nil {
+				var errorVar interface{}
+				err = json.Unmarshal(*v, &errorVar)
+				if err != nil {
+					return err
+				}
+				ar.Error = errorVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // ActivityRunsListResponse a list activity runs.
@@ -2183,20 +2498,37 @@ type ActivityRunsListResponseIterator struct {
 	page ActivityRunsListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ActivityRunsListResponseIterator) Next() error {
+func (iter *ActivityRunsListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ActivityRunsListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ActivityRunsListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2218,6 +2550,11 @@ func (iter ActivityRunsListResponseIterator) Value() ActivityRun {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ActivityRunsListResponseIterator type.
+func NewActivityRunsListResponseIterator(page ActivityRunsListResponsePage) ActivityRunsListResponseIterator {
+	return ActivityRunsListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (arlr ActivityRunsListResponse) IsEmpty() bool {
 	return arlr.Value == nil || len(*arlr.Value) == 0
@@ -2225,11 +2562,11 @@ func (arlr ActivityRunsListResponse) IsEmpty() bool {
 
 // activityRunsListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (arlr ActivityRunsListResponse) activityRunsListResponsePreparer() (*http.Request, error) {
+func (arlr ActivityRunsListResponse) activityRunsListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if arlr.NextLink == nil || len(to.String(arlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(arlr.NextLink)))
@@ -2237,19 +2574,36 @@ func (arlr ActivityRunsListResponse) activityRunsListResponsePreparer() (*http.R
 
 // ActivityRunsListResponsePage contains a page of ActivityRun values.
 type ActivityRunsListResponsePage struct {
-	fn   func(ActivityRunsListResponse) (ActivityRunsListResponse, error)
+	fn   func(context.Context, ActivityRunsListResponse) (ActivityRunsListResponse, error)
 	arlr ActivityRunsListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ActivityRunsListResponsePage) Next() error {
-	next, err := page.fn(page.arlr)
+func (page *ActivityRunsListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ActivityRunsListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.arlr)
 	if err != nil {
 		return err
 	}
 	page.arlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ActivityRunsListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2268,6 +2622,11 @@ func (page ActivityRunsListResponsePage) Values() []ActivityRun {
 		return nil
 	}
 	return *page.arlr.Value
+}
+
+// Creates a new instance of the ActivityRunsListResponsePage type.
+func NewActivityRunsListResponsePage(getNextPage func(context.Context, ActivityRunsListResponse) (ActivityRunsListResponse, error)) ActivityRunsListResponsePage {
+	return ActivityRunsListResponsePage{fn: getNextPage}
 }
 
 // AmazonMWSLinkedService amazon Marketplace Web Service linked service.
@@ -2761,7 +3120,7 @@ func (amls *AmazonMWSLinkedService) UnmarshalJSON(body []byte) error {
 type AmazonMWSLinkedServiceTypeProperties struct {
 	// Endpoint - The endpoint of the Amazon MWS server, (i.e. mws.amazonservices.com)
 	Endpoint interface{} `json:"endpoint,omitempty"`
-	// MarketplaceID - The Amazon Marketplace ID you want to retrieve data from. To retrive data from multiple Marketplace IDs, seperate them with a comma (,). (i.e. A2EUQ1WTGCTBG2)
+	// MarketplaceID - The Amazon Marketplace ID you want to retrieve data from. To retrieve data from multiple Marketplace IDs, separate them with a comma (,). (i.e. A2EUQ1WTGCTBG2)
 	MarketplaceID interface{} `json:"marketplaceID,omitempty"`
 	// SellerID - The Amazon seller ID.
 	SellerID interface{} `json:"sellerID,omitempty"`
@@ -2909,7 +3268,9 @@ func (amod AmazonMWSObjectDataset) MarshalJSON() ([]byte, error) {
 	if amod.Description != nil {
 		objectMap["description"] = amod.Description
 	}
-	objectMap["structure"] = amod.Structure
+	if amod.Structure != nil {
+		objectMap["structure"] = amod.Structure
+	}
 	if amod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = amod.LinkedServiceName
 	}
@@ -3203,6 +3564,87 @@ func (amod AmazonMWSObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &amod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AmazonMWSObjectDataset struct.
+func (amod *AmazonMWSObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if amod.AdditionalProperties == nil {
+					amod.AdditionalProperties = make(map[string]interface{})
+				}
+				amod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				amod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				amod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				amod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				amod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				amod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				amod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AmazonMWSSource a copy activity Amazon Marketplace Web Service source.
 type AmazonMWSSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -3221,9 +3663,15 @@ type AmazonMWSSource struct {
 func (ams AmazonMWSSource) MarshalJSON() ([]byte, error) {
 	ams.Type = TypeAmazonMWSSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ams.Query
-	objectMap["sourceRetryCount"] = ams.SourceRetryCount
-	objectMap["sourceRetryWait"] = ams.SourceRetryWait
+	if ams.Query != nil {
+		objectMap["query"] = ams.Query
+	}
+	if ams.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ams.SourceRetryCount
+	}
+	if ams.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ams.SourceRetryWait
+	}
 	if ams.Type != "" {
 		objectMap["type"] = ams.Type
 	}
@@ -3491,6 +3939,69 @@ func (ams AmazonMWSSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for AmazonMWSSource.
 func (ams AmazonMWSSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ams, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for AmazonMWSSource struct.
+func (ams *AmazonMWSSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ams.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ams.AdditionalProperties == nil {
+					ams.AdditionalProperties = make(map[string]interface{})
+				}
+				ams.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ams.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ams.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ams.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // AmazonRedshiftLinkedService linked service for Amazon Redshift.
@@ -4084,12 +4595,18 @@ type AmazonRedshiftSource struct {
 func (ars AmazonRedshiftSource) MarshalJSON() ([]byte, error) {
 	ars.Type = TypeAmazonRedshiftSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ars.Query
+	if ars.Query != nil {
+		objectMap["query"] = ars.Query
+	}
 	if ars.RedshiftUnloadSettings != nil {
 		objectMap["redshiftUnloadSettings"] = ars.RedshiftUnloadSettings
 	}
-	objectMap["sourceRetryCount"] = ars.SourceRetryCount
-	objectMap["sourceRetryWait"] = ars.SourceRetryWait
+	if ars.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ars.SourceRetryCount
+	}
+	if ars.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ars.SourceRetryWait
+	}
 	if ars.Type != "" {
 		objectMap["type"] = ars.Type
 	}
@@ -4359,6 +4876,78 @@ func (ars AmazonRedshiftSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ars, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AmazonRedshiftSource struct.
+func (ars *AmazonRedshiftSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ars.Query = query
+			}
+		case "redshiftUnloadSettings":
+			if v != nil {
+				var redshiftUnloadSettings RedshiftUnloadSettings
+				err = json.Unmarshal(*v, &redshiftUnloadSettings)
+				if err != nil {
+					return err
+				}
+				ars.RedshiftUnloadSettings = &redshiftUnloadSettings
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ars.AdditionalProperties == nil {
+					ars.AdditionalProperties = make(map[string]interface{})
+				}
+				ars.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ars.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ars.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ars.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AmazonS3Dataset a single Amazon Simple Storage Service (S3) object or a set of S3 objects.
 type AmazonS3Dataset struct {
 	// AmazonS3DatasetTypeProperties - Amazon S3 dataset properties.
@@ -4389,7 +4978,9 @@ func (asd AmazonS3Dataset) MarshalJSON() ([]byte, error) {
 	if asd.Description != nil {
 		objectMap["description"] = asd.Description
 	}
-	objectMap["structure"] = asd.Structure
+	if asd.Structure != nil {
+		objectMap["structure"] = asd.Structure
+	}
 	if asd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = asd.LinkedServiceName
 	}
@@ -5410,8 +6001,12 @@ type AvroFormat struct {
 func (af AvroFormat) MarshalJSON() ([]byte, error) {
 	af.Type = TypeAvroFormat
 	objectMap := make(map[string]interface{})
-	objectMap["serializer"] = af.Serializer
-	objectMap["deserializer"] = af.Deserializer
+	if af.Serializer != nil {
+		objectMap["serializer"] = af.Serializer
+	}
+	if af.Deserializer != nil {
+		objectMap["deserializer"] = af.Deserializer
+	}
 	if af.Type != "" {
 		objectMap["type"] = af.Type
 	}
@@ -5454,6 +6049,60 @@ func (af AvroFormat) AsDatasetStorageFormat() (*DatasetStorageFormat, bool) {
 // AsBasicDatasetStorageFormat is the BasicDatasetStorageFormat implementation for AvroFormat.
 func (af AvroFormat) AsBasicDatasetStorageFormat() (BasicDatasetStorageFormat, bool) {
 	return &af, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for AvroFormat struct.
+func (af *AvroFormat) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if af.AdditionalProperties == nil {
+					af.AdditionalProperties = make(map[string]interface{})
+				}
+				af.AdditionalProperties[k] = additionalProperties
+			}
+		case "serializer":
+			if v != nil {
+				var serializer interface{}
+				err = json.Unmarshal(*v, &serializer)
+				if err != nil {
+					return err
+				}
+				af.Serializer = serializer
+			}
+		case "deserializer":
+			if v != nil {
+				var deserializer interface{}
+				err = json.Unmarshal(*v, &deserializer)
+				if err != nil {
+					return err
+				}
+				af.Deserializer = deserializer
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetStorageFormat
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				af.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // AzureBatchLinkedService azure Batch linked service.
@@ -6057,7 +6706,9 @@ func (abd AzureBlobDataset) MarshalJSON() ([]byte, error) {
 	if abd.Description != nil {
 		objectMap["description"] = abd.Description
 	}
-	objectMap["structure"] = abd.Structure
+	if abd.Structure != nil {
+		objectMap["structure"] = abd.Structure
+	}
 	if abd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = abd.LinkedServiceName
 	}
@@ -7023,16 +7674,28 @@ type AzureDatabricksLinkedServiceTypeProperties struct {
 // MarshalJSON is the custom marshaler for AzureDatabricksLinkedServiceTypeProperties.
 func (adlstp AzureDatabricksLinkedServiceTypeProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["domain"] = adlstp.Domain
+	if adlstp.Domain != nil {
+		objectMap["domain"] = adlstp.Domain
+	}
 	objectMap["accessToken"] = adlstp.AccessToken
-	objectMap["existingClusterId"] = adlstp.ExistingClusterID
-	objectMap["newClusterVersion"] = adlstp.NewClusterVersion
-	objectMap["newClusterNumOfWorker"] = adlstp.NewClusterNumOfWorker
-	objectMap["newClusterNodeType"] = adlstp.NewClusterNodeType
+	if adlstp.ExistingClusterID != nil {
+		objectMap["existingClusterId"] = adlstp.ExistingClusterID
+	}
+	if adlstp.NewClusterVersion != nil {
+		objectMap["newClusterVersion"] = adlstp.NewClusterVersion
+	}
+	if adlstp.NewClusterNumOfWorker != nil {
+		objectMap["newClusterNumOfWorker"] = adlstp.NewClusterNumOfWorker
+	}
+	if adlstp.NewClusterNodeType != nil {
+		objectMap["newClusterNodeType"] = adlstp.NewClusterNodeType
+	}
 	if adlstp.NewClusterSparkConf != nil {
 		objectMap["newClusterSparkConf"] = adlstp.NewClusterSparkConf
 	}
-	objectMap["encryptedCredential"] = adlstp.EncryptedCredential
+	if adlstp.EncryptedCredential != nil {
+		objectMap["encryptedCredential"] = adlstp.EncryptedCredential
+	}
 	return json.Marshal(objectMap)
 }
 
@@ -7745,7 +8408,9 @@ func (adlsd AzureDataLakeStoreDataset) MarshalJSON() ([]byte, error) {
 	if adlsd.Description != nil {
 		objectMap["description"] = adlsd.Description
 	}
-	objectMap["structure"] = adlsd.Structure
+	if adlsd.Structure != nil {
+		objectMap["structure"] = adlsd.Structure
+	}
 	if adlsd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = adlsd.LinkedServiceName
 	}
@@ -8808,10 +9473,18 @@ func (adlss AzureDataLakeStoreSink) MarshalJSON() ([]byte, error) {
 	if adlss.CopyBehavior != "" {
 		objectMap["copyBehavior"] = adlss.CopyBehavior
 	}
-	objectMap["writeBatchSize"] = adlss.WriteBatchSize
-	objectMap["writeBatchTimeout"] = adlss.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = adlss.SinkRetryCount
-	objectMap["sinkRetryWait"] = adlss.SinkRetryWait
+	if adlss.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = adlss.WriteBatchSize
+	}
+	if adlss.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = adlss.WriteBatchTimeout
+	}
+	if adlss.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = adlss.SinkRetryCount
+	}
+	if adlss.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = adlss.SinkRetryWait
+	}
 	if adlss.Type != "" {
 		objectMap["type"] = adlss.Type
 	}
@@ -8901,6 +9574,87 @@ func (adlss AzureDataLakeStoreSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &adlss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AzureDataLakeStoreSink struct.
+func (adlss *AzureDataLakeStoreSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "copyBehavior":
+			if v != nil {
+				var copyBehavior CopyBehaviorType
+				err = json.Unmarshal(*v, &copyBehavior)
+				if err != nil {
+					return err
+				}
+				adlss.CopyBehavior = copyBehavior
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if adlss.AdditionalProperties == nil {
+					adlss.AdditionalProperties = make(map[string]interface{})
+				}
+				adlss.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				adlss.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				adlss.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				adlss.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				adlss.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				adlss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AzureDataLakeStoreSource a copy activity Azure Data Lake source.
 type AzureDataLakeStoreSource struct {
 	// Recursive - If true, files under the folder path will be read recursively. Default is true. Type: boolean (or Expression with resultType boolean).
@@ -8919,9 +9673,15 @@ type AzureDataLakeStoreSource struct {
 func (adlss AzureDataLakeStoreSource) MarshalJSON() ([]byte, error) {
 	adlss.Type = TypeAzureDataLakeStoreSource
 	objectMap := make(map[string]interface{})
-	objectMap["recursive"] = adlss.Recursive
-	objectMap["sourceRetryCount"] = adlss.SourceRetryCount
-	objectMap["sourceRetryWait"] = adlss.SourceRetryWait
+	if adlss.Recursive != nil {
+		objectMap["recursive"] = adlss.Recursive
+	}
+	if adlss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = adlss.SourceRetryCount
+	}
+	if adlss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = adlss.SourceRetryWait
+	}
 	if adlss.Type != "" {
 		objectMap["type"] = adlss.Type
 	}
@@ -9189,6 +9949,69 @@ func (adlss AzureDataLakeStoreSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for AzureDataLakeStoreSource.
 func (adlss AzureDataLakeStoreSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &adlss, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for AzureDataLakeStoreSource struct.
+func (adlss *AzureDataLakeStoreSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "recursive":
+			if v != nil {
+				var recursive interface{}
+				err = json.Unmarshal(*v, &recursive)
+				if err != nil {
+					return err
+				}
+				adlss.Recursive = recursive
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if adlss.AdditionalProperties == nil {
+					adlss.AdditionalProperties = make(map[string]interface{})
+				}
+				adlss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				adlss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				adlss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				adlss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // AzureKeyVaultLinkedService azure Key Vault linked service.
@@ -9703,8 +10526,12 @@ func (akvsr AzureKeyVaultSecretReference) MarshalJSON() ([]byte, error) {
 	if akvsr.Store != nil {
 		objectMap["store"] = akvsr.Store
 	}
-	objectMap["secretName"] = akvsr.SecretName
-	objectMap["secretVersion"] = akvsr.SecretVersion
+	if akvsr.SecretName != nil {
+		objectMap["secretName"] = akvsr.SecretName
+	}
+	if akvsr.SecretVersion != nil {
+		objectMap["secretVersion"] = akvsr.SecretVersion
+	}
 	if akvsr.Type != "" {
 		objectMap["type"] = akvsr.Type
 	}
@@ -11430,9 +12257,15 @@ type AzureMySQLSource struct {
 func (amss AzureMySQLSource) MarshalJSON() ([]byte, error) {
 	amss.Type = TypeAzureMySQLSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = amss.Query
-	objectMap["sourceRetryCount"] = amss.SourceRetryCount
-	objectMap["sourceRetryWait"] = amss.SourceRetryWait
+	if amss.Query != nil {
+		objectMap["query"] = amss.Query
+	}
+	if amss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = amss.SourceRetryCount
+	}
+	if amss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = amss.SourceRetryWait
+	}
 	if amss.Type != "" {
 		objectMap["type"] = amss.Type
 	}
@@ -11702,6 +12535,69 @@ func (amss AzureMySQLSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &amss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AzureMySQLSource struct.
+func (amss *AzureMySQLSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				amss.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if amss.AdditionalProperties == nil {
+					amss.AdditionalProperties = make(map[string]interface{})
+				}
+				amss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				amss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				amss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				amss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AzureMySQLTableDataset the Azure MySQL database dataset.
 type AzureMySQLTableDataset struct {
 	// AzureMySQLTableDatasetTypeProperties - Azure MySQL database dataset properties.
@@ -11732,7 +12628,9 @@ func (amstd AzureMySQLTableDataset) MarshalJSON() ([]byte, error) {
 	if amstd.Description != nil {
 		objectMap["description"] = amstd.Description
 	}
-	objectMap["structure"] = amstd.Structure
+	if amstd.Structure != nil {
+		objectMap["structure"] = amstd.Structure
+	}
 	if amstd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = amstd.LinkedServiceName
 	}
@@ -12635,9 +13533,15 @@ type AzurePostgreSQLSource struct {
 func (apss AzurePostgreSQLSource) MarshalJSON() ([]byte, error) {
 	apss.Type = TypeAzurePostgreSQLSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = apss.Query
-	objectMap["sourceRetryCount"] = apss.SourceRetryCount
-	objectMap["sourceRetryWait"] = apss.SourceRetryWait
+	if apss.Query != nil {
+		objectMap["query"] = apss.Query
+	}
+	if apss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = apss.SourceRetryCount
+	}
+	if apss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = apss.SourceRetryWait
+	}
 	if apss.Type != "" {
 		objectMap["type"] = apss.Type
 	}
@@ -12907,6 +13811,69 @@ func (apss AzurePostgreSQLSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &apss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AzurePostgreSQLSource struct.
+func (apss *AzurePostgreSQLSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				apss.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if apss.AdditionalProperties == nil {
+					apss.AdditionalProperties = make(map[string]interface{})
+				}
+				apss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				apss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				apss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				apss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AzurePostgreSQLTableDataset azure PostgreSQL dataset.
 type AzurePostgreSQLTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -12932,7 +13899,9 @@ func (apstd AzurePostgreSQLTableDataset) MarshalJSON() ([]byte, error) {
 	if apstd.Description != nil {
 		objectMap["description"] = apstd.Description
 	}
-	objectMap["structure"] = apstd.Structure
+	if apstd.Structure != nil {
+		objectMap["structure"] = apstd.Structure
+	}
 	if apstd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = apstd.LinkedServiceName
 	}
@@ -13226,6 +14195,87 @@ func (apstd AzurePostgreSQLTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &apstd, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AzurePostgreSQLTableDataset struct.
+func (apstd *AzurePostgreSQLTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if apstd.AdditionalProperties == nil {
+					apstd.AdditionalProperties = make(map[string]interface{})
+				}
+				apstd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				apstd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				apstd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				apstd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				apstd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				apstd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				apstd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AzureQueueSink a copy activity Azure Queue sink.
 type AzureQueueSink struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -13246,10 +14296,18 @@ type AzureQueueSink struct {
 func (aqs AzureQueueSink) MarshalJSON() ([]byte, error) {
 	aqs.Type = TypeAzureQueueSink
 	objectMap := make(map[string]interface{})
-	objectMap["writeBatchSize"] = aqs.WriteBatchSize
-	objectMap["writeBatchTimeout"] = aqs.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = aqs.SinkRetryCount
-	objectMap["sinkRetryWait"] = aqs.SinkRetryWait
+	if aqs.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = aqs.WriteBatchSize
+	}
+	if aqs.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = aqs.WriteBatchTimeout
+	}
+	if aqs.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = aqs.SinkRetryCount
+	}
+	if aqs.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = aqs.SinkRetryWait
+	}
 	if aqs.Type != "" {
 		objectMap["type"] = aqs.Type
 	}
@@ -13339,6 +14397,78 @@ func (aqs AzureQueueSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &aqs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AzureQueueSink struct.
+func (aqs *AzureQueueSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if aqs.AdditionalProperties == nil {
+					aqs.AdditionalProperties = make(map[string]interface{})
+				}
+				aqs.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				aqs.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				aqs.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				aqs.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				aqs.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				aqs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AzureSearchIndexDataset the Azure Search Index.
 type AzureSearchIndexDataset struct {
 	// AzureSearchIndexDatasetTypeProperties - Properties specific to this dataset type.
@@ -13369,7 +14499,9 @@ func (asid AzureSearchIndexDataset) MarshalJSON() ([]byte, error) {
 	if asid.Description != nil {
 		objectMap["description"] = asid.Description
 	}
-	objectMap["structure"] = asid.Structure
+	if asid.Structure != nil {
+		objectMap["structure"] = asid.Structure
+	}
 	if asid.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = asid.LinkedServiceName
 	}
@@ -13784,10 +14916,18 @@ func (asis AzureSearchIndexSink) MarshalJSON() ([]byte, error) {
 	if asis.WriteBehavior != "" {
 		objectMap["writeBehavior"] = asis.WriteBehavior
 	}
-	objectMap["writeBatchSize"] = asis.WriteBatchSize
-	objectMap["writeBatchTimeout"] = asis.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = asis.SinkRetryCount
-	objectMap["sinkRetryWait"] = asis.SinkRetryWait
+	if asis.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = asis.WriteBatchSize
+	}
+	if asis.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = asis.WriteBatchTimeout
+	}
+	if asis.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = asis.SinkRetryCount
+	}
+	if asis.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = asis.SinkRetryWait
+	}
 	if asis.Type != "" {
 		objectMap["type"] = asis.Type
 	}
@@ -13875,6 +15015,87 @@ func (asis AzureSearchIndexSink) AsCopySink() (*CopySink, bool) {
 // AsBasicCopySink is the BasicCopySink implementation for AzureSearchIndexSink.
 func (asis AzureSearchIndexSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &asis, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for AzureSearchIndexSink struct.
+func (asis *AzureSearchIndexSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "writeBehavior":
+			if v != nil {
+				var writeBehavior AzureSearchIndexWriteBehaviorType
+				err = json.Unmarshal(*v, &writeBehavior)
+				if err != nil {
+					return err
+				}
+				asis.WriteBehavior = writeBehavior
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if asis.AdditionalProperties == nil {
+					asis.AdditionalProperties = make(map[string]interface{})
+				}
+				asis.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				asis.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				asis.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				asis.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				asis.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				asis.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // AzureSearchLinkedService linked service for Windows Azure Search Service.
@@ -15565,7 +16786,9 @@ func (asdtd AzureSQLDWTableDataset) MarshalJSON() ([]byte, error) {
 	if asdtd.Description != nil {
 		objectMap["description"] = asdtd.Description
 	}
-	objectMap["structure"] = asdtd.Structure
+	if asdtd.Structure != nil {
+		objectMap["structure"] = asdtd.Structure
+	}
 	if asdtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = asdtd.LinkedServiceName
 	}
@@ -15985,7 +17208,9 @@ func (astd AzureSQLTableDataset) MarshalJSON() ([]byte, error) {
 	if astd.Description != nil {
 		objectMap["description"] = astd.Description
 	}
-	objectMap["structure"] = astd.Structure
+	if astd.Structure != nil {
+		objectMap["structure"] = astd.Structure
+	}
 	if astd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = astd.LinkedServiceName
 	}
@@ -16943,7 +18168,9 @@ func (atd AzureTableDataset) MarshalJSON() ([]byte, error) {
 	if atd.Description != nil {
 		objectMap["description"] = atd.Description
 	}
-	objectMap["structure"] = atd.Structure
+	if atd.Structure != nil {
+		objectMap["structure"] = atd.Structure
+	}
 	if atd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = atd.LinkedServiceName
 	}
@@ -17361,14 +18588,30 @@ type AzureTableSink struct {
 func (ats AzureTableSink) MarshalJSON() ([]byte, error) {
 	ats.Type = TypeAzureTableSink
 	objectMap := make(map[string]interface{})
-	objectMap["azureTableDefaultPartitionKeyValue"] = ats.AzureTableDefaultPartitionKeyValue
-	objectMap["azureTablePartitionKeyName"] = ats.AzureTablePartitionKeyName
-	objectMap["azureTableRowKeyName"] = ats.AzureTableRowKeyName
-	objectMap["azureTableInsertType"] = ats.AzureTableInsertType
-	objectMap["writeBatchSize"] = ats.WriteBatchSize
-	objectMap["writeBatchTimeout"] = ats.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = ats.SinkRetryCount
-	objectMap["sinkRetryWait"] = ats.SinkRetryWait
+	if ats.AzureTableDefaultPartitionKeyValue != nil {
+		objectMap["azureTableDefaultPartitionKeyValue"] = ats.AzureTableDefaultPartitionKeyValue
+	}
+	if ats.AzureTablePartitionKeyName != nil {
+		objectMap["azureTablePartitionKeyName"] = ats.AzureTablePartitionKeyName
+	}
+	if ats.AzureTableRowKeyName != nil {
+		objectMap["azureTableRowKeyName"] = ats.AzureTableRowKeyName
+	}
+	if ats.AzureTableInsertType != nil {
+		objectMap["azureTableInsertType"] = ats.AzureTableInsertType
+	}
+	if ats.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = ats.WriteBatchSize
+	}
+	if ats.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = ats.WriteBatchTimeout
+	}
+	if ats.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = ats.SinkRetryCount
+	}
+	if ats.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = ats.SinkRetryWait
+	}
 	if ats.Type != "" {
 		objectMap["type"] = ats.Type
 	}
@@ -17458,6 +18701,114 @@ func (ats AzureTableSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &ats, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for AzureTableSink struct.
+func (ats *AzureTableSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "azureTableDefaultPartitionKeyValue":
+			if v != nil {
+				var azureTableDefaultPartitionKeyValue interface{}
+				err = json.Unmarshal(*v, &azureTableDefaultPartitionKeyValue)
+				if err != nil {
+					return err
+				}
+				ats.AzureTableDefaultPartitionKeyValue = azureTableDefaultPartitionKeyValue
+			}
+		case "azureTablePartitionKeyName":
+			if v != nil {
+				var azureTablePartitionKeyName interface{}
+				err = json.Unmarshal(*v, &azureTablePartitionKeyName)
+				if err != nil {
+					return err
+				}
+				ats.AzureTablePartitionKeyName = azureTablePartitionKeyName
+			}
+		case "azureTableRowKeyName":
+			if v != nil {
+				var azureTableRowKeyName interface{}
+				err = json.Unmarshal(*v, &azureTableRowKeyName)
+				if err != nil {
+					return err
+				}
+				ats.AzureTableRowKeyName = azureTableRowKeyName
+			}
+		case "azureTableInsertType":
+			if v != nil {
+				var azureTableInsertType interface{}
+				err = json.Unmarshal(*v, &azureTableInsertType)
+				if err != nil {
+					return err
+				}
+				ats.AzureTableInsertType = azureTableInsertType
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ats.AdditionalProperties == nil {
+					ats.AdditionalProperties = make(map[string]interface{})
+				}
+				ats.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				ats.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				ats.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				ats.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				ats.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ats.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // AzureTableSource a copy activity Azure Table source.
 type AzureTableSource struct {
 	// AzureTableSourceQuery - Azure Table source query. Type: string (or Expression with resultType string).
@@ -17478,10 +18829,18 @@ type AzureTableSource struct {
 func (ats AzureTableSource) MarshalJSON() ([]byte, error) {
 	ats.Type = TypeAzureTableSource
 	objectMap := make(map[string]interface{})
-	objectMap["azureTableSourceQuery"] = ats.AzureTableSourceQuery
-	objectMap["azureTableSourceIgnoreTableNotFound"] = ats.AzureTableSourceIgnoreTableNotFound
-	objectMap["sourceRetryCount"] = ats.SourceRetryCount
-	objectMap["sourceRetryWait"] = ats.SourceRetryWait
+	if ats.AzureTableSourceQuery != nil {
+		objectMap["azureTableSourceQuery"] = ats.AzureTableSourceQuery
+	}
+	if ats.AzureTableSourceIgnoreTableNotFound != nil {
+		objectMap["azureTableSourceIgnoreTableNotFound"] = ats.AzureTableSourceIgnoreTableNotFound
+	}
+	if ats.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ats.SourceRetryCount
+	}
+	if ats.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ats.SourceRetryWait
+	}
 	if ats.Type != "" {
 		objectMap["type"] = ats.Type
 	}
@@ -17751,7 +19110,79 @@ func (ats AzureTableSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ats, true
 }
 
-// BlobEventsTrigger trigger that runs everytime a Blob event occurs.
+// UnmarshalJSON is the custom unmarshaler for AzureTableSource struct.
+func (ats *AzureTableSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "azureTableSourceQuery":
+			if v != nil {
+				var azureTableSourceQuery interface{}
+				err = json.Unmarshal(*v, &azureTableSourceQuery)
+				if err != nil {
+					return err
+				}
+				ats.AzureTableSourceQuery = azureTableSourceQuery
+			}
+		case "azureTableSourceIgnoreTableNotFound":
+			if v != nil {
+				var azureTableSourceIgnoreTableNotFound interface{}
+				err = json.Unmarshal(*v, &azureTableSourceIgnoreTableNotFound)
+				if err != nil {
+					return err
+				}
+				ats.AzureTableSourceIgnoreTableNotFound = azureTableSourceIgnoreTableNotFound
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ats.AdditionalProperties == nil {
+					ats.AdditionalProperties = make(map[string]interface{})
+				}
+				ats.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ats.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ats.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ats.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// BlobEventsTrigger trigger that runs every time a Blob event occurs.
 type BlobEventsTrigger struct {
 	// BlobEventsTriggerTypeProperties - Blob Events Trigger properties.
 	*BlobEventsTriggerTypeProperties `json:"typeProperties,omitempty"`
@@ -17944,16 +19375,30 @@ type BlobSink struct {
 func (bs BlobSink) MarshalJSON() ([]byte, error) {
 	bs.Type = TypeBlobSink
 	objectMap := make(map[string]interface{})
-	objectMap["blobWriterOverwriteFiles"] = bs.BlobWriterOverwriteFiles
-	objectMap["blobWriterDateTimeFormat"] = bs.BlobWriterDateTimeFormat
-	objectMap["blobWriterAddHeader"] = bs.BlobWriterAddHeader
+	if bs.BlobWriterOverwriteFiles != nil {
+		objectMap["blobWriterOverwriteFiles"] = bs.BlobWriterOverwriteFiles
+	}
+	if bs.BlobWriterDateTimeFormat != nil {
+		objectMap["blobWriterDateTimeFormat"] = bs.BlobWriterDateTimeFormat
+	}
+	if bs.BlobWriterAddHeader != nil {
+		objectMap["blobWriterAddHeader"] = bs.BlobWriterAddHeader
+	}
 	if bs.CopyBehavior != "" {
 		objectMap["copyBehavior"] = bs.CopyBehavior
 	}
-	objectMap["writeBatchSize"] = bs.WriteBatchSize
-	objectMap["writeBatchTimeout"] = bs.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = bs.SinkRetryCount
-	objectMap["sinkRetryWait"] = bs.SinkRetryWait
+	if bs.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = bs.WriteBatchSize
+	}
+	if bs.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = bs.WriteBatchTimeout
+	}
+	if bs.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = bs.SinkRetryCount
+	}
+	if bs.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = bs.SinkRetryWait
+	}
 	if bs.Type != "" {
 		objectMap["type"] = bs.Type
 	}
@@ -18043,6 +19488,114 @@ func (bs BlobSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &bs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for BlobSink struct.
+func (bs *BlobSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "blobWriterOverwriteFiles":
+			if v != nil {
+				var blobWriterOverwriteFiles interface{}
+				err = json.Unmarshal(*v, &blobWriterOverwriteFiles)
+				if err != nil {
+					return err
+				}
+				bs.BlobWriterOverwriteFiles = blobWriterOverwriteFiles
+			}
+		case "blobWriterDateTimeFormat":
+			if v != nil {
+				var blobWriterDateTimeFormat interface{}
+				err = json.Unmarshal(*v, &blobWriterDateTimeFormat)
+				if err != nil {
+					return err
+				}
+				bs.BlobWriterDateTimeFormat = blobWriterDateTimeFormat
+			}
+		case "blobWriterAddHeader":
+			if v != nil {
+				var blobWriterAddHeader interface{}
+				err = json.Unmarshal(*v, &blobWriterAddHeader)
+				if err != nil {
+					return err
+				}
+				bs.BlobWriterAddHeader = blobWriterAddHeader
+			}
+		case "copyBehavior":
+			if v != nil {
+				var copyBehavior CopyBehaviorType
+				err = json.Unmarshal(*v, &copyBehavior)
+				if err != nil {
+					return err
+				}
+				bs.CopyBehavior = copyBehavior
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if bs.AdditionalProperties == nil {
+					bs.AdditionalProperties = make(map[string]interface{})
+				}
+				bs.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				bs.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				bs.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				bs.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				bs.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				bs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // BlobSource a copy activity Azure Blob source.
 type BlobSource struct {
 	// TreatEmptyAsNull - Treat empty as null. Type: boolean (or Expression with resultType boolean).
@@ -18065,11 +19618,21 @@ type BlobSource struct {
 func (bs BlobSource) MarshalJSON() ([]byte, error) {
 	bs.Type = TypeBlobSource
 	objectMap := make(map[string]interface{})
-	objectMap["treatEmptyAsNull"] = bs.TreatEmptyAsNull
-	objectMap["skipHeaderLineCount"] = bs.SkipHeaderLineCount
-	objectMap["recursive"] = bs.Recursive
-	objectMap["sourceRetryCount"] = bs.SourceRetryCount
-	objectMap["sourceRetryWait"] = bs.SourceRetryWait
+	if bs.TreatEmptyAsNull != nil {
+		objectMap["treatEmptyAsNull"] = bs.TreatEmptyAsNull
+	}
+	if bs.SkipHeaderLineCount != nil {
+		objectMap["skipHeaderLineCount"] = bs.SkipHeaderLineCount
+	}
+	if bs.Recursive != nil {
+		objectMap["recursive"] = bs.Recursive
+	}
+	if bs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = bs.SourceRetryCount
+	}
+	if bs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = bs.SourceRetryWait
+	}
 	if bs.Type != "" {
 		objectMap["type"] = bs.Type
 	}
@@ -18339,7 +19902,88 @@ func (bs BlobSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &bs, true
 }
 
-// BlobTrigger trigger that runs everytime the selected Blob container changes.
+// UnmarshalJSON is the custom unmarshaler for BlobSource struct.
+func (bs *BlobSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "treatEmptyAsNull":
+			if v != nil {
+				var treatEmptyAsNull interface{}
+				err = json.Unmarshal(*v, &treatEmptyAsNull)
+				if err != nil {
+					return err
+				}
+				bs.TreatEmptyAsNull = treatEmptyAsNull
+			}
+		case "skipHeaderLineCount":
+			if v != nil {
+				var skipHeaderLineCount interface{}
+				err = json.Unmarshal(*v, &skipHeaderLineCount)
+				if err != nil {
+					return err
+				}
+				bs.SkipHeaderLineCount = skipHeaderLineCount
+			}
+		case "recursive":
+			if v != nil {
+				var recursive interface{}
+				err = json.Unmarshal(*v, &recursive)
+				if err != nil {
+					return err
+				}
+				bs.Recursive = recursive
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if bs.AdditionalProperties == nil {
+					bs.AdditionalProperties = make(map[string]interface{})
+				}
+				bs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				bs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				bs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				bs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// BlobTrigger trigger that runs every time the selected Blob container changes.
 type BlobTrigger struct {
 	// BlobTriggerTypeProperties - Blob Trigger properties.
 	*BlobTriggerTypeProperties `json:"typeProperties,omitempty"`
@@ -19093,12 +20737,18 @@ type CassandraSource struct {
 func (cs CassandraSource) MarshalJSON() ([]byte, error) {
 	cs.Type = TypeCassandraSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = cs.Query
+	if cs.Query != nil {
+		objectMap["query"] = cs.Query
+	}
 	if cs.ConsistencyLevel != "" {
 		objectMap["consistencyLevel"] = cs.ConsistencyLevel
 	}
-	objectMap["sourceRetryCount"] = cs.SourceRetryCount
-	objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	if cs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = cs.SourceRetryCount
+	}
+	if cs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	}
 	if cs.Type != "" {
 		objectMap["type"] = cs.Type
 	}
@@ -19368,6 +21018,78 @@ func (cs CassandraSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &cs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for CassandraSource struct.
+func (cs *CassandraSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				cs.Query = query
+			}
+		case "consistencyLevel":
+			if v != nil {
+				var consistencyLevel CassandraSourceReadConsistencyLevels
+				err = json.Unmarshal(*v, &consistencyLevel)
+				if err != nil {
+					return err
+				}
+				cs.ConsistencyLevel = consistencyLevel
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cs.AdditionalProperties == nil {
+					cs.AdditionalProperties = make(map[string]interface{})
+				}
+				cs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // CassandraTableDataset the Cassandra database dataset.
 type CassandraTableDataset struct {
 	// CassandraTableDatasetTypeProperties - Cassandra dataset properties.
@@ -19398,7 +21120,9 @@ func (ctd CassandraTableDataset) MarshalJSON() ([]byte, error) {
 	if ctd.Description != nil {
 		objectMap["description"] = ctd.Description
 	}
-	objectMap["structure"] = ctd.Structure
+	if ctd.Structure != nil {
+		objectMap["structure"] = ctd.Structure
+	}
 	if ctd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = ctd.LinkedServiceName
 	}
@@ -19790,9 +21514,9 @@ type CassandraTableDatasetTypeProperties struct {
 	Keyspace interface{} `json:"keyspace,omitempty"`
 }
 
-// ConcurLinkedService concur Serivce linked service.
+// ConcurLinkedService concur Service linked service.
 type ConcurLinkedService struct {
-	// ConcurLinkedServiceTypeProperties - Concur Serivce linked service properties.
+	// ConcurLinkedServiceTypeProperties - Concur Service linked service properties.
 	*ConcurLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -20277,7 +22001,7 @@ func (cls *ConcurLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ConcurLinkedServiceTypeProperties concur Serivce linked service properties.
+// ConcurLinkedServiceTypeProperties concur Service linked service properties.
 type ConcurLinkedServiceTypeProperties struct {
 	// ClientID - Application client_id supplied by Concur App Management.
 	ClientID interface{} `json:"clientId,omitempty"`
@@ -20372,7 +22096,7 @@ func (clstp *ConcurLinkedServiceTypeProperties) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// ConcurObjectDataset concur Serivce dataset.
+// ConcurObjectDataset concur Service dataset.
 type ConcurObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -20397,7 +22121,9 @@ func (cod ConcurObjectDataset) MarshalJSON() ([]byte, error) {
 	if cod.Description != nil {
 		objectMap["description"] = cod.Description
 	}
-	objectMap["structure"] = cod.Structure
+	if cod.Structure != nil {
+		objectMap["structure"] = cod.Structure
+	}
 	if cod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = cod.LinkedServiceName
 	}
@@ -20691,7 +22417,88 @@ func (cod ConcurObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &cod, true
 }
 
-// ConcurSource a copy activity Concur Serivce source.
+// UnmarshalJSON is the custom unmarshaler for ConcurObjectDataset struct.
+func (cod *ConcurObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cod.AdditionalProperties == nil {
+					cod.AdditionalProperties = make(map[string]interface{})
+				}
+				cod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				cod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				cod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				cod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				cod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				cod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// ConcurSource a copy activity Concur Service source.
 type ConcurSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -20709,9 +22516,15 @@ type ConcurSource struct {
 func (cs ConcurSource) MarshalJSON() ([]byte, error) {
 	cs.Type = TypeConcurSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = cs.Query
-	objectMap["sourceRetryCount"] = cs.SourceRetryCount
-	objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	if cs.Query != nil {
+		objectMap["query"] = cs.Query
+	}
+	if cs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = cs.SourceRetryCount
+	}
+	if cs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	}
 	if cs.Type != "" {
 		objectMap["type"] = cs.Type
 	}
@@ -20981,6 +22794,69 @@ func (cs ConcurSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &cs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ConcurSource struct.
+func (cs *ConcurSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				cs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cs.AdditionalProperties == nil {
+					cs.AdditionalProperties = make(map[string]interface{})
+				}
+				cs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // BasicControlActivity base class for all control activities like IfCondition, ForEach , Until.
 type BasicControlActivity interface {
 	AsFilterActivity() (*FilterActivity, bool)
@@ -21223,6 +23099,69 @@ func (ca ControlActivity) AsActivity() (*Activity, bool) {
 // AsBasicActivity is the BasicActivity implementation for ControlActivity.
 func (ca ControlActivity) AsBasicActivity() (BasicActivity, bool) {
 	return &ca, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ControlActivity struct.
+func (ca *ControlActivity) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ca.AdditionalProperties == nil {
+					ca.AdditionalProperties = make(map[string]interface{})
+				}
+				ca.AdditionalProperties[k] = additionalProperties
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ca.Name = &name
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ca.Description = &description
+			}
+		case "dependsOn":
+			if v != nil {
+				var dependsOn []ActivityDependency
+				err = json.Unmarshal(*v, &dependsOn)
+				if err != nil {
+					return err
+				}
+				ca.DependsOn = &dependsOn
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicActivity
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ca.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // CopyActivity copy activity.
@@ -21540,7 +23479,7 @@ type CopyActivityTypeProperties struct {
 	Source BasicCopySource `json:"source,omitempty"`
 	// Sink - Copy activity sink.
 	Sink BasicCopySink `json:"sink,omitempty"`
-	// Translator - Copy activity translator. If not specificed, tabular translator is used.
+	// Translator - Copy activity translator. If not specified, tabular translator is used.
 	Translator BasicCopyTranslator `json:"translator,omitempty"`
 	// EnableStaging - Specifies whether to copy data via an interim staging. Default value is false. Type: boolean (or Expression with resultType boolean).
 	EnableStaging interface{} `json:"enableStaging,omitempty"`
@@ -21777,10 +23716,18 @@ func unmarshalBasicCopySinkArray(body []byte) ([]BasicCopySink, error) {
 func (cs CopySink) MarshalJSON() ([]byte, error) {
 	cs.Type = TypeCopySink
 	objectMap := make(map[string]interface{})
-	objectMap["writeBatchSize"] = cs.WriteBatchSize
-	objectMap["writeBatchTimeout"] = cs.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = cs.SinkRetryCount
-	objectMap["sinkRetryWait"] = cs.SinkRetryWait
+	if cs.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = cs.WriteBatchSize
+	}
+	if cs.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = cs.WriteBatchTimeout
+	}
+	if cs.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = cs.SinkRetryCount
+	}
+	if cs.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = cs.SinkRetryWait
+	}
 	if cs.Type != "" {
 		objectMap["type"] = cs.Type
 	}
@@ -21868,6 +23815,78 @@ func (cs CopySink) AsCopySink() (*CopySink, bool) {
 // AsBasicCopySink is the BasicCopySink implementation for CopySink.
 func (cs CopySink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &cs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for CopySink struct.
+func (cs *CopySink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cs.AdditionalProperties == nil {
+					cs.AdditionalProperties = make(map[string]interface{})
+				}
+				cs.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				cs.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				cs.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				cs.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				cs.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // BasicCopySource a copy activity source.
@@ -22174,8 +24193,12 @@ func unmarshalBasicCopySourceArray(body []byte) ([]BasicCopySource, error) {
 func (cs CopySource) MarshalJSON() ([]byte, error) {
 	cs.Type = TypeCopySource
 	objectMap := make(map[string]interface{})
-	objectMap["sourceRetryCount"] = cs.SourceRetryCount
-	objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	if cs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = cs.SourceRetryCount
+	}
+	if cs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	}
 	if cs.Type != "" {
 		objectMap["type"] = cs.Type
 	}
@@ -22445,6 +24468,60 @@ func (cs CopySource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &cs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for CopySource struct.
+func (cs *CopySource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cs.AdditionalProperties == nil {
+					cs.AdditionalProperties = make(map[string]interface{})
+				}
+				cs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // BasicCopyTranslator a copy activity translator.
 type BasicCopyTranslator interface {
 	AsTabularTranslator() (*TabularTranslator, bool)
@@ -22522,6 +24599,42 @@ func (ct CopyTranslator) AsCopyTranslator() (*CopyTranslator, bool) {
 // AsBasicCopyTranslator is the BasicCopyTranslator implementation for CopyTranslator.
 func (ct CopyTranslator) AsBasicCopyTranslator() (BasicCopyTranslator, bool) {
 	return &ct, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for CopyTranslator struct.
+func (ct *CopyTranslator) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ct.AdditionalProperties == nil {
+					ct.AdditionalProperties = make(map[string]interface{})
+				}
+				ct.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopyTranslator
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ct.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // CosmosDbLinkedService microsoft Azure Cosmos Database (CosmosDB) linked service.
@@ -23532,9 +25645,15 @@ type CouchbaseSource struct {
 func (cs CouchbaseSource) MarshalJSON() ([]byte, error) {
 	cs.Type = TypeCouchbaseSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = cs.Query
-	objectMap["sourceRetryCount"] = cs.SourceRetryCount
-	objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	if cs.Query != nil {
+		objectMap["query"] = cs.Query
+	}
+	if cs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = cs.SourceRetryCount
+	}
+	if cs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = cs.SourceRetryWait
+	}
 	if cs.Type != "" {
 		objectMap["type"] = cs.Type
 	}
@@ -23804,6 +25923,69 @@ func (cs CouchbaseSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &cs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for CouchbaseSource struct.
+func (cs *CouchbaseSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				cs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cs.AdditionalProperties == nil {
+					cs.AdditionalProperties = make(map[string]interface{})
+				}
+				cs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				cs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // CouchbaseTableDataset couchbase server dataset.
 type CouchbaseTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -23829,7 +26011,9 @@ func (ctd CouchbaseTableDataset) MarshalJSON() ([]byte, error) {
 	if ctd.Description != nil {
 		objectMap["description"] = ctd.Description
 	}
-	objectMap["structure"] = ctd.Structure
+	if ctd.Structure != nil {
+		objectMap["structure"] = ctd.Structure
+	}
 	if ctd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = ctd.LinkedServiceName
 	}
@@ -24121,6 +26305,87 @@ func (ctd CouchbaseTableDataset) AsDataset() (*Dataset, bool) {
 // AsBasicDataset is the BasicDataset implementation for CouchbaseTableDataset.
 func (ctd CouchbaseTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &ctd, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for CouchbaseTableDataset struct.
+func (ctd *CouchbaseTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ctd.AdditionalProperties == nil {
+					ctd.AdditionalProperties = make(map[string]interface{})
+				}
+				ctd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ctd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				ctd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				ctd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				ctd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				ctd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ctd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // CreateRunResponse response body with a run identifier.
@@ -24436,11 +26701,15 @@ type CustomActivityTypeProperties struct {
 // MarshalJSON is the custom marshaler for CustomActivityTypeProperties.
 func (catp CustomActivityTypeProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["command"] = catp.Command
+	if catp.Command != nil {
+		objectMap["command"] = catp.Command
+	}
 	if catp.ResourceLinkedService != nil {
 		objectMap["resourceLinkedService"] = catp.ResourceLinkedService
 	}
-	objectMap["folderPath"] = catp.FolderPath
+	if catp.FolderPath != nil {
+		objectMap["folderPath"] = catp.FolderPath
+	}
 	if catp.ReferenceObjects != nil {
 		objectMap["referenceObjects"] = catp.ReferenceObjects
 	}
@@ -24474,11 +26743,15 @@ type CustomDataset struct {
 func (cd CustomDataset) MarshalJSON() ([]byte, error) {
 	cd.Type = TypeCustomDataset
 	objectMap := make(map[string]interface{})
-	objectMap["typeProperties"] = cd.TypeProperties
+	if cd.TypeProperties != nil {
+		objectMap["typeProperties"] = cd.TypeProperties
+	}
 	if cd.Description != nil {
 		objectMap["description"] = cd.Description
 	}
-	objectMap["structure"] = cd.Structure
+	if cd.Structure != nil {
+		objectMap["structure"] = cd.Structure
+	}
 	if cd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = cd.LinkedServiceName
 	}
@@ -24772,6 +27045,96 @@ func (cd CustomDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &cd, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for CustomDataset struct.
+func (cd *CustomDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "typeProperties":
+			if v != nil {
+				var typeProperties interface{}
+				err = json.Unmarshal(*v, &typeProperties)
+				if err != nil {
+					return err
+				}
+				cd.TypeProperties = typeProperties
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cd.AdditionalProperties == nil {
+					cd.AdditionalProperties = make(map[string]interface{})
+				}
+				cd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				cd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				cd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				cd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				cd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				cd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // CustomDataSourceLinkedService custom linked service.
 type CustomDataSourceLinkedService struct {
 	// TypeProperties - Custom linked service properties.
@@ -24794,7 +27157,9 @@ type CustomDataSourceLinkedService struct {
 func (cdsls CustomDataSourceLinkedService) MarshalJSON() ([]byte, error) {
 	cdsls.Type = TypeCustomDataSource
 	objectMap := make(map[string]interface{})
-	objectMap["typeProperties"] = cdsls.TypeProperties
+	if cdsls.TypeProperties != nil {
+		objectMap["typeProperties"] = cdsls.TypeProperties
+	}
 	if cdsls.ConnectVia != nil {
 		objectMap["connectVia"] = cdsls.ConnectVia
 	}
@@ -25176,6 +27541,87 @@ func (cdsls CustomDataSourceLinkedService) AsBasicLinkedService() (BasicLinkedSe
 	return &cdsls, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for CustomDataSourceLinkedService struct.
+func (cdsls *CustomDataSourceLinkedService) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "typeProperties":
+			if v != nil {
+				var typeProperties interface{}
+				err = json.Unmarshal(*v, &typeProperties)
+				if err != nil {
+					return err
+				}
+				cdsls.TypeProperties = typeProperties
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if cdsls.AdditionalProperties == nil {
+					cdsls.AdditionalProperties = make(map[string]interface{})
+				}
+				cdsls.AdditionalProperties[k] = additionalProperties
+			}
+		case "connectVia":
+			if v != nil {
+				var connectVia IntegrationRuntimeReference
+				err = json.Unmarshal(*v, &connectVia)
+				if err != nil {
+					return err
+				}
+				cdsls.ConnectVia = &connectVia
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				cdsls.Description = &description
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				cdsls.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				cdsls.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicLinkedService
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cdsls.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DatabricksNotebookActivity databricksNotebook activity.
 type DatabricksNotebookActivity struct {
 	// DatabricksNotebookActivityTypeProperties - Databricks Notebook activity properties.
@@ -25468,7 +27914,9 @@ type DatabricksNotebookActivityTypeProperties struct {
 // MarshalJSON is the custom marshaler for DatabricksNotebookActivityTypeProperties.
 func (dnatp DatabricksNotebookActivityTypeProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["notebookPath"] = dnatp.NotebookPath
+	if dnatp.NotebookPath != nil {
+		objectMap["notebookPath"] = dnatp.NotebookPath
+	}
 	if dnatp.BaseParameters != nil {
 		objectMap["baseParameters"] = dnatp.BaseParameters
 	}
@@ -25777,17 +28225,27 @@ type DataLakeAnalyticsUSQLActivityTypeProperties struct {
 // MarshalJSON is the custom marshaler for DataLakeAnalyticsUSQLActivityTypeProperties.
 func (dlauatp DataLakeAnalyticsUSQLActivityTypeProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["scriptPath"] = dlauatp.ScriptPath
+	if dlauatp.ScriptPath != nil {
+		objectMap["scriptPath"] = dlauatp.ScriptPath
+	}
 	if dlauatp.ScriptLinkedService != nil {
 		objectMap["scriptLinkedService"] = dlauatp.ScriptLinkedService
 	}
-	objectMap["degreeOfParallelism"] = dlauatp.DegreeOfParallelism
-	objectMap["priority"] = dlauatp.Priority
+	if dlauatp.DegreeOfParallelism != nil {
+		objectMap["degreeOfParallelism"] = dlauatp.DegreeOfParallelism
+	}
+	if dlauatp.Priority != nil {
+		objectMap["priority"] = dlauatp.Priority
+	}
 	if dlauatp.Parameters != nil {
 		objectMap["parameters"] = dlauatp.Parameters
 	}
-	objectMap["runtimeVersion"] = dlauatp.RuntimeVersion
-	objectMap["compilationMode"] = dlauatp.CompilationMode
+	if dlauatp.RuntimeVersion != nil {
+		objectMap["runtimeVersion"] = dlauatp.RuntimeVersion
+	}
+	if dlauatp.CompilationMode != nil {
+		objectMap["compilationMode"] = dlauatp.CompilationMode
+	}
 	return json.Marshal(objectMap)
 }
 
@@ -25850,8 +28308,8 @@ type BasicDataset interface {
 	AsDataset() (*Dataset, bool)
 }
 
-// Dataset the Azure Data Factory nested object which identifies data within different data stores, such as tables,
-// files, folders, and documents.
+// Dataset the Azure Data Factory nested object which identifies data within different data stores, such as
+// tables, files, folders, and documents.
 type Dataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -26121,7 +28579,9 @@ func (d Dataset) MarshalJSON() ([]byte, error) {
 	if d.Description != nil {
 		objectMap["description"] = d.Description
 	}
-	objectMap["structure"] = d.Structure
+	if d.Structure != nil {
+		objectMap["structure"] = d.Structure
+	}
 	if d.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = d.LinkedServiceName
 	}
@@ -26415,6 +28875,87 @@ func (d Dataset) AsBasicDataset() (BasicDataset, bool) {
 	return &d, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for Dataset struct.
+func (d *Dataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if d.AdditionalProperties == nil {
+					d.AdditionalProperties = make(map[string]interface{})
+				}
+				d.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				d.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				d.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				d.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				d.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				d.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				d.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DatasetBZip2Compression the BZip2 compression method used on a dataset.
 type DatasetBZip2Compression struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -26464,6 +29005,42 @@ func (dbz2c DatasetBZip2Compression) AsDatasetCompression() (*DatasetCompression
 // AsBasicDatasetCompression is the BasicDatasetCompression implementation for DatasetBZip2Compression.
 func (dbz2c DatasetBZip2Compression) AsBasicDatasetCompression() (BasicDatasetCompression, bool) {
 	return &dbz2c, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for DatasetBZip2Compression struct.
+func (dbz2c *DatasetBZip2Compression) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if dbz2c.AdditionalProperties == nil {
+					dbz2c.AdditionalProperties = make(map[string]interface{})
+				}
+				dbz2c.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetCompression
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dbz2c.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // BasicDatasetCompression the compression method used on a dataset.
@@ -26575,6 +29152,42 @@ func (dc DatasetCompression) AsBasicDatasetCompression() (BasicDatasetCompressio
 	return &dc, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for DatasetCompression struct.
+func (dc *DatasetCompression) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if dc.AdditionalProperties == nil {
+					dc.AdditionalProperties = make(map[string]interface{})
+				}
+				dc.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetCompression
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dc.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DatasetDeflateCompression the Deflate compression method used on a dataset.
 type DatasetDeflateCompression struct {
 	// Level - The Deflate compression level. Possible values include: 'Optimal', 'Fastest'
@@ -26629,6 +29242,51 @@ func (ddc DatasetDeflateCompression) AsDatasetCompression() (*DatasetCompression
 // AsBasicDatasetCompression is the BasicDatasetCompression implementation for DatasetDeflateCompression.
 func (ddc DatasetDeflateCompression) AsBasicDatasetCompression() (BasicDatasetCompression, bool) {
 	return &ddc, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for DatasetDeflateCompression struct.
+func (ddc *DatasetDeflateCompression) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "level":
+			if v != nil {
+				var level DatasetCompressionLevel
+				err = json.Unmarshal(*v, &level)
+				if err != nil {
+					return err
+				}
+				ddc.Level = level
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ddc.AdditionalProperties == nil {
+					ddc.AdditionalProperties = make(map[string]interface{})
+				}
+				ddc.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetCompression
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ddc.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // DatasetGZipCompression the GZip compression method used on a dataset.
@@ -26687,6 +29345,51 @@ func (dgzc DatasetGZipCompression) AsBasicDatasetCompression() (BasicDatasetComp
 	return &dgzc, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for DatasetGZipCompression struct.
+func (dgzc *DatasetGZipCompression) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "level":
+			if v != nil {
+				var level DatasetCompressionLevel
+				err = json.Unmarshal(*v, &level)
+				if err != nil {
+					return err
+				}
+				dgzc.Level = level
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if dgzc.AdditionalProperties == nil {
+					dgzc.AdditionalProperties = make(map[string]interface{})
+				}
+				dgzc.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetCompression
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dgzc.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DatasetListResponse a list of dataset resources.
 type DatasetListResponse struct {
 	autorest.Response `json:"-"`
@@ -26702,20 +29405,37 @@ type DatasetListResponseIterator struct {
 	page DatasetListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DatasetListResponseIterator) Next() error {
+func (iter *DatasetListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DatasetListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -26737,6 +29457,11 @@ func (iter DatasetListResponseIterator) Value() DatasetResource {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DatasetListResponseIterator type.
+func NewDatasetListResponseIterator(page DatasetListResponsePage) DatasetListResponseIterator {
+	return DatasetListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlr DatasetListResponse) IsEmpty() bool {
 	return dlr.Value == nil || len(*dlr.Value) == 0
@@ -26744,11 +29469,11 @@ func (dlr DatasetListResponse) IsEmpty() bool {
 
 // datasetListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlr DatasetListResponse) datasetListResponsePreparer() (*http.Request, error) {
+func (dlr DatasetListResponse) datasetListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if dlr.NextLink == nil || len(to.String(dlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlr.NextLink)))
@@ -26756,19 +29481,36 @@ func (dlr DatasetListResponse) datasetListResponsePreparer() (*http.Request, err
 
 // DatasetListResponsePage contains a page of DatasetResource values.
 type DatasetListResponsePage struct {
-	fn  func(DatasetListResponse) (DatasetListResponse, error)
+	fn  func(context.Context, DatasetListResponse) (DatasetListResponse, error)
 	dlr DatasetListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DatasetListResponsePage) Next() error {
-	next, err := page.fn(page.dlr)
+func (page *DatasetListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlr)
 	if err != nil {
 		return err
 	}
 	page.dlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DatasetListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -26787,6 +29529,11 @@ func (page DatasetListResponsePage) Values() []DatasetResource {
 		return nil
 	}
 	return *page.dlr.Value
+}
+
+// Creates a new instance of the DatasetListResponsePage type.
+func NewDatasetListResponsePage(getNextPage func(context.Context, DatasetListResponse) (DatasetListResponse, error)) DatasetListResponsePage {
+	return DatasetListResponsePage{fn: getNextPage}
 }
 
 // DatasetReference dataset reference type.
@@ -26967,8 +29714,12 @@ func unmarshalBasicDatasetStorageFormatArray(body []byte) ([]BasicDatasetStorage
 func (dsf DatasetStorageFormat) MarshalJSON() ([]byte, error) {
 	dsf.Type = TypeDatasetStorageFormat
 	objectMap := make(map[string]interface{})
-	objectMap["serializer"] = dsf.Serializer
-	objectMap["deserializer"] = dsf.Deserializer
+	if dsf.Serializer != nil {
+		objectMap["serializer"] = dsf.Serializer
+	}
+	if dsf.Deserializer != nil {
+		objectMap["deserializer"] = dsf.Deserializer
+	}
 	if dsf.Type != "" {
 		objectMap["type"] = dsf.Type
 	}
@@ -27011,6 +29762,60 @@ func (dsf DatasetStorageFormat) AsDatasetStorageFormat() (*DatasetStorageFormat,
 // AsBasicDatasetStorageFormat is the BasicDatasetStorageFormat implementation for DatasetStorageFormat.
 func (dsf DatasetStorageFormat) AsBasicDatasetStorageFormat() (BasicDatasetStorageFormat, bool) {
 	return &dsf, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for DatasetStorageFormat struct.
+func (dsf *DatasetStorageFormat) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if dsf.AdditionalProperties == nil {
+					dsf.AdditionalProperties = make(map[string]interface{})
+				}
+				dsf.AdditionalProperties[k] = additionalProperties
+			}
+		case "serializer":
+			if v != nil {
+				var serializer interface{}
+				err = json.Unmarshal(*v, &serializer)
+				if err != nil {
+					return err
+				}
+				dsf.Serializer = serializer
+			}
+		case "deserializer":
+			if v != nil {
+				var deserializer interface{}
+				err = json.Unmarshal(*v, &deserializer)
+				if err != nil {
+					return err
+				}
+				dsf.Deserializer = deserializer
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetStorageFormat
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dsf.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // DatasetZipDeflateCompression the ZipDeflate compression method used on a dataset.
@@ -27067,6 +29872,51 @@ func (dzdc DatasetZipDeflateCompression) AsDatasetCompression() (*DatasetCompres
 // AsBasicDatasetCompression is the BasicDatasetCompression implementation for DatasetZipDeflateCompression.
 func (dzdc DatasetZipDeflateCompression) AsBasicDatasetCompression() (BasicDatasetCompression, bool) {
 	return &dzdc, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for DatasetZipDeflateCompression struct.
+func (dzdc *DatasetZipDeflateCompression) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "level":
+			if v != nil {
+				var level DatasetCompressionLevel
+				err = json.Unmarshal(*v, &level)
+				if err != nil {
+					return err
+				}
+				dzdc.Level = level
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if dzdc.AdditionalProperties == nil {
+					dzdc.AdditionalProperties = make(map[string]interface{})
+				}
+				dzdc.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetCompression
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dzdc.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // Db2LinkedService linked service for DB2 data source.
@@ -27680,7 +30530,9 @@ func (ddcd DocumentDbCollectionDataset) MarshalJSON() ([]byte, error) {
 	if ddcd.Description != nil {
 		objectMap["description"] = ddcd.Description
 	}
-	objectMap["structure"] = ddcd.Structure
+	if ddcd.Structure != nil {
+		objectMap["structure"] = ddcd.Structure
+	}
 	if ddcd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = ddcd.LinkedServiceName
 	}
@@ -28092,11 +30944,21 @@ type DocumentDbCollectionSink struct {
 func (ddcs DocumentDbCollectionSink) MarshalJSON() ([]byte, error) {
 	ddcs.Type = TypeDocumentDbCollectionSink
 	objectMap := make(map[string]interface{})
-	objectMap["nestingSeparator"] = ddcs.NestingSeparator
-	objectMap["writeBatchSize"] = ddcs.WriteBatchSize
-	objectMap["writeBatchTimeout"] = ddcs.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = ddcs.SinkRetryCount
-	objectMap["sinkRetryWait"] = ddcs.SinkRetryWait
+	if ddcs.NestingSeparator != nil {
+		objectMap["nestingSeparator"] = ddcs.NestingSeparator
+	}
+	if ddcs.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = ddcs.WriteBatchSize
+	}
+	if ddcs.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = ddcs.WriteBatchTimeout
+	}
+	if ddcs.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = ddcs.SinkRetryCount
+	}
+	if ddcs.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = ddcs.SinkRetryWait
+	}
 	if ddcs.Type != "" {
 		objectMap["type"] = ddcs.Type
 	}
@@ -28186,6 +31048,87 @@ func (ddcs DocumentDbCollectionSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &ddcs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for DocumentDbCollectionSink struct.
+func (ddcs *DocumentDbCollectionSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "nestingSeparator":
+			if v != nil {
+				var nestingSeparator interface{}
+				err = json.Unmarshal(*v, &nestingSeparator)
+				if err != nil {
+					return err
+				}
+				ddcs.NestingSeparator = nestingSeparator
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ddcs.AdditionalProperties == nil {
+					ddcs.AdditionalProperties = make(map[string]interface{})
+				}
+				ddcs.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				ddcs.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				ddcs.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				ddcs.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				ddcs.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ddcs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DocumentDbCollectionSource a copy activity Document Database Collection source.
 type DocumentDbCollectionSource struct {
 	// Query - Documents query. Type: string (or Expression with resultType string).
@@ -28206,10 +31149,18 @@ type DocumentDbCollectionSource struct {
 func (ddcs DocumentDbCollectionSource) MarshalJSON() ([]byte, error) {
 	ddcs.Type = TypeDocumentDbCollectionSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ddcs.Query
-	objectMap["nestingSeparator"] = ddcs.NestingSeparator
-	objectMap["sourceRetryCount"] = ddcs.SourceRetryCount
-	objectMap["sourceRetryWait"] = ddcs.SourceRetryWait
+	if ddcs.Query != nil {
+		objectMap["query"] = ddcs.Query
+	}
+	if ddcs.NestingSeparator != nil {
+		objectMap["nestingSeparator"] = ddcs.NestingSeparator
+	}
+	if ddcs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ddcs.SourceRetryCount
+	}
+	if ddcs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ddcs.SourceRetryWait
+	}
 	if ddcs.Type != "" {
 		objectMap["type"] = ddcs.Type
 	}
@@ -28477,6 +31428,78 @@ func (ddcs DocumentDbCollectionSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for DocumentDbCollectionSource.
 func (ddcs DocumentDbCollectionSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ddcs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for DocumentDbCollectionSource struct.
+func (ddcs *DocumentDbCollectionSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ddcs.Query = query
+			}
+		case "nestingSeparator":
+			if v != nil {
+				var nestingSeparator interface{}
+				err = json.Unmarshal(*v, &nestingSeparator)
+				if err != nil {
+					return err
+				}
+				ddcs.NestingSeparator = nestingSeparator
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ddcs.AdditionalProperties == nil {
+					ddcs.AdditionalProperties = make(map[string]interface{})
+				}
+				ddcs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ddcs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ddcs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ddcs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // DrillLinkedService drill server linked service.
@@ -28992,9 +32015,15 @@ type DrillSource struct {
 func (ds DrillSource) MarshalJSON() ([]byte, error) {
 	ds.Type = TypeDrillSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ds.Query
-	objectMap["sourceRetryCount"] = ds.SourceRetryCount
-	objectMap["sourceRetryWait"] = ds.SourceRetryWait
+	if ds.Query != nil {
+		objectMap["query"] = ds.Query
+	}
+	if ds.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ds.SourceRetryCount
+	}
+	if ds.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ds.SourceRetryWait
+	}
 	if ds.Type != "" {
 		objectMap["type"] = ds.Type
 	}
@@ -29264,6 +32293,69 @@ func (ds DrillSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ds, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for DrillSource struct.
+func (ds *DrillSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ds.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ds.AdditionalProperties == nil {
+					ds.AdditionalProperties = make(map[string]interface{})
+				}
+				ds.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ds.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ds.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DrillTableDataset drill server dataset.
 type DrillTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -29289,7 +32381,9 @@ func (dtd DrillTableDataset) MarshalJSON() ([]byte, error) {
 	if dtd.Description != nil {
 		objectMap["description"] = dtd.Description
 	}
-	objectMap["structure"] = dtd.Structure
+	if dtd.Structure != nil {
+		objectMap["structure"] = dtd.Structure
+	}
 	if dtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = dtd.LinkedServiceName
 	}
@@ -29583,6 +32677,87 @@ func (dtd DrillTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &dtd, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for DrillTableDataset struct.
+func (dtd *DrillTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if dtd.AdditionalProperties == nil {
+					dtd.AdditionalProperties = make(map[string]interface{})
+				}
+				dtd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				dtd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				dtd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				dtd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				dtd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				dtd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dtd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DynamicsEntityDataset the Dynamics entity dataset.
 type DynamicsEntityDataset struct {
 	// DynamicsEntityDatasetTypeProperties - Dynamics entity dataset properties.
@@ -29613,7 +32788,9 @@ func (ded DynamicsEntityDataset) MarshalJSON() ([]byte, error) {
 	if ded.Description != nil {
 		objectMap["description"] = ded.Description
 	}
-	objectMap["structure"] = ded.Structure
+	if ded.Structure != nil {
+		objectMap["structure"] = ded.Structure
+	}
 	if ded.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = ded.LinkedServiceName
 	}
@@ -30634,11 +33811,21 @@ func (ds DynamicsSink) MarshalJSON() ([]byte, error) {
 	if ds.WriteBehavior != nil {
 		objectMap["writeBehavior"] = ds.WriteBehavior
 	}
-	objectMap["ignoreNullValues"] = ds.IgnoreNullValues
-	objectMap["writeBatchSize"] = ds.WriteBatchSize
-	objectMap["writeBatchTimeout"] = ds.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = ds.SinkRetryCount
-	objectMap["sinkRetryWait"] = ds.SinkRetryWait
+	if ds.IgnoreNullValues != nil {
+		objectMap["ignoreNullValues"] = ds.IgnoreNullValues
+	}
+	if ds.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = ds.WriteBatchSize
+	}
+	if ds.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = ds.WriteBatchTimeout
+	}
+	if ds.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = ds.SinkRetryCount
+	}
+	if ds.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = ds.SinkRetryWait
+	}
 	if ds.Type != "" {
 		objectMap["type"] = ds.Type
 	}
@@ -30728,6 +33915,96 @@ func (ds DynamicsSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &ds, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for DynamicsSink struct.
+func (ds *DynamicsSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "writeBehavior":
+			if v != nil {
+				var writeBehavior string
+				err = json.Unmarshal(*v, &writeBehavior)
+				if err != nil {
+					return err
+				}
+				ds.WriteBehavior = &writeBehavior
+			}
+		case "ignoreNullValues":
+			if v != nil {
+				var ignoreNullValues interface{}
+				err = json.Unmarshal(*v, &ignoreNullValues)
+				if err != nil {
+					return err
+				}
+				ds.IgnoreNullValues = ignoreNullValues
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ds.AdditionalProperties == nil {
+					ds.AdditionalProperties = make(map[string]interface{})
+				}
+				ds.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				ds.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				ds.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				ds.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				ds.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // DynamicsSource a copy activity Dynamics source.
 type DynamicsSource struct {
 	// Query - FetchXML is a proprietary query language that is used in Microsoft Dynamics (online & on-premises). Type: string (or Expression with resultType string).
@@ -30746,9 +34023,15 @@ type DynamicsSource struct {
 func (ds DynamicsSource) MarshalJSON() ([]byte, error) {
 	ds.Type = TypeDynamicsSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ds.Query
-	objectMap["sourceRetryCount"] = ds.SourceRetryCount
-	objectMap["sourceRetryWait"] = ds.SourceRetryWait
+	if ds.Query != nil {
+		objectMap["query"] = ds.Query
+	}
+	if ds.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ds.SourceRetryCount
+	}
+	if ds.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ds.SourceRetryWait
+	}
 	if ds.Type != "" {
 		objectMap["type"] = ds.Type
 	}
@@ -31016,6 +34299,69 @@ func (ds DynamicsSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for DynamicsSource.
 func (ds DynamicsSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ds, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for DynamicsSource struct.
+func (ds *DynamicsSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ds.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ds.AdditionalProperties == nil {
+					ds.AdditionalProperties = make(map[string]interface{})
+				}
+				ds.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ds.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ds.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // EloquaLinkedService eloqua server linked service.
@@ -31625,7 +34971,9 @@ func (eod EloquaObjectDataset) MarshalJSON() ([]byte, error) {
 	if eod.Description != nil {
 		objectMap["description"] = eod.Description
 	}
-	objectMap["structure"] = eod.Structure
+	if eod.Structure != nil {
+		objectMap["structure"] = eod.Structure
+	}
 	if eod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = eod.LinkedServiceName
 	}
@@ -31919,6 +35267,87 @@ func (eod EloquaObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &eod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for EloquaObjectDataset struct.
+func (eod *EloquaObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if eod.AdditionalProperties == nil {
+					eod.AdditionalProperties = make(map[string]interface{})
+				}
+				eod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				eod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				eod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				eod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				eod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				eod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				eod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // EloquaSource a copy activity Eloqua server source.
 type EloquaSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -31937,9 +35366,15 @@ type EloquaSource struct {
 func (es EloquaSource) MarshalJSON() ([]byte, error) {
 	es.Type = TypeEloquaSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = es.Query
-	objectMap["sourceRetryCount"] = es.SourceRetryCount
-	objectMap["sourceRetryWait"] = es.SourceRetryWait
+	if es.Query != nil {
+		objectMap["query"] = es.Query
+	}
+	if es.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = es.SourceRetryCount
+	}
+	if es.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = es.SourceRetryWait
+	}
 	if es.Type != "" {
 		objectMap["type"] = es.Type
 	}
@@ -32207,6 +35642,69 @@ func (es EloquaSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for EloquaSource.
 func (es EloquaSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &es, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for EloquaSource struct.
+func (es *EloquaSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				es.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if es.AdditionalProperties == nil {
+					es.AdditionalProperties = make(map[string]interface{})
+				}
+				es.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				es.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				es.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				es.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // ErrorResponse the object that defines the structure of an Azure Data Factory response.
@@ -32784,12 +36282,14 @@ func (espa *ExecuteSSISPackageActivity) UnmarshalJSON(body []byte) error {
 type ExecuteSSISPackageActivityTypeProperties struct {
 	// PackageLocation - SSIS package location.
 	PackageLocation *SSISPackageLocation `json:"packageLocation,omitempty"`
-	// Runtime - Specifies the runtime to execute SSIS package. Possible values include: 'X64', 'X86'
-	Runtime SSISExecutionRuntime `json:"runtime,omitempty"`
-	// LoggingLevel - The logging level of SSIS package execution.
-	LoggingLevel *string `json:"loggingLevel,omitempty"`
-	// EnvironmentPath - The environment path to execute the SSIS package.
-	EnvironmentPath *string `json:"environmentPath,omitempty"`
+	// Runtime - Specifies the runtime to execute SSIS package. The value should be "x86" or "x64". Type: string (or Expression with resultType string).
+	Runtime interface{} `json:"runtime,omitempty"`
+	// LoggingLevel - The logging level of SSIS package execution. Type: string (or Expression with resultType string).
+	LoggingLevel interface{} `json:"loggingLevel,omitempty"`
+	// EnvironmentPath - The environment path to execute the SSIS package. Type: string (or Expression with resultType string).
+	EnvironmentPath interface{} `json:"environmentPath,omitempty"`
+	// ExecutionCredential - The package execution credential.
+	ExecutionCredential *SSISExecutionCredential `json:"executionCredential,omitempty"`
 	// ConnectVia - The integration runtime reference.
 	ConnectVia *IntegrationRuntimeReference `json:"connectVia,omitempty"`
 	// ProjectParameters - The project level parameters to execute the SSIS package.
@@ -32810,7 +36310,7 @@ func (espatp ExecuteSSISPackageActivityTypeProperties) MarshalJSON() ([]byte, er
 	if espatp.PackageLocation != nil {
 		objectMap["packageLocation"] = espatp.PackageLocation
 	}
-	if espatp.Runtime != "" {
+	if espatp.Runtime != nil {
 		objectMap["runtime"] = espatp.Runtime
 	}
 	if espatp.LoggingLevel != nil {
@@ -32818,6 +36318,9 @@ func (espatp ExecuteSSISPackageActivityTypeProperties) MarshalJSON() ([]byte, er
 	}
 	if espatp.EnvironmentPath != nil {
 		objectMap["environmentPath"] = espatp.EnvironmentPath
+	}
+	if espatp.ExecutionCredential != nil {
+		objectMap["executionCredential"] = espatp.ExecutionCredential
 	}
 	if espatp.ConnectVia != nil {
 		objectMap["connectVia"] = espatp.ConnectVia
@@ -33144,6 +36647,87 @@ func (ea ExecutionActivity) AsBasicActivity() (BasicActivity, bool) {
 	return &ea, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ExecutionActivity struct.
+func (ea *ExecutionActivity) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				ea.LinkedServiceName = &linkedServiceName
+			}
+		case "policy":
+			if v != nil {
+				var policy ActivityPolicy
+				err = json.Unmarshal(*v, &policy)
+				if err != nil {
+					return err
+				}
+				ea.Policy = &policy
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ea.AdditionalProperties == nil {
+					ea.AdditionalProperties = make(map[string]interface{})
+				}
+				ea.AdditionalProperties[k] = additionalProperties
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ea.Name = &name
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ea.Description = &description
+			}
+		case "dependsOn":
+			if v != nil {
+				var dependsOn []ActivityDependency
+				err = json.Unmarshal(*v, &dependsOn)
+				if err != nil {
+					return err
+				}
+				ea.DependsOn = &dependsOn
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicActivity
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ea.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // Expression azure Data Factory expression definition.
 type Expression struct {
 	// Type - Expression type.
@@ -33318,20 +36902,37 @@ type FactoryListResponseIterator struct {
 	page FactoryListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *FactoryListResponseIterator) Next() error {
+func (iter *FactoryListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoryListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *FactoryListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -33353,6 +36954,11 @@ func (iter FactoryListResponseIterator) Value() Factory {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the FactoryListResponseIterator type.
+func NewFactoryListResponseIterator(page FactoryListResponsePage) FactoryListResponseIterator {
+	return FactoryListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (flr FactoryListResponse) IsEmpty() bool {
 	return flr.Value == nil || len(*flr.Value) == 0
@@ -33360,11 +36966,11 @@ func (flr FactoryListResponse) IsEmpty() bool {
 
 // factoryListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (flr FactoryListResponse) factoryListResponsePreparer() (*http.Request, error) {
+func (flr FactoryListResponse) factoryListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if flr.NextLink == nil || len(to.String(flr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(flr.NextLink)))
@@ -33372,19 +36978,36 @@ func (flr FactoryListResponse) factoryListResponsePreparer() (*http.Request, err
 
 // FactoryListResponsePage contains a page of Factory values.
 type FactoryListResponsePage struct {
-	fn  func(FactoryListResponse) (FactoryListResponse, error)
+	fn  func(context.Context, FactoryListResponse) (FactoryListResponse, error)
 	flr FactoryListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *FactoryListResponsePage) Next() error {
-	next, err := page.fn(page.flr)
+func (page *FactoryListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoryListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.flr)
 	if err != nil {
 		return err
 	}
 	page.flr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *FactoryListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -33403,6 +37026,11 @@ func (page FactoryListResponsePage) Values() []Factory {
 		return nil
 	}
 	return *page.flr.Value
+}
+
+// Creates a new instance of the FactoryListResponsePage type.
+func NewFactoryListResponsePage(getNextPage func(context.Context, FactoryListResponse) (FactoryListResponse, error)) FactoryListResponsePage {
+	return FactoryListResponsePage{fn: getNextPage}
 }
 
 // FactoryProperties factory resource properties.
@@ -34044,7 +37672,9 @@ func (fsd FileShareDataset) MarshalJSON() ([]byte, error) {
 	if fsd.Description != nil {
 		objectMap["description"] = fsd.Description
 	}
-	objectMap["structure"] = fsd.Structure
+	if fsd.Structure != nil {
+		objectMap["structure"] = fsd.Structure
+	}
 	if fsd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = fsd.LinkedServiceName
 	}
@@ -34525,10 +38155,18 @@ func (fss FileSystemSink) MarshalJSON() ([]byte, error) {
 	if fss.CopyBehavior != "" {
 		objectMap["copyBehavior"] = fss.CopyBehavior
 	}
-	objectMap["writeBatchSize"] = fss.WriteBatchSize
-	objectMap["writeBatchTimeout"] = fss.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = fss.SinkRetryCount
-	objectMap["sinkRetryWait"] = fss.SinkRetryWait
+	if fss.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = fss.WriteBatchSize
+	}
+	if fss.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = fss.WriteBatchTimeout
+	}
+	if fss.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = fss.SinkRetryCount
+	}
+	if fss.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = fss.SinkRetryWait
+	}
 	if fss.Type != "" {
 		objectMap["type"] = fss.Type
 	}
@@ -34618,6 +38256,87 @@ func (fss FileSystemSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &fss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for FileSystemSink struct.
+func (fss *FileSystemSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "copyBehavior":
+			if v != nil {
+				var copyBehavior CopyBehaviorType
+				err = json.Unmarshal(*v, &copyBehavior)
+				if err != nil {
+					return err
+				}
+				fss.CopyBehavior = copyBehavior
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if fss.AdditionalProperties == nil {
+					fss.AdditionalProperties = make(map[string]interface{})
+				}
+				fss.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				fss.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				fss.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				fss.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				fss.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				fss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // FileSystemSource a copy activity file system source.
 type FileSystemSource struct {
 	// Recursive - If true, files under the folder path will be read recursively. Default is true. Type: boolean (or Expression with resultType boolean).
@@ -34636,9 +38355,15 @@ type FileSystemSource struct {
 func (fss FileSystemSource) MarshalJSON() ([]byte, error) {
 	fss.Type = TypeFileSystemSource
 	objectMap := make(map[string]interface{})
-	objectMap["recursive"] = fss.Recursive
-	objectMap["sourceRetryCount"] = fss.SourceRetryCount
-	objectMap["sourceRetryWait"] = fss.SourceRetryWait
+	if fss.Recursive != nil {
+		objectMap["recursive"] = fss.Recursive
+	}
+	if fss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = fss.SourceRetryCount
+	}
+	if fss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = fss.SourceRetryWait
+	}
 	if fss.Type != "" {
 		objectMap["type"] = fss.Type
 	}
@@ -34908,6 +38633,69 @@ func (fss FileSystemSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &fss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for FileSystemSource struct.
+func (fss *FileSystemSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "recursive":
+			if v != nil {
+				var recursive interface{}
+				err = json.Unmarshal(*v, &recursive)
+				if err != nil {
+					return err
+				}
+				fss.Recursive = recursive
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if fss.AdditionalProperties == nil {
+					fss.AdditionalProperties = make(map[string]interface{})
+				}
+				fss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				fss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				fss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				fss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // FilterActivity filter and return results from input array based on the conditions.
 type FilterActivity struct {
 	// FilterActivityTypeProperties - Filter activity properties.
@@ -35161,7 +38949,7 @@ func (fa *FilterActivity) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// FilterActivityTypeProperties fitler activity properties.
+// FilterActivityTypeProperties filter activity properties.
 type FilterActivityTypeProperties struct {
 	// Items - Input array on which filter should be applied.
 	Items *Expression `json:"items,omitempty"`
@@ -37026,7 +40814,9 @@ func (gbqod GoogleBigQueryObjectDataset) MarshalJSON() ([]byte, error) {
 	if gbqod.Description != nil {
 		objectMap["description"] = gbqod.Description
 	}
-	objectMap["structure"] = gbqod.Structure
+	if gbqod.Structure != nil {
+		objectMap["structure"] = gbqod.Structure
+	}
 	if gbqod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = gbqod.LinkedServiceName
 	}
@@ -37320,6 +41110,87 @@ func (gbqod GoogleBigQueryObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &gbqod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for GoogleBigQueryObjectDataset struct.
+func (gbqod *GoogleBigQueryObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if gbqod.AdditionalProperties == nil {
+					gbqod.AdditionalProperties = make(map[string]interface{})
+				}
+				gbqod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				gbqod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				gbqod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				gbqod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				gbqod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				gbqod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				gbqod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // GoogleBigQuerySource a copy activity Google BigQuery service source.
 type GoogleBigQuerySource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -37338,9 +41209,15 @@ type GoogleBigQuerySource struct {
 func (gbqs GoogleBigQuerySource) MarshalJSON() ([]byte, error) {
 	gbqs.Type = TypeGoogleBigQuerySource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = gbqs.Query
-	objectMap["sourceRetryCount"] = gbqs.SourceRetryCount
-	objectMap["sourceRetryWait"] = gbqs.SourceRetryWait
+	if gbqs.Query != nil {
+		objectMap["query"] = gbqs.Query
+	}
+	if gbqs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = gbqs.SourceRetryCount
+	}
+	if gbqs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = gbqs.SourceRetryWait
+	}
 	if gbqs.Type != "" {
 		objectMap["type"] = gbqs.Type
 	}
@@ -37608,6 +41485,69 @@ func (gbqs GoogleBigQuerySource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for GoogleBigQuerySource.
 func (gbqs GoogleBigQuerySource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &gbqs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for GoogleBigQuerySource struct.
+func (gbqs *GoogleBigQuerySource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				gbqs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if gbqs.AdditionalProperties == nil {
+					gbqs.AdditionalProperties = make(map[string]interface{})
+				}
+				gbqs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				gbqs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				gbqs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				gbqs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // GreenplumLinkedService greenplum Database linked service.
@@ -38123,9 +42063,15 @@ type GreenplumSource struct {
 func (gs GreenplumSource) MarshalJSON() ([]byte, error) {
 	gs.Type = TypeGreenplumSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = gs.Query
-	objectMap["sourceRetryCount"] = gs.SourceRetryCount
-	objectMap["sourceRetryWait"] = gs.SourceRetryWait
+	if gs.Query != nil {
+		objectMap["query"] = gs.Query
+	}
+	if gs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = gs.SourceRetryCount
+	}
+	if gs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = gs.SourceRetryWait
+	}
 	if gs.Type != "" {
 		objectMap["type"] = gs.Type
 	}
@@ -38395,6 +42341,69 @@ func (gs GreenplumSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &gs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for GreenplumSource struct.
+func (gs *GreenplumSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				gs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if gs.AdditionalProperties == nil {
+					gs.AdditionalProperties = make(map[string]interface{})
+				}
+				gs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				gs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				gs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				gs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // GreenplumTableDataset greenplum Database dataset.
 type GreenplumTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -38420,7 +42429,9 @@ func (gtd GreenplumTableDataset) MarshalJSON() ([]byte, error) {
 	if gtd.Description != nil {
 		objectMap["description"] = gtd.Description
 	}
-	objectMap["structure"] = gtd.Structure
+	if gtd.Structure != nil {
+		objectMap["structure"] = gtd.Structure
+	}
 	if gtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = gtd.LinkedServiceName
 	}
@@ -38712,6 +42723,87 @@ func (gtd GreenplumTableDataset) AsDataset() (*Dataset, bool) {
 // AsBasicDataset is the BasicDataset implementation for GreenplumTableDataset.
 func (gtd GreenplumTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &gtd, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for GreenplumTableDataset struct.
+func (gtd *GreenplumTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if gtd.AdditionalProperties == nil {
+					gtd.AdditionalProperties = make(map[string]interface{})
+				}
+				gtd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				gtd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				gtd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				gtd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				gtd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				gtd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				gtd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // HBaseLinkedService hBase server linked service.
@@ -39365,7 +43457,9 @@ func (hbod HBaseObjectDataset) MarshalJSON() ([]byte, error) {
 	if hbod.Description != nil {
 		objectMap["description"] = hbod.Description
 	}
-	objectMap["structure"] = hbod.Structure
+	if hbod.Structure != nil {
+		objectMap["structure"] = hbod.Structure
+	}
 	if hbod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = hbod.LinkedServiceName
 	}
@@ -39659,6 +43753,87 @@ func (hbod HBaseObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &hbod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for HBaseObjectDataset struct.
+func (hbod *HBaseObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hbod.AdditionalProperties == nil {
+					hbod.AdditionalProperties = make(map[string]interface{})
+				}
+				hbod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				hbod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				hbod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				hbod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				hbod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				hbod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hbod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // HBaseSource a copy activity HBase server source.
 type HBaseSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -39677,9 +43852,15 @@ type HBaseSource struct {
 func (hbs HBaseSource) MarshalJSON() ([]byte, error) {
 	hbs.Type = TypeHBaseSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = hbs.Query
-	objectMap["sourceRetryCount"] = hbs.SourceRetryCount
-	objectMap["sourceRetryWait"] = hbs.SourceRetryWait
+	if hbs.Query != nil {
+		objectMap["query"] = hbs.Query
+	}
+	if hbs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = hbs.SourceRetryCount
+	}
+	if hbs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = hbs.SourceRetryWait
+	}
 	if hbs.Type != "" {
 		objectMap["type"] = hbs.Type
 	}
@@ -39947,6 +44128,69 @@ func (hbs HBaseSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for HBaseSource.
 func (hbs HBaseSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &hbs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for HBaseSource struct.
+func (hbs *HBaseSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				hbs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hbs.AdditionalProperties == nil {
+					hbs.AdditionalProperties = make(map[string]interface{})
+				}
+				hbs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				hbs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				hbs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hbs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // HdfsLinkedService hadoop Distributed File System (HDFS) linked service.
@@ -40529,12 +44773,18 @@ type HdfsSource struct {
 func (hs HdfsSource) MarshalJSON() ([]byte, error) {
 	hs.Type = TypeHdfsSource
 	objectMap := make(map[string]interface{})
-	objectMap["recursive"] = hs.Recursive
+	if hs.Recursive != nil {
+		objectMap["recursive"] = hs.Recursive
+	}
 	if hs.DistcpSettings != nil {
 		objectMap["distcpSettings"] = hs.DistcpSettings
 	}
-	objectMap["sourceRetryCount"] = hs.SourceRetryCount
-	objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	if hs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = hs.SourceRetryCount
+	}
+	if hs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	}
 	if hs.Type != "" {
 		objectMap["type"] = hs.Type
 	}
@@ -40802,6 +45052,78 @@ func (hs HdfsSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for HdfsSource.
 func (hs HdfsSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &hs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for HdfsSource struct.
+func (hs *HdfsSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "recursive":
+			if v != nil {
+				var recursive interface{}
+				err = json.Unmarshal(*v, &recursive)
+				if err != nil {
+					return err
+				}
+				hs.Recursive = recursive
+			}
+		case "distcpSettings":
+			if v != nil {
+				var distcpSettings DistcpSettings
+				err = json.Unmarshal(*v, &distcpSettings)
+				if err != nil {
+					return err
+				}
+				hs.DistcpSettings = &distcpSettings
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hs.AdditionalProperties == nil {
+					hs.AdditionalProperties = make(map[string]interface{})
+				}
+				hs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // HDInsightHiveActivity hDInsight Hive activity type.
@@ -41113,7 +45435,9 @@ func (hihatp HDInsightHiveActivityTypeProperties) MarshalJSON() ([]byte, error) 
 	if hihatp.GetDebugInfo != "" {
 		objectMap["getDebugInfo"] = hihatp.GetDebugInfo
 	}
-	objectMap["scriptPath"] = hihatp.ScriptPath
+	if hihatp.ScriptPath != nil {
+		objectMap["scriptPath"] = hihatp.ScriptPath
+	}
 	if hihatp.ScriptLinkedService != nil {
 		objectMap["scriptLinkedService"] = hihatp.ScriptLinkedService
 	}
@@ -42007,8 +46331,12 @@ func (himratp HDInsightMapReduceActivityTypeProperties) MarshalJSON() ([]byte, e
 	if himratp.GetDebugInfo != "" {
 		objectMap["getDebugInfo"] = himratp.GetDebugInfo
 	}
-	objectMap["className"] = himratp.ClassName
-	objectMap["jarFilePath"] = himratp.JarFilePath
+	if himratp.ClassName != nil {
+		objectMap["className"] = himratp.ClassName
+	}
+	if himratp.JarFilePath != nil {
+		objectMap["jarFilePath"] = himratp.JarFilePath
+	}
 	if himratp.JarLinkedService != nil {
 		objectMap["jarLinkedService"] = himratp.JarLinkedService
 	}
@@ -43163,7 +47491,9 @@ func (hipatp HDInsightPigActivityTypeProperties) MarshalJSON() ([]byte, error) {
 	if hipatp.GetDebugInfo != "" {
 		objectMap["getDebugInfo"] = hipatp.GetDebugInfo
 	}
-	objectMap["scriptPath"] = hipatp.ScriptPath
+	if hipatp.ScriptPath != nil {
+		objectMap["scriptPath"] = hipatp.ScriptPath
+	}
 	if hipatp.ScriptLinkedService != nil {
 		objectMap["scriptLinkedService"] = hipatp.ScriptLinkedService
 	}
@@ -43477,8 +47807,12 @@ type HDInsightSparkActivityTypeProperties struct {
 // MarshalJSON is the custom marshaler for HDInsightSparkActivityTypeProperties.
 func (hisatp HDInsightSparkActivityTypeProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["rootPath"] = hisatp.RootPath
-	objectMap["entryFilePath"] = hisatp.EntryFilePath
+	if hisatp.RootPath != nil {
+		objectMap["rootPath"] = hisatp.RootPath
+	}
+	if hisatp.EntryFilePath != nil {
+		objectMap["entryFilePath"] = hisatp.EntryFilePath
+	}
 	if hisatp.Arguments != nil {
 		objectMap["arguments"] = hisatp.Arguments
 	}
@@ -43491,7 +47825,9 @@ func (hisatp HDInsightSparkActivityTypeProperties) MarshalJSON() ([]byte, error)
 	if hisatp.ClassName != nil {
 		objectMap["className"] = hisatp.ClassName
 	}
-	objectMap["proxyUser"] = hisatp.ProxyUser
+	if hisatp.ProxyUser != nil {
+		objectMap["proxyUser"] = hisatp.ProxyUser
+	}
 	if hisatp.SparkConfig != nil {
 		objectMap["sparkConfig"] = hisatp.SparkConfig
 	}
@@ -43819,17 +48155,27 @@ func (hisatp HDInsightStreamingActivityTypeProperties) MarshalJSON() ([]byte, er
 	if hisatp.GetDebugInfo != "" {
 		objectMap["getDebugInfo"] = hisatp.GetDebugInfo
 	}
-	objectMap["mapper"] = hisatp.Mapper
-	objectMap["reducer"] = hisatp.Reducer
-	objectMap["input"] = hisatp.Input
-	objectMap["output"] = hisatp.Output
+	if hisatp.Mapper != nil {
+		objectMap["mapper"] = hisatp.Mapper
+	}
+	if hisatp.Reducer != nil {
+		objectMap["reducer"] = hisatp.Reducer
+	}
+	if hisatp.Input != nil {
+		objectMap["input"] = hisatp.Input
+	}
+	if hisatp.Output != nil {
+		objectMap["output"] = hisatp.Output
+	}
 	if hisatp.FilePaths != nil {
 		objectMap["filePaths"] = hisatp.FilePaths
 	}
 	if hisatp.FileLinkedService != nil {
 		objectMap["fileLinkedService"] = hisatp.FileLinkedService
 	}
-	objectMap["combiner"] = hisatp.Combiner
+	if hisatp.Combiner != nil {
+		objectMap["combiner"] = hisatp.Combiner
+	}
 	if hisatp.CommandEnvironment != nil {
 		objectMap["commandEnvironment"] = hisatp.CommandEnvironment
 	}
@@ -44556,7 +48902,9 @@ func (hod HiveObjectDataset) MarshalJSON() ([]byte, error) {
 	if hod.Description != nil {
 		objectMap["description"] = hod.Description
 	}
-	objectMap["structure"] = hod.Structure
+	if hod.Structure != nil {
+		objectMap["structure"] = hod.Structure
+	}
 	if hod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = hod.LinkedServiceName
 	}
@@ -44850,6 +49198,87 @@ func (hod HiveObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &hod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for HiveObjectDataset struct.
+func (hod *HiveObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hod.AdditionalProperties == nil {
+					hod.AdditionalProperties = make(map[string]interface{})
+				}
+				hod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				hod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				hod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				hod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				hod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				hod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // HiveSource a copy activity Hive Server source.
 type HiveSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -44868,9 +49297,15 @@ type HiveSource struct {
 func (hs HiveSource) MarshalJSON() ([]byte, error) {
 	hs.Type = TypeHiveSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = hs.Query
-	objectMap["sourceRetryCount"] = hs.SourceRetryCount
-	objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	if hs.Query != nil {
+		objectMap["query"] = hs.Query
+	}
+	if hs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = hs.SourceRetryCount
+	}
+	if hs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	}
 	if hs.Type != "" {
 		objectMap["type"] = hs.Type
 	}
@@ -45140,6 +49575,69 @@ func (hs HiveSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &hs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for HiveSource struct.
+func (hs *HiveSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				hs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hs.AdditionalProperties == nil {
+					hs.AdditionalProperties = make(map[string]interface{})
+				}
+				hs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // HTTPDataset a file in an HTTP web server.
 type HTTPDataset struct {
 	// HTTPDatasetTypeProperties - Properties specific to this dataset type.
@@ -45170,7 +49668,9 @@ func (hd HTTPDataset) MarshalJSON() ([]byte, error) {
 	if hd.Description != nil {
 		objectMap["description"] = hd.Description
 	}
-	objectMap["structure"] = hd.Structure
+	if hd.Structure != nil {
+		objectMap["structure"] = hd.Structure
+	}
 	if hd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = hd.LinkedServiceName
 	}
@@ -46250,9 +50750,15 @@ type HTTPSource struct {
 func (hs HTTPSource) MarshalJSON() ([]byte, error) {
 	hs.Type = TypeHTTPSource
 	objectMap := make(map[string]interface{})
-	objectMap["httpRequestTimeout"] = hs.HTTPRequestTimeout
-	objectMap["sourceRetryCount"] = hs.SourceRetryCount
-	objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	if hs.HTTPRequestTimeout != nil {
+		objectMap["httpRequestTimeout"] = hs.HTTPRequestTimeout
+	}
+	if hs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = hs.SourceRetryCount
+	}
+	if hs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	}
 	if hs.Type != "" {
 		objectMap["type"] = hs.Type
 	}
@@ -46522,9 +51028,72 @@ func (hs HTTPSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &hs, true
 }
 
-// HubspotLinkedService hubspot Serivce linked service.
+// UnmarshalJSON is the custom unmarshaler for HTTPSource struct.
+func (hs *HTTPSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "httpRequestTimeout":
+			if v != nil {
+				var HTTPRequestTimeout interface{}
+				err = json.Unmarshal(*v, &HTTPRequestTimeout)
+				if err != nil {
+					return err
+				}
+				hs.HTTPRequestTimeout = HTTPRequestTimeout
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hs.AdditionalProperties == nil {
+					hs.AdditionalProperties = make(map[string]interface{})
+				}
+				hs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// HubspotLinkedService hubspot Service linked service.
 type HubspotLinkedService struct {
-	// HubspotLinkedServiceTypeProperties - Hubspot Serivce linked service properties.
+	// HubspotLinkedServiceTypeProperties - Hubspot Service linked service properties.
 	*HubspotLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -47009,7 +51578,7 @@ func (hls *HubspotLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// HubspotLinkedServiceTypeProperties hubspot Serivce linked service properties.
+// HubspotLinkedServiceTypeProperties hubspot Service linked service properties.
 type HubspotLinkedServiceTypeProperties struct {
 	// ClientID - The client ID associated with your Hubspot application.
 	ClientID interface{} `json:"clientId,omitempty"`
@@ -47113,7 +51682,7 @@ func (hlstp *HubspotLinkedServiceTypeProperties) UnmarshalJSON(body []byte) erro
 	return nil
 }
 
-// HubspotObjectDataset hubspot Serivce dataset.
+// HubspotObjectDataset hubspot Service dataset.
 type HubspotObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -47138,7 +51707,9 @@ func (hod HubspotObjectDataset) MarshalJSON() ([]byte, error) {
 	if hod.Description != nil {
 		objectMap["description"] = hod.Description
 	}
-	objectMap["structure"] = hod.Structure
+	if hod.Structure != nil {
+		objectMap["structure"] = hod.Structure
+	}
 	if hod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = hod.LinkedServiceName
 	}
@@ -47432,7 +52003,88 @@ func (hod HubspotObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &hod, true
 }
 
-// HubspotSource a copy activity Hubspot Serivce source.
+// UnmarshalJSON is the custom unmarshaler for HubspotObjectDataset struct.
+func (hod *HubspotObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hod.AdditionalProperties == nil {
+					hod.AdditionalProperties = make(map[string]interface{})
+				}
+				hod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				hod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				hod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				hod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				hod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				hod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// HubspotSource a copy activity Hubspot Service source.
 type HubspotSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -47450,9 +52102,15 @@ type HubspotSource struct {
 func (hs HubspotSource) MarshalJSON() ([]byte, error) {
 	hs.Type = TypeHubspotSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = hs.Query
-	objectMap["sourceRetryCount"] = hs.SourceRetryCount
-	objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	if hs.Query != nil {
+		objectMap["query"] = hs.Query
+	}
+	if hs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = hs.SourceRetryCount
+	}
+	if hs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = hs.SourceRetryWait
+	}
 	if hs.Type != "" {
 		objectMap["type"] = hs.Type
 	}
@@ -47722,8 +52380,72 @@ func (hs HubspotSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &hs, true
 }
 
-// IfConditionActivity this activity evaluates a boolean expression and executes either the activities under the
-// ifTrueActivities property or the ifFalseActivities property depending on the result of the expression.
+// UnmarshalJSON is the custom unmarshaler for HubspotSource struct.
+func (hs *HubspotSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				hs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if hs.AdditionalProperties == nil {
+					hs.AdditionalProperties = make(map[string]interface{})
+				}
+				hs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				hs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// IfConditionActivity this activity evaluates a boolean expression and executes either the activities
+// under the ifTrueActivities property or the ifFalseActivities property depending on the result of the
+// expression.
 type IfConditionActivity struct {
 	// IfConditionActivityTypeProperties - IfCondition activity properties.
 	*IfConditionActivityTypeProperties `json:"typeProperties,omitempty"`
@@ -48677,7 +53399,9 @@ func (iod ImpalaObjectDataset) MarshalJSON() ([]byte, error) {
 	if iod.Description != nil {
 		objectMap["description"] = iod.Description
 	}
-	objectMap["structure"] = iod.Structure
+	if iod.Structure != nil {
+		objectMap["structure"] = iod.Structure
+	}
 	if iod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = iod.LinkedServiceName
 	}
@@ -48971,6 +53695,87 @@ func (iod ImpalaObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &iod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ImpalaObjectDataset struct.
+func (iod *ImpalaObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if iod.AdditionalProperties == nil {
+					iod.AdditionalProperties = make(map[string]interface{})
+				}
+				iod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				iod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				iod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				iod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				iod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				iod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				iod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // ImpalaSource a copy activity Impala server source.
 type ImpalaSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -48989,9 +53794,15 @@ type ImpalaSource struct {
 func (is ImpalaSource) MarshalJSON() ([]byte, error) {
 	is.Type = TypeImpalaSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = is.Query
-	objectMap["sourceRetryCount"] = is.SourceRetryCount
-	objectMap["sourceRetryWait"] = is.SourceRetryWait
+	if is.Query != nil {
+		objectMap["query"] = is.Query
+	}
+	if is.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = is.SourceRetryCount
+	}
+	if is.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = is.SourceRetryWait
+	}
 	if is.Type != "" {
 		objectMap["type"] = is.Type
 	}
@@ -49261,6 +54072,69 @@ func (is ImpalaSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &is, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ImpalaSource struct.
+func (is *ImpalaSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				is.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if is.AdditionalProperties == nil {
+					is.AdditionalProperties = make(map[string]interface{})
+				}
+				is.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				is.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				is.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				is.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // BasicIntegrationRuntime azure Data Factory nested object which serves as a compute resource for activities.
 type BasicIntegrationRuntime interface {
 	AsSelfHostedIntegrationRuntime() (*SelfHostedIntegrationRuntime, bool)
@@ -49355,6 +54229,51 @@ func (ir IntegrationRuntime) AsBasicIntegrationRuntime() (BasicIntegrationRuntim
 	return &ir, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntime struct.
+func (ir *IntegrationRuntime) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ir.AdditionalProperties == nil {
+					ir.AdditionalProperties = make(map[string]interface{})
+				}
+				ir.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ir.Description = &description
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicIntegrationRuntime
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ir.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // IntegrationRuntimeAuthKeys the integration runtime authentication keys.
 type IntegrationRuntimeAuthKeys struct {
 	autorest.Response `json:"-"`
@@ -49404,7 +54323,80 @@ func (ircp IntegrationRuntimeComputeProperties) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// IntegrationRuntimeConnectionInfo connection information for encrypting the on-premises data source credentials.
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeComputeProperties struct.
+func (ircp *IntegrationRuntimeComputeProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ircp.AdditionalProperties == nil {
+					ircp.AdditionalProperties = make(map[string]interface{})
+				}
+				ircp.AdditionalProperties[k] = additionalProperties
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				ircp.Location = &location
+			}
+		case "nodeSize":
+			if v != nil {
+				var nodeSize string
+				err = json.Unmarshal(*v, &nodeSize)
+				if err != nil {
+					return err
+				}
+				ircp.NodeSize = &nodeSize
+			}
+		case "numberOfNodes":
+			if v != nil {
+				var numberOfNodes int32
+				err = json.Unmarshal(*v, &numberOfNodes)
+				if err != nil {
+					return err
+				}
+				ircp.NumberOfNodes = &numberOfNodes
+			}
+		case "maxParallelExecutionsPerNode":
+			if v != nil {
+				var maxParallelExecutionsPerNode int32
+				err = json.Unmarshal(*v, &maxParallelExecutionsPerNode)
+				if err != nil {
+					return err
+				}
+				ircp.MaxParallelExecutionsPerNode = &maxParallelExecutionsPerNode
+			}
+		case "vNetProperties":
+			if v != nil {
+				var vNetProperties IntegrationRuntimeVNetProperties
+				err = json.Unmarshal(*v, &vNetProperties)
+				if err != nil {
+					return err
+				}
+				ircp.VNetProperties = &vNetProperties
+			}
+		}
+	}
+
+	return nil
+}
+
+// IntegrationRuntimeConnectionInfo connection information for encrypting the on-premises data source
+// credentials.
 type IntegrationRuntimeConnectionInfo struct {
 	autorest.Response `json:"-"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -49450,8 +54442,89 @@ func (irci IntegrationRuntimeConnectionInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// IntegrationRuntimeCustomSetupScriptProperties custom setup script properties for a managed dedicated integration
-// runtime.
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeConnectionInfo struct.
+func (irci *IntegrationRuntimeConnectionInfo) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irci.AdditionalProperties == nil {
+					irci.AdditionalProperties = make(map[string]interface{})
+				}
+				irci.AdditionalProperties[k] = additionalProperties
+			}
+		case "serviceToken":
+			if v != nil {
+				var serviceToken string
+				err = json.Unmarshal(*v, &serviceToken)
+				if err != nil {
+					return err
+				}
+				irci.ServiceToken = &serviceToken
+			}
+		case "identityCertThumbprint":
+			if v != nil {
+				var identityCertThumbprint string
+				err = json.Unmarshal(*v, &identityCertThumbprint)
+				if err != nil {
+					return err
+				}
+				irci.IdentityCertThumbprint = &identityCertThumbprint
+			}
+		case "hostServiceUri":
+			if v != nil {
+				var hostServiceURI string
+				err = json.Unmarshal(*v, &hostServiceURI)
+				if err != nil {
+					return err
+				}
+				irci.HostServiceURI = &hostServiceURI
+			}
+		case "version":
+			if v != nil {
+				var version string
+				err = json.Unmarshal(*v, &version)
+				if err != nil {
+					return err
+				}
+				irci.Version = &version
+			}
+		case "publicKey":
+			if v != nil {
+				var publicKey string
+				err = json.Unmarshal(*v, &publicKey)
+				if err != nil {
+					return err
+				}
+				irci.PublicKey = &publicKey
+			}
+		case "isIdentityCertExprired":
+			if v != nil {
+				var isIdentityCertExprired bool
+				err = json.Unmarshal(*v, &isIdentityCertExprired)
+				if err != nil {
+					return err
+				}
+				irci.IsIdentityCertExprired = &isIdentityCertExprired
+			}
+		}
+	}
+
+	return nil
+}
+
+// IntegrationRuntimeCustomSetupScriptProperties custom setup script properties for a managed dedicated
+// integration runtime.
 type IntegrationRuntimeCustomSetupScriptProperties struct {
 	// BlobContainerURI - The URI of the Azure blob container that contains the custom setup script.
 	BlobContainerURI *string `json:"blobContainerUri,omitempty"`
@@ -49468,27 +54541,44 @@ type IntegrationRuntimeListResponse struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// IntegrationRuntimeListResponseIterator provides access to a complete listing of IntegrationRuntimeResource
-// values.
+// IntegrationRuntimeListResponseIterator provides access to a complete listing of
+// IntegrationRuntimeResource values.
 type IntegrationRuntimeListResponseIterator struct {
 	i    int
 	page IntegrationRuntimeListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IntegrationRuntimeListResponseIterator) Next() error {
+func (iter *IntegrationRuntimeListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimeListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *IntegrationRuntimeListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -49510,6 +54600,11 @@ func (iter IntegrationRuntimeListResponseIterator) Value() IntegrationRuntimeRes
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the IntegrationRuntimeListResponseIterator type.
+func NewIntegrationRuntimeListResponseIterator(page IntegrationRuntimeListResponsePage) IntegrationRuntimeListResponseIterator {
+	return IntegrationRuntimeListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (irlr IntegrationRuntimeListResponse) IsEmpty() bool {
 	return irlr.Value == nil || len(*irlr.Value) == 0
@@ -49517,11 +54612,11 @@ func (irlr IntegrationRuntimeListResponse) IsEmpty() bool {
 
 // integrationRuntimeListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (irlr IntegrationRuntimeListResponse) integrationRuntimeListResponsePreparer() (*http.Request, error) {
+func (irlr IntegrationRuntimeListResponse) integrationRuntimeListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if irlr.NextLink == nil || len(to.String(irlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(irlr.NextLink)))
@@ -49529,19 +54624,36 @@ func (irlr IntegrationRuntimeListResponse) integrationRuntimeListResponsePrepare
 
 // IntegrationRuntimeListResponsePage contains a page of IntegrationRuntimeResource values.
 type IntegrationRuntimeListResponsePage struct {
-	fn   func(IntegrationRuntimeListResponse) (IntegrationRuntimeListResponse, error)
+	fn   func(context.Context, IntegrationRuntimeListResponse) (IntegrationRuntimeListResponse, error)
 	irlr IntegrationRuntimeListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IntegrationRuntimeListResponsePage) Next() error {
-	next, err := page.fn(page.irlr)
+func (page *IntegrationRuntimeListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimeListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.irlr)
 	if err != nil {
 		return err
 	}
 	page.irlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *IntegrationRuntimeListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -49560,6 +54672,11 @@ func (page IntegrationRuntimeListResponsePage) Values() []IntegrationRuntimeReso
 		return nil
 	}
 	return *page.irlr.Value
+}
+
+// Creates a new instance of the IntegrationRuntimeListResponsePage type.
+func NewIntegrationRuntimeListResponsePage(getNextPage func(context.Context, IntegrationRuntimeListResponse) (IntegrationRuntimeListResponse, error)) IntegrationRuntimeListResponsePage {
+	return IntegrationRuntimeListResponsePage{fn: getNextPage}
 }
 
 // IntegrationRuntimeMonitoringData get monitoring data response.
@@ -49633,6 +54750,105 @@ func (irnmd IntegrationRuntimeNodeMonitoringData) MarshalJSON() ([]byte, error) 
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeNodeMonitoringData struct.
+func (irnmd *IntegrationRuntimeNodeMonitoringData) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irnmd.AdditionalProperties == nil {
+					irnmd.AdditionalProperties = make(map[string]interface{})
+				}
+				irnmd.AdditionalProperties[k] = additionalProperties
+			}
+		case "nodeName":
+			if v != nil {
+				var nodeName string
+				err = json.Unmarshal(*v, &nodeName)
+				if err != nil {
+					return err
+				}
+				irnmd.NodeName = &nodeName
+			}
+		case "availableMemoryInMB":
+			if v != nil {
+				var availableMemoryInMB int32
+				err = json.Unmarshal(*v, &availableMemoryInMB)
+				if err != nil {
+					return err
+				}
+				irnmd.AvailableMemoryInMB = &availableMemoryInMB
+			}
+		case "cpuUtilization":
+			if v != nil {
+				var CPUUtilization float64
+				err = json.Unmarshal(*v, &CPUUtilization)
+				if err != nil {
+					return err
+				}
+				irnmd.CPUUtilization = &CPUUtilization
+			}
+		case "concurrentJobsLimit":
+			if v != nil {
+				var concurrentJobsLimit int32
+				err = json.Unmarshal(*v, &concurrentJobsLimit)
+				if err != nil {
+					return err
+				}
+				irnmd.ConcurrentJobsLimit = &concurrentJobsLimit
+			}
+		case "concurrentJobsRunning":
+			if v != nil {
+				var concurrentJobsRunning int32
+				err = json.Unmarshal(*v, &concurrentJobsRunning)
+				if err != nil {
+					return err
+				}
+				irnmd.ConcurrentJobsRunning = &concurrentJobsRunning
+			}
+		case "maxConcurrentJobs":
+			if v != nil {
+				var maxConcurrentJobs int32
+				err = json.Unmarshal(*v, &maxConcurrentJobs)
+				if err != nil {
+					return err
+				}
+				irnmd.MaxConcurrentJobs = &maxConcurrentJobs
+			}
+		case "sentBytes":
+			if v != nil {
+				var sentBytes float64
+				err = json.Unmarshal(*v, &sentBytes)
+				if err != nil {
+					return err
+				}
+				irnmd.SentBytes = &sentBytes
+			}
+		case "receivedBytes":
+			if v != nil {
+				var receivedBytes float64
+				err = json.Unmarshal(*v, &receivedBytes)
+				if err != nil {
+					return err
+				}
+				irnmd.ReceivedBytes = &receivedBytes
+			}
+		}
+	}
+
+	return nil
+}
+
 // IntegrationRuntimeReference integration runtime reference type.
 type IntegrationRuntimeReference struct {
 	// Type - Type of integration runtime.
@@ -49682,6 +54898,42 @@ func (irrnr IntegrationRuntimeRemoveNodeRequest) MarshalJSON() ([]byte, error) {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeRemoveNodeRequest struct.
+func (irrnr *IntegrationRuntimeRemoveNodeRequest) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irrnr.AdditionalProperties == nil {
+					irrnr.AdditionalProperties = make(map[string]interface{})
+				}
+				irrnr.AdditionalProperties[k] = additionalProperties
+			}
+		case "nodeName":
+			if v != nil {
+				var nodeName string
+				err = json.Unmarshal(*v, &nodeName)
+				if err != nil {
+					return err
+				}
+				irrnr.NodeName = &nodeName
+			}
+		}
+	}
+
+	return nil
 }
 
 // IntegrationRuntimeResource integration runtime resource type.
@@ -49793,6 +55045,69 @@ func (irsci IntegrationRuntimeSsisCatalogInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeSsisCatalogInfo struct.
+func (irsci *IntegrationRuntimeSsisCatalogInfo) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irsci.AdditionalProperties == nil {
+					irsci.AdditionalProperties = make(map[string]interface{})
+				}
+				irsci.AdditionalProperties[k] = additionalProperties
+			}
+		case "catalogServerEndpoint":
+			if v != nil {
+				var catalogServerEndpoint string
+				err = json.Unmarshal(*v, &catalogServerEndpoint)
+				if err != nil {
+					return err
+				}
+				irsci.CatalogServerEndpoint = &catalogServerEndpoint
+			}
+		case "catalogAdminUserName":
+			if v != nil {
+				var catalogAdminUserName string
+				err = json.Unmarshal(*v, &catalogAdminUserName)
+				if err != nil {
+					return err
+				}
+				irsci.CatalogAdminUserName = &catalogAdminUserName
+			}
+		case "catalogAdminPassword":
+			if v != nil {
+				var catalogAdminPassword SecureString
+				err = json.Unmarshal(*v, &catalogAdminPassword)
+				if err != nil {
+					return err
+				}
+				irsci.CatalogAdminPassword = &catalogAdminPassword
+			}
+		case "catalogPricingTier":
+			if v != nil {
+				var catalogPricingTier IntegrationRuntimeSsisCatalogPricingTier
+				err = json.Unmarshal(*v, &catalogPricingTier)
+				if err != nil {
+					return err
+				}
+				irsci.CatalogPricingTier = catalogPricingTier
+			}
+		}
+	}
+
+	return nil
+}
+
 // IntegrationRuntimeSsisProperties SSIS properties for managed integration runtime.
 type IntegrationRuntimeSsisProperties struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -49828,8 +55143,71 @@ func (irsp IntegrationRuntimeSsisProperties) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// IntegrationRuntimesStartFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeSsisProperties struct.
+func (irsp *IntegrationRuntimeSsisProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irsp.AdditionalProperties == nil {
+					irsp.AdditionalProperties = make(map[string]interface{})
+				}
+				irsp.AdditionalProperties[k] = additionalProperties
+			}
+		case "catalogInfo":
+			if v != nil {
+				var catalogInfo IntegrationRuntimeSsisCatalogInfo
+				err = json.Unmarshal(*v, &catalogInfo)
+				if err != nil {
+					return err
+				}
+				irsp.CatalogInfo = &catalogInfo
+			}
+		case "licenseType":
+			if v != nil {
+				var licenseType IntegrationRuntimeLicenseType
+				err = json.Unmarshal(*v, &licenseType)
+				if err != nil {
+					return err
+				}
+				irsp.LicenseType = licenseType
+			}
+		case "customSetupScriptProperties":
+			if v != nil {
+				var customSetupScriptProperties IntegrationRuntimeCustomSetupScriptProperties
+				err = json.Unmarshal(*v, &customSetupScriptProperties)
+				if err != nil {
+					return err
+				}
+				irsp.CustomSetupScriptProperties = &customSetupScriptProperties
+			}
+		case "edition":
+			if v != nil {
+				var edition IntegrationRuntimeEdition
+				err = json.Unmarshal(*v, &edition)
+				if err != nil {
+					return err
+				}
+				irsp.Edition = edition
+			}
+		}
+	}
+
+	return nil
+}
+
+// IntegrationRuntimesStartFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type IntegrationRuntimesStartFuture struct {
 	azure.Future
 }
@@ -49979,6 +55357,60 @@ func (irs IntegrationRuntimeStatus) AsBasicIntegrationRuntimeStatus() (BasicInte
 	return &irs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeStatus struct.
+func (irs *IntegrationRuntimeStatus) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irs.AdditionalProperties == nil {
+					irs.AdditionalProperties = make(map[string]interface{})
+				}
+				irs.AdditionalProperties[k] = additionalProperties
+			}
+		case "dataFactoryName":
+			if v != nil {
+				var dataFactoryName string
+				err = json.Unmarshal(*v, &dataFactoryName)
+				if err != nil {
+					return err
+				}
+				irs.DataFactoryName = &dataFactoryName
+			}
+		case "state":
+			if v != nil {
+				var state IntegrationRuntimeState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				irs.State = state
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicIntegrationRuntimeStatus
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				irs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // IntegrationRuntimeStatusListResponse a list of integration runtime status.
 type IntegrationRuntimeStatusListResponse struct {
 	// Value - List of integration runtime status.
@@ -50053,9 +55485,54 @@ func (irvnp IntegrationRuntimeVNetProperties) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// JiraLinkedService jira Serivce linked service.
+// UnmarshalJSON is the custom unmarshaler for IntegrationRuntimeVNetProperties struct.
+func (irvnp *IntegrationRuntimeVNetProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if irvnp.AdditionalProperties == nil {
+					irvnp.AdditionalProperties = make(map[string]interface{})
+				}
+				irvnp.AdditionalProperties[k] = additionalProperties
+			}
+		case "vNetId":
+			if v != nil {
+				var vNetID string
+				err = json.Unmarshal(*v, &vNetID)
+				if err != nil {
+					return err
+				}
+				irvnp.VNetID = &vNetID
+			}
+		case "subnet":
+			if v != nil {
+				var subnet string
+				err = json.Unmarshal(*v, &subnet)
+				if err != nil {
+					return err
+				}
+				irvnp.Subnet = &subnet
+			}
+		}
+	}
+
+	return nil
+}
+
+// JiraLinkedService jira Service linked service.
 type JiraLinkedService struct {
-	// JiraLinkedServiceTypeProperties - Jira Serivce linked service properties.
+	// JiraLinkedServiceTypeProperties - Jira Service linked service properties.
 	*JiraLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -50540,7 +56017,7 @@ func (jls *JiraLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// JiraLinkedServiceTypeProperties jira Serivce linked service properties.
+// JiraLinkedServiceTypeProperties jira Service linked service properties.
 type JiraLinkedServiceTypeProperties struct {
 	// Host - The IP address or host name of the Jira service. (e.g. jira.example.com)
 	Host interface{} `json:"host,omitempty"`
@@ -50646,7 +56123,7 @@ func (jlstp *JiraLinkedServiceTypeProperties) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// JiraObjectDataset jira Serivce dataset.
+// JiraObjectDataset jira Service dataset.
 type JiraObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -50671,7 +56148,9 @@ func (jod JiraObjectDataset) MarshalJSON() ([]byte, error) {
 	if jod.Description != nil {
 		objectMap["description"] = jod.Description
 	}
-	objectMap["structure"] = jod.Structure
+	if jod.Structure != nil {
+		objectMap["structure"] = jod.Structure
+	}
 	if jod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = jod.LinkedServiceName
 	}
@@ -50965,7 +56444,88 @@ func (jod JiraObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &jod, true
 }
 
-// JiraSource a copy activity Jira Serivce source.
+// UnmarshalJSON is the custom unmarshaler for JiraObjectDataset struct.
+func (jod *JiraObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if jod.AdditionalProperties == nil {
+					jod.AdditionalProperties = make(map[string]interface{})
+				}
+				jod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				jod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				jod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				jod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				jod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				jod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				jod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// JiraSource a copy activity Jira Service source.
 type JiraSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -50983,9 +56543,15 @@ type JiraSource struct {
 func (js JiraSource) MarshalJSON() ([]byte, error) {
 	js.Type = TypeJiraSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = js.Query
-	objectMap["sourceRetryCount"] = js.SourceRetryCount
-	objectMap["sourceRetryWait"] = js.SourceRetryWait
+	if js.Query != nil {
+		objectMap["query"] = js.Query
+	}
+	if js.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = js.SourceRetryCount
+	}
+	if js.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = js.SourceRetryWait
+	}
 	if js.Type != "" {
 		objectMap["type"] = js.Type
 	}
@@ -51255,6 +56821,69 @@ func (js JiraSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &js, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for JiraSource struct.
+func (js *JiraSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				js.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if js.AdditionalProperties == nil {
+					js.AdditionalProperties = make(map[string]interface{})
+				}
+				js.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				js.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				js.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				js.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // JSONFormat the data stored in JSON format.
 type JSONFormat struct {
 	// FilePattern - File pattern of JSON. To be more specific, the way of separating a collection of JSON objects. The default value is 'setOfObjects'. It is case-sensitive. Possible values include: 'SetOfObjects', 'ArrayOfObjects'
@@ -51284,12 +56913,24 @@ func (jf JSONFormat) MarshalJSON() ([]byte, error) {
 	if jf.FilePattern != "" {
 		objectMap["filePattern"] = jf.FilePattern
 	}
-	objectMap["nestingSeparator"] = jf.NestingSeparator
-	objectMap["encodingName"] = jf.EncodingName
-	objectMap["jsonNodeReference"] = jf.JSONNodeReference
-	objectMap["jsonPathDefinition"] = jf.JSONPathDefinition
-	objectMap["serializer"] = jf.Serializer
-	objectMap["deserializer"] = jf.Deserializer
+	if jf.NestingSeparator != nil {
+		objectMap["nestingSeparator"] = jf.NestingSeparator
+	}
+	if jf.EncodingName != nil {
+		objectMap["encodingName"] = jf.EncodingName
+	}
+	if jf.JSONNodeReference != nil {
+		objectMap["jsonNodeReference"] = jf.JSONNodeReference
+	}
+	if jf.JSONPathDefinition != nil {
+		objectMap["jsonPathDefinition"] = jf.JSONPathDefinition
+	}
+	if jf.Serializer != nil {
+		objectMap["serializer"] = jf.Serializer
+	}
+	if jf.Deserializer != nil {
+		objectMap["deserializer"] = jf.Deserializer
+	}
 	if jf.Type != "" {
 		objectMap["type"] = jf.Type
 	}
@@ -51332,6 +56973,105 @@ func (jf JSONFormat) AsDatasetStorageFormat() (*DatasetStorageFormat, bool) {
 // AsBasicDatasetStorageFormat is the BasicDatasetStorageFormat implementation for JSONFormat.
 func (jf JSONFormat) AsBasicDatasetStorageFormat() (BasicDatasetStorageFormat, bool) {
 	return &jf, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for JSONFormat struct.
+func (jf *JSONFormat) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "filePattern":
+			if v != nil {
+				var filePattern JSONFormatFilePattern
+				err = json.Unmarshal(*v, &filePattern)
+				if err != nil {
+					return err
+				}
+				jf.FilePattern = filePattern
+			}
+		case "nestingSeparator":
+			if v != nil {
+				var nestingSeparator interface{}
+				err = json.Unmarshal(*v, &nestingSeparator)
+				if err != nil {
+					return err
+				}
+				jf.NestingSeparator = nestingSeparator
+			}
+		case "encodingName":
+			if v != nil {
+				var encodingName interface{}
+				err = json.Unmarshal(*v, &encodingName)
+				if err != nil {
+					return err
+				}
+				jf.EncodingName = encodingName
+			}
+		case "jsonNodeReference":
+			if v != nil {
+				var JSONNodeReference interface{}
+				err = json.Unmarshal(*v, &JSONNodeReference)
+				if err != nil {
+					return err
+				}
+				jf.JSONNodeReference = JSONNodeReference
+			}
+		case "jsonPathDefinition":
+			if v != nil {
+				var JSONPathDefinition interface{}
+				err = json.Unmarshal(*v, &JSONPathDefinition)
+				if err != nil {
+					return err
+				}
+				jf.JSONPathDefinition = JSONPathDefinition
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if jf.AdditionalProperties == nil {
+					jf.AdditionalProperties = make(map[string]interface{})
+				}
+				jf.AdditionalProperties[k] = additionalProperties
+			}
+		case "serializer":
+			if v != nil {
+				var serializer interface{}
+				err = json.Unmarshal(*v, &serializer)
+				if err != nil {
+					return err
+				}
+				jf.Serializer = serializer
+			}
+		case "deserializer":
+			if v != nil {
+				var deserializer interface{}
+				err = json.Unmarshal(*v, &deserializer)
+				if err != nil {
+					return err
+				}
+				jf.Deserializer = deserializer
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetStorageFormat
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				jf.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // LinkedIntegrationRuntime the linked integration runtime information.
@@ -51618,8 +57358,8 @@ type BasicLinkedService interface {
 	AsLinkedService() (*LinkedService, bool)
 }
 
-// LinkedService the Azure Data Factory nested object which contains the information and credential which can be
-// used to connect with related store or compute resource.
+// LinkedService the Azure Data Factory nested object which contains the information and credential which can
+// be used to connect with related store or compute resource.
 type LinkedService struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -52333,6 +58073,78 @@ func (ls LinkedService) AsBasicLinkedService() (BasicLinkedService, bool) {
 	return &ls, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for LinkedService struct.
+func (ls *LinkedService) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ls.AdditionalProperties == nil {
+					ls.AdditionalProperties = make(map[string]interface{})
+				}
+				ls.AdditionalProperties[k] = additionalProperties
+			}
+		case "connectVia":
+			if v != nil {
+				var connectVia IntegrationRuntimeReference
+				err = json.Unmarshal(*v, &connectVia)
+				if err != nil {
+					return err
+				}
+				ls.ConnectVia = &connectVia
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ls.Description = &description
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				ls.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				ls.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicLinkedService
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ls.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // LinkedServiceListResponse a list of linked service resources.
 type LinkedServiceListResponse struct {
 	autorest.Response `json:"-"`
@@ -52348,20 +58160,37 @@ type LinkedServiceListResponseIterator struct {
 	page LinkedServiceListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *LinkedServiceListResponseIterator) Next() error {
+func (iter *LinkedServiceListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServiceListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *LinkedServiceListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -52383,6 +58212,11 @@ func (iter LinkedServiceListResponseIterator) Value() LinkedServiceResource {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the LinkedServiceListResponseIterator type.
+func NewLinkedServiceListResponseIterator(page LinkedServiceListResponsePage) LinkedServiceListResponseIterator {
+	return LinkedServiceListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (lslr LinkedServiceListResponse) IsEmpty() bool {
 	return lslr.Value == nil || len(*lslr.Value) == 0
@@ -52390,11 +58224,11 @@ func (lslr LinkedServiceListResponse) IsEmpty() bool {
 
 // linkedServiceListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lslr LinkedServiceListResponse) linkedServiceListResponsePreparer() (*http.Request, error) {
+func (lslr LinkedServiceListResponse) linkedServiceListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if lslr.NextLink == nil || len(to.String(lslr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lslr.NextLink)))
@@ -52402,19 +58236,36 @@ func (lslr LinkedServiceListResponse) linkedServiceListResponsePreparer() (*http
 
 // LinkedServiceListResponsePage contains a page of LinkedServiceResource values.
 type LinkedServiceListResponsePage struct {
-	fn   func(LinkedServiceListResponse) (LinkedServiceListResponse, error)
+	fn   func(context.Context, LinkedServiceListResponse) (LinkedServiceListResponse, error)
 	lslr LinkedServiceListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *LinkedServiceListResponsePage) Next() error {
-	next, err := page.fn(page.lslr)
+func (page *LinkedServiceListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServiceListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.lslr)
 	if err != nil {
 		return err
 	}
 	page.lslr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *LinkedServiceListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -52433,6 +58284,11 @@ func (page LinkedServiceListResponsePage) Values() []LinkedServiceResource {
 		return nil
 	}
 	return *page.lslr.Value
+}
+
+// Creates a new instance of the LinkedServiceListResponsePage type.
+func NewLinkedServiceListResponsePage(getNextPage func(context.Context, LinkedServiceListResponse) (LinkedServiceListResponse, error)) LinkedServiceListResponsePage {
+	return LinkedServiceListResponsePage{fn: getNextPage}
 }
 
 // LinkedServiceReference linked service reference type.
@@ -53462,7 +59318,9 @@ func (mod MagentoObjectDataset) MarshalJSON() ([]byte, error) {
 	if mod.Description != nil {
 		objectMap["description"] = mod.Description
 	}
-	objectMap["structure"] = mod.Structure
+	if mod.Structure != nil {
+		objectMap["structure"] = mod.Structure
+	}
 	if mod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = mod.LinkedServiceName
 	}
@@ -53756,6 +59614,87 @@ func (mod MagentoObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &mod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for MagentoObjectDataset struct.
+func (mod *MagentoObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mod.AdditionalProperties == nil {
+					mod.AdditionalProperties = make(map[string]interface{})
+				}
+				mod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				mod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				mod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				mod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				mod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				mod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // MagentoSource a copy activity Magento server source.
 type MagentoSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -53774,9 +59713,15 @@ type MagentoSource struct {
 func (ms MagentoSource) MarshalJSON() ([]byte, error) {
 	ms.Type = TypeMagentoSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ms.Query
-	objectMap["sourceRetryCount"] = ms.SourceRetryCount
-	objectMap["sourceRetryWait"] = ms.SourceRetryWait
+	if ms.Query != nil {
+		objectMap["query"] = ms.Query
+	}
+	if ms.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ms.SourceRetryCount
+	}
+	if ms.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ms.SourceRetryWait
+	}
 	if ms.Type != "" {
 		objectMap["type"] = ms.Type
 	}
@@ -54044,6 +59989,69 @@ func (ms MagentoSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for MagentoSource.
 func (ms MagentoSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ms, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for MagentoSource struct.
+func (ms *MagentoSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ms.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ms.AdditionalProperties == nil {
+					ms.AdditionalProperties = make(map[string]interface{})
+				}
+				ms.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ms.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ms.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ms.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // ManagedIntegrationRuntime managed integration runtime, including managed elastic and managed dedicated
@@ -54856,9 +60864,15 @@ type MariaDBSource struct {
 func (mds MariaDBSource) MarshalJSON() ([]byte, error) {
 	mds.Type = TypeMariaDBSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = mds.Query
-	objectMap["sourceRetryCount"] = mds.SourceRetryCount
-	objectMap["sourceRetryWait"] = mds.SourceRetryWait
+	if mds.Query != nil {
+		objectMap["query"] = mds.Query
+	}
+	if mds.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = mds.SourceRetryCount
+	}
+	if mds.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = mds.SourceRetryWait
+	}
 	if mds.Type != "" {
 		objectMap["type"] = mds.Type
 	}
@@ -55128,6 +61142,69 @@ func (mds MariaDBSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &mds, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for MariaDBSource struct.
+func (mds *MariaDBSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				mds.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mds.AdditionalProperties == nil {
+					mds.AdditionalProperties = make(map[string]interface{})
+				}
+				mds.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				mds.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				mds.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // MariaDBTableDataset mariaDB server dataset.
 type MariaDBTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -55153,7 +61230,9 @@ func (mdtd MariaDBTableDataset) MarshalJSON() ([]byte, error) {
 	if mdtd.Description != nil {
 		objectMap["description"] = mdtd.Description
 	}
-	objectMap["structure"] = mdtd.Structure
+	if mdtd.Structure != nil {
+		objectMap["structure"] = mdtd.Structure
+	}
 	if mdtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = mdtd.LinkedServiceName
 	}
@@ -55445,6 +61524,87 @@ func (mdtd MariaDBTableDataset) AsDataset() (*Dataset, bool) {
 // AsBasicDataset is the BasicDataset implementation for MariaDBTableDataset.
 func (mdtd MariaDBTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &mdtd, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for MariaDBTableDataset struct.
+func (mdtd *MariaDBTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mdtd.AdditionalProperties == nil {
+					mdtd.AdditionalProperties = make(map[string]interface{})
+				}
+				mdtd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				mdtd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				mdtd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				mdtd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				mdtd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				mdtd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mdtd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // MarketoLinkedService marketo server linked service.
@@ -56054,7 +62214,9 @@ func (mod MarketoObjectDataset) MarshalJSON() ([]byte, error) {
 	if mod.Description != nil {
 		objectMap["description"] = mod.Description
 	}
-	objectMap["structure"] = mod.Structure
+	if mod.Structure != nil {
+		objectMap["structure"] = mod.Structure
+	}
 	if mod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = mod.LinkedServiceName
 	}
@@ -56348,6 +62510,87 @@ func (mod MarketoObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &mod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for MarketoObjectDataset struct.
+func (mod *MarketoObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mod.AdditionalProperties == nil {
+					mod.AdditionalProperties = make(map[string]interface{})
+				}
+				mod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				mod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				mod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				mod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				mod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				mod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // MarketoSource a copy activity Marketo server source.
 type MarketoSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -56366,9 +62609,15 @@ type MarketoSource struct {
 func (ms MarketoSource) MarshalJSON() ([]byte, error) {
 	ms.Type = TypeMarketoSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ms.Query
-	objectMap["sourceRetryCount"] = ms.SourceRetryCount
-	objectMap["sourceRetryWait"] = ms.SourceRetryWait
+	if ms.Query != nil {
+		objectMap["query"] = ms.Query
+	}
+	if ms.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ms.SourceRetryCount
+	}
+	if ms.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ms.SourceRetryWait
+	}
 	if ms.Type != "" {
 		objectMap["type"] = ms.Type
 	}
@@ -56638,6 +62887,69 @@ func (ms MarketoSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ms, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for MarketoSource struct.
+func (ms *MarketoSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ms.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ms.AdditionalProperties == nil {
+					ms.AdditionalProperties = make(map[string]interface{})
+				}
+				ms.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ms.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ms.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ms.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // MongoDbCollectionDataset the MongoDB database dataset.
 type MongoDbCollectionDataset struct {
 	// MongoDbCollectionDatasetTypeProperties - MongoDB database dataset properties.
@@ -56668,7 +62980,9 @@ func (mdcd MongoDbCollectionDataset) MarshalJSON() ([]byte, error) {
 	if mdcd.Description != nil {
 		objectMap["description"] = mdcd.Description
 	}
-	objectMap["structure"] = mdcd.Structure
+	if mdcd.Structure != nil {
+		objectMap["structure"] = mdcd.Structure
+	}
 	if mdcd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = mdcd.LinkedServiceName
 	}
@@ -57691,9 +64005,15 @@ type MongoDbSource struct {
 func (mds MongoDbSource) MarshalJSON() ([]byte, error) {
 	mds.Type = TypeMongoDbSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = mds.Query
-	objectMap["sourceRetryCount"] = mds.SourceRetryCount
-	objectMap["sourceRetryWait"] = mds.SourceRetryWait
+	if mds.Query != nil {
+		objectMap["query"] = mds.Query
+	}
+	if mds.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = mds.SourceRetryCount
+	}
+	if mds.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = mds.SourceRetryWait
+	}
 	if mds.Type != "" {
 		objectMap["type"] = mds.Type
 	}
@@ -57963,6 +64283,69 @@ func (mds MongoDbSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &mds, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for MongoDbSource struct.
+func (mds *MongoDbSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				mds.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mds.AdditionalProperties == nil {
+					mds.AdditionalProperties = make(map[string]interface{})
+				}
+				mds.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				mds.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				mds.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // BasicMultiplePipelineTrigger base class for all triggers that support one to many model for trigger to pipeline.
 type BasicMultiplePipelineTrigger interface {
 	AsBlobEventsTrigger() (*BlobEventsTrigger, bool)
@@ -58090,6 +64473,69 @@ func (mpt MultiplePipelineTrigger) AsTrigger() (*Trigger, bool) {
 // AsBasicTrigger is the BasicTrigger implementation for MultiplePipelineTrigger.
 func (mpt MultiplePipelineTrigger) AsBasicTrigger() (BasicTrigger, bool) {
 	return &mpt, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for MultiplePipelineTrigger struct.
+func (mpt *MultiplePipelineTrigger) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "pipelines":
+			if v != nil {
+				var pipelines []TriggerPipelineReference
+				err = json.Unmarshal(*v, &pipelines)
+				if err != nil {
+					return err
+				}
+				mpt.Pipelines = &pipelines
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mpt.AdditionalProperties == nil {
+					mpt.AdditionalProperties = make(map[string]interface{})
+				}
+				mpt.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				mpt.Description = &description
+			}
+		case "runtimeState":
+			if v != nil {
+				var runtimeState TriggerRuntimeState
+				err = json.Unmarshal(*v, &runtimeState)
+				if err != nil {
+					return err
+				}
+				mpt.RuntimeState = runtimeState
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicTrigger
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mpt.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // MySQLLinkedService linked service for MySQL data source.
@@ -59132,9 +65578,15 @@ type NetezzaSource struct {
 func (ns NetezzaSource) MarshalJSON() ([]byte, error) {
 	ns.Type = TypeNetezzaSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ns.Query
-	objectMap["sourceRetryCount"] = ns.SourceRetryCount
-	objectMap["sourceRetryWait"] = ns.SourceRetryWait
+	if ns.Query != nil {
+		objectMap["query"] = ns.Query
+	}
+	if ns.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ns.SourceRetryCount
+	}
+	if ns.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ns.SourceRetryWait
+	}
 	if ns.Type != "" {
 		objectMap["type"] = ns.Type
 	}
@@ -59404,6 +65856,69 @@ func (ns NetezzaSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ns, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for NetezzaSource struct.
+func (ns *NetezzaSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ns.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ns.AdditionalProperties == nil {
+					ns.AdditionalProperties = make(map[string]interface{})
+				}
+				ns.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ns.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ns.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ns.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // NetezzaTableDataset netezza dataset.
 type NetezzaTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -59429,7 +65944,9 @@ func (ntd NetezzaTableDataset) MarshalJSON() ([]byte, error) {
 	if ntd.Description != nil {
 		objectMap["description"] = ntd.Description
 	}
-	objectMap["structure"] = ntd.Structure
+	if ntd.Structure != nil {
+		objectMap["structure"] = ntd.Structure
+	}
 	if ntd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = ntd.LinkedServiceName
 	}
@@ -59721,6 +66238,87 @@ func (ntd NetezzaTableDataset) AsDataset() (*Dataset, bool) {
 // AsBasicDataset is the BasicDataset implementation for NetezzaTableDataset.
 func (ntd NetezzaTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &ntd, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for NetezzaTableDataset struct.
+func (ntd *NetezzaTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ntd.AdditionalProperties == nil {
+					ntd.AdditionalProperties = make(map[string]interface{})
+				}
+				ntd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ntd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				ntd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				ntd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				ntd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				ntd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ntd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // ODataLinkedService open Data Protocol (OData) linked service.
@@ -60313,7 +66911,9 @@ func (odrd ODataResourceDataset) MarshalJSON() ([]byte, error) {
 	if odrd.Description != nil {
 		objectMap["description"] = odrd.Description
 	}
-	objectMap["structure"] = odrd.Structure
+	if odrd.Structure != nil {
+		objectMap["structure"] = odrd.Structure
+	}
 	if odrd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = odrd.LinkedServiceName
 	}
@@ -61295,11 +67895,21 @@ type OdbcSink struct {
 func (osVar OdbcSink) MarshalJSON() ([]byte, error) {
 	osVar.Type = TypeOdbcSink
 	objectMap := make(map[string]interface{})
-	objectMap["preCopyScript"] = osVar.PreCopyScript
-	objectMap["writeBatchSize"] = osVar.WriteBatchSize
-	objectMap["writeBatchTimeout"] = osVar.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = osVar.SinkRetryCount
-	objectMap["sinkRetryWait"] = osVar.SinkRetryWait
+	if osVar.PreCopyScript != nil {
+		objectMap["preCopyScript"] = osVar.PreCopyScript
+	}
+	if osVar.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = osVar.WriteBatchSize
+	}
+	if osVar.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = osVar.WriteBatchTimeout
+	}
+	if osVar.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = osVar.SinkRetryCount
+	}
+	if osVar.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = osVar.SinkRetryWait
+	}
 	if osVar.Type != "" {
 		objectMap["type"] = osVar.Type
 	}
@@ -61387,6 +67997,87 @@ func (osVar OdbcSink) AsCopySink() (*CopySink, bool) {
 // AsBasicCopySink is the BasicCopySink implementation for OdbcSink.
 func (osVar OdbcSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &osVar, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for OdbcSink struct.
+func (osVar *OdbcSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "preCopyScript":
+			if v != nil {
+				var preCopyScript interface{}
+				err = json.Unmarshal(*v, &preCopyScript)
+				if err != nil {
+					return err
+				}
+				osVar.PreCopyScript = preCopyScript
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if osVar.AdditionalProperties == nil {
+					osVar.AdditionalProperties = make(map[string]interface{})
+				}
+				osVar.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				osVar.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				osVar.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				osVar.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				osVar.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				osVar.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // Operation azure Data Factory API operation definition.
@@ -62062,11 +68753,21 @@ type OracleSink struct {
 func (osVar OracleSink) MarshalJSON() ([]byte, error) {
 	osVar.Type = TypeOracleSink
 	objectMap := make(map[string]interface{})
-	objectMap["preCopyScript"] = osVar.PreCopyScript
-	objectMap["writeBatchSize"] = osVar.WriteBatchSize
-	objectMap["writeBatchTimeout"] = osVar.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = osVar.SinkRetryCount
-	objectMap["sinkRetryWait"] = osVar.SinkRetryWait
+	if osVar.PreCopyScript != nil {
+		objectMap["preCopyScript"] = osVar.PreCopyScript
+	}
+	if osVar.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = osVar.WriteBatchSize
+	}
+	if osVar.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = osVar.WriteBatchTimeout
+	}
+	if osVar.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = osVar.SinkRetryCount
+	}
+	if osVar.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = osVar.SinkRetryWait
+	}
 	if osVar.Type != "" {
 		objectMap["type"] = osVar.Type
 	}
@@ -62156,6 +68857,87 @@ func (osVar OracleSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &osVar, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for OracleSink struct.
+func (osVar *OracleSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "preCopyScript":
+			if v != nil {
+				var preCopyScript interface{}
+				err = json.Unmarshal(*v, &preCopyScript)
+				if err != nil {
+					return err
+				}
+				osVar.PreCopyScript = preCopyScript
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if osVar.AdditionalProperties == nil {
+					osVar.AdditionalProperties = make(map[string]interface{})
+				}
+				osVar.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				osVar.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				osVar.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				osVar.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				osVar.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				osVar.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // OracleSource a copy activity Oracle source.
 type OracleSource struct {
 	// OracleReaderQuery - Oracle reader query. Type: string (or Expression with resultType string).
@@ -62176,10 +68958,18 @@ type OracleSource struct {
 func (osVar OracleSource) MarshalJSON() ([]byte, error) {
 	osVar.Type = TypeOracleSource
 	objectMap := make(map[string]interface{})
-	objectMap["oracleReaderQuery"] = osVar.OracleReaderQuery
-	objectMap["queryTimeout"] = osVar.QueryTimeout
-	objectMap["sourceRetryCount"] = osVar.SourceRetryCount
-	objectMap["sourceRetryWait"] = osVar.SourceRetryWait
+	if osVar.OracleReaderQuery != nil {
+		objectMap["oracleReaderQuery"] = osVar.OracleReaderQuery
+	}
+	if osVar.QueryTimeout != nil {
+		objectMap["queryTimeout"] = osVar.QueryTimeout
+	}
+	if osVar.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = osVar.SourceRetryCount
+	}
+	if osVar.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = osVar.SourceRetryWait
+	}
 	if osVar.Type != "" {
 		objectMap["type"] = osVar.Type
 	}
@@ -62449,6 +69239,78 @@ func (osVar OracleSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &osVar, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for OracleSource struct.
+func (osVar *OracleSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "oracleReaderQuery":
+			if v != nil {
+				var oracleReaderQuery interface{}
+				err = json.Unmarshal(*v, &oracleReaderQuery)
+				if err != nil {
+					return err
+				}
+				osVar.OracleReaderQuery = oracleReaderQuery
+			}
+		case "queryTimeout":
+			if v != nil {
+				var queryTimeout interface{}
+				err = json.Unmarshal(*v, &queryTimeout)
+				if err != nil {
+					return err
+				}
+				osVar.QueryTimeout = queryTimeout
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if osVar.AdditionalProperties == nil {
+					osVar.AdditionalProperties = make(map[string]interface{})
+				}
+				osVar.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				osVar.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				osVar.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				osVar.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // OracleTableDataset the on-premises Oracle database dataset.
 type OracleTableDataset struct {
 	// OracleTableDatasetTypeProperties - On-premises Oracle dataset properties.
@@ -62479,7 +69341,9 @@ func (otd OracleTableDataset) MarshalJSON() ([]byte, error) {
 	if otd.Description != nil {
 		objectMap["description"] = otd.Description
 	}
-	objectMap["structure"] = otd.Structure
+	if otd.Structure != nil {
+		objectMap["structure"] = otd.Structure
+	}
 	if otd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = otd.LinkedServiceName
 	}
@@ -62885,8 +69749,12 @@ type OrcFormat struct {
 func (of OrcFormat) MarshalJSON() ([]byte, error) {
 	of.Type = TypeOrcFormat
 	objectMap := make(map[string]interface{})
-	objectMap["serializer"] = of.Serializer
-	objectMap["deserializer"] = of.Deserializer
+	if of.Serializer != nil {
+		objectMap["serializer"] = of.Serializer
+	}
+	if of.Deserializer != nil {
+		objectMap["deserializer"] = of.Deserializer
+	}
 	if of.Type != "" {
 		objectMap["type"] = of.Type
 	}
@@ -62931,6 +69799,60 @@ func (of OrcFormat) AsBasicDatasetStorageFormat() (BasicDatasetStorageFormat, bo
 	return &of, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for OrcFormat struct.
+func (of *OrcFormat) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if of.AdditionalProperties == nil {
+					of.AdditionalProperties = make(map[string]interface{})
+				}
+				of.AdditionalProperties[k] = additionalProperties
+			}
+		case "serializer":
+			if v != nil {
+				var serializer interface{}
+				err = json.Unmarshal(*v, &serializer)
+				if err != nil {
+					return err
+				}
+				of.Serializer = serializer
+			}
+		case "deserializer":
+			if v != nil {
+				var deserializer interface{}
+				err = json.Unmarshal(*v, &deserializer)
+				if err != nil {
+					return err
+				}
+				of.Deserializer = deserializer
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetStorageFormat
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				of.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // ParameterSpecification definition of a single parameter for an entity.
 type ParameterSpecification struct {
 	// Type - Parameter type. Possible values include: 'ParameterTypeObject', 'ParameterTypeString', 'ParameterTypeInt', 'ParameterTypeFloat', 'ParameterTypeBool', 'ParameterTypeArray', 'ParameterTypeSecureString'
@@ -62955,8 +69877,12 @@ type ParquetFormat struct {
 func (pf ParquetFormat) MarshalJSON() ([]byte, error) {
 	pf.Type = TypeParquetFormat
 	objectMap := make(map[string]interface{})
-	objectMap["serializer"] = pf.Serializer
-	objectMap["deserializer"] = pf.Deserializer
+	if pf.Serializer != nil {
+		objectMap["serializer"] = pf.Serializer
+	}
+	if pf.Deserializer != nil {
+		objectMap["deserializer"] = pf.Deserializer
+	}
 	if pf.Type != "" {
 		objectMap["type"] = pf.Type
 	}
@@ -63001,9 +69927,63 @@ func (pf ParquetFormat) AsBasicDatasetStorageFormat() (BasicDatasetStorageFormat
 	return &pf, true
 }
 
-// PaypalLinkedService paypal Serivce linked service.
+// UnmarshalJSON is the custom unmarshaler for ParquetFormat struct.
+func (pf *ParquetFormat) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if pf.AdditionalProperties == nil {
+					pf.AdditionalProperties = make(map[string]interface{})
+				}
+				pf.AdditionalProperties[k] = additionalProperties
+			}
+		case "serializer":
+			if v != nil {
+				var serializer interface{}
+				err = json.Unmarshal(*v, &serializer)
+				if err != nil {
+					return err
+				}
+				pf.Serializer = serializer
+			}
+		case "deserializer":
+			if v != nil {
+				var deserializer interface{}
+				err = json.Unmarshal(*v, &deserializer)
+				if err != nil {
+					return err
+				}
+				pf.Deserializer = deserializer
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetStorageFormat
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				pf.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// PaypalLinkedService paypal Service linked service.
 type PaypalLinkedService struct {
-	// PaypalLinkedServiceTypeProperties - Paypal Serivce linked service properties.
+	// PaypalLinkedServiceTypeProperties - Paypal Service linked service properties.
 	*PaypalLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -63488,7 +70468,7 @@ func (pls *PaypalLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// PaypalLinkedServiceTypeProperties paypal Serivce linked service properties.
+// PaypalLinkedServiceTypeProperties paypal Service linked service properties.
 type PaypalLinkedServiceTypeProperties struct {
 	// Host - The URL of the PayPal instance. (i.e. api.sandbox.paypal.com)
 	Host interface{} `json:"host,omitempty"`
@@ -63583,7 +70563,7 @@ func (plstp *PaypalLinkedServiceTypeProperties) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// PaypalObjectDataset paypal Serivce dataset.
+// PaypalObjectDataset paypal Service dataset.
 type PaypalObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -63608,7 +70588,9 @@ func (pod PaypalObjectDataset) MarshalJSON() ([]byte, error) {
 	if pod.Description != nil {
 		objectMap["description"] = pod.Description
 	}
-	objectMap["structure"] = pod.Structure
+	if pod.Structure != nil {
+		objectMap["structure"] = pod.Structure
+	}
 	if pod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = pod.LinkedServiceName
 	}
@@ -63902,7 +70884,88 @@ func (pod PaypalObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &pod, true
 }
 
-// PaypalSource a copy activity Paypal Serivce source.
+// UnmarshalJSON is the custom unmarshaler for PaypalObjectDataset struct.
+func (pod *PaypalObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if pod.AdditionalProperties == nil {
+					pod.AdditionalProperties = make(map[string]interface{})
+				}
+				pod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				pod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				pod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				pod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				pod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				pod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				pod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// PaypalSource a copy activity Paypal Service source.
 type PaypalSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -63920,9 +70983,15 @@ type PaypalSource struct {
 func (ps PaypalSource) MarshalJSON() ([]byte, error) {
 	ps.Type = TypePaypalSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ps.Query
-	objectMap["sourceRetryCount"] = ps.SourceRetryCount
-	objectMap["sourceRetryWait"] = ps.SourceRetryWait
+	if ps.Query != nil {
+		objectMap["query"] = ps.Query
+	}
+	if ps.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ps.SourceRetryCount
+	}
+	if ps.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ps.SourceRetryWait
+	}
 	if ps.Type != "" {
 		objectMap["type"] = ps.Type
 	}
@@ -64190,6 +71259,69 @@ func (ps PaypalSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for PaypalSource.
 func (ps PaypalSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ps, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for PaypalSource struct.
+func (ps *PaypalSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ps.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ps.AdditionalProperties == nil {
+					ps.AdditionalProperties = make(map[string]interface{})
+				}
+				ps.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ps.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ps.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ps.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // PhoenixLinkedService phoenix server linked service.
@@ -64854,7 +71986,9 @@ func (pod PhoenixObjectDataset) MarshalJSON() ([]byte, error) {
 	if pod.Description != nil {
 		objectMap["description"] = pod.Description
 	}
-	objectMap["structure"] = pod.Structure
+	if pod.Structure != nil {
+		objectMap["structure"] = pod.Structure
+	}
 	if pod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = pod.LinkedServiceName
 	}
@@ -65148,6 +72282,87 @@ func (pod PhoenixObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &pod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for PhoenixObjectDataset struct.
+func (pod *PhoenixObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if pod.AdditionalProperties == nil {
+					pod.AdditionalProperties = make(map[string]interface{})
+				}
+				pod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				pod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				pod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				pod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				pod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				pod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				pod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // PhoenixSource a copy activity Phoenix server source.
 type PhoenixSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -65166,9 +72381,15 @@ type PhoenixSource struct {
 func (ps PhoenixSource) MarshalJSON() ([]byte, error) {
 	ps.Type = TypePhoenixSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ps.Query
-	objectMap["sourceRetryCount"] = ps.SourceRetryCount
-	objectMap["sourceRetryWait"] = ps.SourceRetryWait
+	if ps.Query != nil {
+		objectMap["query"] = ps.Query
+	}
+	if ps.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ps.SourceRetryCount
+	}
+	if ps.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ps.SourceRetryWait
+	}
 	if ps.Type != "" {
 		objectMap["type"] = ps.Type
 	}
@@ -65438,6 +72659,69 @@ func (ps PhoenixSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ps, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for PhoenixSource struct.
+func (ps *PhoenixSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ps.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ps.AdditionalProperties == nil {
+					ps.AdditionalProperties = make(map[string]interface{})
+				}
+				ps.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ps.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ps.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ps.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // Pipeline a data factory pipeline.
 type Pipeline struct {
 	// Description - The description of the pipeline.
@@ -65547,20 +72831,37 @@ type PipelineListResponseIterator struct {
 	page PipelineListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PipelineListResponseIterator) Next() error {
+func (iter *PipelineListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelineListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *PipelineListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -65582,6 +72883,11 @@ func (iter PipelineListResponseIterator) Value() PipelineResource {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the PipelineListResponseIterator type.
+func NewPipelineListResponseIterator(page PipelineListResponsePage) PipelineListResponseIterator {
+	return PipelineListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (plr PipelineListResponse) IsEmpty() bool {
 	return plr.Value == nil || len(*plr.Value) == 0
@@ -65589,11 +72895,11 @@ func (plr PipelineListResponse) IsEmpty() bool {
 
 // pipelineListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (plr PipelineListResponse) pipelineListResponsePreparer() (*http.Request, error) {
+func (plr PipelineListResponse) pipelineListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if plr.NextLink == nil || len(to.String(plr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(plr.NextLink)))
@@ -65601,19 +72907,36 @@ func (plr PipelineListResponse) pipelineListResponsePreparer() (*http.Request, e
 
 // PipelineListResponsePage contains a page of PipelineResource values.
 type PipelineListResponsePage struct {
-	fn  func(PipelineListResponse) (PipelineListResponse, error)
+	fn  func(context.Context, PipelineListResponse) (PipelineListResponse, error)
 	plr PipelineListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PipelineListResponsePage) Next() error {
-	next, err := page.fn(page.plr)
+func (page *PipelineListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelineListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.plr)
 	if err != nil {
 		return err
 	}
 	page.plr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *PipelineListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -65632,6 +72955,11 @@ func (page PipelineListResponsePage) Values() []PipelineResource {
 		return nil
 	}
 	return *page.plr.Value
+}
+
+// Creates a new instance of the PipelineListResponsePage type.
+func NewPipelineListResponsePage(getNextPage func(context.Context, PipelineListResponse) (PipelineListResponse, error)) PipelineListResponsePage {
+	return PipelineListResponsePage{fn: getNextPage}
 }
 
 // PipelineReference pipeline reference type.
@@ -65823,6 +73151,123 @@ func (pr PipelineRun) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for PipelineRun struct.
+func (pr *PipelineRun) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if pr.AdditionalProperties == nil {
+					pr.AdditionalProperties = make(map[string]interface{})
+				}
+				pr.AdditionalProperties[k] = additionalProperties
+			}
+		case "runId":
+			if v != nil {
+				var runID string
+				err = json.Unmarshal(*v, &runID)
+				if err != nil {
+					return err
+				}
+				pr.RunID = &runID
+			}
+		case "pipelineName":
+			if v != nil {
+				var pipelineName string
+				err = json.Unmarshal(*v, &pipelineName)
+				if err != nil {
+					return err
+				}
+				pr.PipelineName = &pipelineName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*string
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				pr.Parameters = parameters
+			}
+		case "invokedBy":
+			if v != nil {
+				var invokedBy PipelineRunInvokedBy
+				err = json.Unmarshal(*v, &invokedBy)
+				if err != nil {
+					return err
+				}
+				pr.InvokedBy = &invokedBy
+			}
+		case "lastUpdated":
+			if v != nil {
+				var lastUpdated date.Time
+				err = json.Unmarshal(*v, &lastUpdated)
+				if err != nil {
+					return err
+				}
+				pr.LastUpdated = &lastUpdated
+			}
+		case "runStart":
+			if v != nil {
+				var runStart date.Time
+				err = json.Unmarshal(*v, &runStart)
+				if err != nil {
+					return err
+				}
+				pr.RunStart = &runStart
+			}
+		case "runEnd":
+			if v != nil {
+				var runEnd date.Time
+				err = json.Unmarshal(*v, &runEnd)
+				if err != nil {
+					return err
+				}
+				pr.RunEnd = &runEnd
+			}
+		case "durationInMs":
+			if v != nil {
+				var durationInMs int32
+				err = json.Unmarshal(*v, &durationInMs)
+				if err != nil {
+					return err
+				}
+				pr.DurationInMs = &durationInMs
+			}
+		case "status":
+			if v != nil {
+				var status string
+				err = json.Unmarshal(*v, &status)
+				if err != nil {
+					return err
+				}
+				pr.Status = &status
+			}
+		case "message":
+			if v != nil {
+				var message string
+				err = json.Unmarshal(*v, &message)
+				if err != nil {
+					return err
+				}
+				pr.Message = &message
+			}
+		}
+	}
+
+	return nil
+}
+
 // PipelineRunFilterParameters query parameters for listing pipeline runs.
 type PipelineRunFilterParameters struct {
 	// ContinuationToken - The continuation token for getting the next page of results. Null for first page.
@@ -65892,13 +73337,82 @@ func (ps PolybaseSettings) MarshalJSON() ([]byte, error) {
 	if ps.RejectType != "" {
 		objectMap["rejectType"] = ps.RejectType
 	}
-	objectMap["rejectValue"] = ps.RejectValue
-	objectMap["rejectSampleValue"] = ps.RejectSampleValue
-	objectMap["useTypeDefault"] = ps.UseTypeDefault
+	if ps.RejectValue != nil {
+		objectMap["rejectValue"] = ps.RejectValue
+	}
+	if ps.RejectSampleValue != nil {
+		objectMap["rejectSampleValue"] = ps.RejectSampleValue
+	}
+	if ps.UseTypeDefault != nil {
+		objectMap["useTypeDefault"] = ps.UseTypeDefault
+	}
 	for k, v := range ps.AdditionalProperties {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for PolybaseSettings struct.
+func (ps *PolybaseSettings) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ps.AdditionalProperties == nil {
+					ps.AdditionalProperties = make(map[string]interface{})
+				}
+				ps.AdditionalProperties[k] = additionalProperties
+			}
+		case "rejectType":
+			if v != nil {
+				var rejectType PolybaseSettingsRejectType
+				err = json.Unmarshal(*v, &rejectType)
+				if err != nil {
+					return err
+				}
+				ps.RejectType = rejectType
+			}
+		case "rejectValue":
+			if v != nil {
+				var rejectValue interface{}
+				err = json.Unmarshal(*v, &rejectValue)
+				if err != nil {
+					return err
+				}
+				ps.RejectValue = rejectValue
+			}
+		case "rejectSampleValue":
+			if v != nil {
+				var rejectSampleValue interface{}
+				err = json.Unmarshal(*v, &rejectSampleValue)
+				if err != nil {
+					return err
+				}
+				ps.RejectSampleValue = rejectSampleValue
+			}
+		case "useTypeDefault":
+			if v != nil {
+				var useTypeDefault interface{}
+				err = json.Unmarshal(*v, &useTypeDefault)
+				if err != nil {
+					return err
+				}
+				ps.UseTypeDefault = useTypeDefault
+			}
+		}
+	}
+
+	return nil
 }
 
 // PostgreSQLLinkedService linked service for PostgreSQL data source.
@@ -67112,7 +74626,9 @@ func (pod PrestoObjectDataset) MarshalJSON() ([]byte, error) {
 	if pod.Description != nil {
 		objectMap["description"] = pod.Description
 	}
-	objectMap["structure"] = pod.Structure
+	if pod.Structure != nil {
+		objectMap["structure"] = pod.Structure
+	}
 	if pod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = pod.LinkedServiceName
 	}
@@ -67406,6 +74922,87 @@ func (pod PrestoObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &pod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for PrestoObjectDataset struct.
+func (pod *PrestoObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if pod.AdditionalProperties == nil {
+					pod.AdditionalProperties = make(map[string]interface{})
+				}
+				pod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				pod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				pod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				pod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				pod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				pod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				pod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // PrestoSource a copy activity Presto server source.
 type PrestoSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -67424,9 +75021,15 @@ type PrestoSource struct {
 func (ps PrestoSource) MarshalJSON() ([]byte, error) {
 	ps.Type = TypePrestoSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ps.Query
-	objectMap["sourceRetryCount"] = ps.SourceRetryCount
-	objectMap["sourceRetryWait"] = ps.SourceRetryWait
+	if ps.Query != nil {
+		objectMap["query"] = ps.Query
+	}
+	if ps.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ps.SourceRetryCount
+	}
+	if ps.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ps.SourceRetryWait
+	}
 	if ps.Type != "" {
 		objectMap["type"] = ps.Type
 	}
@@ -67694,6 +75297,69 @@ func (ps PrestoSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for PrestoSource.
 func (ps PrestoSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ps, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for PrestoSource struct.
+func (ps *PrestoSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ps.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ps.AdditionalProperties == nil {
+					ps.AdditionalProperties = make(map[string]interface{})
+				}
+				ps.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ps.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ps.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ps.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // QuickBooksLinkedService quickBooks server linked service.
@@ -68312,7 +75978,9 @@ func (qbod QuickBooksObjectDataset) MarshalJSON() ([]byte, error) {
 	if qbod.Description != nil {
 		objectMap["description"] = qbod.Description
 	}
-	objectMap["structure"] = qbod.Structure
+	if qbod.Structure != nil {
+		objectMap["structure"] = qbod.Structure
+	}
 	if qbod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = qbod.LinkedServiceName
 	}
@@ -68606,6 +76274,87 @@ func (qbod QuickBooksObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &qbod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for QuickBooksObjectDataset struct.
+func (qbod *QuickBooksObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if qbod.AdditionalProperties == nil {
+					qbod.AdditionalProperties = make(map[string]interface{})
+				}
+				qbod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				qbod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				qbod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				qbod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				qbod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				qbod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				qbod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // QuickBooksSource a copy activity QuickBooks server source.
 type QuickBooksSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -68624,9 +76373,15 @@ type QuickBooksSource struct {
 func (qbs QuickBooksSource) MarshalJSON() ([]byte, error) {
 	qbs.Type = TypeQuickBooksSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = qbs.Query
-	objectMap["sourceRetryCount"] = qbs.SourceRetryCount
-	objectMap["sourceRetryWait"] = qbs.SourceRetryWait
+	if qbs.Query != nil {
+		objectMap["query"] = qbs.Query
+	}
+	if qbs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = qbs.SourceRetryCount
+	}
+	if qbs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = qbs.SourceRetryWait
+	}
 	if qbs.Type != "" {
 		objectMap["type"] = qbs.Type
 	}
@@ -68896,6 +76651,69 @@ func (qbs QuickBooksSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &qbs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for QuickBooksSource struct.
+func (qbs *QuickBooksSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				qbs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if qbs.AdditionalProperties == nil {
+					qbs.AdditionalProperties = make(map[string]interface{})
+				}
+				qbs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				qbs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				qbs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				qbs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // RecurrenceSchedule the recurrence schedule.
 type RecurrenceSchedule struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -68936,7 +76754,79 @@ func (rs RecurrenceSchedule) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// RecurrenceScheduleOccurrence the recurrence schedule occurence.
+// UnmarshalJSON is the custom unmarshaler for RecurrenceSchedule struct.
+func (rs *RecurrenceSchedule) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if rs.AdditionalProperties == nil {
+					rs.AdditionalProperties = make(map[string]interface{})
+				}
+				rs.AdditionalProperties[k] = additionalProperties
+			}
+		case "minutes":
+			if v != nil {
+				var minutes []int32
+				err = json.Unmarshal(*v, &minutes)
+				if err != nil {
+					return err
+				}
+				rs.Minutes = &minutes
+			}
+		case "hours":
+			if v != nil {
+				var hours []int32
+				err = json.Unmarshal(*v, &hours)
+				if err != nil {
+					return err
+				}
+				rs.Hours = &hours
+			}
+		case "weekDays":
+			if v != nil {
+				var weekDays []DaysOfWeek
+				err = json.Unmarshal(*v, &weekDays)
+				if err != nil {
+					return err
+				}
+				rs.WeekDays = &weekDays
+			}
+		case "monthDays":
+			if v != nil {
+				var monthDays []int32
+				err = json.Unmarshal(*v, &monthDays)
+				if err != nil {
+					return err
+				}
+				rs.MonthDays = &monthDays
+			}
+		case "monthlyOccurrences":
+			if v != nil {
+				var monthlyOccurrences []RecurrenceScheduleOccurrence
+				err = json.Unmarshal(*v, &monthlyOccurrences)
+				if err != nil {
+					return err
+				}
+				rs.MonthlyOccurrences = &monthlyOccurrences
+			}
+		}
+	}
+
+	return nil
+}
+
+// RecurrenceScheduleOccurrence the recurrence schedule occurrence.
 type RecurrenceScheduleOccurrence struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -68961,6 +76851,51 @@ func (rso RecurrenceScheduleOccurrence) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for RecurrenceScheduleOccurrence struct.
+func (rso *RecurrenceScheduleOccurrence) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if rso.AdditionalProperties == nil {
+					rso.AdditionalProperties = make(map[string]interface{})
+				}
+				rso.AdditionalProperties[k] = additionalProperties
+			}
+		case "day":
+			if v != nil {
+				var day DayOfWeek
+				err = json.Unmarshal(*v, &day)
+				if err != nil {
+					return err
+				}
+				rso.Day = day
+			}
+		case "occurrence":
+			if v != nil {
+				var occurrence int32
+				err = json.Unmarshal(*v, &occurrence)
+				if err != nil {
+					return err
+				}
+				rso.Occurrence = &occurrence
+			}
+		}
+	}
+
+	return nil
+}
+
 // RedirectIncompatibleRowSettings redirect incompatible row settings
 type RedirectIncompatibleRowSettings struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -68974,17 +76909,66 @@ type RedirectIncompatibleRowSettings struct {
 // MarshalJSON is the custom marshaler for RedirectIncompatibleRowSettings.
 func (rirs RedirectIncompatibleRowSettings) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["linkedServiceName"] = rirs.LinkedServiceName
-	objectMap["path"] = rirs.Path
+	if rirs.LinkedServiceName != nil {
+		objectMap["linkedServiceName"] = rirs.LinkedServiceName
+	}
+	if rirs.Path != nil {
+		objectMap["path"] = rirs.Path
+	}
 	for k, v := range rirs.AdditionalProperties {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
 }
 
-// RedshiftUnloadSettings the Amazon S3 settings needed for the interim Amazon S3 when copying from Amazon Redshift
-// with unload. With this, data from Amazon Redshift source will be unloaded into S3 first and then copied into the
-// targeted sink from the interim S3.
+// UnmarshalJSON is the custom unmarshaler for RedirectIncompatibleRowSettings struct.
+func (rirs *RedirectIncompatibleRowSettings) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if rirs.AdditionalProperties == nil {
+					rirs.AdditionalProperties = make(map[string]interface{})
+				}
+				rirs.AdditionalProperties[k] = additionalProperties
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName interface{}
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				rirs.LinkedServiceName = linkedServiceName
+			}
+		case "path":
+			if v != nil {
+				var pathVar interface{}
+				err = json.Unmarshal(*v, &pathVar)
+				if err != nil {
+					return err
+				}
+				rirs.Path = pathVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// RedshiftUnloadSettings the Amazon S3 settings needed for the interim Amazon S3 when copying from Amazon
+// Redshift with unload. With this, data from Amazon Redshift source will be unloaded into S3 first and
+// then copied into the targeted sink from the interim S3.
 type RedshiftUnloadSettings struct {
 	// S3LinkedServiceName - The name of the Amazon S3 linked service which will be used for the unload operation when copying from the Amazon Redshift source.
 	S3LinkedServiceName *LinkedServiceReference `json:"s3LinkedServiceName,omitempty"`
@@ -69010,9 +76994,15 @@ type RelationalSource struct {
 func (rs RelationalSource) MarshalJSON() ([]byte, error) {
 	rs.Type = TypeRelationalSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = rs.Query
-	objectMap["sourceRetryCount"] = rs.SourceRetryCount
-	objectMap["sourceRetryWait"] = rs.SourceRetryWait
+	if rs.Query != nil {
+		objectMap["query"] = rs.Query
+	}
+	if rs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = rs.SourceRetryCount
+	}
+	if rs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = rs.SourceRetryWait
+	}
 	if rs.Type != "" {
 		objectMap["type"] = rs.Type
 	}
@@ -69282,6 +77272,69 @@ func (rs RelationalSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &rs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for RelationalSource struct.
+func (rs *RelationalSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				rs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if rs.AdditionalProperties == nil {
+					rs.AdditionalProperties = make(map[string]interface{})
+				}
+				rs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				rs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				rs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				rs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // RelationalTableDataset the relational table dataset.
 type RelationalTableDataset struct {
 	// RelationalTableDatasetTypeProperties - Relational table dataset properties.
@@ -69312,7 +77365,9 @@ func (rtd RelationalTableDataset) MarshalJSON() ([]byte, error) {
 	if rtd.Description != nil {
 		objectMap["description"] = rtd.Description
 	}
-	objectMap["structure"] = rtd.Structure
+	if rtd.Structure != nil {
+		objectMap["structure"] = rtd.Structure
+	}
 	if rtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = rtd.LinkedServiceName
 	}
@@ -70344,7 +78399,9 @@ func (rod ResponsysObjectDataset) MarshalJSON() ([]byte, error) {
 	if rod.Description != nil {
 		objectMap["description"] = rod.Description
 	}
-	objectMap["structure"] = rod.Structure
+	if rod.Structure != nil {
+		objectMap["structure"] = rod.Structure
+	}
 	if rod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = rod.LinkedServiceName
 	}
@@ -70638,6 +78695,87 @@ func (rod ResponsysObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &rod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ResponsysObjectDataset struct.
+func (rod *ResponsysObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if rod.AdditionalProperties == nil {
+					rod.AdditionalProperties = make(map[string]interface{})
+				}
+				rod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				rod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				rod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				rod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				rod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				rod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				rod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // ResponsysSource a copy activity Responsys source.
 type ResponsysSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -70656,9 +78794,15 @@ type ResponsysSource struct {
 func (rs ResponsysSource) MarshalJSON() ([]byte, error) {
 	rs.Type = TypeResponsysSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = rs.Query
-	objectMap["sourceRetryCount"] = rs.SourceRetryCount
-	objectMap["sourceRetryWait"] = rs.SourceRetryWait
+	if rs.Query != nil {
+		objectMap["query"] = rs.Query
+	}
+	if rs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = rs.SourceRetryCount
+	}
+	if rs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = rs.SourceRetryWait
+	}
 	if rs.Type != "" {
 		objectMap["type"] = rs.Type
 	}
@@ -70926,6 +79070,69 @@ func (rs ResponsysSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for ResponsysSource.
 func (rs ResponsysSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &rs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ResponsysSource struct.
+func (rs *ResponsysSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				rs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if rs.AdditionalProperties == nil {
+					rs.AdditionalProperties = make(map[string]interface{})
+				}
+				rs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				rs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				rs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				rs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // RetryPolicy execution policy for an activity.
@@ -71982,7 +80189,8 @@ func (smcls *SalesforceMarketingCloudLinkedService) UnmarshalJSON(body []byte) e
 	return nil
 }
 
-// SalesforceMarketingCloudLinkedServiceTypeProperties salesforce Marketing Cloud linked service properties.
+// SalesforceMarketingCloudLinkedServiceTypeProperties salesforce Marketing Cloud linked service
+// properties.
 type SalesforceMarketingCloudLinkedServiceTypeProperties struct {
 	// ClientID - The client ID associated with the Salesforce Marketing Cloud application. Type: string (or Expression with resultType string).
 	ClientID interface{} `json:"clientId,omitempty"`
@@ -72091,7 +80299,9 @@ func (smcod SalesforceMarketingCloudObjectDataset) MarshalJSON() ([]byte, error)
 	if smcod.Description != nil {
 		objectMap["description"] = smcod.Description
 	}
-	objectMap["structure"] = smcod.Structure
+	if smcod.Structure != nil {
+		objectMap["structure"] = smcod.Structure
+	}
 	if smcod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = smcod.LinkedServiceName
 	}
@@ -72385,6 +80595,87 @@ func (smcod SalesforceMarketingCloudObjectDataset) AsBasicDataset() (BasicDatase
 	return &smcod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SalesforceMarketingCloudObjectDataset struct.
+func (smcod *SalesforceMarketingCloudObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if smcod.AdditionalProperties == nil {
+					smcod.AdditionalProperties = make(map[string]interface{})
+				}
+				smcod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				smcod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				smcod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				smcod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				smcod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				smcod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				smcod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SalesforceMarketingCloudSource a copy activity Salesforce Marketing Cloud source.
 type SalesforceMarketingCloudSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -72403,9 +80694,15 @@ type SalesforceMarketingCloudSource struct {
 func (smcs SalesforceMarketingCloudSource) MarshalJSON() ([]byte, error) {
 	smcs.Type = TypeSalesforceMarketingCloudSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = smcs.Query
-	objectMap["sourceRetryCount"] = smcs.SourceRetryCount
-	objectMap["sourceRetryWait"] = smcs.SourceRetryWait
+	if smcs.Query != nil {
+		objectMap["query"] = smcs.Query
+	}
+	if smcs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = smcs.SourceRetryCount
+	}
+	if smcs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = smcs.SourceRetryWait
+	}
 	if smcs.Type != "" {
 		objectMap["type"] = smcs.Type
 	}
@@ -72675,6 +80972,69 @@ func (smcs SalesforceMarketingCloudSource) AsBasicCopySource() (BasicCopySource,
 	return &smcs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SalesforceMarketingCloudSource struct.
+func (smcs *SalesforceMarketingCloudSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				smcs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if smcs.AdditionalProperties == nil {
+					smcs.AdditionalProperties = make(map[string]interface{})
+				}
+				smcs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				smcs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				smcs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				smcs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SalesforceObjectDataset the Salesforce object dataset.
 type SalesforceObjectDataset struct {
 	// SalesforceObjectDatasetTypeProperties - Salesforce object dataset properties.
@@ -72705,7 +81065,9 @@ func (sod SalesforceObjectDataset) MarshalJSON() ([]byte, error) {
 	if sod.Description != nil {
 		objectMap["description"] = sod.Description
 	}
-	objectMap["structure"] = sod.Structure
+	if sod.Structure != nil {
+		objectMap["structure"] = sod.Structure
+	}
 	if sod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = sod.LinkedServiceName
 	}
@@ -73124,12 +81486,24 @@ func (ss SalesforceSink) MarshalJSON() ([]byte, error) {
 	if ss.WriteBehavior != "" {
 		objectMap["writeBehavior"] = ss.WriteBehavior
 	}
-	objectMap["externalIdFieldName"] = ss.ExternalIDFieldName
-	objectMap["ignoreNullValues"] = ss.IgnoreNullValues
-	objectMap["writeBatchSize"] = ss.WriteBatchSize
-	objectMap["writeBatchTimeout"] = ss.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = ss.SinkRetryCount
-	objectMap["sinkRetryWait"] = ss.SinkRetryWait
+	if ss.ExternalIDFieldName != nil {
+		objectMap["externalIdFieldName"] = ss.ExternalIDFieldName
+	}
+	if ss.IgnoreNullValues != nil {
+		objectMap["ignoreNullValues"] = ss.IgnoreNullValues
+	}
+	if ss.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = ss.WriteBatchSize
+	}
+	if ss.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = ss.WriteBatchTimeout
+	}
+	if ss.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = ss.SinkRetryCount
+	}
+	if ss.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = ss.SinkRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -73219,6 +81593,105 @@ func (ss SalesforceSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &ss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SalesforceSink struct.
+func (ss *SalesforceSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "writeBehavior":
+			if v != nil {
+				var writeBehavior SalesforceSinkWriteBehavior
+				err = json.Unmarshal(*v, &writeBehavior)
+				if err != nil {
+					return err
+				}
+				ss.WriteBehavior = writeBehavior
+			}
+		case "externalIdFieldName":
+			if v != nil {
+				var externalIDFieldName interface{}
+				err = json.Unmarshal(*v, &externalIDFieldName)
+				if err != nil {
+					return err
+				}
+				ss.ExternalIDFieldName = externalIDFieldName
+			}
+		case "ignoreNullValues":
+			if v != nil {
+				var ignoreNullValues interface{}
+				err = json.Unmarshal(*v, &ignoreNullValues)
+				if err != nil {
+					return err
+				}
+				ss.IgnoreNullValues = ignoreNullValues
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				ss.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				ss.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SalesforceSource a copy activity Salesforce source.
 type SalesforceSource struct {
 	// Query - Database query. Type: string (or Expression with resultType string).
@@ -73239,12 +81712,18 @@ type SalesforceSource struct {
 func (ss SalesforceSource) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeSalesforceSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ss.Query
+	if ss.Query != nil {
+		objectMap["query"] = ss.Query
+	}
 	if ss.ReadBehavior != "" {
 		objectMap["readBehavior"] = ss.ReadBehavior
 	}
-	objectMap["sourceRetryCount"] = ss.SourceRetryCount
-	objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	if ss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ss.SourceRetryCount
+	}
+	if ss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -73512,6 +81991,78 @@ func (ss SalesforceSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for SalesforceSource.
 func (ss SalesforceSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ss, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for SalesforceSource struct.
+func (ss *SalesforceSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ss.Query = query
+			}
+		case "readBehavior":
+			if v != nil {
+				var readBehavior SalesforceSourceReadBehavior
+				err = json.Unmarshal(*v, &readBehavior)
+				if err != nil {
+					return err
+				}
+				ss.ReadBehavior = readBehavior
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // SapBWLinkedService SAP Business Warehouse Linked Service.
@@ -74664,7 +83215,9 @@ func (scfcrd SapCloudForCustomerResourceDataset) MarshalJSON() ([]byte, error) {
 	if scfcrd.Description != nil {
 		objectMap["description"] = scfcrd.Description
 	}
-	objectMap["structure"] = scfcrd.Structure
+	if scfcrd.Structure != nil {
+		objectMap["structure"] = scfcrd.Structure
+	}
 	if scfcrd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = scfcrd.LinkedServiceName
 	}
@@ -75048,7 +83601,8 @@ func (scfcrd *SapCloudForCustomerResourceDataset) UnmarshalJSON(body []byte) err
 	return nil
 }
 
-// SapCloudForCustomerResourceDatasetTypeProperties sap Cloud For Customer OData resource dataset properties.
+// SapCloudForCustomerResourceDatasetTypeProperties sap Cloud For Customer OData resource dataset
+// properties.
 type SapCloudForCustomerResourceDatasetTypeProperties struct {
 	// Path - The path of the SAP Cloud for Customer OData entity. Type: string (or Expression with resultType string).
 	Path interface{} `json:"path,omitempty"`
@@ -75079,10 +83633,18 @@ func (scfcs SapCloudForCustomerSink) MarshalJSON() ([]byte, error) {
 	if scfcs.WriteBehavior != "" {
 		objectMap["writeBehavior"] = scfcs.WriteBehavior
 	}
-	objectMap["writeBatchSize"] = scfcs.WriteBatchSize
-	objectMap["writeBatchTimeout"] = scfcs.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = scfcs.SinkRetryCount
-	objectMap["sinkRetryWait"] = scfcs.SinkRetryWait
+	if scfcs.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = scfcs.WriteBatchSize
+	}
+	if scfcs.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = scfcs.WriteBatchTimeout
+	}
+	if scfcs.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = scfcs.SinkRetryCount
+	}
+	if scfcs.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = scfcs.SinkRetryWait
+	}
 	if scfcs.Type != "" {
 		objectMap["type"] = scfcs.Type
 	}
@@ -75172,6 +83734,87 @@ func (scfcs SapCloudForCustomerSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &scfcs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SapCloudForCustomerSink struct.
+func (scfcs *SapCloudForCustomerSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "writeBehavior":
+			if v != nil {
+				var writeBehavior SapCloudForCustomerSinkWriteBehavior
+				err = json.Unmarshal(*v, &writeBehavior)
+				if err != nil {
+					return err
+				}
+				scfcs.WriteBehavior = writeBehavior
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if scfcs.AdditionalProperties == nil {
+					scfcs.AdditionalProperties = make(map[string]interface{})
+				}
+				scfcs.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				scfcs.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				scfcs.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				scfcs.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				scfcs.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				scfcs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SapCloudForCustomerSource a copy activity source for SAP Cloud for Customer source.
 type SapCloudForCustomerSource struct {
 	// Query - SAP Cloud for Customer OData query. For example, "$top=1". Type: string (or Expression with resultType string).
@@ -75190,9 +83833,15 @@ type SapCloudForCustomerSource struct {
 func (scfcs SapCloudForCustomerSource) MarshalJSON() ([]byte, error) {
 	scfcs.Type = TypeSapCloudForCustomerSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = scfcs.Query
-	objectMap["sourceRetryCount"] = scfcs.SourceRetryCount
-	objectMap["sourceRetryWait"] = scfcs.SourceRetryWait
+	if scfcs.Query != nil {
+		objectMap["query"] = scfcs.Query
+	}
+	if scfcs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = scfcs.SourceRetryCount
+	}
+	if scfcs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = scfcs.SourceRetryWait
+	}
 	if scfcs.Type != "" {
 		objectMap["type"] = scfcs.Type
 	}
@@ -75460,6 +84109,69 @@ func (scfcs SapCloudForCustomerSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for SapCloudForCustomerSource.
 func (scfcs SapCloudForCustomerSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &scfcs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for SapCloudForCustomerSource struct.
+func (scfcs *SapCloudForCustomerSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				scfcs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if scfcs.AdditionalProperties == nil {
+					scfcs.AdditionalProperties = make(map[string]interface{})
+				}
+				scfcs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				scfcs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				scfcs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				scfcs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // SapEccLinkedService linked service for SAP ERP Central Component(SAP ECC).
@@ -76041,7 +84753,9 @@ func (serd SapEccResourceDataset) MarshalJSON() ([]byte, error) {
 	if serd.Description != nil {
 		objectMap["description"] = serd.Description
 	}
-	objectMap["structure"] = serd.Structure
+	if serd.Structure != nil {
+		objectMap["structure"] = serd.Structure
+	}
 	if serd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = serd.LinkedServiceName
 	}
@@ -76452,8 +85166,12 @@ func (ses SapEccSource) MarshalJSON() ([]byte, error) {
 	if ses.Query != nil {
 		objectMap["query"] = ses.Query
 	}
-	objectMap["sourceRetryCount"] = ses.SourceRetryCount
-	objectMap["sourceRetryWait"] = ses.SourceRetryWait
+	if ses.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ses.SourceRetryCount
+	}
+	if ses.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ses.SourceRetryWait
+	}
 	if ses.Type != "" {
 		objectMap["type"] = ses.Type
 	}
@@ -76721,6 +85439,69 @@ func (ses SapEccSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for SapEccSource.
 func (ses SapEccSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ses, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for SapEccSource struct.
+func (ses *SapEccSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query string
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ses.Query = &query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ses.AdditionalProperties == nil {
+					ses.AdditionalProperties = make(map[string]interface{})
+				}
+				ses.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ses.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ses.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ses.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // SapHanaLinkedService SAP HANA Linked Service.
@@ -77481,6 +86262,87 @@ func (str ScheduleTriggerRecurrence) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for ScheduleTriggerRecurrence struct.
+func (str *ScheduleTriggerRecurrence) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if str.AdditionalProperties == nil {
+					str.AdditionalProperties = make(map[string]interface{})
+				}
+				str.AdditionalProperties[k] = additionalProperties
+			}
+		case "frequency":
+			if v != nil {
+				var frequency RecurrenceFrequency
+				err = json.Unmarshal(*v, &frequency)
+				if err != nil {
+					return err
+				}
+				str.Frequency = frequency
+			}
+		case "interval":
+			if v != nil {
+				var interval int32
+				err = json.Unmarshal(*v, &interval)
+				if err != nil {
+					return err
+				}
+				str.Interval = &interval
+			}
+		case "startTime":
+			if v != nil {
+				var startTime date.Time
+				err = json.Unmarshal(*v, &startTime)
+				if err != nil {
+					return err
+				}
+				str.StartTime = &startTime
+			}
+		case "endTime":
+			if v != nil {
+				var endTime date.Time
+				err = json.Unmarshal(*v, &endTime)
+				if err != nil {
+					return err
+				}
+				str.EndTime = &endTime
+			}
+		case "timeZone":
+			if v != nil {
+				var timeZone string
+				err = json.Unmarshal(*v, &timeZone)
+				if err != nil {
+					return err
+				}
+				str.TimeZone = &timeZone
+			}
+		case "schedule":
+			if v != nil {
+				var schedule RecurrenceSchedule
+				err = json.Unmarshal(*v, &schedule)
+				if err != nil {
+					return err
+				}
+				str.Schedule = &schedule
+			}
+		}
+	}
+
+	return nil
+}
+
 // ScheduleTriggerTypeProperties schedule Trigger properties.
 type ScheduleTriggerTypeProperties struct {
 	// Recurrence - Recurrence schedule configuration.
@@ -77571,8 +86433,8 @@ func (sb SecretBase) AsBasicSecretBase() (BasicSecretBase, bool) {
 	return &sb, true
 }
 
-// SecureString azure Data Factory secure string definition. The string value will be masked with asterisks '*'
-// during Get or List API calls.
+// SecureString azure Data Factory secure string definition. The string value will be masked with asterisks
+// '*' during Get or List API calls.
 type SecureString struct {
 	// Value - Value of secure string.
 	Value *string `json:"value,omitempty"`
@@ -78652,7 +87514,9 @@ func (snod ServiceNowObjectDataset) MarshalJSON() ([]byte, error) {
 	if snod.Description != nil {
 		objectMap["description"] = snod.Description
 	}
-	objectMap["structure"] = snod.Structure
+	if snod.Structure != nil {
+		objectMap["structure"] = snod.Structure
+	}
 	if snod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = snod.LinkedServiceName
 	}
@@ -78946,6 +87810,87 @@ func (snod ServiceNowObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &snod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ServiceNowObjectDataset struct.
+func (snod *ServiceNowObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if snod.AdditionalProperties == nil {
+					snod.AdditionalProperties = make(map[string]interface{})
+				}
+				snod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				snod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				snod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				snod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				snod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				snod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				snod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // ServiceNowSource a copy activity ServiceNow server source.
 type ServiceNowSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -78964,9 +87909,15 @@ type ServiceNowSource struct {
 func (sns ServiceNowSource) MarshalJSON() ([]byte, error) {
 	sns.Type = TypeServiceNowSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = sns.Query
-	objectMap["sourceRetryCount"] = sns.SourceRetryCount
-	objectMap["sourceRetryWait"] = sns.SourceRetryWait
+	if sns.Query != nil {
+		objectMap["query"] = sns.Query
+	}
+	if sns.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = sns.SourceRetryCount
+	}
+	if sns.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = sns.SourceRetryWait
+	}
 	if sns.Type != "" {
 		objectMap["type"] = sns.Type
 	}
@@ -79234,6 +88185,69 @@ func (sns ServiceNowSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for ServiceNowSource.
 func (sns ServiceNowSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &sns, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ServiceNowSource struct.
+func (sns *ServiceNowSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				sns.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if sns.AdditionalProperties == nil {
+					sns.AdditionalProperties = make(map[string]interface{})
+				}
+				sns.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				sns.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				sns.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sns.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // SftpServerLinkedService a linked service for an SSH File Transfer Protocol (SFTP) server.
@@ -79860,9 +88874,9 @@ func (sslstp *SftpServerLinkedServiceTypeProperties) UnmarshalJSON(body []byte) 
 	return nil
 }
 
-// ShopifyLinkedService shopify Serivce linked service.
+// ShopifyLinkedService shopify Service linked service.
 type ShopifyLinkedService struct {
-	// ShopifyLinkedServiceTypeProperties - Shopify Serivce linked service properties.
+	// ShopifyLinkedServiceTypeProperties - Shopify Service linked service properties.
 	*ShopifyLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -80347,7 +89361,7 @@ func (sls *ShopifyLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ShopifyLinkedServiceTypeProperties shopify Serivce linked service properties.
+// ShopifyLinkedServiceTypeProperties shopify Service linked service properties.
 type ShopifyLinkedServiceTypeProperties struct {
 	// Host - The endpoint of the Shopify server. (i.e. mystore.myshopify.com)
 	Host interface{} `json:"host,omitempty"`
@@ -80431,7 +89445,7 @@ func (slstp *ShopifyLinkedServiceTypeProperties) UnmarshalJSON(body []byte) erro
 	return nil
 }
 
-// ShopifyObjectDataset shopify Serivce dataset.
+// ShopifyObjectDataset shopify Service dataset.
 type ShopifyObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -80456,7 +89470,9 @@ func (sod ShopifyObjectDataset) MarshalJSON() ([]byte, error) {
 	if sod.Description != nil {
 		objectMap["description"] = sod.Description
 	}
-	objectMap["structure"] = sod.Structure
+	if sod.Structure != nil {
+		objectMap["structure"] = sod.Structure
+	}
 	if sod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = sod.LinkedServiceName
 	}
@@ -80750,7 +89766,88 @@ func (sod ShopifyObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &sod, true
 }
 
-// ShopifySource a copy activity Shopify Serivce source.
+// UnmarshalJSON is the custom unmarshaler for ShopifyObjectDataset struct.
+func (sod *ShopifyObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if sod.AdditionalProperties == nil {
+					sod.AdditionalProperties = make(map[string]interface{})
+				}
+				sod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				sod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				sod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				sod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				sod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				sod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// ShopifySource a copy activity Shopify Service source.
 type ShopifySource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -80768,9 +89865,15 @@ type ShopifySource struct {
 func (ss ShopifySource) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeShopifySource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ss.Query
-	objectMap["sourceRetryCount"] = ss.SourceRetryCount
-	objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	if ss.Query != nil {
+		objectMap["query"] = ss.Query
+	}
+	if ss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ss.SourceRetryCount
+	}
+	if ss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -81038,6 +90141,69 @@ func (ss ShopifySource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for ShopifySource.
 func (ss ShopifySource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ss, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ShopifySource struct.
+func (ss *ShopifySource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ss.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // SparkLinkedService spark Server linked service.
@@ -81724,7 +90890,9 @@ func (sod SparkObjectDataset) MarshalJSON() ([]byte, error) {
 	if sod.Description != nil {
 		objectMap["description"] = sod.Description
 	}
-	objectMap["structure"] = sod.Structure
+	if sod.Structure != nil {
+		objectMap["structure"] = sod.Structure
+	}
 	if sod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = sod.LinkedServiceName
 	}
@@ -82018,6 +91186,87 @@ func (sod SparkObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &sod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SparkObjectDataset struct.
+func (sod *SparkObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if sod.AdditionalProperties == nil {
+					sod.AdditionalProperties = make(map[string]interface{})
+				}
+				sod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				sod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				sod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				sod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				sod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				sod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SparkSource a copy activity Spark Server source.
 type SparkSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -82036,9 +91285,15 @@ type SparkSource struct {
 func (ss SparkSource) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeSparkSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ss.Query
-	objectMap["sourceRetryCount"] = ss.SourceRetryCount
-	objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	if ss.Query != nil {
+		objectMap["query"] = ss.Query
+	}
+	if ss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ss.SourceRetryCount
+	}
+	if ss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -82308,6 +91563,69 @@ func (ss SparkSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SparkSource struct.
+func (ss *SparkSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ss.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SQLDWSink a copy activity SQL Data Warehouse sink.
 type SQLDWSink struct {
 	// PreCopyScript - SQL pre-copy script. Type: string (or Expression with resultType string).
@@ -82334,15 +91652,27 @@ type SQLDWSink struct {
 func (sds SQLDWSink) MarshalJSON() ([]byte, error) {
 	sds.Type = TypeSQLDWSink
 	objectMap := make(map[string]interface{})
-	objectMap["preCopyScript"] = sds.PreCopyScript
-	objectMap["allowPolyBase"] = sds.AllowPolyBase
+	if sds.PreCopyScript != nil {
+		objectMap["preCopyScript"] = sds.PreCopyScript
+	}
+	if sds.AllowPolyBase != nil {
+		objectMap["allowPolyBase"] = sds.AllowPolyBase
+	}
 	if sds.PolyBaseSettings != nil {
 		objectMap["polyBaseSettings"] = sds.PolyBaseSettings
 	}
-	objectMap["writeBatchSize"] = sds.WriteBatchSize
-	objectMap["writeBatchTimeout"] = sds.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = sds.SinkRetryCount
-	objectMap["sinkRetryWait"] = sds.SinkRetryWait
+	if sds.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = sds.WriteBatchSize
+	}
+	if sds.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = sds.WriteBatchTimeout
+	}
+	if sds.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = sds.SinkRetryCount
+	}
+	if sds.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = sds.SinkRetryWait
+	}
 	if sds.Type != "" {
 		objectMap["type"] = sds.Type
 	}
@@ -82432,6 +91762,105 @@ func (sds SQLDWSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &sds, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SQLDWSink struct.
+func (sds *SQLDWSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "preCopyScript":
+			if v != nil {
+				var preCopyScript interface{}
+				err = json.Unmarshal(*v, &preCopyScript)
+				if err != nil {
+					return err
+				}
+				sds.PreCopyScript = preCopyScript
+			}
+		case "allowPolyBase":
+			if v != nil {
+				var allowPolyBase interface{}
+				err = json.Unmarshal(*v, &allowPolyBase)
+				if err != nil {
+					return err
+				}
+				sds.AllowPolyBase = allowPolyBase
+			}
+		case "polyBaseSettings":
+			if v != nil {
+				var polyBaseSettings PolybaseSettings
+				err = json.Unmarshal(*v, &polyBaseSettings)
+				if err != nil {
+					return err
+				}
+				sds.PolyBaseSettings = &polyBaseSettings
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if sds.AdditionalProperties == nil {
+					sds.AdditionalProperties = make(map[string]interface{})
+				}
+				sds.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				sds.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				sds.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				sds.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				sds.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SQLDWSource a copy activity SQL Data Warehouse source.
 type SQLDWSource struct {
 	// SQLReaderQuery - SQL Data Warehouse reader query. Type: string (or Expression with resultType string).
@@ -82454,11 +91883,21 @@ type SQLDWSource struct {
 func (sds SQLDWSource) MarshalJSON() ([]byte, error) {
 	sds.Type = TypeSQLDWSource
 	objectMap := make(map[string]interface{})
-	objectMap["sqlReaderQuery"] = sds.SQLReaderQuery
-	objectMap["sqlReaderStoredProcedureName"] = sds.SQLReaderStoredProcedureName
-	objectMap["storedProcedureParameters"] = sds.StoredProcedureParameters
-	objectMap["sourceRetryCount"] = sds.SourceRetryCount
-	objectMap["sourceRetryWait"] = sds.SourceRetryWait
+	if sds.SQLReaderQuery != nil {
+		objectMap["sqlReaderQuery"] = sds.SQLReaderQuery
+	}
+	if sds.SQLReaderStoredProcedureName != nil {
+		objectMap["sqlReaderStoredProcedureName"] = sds.SQLReaderStoredProcedureName
+	}
+	if sds.StoredProcedureParameters != nil {
+		objectMap["storedProcedureParameters"] = sds.StoredProcedureParameters
+	}
+	if sds.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = sds.SourceRetryCount
+	}
+	if sds.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = sds.SourceRetryWait
+	}
 	if sds.Type != "" {
 		objectMap["type"] = sds.Type
 	}
@@ -82726,6 +92165,87 @@ func (sds SQLDWSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for SQLDWSource.
 func (sds SQLDWSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &sds, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for SQLDWSource struct.
+func (sds *SQLDWSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "sqlReaderQuery":
+			if v != nil {
+				var SQLReaderQuery interface{}
+				err = json.Unmarshal(*v, &SQLReaderQuery)
+				if err != nil {
+					return err
+				}
+				sds.SQLReaderQuery = SQLReaderQuery
+			}
+		case "sqlReaderStoredProcedureName":
+			if v != nil {
+				var SQLReaderStoredProcedureName interface{}
+				err = json.Unmarshal(*v, &SQLReaderStoredProcedureName)
+				if err != nil {
+					return err
+				}
+				sds.SQLReaderStoredProcedureName = SQLReaderStoredProcedureName
+			}
+		case "storedProcedureParameters":
+			if v != nil {
+				var storedProcedureParameters interface{}
+				err = json.Unmarshal(*v, &storedProcedureParameters)
+				if err != nil {
+					return err
+				}
+				sds.StoredProcedureParameters = storedProcedureParameters
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if sds.AdditionalProperties == nil {
+					sds.AdditionalProperties = make(map[string]interface{})
+				}
+				sds.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				sds.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				sds.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sds.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // SQLServerLinkedService SQL Server linked service.
@@ -83569,7 +93089,9 @@ type SQLServerStoredProcedureActivityTypeProperties struct {
 // MarshalJSON is the custom marshaler for SQLServerStoredProcedureActivityTypeProperties.
 func (ssspatp SQLServerStoredProcedureActivityTypeProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["storedProcedureName"] = ssspatp.StoredProcedureName
+	if ssspatp.StoredProcedureName != nil {
+		objectMap["storedProcedureName"] = ssspatp.StoredProcedureName
+	}
 	if ssspatp.StoredProcedureParameters != nil {
 		objectMap["storedProcedureParameters"] = ssspatp.StoredProcedureParameters
 	}
@@ -83606,7 +93128,9 @@ func (sstd SQLServerTableDataset) MarshalJSON() ([]byte, error) {
 	if sstd.Description != nil {
 		objectMap["description"] = sstd.Description
 	}
-	objectMap["structure"] = sstd.Structure
+	if sstd.Structure != nil {
+		objectMap["structure"] = sstd.Structure
+	}
 	if sstd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = sstd.LinkedServiceName
 	}
@@ -84024,16 +93548,30 @@ type SQLSink struct {
 func (ss SQLSink) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeSQLSink
 	objectMap := make(map[string]interface{})
-	objectMap["sqlWriterStoredProcedureName"] = ss.SQLWriterStoredProcedureName
-	objectMap["sqlWriterTableType"] = ss.SQLWriterTableType
-	objectMap["preCopyScript"] = ss.PreCopyScript
+	if ss.SQLWriterStoredProcedureName != nil {
+		objectMap["sqlWriterStoredProcedureName"] = ss.SQLWriterStoredProcedureName
+	}
+	if ss.SQLWriterTableType != nil {
+		objectMap["sqlWriterTableType"] = ss.SQLWriterTableType
+	}
+	if ss.PreCopyScript != nil {
+		objectMap["preCopyScript"] = ss.PreCopyScript
+	}
 	if ss.StoredProcedureParameters != nil {
 		objectMap["storedProcedureParameters"] = ss.StoredProcedureParameters
 	}
-	objectMap["writeBatchSize"] = ss.WriteBatchSize
-	objectMap["writeBatchTimeout"] = ss.WriteBatchTimeout
-	objectMap["sinkRetryCount"] = ss.SinkRetryCount
-	objectMap["sinkRetryWait"] = ss.SinkRetryWait
+	if ss.WriteBatchSize != nil {
+		objectMap["writeBatchSize"] = ss.WriteBatchSize
+	}
+	if ss.WriteBatchTimeout != nil {
+		objectMap["writeBatchTimeout"] = ss.WriteBatchTimeout
+	}
+	if ss.SinkRetryCount != nil {
+		objectMap["sinkRetryCount"] = ss.SinkRetryCount
+	}
+	if ss.SinkRetryWait != nil {
+		objectMap["sinkRetryWait"] = ss.SinkRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -84123,6 +93661,114 @@ func (ss SQLSink) AsBasicCopySink() (BasicCopySink, bool) {
 	return &ss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SQLSink struct.
+func (ss *SQLSink) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "sqlWriterStoredProcedureName":
+			if v != nil {
+				var SQLWriterStoredProcedureName interface{}
+				err = json.Unmarshal(*v, &SQLWriterStoredProcedureName)
+				if err != nil {
+					return err
+				}
+				ss.SQLWriterStoredProcedureName = SQLWriterStoredProcedureName
+			}
+		case "sqlWriterTableType":
+			if v != nil {
+				var SQLWriterTableType interface{}
+				err = json.Unmarshal(*v, &SQLWriterTableType)
+				if err != nil {
+					return err
+				}
+				ss.SQLWriterTableType = SQLWriterTableType
+			}
+		case "preCopyScript":
+			if v != nil {
+				var preCopyScript interface{}
+				err = json.Unmarshal(*v, &preCopyScript)
+				if err != nil {
+					return err
+				}
+				ss.PreCopyScript = preCopyScript
+			}
+		case "storedProcedureParameters":
+			if v != nil {
+				var storedProcedureParameters map[string]*StoredProcedureParameter
+				err = json.Unmarshal(*v, &storedProcedureParameters)
+				if err != nil {
+					return err
+				}
+				ss.StoredProcedureParameters = storedProcedureParameters
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "writeBatchSize":
+			if v != nil {
+				var writeBatchSize interface{}
+				err = json.Unmarshal(*v, &writeBatchSize)
+				if err != nil {
+					return err
+				}
+				ss.WriteBatchSize = writeBatchSize
+			}
+		case "writeBatchTimeout":
+			if v != nil {
+				var writeBatchTimeout interface{}
+				err = json.Unmarshal(*v, &writeBatchTimeout)
+				if err != nil {
+					return err
+				}
+				ss.WriteBatchTimeout = writeBatchTimeout
+			}
+		case "sinkRetryCount":
+			if v != nil {
+				var sinkRetryCount interface{}
+				err = json.Unmarshal(*v, &sinkRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SinkRetryCount = sinkRetryCount
+			}
+		case "sinkRetryWait":
+			if v != nil {
+				var sinkRetryWait interface{}
+				err = json.Unmarshal(*v, &sinkRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SinkRetryWait = sinkRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySink
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // SQLSource a copy activity SQL source.
 type SQLSource struct {
 	// SQLReaderQuery - SQL reader query. Type: string (or Expression with resultType string).
@@ -84145,13 +93791,21 @@ type SQLSource struct {
 func (ss SQLSource) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeSQLSource
 	objectMap := make(map[string]interface{})
-	objectMap["sqlReaderQuery"] = ss.SQLReaderQuery
-	objectMap["sqlReaderStoredProcedureName"] = ss.SQLReaderStoredProcedureName
+	if ss.SQLReaderQuery != nil {
+		objectMap["sqlReaderQuery"] = ss.SQLReaderQuery
+	}
+	if ss.SQLReaderStoredProcedureName != nil {
+		objectMap["sqlReaderStoredProcedureName"] = ss.SQLReaderStoredProcedureName
+	}
 	if ss.StoredProcedureParameters != nil {
 		objectMap["storedProcedureParameters"] = ss.StoredProcedureParameters
 	}
-	objectMap["sourceRetryCount"] = ss.SourceRetryCount
-	objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	if ss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ss.SourceRetryCount
+	}
+	if ss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -84421,9 +94075,90 @@ func (ss SQLSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ss, true
 }
 
-// SquareLinkedService square Serivce linked service.
+// UnmarshalJSON is the custom unmarshaler for SQLSource struct.
+func (ss *SQLSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "sqlReaderQuery":
+			if v != nil {
+				var SQLReaderQuery interface{}
+				err = json.Unmarshal(*v, &SQLReaderQuery)
+				if err != nil {
+					return err
+				}
+				ss.SQLReaderQuery = SQLReaderQuery
+			}
+		case "sqlReaderStoredProcedureName":
+			if v != nil {
+				var SQLReaderStoredProcedureName interface{}
+				err = json.Unmarshal(*v, &SQLReaderStoredProcedureName)
+				if err != nil {
+					return err
+				}
+				ss.SQLReaderStoredProcedureName = SQLReaderStoredProcedureName
+			}
+		case "storedProcedureParameters":
+			if v != nil {
+				var storedProcedureParameters map[string]*StoredProcedureParameter
+				err = json.Unmarshal(*v, &storedProcedureParameters)
+				if err != nil {
+					return err
+				}
+				ss.StoredProcedureParameters = storedProcedureParameters
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// SquareLinkedService square Service linked service.
 type SquareLinkedService struct {
-	// SquareLinkedServiceTypeProperties - Square Serivce linked service properties.
+	// SquareLinkedServiceTypeProperties - Square Service linked service properties.
 	*SquareLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -84908,7 +94643,7 @@ func (sls *SquareLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// SquareLinkedServiceTypeProperties square Serivce linked service properties.
+// SquareLinkedServiceTypeProperties square Service linked service properties.
 type SquareLinkedServiceTypeProperties struct {
 	// Host - The URL of the Square instance. (i.e. mystore.mysquare.com)
 	Host interface{} `json:"host,omitempty"`
@@ -85014,7 +94749,7 @@ func (slstp *SquareLinkedServiceTypeProperties) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// SquareObjectDataset square Serivce dataset.
+// SquareObjectDataset square Service dataset.
 type SquareObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -85039,7 +94774,9 @@ func (sod SquareObjectDataset) MarshalJSON() ([]byte, error) {
 	if sod.Description != nil {
 		objectMap["description"] = sod.Description
 	}
-	objectMap["structure"] = sod.Structure
+	if sod.Structure != nil {
+		objectMap["structure"] = sod.Structure
+	}
 	if sod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = sod.LinkedServiceName
 	}
@@ -85333,7 +95070,88 @@ func (sod SquareObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &sod, true
 }
 
-// SquareSource a copy activity Square Serivce source.
+// UnmarshalJSON is the custom unmarshaler for SquareObjectDataset struct.
+func (sod *SquareObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if sod.AdditionalProperties == nil {
+					sod.AdditionalProperties = make(map[string]interface{})
+				}
+				sod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				sod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				sod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				sod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				sod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				sod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// SquareSource a copy activity Square Service source.
 type SquareSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -85351,9 +95169,15 @@ type SquareSource struct {
 func (ss SquareSource) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeSquareSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = ss.Query
-	objectMap["sourceRetryCount"] = ss.SourceRetryCount
-	objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	if ss.Query != nil {
+		objectMap["query"] = ss.Query
+	}
+	if ss.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ss.SourceRetryCount
+	}
+	if ss.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ss.SourceRetryWait
+	}
 	if ss.Type != "" {
 		objectMap["type"] = ss.Type
 	}
@@ -85623,6 +95447,79 @@ func (ss SquareSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ss, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for SquareSource struct.
+func (ss *SquareSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				ss.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ss.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// SSISExecutionCredential SSIS package execution credential.
+type SSISExecutionCredential struct {
+	// Domain - Domain for windows authentication.
+	Domain interface{} `json:"domain,omitempty"`
+	// UserName - UseName for windows authentication.
+	UserName interface{} `json:"userName,omitempty"`
+	// Password - Password for windows authentication.
+	Password *SecureString `json:"password,omitempty"`
+}
+
 // SSISExecutionParameter SSIS execution parameter.
 type SSISExecutionParameter struct {
 	// Value - SSIS package execution parameter value. Type: string (or Expression with resultType string).
@@ -85631,8 +95528,8 @@ type SSISExecutionParameter struct {
 
 // SSISPackageLocation SSIS package location.
 type SSISPackageLocation struct {
-	// PackagePath - The SSIS package path.
-	PackagePath *string `json:"packagePath,omitempty"`
+	// PackagePath - The SSIS package path. Type: string (or Expression with resultType string).
+	PackagePath interface{} `json:"packagePath,omitempty"`
 }
 
 // SSISPropertyOverride SSIS property override.
@@ -85661,12 +95558,70 @@ func (ss StagingSettings) MarshalJSON() ([]byte, error) {
 	if ss.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = ss.LinkedServiceName
 	}
-	objectMap["path"] = ss.Path
-	objectMap["enableCompression"] = ss.EnableCompression
+	if ss.Path != nil {
+		objectMap["path"] = ss.Path
+	}
+	if ss.EnableCompression != nil {
+		objectMap["enableCompression"] = ss.EnableCompression
+	}
 	for k, v := range ss.AdditionalProperties {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for StagingSettings struct.
+func (ss *StagingSettings) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ss.AdditionalProperties == nil {
+					ss.AdditionalProperties = make(map[string]interface{})
+				}
+				ss.AdditionalProperties[k] = additionalProperties
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				ss.LinkedServiceName = &linkedServiceName
+			}
+		case "path":
+			if v != nil {
+				var pathVar interface{}
+				err = json.Unmarshal(*v, &pathVar)
+				if err != nil {
+					return err
+				}
+				ss.Path = pathVar
+			}
+		case "enableCompression":
+			if v != nil {
+				var enableCompression interface{}
+				err = json.Unmarshal(*v, &enableCompression)
+				if err != nil {
+					return err
+				}
+				ss.EnableCompression = enableCompression
+			}
+		}
+	}
+
+	return nil
 }
 
 // StoredProcedureParameter SQL stored procedure parameter.
@@ -86287,8 +96242,12 @@ type TabularTranslator struct {
 func (tt TabularTranslator) MarshalJSON() ([]byte, error) {
 	tt.Type = TypeTabularTranslator
 	objectMap := make(map[string]interface{})
-	objectMap["columnMappings"] = tt.ColumnMappings
-	objectMap["schemaMapping"] = tt.SchemaMapping
+	if tt.ColumnMappings != nil {
+		objectMap["columnMappings"] = tt.ColumnMappings
+	}
+	if tt.SchemaMapping != nil {
+		objectMap["schemaMapping"] = tt.SchemaMapping
+	}
 	if tt.Type != "" {
 		objectMap["type"] = tt.Type
 	}
@@ -86311,6 +96270,60 @@ func (tt TabularTranslator) AsCopyTranslator() (*CopyTranslator, bool) {
 // AsBasicCopyTranslator is the BasicCopyTranslator implementation for TabularTranslator.
 func (tt TabularTranslator) AsBasicCopyTranslator() (BasicCopyTranslator, bool) {
 	return &tt, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for TabularTranslator struct.
+func (tt *TabularTranslator) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "columnMappings":
+			if v != nil {
+				var columnMappings interface{}
+				err = json.Unmarshal(*v, &columnMappings)
+				if err != nil {
+					return err
+				}
+				tt.ColumnMappings = columnMappings
+			}
+		case "schemaMapping":
+			if v != nil {
+				var schemaMapping interface{}
+				err = json.Unmarshal(*v, &schemaMapping)
+				if err != nil {
+					return err
+				}
+				tt.SchemaMapping = schemaMapping
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if tt.AdditionalProperties == nil {
+					tt.AdditionalProperties = make(map[string]interface{})
+				}
+				tt.AdditionalProperties[k] = additionalProperties
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopyTranslator
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				tt.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // TeradataLinkedService linked service for Teradata data source.
@@ -86907,17 +96920,39 @@ type TextFormat struct {
 func (tf TextFormat) MarshalJSON() ([]byte, error) {
 	tf.Type = TypeTextFormat
 	objectMap := make(map[string]interface{})
-	objectMap["columnDelimiter"] = tf.ColumnDelimiter
-	objectMap["rowDelimiter"] = tf.RowDelimiter
-	objectMap["escapeChar"] = tf.EscapeChar
-	objectMap["quoteChar"] = tf.QuoteChar
-	objectMap["nullValue"] = tf.NullValue
-	objectMap["encodingName"] = tf.EncodingName
-	objectMap["treatEmptyAsNull"] = tf.TreatEmptyAsNull
-	objectMap["skipLineCount"] = tf.SkipLineCount
-	objectMap["firstRowAsHeader"] = tf.FirstRowAsHeader
-	objectMap["serializer"] = tf.Serializer
-	objectMap["deserializer"] = tf.Deserializer
+	if tf.ColumnDelimiter != nil {
+		objectMap["columnDelimiter"] = tf.ColumnDelimiter
+	}
+	if tf.RowDelimiter != nil {
+		objectMap["rowDelimiter"] = tf.RowDelimiter
+	}
+	if tf.EscapeChar != nil {
+		objectMap["escapeChar"] = tf.EscapeChar
+	}
+	if tf.QuoteChar != nil {
+		objectMap["quoteChar"] = tf.QuoteChar
+	}
+	if tf.NullValue != nil {
+		objectMap["nullValue"] = tf.NullValue
+	}
+	if tf.EncodingName != nil {
+		objectMap["encodingName"] = tf.EncodingName
+	}
+	if tf.TreatEmptyAsNull != nil {
+		objectMap["treatEmptyAsNull"] = tf.TreatEmptyAsNull
+	}
+	if tf.SkipLineCount != nil {
+		objectMap["skipLineCount"] = tf.SkipLineCount
+	}
+	if tf.FirstRowAsHeader != nil {
+		objectMap["firstRowAsHeader"] = tf.FirstRowAsHeader
+	}
+	if tf.Serializer != nil {
+		objectMap["serializer"] = tf.Serializer
+	}
+	if tf.Deserializer != nil {
+		objectMap["deserializer"] = tf.Deserializer
+	}
 	if tf.Type != "" {
 		objectMap["type"] = tf.Type
 	}
@@ -86960,6 +96995,141 @@ func (tf TextFormat) AsDatasetStorageFormat() (*DatasetStorageFormat, bool) {
 // AsBasicDatasetStorageFormat is the BasicDatasetStorageFormat implementation for TextFormat.
 func (tf TextFormat) AsBasicDatasetStorageFormat() (BasicDatasetStorageFormat, bool) {
 	return &tf, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for TextFormat struct.
+func (tf *TextFormat) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "columnDelimiter":
+			if v != nil {
+				var columnDelimiter interface{}
+				err = json.Unmarshal(*v, &columnDelimiter)
+				if err != nil {
+					return err
+				}
+				tf.ColumnDelimiter = columnDelimiter
+			}
+		case "rowDelimiter":
+			if v != nil {
+				var rowDelimiter interface{}
+				err = json.Unmarshal(*v, &rowDelimiter)
+				if err != nil {
+					return err
+				}
+				tf.RowDelimiter = rowDelimiter
+			}
+		case "escapeChar":
+			if v != nil {
+				var escapeChar interface{}
+				err = json.Unmarshal(*v, &escapeChar)
+				if err != nil {
+					return err
+				}
+				tf.EscapeChar = escapeChar
+			}
+		case "quoteChar":
+			if v != nil {
+				var quoteChar interface{}
+				err = json.Unmarshal(*v, &quoteChar)
+				if err != nil {
+					return err
+				}
+				tf.QuoteChar = quoteChar
+			}
+		case "nullValue":
+			if v != nil {
+				var nullValue interface{}
+				err = json.Unmarshal(*v, &nullValue)
+				if err != nil {
+					return err
+				}
+				tf.NullValue = nullValue
+			}
+		case "encodingName":
+			if v != nil {
+				var encodingName interface{}
+				err = json.Unmarshal(*v, &encodingName)
+				if err != nil {
+					return err
+				}
+				tf.EncodingName = encodingName
+			}
+		case "treatEmptyAsNull":
+			if v != nil {
+				var treatEmptyAsNull interface{}
+				err = json.Unmarshal(*v, &treatEmptyAsNull)
+				if err != nil {
+					return err
+				}
+				tf.TreatEmptyAsNull = treatEmptyAsNull
+			}
+		case "skipLineCount":
+			if v != nil {
+				var skipLineCount interface{}
+				err = json.Unmarshal(*v, &skipLineCount)
+				if err != nil {
+					return err
+				}
+				tf.SkipLineCount = skipLineCount
+			}
+		case "firstRowAsHeader":
+			if v != nil {
+				var firstRowAsHeader interface{}
+				err = json.Unmarshal(*v, &firstRowAsHeader)
+				if err != nil {
+					return err
+				}
+				tf.FirstRowAsHeader = firstRowAsHeader
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if tf.AdditionalProperties == nil {
+					tf.AdditionalProperties = make(map[string]interface{})
+				}
+				tf.AdditionalProperties[k] = additionalProperties
+			}
+		case "serializer":
+			if v != nil {
+				var serializer interface{}
+				err = json.Unmarshal(*v, &serializer)
+				if err != nil {
+					return err
+				}
+				tf.Serializer = serializer
+			}
+		case "deserializer":
+			if v != nil {
+				var deserializer interface{}
+				err = json.Unmarshal(*v, &deserializer)
+				if err != nil {
+					return err
+				}
+				tf.Deserializer = deserializer
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDatasetStorageFormat
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				tf.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // BasicTrigger azure data factory nested object which contains information about creating pipeline run
@@ -87097,6 +97267,60 @@ func (t Trigger) AsBasicTrigger() (BasicTrigger, bool) {
 	return &t, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for Trigger struct.
+func (t *Trigger) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if t.AdditionalProperties == nil {
+					t.AdditionalProperties = make(map[string]interface{})
+				}
+				t.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				t.Description = &description
+			}
+		case "runtimeState":
+			if v != nil {
+				var runtimeState TriggerRuntimeState
+				err = json.Unmarshal(*v, &runtimeState)
+				if err != nil {
+					return err
+				}
+				t.RuntimeState = runtimeState
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicTrigger
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				t.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // TriggerListResponse a list of trigger resources.
 type TriggerListResponse struct {
 	autorest.Response `json:"-"`
@@ -87112,20 +97336,37 @@ type TriggerListResponseIterator struct {
 	page TriggerListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TriggerListResponseIterator) Next() error {
+func (iter *TriggerListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggerListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *TriggerListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -87147,6 +97388,11 @@ func (iter TriggerListResponseIterator) Value() TriggerResource {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the TriggerListResponseIterator type.
+func NewTriggerListResponseIterator(page TriggerListResponsePage) TriggerListResponseIterator {
+	return TriggerListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (tlr TriggerListResponse) IsEmpty() bool {
 	return tlr.Value == nil || len(*tlr.Value) == 0
@@ -87154,11 +97400,11 @@ func (tlr TriggerListResponse) IsEmpty() bool {
 
 // triggerListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tlr TriggerListResponse) triggerListResponsePreparer() (*http.Request, error) {
+func (tlr TriggerListResponse) triggerListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if tlr.NextLink == nil || len(to.String(tlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tlr.NextLink)))
@@ -87166,19 +97412,36 @@ func (tlr TriggerListResponse) triggerListResponsePreparer() (*http.Request, err
 
 // TriggerListResponsePage contains a page of TriggerResource values.
 type TriggerListResponsePage struct {
-	fn  func(TriggerListResponse) (TriggerListResponse, error)
+	fn  func(context.Context, TriggerListResponse) (TriggerListResponse, error)
 	tlr TriggerListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TriggerListResponsePage) Next() error {
-	next, err := page.fn(page.tlr)
+func (page *TriggerListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggerListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.tlr)
 	if err != nil {
 		return err
 	}
 	page.tlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *TriggerListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -87197,6 +97460,11 @@ func (page TriggerListResponsePage) Values() []TriggerResource {
 		return nil
 	}
 	return *page.tlr.Value
+}
+
+// Creates a new instance of the TriggerListResponsePage type.
+func NewTriggerListResponsePage(getNextPage func(context.Context, TriggerListResponse) (TriggerListResponse, error)) TriggerListResponsePage {
+	return TriggerListResponsePage{fn: getNextPage}
 }
 
 // TriggerPipelineReference pipeline that needs to be triggered with the given parameters.
@@ -87348,6 +97616,105 @@ func (tr TriggerRun) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for TriggerRun struct.
+func (tr *TriggerRun) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if tr.AdditionalProperties == nil {
+					tr.AdditionalProperties = make(map[string]interface{})
+				}
+				tr.AdditionalProperties[k] = additionalProperties
+			}
+		case "triggerRunId":
+			if v != nil {
+				var triggerRunID string
+				err = json.Unmarshal(*v, &triggerRunID)
+				if err != nil {
+					return err
+				}
+				tr.TriggerRunID = &triggerRunID
+			}
+		case "triggerName":
+			if v != nil {
+				var triggerName string
+				err = json.Unmarshal(*v, &triggerName)
+				if err != nil {
+					return err
+				}
+				tr.TriggerName = &triggerName
+			}
+		case "triggerType":
+			if v != nil {
+				var triggerType string
+				err = json.Unmarshal(*v, &triggerType)
+				if err != nil {
+					return err
+				}
+				tr.TriggerType = &triggerType
+			}
+		case "triggerRunTimestamp":
+			if v != nil {
+				var triggerRunTimestamp date.Time
+				err = json.Unmarshal(*v, &triggerRunTimestamp)
+				if err != nil {
+					return err
+				}
+				tr.TriggerRunTimestamp = &triggerRunTimestamp
+			}
+		case "status":
+			if v != nil {
+				var status TriggerRunStatus
+				err = json.Unmarshal(*v, &status)
+				if err != nil {
+					return err
+				}
+				tr.Status = status
+			}
+		case "message":
+			if v != nil {
+				var message string
+				err = json.Unmarshal(*v, &message)
+				if err != nil {
+					return err
+				}
+				tr.Message = &message
+			}
+		case "properties":
+			if v != nil {
+				var properties map[string]*string
+				err = json.Unmarshal(*v, &properties)
+				if err != nil {
+					return err
+				}
+				tr.Properties = properties
+			}
+		case "triggeredPipelines":
+			if v != nil {
+				var triggeredPipelines map[string]*string
+				err = json.Unmarshal(*v, &triggeredPipelines)
+				if err != nil {
+					return err
+				}
+				tr.TriggeredPipelines = triggeredPipelines
+			}
+		}
+	}
+
+	return nil
+}
+
 // TriggerRunListResponse a list of trigger runs.
 type TriggerRunListResponse struct {
 	autorest.Response `json:"-"`
@@ -87363,20 +97730,37 @@ type TriggerRunListResponseIterator struct {
 	page TriggerRunListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TriggerRunListResponseIterator) Next() error {
+func (iter *TriggerRunListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggerRunListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *TriggerRunListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -87398,6 +97782,11 @@ func (iter TriggerRunListResponseIterator) Value() TriggerRun {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the TriggerRunListResponseIterator type.
+func NewTriggerRunListResponseIterator(page TriggerRunListResponsePage) TriggerRunListResponseIterator {
+	return TriggerRunListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (trlr TriggerRunListResponse) IsEmpty() bool {
 	return trlr.Value == nil || len(*trlr.Value) == 0
@@ -87405,11 +97794,11 @@ func (trlr TriggerRunListResponse) IsEmpty() bool {
 
 // triggerRunListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (trlr TriggerRunListResponse) triggerRunListResponsePreparer() (*http.Request, error) {
+func (trlr TriggerRunListResponse) triggerRunListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if trlr.NextLink == nil || len(to.String(trlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(trlr.NextLink)))
@@ -87417,19 +97806,36 @@ func (trlr TriggerRunListResponse) triggerRunListResponsePreparer() (*http.Reque
 
 // TriggerRunListResponsePage contains a page of TriggerRun values.
 type TriggerRunListResponsePage struct {
-	fn   func(TriggerRunListResponse) (TriggerRunListResponse, error)
+	fn   func(context.Context, TriggerRunListResponse) (TriggerRunListResponse, error)
 	trlr TriggerRunListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TriggerRunListResponsePage) Next() error {
-	next, err := page.fn(page.trlr)
+func (page *TriggerRunListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggerRunListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.trlr)
 	if err != nil {
 		return err
 	}
 	page.trlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *TriggerRunListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -87450,7 +97856,13 @@ func (page TriggerRunListResponsePage) Values() []TriggerRun {
 	return *page.trlr.Value
 }
 
-// TriggersStartFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// Creates a new instance of the TriggerRunListResponsePage type.
+func NewTriggerRunListResponsePage(getNextPage func(context.Context, TriggerRunListResponse) (TriggerRunListResponse, error)) TriggerRunListResponsePage {
+	return TriggerRunListResponsePage{fn: getNextPage}
+}
+
+// TriggersStartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type TriggersStartFuture struct {
 	azure.Future
 }
@@ -87494,8 +97906,8 @@ func (future *TriggersStopFuture) Result(client TriggersClient) (ar autorest.Res
 	return
 }
 
-// TumblingWindowTrigger trigger that schedules pipeline runs for all fixed time interval windows from a start time
-// without gaps and also supports backfill scenarios (when start time is in the past).
+// TumblingWindowTrigger trigger that schedules pipeline runs for all fixed time interval windows from a
+// start time without gaps and also supports backfill scenarios (when start time is in the past).
 type TumblingWindowTrigger struct {
 	// Pipeline - Pipeline for which runs are created when an event is fired for trigger window that is ready.
 	Pipeline *TriggerPipelineReference `json:"pipeline,omitempty"`
@@ -87666,8 +98078,8 @@ type TumblingWindowTriggerTypeProperties struct {
 	RetryPolicy *RetryPolicy `json:"retryPolicy,omitempty"`
 }
 
-// UntilActivity this activity executes inner activities until the specified boolean expression results to true or
-// timeout is reached, whichever is earlier.
+// UntilActivity this activity executes inner activities until the specified boolean expression results to
+// true or timeout is reached, whichever is earlier.
 type UntilActivity struct {
 	// UntilActivityTypeProperties - Until activity properties.
 	*UntilActivityTypeProperties `json:"typeProperties,omitempty"`
@@ -88498,9 +98910,15 @@ type VerticaSource struct {
 func (vs VerticaSource) MarshalJSON() ([]byte, error) {
 	vs.Type = TypeVerticaSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = vs.Query
-	objectMap["sourceRetryCount"] = vs.SourceRetryCount
-	objectMap["sourceRetryWait"] = vs.SourceRetryWait
+	if vs.Query != nil {
+		objectMap["query"] = vs.Query
+	}
+	if vs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = vs.SourceRetryCount
+	}
+	if vs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = vs.SourceRetryWait
+	}
 	if vs.Type != "" {
 		objectMap["type"] = vs.Type
 	}
@@ -88770,6 +99188,69 @@ func (vs VerticaSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &vs, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for VerticaSource struct.
+func (vs *VerticaSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				vs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if vs.AdditionalProperties == nil {
+					vs.AdditionalProperties = make(map[string]interface{})
+				}
+				vs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				vs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				vs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				vs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // VerticaTableDataset vertica dataset.
 type VerticaTableDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -88795,7 +99276,9 @@ func (vtd VerticaTableDataset) MarshalJSON() ([]byte, error) {
 	if vtd.Description != nil {
 		objectMap["description"] = vtd.Description
 	}
-	objectMap["structure"] = vtd.Structure
+	if vtd.Structure != nil {
+		objectMap["structure"] = vtd.Structure
+	}
 	if vtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = vtd.LinkedServiceName
 	}
@@ -89087,6 +99570,87 @@ func (vtd VerticaTableDataset) AsDataset() (*Dataset, bool) {
 // AsBasicDataset is the BasicDataset implementation for VerticaTableDataset.
 func (vtd VerticaTableDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &vtd, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for VerticaTableDataset struct.
+func (vtd *VerticaTableDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if vtd.AdditionalProperties == nil {
+					vtd.AdditionalProperties = make(map[string]interface{})
+				}
+				vtd.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				vtd.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				vtd.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				vtd.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				vtd.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				vtd.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				vtd.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // WaitActivity this activity suspends pipeline execution for the specified interval.
@@ -89661,8 +100225,8 @@ type WebActivityTypeProperties struct {
 	LinkedServices *[]LinkedServiceReference `json:"linkedServices,omitempty"`
 }
 
-// WebAnonymousAuthentication a WebLinkedService that uses anonymous authentication to communicate with an HTTP
-// endpoint.
+// WebAnonymousAuthentication a WebLinkedService that uses anonymous authentication to communicate with an
+// HTTP endpoint.
 type WebAnonymousAuthentication struct {
 	// URL - The URL of the web service endpoint, e.g. http://www.microsoft.com . Type: string (or Expression with resultType string).
 	URL interface{} `json:"url,omitempty"`
@@ -89674,7 +100238,9 @@ type WebAnonymousAuthentication struct {
 func (waa WebAnonymousAuthentication) MarshalJSON() ([]byte, error) {
 	waa.AuthenticationType = AuthenticationTypeAnonymous
 	objectMap := make(map[string]interface{})
-	objectMap["url"] = waa.URL
+	if waa.URL != nil {
+		objectMap["url"] = waa.URL
+	}
 	if waa.AuthenticationType != "" {
 		objectMap["authenticationType"] = waa.AuthenticationType
 	}
@@ -89706,7 +100272,8 @@ func (waa WebAnonymousAuthentication) AsBasicWebLinkedServiceTypeProperties() (B
 	return &waa, true
 }
 
-// WebBasicAuthentication a WebLinkedService that uses basic authentication to communicate with an HTTP endpoint.
+// WebBasicAuthentication a WebLinkedService that uses basic authentication to communicate with an HTTP
+// endpoint.
 type WebBasicAuthentication struct {
 	// Username - User name for Basic authentication. Type: string (or Expression with resultType string).
 	Username interface{} `json:"username,omitempty"`
@@ -89722,9 +100289,13 @@ type WebBasicAuthentication struct {
 func (wba WebBasicAuthentication) MarshalJSON() ([]byte, error) {
 	wba.AuthenticationType = AuthenticationTypeBasic
 	objectMap := make(map[string]interface{})
-	objectMap["username"] = wba.Username
+	if wba.Username != nil {
+		objectMap["username"] = wba.Username
+	}
 	objectMap["password"] = wba.Password
-	objectMap["url"] = wba.URL
+	if wba.URL != nil {
+		objectMap["url"] = wba.URL
+	}
 	if wba.AuthenticationType != "" {
 		objectMap["authenticationType"] = wba.AuthenticationType
 	}
@@ -89806,9 +100377,9 @@ func (wba *WebBasicAuthentication) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// WebClientCertificateAuthentication a WebLinkedService that uses client certificate based authentication to
-// communicate with an HTTP endpoint. This scheme follows mutual authentication; the server must also provide valid
-// credentials to the client.
+// WebClientCertificateAuthentication a WebLinkedService that uses client certificate based authentication
+// to communicate with an HTTP endpoint. This scheme follows mutual authentication; the server must also
+// provide valid credentials to the client.
 type WebClientCertificateAuthentication struct {
 	// Pfx - Base64-encoded contents of a PFX file.
 	Pfx BasicSecretBase `json:"pfx,omitempty"`
@@ -89826,7 +100397,9 @@ func (wcca WebClientCertificateAuthentication) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	objectMap["pfx"] = wcca.Pfx
 	objectMap["password"] = wcca.Password
-	objectMap["url"] = wcca.URL
+	if wcca.URL != nil {
+		objectMap["url"] = wcca.URL
+	}
 	if wcca.AuthenticationType != "" {
 		objectMap["authenticationType"] = wcca.AuthenticationType
 	}
@@ -90458,7 +101031,9 @@ func unmarshalBasicWebLinkedServiceTypePropertiesArray(body []byte) ([]BasicWebL
 func (wlstp WebLinkedServiceTypeProperties) MarshalJSON() ([]byte, error) {
 	wlstp.AuthenticationType = AuthenticationTypeWebLinkedServiceTypeProperties
 	objectMap := make(map[string]interface{})
-	objectMap["url"] = wlstp.URL
+	if wlstp.URL != nil {
+		objectMap["url"] = wlstp.URL
+	}
 	if wlstp.AuthenticationType != "" {
 		objectMap["authenticationType"] = wlstp.AuthenticationType
 	}
@@ -90506,8 +101081,12 @@ type WebSource struct {
 func (ws WebSource) MarshalJSON() ([]byte, error) {
 	ws.Type = TypeWebSource
 	objectMap := make(map[string]interface{})
-	objectMap["sourceRetryCount"] = ws.SourceRetryCount
-	objectMap["sourceRetryWait"] = ws.SourceRetryWait
+	if ws.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = ws.SourceRetryCount
+	}
+	if ws.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = ws.SourceRetryWait
+	}
 	if ws.Type != "" {
 		objectMap["type"] = ws.Type
 	}
@@ -90777,6 +101356,60 @@ func (ws WebSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &ws, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for WebSource struct.
+func (ws *WebSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ws.AdditionalProperties == nil {
+					ws.AdditionalProperties = make(map[string]interface{})
+				}
+				ws.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				ws.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				ws.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ws.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // WebTableDataset the dataset points to a HTML table in the web page.
 type WebTableDataset struct {
 	// WebTableDatasetTypeProperties - Web table dataset properties.
@@ -90807,7 +101440,9 @@ func (wtd WebTableDataset) MarshalJSON() ([]byte, error) {
 	if wtd.Description != nil {
 		objectMap["description"] = wtd.Description
 	}
-	objectMap["structure"] = wtd.Structure
+	if wtd.Structure != nil {
+		objectMap["structure"] = wtd.Structure
+	}
 	if wtd.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = wtd.LinkedServiceName
 	}
@@ -91199,9 +101834,9 @@ type WebTableDatasetTypeProperties struct {
 	Path interface{} `json:"path,omitempty"`
 }
 
-// XeroLinkedService xero Serivce linked service.
+// XeroLinkedService xero Service linked service.
 type XeroLinkedService struct {
-	// XeroLinkedServiceTypeProperties - Xero Serivce linked service properties.
+	// XeroLinkedServiceTypeProperties - Xero Service linked service properties.
 	*XeroLinkedServiceTypeProperties `json:"typeProperties,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -91686,7 +102321,7 @@ func (xls *XeroLinkedService) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// XeroLinkedServiceTypeProperties xero Serivce linked service properties.
+// XeroLinkedServiceTypeProperties xero Service linked service properties.
 type XeroLinkedServiceTypeProperties struct {
 	// Host - The endpoint of the Xero server. (i.e. api.xero.com)
 	Host interface{} `json:"host,omitempty"`
@@ -91781,7 +102416,7 @@ func (xlstp *XeroLinkedServiceTypeProperties) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// XeroObjectDataset xero Serivce dataset.
+// XeroObjectDataset xero Service dataset.
 type XeroObjectDataset struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
@@ -91806,7 +102441,9 @@ func (xod XeroObjectDataset) MarshalJSON() ([]byte, error) {
 	if xod.Description != nil {
 		objectMap["description"] = xod.Description
 	}
-	objectMap["structure"] = xod.Structure
+	if xod.Structure != nil {
+		objectMap["structure"] = xod.Structure
+	}
 	if xod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = xod.LinkedServiceName
 	}
@@ -92100,7 +102737,88 @@ func (xod XeroObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &xod, true
 }
 
-// XeroSource a copy activity Xero Serivce source.
+// UnmarshalJSON is the custom unmarshaler for XeroObjectDataset struct.
+func (xod *XeroObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if xod.AdditionalProperties == nil {
+					xod.AdditionalProperties = make(map[string]interface{})
+				}
+				xod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				xod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				xod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				xod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				xod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				xod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				xod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// XeroSource a copy activity Xero Service source.
 type XeroSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
@@ -92118,9 +102836,15 @@ type XeroSource struct {
 func (xs XeroSource) MarshalJSON() ([]byte, error) {
 	xs.Type = TypeXeroSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = xs.Query
-	objectMap["sourceRetryCount"] = xs.SourceRetryCount
-	objectMap["sourceRetryWait"] = xs.SourceRetryWait
+	if xs.Query != nil {
+		objectMap["query"] = xs.Query
+	}
+	if xs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = xs.SourceRetryCount
+	}
+	if xs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = xs.SourceRetryWait
+	}
 	if xs.Type != "" {
 		objectMap["type"] = xs.Type
 	}
@@ -92388,6 +103112,69 @@ func (xs XeroSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for XeroSource.
 func (xs XeroSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &xs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for XeroSource struct.
+func (xs *XeroSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				xs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if xs.AdditionalProperties == nil {
+					xs.AdditionalProperties = make(map[string]interface{})
+				}
+				xs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				xs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				xs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				xs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }
 
 // ZohoLinkedService zoho server linked service.
@@ -92986,7 +103773,9 @@ func (zod ZohoObjectDataset) MarshalJSON() ([]byte, error) {
 	if zod.Description != nil {
 		objectMap["description"] = zod.Description
 	}
-	objectMap["structure"] = zod.Structure
+	if zod.Structure != nil {
+		objectMap["structure"] = zod.Structure
+	}
 	if zod.LinkedServiceName != nil {
 		objectMap["linkedServiceName"] = zod.LinkedServiceName
 	}
@@ -93280,6 +104069,87 @@ func (zod ZohoObjectDataset) AsBasicDataset() (BasicDataset, bool) {
 	return &zod, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for ZohoObjectDataset struct.
+func (zod *ZohoObjectDataset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if zod.AdditionalProperties == nil {
+					zod.AdditionalProperties = make(map[string]interface{})
+				}
+				zod.AdditionalProperties[k] = additionalProperties
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				zod.Description = &description
+			}
+		case "structure":
+			if v != nil {
+				var structure interface{}
+				err = json.Unmarshal(*v, &structure)
+				if err != nil {
+					return err
+				}
+				zod.Structure = structure
+			}
+		case "linkedServiceName":
+			if v != nil {
+				var linkedServiceName LinkedServiceReference
+				err = json.Unmarshal(*v, &linkedServiceName)
+				if err != nil {
+					return err
+				}
+				zod.LinkedServiceName = &linkedServiceName
+			}
+		case "parameters":
+			if v != nil {
+				var parameters map[string]*ParameterSpecification
+				err = json.Unmarshal(*v, &parameters)
+				if err != nil {
+					return err
+				}
+				zod.Parameters = parameters
+			}
+		case "annotations":
+			if v != nil {
+				var annotations []interface{}
+				err = json.Unmarshal(*v, &annotations)
+				if err != nil {
+					return err
+				}
+				zod.Annotations = &annotations
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicDataset
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				zod.Type = typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
 // ZohoSource a copy activity Zoho server source.
 type ZohoSource struct {
 	// Query - A query to retrieve data from source. Type: string (or Expression with resultType string).
@@ -93298,9 +104168,15 @@ type ZohoSource struct {
 func (zs ZohoSource) MarshalJSON() ([]byte, error) {
 	zs.Type = TypeZohoSource
 	objectMap := make(map[string]interface{})
-	objectMap["query"] = zs.Query
-	objectMap["sourceRetryCount"] = zs.SourceRetryCount
-	objectMap["sourceRetryWait"] = zs.SourceRetryWait
+	if zs.Query != nil {
+		objectMap["query"] = zs.Query
+	}
+	if zs.SourceRetryCount != nil {
+		objectMap["sourceRetryCount"] = zs.SourceRetryCount
+	}
+	if zs.SourceRetryWait != nil {
+		objectMap["sourceRetryWait"] = zs.SourceRetryWait
+	}
 	if zs.Type != "" {
 		objectMap["type"] = zs.Type
 	}
@@ -93568,4 +104444,67 @@ func (zs ZohoSource) AsCopySource() (*CopySource, bool) {
 // AsBasicCopySource is the BasicCopySource implementation for ZohoSource.
 func (zs ZohoSource) AsBasicCopySource() (BasicCopySource, bool) {
 	return &zs, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ZohoSource struct.
+func (zs *ZohoSource) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "query":
+			if v != nil {
+				var query interface{}
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				zs.Query = query
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if zs.AdditionalProperties == nil {
+					zs.AdditionalProperties = make(map[string]interface{})
+				}
+				zs.AdditionalProperties[k] = additionalProperties
+			}
+		case "sourceRetryCount":
+			if v != nil {
+				var sourceRetryCount interface{}
+				err = json.Unmarshal(*v, &sourceRetryCount)
+				if err != nil {
+					return err
+				}
+				zs.SourceRetryCount = sourceRetryCount
+			}
+		case "sourceRetryWait":
+			if v != nil {
+				var sourceRetryWait interface{}
+				err = json.Unmarshal(*v, &sourceRetryWait)
+				if err != nil {
+					return err
+				}
+				zs.SourceRetryWait = sourceRetryWait
+			}
+		case "type":
+			if v != nil {
+				var typeVar TypeBasicCopySource
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				zs.Type = typeVar
+			}
+		}
+	}
+
+	return nil
 }

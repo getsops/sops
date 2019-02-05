@@ -34,7 +34,6 @@ var Syntax_name = map[int32]string{
 	0: "SYNTAX_PROTO2",
 	1: "SYNTAX_PROTO3",
 }
-
 var Syntax_value = map[string]int32{
 	"SYNTAX_PROTO2": 0,
 	"SYNTAX_PROTO3": 1,
@@ -43,9 +42,8 @@ var Syntax_value = map[string]int32{
 func (x Syntax) String() string {
 	return proto.EnumName(Syntax_name, int32(x))
 }
-
 func (Syntax) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{0}
+	return fileDescriptor_type_de958d9f8682c896, []int{0}
 }
 
 // Basic field types.
@@ -113,7 +111,6 @@ var Field_Kind_name = map[int32]string{
 	17: "TYPE_SINT32",
 	18: "TYPE_SINT64",
 }
-
 var Field_Kind_value = map[string]int32{
 	"TYPE_UNKNOWN":  0,
 	"TYPE_DOUBLE":   1,
@@ -139,9 +136,8 @@ var Field_Kind_value = map[string]int32{
 func (x Field_Kind) String() string {
 	return proto.EnumName(Field_Kind_name, int32(x))
 }
-
 func (Field_Kind) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{1, 0}
+	return fileDescriptor_type_de958d9f8682c896, []int{1, 0}
 }
 
 // Whether a field is optional, required, or repeated.
@@ -164,7 +160,6 @@ var Field_Cardinality_name = map[int32]string{
 	2: "CARDINALITY_REQUIRED",
 	3: "CARDINALITY_REPEATED",
 }
-
 var Field_Cardinality_value = map[string]int32{
 	"CARDINALITY_UNKNOWN":  0,
 	"CARDINALITY_OPTIONAL": 1,
@@ -175,9 +170,8 @@ var Field_Cardinality_value = map[string]int32{
 func (x Field_Cardinality) String() string {
 	return proto.EnumName(Field_Cardinality_name, int32(x))
 }
-
 func (Field_Cardinality) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{1, 1}
+	return fileDescriptor_type_de958d9f8682c896, []int{1, 1}
 }
 
 // A protocol buffer message type.
@@ -203,7 +197,7 @@ func (m *Type) Reset()         { *m = Type{} }
 func (m *Type) String() string { return proto.CompactTextString(m) }
 func (*Type) ProtoMessage()    {}
 func (*Type) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{0}
+	return fileDescriptor_type_de958d9f8682c896, []int{0}
 }
 func (m *Type) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Type.Unmarshal(m, b)
@@ -211,8 +205,8 @@ func (m *Type) XXX_Unmarshal(b []byte) error {
 func (m *Type) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Type.Marshal(b, m, deterministic)
 }
-func (m *Type) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Type.Merge(m, src)
+func (dst *Type) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Type.Merge(dst, src)
 }
 func (m *Type) XXX_Size() int {
 	return xxx_messageInfo_Type.Size(m)
@@ -298,7 +292,7 @@ func (m *Field) Reset()         { *m = Field{} }
 func (m *Field) String() string { return proto.CompactTextString(m) }
 func (*Field) ProtoMessage()    {}
 func (*Field) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{1}
+	return fileDescriptor_type_de958d9f8682c896, []int{1}
 }
 func (m *Field) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Field.Unmarshal(m, b)
@@ -306,8 +300,8 @@ func (m *Field) XXX_Unmarshal(b []byte) error {
 func (m *Field) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Field.Marshal(b, m, deterministic)
 }
-func (m *Field) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Field.Merge(m, src)
+func (dst *Field) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Field.Merge(dst, src)
 }
 func (m *Field) XXX_Size() int {
 	return xxx_messageInfo_Field.Size(m)
@@ -409,7 +403,7 @@ func (m *Enum) Reset()         { *m = Enum{} }
 func (m *Enum) String() string { return proto.CompactTextString(m) }
 func (*Enum) ProtoMessage()    {}
 func (*Enum) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{2}
+	return fileDescriptor_type_de958d9f8682c896, []int{2}
 }
 func (m *Enum) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Enum.Unmarshal(m, b)
@@ -417,8 +411,8 @@ func (m *Enum) XXX_Unmarshal(b []byte) error {
 func (m *Enum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Enum.Marshal(b, m, deterministic)
 }
-func (m *Enum) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Enum.Merge(m, src)
+func (dst *Enum) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Enum.Merge(dst, src)
 }
 func (m *Enum) XXX_Size() int {
 	return xxx_messageInfo_Enum.Size(m)
@@ -481,7 +475,7 @@ func (m *EnumValue) Reset()         { *m = EnumValue{} }
 func (m *EnumValue) String() string { return proto.CompactTextString(m) }
 func (*EnumValue) ProtoMessage()    {}
 func (*EnumValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{3}
+	return fileDescriptor_type_de958d9f8682c896, []int{3}
 }
 func (m *EnumValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EnumValue.Unmarshal(m, b)
@@ -489,8 +483,8 @@ func (m *EnumValue) XXX_Unmarshal(b []byte) error {
 func (m *EnumValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EnumValue.Marshal(b, m, deterministic)
 }
-func (m *EnumValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EnumValue.Merge(m, src)
+func (dst *EnumValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EnumValue.Merge(dst, src)
 }
 func (m *EnumValue) XXX_Size() int {
 	return xxx_messageInfo_EnumValue.Size(m)
@@ -544,7 +538,7 @@ func (m *Option) Reset()         { *m = Option{} }
 func (m *Option) String() string { return proto.CompactTextString(m) }
 func (*Option) ProtoMessage()    {}
 func (*Option) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dd271cc1e348c538, []int{4}
+	return fileDescriptor_type_de958d9f8682c896, []int{4}
 }
 func (m *Option) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Option.Unmarshal(m, b)
@@ -552,8 +546,8 @@ func (m *Option) XXX_Unmarshal(b []byte) error {
 func (m *Option) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Option.Marshal(b, m, deterministic)
 }
-func (m *Option) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Option.Merge(m, src)
+func (dst *Option) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Option.Merge(dst, src)
 }
 func (m *Option) XXX_Size() int {
 	return xxx_messageInfo_Option.Size(m)
@@ -589,9 +583,9 @@ func init() {
 	proto.RegisterEnum("google.protobuf.Field_Cardinality", Field_Cardinality_name, Field_Cardinality_value)
 }
 
-func init() { proto.RegisterFile("google/protobuf/type.proto", fileDescriptor_dd271cc1e348c538) }
+func init() { proto.RegisterFile("google/protobuf/type.proto", fileDescriptor_type_de958d9f8682c896) }
 
-var fileDescriptor_dd271cc1e348c538 = []byte{
+var fileDescriptor_type_de958d9f8682c896 = []byte{
 	// 810 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0xcd, 0x8e, 0xda, 0x56,
 	0x14, 0x8e, 0x8d, 0xf1, 0xe0, 0xc3, 0xc0, 0xdc, 0xdc, 0x44, 0x89, 0x33, 0x91, 0x52, 0x44, 0xbb,

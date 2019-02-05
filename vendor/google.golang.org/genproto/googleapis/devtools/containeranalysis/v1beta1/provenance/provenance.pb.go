@@ -34,7 +34,6 @@ var Hash_HashType_name = map[int32]string{
 	0: "HASH_TYPE_UNSPECIFIED",
 	1: "SHA256",
 }
-
 var Hash_HashType_value = map[string]int32{
 	"HASH_TYPE_UNSPECIFIED": 0,
 	"SHA256":                1,
@@ -43,9 +42,8 @@ var Hash_HashType_value = map[string]int32{
 func (x Hash_HashType) String() string {
 	return proto.EnumName(Hash_HashType_name, int32(x))
 }
-
 func (Hash_HashType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{3, 0}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{3, 0}
 }
 
 // Provenance of a build. Contains all information needed to verify the full
@@ -89,7 +87,7 @@ func (m *BuildProvenance) Reset()         { *m = BuildProvenance{} }
 func (m *BuildProvenance) String() string { return proto.CompactTextString(m) }
 func (*BuildProvenance) ProtoMessage()    {}
 func (*BuildProvenance) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{0}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{0}
 }
 func (m *BuildProvenance) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BuildProvenance.Unmarshal(m, b)
@@ -97,8 +95,8 @@ func (m *BuildProvenance) XXX_Unmarshal(b []byte) error {
 func (m *BuildProvenance) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BuildProvenance.Marshal(b, m, deterministic)
 }
-func (m *BuildProvenance) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BuildProvenance.Merge(m, src)
+func (dst *BuildProvenance) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BuildProvenance.Merge(dst, src)
 }
 func (m *BuildProvenance) XXX_Size() int {
 	return xxx_messageInfo_BuildProvenance.Size(m)
@@ -230,7 +228,7 @@ func (m *Source) Reset()         { *m = Source{} }
 func (m *Source) String() string { return proto.CompactTextString(m) }
 func (*Source) ProtoMessage()    {}
 func (*Source) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{1}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{1}
 }
 func (m *Source) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Source.Unmarshal(m, b)
@@ -238,8 +236,8 @@ func (m *Source) XXX_Unmarshal(b []byte) error {
 func (m *Source) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Source.Marshal(b, m, deterministic)
 }
-func (m *Source) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Source.Merge(m, src)
+func (dst *Source) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Source.Merge(dst, src)
 }
 func (m *Source) XXX_Size() int {
 	return xxx_messageInfo_Source.Size(m)
@@ -292,7 +290,7 @@ func (m *FileHashes) Reset()         { *m = FileHashes{} }
 func (m *FileHashes) String() string { return proto.CompactTextString(m) }
 func (*FileHashes) ProtoMessage()    {}
 func (*FileHashes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{2}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{2}
 }
 func (m *FileHashes) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FileHashes.Unmarshal(m, b)
@@ -300,8 +298,8 @@ func (m *FileHashes) XXX_Unmarshal(b []byte) error {
 func (m *FileHashes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FileHashes.Marshal(b, m, deterministic)
 }
-func (m *FileHashes) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FileHashes.Merge(m, src)
+func (dst *FileHashes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FileHashes.Merge(dst, src)
 }
 func (m *FileHashes) XXX_Size() int {
 	return xxx_messageInfo_FileHashes.Size(m)
@@ -334,7 +332,7 @@ func (m *Hash) Reset()         { *m = Hash{} }
 func (m *Hash) String() string { return proto.CompactTextString(m) }
 func (*Hash) ProtoMessage()    {}
 func (*Hash) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{3}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{3}
 }
 func (m *Hash) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Hash.Unmarshal(m, b)
@@ -342,8 +340,8 @@ func (m *Hash) XXX_Unmarshal(b []byte) error {
 func (m *Hash) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Hash.Marshal(b, m, deterministic)
 }
-func (m *Hash) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Hash.Merge(m, src)
+func (dst *Hash) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Hash.Merge(dst, src)
 }
 func (m *Hash) XXX_Size() int {
 	return xxx_messageInfo_Hash.Size(m)
@@ -394,7 +392,7 @@ func (m *Command) Reset()         { *m = Command{} }
 func (m *Command) String() string { return proto.CompactTextString(m) }
 func (*Command) ProtoMessage()    {}
 func (*Command) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{4}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{4}
 }
 func (m *Command) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Command.Unmarshal(m, b)
@@ -402,8 +400,8 @@ func (m *Command) XXX_Unmarshal(b []byte) error {
 func (m *Command) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Command.Marshal(b, m, deterministic)
 }
-func (m *Command) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Command.Merge(m, src)
+func (dst *Command) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Command.Merge(dst, src)
 }
 func (m *Command) XXX_Size() int {
 	return xxx_messageInfo_Command.Size(m)
@@ -479,7 +477,7 @@ func (m *Artifact) Reset()         { *m = Artifact{} }
 func (m *Artifact) String() string { return proto.CompactTextString(m) }
 func (*Artifact) ProtoMessage()    {}
 func (*Artifact) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4ab6101dd6eab75c, []int{5}
+	return fileDescriptor_provenance_d5caf2c54405b6af, []int{5}
 }
 func (m *Artifact) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Artifact.Unmarshal(m, b)
@@ -487,8 +485,8 @@ func (m *Artifact) XXX_Unmarshal(b []byte) error {
 func (m *Artifact) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Artifact.Marshal(b, m, deterministic)
 }
-func (m *Artifact) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Artifact.Merge(m, src)
+func (dst *Artifact) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Artifact.Merge(dst, src)
 }
 func (m *Artifact) XXX_Size() int {
 	return xxx_messageInfo_Artifact.Size(m)
@@ -533,10 +531,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/provenance/provenance.proto", fileDescriptor_4ab6101dd6eab75c)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/provenance/provenance.proto", fileDescriptor_provenance_d5caf2c54405b6af)
 }
 
-var fileDescriptor_4ab6101dd6eab75c = []byte{
+var fileDescriptor_provenance_d5caf2c54405b6af = []byte{
 	// 848 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x55, 0x4b, 0x6f, 0x23, 0x45,
 	0x10, 0x66, 0xfc, 0x1c, 0x97, 0xb3, 0x49, 0xb6, 0x59, 0xa4, 0x8e, 0x51, 0x44, 0x64, 0x5e, 0xe1,

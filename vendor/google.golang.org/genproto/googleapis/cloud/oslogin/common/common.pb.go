@@ -49,7 +49,7 @@ func (m *PosixAccount) Reset()         { *m = PosixAccount{} }
 func (m *PosixAccount) String() string { return proto.CompactTextString(m) }
 func (*PosixAccount) ProtoMessage()    {}
 func (*PosixAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7fa58776520b3f24, []int{0}
+	return fileDescriptor_common_ebba42564a5ff09e, []int{0}
 }
 func (m *PosixAccount) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PosixAccount.Unmarshal(m, b)
@@ -57,8 +57,8 @@ func (m *PosixAccount) XXX_Unmarshal(b []byte) error {
 func (m *PosixAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PosixAccount.Marshal(b, m, deterministic)
 }
-func (m *PosixAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PosixAccount.Merge(m, src)
+func (dst *PosixAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PosixAccount.Merge(dst, src)
 }
 func (m *PosixAccount) XXX_Size() int {
 	return xxx_messageInfo_PosixAccount.Size(m)
@@ -151,7 +151,7 @@ func (m *SshPublicKey) Reset()         { *m = SshPublicKey{} }
 func (m *SshPublicKey) String() string { return proto.CompactTextString(m) }
 func (*SshPublicKey) ProtoMessage()    {}
 func (*SshPublicKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7fa58776520b3f24, []int{1}
+	return fileDescriptor_common_ebba42564a5ff09e, []int{1}
 }
 func (m *SshPublicKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SshPublicKey.Unmarshal(m, b)
@@ -159,8 +159,8 @@ func (m *SshPublicKey) XXX_Unmarshal(b []byte) error {
 func (m *SshPublicKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SshPublicKey.Marshal(b, m, deterministic)
 }
-func (m *SshPublicKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SshPublicKey.Merge(m, src)
+func (dst *SshPublicKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SshPublicKey.Merge(dst, src)
 }
 func (m *SshPublicKey) XXX_Size() int {
 	return xxx_messageInfo_SshPublicKey.Size(m)
@@ -198,10 +198,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/oslogin/common/common.proto", fileDescriptor_7fa58776520b3f24)
+	proto.RegisterFile("google/cloud/oslogin/common/common.proto", fileDescriptor_common_ebba42564a5ff09e)
 }
 
-var fileDescriptor_7fa58776520b3f24 = []byte{
+var fileDescriptor_common_ebba42564a5ff09e = []byte{
 	// 406 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0x41, 0x6b, 0x14, 0x31,
 	0x14, 0xc7, 0x99, 0xae, 0x6d, 0x77, 0xe2, 0x2a, 0x12, 0x7a, 0x08, 0x5d, 0xc5, 0xa5, 0x20, 0xec,

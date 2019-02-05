@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/internal/shareddefaults"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestSharedCredentialsProvider(t *testing.T) {
@@ -14,11 +13,19 @@ func TestSharedCredentialsProvider(t *testing.T) {
 
 	p := SharedCredentialsProvider{Filename: "example.ini", Profile: ""}
 	creds, err := p.Retrieve()
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
-	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
-	assert.Equal(t, "token", creds.SessionToken, "Expect session token to match")
+	if e, a := "accessKey", creds.AccessKeyID; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "secret", creds.SecretAccessKey; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "token", creds.SessionToken; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestSharedCredentialsProviderIsExpired(t *testing.T) {
@@ -26,12 +33,18 @@ func TestSharedCredentialsProviderIsExpired(t *testing.T) {
 
 	p := SharedCredentialsProvider{Filename: "example.ini", Profile: ""}
 
-	assert.True(t, p.IsExpired(), "Expect creds to be expired before retrieve")
+	if !p.IsExpired() {
+		t.Errorf("Expect creds to be expired before retrieve")
+	}
 
 	_, err := p.Retrieve()
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.False(t, p.IsExpired(), "Expect creds to not be expired after retrieve")
+	if p.IsExpired() {
+		t.Errorf("Expect creds to not be expired after retrieve")
+	}
 }
 
 func TestSharedCredentialsProviderWithAWS_SHARED_CREDENTIALS_FILE(t *testing.T) {
@@ -40,25 +53,43 @@ func TestSharedCredentialsProviderWithAWS_SHARED_CREDENTIALS_FILE(t *testing.T) 
 	p := SharedCredentialsProvider{}
 	creds, err := p.Retrieve()
 
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
-	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
-	assert.Equal(t, "token", creds.SessionToken, "Expect session token to match")
+	if e, a := "accessKey", creds.AccessKeyID; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "secret", creds.SecretAccessKey; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "token", creds.SessionToken; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestSharedCredentialsProviderWithAWS_SHARED_CREDENTIALS_FILEAbsPath(t *testing.T) {
 	os.Clearenv()
 	wd, err := os.Getwd()
-	assert.NoError(t, err)
+	if err != nil {
+		t.Errorf("expect no error, got %v", err)
+	}
 	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", filepath.Join(wd, "example.ini"))
 	p := SharedCredentialsProvider{}
 	creds, err := p.Retrieve()
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
-	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
-	assert.Equal(t, "token", creds.SessionToken, "Expect session token to match")
+	if e, a := "accessKey", creds.AccessKeyID; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "secret", creds.SecretAccessKey; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "token", creds.SessionToken; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestSharedCredentialsProviderWithAWS_PROFILE(t *testing.T) {
@@ -67,11 +98,19 @@ func TestSharedCredentialsProviderWithAWS_PROFILE(t *testing.T) {
 
 	p := SharedCredentialsProvider{Filename: "example.ini", Profile: ""}
 	creds, err := p.Retrieve()
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
-	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
-	assert.Empty(t, creds.SessionToken, "Expect no token")
+	if e, a := "accessKey", creds.AccessKeyID; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "secret", creds.SecretAccessKey; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if v := creds.SessionToken; len(v) != 0 {
+		t.Errorf("Expect no token, %v", v)
+	}
 }
 
 func TestSharedCredentialsProviderWithoutTokenFromProfile(t *testing.T) {
@@ -79,11 +118,19 @@ func TestSharedCredentialsProviderWithoutTokenFromProfile(t *testing.T) {
 
 	p := SharedCredentialsProvider{Filename: "example.ini", Profile: "no_token"}
 	creds, err := p.Retrieve()
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
-	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
-	assert.Empty(t, creds.SessionToken, "Expect no token")
+	if e, a := "accessKey", creds.AccessKeyID; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "secret", creds.SecretAccessKey; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if v := creds.SessionToken; len(v) != 0 {
+		t.Errorf("Expect no token, %v", v)
+	}
 }
 
 func TestSharedCredentialsProviderColonInCredFile(t *testing.T) {
@@ -91,11 +138,19 @@ func TestSharedCredentialsProviderColonInCredFile(t *testing.T) {
 
 	p := SharedCredentialsProvider{Filename: "example.ini", Profile: "with_colon"}
 	creds, err := p.Retrieve()
-	assert.Nil(t, err, "Expect no error")
+	if err != nil {
+		t.Errorf("expect nil, got %v", err)
+	}
 
-	assert.Equal(t, "accessKey", creds.AccessKeyID, "Expect access key ID to match")
-	assert.Equal(t, "secret", creds.SecretAccessKey, "Expect secret access key to match")
-	assert.Empty(t, creds.SessionToken, "Expect no token")
+	if e, a := "accessKey", creds.AccessKeyID; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "secret", creds.SecretAccessKey; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if v := creds.SessionToken; len(v) != 0 {
+		t.Errorf("Expect no token, %v", v)
+	}
 }
 
 func TestSharedCredentialsProvider_DefaultFilename(t *testing.T) {

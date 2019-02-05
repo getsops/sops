@@ -18,12 +18,17 @@ package recoveryservices
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2016-06-01/recoveryservices"
 
 // AuthType enumerates the values for auth type.
 type AuthType string
@@ -153,7 +158,8 @@ type ClientDiscoveryDisplay struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// ClientDiscoveryForLogSpecification class to represent shoebox log specification in json client discovery.
+// ClientDiscoveryForLogSpecification class to represent shoebox log specification in json client
+// discovery.
 type ClientDiscoveryForLogSpecification struct {
 	// Name - Name of the log.
 	Name *string `json:"name,omitempty"`
@@ -179,33 +185,50 @@ type ClientDiscoveryForServiceSpecification struct {
 // ClientDiscoveryResponse operations List response which contains list of available APIs.
 type ClientDiscoveryResponse struct {
 	autorest.Response `json:"-"`
-	// Value - List of available operationss.
+	// Value - List of available operations.
 	Value *[]ClientDiscoveryValueForSingleAPI `json:"value,omitempty"`
 	// NextLink - Link to the next chunk of the response
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ClientDiscoveryResponseIterator provides access to a complete listing of ClientDiscoveryValueForSingleAPI
-// values.
+// ClientDiscoveryResponseIterator provides access to a complete listing of
+// ClientDiscoveryValueForSingleAPI values.
 type ClientDiscoveryResponseIterator struct {
 	i    int
 	page ClientDiscoveryResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ClientDiscoveryResponseIterator) Next() error {
+func (iter *ClientDiscoveryResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClientDiscoveryResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ClientDiscoveryResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -227,6 +250,11 @@ func (iter ClientDiscoveryResponseIterator) Value() ClientDiscoveryValueForSingl
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ClientDiscoveryResponseIterator type.
+func NewClientDiscoveryResponseIterator(page ClientDiscoveryResponsePage) ClientDiscoveryResponseIterator {
+	return ClientDiscoveryResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (cdr ClientDiscoveryResponse) IsEmpty() bool {
 	return cdr.Value == nil || len(*cdr.Value) == 0
@@ -234,11 +262,11 @@ func (cdr ClientDiscoveryResponse) IsEmpty() bool {
 
 // clientDiscoveryResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (cdr ClientDiscoveryResponse) clientDiscoveryResponsePreparer() (*http.Request, error) {
+func (cdr ClientDiscoveryResponse) clientDiscoveryResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if cdr.NextLink == nil || len(to.String(cdr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(cdr.NextLink)))
@@ -246,19 +274,36 @@ func (cdr ClientDiscoveryResponse) clientDiscoveryResponsePreparer() (*http.Requ
 
 // ClientDiscoveryResponsePage contains a page of ClientDiscoveryValueForSingleAPI values.
 type ClientDiscoveryResponsePage struct {
-	fn  func(ClientDiscoveryResponse) (ClientDiscoveryResponse, error)
+	fn  func(context.Context, ClientDiscoveryResponse) (ClientDiscoveryResponse, error)
 	cdr ClientDiscoveryResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ClientDiscoveryResponsePage) Next() error {
-	next, err := page.fn(page.cdr)
+func (page *ClientDiscoveryResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClientDiscoveryResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.cdr)
 	if err != nil {
 		return err
 	}
 	page.cdr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ClientDiscoveryResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -277,6 +322,11 @@ func (page ClientDiscoveryResponsePage) Values() []ClientDiscoveryValueForSingle
 		return nil
 	}
 	return *page.cdr.Value
+}
+
+// Creates a new instance of the ClientDiscoveryResponsePage type.
+func NewClientDiscoveryResponsePage(getNextPage func(context.Context, ClientDiscoveryResponse) (ClientDiscoveryResponse, error)) ClientDiscoveryResponsePage {
+	return ClientDiscoveryResponsePage{fn: getNextPage}
 }
 
 // ClientDiscoveryValueForSingleAPI available operation details.
@@ -470,7 +520,7 @@ type ResourceCertificateAndAadDetails struct {
 	AzureManagementEndpointAudience *string `json:"azureManagementEndpointAudience,omitempty"`
 	// Certificate - The base64 encoded certificate raw data string.
 	Certificate *[]byte `json:"certificate,omitempty"`
-	// FriendlyName - Certificate friendlyname.
+	// FriendlyName - Certificate friendly name.
 	FriendlyName *string `json:"friendlyName,omitempty"`
 	// Issuer - Certificate issuer.
 	Issuer *string `json:"issuer,omitempty"`
@@ -567,7 +617,7 @@ type ResourceCertificateAndAcsDetails struct {
 	GlobalAcsRPRealm *string `json:"globalAcsRPRealm,omitempty"`
 	// Certificate - The base64 encoded certificate raw data string.
 	Certificate *[]byte `json:"certificate,omitempty"`
-	// FriendlyName - Certificate friendlyname.
+	// FriendlyName - Certificate friendly name.
 	FriendlyName *string `json:"friendlyName,omitempty"`
 	// Issuer - Certificate issuer.
 	Issuer *string `json:"issuer,omitempty"`
@@ -659,7 +709,7 @@ type BasicResourceCertificateDetails interface {
 type ResourceCertificateDetails struct {
 	// Certificate - The base64 encoded certificate raw data string.
 	Certificate *[]byte `json:"certificate,omitempty"`
-	// FriendlyName - Certificate friendlyname.
+	// FriendlyName - Certificate friendly name.
 	FriendlyName *string `json:"friendlyName,omitempty"`
 	// Issuer - Certificate issuer.
 	Issuer *string `json:"issuer,omitempty"`
@@ -832,7 +882,7 @@ type UpgradeDetails struct {
 	Status VaultUpgradeState `json:"status,omitempty"`
 	// Message - Message to the user containing information about the upgrade operation.
 	Message *string `json:"message,omitempty"`
-	// TriggerType - The way the vault upgradation was triggered. Possible values include: 'UserTriggered', 'ForcedUpgrade'
+	// TriggerType - The way the vault upgrade was triggered. Possible values include: 'UserTriggered', 'ForcedUpgrade'
 	TriggerType TriggerType `json:"triggerType,omitempty"`
 	// UpgradedResourceID - Resource ID of the upgraded vault.
 	UpgradedResourceID *string `json:"upgradedResourceId,omitempty"`
@@ -889,8 +939,8 @@ func (vVar Vault) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// VaultCertificateResponse certificate corresponding to a vault that can be used by clients to register themselves
-// with the vault.
+// VaultCertificateResponse certificate corresponding to a vault that can be used by clients to register
+// themselves with the vault.
 type VaultCertificateResponse struct {
 	autorest.Response `json:"-"`
 	// Name - Resource name associated with the resource.
@@ -1072,20 +1122,37 @@ type VaultListIterator struct {
 	page VaultListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *VaultListIterator) Next() error {
+func (iter *VaultListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *VaultListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1107,6 +1174,11 @@ func (iter VaultListIterator) Value() Vault {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the VaultListIterator type.
+func NewVaultListIterator(page VaultListPage) VaultListIterator {
+	return VaultListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (vl VaultList) IsEmpty() bool {
 	return vl.Value == nil || len(*vl.Value) == 0
@@ -1114,11 +1186,11 @@ func (vl VaultList) IsEmpty() bool {
 
 // vaultListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (vl VaultList) vaultListPreparer() (*http.Request, error) {
+func (vl VaultList) vaultListPreparer(ctx context.Context) (*http.Request, error) {
 	if vl.NextLink == nil || len(to.String(vl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(vl.NextLink)))
@@ -1126,19 +1198,36 @@ func (vl VaultList) vaultListPreparer() (*http.Request, error) {
 
 // VaultListPage contains a page of Vault values.
 type VaultListPage struct {
-	fn func(VaultList) (VaultList, error)
+	fn func(context.Context, VaultList) (VaultList, error)
 	vl VaultList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *VaultListPage) Next() error {
-	next, err := page.fn(page.vl)
+func (page *VaultListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.vl)
 	if err != nil {
 		return err
 	}
 	page.vl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *VaultListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1157,6 +1246,11 @@ func (page VaultListPage) Values() []Vault {
 		return nil
 	}
 	return *page.vl.Value
+}
+
+// Creates a new instance of the VaultListPage type.
+func NewVaultListPage(getNextPage func(context.Context, VaultList) (VaultList, error)) VaultListPage {
+	return VaultListPage{fn: getNextPage}
 }
 
 // VaultProperties properties of the vault.

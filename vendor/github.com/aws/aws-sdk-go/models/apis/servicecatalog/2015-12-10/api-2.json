@@ -54,6 +54,20 @@
         {"shape":"LimitExceededException"}
       ]
     },
+    "AssociateServiceActionWithProvisioningArtifact":{
+      "name":"AssociateServiceActionWithProvisioningArtifact",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AssociateServiceActionWithProvisioningArtifactInput"},
+      "output":{"shape":"AssociateServiceActionWithProvisioningArtifactOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"DuplicateResourceException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
     "AssociateTagOptionWithResource":{
       "name":"AssociateTagOptionWithResource",
       "http":{
@@ -69,6 +83,30 @@
         {"shape":"LimitExceededException"},
         {"shape":"DuplicateResourceException"},
         {"shape":"InvalidStateException"}
+      ]
+    },
+    "BatchAssociateServiceActionWithProvisioningArtifact":{
+      "name":"BatchAssociateServiceActionWithProvisioningArtifact",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchAssociateServiceActionWithProvisioningArtifactInput"},
+      "output":{"shape":"BatchAssociateServiceActionWithProvisioningArtifactOutput"},
+      "errors":[
+        {"shape":"InvalidParametersException"}
+      ]
+    },
+    "BatchDisassociateServiceActionFromProvisioningArtifact":{
+      "name":"BatchDisassociateServiceActionFromProvisioningArtifact",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchDisassociateServiceActionFromProvisioningArtifactInput"},
+      "output":{"shape":"BatchDisassociateServiceActionFromProvisioningArtifactOutput"},
+      "errors":[
+        {"shape":"InvalidParametersException"}
       ]
     },
     "CopyProduct":{
@@ -124,7 +162,8 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"LimitExceededException"},
-        {"shape":"InvalidParametersException"}
+        {"shape":"InvalidParametersException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "CreateProduct":{
@@ -165,6 +204,19 @@
       "output":{"shape":"CreateProvisioningArtifactOutput"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
+    "CreateServiceAction":{
+      "name":"CreateServiceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateServiceActionInput"},
+      "output":{"shape":"CreateServiceActionOutput"},
+      "errors":[
         {"shape":"InvalidParametersException"},
         {"shape":"LimitExceededException"}
       ]
@@ -220,7 +272,9 @@
       "input":{"shape":"DeletePortfolioShareInput"},
       "output":{"shape":"DeletePortfolioShareOutput"},
       "errors":[
-        {"shape":"ResourceNotFoundException"}
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "DeleteProduct":{
@@ -263,6 +317,19 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidParametersException"}
+      ]
+    },
+    "DeleteServiceAction":{
+      "name":"DeleteServiceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteServiceActionInput"},
+      "output":{"shape":"DeleteServiceActionOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"}
       ]
     },
     "DeleteTagOption":{
@@ -313,6 +380,20 @@
       "output":{"shape":"DescribePortfolioOutput"},
       "errors":[
         {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DescribePortfolioShareStatus":{
+      "name":"DescribePortfolioShareStatus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribePortfolioShareStatusInput"},
+      "output":{"shape":"DescribePortfolioShareStatusOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "DescribeProduct":{
@@ -415,6 +496,18 @@
         {"shape":"ResourceNotFoundException"}
       ]
     },
+    "DescribeServiceAction":{
+      "name":"DescribeServiceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeServiceActionInput"},
+      "output":{"shape":"DescribeServiceActionOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "DescribeTagOption":{
       "name":"DescribeTagOption",
       "http":{
@@ -426,6 +519,20 @@
       "errors":[
         {"shape":"TagOptionNotMigratedException"},
         {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DisableAWSOrganizationsAccess":{
+      "name":"DisableAWSOrganizationsAccess",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisableAWSOrganizationsAccessInput"},
+      "output":{"shape":"DisableAWSOrganizationsAccessOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "DisassociatePrincipalFromPortfolio":{
@@ -455,6 +562,18 @@
         {"shape":"InvalidParametersException"}
       ]
     },
+    "DisassociateServiceActionFromProvisioningArtifact":{
+      "name":"DisassociateServiceActionFromProvisioningArtifact",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisassociateServiceActionFromProvisioningArtifactInput"},
+      "output":{"shape":"DisassociateServiceActionFromProvisioningArtifactOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "DisassociateTagOptionFromResource":{
       "name":"DisassociateTagOptionFromResource",
       "http":{
@@ -466,6 +585,20 @@
       "errors":[
         {"shape":"TagOptionNotMigratedException"},
         {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "EnableAWSOrganizationsAccess":{
+      "name":"EnableAWSOrganizationsAccess",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"EnableAWSOrganizationsAccessInput"},
+      "output":{"shape":"EnableAWSOrganizationsAccessOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "ExecuteProvisionedProductPlan":{
@@ -482,6 +615,33 @@
         {"shape":"InvalidStateException"}
       ]
     },
+    "ExecuteProvisionedProductServiceAction":{
+      "name":"ExecuteProvisionedProductServiceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ExecuteProvisionedProductServiceActionInput"},
+      "output":{"shape":"ExecuteProvisionedProductServiceActionOutput"},
+      "errors":[
+        {"shape":"InvalidParametersException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"}
+      ]
+    },
+    "GetAWSOrganizationsAccessStatus":{
+      "name":"GetAWSOrganizationsAccessStatus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetAWSOrganizationsAccessStatusInput"},
+      "output":{"shape":"GetAWSOrganizationsAccessStatusOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"OperationNotSupportedException"}
+      ]
+    },
     "ListAcceptedPortfolioShares":{
       "name":"ListAcceptedPortfolioShares",
       "http":{
@@ -491,7 +651,8 @@
       "input":{"shape":"ListAcceptedPortfolioSharesInput"},
       "output":{"shape":"ListAcceptedPortfolioSharesOutput"},
       "errors":[
-        {"shape":"InvalidParametersException"}
+        {"shape":"InvalidParametersException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "ListConstraintsForPortfolio":{
@@ -518,6 +679,20 @@
       "errors":[
         {"shape":"InvalidParametersException"},
         {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "ListOrganizationPortfolioAccess":{
+      "name":"ListOrganizationPortfolioAccess",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListOrganizationPortfolioAccessInput"},
+      "output":{"shape":"ListOrganizationPortfolioAccessOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"},
+        {"shape":"OperationNotSupportedException"}
       ]
     },
     "ListPortfolioAccess":{
@@ -596,6 +771,19 @@
         {"shape":"InvalidParametersException"}
       ]
     },
+    "ListProvisioningArtifactsForServiceAction":{
+      "name":"ListProvisioningArtifactsForServiceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListProvisioningArtifactsForServiceActionInput"},
+      "output":{"shape":"ListProvisioningArtifactsForServiceActionOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"}
+      ]
+    },
     "ListRecordHistory":{
       "name":"ListRecordHistory",
       "http":{
@@ -618,6 +806,31 @@
       "output":{"shape":"ListResourcesForTagOptionOutput"},
       "errors":[
         {"shape":"TagOptionNotMigratedException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"}
+      ]
+    },
+    "ListServiceActions":{
+      "name":"ListServiceActions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListServiceActionsInput"},
+      "output":{"shape":"ListServiceActionsOutput"},
+      "errors":[
+        {"shape":"InvalidParametersException"}
+      ]
+    },
+    "ListServiceActionsForProvisioningArtifact":{
+      "name":"ListServiceActionsForProvisioningArtifact",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListServiceActionsForProvisioningArtifactInput"},
+      "output":{"shape":"ListServiceActionsForProvisioningArtifactOutput"},
+      "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidParametersException"}
       ]
@@ -790,6 +1003,19 @@
         {"shape":"InvalidParametersException"}
       ]
     },
+    "UpdateServiceAction":{
+      "name":"UpdateServiceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateServiceActionInput"},
+      "output":{"shape":"UpdateServiceActionOutput"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParametersException"}
+      ]
+    },
     "UpdateTagOption":{
       "name":"UpdateTagOption",
       "http":{
@@ -807,13 +1033,17 @@
     }
   },
   "shapes":{
-    "AcceptLanguage":{"type":"string"},
+    "AcceptLanguage":{
+      "type":"string",
+      "max":100
+    },
     "AcceptPortfolioShareInput":{
       "type":"structure",
       "required":["PortfolioId"],
       "members":{
         "AcceptLanguage":{"shape":"AcceptLanguage"},
-        "PortfolioId":{"shape":"Id"}
+        "PortfolioId":{"shape":"Id"},
+        "PortfolioShareType":{"shape":"PortfolioShareType"}
       }
     },
     "AcceptPortfolioShareOutput":{
@@ -837,6 +1067,14 @@
       ]
     },
     "AccessLevelFilterValue":{"type":"string"},
+    "AccessStatus":{
+      "type":"string",
+      "enum":[
+        "ENABLED",
+        "UNDER_CHANGE",
+        "DISABLED"
+      ]
+    },
     "AccountId":{
       "type":"string",
       "pattern":"^[0-9]{12}$"
@@ -893,6 +1131,25 @@
       "members":{
       }
     },
+    "AssociateServiceActionWithProvisioningArtifactInput":{
+      "type":"structure",
+      "required":[
+        "ProductId",
+        "ProvisioningArtifactId",
+        "ServiceActionId"
+      ],
+      "members":{
+        "ProductId":{"shape":"Id"},
+        "ProvisioningArtifactId":{"shape":"Id"},
+        "ServiceActionId":{"shape":"Id"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "AssociateServiceActionWithProvisioningArtifactOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "AssociateTagOptionWithResourceInput":{
       "type":"structure",
       "required":[
@@ -910,6 +1167,34 @@
       }
     },
     "AttributeValue":{"type":"string"},
+    "BatchAssociateServiceActionWithProvisioningArtifactInput":{
+      "type":"structure",
+      "required":["ServiceActionAssociations"],
+      "members":{
+        "ServiceActionAssociations":{"shape":"ServiceActionAssociations"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "BatchAssociateServiceActionWithProvisioningArtifactOutput":{
+      "type":"structure",
+      "members":{
+        "FailedServiceActionAssociations":{"shape":"FailedServiceActionAssociations"}
+      }
+    },
+    "BatchDisassociateServiceActionFromProvisioningArtifactInput":{
+      "type":"structure",
+      "required":["ServiceActionAssociations"],
+      "members":{
+        "ServiceActionAssociations":{"shape":"ServiceActionAssociations"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "BatchDisassociateServiceActionFromProvisioningArtifactOutput":{
+      "type":"structure",
+      "members":{
+        "FailedServiceActionAssociations":{"shape":"FailedServiceActionAssociations"}
+      }
+    },
     "CausingEntity":{"type":"string"},
     "ChangeAction":{
       "type":"string",
@@ -1063,19 +1348,18 @@
     },
     "CreatePortfolioShareInput":{
       "type":"structure",
-      "required":[
-        "PortfolioId",
-        "AccountId"
-      ],
+      "required":["PortfolioId"],
       "members":{
         "AcceptLanguage":{"shape":"AcceptLanguage"},
         "PortfolioId":{"shape":"Id"},
-        "AccountId":{"shape":"AccountId"}
+        "AccountId":{"shape":"AccountId"},
+        "OrganizationNode":{"shape":"OrganizationNode"}
       }
     },
     "CreatePortfolioShareOutput":{
       "type":"structure",
       "members":{
+        "PortfolioShareToken":{"shape":"PortfolioShareToken"}
       }
     },
     "CreateProductInput":{
@@ -1175,6 +1459,32 @@
         "Status":{"shape":"Status"}
       }
     },
+    "CreateServiceActionInput":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "DefinitionType",
+        "Definition",
+        "IdempotencyToken"
+      ],
+      "members":{
+        "Name":{"shape":"ServiceActionName"},
+        "DefinitionType":{"shape":"ServiceActionDefinitionType"},
+        "Definition":{"shape":"ServiceActionDefinitionMap"},
+        "Description":{"shape":"ServiceActionDescription"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"},
+        "IdempotencyToken":{
+          "shape":"IdempotencyToken",
+          "idempotencyToken":true
+        }
+      }
+    },
+    "CreateServiceActionOutput":{
+      "type":"structure",
+      "members":{
+        "ServiceActionDetail":{"shape":"ServiceActionDetail"}
+      }
+    },
     "CreateTagOptionInput":{
       "type":"structure",
       "required":[
@@ -1223,19 +1533,18 @@
     },
     "DeletePortfolioShareInput":{
       "type":"structure",
-      "required":[
-        "PortfolioId",
-        "AccountId"
-      ],
+      "required":["PortfolioId"],
       "members":{
         "AcceptLanguage":{"shape":"AcceptLanguage"},
         "PortfolioId":{"shape":"Id"},
-        "AccountId":{"shape":"AccountId"}
+        "AccountId":{"shape":"AccountId"},
+        "OrganizationNode":{"shape":"OrganizationNode"}
       }
     },
     "DeletePortfolioShareOutput":{
       "type":"structure",
       "members":{
+        "PortfolioShareToken":{"shape":"PortfolioShareToken"}
       }
     },
     "DeleteProductInput":{
@@ -1278,6 +1587,19 @@
       }
     },
     "DeleteProvisioningArtifactOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteServiceActionInput":{
+      "type":"structure",
+      "required":["Id"],
+      "members":{
+        "Id":{"shape":"Id"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "DeleteServiceActionOutput":{
       "type":"structure",
       "members":{
       }
@@ -1340,6 +1662,23 @@
         "PortfolioDetail":{"shape":"PortfolioDetail"},
         "Tags":{"shape":"Tags"},
         "TagOptions":{"shape":"TagOptionDetails"}
+      }
+    },
+    "DescribePortfolioShareStatusInput":{
+      "type":"structure",
+      "required":["PortfolioShareToken"],
+      "members":{
+        "PortfolioShareToken":{"shape":"PortfolioShareToken"}
+      }
+    },
+    "DescribePortfolioShareStatusOutput":{
+      "type":"structure",
+      "members":{
+        "PortfolioShareToken":{"shape":"PortfolioShareToken"},
+        "PortfolioId":{"shape":"Id"},
+        "OrganizationNodeValue":{"shape":"OrganizationNodeValue"},
+        "Status":{"shape":"ShareStatus"},
+        "ShareDetails":{"shape":"ShareDetails"}
       }
     },
     "DescribeProductAsAdminInput":{
@@ -1462,7 +1801,8 @@
         "ProvisioningArtifactParameters":{"shape":"ProvisioningArtifactParameters"},
         "ConstraintSummaries":{"shape":"ConstraintSummaries"},
         "UsageInstructions":{"shape":"UsageInstructions"},
-        "TagOptions":{"shape":"TagOptionSummaries"}
+        "TagOptions":{"shape":"TagOptionSummaries"},
+        "ProvisioningArtifactPreferences":{"shape":"ProvisioningArtifactPreferences"}
       }
     },
     "DescribeRecordInput":{
@@ -1483,6 +1823,20 @@
         "NextPageToken":{"shape":"PageToken"}
       }
     },
+    "DescribeServiceActionInput":{
+      "type":"structure",
+      "required":["Id"],
+      "members":{
+        "Id":{"shape":"Id"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "DescribeServiceActionOutput":{
+      "type":"structure",
+      "members":{
+        "ServiceActionDetail":{"shape":"ServiceActionDetail"}
+      }
+    },
     "DescribeTagOptionInput":{
       "type":"structure",
       "required":["Id"],
@@ -1497,6 +1851,16 @@
       }
     },
     "Description":{"type":"string"},
+    "DisableAWSOrganizationsAccessInput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DisableAWSOrganizationsAccessOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DisassociatePrincipalFromPortfolioInput":{
       "type":"structure",
       "required":[
@@ -1531,6 +1895,25 @@
       "members":{
       }
     },
+    "DisassociateServiceActionFromProvisioningArtifactInput":{
+      "type":"structure",
+      "required":[
+        "ProductId",
+        "ProvisioningArtifactId",
+        "ServiceActionId"
+      ],
+      "members":{
+        "ProductId":{"shape":"Id"},
+        "ProvisioningArtifactId":{"shape":"Id"},
+        "ServiceActionId":{"shape":"Id"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "DisassociateServiceActionFromProvisioningArtifactOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DisassociateTagOptionFromResourceInput":{
       "type":"structure",
       "required":[
@@ -1553,6 +1936,17 @@
       },
       "exception":true
     },
+    "EnableAWSOrganizationsAccessInput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "EnableAWSOrganizationsAccessOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "Error":{"type":"string"},
     "ErrorCode":{"type":"string"},
     "ErrorDescription":{"type":"string"},
     "EvaluationType":{
@@ -1583,11 +1977,61 @@
         "RecordDetail":{"shape":"RecordDetail"}
       }
     },
+    "ExecuteProvisionedProductServiceActionInput":{
+      "type":"structure",
+      "required":[
+        "ProvisionedProductId",
+        "ServiceActionId",
+        "ExecuteToken"
+      ],
+      "members":{
+        "ProvisionedProductId":{"shape":"Id"},
+        "ServiceActionId":{"shape":"Id"},
+        "ExecuteToken":{
+          "shape":"IdempotencyToken",
+          "idempotencyToken":true
+        },
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "ExecuteProvisionedProductServiceActionOutput":{
+      "type":"structure",
+      "members":{
+        "RecordDetail":{"shape":"RecordDetail"}
+      }
+    },
+    "FailedServiceActionAssociation":{
+      "type":"structure",
+      "members":{
+        "ServiceActionId":{"shape":"Id"},
+        "ProductId":{"shape":"Id"},
+        "ProvisioningArtifactId":{"shape":"Id"},
+        "ErrorCode":{"shape":"ServiceActionAssociationErrorCode"},
+        "ErrorMessage":{"shape":"ServiceActionAssociationErrorMessage"}
+      }
+    },
+    "FailedServiceActionAssociations":{
+      "type":"list",
+      "member":{"shape":"FailedServiceActionAssociation"},
+      "max":50
+    },
+    "GetAWSOrganizationsAccessStatusInput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "GetAWSOrganizationsAccessStatusOutput":{
+      "type":"structure",
+      "members":{
+        "AccessStatus":{"shape":"AccessStatus"}
+      }
+    },
     "HasDefaultPath":{"type":"boolean"},
     "Id":{
       "type":"string",
       "max":100,
-      "min":1
+      "min":1,
+      "pattern":"^[a-zA-Z0-9_\\-]*"
     },
     "IdempotencyToken":{
       "type":"string",
@@ -1681,6 +2125,27 @@
         "NextPageToken":{"shape":"PageToken"}
       }
     },
+    "ListOrganizationPortfolioAccessInput":{
+      "type":"structure",
+      "required":[
+        "PortfolioId",
+        "OrganizationNodeType"
+      ],
+      "members":{
+        "AcceptLanguage":{"shape":"AcceptLanguage"},
+        "PortfolioId":{"shape":"Id"},
+        "OrganizationNodeType":{"shape":"OrganizationNodeType"},
+        "PageToken":{"shape":"PageToken"},
+        "PageSize":{"shape":"PageSize"}
+      }
+    },
+    "ListOrganizationPortfolioAccessOutput":{
+      "type":"structure",
+      "members":{
+        "OrganizationNodes":{"shape":"OrganizationNodes"},
+        "NextPageToken":{"shape":"PageToken"}
+      }
+    },
     "ListPortfolioAccessInput":{
       "type":"structure",
       "required":["PortfolioId"],
@@ -1762,6 +2227,23 @@
         "NextPageToken":{"shape":"PageToken"}
       }
     },
+    "ListProvisioningArtifactsForServiceActionInput":{
+      "type":"structure",
+      "required":["ServiceActionId"],
+      "members":{
+        "ServiceActionId":{"shape":"Id"},
+        "PageSize":{"shape":"PageSize"},
+        "PageToken":{"shape":"PageToken"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "ListProvisioningArtifactsForServiceActionOutput":{
+      "type":"structure",
+      "members":{
+        "ProvisioningArtifactViews":{"shape":"ProvisioningArtifactViews"},
+        "NextPageToken":{"shape":"PageToken"}
+      }
+    },
     "ListProvisioningArtifactsInput":{
       "type":"structure",
       "required":["ProductId"],
@@ -1818,6 +2300,42 @@
         "PageToken":{"shape":"PageToken"}
       }
     },
+    "ListServiceActionsForProvisioningArtifactInput":{
+      "type":"structure",
+      "required":[
+        "ProductId",
+        "ProvisioningArtifactId"
+      ],
+      "members":{
+        "ProductId":{"shape":"Id"},
+        "ProvisioningArtifactId":{"shape":"Id"},
+        "PageSize":{"shape":"PageSize"},
+        "PageToken":{"shape":"PageToken"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "ListServiceActionsForProvisioningArtifactOutput":{
+      "type":"structure",
+      "members":{
+        "ServiceActionSummaries":{"shape":"ServiceActionSummaries"},
+        "NextPageToken":{"shape":"PageToken"}
+      }
+    },
+    "ListServiceActionsInput":{
+      "type":"structure",
+      "members":{
+        "AcceptLanguage":{"shape":"AcceptLanguage"},
+        "PageSize":{"shape":"PageSize"},
+        "PageToken":{"shape":"PageToken"}
+      }
+    },
+    "ListServiceActionsOutput":{
+      "type":"structure",
+      "members":{
+        "ServiceActionSummaries":{"shape":"ServiceActionSummaries"},
+        "NextPageToken":{"shape":"PageToken"}
+      }
+    },
     "ListTagOptionsFilters":{
       "type":"structure",
       "members":{
@@ -1842,6 +2360,11 @@
       }
     },
     "LogicalResourceId":{"type":"string"},
+    "Message":{"type":"string"},
+    "Namespaces":{
+      "type":"list",
+      "member":{"shape":"AccountId"}
+    },
     "NoEcho":{"type":"boolean"},
     "NotificationArn":{
       "type":"string",
@@ -1854,6 +2377,35 @@
       "member":{"shape":"NotificationArn"},
       "max":5
     },
+    "OperationNotSupportedException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "OrganizationNode":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"OrganizationNodeType"},
+        "Value":{"shape":"OrganizationNodeValue"}
+      }
+    },
+    "OrganizationNodeType":{
+      "type":"string",
+      "enum":[
+        "ORGANIZATION",
+        "ORGANIZATIONAL_UNIT",
+        "ACCOUNT"
+      ]
+    },
+    "OrganizationNodeValue":{
+      "type":"string",
+      "pattern":"(^[0-9]{12}$)|(^arn:aws:organizations::\\d{12}:organization\\/o-[a-z0-9]{10,32})|(^o-[a-z0-9]{10,32}$)|(^arn:aws:organizations::\\d{12}:ou\\/o-[a-z0-9]{10,32}\\/ou-[0-9a-z]{4,32}-[0-9a-z]{8,32}$)|(^ou-[0-9a-z]{4,32}-[a-z0-9]{8,32}$)"
+    },
+    "OrganizationNodes":{
+      "type":"list",
+      "member":{"shape":"OrganizationNode"}
+    },
     "OutputKey":{"type":"string"},
     "OutputValue":{"type":"string"},
     "PageSize":{
@@ -1863,6 +2415,7 @@
     },
     "PageToken":{
       "type":"string",
+      "max":2024,
       "pattern":"[\\u0009\\u000a\\u000d\\u0020-\\uD7FF\\uE000-\\uFFFD]*"
     },
     "ParameterConstraints":{
@@ -1913,11 +2466,13 @@
       "min":1
     },
     "PortfolioName":{"type":"string"},
+    "PortfolioShareToken":{"type":"string"},
     "PortfolioShareType":{
       "type":"string",
       "enum":[
         "IMPORTED",
-        "AWS_SERVICECATALOG"
+        "AWS_SERVICECATALOG",
+        "AWS_ORGANIZATIONS"
       ]
     },
     "Principal":{
@@ -2069,6 +2624,7 @@
         "PathId":{"shape":"Id"},
         "ProvisionedProductName":{"shape":"ProvisionedProductName"},
         "ProvisioningParameters":{"shape":"ProvisioningParameters"},
+        "ProvisioningPreferences":{"shape":"ProvisioningPreferences"},
         "Tags":{"shape":"Tags"},
         "NotificationArns":{"shape":"NotificationArns"},
         "ProvisionToken":{
@@ -2118,7 +2674,9 @@
         "StatusMessage":{"shape":"ProvisionedProductStatusMessage"},
         "CreatedTime":{"shape":"CreatedTime"},
         "IdempotencyToken":{"shape":"IdempotencyToken"},
-        "LastRecordId":{"shape":"LastRequestId"}
+        "LastRecordId":{"shape":"LastRequestId"},
+        "ProductId":{"shape":"Id"},
+        "ProvisioningArtifactId":{"shape":"Id"}
       }
     },
     "ProvisionedProductDetails":{
@@ -2267,6 +2825,13 @@
       "type":"list",
       "member":{"shape":"ProvisioningArtifactParameter"}
     },
+    "ProvisioningArtifactPreferences":{
+      "type":"structure",
+      "members":{
+        "StackSetAccounts":{"shape":"StackSetAccounts"},
+        "StackSetRegions":{"shape":"StackSetRegions"}
+      }
+    },
     "ProvisioningArtifactProperties":{
       "type":"structure",
       "required":["Info"],
@@ -2304,6 +2869,17 @@
         "MARKETPLACE_CAR"
       ]
     },
+    "ProvisioningArtifactView":{
+      "type":"structure",
+      "members":{
+        "ProductViewSummary":{"shape":"ProductViewSummary"},
+        "ProvisioningArtifact":{"shape":"ProvisioningArtifact"}
+      }
+    },
+    "ProvisioningArtifactViews":{
+      "type":"list",
+      "member":{"shape":"ProvisioningArtifactView"}
+    },
     "ProvisioningArtifacts":{
       "type":"list",
       "member":{"shape":"ProvisioningArtifact"}
@@ -2318,6 +2894,17 @@
     "ProvisioningParameters":{
       "type":"list",
       "member":{"shape":"ProvisioningParameter"}
+    },
+    "ProvisioningPreferences":{
+      "type":"structure",
+      "members":{
+        "StackSetAccounts":{"shape":"StackSetAccounts"},
+        "StackSetRegions":{"shape":"StackSetRegions"},
+        "StackSetFailureToleranceCount":{"shape":"StackSetFailureToleranceCount"},
+        "StackSetFailureTolerancePercentage":{"shape":"StackSetFailureTolerancePercentage"},
+        "StackSetMaxConcurrencyCount":{"shape":"StackSetMaxConcurrencyCount"},
+        "StackSetMaxConcurrencyPercentage":{"shape":"StackSetMaxConcurrencyPercentage"}
+      }
     },
     "RecordDetail":{
       "type":"structure",
@@ -2399,12 +2986,14 @@
       "max":50
     },
     "RecordType":{"type":"string"},
+    "Region":{"type":"string"},
     "RejectPortfolioShareInput":{
       "type":"structure",
       "required":["PortfolioId"],
       "members":{
         "AcceptLanguage":{"shape":"AcceptLanguage"},
-        "PortfolioId":{"shape":"Id"}
+        "PortfolioId":{"shape":"Id"},
+        "PortfolioShareType":{"shape":"PortfolioShareType"}
       }
     },
     "RejectPortfolioShareOutput":{
@@ -2599,6 +3188,124 @@
       "max":100,
       "min":0
     },
+    "ServiceActionAssociation":{
+      "type":"structure",
+      "required":[
+        "ServiceActionId",
+        "ProductId",
+        "ProvisioningArtifactId"
+      ],
+      "members":{
+        "ServiceActionId":{"shape":"Id"},
+        "ProductId":{"shape":"Id"},
+        "ProvisioningArtifactId":{"shape":"Id"}
+      }
+    },
+    "ServiceActionAssociationErrorCode":{
+      "type":"string",
+      "enum":[
+        "DUPLICATE_RESOURCE",
+        "INTERNAL_FAILURE",
+        "LIMIT_EXCEEDED",
+        "RESOURCE_NOT_FOUND",
+        "THROTTLING"
+      ]
+    },
+    "ServiceActionAssociationErrorMessage":{
+      "type":"string",
+      "max":1024,
+      "min":1
+    },
+    "ServiceActionAssociations":{
+      "type":"list",
+      "member":{"shape":"ServiceActionAssociation"},
+      "max":50,
+      "min":1
+    },
+    "ServiceActionDefinitionKey":{
+      "type":"string",
+      "enum":[
+        "Name",
+        "Version",
+        "AssumeRole",
+        "Parameters"
+      ]
+    },
+    "ServiceActionDefinitionMap":{
+      "type":"map",
+      "key":{"shape":"ServiceActionDefinitionKey"},
+      "value":{"shape":"ServiceActionDefinitionValue"},
+      "max":100,
+      "min":1
+    },
+    "ServiceActionDefinitionType":{
+      "type":"string",
+      "enum":["SSM_AUTOMATION"]
+    },
+    "ServiceActionDefinitionValue":{
+      "type":"string",
+      "max":1024,
+      "min":1
+    },
+    "ServiceActionDescription":{
+      "type":"string",
+      "max":1024
+    },
+    "ServiceActionDetail":{
+      "type":"structure",
+      "members":{
+        "ServiceActionSummary":{"shape":"ServiceActionSummary"},
+        "Definition":{"shape":"ServiceActionDefinitionMap"}
+      }
+    },
+    "ServiceActionName":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"^[a-zA-Z0-9_\\-.]*"
+    },
+    "ServiceActionSummaries":{
+      "type":"list",
+      "member":{"shape":"ServiceActionSummary"}
+    },
+    "ServiceActionSummary":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"Id"},
+        "Name":{"shape":"ServiceActionName"},
+        "Description":{"shape":"ServiceActionDescription"},
+        "DefinitionType":{"shape":"ServiceActionDefinitionType"}
+      }
+    },
+    "ShareDetails":{
+      "type":"structure",
+      "members":{
+        "SuccessfulShares":{"shape":"SuccessfulShares"},
+        "ShareErrors":{"shape":"ShareErrors"}
+      }
+    },
+    "ShareError":{
+      "type":"structure",
+      "members":{
+        "Accounts":{"shape":"Namespaces"},
+        "Message":{"shape":"Message"},
+        "Error":{"shape":"Error"}
+      }
+    },
+    "ShareErrors":{
+      "type":"list",
+      "member":{"shape":"ShareError"}
+    },
+    "ShareStatus":{
+      "type":"string",
+      "enum":[
+        "NOT_STARTED",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "COMPLETED_WITH_ERRORS",
+        "ERROR"
+      ]
+    },
     "SortField":{"type":"string"},
     "SortOrder":{
       "type":"string",
@@ -2616,6 +3323,40 @@
       "key":{"shape":"ProvisioningArtifactPropertyName"},
       "value":{"shape":"ProvisioningArtifactPropertyValue"}
     },
+    "StackSetAccounts":{
+      "type":"list",
+      "member":{"shape":"AccountId"}
+    },
+    "StackSetFailureToleranceCount":{
+      "type":"integer",
+      "min":0
+    },
+    "StackSetFailureTolerancePercentage":{
+      "type":"integer",
+      "max":100,
+      "min":0
+    },
+    "StackSetMaxConcurrencyCount":{
+      "type":"integer",
+      "min":1
+    },
+    "StackSetMaxConcurrencyPercentage":{
+      "type":"integer",
+      "max":100,
+      "min":1
+    },
+    "StackSetOperationType":{
+      "type":"string",
+      "enum":[
+        "CREATE",
+        "UPDATE",
+        "DELETE"
+      ]
+    },
+    "StackSetRegions":{
+      "type":"list",
+      "member":{"shape":"Region"}
+    },
     "Status":{
       "type":"string",
       "enum":[
@@ -2628,6 +3369,10 @@
     "StatusMessage":{
       "type":"string",
       "pattern":"[\\u0009\\u000a\\u000d\\u0020-\\uD7FF\\uE000-\\uFFFD]*"
+    },
+    "SuccessfulShares":{
+      "type":"list",
+      "member":{"shape":"AccountId"}
     },
     "SupportDescription":{
       "type":"string",
@@ -2818,6 +3563,7 @@
         "ProvisioningArtifactId":{"shape":"Id"},
         "PathId":{"shape":"Id"},
         "ProvisioningParameters":{"shape":"UpdateProvisioningParameters"},
+        "ProvisioningPreferences":{"shape":"UpdateProvisioningPreferences"},
         "UpdateToken":{
           "shape":"IdempotencyToken",
           "idempotencyToken":true
@@ -2864,6 +3610,35 @@
     "UpdateProvisioningParameters":{
       "type":"list",
       "member":{"shape":"UpdateProvisioningParameter"}
+    },
+    "UpdateProvisioningPreferences":{
+      "type":"structure",
+      "members":{
+        "StackSetAccounts":{"shape":"StackSetAccounts"},
+        "StackSetRegions":{"shape":"StackSetRegions"},
+        "StackSetFailureToleranceCount":{"shape":"StackSetFailureToleranceCount"},
+        "StackSetFailureTolerancePercentage":{"shape":"StackSetFailureTolerancePercentage"},
+        "StackSetMaxConcurrencyCount":{"shape":"StackSetMaxConcurrencyCount"},
+        "StackSetMaxConcurrencyPercentage":{"shape":"StackSetMaxConcurrencyPercentage"},
+        "StackSetOperationType":{"shape":"StackSetOperationType"}
+      }
+    },
+    "UpdateServiceActionInput":{
+      "type":"structure",
+      "required":["Id"],
+      "members":{
+        "Id":{"shape":"Id"},
+        "Name":{"shape":"ServiceActionName"},
+        "Definition":{"shape":"ServiceActionDefinitionMap"},
+        "Description":{"shape":"ServiceActionDescription"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "UpdateServiceActionOutput":{
+      "type":"structure",
+      "members":{
+        "ServiceActionDetail":{"shape":"ServiceActionDetail"}
+      }
     },
     "UpdateTagOptionInput":{
       "type":"structure",

@@ -50,14 +50,19 @@ type Config struct {
 	TLSCreds          credentials.TransportCredentials // derived
 }
 
+// RequiredFlags describes the flag requirements for a cbt command.
 type RequiredFlags uint
 
-const NoneRequired RequiredFlags = 0
 const (
+	// NoneRequired specifies that not flags are required.
+	NoneRequired RequiredFlags = 0
+	// ProjectRequired specifies that the -project flag is required.
 	ProjectRequired RequiredFlags = 1 << iota
+	// InstanceRequired specifies that the -instance flag is required.
 	InstanceRequired
+	// ProjectAndInstanceRequired specifies that both -project and -instance is required.
+	ProjectAndInstanceRequired = ProjectRequired | InstanceRequired
 )
-const ProjectAndInstanceRequired RequiredFlags = ProjectRequired | InstanceRequired
 
 // RegisterFlags registers a set of standard flags for this config.
 // It should be called before flag.Parse.
@@ -152,15 +157,18 @@ func Load() (*Config, error) {
 	return c, s.Err()
 }
 
+// GcloudCredential holds gcloud credential information.
 type GcloudCredential struct {
 	AccessToken string    `json:"access_token"`
 	Expiry      time.Time `json:"token_expiry"`
 }
 
+// Token creates an oauth2 token using gcloud credentials.
 func (cred *GcloudCredential) Token() *oauth2.Token {
 	return &oauth2.Token{AccessToken: cred.AccessToken, TokenType: "Bearer", Expiry: cred.Expiry}
 }
 
+// GcloudConfig holds gcloud configuration values.
 type GcloudConfig struct {
 	Configuration struct {
 		Properties struct {
@@ -172,6 +180,8 @@ type GcloudConfig struct {
 	Credential GcloudCredential `json:"credential"`
 }
 
+// GcloudCmdTokenSource holds the comamnd arguments. It is only intended to be set by the program.
+// TODO(deklerk) Can this be unexported?
 type GcloudCmdTokenSource struct {
 	Command string
 	Args    []string

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewSolutionsClientWithBaseURI(baseURI string, subscriptionID string, provid
 // solutionName - user Solution Name.
 // parameters - the parameters required to create OMS Solution.
 func (client SolutionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, solutionName string, parameters Solution) (result SolutionsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SolutionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -104,10 +115,6 @@ func (client SolutionsClient) CreateOrUpdateSender(req *http.Request) (future So
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -130,6 +137,16 @@ func (client SolutionsClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // solutionName - user Solution Name.
 func (client SolutionsClient) Delete(ctx context.Context, resourceGroupName string, solutionName string) (result SolutionsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SolutionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -183,10 +200,6 @@ func (client SolutionsClient) DeleteSender(req *http.Request) (future SolutionsD
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -208,6 +221,16 @@ func (client SolutionsClient) DeleteResponder(resp *http.Response) (result autor
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // solutionName - user Solution Name.
 func (client SolutionsClient) Get(ctx context.Context, resourceGroupName string, solutionName string) (result Solution, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SolutionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -282,6 +305,16 @@ func (client SolutionsClient) GetResponder(resp *http.Response) (result Solution
 // Parameters:
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 func (client SolutionsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result SolutionPropertiesList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SolutionsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -353,6 +386,16 @@ func (client SolutionsClient) ListByResourceGroupResponder(resp *http.Response) 
 
 // ListBySubscription retrieves the solution list. It will retrieve both first party and third party solutions
 func (client SolutionsClient) ListBySubscription(ctx context.Context) (result SolutionPropertiesList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SolutionsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsClient", "ListBySubscription", nil, "Failure preparing request")

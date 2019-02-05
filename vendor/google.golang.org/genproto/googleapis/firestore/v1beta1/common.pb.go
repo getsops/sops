@@ -38,7 +38,7 @@ func (m *DocumentMask) Reset()         { *m = DocumentMask{} }
 func (m *DocumentMask) String() string { return proto.CompactTextString(m) }
 func (*DocumentMask) ProtoMessage()    {}
 func (*DocumentMask) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfe8bb60f36bcae9, []int{0}
+	return fileDescriptor_common_37c55147eeb829a0, []int{0}
 }
 func (m *DocumentMask) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DocumentMask.Unmarshal(m, b)
@@ -46,8 +46,8 @@ func (m *DocumentMask) XXX_Unmarshal(b []byte) error {
 func (m *DocumentMask) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DocumentMask.Marshal(b, m, deterministic)
 }
-func (m *DocumentMask) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DocumentMask.Merge(m, src)
+func (dst *DocumentMask) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DocumentMask.Merge(dst, src)
 }
 func (m *DocumentMask) XXX_Size() int {
 	return xxx_messageInfo_DocumentMask.Size(m)
@@ -82,7 +82,7 @@ func (m *Precondition) Reset()         { *m = Precondition{} }
 func (m *Precondition) String() string { return proto.CompactTextString(m) }
 func (*Precondition) ProtoMessage()    {}
 func (*Precondition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfe8bb60f36bcae9, []int{1}
+	return fileDescriptor_common_37c55147eeb829a0, []int{1}
 }
 func (m *Precondition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Precondition.Unmarshal(m, b)
@@ -90,8 +90,8 @@ func (m *Precondition) XXX_Unmarshal(b []byte) error {
 func (m *Precondition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Precondition.Marshal(b, m, deterministic)
 }
-func (m *Precondition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Precondition.Merge(m, src)
+func (dst *Precondition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Precondition.Merge(dst, src)
 }
 func (m *Precondition) XXX_Size() int {
 	return xxx_messageInfo_Precondition.Size(m)
@@ -229,7 +229,7 @@ func (m *TransactionOptions) Reset()         { *m = TransactionOptions{} }
 func (m *TransactionOptions) String() string { return proto.CompactTextString(m) }
 func (*TransactionOptions) ProtoMessage()    {}
 func (*TransactionOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfe8bb60f36bcae9, []int{2}
+	return fileDescriptor_common_37c55147eeb829a0, []int{2}
 }
 func (m *TransactionOptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransactionOptions.Unmarshal(m, b)
@@ -237,8 +237,8 @@ func (m *TransactionOptions) XXX_Unmarshal(b []byte) error {
 func (m *TransactionOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransactionOptions.Marshal(b, m, deterministic)
 }
-func (m *TransactionOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransactionOptions.Merge(m, src)
+func (dst *TransactionOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransactionOptions.Merge(dst, src)
 }
 func (m *TransactionOptions) XXX_Size() int {
 	return xxx_messageInfo_TransactionOptions.Size(m)
@@ -373,7 +373,7 @@ func (m *TransactionOptions_ReadWrite) Reset()         { *m = TransactionOptions
 func (m *TransactionOptions_ReadWrite) String() string { return proto.CompactTextString(m) }
 func (*TransactionOptions_ReadWrite) ProtoMessage()    {}
 func (*TransactionOptions_ReadWrite) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfe8bb60f36bcae9, []int{2, 0}
+	return fileDescriptor_common_37c55147eeb829a0, []int{2, 0}
 }
 func (m *TransactionOptions_ReadWrite) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransactionOptions_ReadWrite.Unmarshal(m, b)
@@ -381,8 +381,8 @@ func (m *TransactionOptions_ReadWrite) XXX_Unmarshal(b []byte) error {
 func (m *TransactionOptions_ReadWrite) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransactionOptions_ReadWrite.Marshal(b, m, deterministic)
 }
-func (m *TransactionOptions_ReadWrite) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransactionOptions_ReadWrite.Merge(m, src)
+func (dst *TransactionOptions_ReadWrite) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransactionOptions_ReadWrite.Merge(dst, src)
 }
 func (m *TransactionOptions_ReadWrite) XXX_Size() int {
 	return xxx_messageInfo_TransactionOptions_ReadWrite.Size(m)
@@ -417,7 +417,7 @@ func (m *TransactionOptions_ReadOnly) Reset()         { *m = TransactionOptions_
 func (m *TransactionOptions_ReadOnly) String() string { return proto.CompactTextString(m) }
 func (*TransactionOptions_ReadOnly) ProtoMessage()    {}
 func (*TransactionOptions_ReadOnly) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bfe8bb60f36bcae9, []int{2, 1}
+	return fileDescriptor_common_37c55147eeb829a0, []int{2, 1}
 }
 func (m *TransactionOptions_ReadOnly) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransactionOptions_ReadOnly.Unmarshal(m, b)
@@ -425,8 +425,8 @@ func (m *TransactionOptions_ReadOnly) XXX_Unmarshal(b []byte) error {
 func (m *TransactionOptions_ReadOnly) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransactionOptions_ReadOnly.Marshal(b, m, deterministic)
 }
-func (m *TransactionOptions_ReadOnly) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransactionOptions_ReadOnly.Merge(m, src)
+func (dst *TransactionOptions_ReadOnly) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransactionOptions_ReadOnly.Merge(dst, src)
 }
 func (m *TransactionOptions_ReadOnly) XXX_Size() int {
 	return xxx_messageInfo_TransactionOptions_ReadOnly.Size(m)
@@ -525,10 +525,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/firestore/v1beta1/common.proto", fileDescriptor_bfe8bb60f36bcae9)
+	proto.RegisterFile("google/firestore/v1beta1/common.proto", fileDescriptor_common_37c55147eeb829a0)
 }
 
-var fileDescriptor_bfe8bb60f36bcae9 = []byte{
+var fileDescriptor_common_37c55147eeb829a0 = []byte{
 	// 468 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x52, 0xef, 0x8a, 0xd3, 0x40,
 	0x10, 0x6f, 0x7a, 0xc7, 0xd1, 0x4e, 0x8b, 0x9c, 0x41, 0x24, 0x84, 0xc3, 0x3b, 0x0a, 0x42, 0x41,

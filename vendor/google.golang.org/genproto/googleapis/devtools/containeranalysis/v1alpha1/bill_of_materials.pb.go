@@ -36,7 +36,6 @@ var PackageManager_Architecture_name = map[int32]string{
 	1: "X86",
 	2: "X64",
 }
-
 var PackageManager_Architecture_value = map[string]int32{
 	"ARCHITECTURE_UNSPECIFIED": 0,
 	"X86":                      1,
@@ -46,9 +45,8 @@ var PackageManager_Architecture_value = map[string]int32{
 func (x PackageManager_Architecture) String() string {
 	return proto.EnumName(PackageManager_Architecture_name, int32(x))
 }
-
 func (PackageManager_Architecture) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_7bcf14fe966f6fd8, []int{0, 0}
+	return fileDescriptor_bill_of_materials_27661a0342dc8703, []int{0, 0}
 }
 
 // PackageManager provides metadata about available / installed packages.
@@ -62,7 +60,7 @@ func (m *PackageManager) Reset()         { *m = PackageManager{} }
 func (m *PackageManager) String() string { return proto.CompactTextString(m) }
 func (*PackageManager) ProtoMessage()    {}
 func (*PackageManager) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7bcf14fe966f6fd8, []int{0}
+	return fileDescriptor_bill_of_materials_27661a0342dc8703, []int{0}
 }
 func (m *PackageManager) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PackageManager.Unmarshal(m, b)
@@ -70,8 +68,8 @@ func (m *PackageManager) XXX_Unmarshal(b []byte) error {
 func (m *PackageManager) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PackageManager.Marshal(b, m, deterministic)
 }
-func (m *PackageManager) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PackageManager.Merge(m, src)
+func (dst *PackageManager) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PackageManager.Merge(dst, src)
 }
 func (m *PackageManager) XXX_Size() int {
 	return xxx_messageInfo_PackageManager.Size(m)
@@ -109,7 +107,7 @@ func (m *PackageManager_Distribution) Reset()         { *m = PackageManager_Dist
 func (m *PackageManager_Distribution) String() string { return proto.CompactTextString(m) }
 func (*PackageManager_Distribution) ProtoMessage()    {}
 func (*PackageManager_Distribution) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7bcf14fe966f6fd8, []int{0, 0}
+	return fileDescriptor_bill_of_materials_27661a0342dc8703, []int{0, 0}
 }
 func (m *PackageManager_Distribution) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PackageManager_Distribution.Unmarshal(m, b)
@@ -117,8 +115,8 @@ func (m *PackageManager_Distribution) XXX_Unmarshal(b []byte) error {
 func (m *PackageManager_Distribution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PackageManager_Distribution.Marshal(b, m, deterministic)
 }
-func (m *PackageManager_Distribution) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PackageManager_Distribution.Merge(m, src)
+func (dst *PackageManager_Distribution) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PackageManager_Distribution.Merge(dst, src)
 }
 func (m *PackageManager_Distribution) XXX_Size() int {
 	return xxx_messageInfo_PackageManager_Distribution.Size(m)
@@ -191,7 +189,7 @@ func (m *PackageManager_Location) Reset()         { *m = PackageManager_Location
 func (m *PackageManager_Location) String() string { return proto.CompactTextString(m) }
 func (*PackageManager_Location) ProtoMessage()    {}
 func (*PackageManager_Location) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7bcf14fe966f6fd8, []int{0, 1}
+	return fileDescriptor_bill_of_materials_27661a0342dc8703, []int{0, 1}
 }
 func (m *PackageManager_Location) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PackageManager_Location.Unmarshal(m, b)
@@ -199,8 +197,8 @@ func (m *PackageManager_Location) XXX_Unmarshal(b []byte) error {
 func (m *PackageManager_Location) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PackageManager_Location.Marshal(b, m, deterministic)
 }
-func (m *PackageManager_Location) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PackageManager_Location.Merge(m, src)
+func (dst *PackageManager_Location) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PackageManager_Location.Merge(dst, src)
 }
 func (m *PackageManager_Location) XXX_Size() int {
 	return xxx_messageInfo_PackageManager_Location.Size(m)
@@ -249,7 +247,7 @@ func (m *PackageManager_Package) Reset()         { *m = PackageManager_Package{}
 func (m *PackageManager_Package) String() string { return proto.CompactTextString(m) }
 func (*PackageManager_Package) ProtoMessage()    {}
 func (*PackageManager_Package) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7bcf14fe966f6fd8, []int{0, 2}
+	return fileDescriptor_bill_of_materials_27661a0342dc8703, []int{0, 2}
 }
 func (m *PackageManager_Package) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PackageManager_Package.Unmarshal(m, b)
@@ -257,8 +255,8 @@ func (m *PackageManager_Package) XXX_Unmarshal(b []byte) error {
 func (m *PackageManager_Package) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PackageManager_Package.Marshal(b, m, deterministic)
 }
-func (m *PackageManager_Package) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PackageManager_Package.Merge(m, src)
+func (dst *PackageManager_Package) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PackageManager_Package.Merge(dst, src)
 }
 func (m *PackageManager_Package) XXX_Size() int {
 	return xxx_messageInfo_PackageManager_Package.Size(m)
@@ -300,7 +298,7 @@ func (m *PackageManager_Installation) Reset()         { *m = PackageManager_Inst
 func (m *PackageManager_Installation) String() string { return proto.CompactTextString(m) }
 func (*PackageManager_Installation) ProtoMessage()    {}
 func (*PackageManager_Installation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7bcf14fe966f6fd8, []int{0, 3}
+	return fileDescriptor_bill_of_materials_27661a0342dc8703, []int{0, 3}
 }
 func (m *PackageManager_Installation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PackageManager_Installation.Unmarshal(m, b)
@@ -308,8 +306,8 @@ func (m *PackageManager_Installation) XXX_Unmarshal(b []byte) error {
 func (m *PackageManager_Installation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PackageManager_Installation.Marshal(b, m, deterministic)
 }
-func (m *PackageManager_Installation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PackageManager_Installation.Merge(m, src)
+func (dst *PackageManager_Installation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PackageManager_Installation.Merge(dst, src)
 }
 func (m *PackageManager_Installation) XXX_Size() int {
 	return xxx_messageInfo_PackageManager_Installation.Size(m)
@@ -344,10 +342,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1alpha1/bill_of_materials.proto", fileDescriptor_7bcf14fe966f6fd8)
+	proto.RegisterFile("google/devtools/containeranalysis/v1alpha1/bill_of_materials.proto", fileDescriptor_bill_of_materials_27661a0342dc8703)
 }
 
-var fileDescriptor_7bcf14fe966f6fd8 = []byte{
+var fileDescriptor_bill_of_materials_27661a0342dc8703 = []byte{
 	// 522 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x93, 0xd1, 0x8a, 0xd3, 0x4e,
 	0x14, 0xc6, 0xff, 0x49, 0x97, 0x76, 0xf7, 0xb4, 0xff, 0x52, 0xe6, 0xc6, 0x10, 0x16, 0x29, 0x0b,

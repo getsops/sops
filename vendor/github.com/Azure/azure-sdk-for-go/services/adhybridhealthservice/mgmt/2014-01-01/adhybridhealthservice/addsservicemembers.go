@@ -21,11 +21,12 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
 
-// AddsServiceMembersClient is the REST APIs for Azure Active Drectory Connect Health
+// AddsServiceMembersClient is the REST APIs for Azure Active Directory Connect Health
 type AddsServiceMembersClient struct {
 	BaseClient
 }
@@ -49,6 +50,16 @@ func NewAddsServiceMembersClientWithBaseURI(baseURI string) AddsServiceMembersCl
 // will be permanently deleted and False indicates that the server will be marked disabled and then deleted
 // after 30 days, if it is not re-registered.
 func (client AddsServiceMembersClient) Delete(ctx context.Context, serviceName string, serviceMemberID uuid.UUID, confirm *bool) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, serviceName, serviceMemberID, confirm)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServiceMembersClient", "Delete", nil, "Failure preparing request")
@@ -118,6 +129,16 @@ func (client AddsServiceMembersClient) DeleteResponder(resp *http.Response) (res
 // serviceName - the name of the service.
 // serviceMemberID - the server Id.
 func (client AddsServiceMembersClient) Get(ctx context.Context, serviceName string, serviceMemberID uuid.UUID) (result ServiceMember, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, serviceName, serviceMemberID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServiceMembersClient", "Get", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client AddsServiceMembersClient) GetResponder(resp *http.Response) (result
 // serviceName - the name of the service.
 // filter - the server property filter to apply.
 func (client AddsServiceMembersClient) List(ctx context.Context, serviceName string, filter string) (result AddsServiceMembersPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersClient.List")
+		defer func() {
+			sc := -1
+			if result.asm.Response.Response != nil {
+				sc = result.asm.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, serviceName, filter)
 	if err != nil {
@@ -250,8 +281,8 @@ func (client AddsServiceMembersClient) ListResponder(resp *http.Response) (resul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AddsServiceMembersClient) listNextResults(lastResults AddsServiceMembers) (result AddsServiceMembers, err error) {
-	req, err := lastResults.addsServiceMembersPreparer()
+func (client AddsServiceMembersClient) listNextResults(ctx context.Context, lastResults AddsServiceMembers) (result AddsServiceMembers, err error) {
+	req, err := lastResults.addsServiceMembersPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServiceMembersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -272,6 +303,16 @@ func (client AddsServiceMembersClient) listNextResults(lastResults AddsServiceMe
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AddsServiceMembersClient) ListComplete(ctx context.Context, serviceName string, filter string) (result AddsServiceMembersIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, serviceName, filter)
 	return
 }
@@ -283,6 +324,16 @@ func (client AddsServiceMembersClient) ListComplete(ctx context.Context, service
 // serviceMemberID - the server Id.
 // filter - the property filter to apply.
 func (client AddsServiceMembersClient) ListCredentials(ctx context.Context, serviceName string, serviceMemberID uuid.UUID, filter string) (result Credentials, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersClient.ListCredentials")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListCredentialsPreparer(ctx, serviceName, serviceMemberID, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServiceMembersClient", "ListCredentials", nil, "Failure preparing request")

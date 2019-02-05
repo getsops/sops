@@ -424,12 +424,13 @@ func (x *extracter) visitFormats(call *callData, v ssa.Value) {
 		// 	fn(p)
 		// }
 
+	case *ssa.Call:
+
 	case ssa.Instruction:
 		rands := v.Operands(nil)
 		if len(rands) == 1 && rands[0] != nil {
 			x.visitFormats(call, *rands[0])
 		}
-	case *ssa.Call:
 	}
 }
 

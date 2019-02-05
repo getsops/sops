@@ -77,7 +77,7 @@ func (m *Occurrence) Reset()         { *m = Occurrence{} }
 func (m *Occurrence) String() string { return proto.CompactTextString(m) }
 func (*Occurrence) ProtoMessage()    {}
 func (*Occurrence) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{0}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{0}
 }
 func (m *Occurrence) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Occurrence.Unmarshal(m, b)
@@ -85,8 +85,8 @@ func (m *Occurrence) XXX_Unmarshal(b []byte) error {
 func (m *Occurrence) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Occurrence.Marshal(b, m, deterministic)
 }
-func (m *Occurrence) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Occurrence.Merge(m, src)
+func (dst *Occurrence) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Occurrence.Merge(dst, src)
 }
 func (m *Occurrence) XXX_Size() int {
 	return xxx_messageInfo_Occurrence.Size(m)
@@ -436,7 +436,7 @@ func (m *Resource) Reset()         { *m = Resource{} }
 func (m *Resource) String() string { return proto.CompactTextString(m) }
 func (*Resource) ProtoMessage()    {}
 func (*Resource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{1}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{1}
 }
 func (m *Resource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Resource.Unmarshal(m, b)
@@ -444,8 +444,8 @@ func (m *Resource) XXX_Unmarshal(b []byte) error {
 func (m *Resource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Resource.Marshal(b, m, deterministic)
 }
-func (m *Resource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Resource.Merge(m, src)
+func (dst *Resource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Resource.Merge(dst, src)
 }
 func (m *Resource) XXX_Size() int {
 	return xxx_messageInfo_Resource.Size(m)
@@ -521,7 +521,7 @@ func (m *Note) Reset()         { *m = Note{} }
 func (m *Note) String() string { return proto.CompactTextString(m) }
 func (*Note) ProtoMessage()    {}
 func (*Note) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{2}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{2}
 }
 func (m *Note) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Note.Unmarshal(m, b)
@@ -529,8 +529,8 @@ func (m *Note) XXX_Unmarshal(b []byte) error {
 func (m *Note) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Note.Marshal(b, m, deterministic)
 }
-func (m *Note) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Note.Merge(m, src)
+func (dst *Note) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Note.Merge(dst, src)
 }
 func (m *Note) XXX_Size() int {
 	return xxx_messageInfo_Note.Size(m)
@@ -889,7 +889,7 @@ func (m *GetOccurrenceRequest) Reset()         { *m = GetOccurrenceRequest{} }
 func (m *GetOccurrenceRequest) String() string { return proto.CompactTextString(m) }
 func (*GetOccurrenceRequest) ProtoMessage()    {}
 func (*GetOccurrenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{3}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{3}
 }
 func (m *GetOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetOccurrenceRequest.Unmarshal(m, b)
@@ -897,8 +897,8 @@ func (m *GetOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetOccurrenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetOccurrenceRequest.Marshal(b, m, deterministic)
 }
-func (m *GetOccurrenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetOccurrenceRequest.Merge(m, src)
+func (dst *GetOccurrenceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetOccurrenceRequest.Merge(dst, src)
 }
 func (m *GetOccurrenceRequest) XXX_Size() int {
 	return xxx_messageInfo_GetOccurrenceRequest.Size(m)
@@ -936,7 +936,7 @@ func (m *ListOccurrencesRequest) Reset()         { *m = ListOccurrencesRequest{}
 func (m *ListOccurrencesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListOccurrencesRequest) ProtoMessage()    {}
 func (*ListOccurrencesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{4}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{4}
 }
 func (m *ListOccurrencesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListOccurrencesRequest.Unmarshal(m, b)
@@ -944,8 +944,8 @@ func (m *ListOccurrencesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListOccurrencesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListOccurrencesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListOccurrencesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListOccurrencesRequest.Merge(m, src)
+func (dst *ListOccurrencesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListOccurrencesRequest.Merge(dst, src)
 }
 func (m *ListOccurrencesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListOccurrencesRequest.Size(m)
@@ -1001,7 +1001,7 @@ func (m *ListOccurrencesResponse) Reset()         { *m = ListOccurrencesResponse
 func (m *ListOccurrencesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListOccurrencesResponse) ProtoMessage()    {}
 func (*ListOccurrencesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{5}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{5}
 }
 func (m *ListOccurrencesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListOccurrencesResponse.Unmarshal(m, b)
@@ -1009,8 +1009,8 @@ func (m *ListOccurrencesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListOccurrencesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListOccurrencesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListOccurrencesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListOccurrencesResponse.Merge(m, src)
+func (dst *ListOccurrencesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListOccurrencesResponse.Merge(dst, src)
 }
 func (m *ListOccurrencesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListOccurrencesResponse.Size(m)
@@ -1049,7 +1049,7 @@ func (m *DeleteOccurrenceRequest) Reset()         { *m = DeleteOccurrenceRequest
 func (m *DeleteOccurrenceRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteOccurrenceRequest) ProtoMessage()    {}
 func (*DeleteOccurrenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{6}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{6}
 }
 func (m *DeleteOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteOccurrenceRequest.Unmarshal(m, b)
@@ -1057,8 +1057,8 @@ func (m *DeleteOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteOccurrenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteOccurrenceRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteOccurrenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteOccurrenceRequest.Merge(m, src)
+func (dst *DeleteOccurrenceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteOccurrenceRequest.Merge(dst, src)
 }
 func (m *DeleteOccurrenceRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteOccurrenceRequest.Size(m)
@@ -1092,7 +1092,7 @@ func (m *CreateOccurrenceRequest) Reset()         { *m = CreateOccurrenceRequest
 func (m *CreateOccurrenceRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateOccurrenceRequest) ProtoMessage()    {}
 func (*CreateOccurrenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{7}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{7}
 }
 func (m *CreateOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateOccurrenceRequest.Unmarshal(m, b)
@@ -1100,8 +1100,8 @@ func (m *CreateOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateOccurrenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateOccurrenceRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateOccurrenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateOccurrenceRequest.Merge(m, src)
+func (dst *CreateOccurrenceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateOccurrenceRequest.Merge(dst, src)
 }
 func (m *CreateOccurrenceRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateOccurrenceRequest.Size(m)
@@ -1144,7 +1144,7 @@ func (m *UpdateOccurrenceRequest) Reset()         { *m = UpdateOccurrenceRequest
 func (m *UpdateOccurrenceRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateOccurrenceRequest) ProtoMessage()    {}
 func (*UpdateOccurrenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{8}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{8}
 }
 func (m *UpdateOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateOccurrenceRequest.Unmarshal(m, b)
@@ -1152,8 +1152,8 @@ func (m *UpdateOccurrenceRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateOccurrenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateOccurrenceRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateOccurrenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateOccurrenceRequest.Merge(m, src)
+func (dst *UpdateOccurrenceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateOccurrenceRequest.Merge(dst, src)
 }
 func (m *UpdateOccurrenceRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateOccurrenceRequest.Size(m)
@@ -1199,7 +1199,7 @@ func (m *GetNoteRequest) Reset()         { *m = GetNoteRequest{} }
 func (m *GetNoteRequest) String() string { return proto.CompactTextString(m) }
 func (*GetNoteRequest) ProtoMessage()    {}
 func (*GetNoteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{9}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{9}
 }
 func (m *GetNoteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetNoteRequest.Unmarshal(m, b)
@@ -1207,8 +1207,8 @@ func (m *GetNoteRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetNoteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetNoteRequest.Marshal(b, m, deterministic)
 }
-func (m *GetNoteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetNoteRequest.Merge(m, src)
+func (dst *GetNoteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetNoteRequest.Merge(dst, src)
 }
 func (m *GetNoteRequest) XXX_Size() int {
 	return xxx_messageInfo_GetNoteRequest.Size(m)
@@ -1240,7 +1240,7 @@ func (m *GetOccurrenceNoteRequest) Reset()         { *m = GetOccurrenceNoteReque
 func (m *GetOccurrenceNoteRequest) String() string { return proto.CompactTextString(m) }
 func (*GetOccurrenceNoteRequest) ProtoMessage()    {}
 func (*GetOccurrenceNoteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{10}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{10}
 }
 func (m *GetOccurrenceNoteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetOccurrenceNoteRequest.Unmarshal(m, b)
@@ -1248,8 +1248,8 @@ func (m *GetOccurrenceNoteRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetOccurrenceNoteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetOccurrenceNoteRequest.Marshal(b, m, deterministic)
 }
-func (m *GetOccurrenceNoteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetOccurrenceNoteRequest.Merge(m, src)
+func (dst *GetOccurrenceNoteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetOccurrenceNoteRequest.Merge(dst, src)
 }
 func (m *GetOccurrenceNoteRequest) XXX_Size() int {
 	return xxx_messageInfo_GetOccurrenceNoteRequest.Size(m)
@@ -1287,7 +1287,7 @@ func (m *ListNotesRequest) Reset()         { *m = ListNotesRequest{} }
 func (m *ListNotesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListNotesRequest) ProtoMessage()    {}
 func (*ListNotesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{11}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{11}
 }
 func (m *ListNotesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListNotesRequest.Unmarshal(m, b)
@@ -1295,8 +1295,8 @@ func (m *ListNotesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListNotesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListNotesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListNotesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListNotesRequest.Merge(m, src)
+func (dst *ListNotesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListNotesRequest.Merge(dst, src)
 }
 func (m *ListNotesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListNotesRequest.Size(m)
@@ -1352,7 +1352,7 @@ func (m *ListNotesResponse) Reset()         { *m = ListNotesResponse{} }
 func (m *ListNotesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListNotesResponse) ProtoMessage()    {}
 func (*ListNotesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{12}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{12}
 }
 func (m *ListNotesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListNotesResponse.Unmarshal(m, b)
@@ -1360,8 +1360,8 @@ func (m *ListNotesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListNotesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListNotesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListNotesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListNotesResponse.Merge(m, src)
+func (dst *ListNotesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListNotesResponse.Merge(dst, src)
 }
 func (m *ListNotesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListNotesResponse.Size(m)
@@ -1400,7 +1400,7 @@ func (m *DeleteNoteRequest) Reset()         { *m = DeleteNoteRequest{} }
 func (m *DeleteNoteRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteNoteRequest) ProtoMessage()    {}
 func (*DeleteNoteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{13}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{13}
 }
 func (m *DeleteNoteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteNoteRequest.Unmarshal(m, b)
@@ -1408,8 +1408,8 @@ func (m *DeleteNoteRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteNoteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteNoteRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteNoteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteNoteRequest.Merge(m, src)
+func (dst *DeleteNoteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteNoteRequest.Merge(dst, src)
 }
 func (m *DeleteNoteRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteNoteRequest.Size(m)
@@ -1445,7 +1445,7 @@ func (m *CreateNoteRequest) Reset()         { *m = CreateNoteRequest{} }
 func (m *CreateNoteRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateNoteRequest) ProtoMessage()    {}
 func (*CreateNoteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{14}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{14}
 }
 func (m *CreateNoteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateNoteRequest.Unmarshal(m, b)
@@ -1453,8 +1453,8 @@ func (m *CreateNoteRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateNoteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateNoteRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateNoteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateNoteRequest.Merge(m, src)
+func (dst *CreateNoteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateNoteRequest.Merge(dst, src)
 }
 func (m *CreateNoteRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateNoteRequest.Size(m)
@@ -1504,7 +1504,7 @@ func (m *UpdateNoteRequest) Reset()         { *m = UpdateNoteRequest{} }
 func (m *UpdateNoteRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateNoteRequest) ProtoMessage()    {}
 func (*UpdateNoteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{15}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{15}
 }
 func (m *UpdateNoteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateNoteRequest.Unmarshal(m, b)
@@ -1512,8 +1512,8 @@ func (m *UpdateNoteRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateNoteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateNoteRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateNoteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateNoteRequest.Merge(m, src)
+func (dst *UpdateNoteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateNoteRequest.Merge(dst, src)
 }
 func (m *UpdateNoteRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateNoteRequest.Size(m)
@@ -1565,7 +1565,7 @@ func (m *ListNoteOccurrencesRequest) Reset()         { *m = ListNoteOccurrencesR
 func (m *ListNoteOccurrencesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListNoteOccurrencesRequest) ProtoMessage()    {}
 func (*ListNoteOccurrencesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{16}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{16}
 }
 func (m *ListNoteOccurrencesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListNoteOccurrencesRequest.Unmarshal(m, b)
@@ -1573,8 +1573,8 @@ func (m *ListNoteOccurrencesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListNoteOccurrencesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListNoteOccurrencesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListNoteOccurrencesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListNoteOccurrencesRequest.Merge(m, src)
+func (dst *ListNoteOccurrencesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListNoteOccurrencesRequest.Merge(dst, src)
 }
 func (m *ListNoteOccurrencesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListNoteOccurrencesRequest.Size(m)
@@ -1628,7 +1628,7 @@ func (m *ListNoteOccurrencesResponse) Reset()         { *m = ListNoteOccurrences
 func (m *ListNoteOccurrencesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListNoteOccurrencesResponse) ProtoMessage()    {}
 func (*ListNoteOccurrencesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{17}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{17}
 }
 func (m *ListNoteOccurrencesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListNoteOccurrencesResponse.Unmarshal(m, b)
@@ -1636,8 +1636,8 @@ func (m *ListNoteOccurrencesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListNoteOccurrencesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListNoteOccurrencesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListNoteOccurrencesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListNoteOccurrencesResponse.Merge(m, src)
+func (dst *ListNoteOccurrencesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListNoteOccurrencesResponse.Merge(dst, src)
 }
 func (m *ListNoteOccurrencesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListNoteOccurrencesResponse.Size(m)
@@ -1678,7 +1678,7 @@ func (m *BatchCreateNotesRequest) Reset()         { *m = BatchCreateNotesRequest
 func (m *BatchCreateNotesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchCreateNotesRequest) ProtoMessage()    {}
 func (*BatchCreateNotesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{18}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{18}
 }
 func (m *BatchCreateNotesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchCreateNotesRequest.Unmarshal(m, b)
@@ -1686,8 +1686,8 @@ func (m *BatchCreateNotesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchCreateNotesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchCreateNotesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchCreateNotesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchCreateNotesRequest.Merge(m, src)
+func (dst *BatchCreateNotesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchCreateNotesRequest.Merge(dst, src)
 }
 func (m *BatchCreateNotesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchCreateNotesRequest.Size(m)
@@ -1725,7 +1725,7 @@ func (m *BatchCreateNotesResponse) Reset()         { *m = BatchCreateNotesRespon
 func (m *BatchCreateNotesResponse) String() string { return proto.CompactTextString(m) }
 func (*BatchCreateNotesResponse) ProtoMessage()    {}
 func (*BatchCreateNotesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{19}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{19}
 }
 func (m *BatchCreateNotesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchCreateNotesResponse.Unmarshal(m, b)
@@ -1733,8 +1733,8 @@ func (m *BatchCreateNotesResponse) XXX_Unmarshal(b []byte) error {
 func (m *BatchCreateNotesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchCreateNotesResponse.Marshal(b, m, deterministic)
 }
-func (m *BatchCreateNotesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchCreateNotesResponse.Merge(m, src)
+func (dst *BatchCreateNotesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchCreateNotesResponse.Merge(dst, src)
 }
 func (m *BatchCreateNotesResponse) XXX_Size() int {
 	return xxx_messageInfo_BatchCreateNotesResponse.Size(m)
@@ -1768,7 +1768,7 @@ func (m *BatchCreateOccurrencesRequest) Reset()         { *m = BatchCreateOccurr
 func (m *BatchCreateOccurrencesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchCreateOccurrencesRequest) ProtoMessage()    {}
 func (*BatchCreateOccurrencesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{20}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{20}
 }
 func (m *BatchCreateOccurrencesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchCreateOccurrencesRequest.Unmarshal(m, b)
@@ -1776,8 +1776,8 @@ func (m *BatchCreateOccurrencesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchCreateOccurrencesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchCreateOccurrencesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchCreateOccurrencesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchCreateOccurrencesRequest.Merge(m, src)
+func (dst *BatchCreateOccurrencesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchCreateOccurrencesRequest.Merge(dst, src)
 }
 func (m *BatchCreateOccurrencesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchCreateOccurrencesRequest.Size(m)
@@ -1815,7 +1815,7 @@ func (m *BatchCreateOccurrencesResponse) Reset()         { *m = BatchCreateOccur
 func (m *BatchCreateOccurrencesResponse) String() string { return proto.CompactTextString(m) }
 func (*BatchCreateOccurrencesResponse) ProtoMessage()    {}
 func (*BatchCreateOccurrencesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{21}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{21}
 }
 func (m *BatchCreateOccurrencesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchCreateOccurrencesResponse.Unmarshal(m, b)
@@ -1823,8 +1823,8 @@ func (m *BatchCreateOccurrencesResponse) XXX_Unmarshal(b []byte) error {
 func (m *BatchCreateOccurrencesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchCreateOccurrencesResponse.Marshal(b, m, deterministic)
 }
-func (m *BatchCreateOccurrencesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchCreateOccurrencesResponse.Merge(m, src)
+func (dst *BatchCreateOccurrencesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchCreateOccurrencesResponse.Merge(dst, src)
 }
 func (m *BatchCreateOccurrencesResponse) XXX_Size() int {
 	return xxx_messageInfo_BatchCreateOccurrencesResponse.Size(m)
@@ -1860,7 +1860,7 @@ func (m *GetVulnerabilityOccurrencesSummaryRequest) Reset() {
 func (m *GetVulnerabilityOccurrencesSummaryRequest) String() string { return proto.CompactTextString(m) }
 func (*GetVulnerabilityOccurrencesSummaryRequest) ProtoMessage()    {}
 func (*GetVulnerabilityOccurrencesSummaryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{22}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{22}
 }
 func (m *GetVulnerabilityOccurrencesSummaryRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetVulnerabilityOccurrencesSummaryRequest.Unmarshal(m, b)
@@ -1868,8 +1868,8 @@ func (m *GetVulnerabilityOccurrencesSummaryRequest) XXX_Unmarshal(b []byte) erro
 func (m *GetVulnerabilityOccurrencesSummaryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetVulnerabilityOccurrencesSummaryRequest.Marshal(b, m, deterministic)
 }
-func (m *GetVulnerabilityOccurrencesSummaryRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetVulnerabilityOccurrencesSummaryRequest.Merge(m, src)
+func (dst *GetVulnerabilityOccurrencesSummaryRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetVulnerabilityOccurrencesSummaryRequest.Merge(dst, src)
 }
 func (m *GetVulnerabilityOccurrencesSummaryRequest) XXX_Size() int {
 	return xxx_messageInfo_GetVulnerabilityOccurrencesSummaryRequest.Size(m)
@@ -1908,7 +1908,7 @@ func (m *VulnerabilityOccurrencesSummary) Reset()         { *m = VulnerabilityOc
 func (m *VulnerabilityOccurrencesSummary) String() string { return proto.CompactTextString(m) }
 func (*VulnerabilityOccurrencesSummary) ProtoMessage()    {}
 func (*VulnerabilityOccurrencesSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{23}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{23}
 }
 func (m *VulnerabilityOccurrencesSummary) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VulnerabilityOccurrencesSummary.Unmarshal(m, b)
@@ -1916,8 +1916,8 @@ func (m *VulnerabilityOccurrencesSummary) XXX_Unmarshal(b []byte) error {
 func (m *VulnerabilityOccurrencesSummary) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VulnerabilityOccurrencesSummary.Marshal(b, m, deterministic)
 }
-func (m *VulnerabilityOccurrencesSummary) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VulnerabilityOccurrencesSummary.Merge(m, src)
+func (dst *VulnerabilityOccurrencesSummary) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VulnerabilityOccurrencesSummary.Merge(dst, src)
 }
 func (m *VulnerabilityOccurrencesSummary) XXX_Size() int {
 	return xxx_messageInfo_VulnerabilityOccurrencesSummary.Size(m)
@@ -1959,7 +1959,7 @@ func (m *VulnerabilityOccurrencesSummary_FixableTotalByDigest) String() string {
 }
 func (*VulnerabilityOccurrencesSummary_FixableTotalByDigest) ProtoMessage() {}
 func (*VulnerabilityOccurrencesSummary_FixableTotalByDigest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5865e5de1898162a, []int{23, 0}
+	return fileDescriptor_grafeas_a4e3069f0b5ff953, []int{23, 0}
 }
 func (m *VulnerabilityOccurrencesSummary_FixableTotalByDigest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VulnerabilityOccurrencesSummary_FixableTotalByDigest.Unmarshal(m, b)
@@ -1967,8 +1967,8 @@ func (m *VulnerabilityOccurrencesSummary_FixableTotalByDigest) XXX_Unmarshal(b [
 func (m *VulnerabilityOccurrencesSummary_FixableTotalByDigest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VulnerabilityOccurrencesSummary_FixableTotalByDigest.Marshal(b, m, deterministic)
 }
-func (m *VulnerabilityOccurrencesSummary_FixableTotalByDigest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VulnerabilityOccurrencesSummary_FixableTotalByDigest.Merge(m, src)
+func (dst *VulnerabilityOccurrencesSummary_FixableTotalByDigest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VulnerabilityOccurrencesSummary_FixableTotalByDigest.Merge(dst, src)
 }
 func (m *VulnerabilityOccurrencesSummary_FixableTotalByDigest) XXX_Size() int {
 	return xxx_messageInfo_VulnerabilityOccurrencesSummary_FixableTotalByDigest.Size(m)
@@ -2611,10 +2611,10 @@ var _GrafeasV1Beta1_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/grafeas/grafeas.proto", fileDescriptor_5865e5de1898162a)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/grafeas/grafeas.proto", fileDescriptor_grafeas_a4e3069f0b5ff953)
 }
 
-var fileDescriptor_5865e5de1898162a = []byte{
+var fileDescriptor_grafeas_a4e3069f0b5ff953 = []byte{
 	// 1920 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0xcd, 0x6f, 0x1b, 0xc7,
 	0x15, 0xf7, 0x52, 0x9f, 0x7c, 0xd4, 0x07, 0x35, 0x75, 0xac, 0x2d, 0x9d, 0xc4, 0xec, 0xc6, 0x75,

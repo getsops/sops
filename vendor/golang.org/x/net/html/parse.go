@@ -470,6 +470,10 @@ func (p *parser) resetInsertionMode() {
 		case a.Table:
 			p.im = inTableIM
 		case a.Template:
+			// TODO: remove this divergence from the HTML5 spec.
+			if n.Namespace != "" {
+				continue
+			}
 			p.im = p.templateStack.top()
 		case a.Head:
 			// TODO: remove this divergence from the HTML5 spec.
@@ -984,6 +988,14 @@ func inBodyIM(p *parser) bool {
 			p.acknowledgeSelfClosingTag()
 			p.popUntil(buttonScope, a.P)
 			p.parseImpliedToken(StartTagToken, a.Form, a.Form.String())
+			if p.form == nil {
+				// NOTE: The 'isindex' element has been removed,
+				// and the 'template' element has not been designed to be
+				// collaborative with the index element.
+				//
+				// Ignore the token.
+				return true
+			}
 			if action != "" {
 				p.form.Attr = []Attribute{{Key: "action", Val: action}}
 			}
@@ -1252,12 +1264,6 @@ func (p *parser) inBodyEndTagFormatting(tagAtom a.Atom) {
 		switch commonAncestor.DataAtom {
 		case a.Table, a.Tbody, a.Tfoot, a.Thead, a.Tr:
 			p.fosterParent(lastNode)
-		case a.Template:
-			// TODO: remove namespace checking
-			if commonAncestor.Namespace == "html" {
-				commonAncestor = commonAncestor.LastChild
-			}
-			fallthrough
 		default:
 			commonAncestor.AppendChild(lastNode)
 		}
@@ -1713,8 +1719,12 @@ func inSelectIM(p *parser) bool {
 			}
 			p.addElement()
 		case a.Select:
-			p.tok.Type = EndTagToken
-			return false
+			if p.popUntil(selectScope, a.Select) {
+				p.resetInsertionMode()
+			} else {
+				// Ignore the token.
+				return true
+			}
 		case a.Input, a.Keygen, a.Textarea:
 			if p.elementInScope(selectScope, a.Select) {
 				p.parseImpliedToken(EndTagToken, a.Select, a.Select.String())
@@ -1744,6 +1754,9 @@ func inSelectIM(p *parser) bool {
 		case a.Select:
 			if p.popUntil(selectScope, a.Select) {
 				p.resetInsertionMode()
+			} else {
+				// Ignore the token.
+				return true
 			}
 		case a.Template:
 			return inHeadIM(p)
@@ -1769,13 +1782,22 @@ func inSelectInTableIM(p *parser) bool {
 	case StartTagToken, EndTagToken:
 		switch p.tok.DataAtom {
 		case a.Caption, a.Table, a.Tbody, a.Tfoot, a.Thead, a.Tr, a.Td, a.Th:
-			if p.tok.Type == StartTagToken || p.elementInScope(tableScope, p.tok.DataAtom) {
-				p.parseImpliedToken(EndTagToken, a.Select, a.Select.String())
-				return false
-			} else {
+			if p.tok.Type == EndTagToken && !p.elementInScope(tableScope, p.tok.DataAtom) {
 				// Ignore the token.
 				return true
 			}
+			// This is like p.popUntil(selectScope, a.Select), but it also
+			// matches <math select>, not just <select>. Matching the MathML
+			// tag is arguably incorrect (conceptually), but it mimics what
+			// Chromium does.
+			for i := len(p.oe) - 1; i >= 0; i-- {
+				if n := p.oe[i]; n.DataAtom == a.Select {
+					p.oe = p.oe[:i]
+					break
+				}
+			}
+			p.resetInsertionMode()
+			return false
 		}
 	}
 	return inSelectIM(p)

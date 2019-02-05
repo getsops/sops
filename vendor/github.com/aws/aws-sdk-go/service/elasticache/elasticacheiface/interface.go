@@ -96,6 +96,10 @@ type ElastiCacheAPI interface {
 	CreateSnapshotWithContext(aws.Context, *elasticache.CreateSnapshotInput, ...request.Option) (*elasticache.CreateSnapshotOutput, error)
 	CreateSnapshotRequest(*elasticache.CreateSnapshotInput) (*request.Request, *elasticache.CreateSnapshotOutput)
 
+	DecreaseReplicaCount(*elasticache.DecreaseReplicaCountInput) (*elasticache.DecreaseReplicaCountOutput, error)
+	DecreaseReplicaCountWithContext(aws.Context, *elasticache.DecreaseReplicaCountInput, ...request.Option) (*elasticache.DecreaseReplicaCountOutput, error)
+	DecreaseReplicaCountRequest(*elasticache.DecreaseReplicaCountInput) (*request.Request, *elasticache.DecreaseReplicaCountOutput)
+
 	DeleteCacheCluster(*elasticache.DeleteCacheClusterInput) (*elasticache.DeleteCacheClusterOutput, error)
 	DeleteCacheClusterWithContext(aws.Context, *elasticache.DeleteCacheClusterInput, ...request.Option) (*elasticache.DeleteCacheClusterOutput, error)
 	DeleteCacheClusterRequest(*elasticache.DeleteCacheClusterInput) (*request.Request, *elasticache.DeleteCacheClusterOutput)
@@ -203,6 +207,10 @@ type ElastiCacheAPI interface {
 
 	DescribeSnapshotsPages(*elasticache.DescribeSnapshotsInput, func(*elasticache.DescribeSnapshotsOutput, bool) bool) error
 	DescribeSnapshotsPagesWithContext(aws.Context, *elasticache.DescribeSnapshotsInput, func(*elasticache.DescribeSnapshotsOutput, bool) bool, ...request.Option) error
+
+	IncreaseReplicaCount(*elasticache.IncreaseReplicaCountInput) (*elasticache.IncreaseReplicaCountOutput, error)
+	IncreaseReplicaCountWithContext(aws.Context, *elasticache.IncreaseReplicaCountInput, ...request.Option) (*elasticache.IncreaseReplicaCountOutput, error)
+	IncreaseReplicaCountRequest(*elasticache.IncreaseReplicaCountInput) (*request.Request, *elasticache.IncreaseReplicaCountOutput)
 
 	ListAllowedNodeTypeModifications(*elasticache.ListAllowedNodeTypeModificationsInput) (*elasticache.ListAllowedNodeTypeModificationsOutput, error)
 	ListAllowedNodeTypeModificationsWithContext(aws.Context, *elasticache.ListAllowedNodeTypeModificationsInput, ...request.Option) (*elasticache.ListAllowedNodeTypeModificationsOutput, error)

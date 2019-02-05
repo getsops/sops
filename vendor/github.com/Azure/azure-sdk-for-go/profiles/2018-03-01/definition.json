@@ -1,0 +1,30 @@
+{
+    "include": [
+        "../../services/authorization/mgmt/2015-07-01/authorization",
+        "../../services/authorization/mgmt/2015-07-01/authorization/authorizationapi",
+        "../../services/compute/mgmt/2017-03-30/compute",
+        "../../services/compute/mgmt/2017-03-30/compute/computeapi",
+        "../../services/dns/mgmt/2016-04-01/dns",
+        "../../services/dns/mgmt/2016-04-01/dns/dnsapi",
+        "../../services/keyvault/2016-10-01/keyvault",
+        "../../services/keyvault/2016-10-01/keyvault/keyvaultapi",
+        "../../services/keyvault/mgmt/2016-10-01/keyvault",
+        "../../services/keyvault/mgmt/2016-10-01/keyvault/keyvaultapi",
+        "../../services/network/mgmt/2017-10-01/network",
+        "../../services/network/mgmt/2017-10-01/network/networkapi",
+        "../../services/resources/mgmt/2016-09-01/links",
+        "../../services/resources/mgmt/2016-09-01/links/linksapi",
+        "../../services/resources/mgmt/2016-09-01/locks",
+        "../../services/resources/mgmt/2016-09-01/locks/locksapi",
+        "../../services/resources/mgmt/2016-12-01/policy",
+        "../../services/resources/mgmt/2016-12-01/policy/policyapi",
+        "../../services/resources/mgmt/2018-02-01/resources",
+        "../../services/resources/mgmt/2018-02-01/resources/resourcesapi",
+        "../../services/resources/mgmt/2016-06-01/subscriptions",
+        "../../services/resources/mgmt/2016-06-01/subscriptions/subscriptionsapi",
+        "../../services/storage/mgmt/2016-01-01/storage",
+        "../../services/storage/mgmt/2016-01-01/storage/storageapi",
+        "../../services/web/mgmt/2016-09-01/web",
+        "../../services/web/mgmt/2016-09-01/web/webapi"
+    ]
+}

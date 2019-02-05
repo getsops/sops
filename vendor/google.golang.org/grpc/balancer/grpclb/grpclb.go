@@ -25,6 +25,7 @@
 package grpclb
 
 import (
+	"context"
 	"errors"
 	"strconv"
 	"strings"
@@ -32,12 +33,13 @@ import (
 	"time"
 
 	durationpb "github.com/golang/protobuf/ptypes/duration"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer"
 	lbpb "google.golang.org/grpc/balancer/grpclb/grpc_lb_v1"
 	"google.golang.org/grpc/connectivity"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/internal"
 	"google.golang.org/grpc/internal/backoff"
 	"google.golang.org/grpc/resolver"
 )
@@ -166,13 +168,35 @@ func (b *lbBuilder) Build(cc balancer.ClientConn, opt balancer.BuildOptions) bal
 		backoff:        defaultBackoffConfig, // TODO: make backoff configurable.
 	}
 
+	var err error
+	if opt.CredsBundle != nil {
+		lb.grpclbClientConnCreds, err = opt.CredsBundle.NewWithMode(internal.CredsBundleModeBalancer)
+		if err != nil {
+			grpclog.Warningf("lbBalancer: client connection creds NewWithMode failed: %v", err)
+		}
+		lb.grpclbBackendCreds, err = opt.CredsBundle.NewWithMode(internal.CredsBundleModeBackendFromBalancer)
+		if err != nil {
+			grpclog.Warningf("lbBalancer: backend creds NewWithMode failed: %v", err)
+		}
+	}
+
 	return lb
 }
 
 type lbBalancer struct {
-	cc              *lbCacheClientConn
-	target          string
-	opt             balancer.BuildOptions
+	cc     *lbCacheClientConn
+	target string
+	opt    balancer.BuildOptions
+
+	// grpclbClientConnCreds is the creds bundle to be used to connect to grpclb
+	// servers. If it's nil, use the TransportCredentials from BuildOptions
+	// instead.
+	grpclbClientConnCreds credentials.Bundle
+	// grpclbBackendCreds is the creds bundle to be used for addresses that are
+	// returned by grpclb server. If it's nil, don't set anything when creating
+	// SubConns.
+	grpclbBackendCreds credentials.Bundle
+
 	fallbackTimeout time.Duration
 	doneCh          chan struct{}
 
@@ -302,7 +326,7 @@ func (lb *lbBalancer) fallbackToBackendsAfter(fallbackTimeout time.Duration) {
 		return
 	}
 	lb.fallbackTimerExpired = true
-	lb.refreshSubConns(lb.resolvedBackendAddrs)
+	lb.refreshSubConns(lb.resolvedBackendAddrs, false)
 	lb.mu.Unlock()
 }
 
@@ -318,6 +342,7 @@ func (lb *lbBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
 	var remoteBalancerAddrs, backendAddrs []resolver.Address
 	for _, a := range addrs {
 		if a.Type == resolver.GRPCLB {
+			a.Type = resolver.Backend
 			remoteBalancerAddrs = append(remoteBalancerAddrs, a)
 		} else {
 			backendAddrs = append(backendAddrs, a)
@@ -349,7 +374,7 @@ func (lb *lbBalancer) HandleResolvedAddrs(addrs []resolver.Address, err error) {
 		// This means we received a new list of resolved backends, and we are
 		// still in fallback mode. Need to update the list of backends we are
 		// using to the new list of backends.
-		lb.refreshSubConns(lb.resolvedBackendAddrs)
+		lb.refreshSubConns(lb.resolvedBackendAddrs, false)
 	}
 	lb.mu.Unlock()
 }

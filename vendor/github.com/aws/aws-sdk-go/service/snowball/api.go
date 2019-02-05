@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opCancelCluster = "CancelCluster"
@@ -16,7 +18,7 @@ const opCancelCluster = "CancelCluster"
 // CancelClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CancelCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -50,6 +52,7 @@ func (c *Snowball) CancelClusterRequest(input *CancelClusterInput) (req *request
 
 	output = &CancelClusterOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -106,7 +109,7 @@ const opCancelJob = "CancelJob"
 // CancelJobRequest generates a "aws/request.Request" representing the
 // client's request for the CancelJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -140,6 +143,7 @@ func (c *Snowball) CancelJobRequest(input *CancelJobInput) (req *request.Request
 
 	output = &CancelJobOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -196,7 +200,7 @@ const opCreateAddress = "CreateAddress"
 // CreateAddressRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAddress operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -284,7 +288,7 @@ const opCreateCluster = "CreateCluster"
 // CreateClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -379,7 +383,7 @@ const opCreateJob = "CreateJob"
 // CreateJobRequest generates a "aws/request.Request" representing the
 // client's request for the CreateJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -482,7 +486,7 @@ const opDescribeAddress = "DescribeAddress"
 // DescribeAddressRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAddress operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -563,7 +567,7 @@ const opDescribeAddresses = "DescribeAddresses"
 // DescribeAddressesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAddresses operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -705,7 +709,7 @@ const opDescribeCluster = "DescribeCluster"
 // DescribeClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -786,7 +790,7 @@ const opDescribeJob = "DescribeJob"
 // DescribeJobRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -867,7 +871,7 @@ const opGetJobManifest = "GetJobManifest"
 // GetJobManifestRequest generates a "aws/request.Request" representing the
 // client's request for the GetJobManifest operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -968,7 +972,7 @@ const opGetJobUnlockCode = "GetJobUnlockCode"
 // GetJobUnlockCodeRequest generates a "aws/request.Request" representing the
 // client's request for the GetJobUnlockCode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1064,7 +1068,7 @@ const opGetSnowballUsage = "GetSnowballUsage"
 // GetSnowballUsageRequest generates a "aws/request.Request" representing the
 // client's request for the GetSnowballUsage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1142,7 +1146,7 @@ const opListClusterJobs = "ListClusterJobs"
 // ListClusterJobsRequest generates a "aws/request.Request" representing the
 // client's request for the ListClusterJobs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1228,7 +1232,7 @@ const opListClusters = "ListClusters"
 // ListClustersRequest generates a "aws/request.Request" representing the
 // client's request for the ListClusters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1310,7 +1314,7 @@ const opListCompatibleImages = "ListCompatibleImages"
 // ListCompatibleImagesRequest generates a "aws/request.Request" representing the
 // client's request for the ListCompatibleImages operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1351,9 +1355,9 @@ func (c *Snowball) ListCompatibleImagesRequest(input *ListCompatibleImagesInput)
 //
 // This action returns a list of the different Amazon EC2 Amazon Machine Images
 // (AMIs) that are owned by your AWS account that would be supported for use
-// on a Snowball Edge device. Currently, supported AMIs are based on the CentOS
-// 7 (x86_64) - with Updates HVM, Ubuntu Server 14.04 LTS (HVM), and Ubuntu
-// 16.04 LTS - Xenial (HVM) images, available on the AWS Marketplace.
+// on EDGE, EDGE_C, and EDGE_CG devices. For more information on compatible
+// AMIs, see Using Amazon EC2 Compute Instances (http://docs.aws.amazon.com/snowball/latest/developer-guide/using-ec2.html)
+// in the AWS Snowball Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1398,7 +1402,7 @@ const opListJobs = "ListJobs"
 // ListJobsRequest generates a "aws/request.Request" representing the
 // client's request for the ListJobs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1538,7 +1542,7 @@ const opUpdateCluster = "UpdateCluster"
 // UpdateClusterRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1572,6 +1576,7 @@ func (c *Snowball) UpdateClusterRequest(input *UpdateClusterInput) (req *request
 
 	output = &UpdateClusterOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1638,7 +1643,7 @@ const opUpdateJob = "UpdateJob"
 // UpdateJobRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1672,6 +1677,7 @@ func (c *Snowball) UpdateJobRequest(input *UpdateJobInput) (req *request.Request
 
 	output = &UpdateJobOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2145,25 +2151,25 @@ type ClusterMetadata struct {
 	RoleARN *string `type:"string"`
 
 	// The shipping speed for each node in this cluster. This speed doesn't dictate
-	// how soon you'll get each Snowball Edge device, rather it represents how quickly
-	// each device moves to its destination while in transit. Regional shipping
-	// speeds are as follows:
+	// how soon you'll get each device, rather it represents how quickly each device
+	// moves to its destination while in transit. Regional shipping speeds are as
+	// follows:
 	//
 	//    * In Australia, you have access to express shipping. Typically, devices
 	//    shipped express are delivered in about a day.
 	//
 	//    * In the European Union (EU), you have access to express shipping. Typically,
-	//    Snowball Edges shipped express are delivered in about a day. In addition,
-	//    most countries in the EU have access to standard shipping, which typically
+	//    devices shipped express are delivered in about a day. In addition, most
+	//    countries in the EU have access to standard shipping, which typically
 	//    takes less than a week, one way.
 	//
-	//    * In India, Snowball Edges are delivered in one to seven days.
+	//    * In India, devices are delivered in one to seven days.
 	//
 	//    * In the US, you have access to one-day shipping and two-day shipping.
 	ShippingOption *string `type:"string" enum:"ShippingOption"`
 
-	// The type of AWS Snowball device to use for this cluster. Currently, the only
-	// supported device type for cluster jobs is EDGE.
+	// The type of AWS Snowball device to use for this cluster. The only supported
+	// device types for cluster jobs are EDGE, EDGE_C, and EDGE_CG.
 	SnowballType *string `type:"string" enum:"Type"`
 }
 
@@ -2256,9 +2262,9 @@ func (s *ClusterMetadata) SetSnowballType(v string) *ClusterMetadata {
 }
 
 // A JSON-formatted object that describes a compatible Amazon Machine Image
-// (AMI), including the ID and name for a Snowball Edge AMI. This AMI is compatible
-// with the device's physical hardware requirements, and it should be able to
-// be run in an SBE1 instance on the device.
+// (AMI). For more information on compatible AMIs, see Using Amazon EC2 Compute
+// Instances (http://docs.aws.amazon.com/snowball/latest/developer-guide/using-ec2.html)
+// in the AWS Snowball Developer Guide.
 type CompatibleImage struct {
 	_ struct{} `type:"structure"`
 
@@ -2416,15 +2422,15 @@ type CreateClusterInput struct {
 	//    most countries in the EU have access to standard shipping, which typically
 	//    takes less than a week, one way.
 	//
-	//    * In India, Snowball Edges are delivered in one to seven days.
+	//    * In India, devices are delivered in one to seven days.
 	//
 	//    * In the US, you have access to one-day shipping and two-day shipping.
 	//
 	// ShippingOption is a required field
 	ShippingOption *string `type:"string" required:"true" enum:"ShippingOption"`
 
-	// The type of AWS Snowball device to use for this cluster. Currently, the only
-	// supported device type for cluster jobs is EDGE.
+	// The type of AWS Snowball device to use for this cluster. The only supported
+	// device types for cluster jobs are EDGE, EDGE_C, and EDGE_CG.
 	SnowballType *string `type:"string" enum:"Type"`
 }
 
@@ -2630,8 +2636,8 @@ type CreateJobInput struct {
 	// Snowballs come with 80 TB in storage capacity.
 	SnowballCapacityPreference *string `type:"string" enum:"Capacity"`
 
-	// The type of AWS Snowball device to use for this job. Currently, the only
-	// supported device type for cluster jobs is EDGE.
+	// The type of AWS Snowball device to use for this job. The only supported device
+	// types for cluster jobs are EDGE, EDGE_C, and EDGE_CG.
 	SnowballType *string `type:"string" enum:"Type"`
 }
 
@@ -3122,7 +3128,7 @@ type Ec2AmiResource struct {
 	// AmiId is a required field
 	AmiId *string `min:"12" type:"string" required:"true"`
 
-	// The ID of the AMI on the Snowball Edge device.
+	// The ID of the AMI on the supported device.
 	SnowballAmiId *string `min:"1" type:"string"`
 }
 
@@ -4052,7 +4058,7 @@ type ListCompatibleImagesInput struct {
 	_ struct{} `type:"structure"`
 
 	// The maximum number of results for the list of compatible images. Currently,
-	// a Snowball Edge device can store 10 AMIs.
+	// each supported device can store 10 AMIs.
 	MaxResults *int64 `type:"integer"`
 
 	// HTTP requests are stateless. To identify what object comes "next" in the
@@ -4099,8 +4105,7 @@ func (s *ListCompatibleImagesInput) SetNextToken(v string) *ListCompatibleImages
 type ListCompatibleImagesOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A JSON-formatted object that describes a compatible AMI, including the ID
-	// and name for a Snowball Edge AMI.
+	// A JSON-formatted object that describes a compatible AMI.
 	CompatibleImages []*CompatibleImage `type:"list"`
 
 	// Because HTTP requests are stateless, this is the starting point for your
@@ -4712,6 +4717,9 @@ const (
 	// CapacityT100 is a Capacity enum value
 	CapacityT100 = "T100"
 
+	// CapacityT42 is a Capacity enum value
+	CapacityT42 = "T42"
+
 	// CapacityNoPreference is a Capacity enum value
 	CapacityNoPreference = "NoPreference"
 )
@@ -4805,4 +4813,10 @@ const (
 
 	// TypeEdge is a Type enum value
 	TypeEdge = "EDGE"
+
+	// TypeEdgeC is a Type enum value
+	TypeEdgeC = "EDGE_C"
+
+	// TypeEdgeCg is a Type enum value
+	TypeEdgeCg = "EDGE_CG"
 )

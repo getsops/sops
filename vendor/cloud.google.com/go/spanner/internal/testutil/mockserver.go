@@ -17,6 +17,7 @@ limitations under the License.
 package testutil
 
 import (
+	"context"
 	"encoding/binary"
 	"fmt"
 	"io"
@@ -25,12 +26,9 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
-
 	"github.com/golang/protobuf/ptypes/empty"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	pbt "github.com/golang/protobuf/ptypes/timestamp"
-
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -155,6 +153,16 @@ func (m *MockCloudSpanner) ExecuteStreamingSql(r *sppb.ExecuteSqlRequest, s sppb
 	switch r.Sql {
 	case "SELECT * from t_unavailable":
 		return status.Errorf(codes.Unavailable, "mock table unavailable")
+
+	case "UPDATE t SET x = 2 WHERE x = 1":
+		err := s.Send(&sppb.PartialResultSet{
+			Stats: &sppb.ResultSetStats{RowCount: &sppb.ResultSetStats_RowCountLowerBound{3}},
+		})
+		if err != nil {
+			panic(err)
+		}
+		return nil
+
 	case "SELECT t.key key, t.value value FROM t_mock t":
 		if r.ResumeToken != nil {
 			s, err := DecodeResumeToken(r.ResumeToken)
@@ -231,6 +239,13 @@ func (m *MockCloudSpanner) Serve() {
 	sppb.RegisterSpannerServer(m.s, m)
 	m.addr = "localhost:" + port
 	go m.s.Serve(lis)
+}
+
+// BeginTransaction is a placeholder for SpannerServer.BeginTransaction.
+func (m *MockCloudSpanner) BeginTransaction(_ context.Context, r *sppb.BeginTransactionRequest) (*sppb.Transaction, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return &sppb.Transaction{}, nil
 }
 
 // Stop terminates MockCloudSpanner and closes the serving port.

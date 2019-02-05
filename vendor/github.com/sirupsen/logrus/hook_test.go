@@ -1,4 +1,4 @@
-package logrus
+package logrus_test
 
 import (
 	"bytes"
@@ -8,6 +8,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	. "github.com/sirupsen/logrus"
+	. "github.com/sirupsen/logrus/internal/testutils"
 )
 
 type TestHook struct {
@@ -21,6 +24,7 @@ func (hook *TestHook) Fire(entry *Entry) error {
 
 func (hook *TestHook) Levels() []Level {
 	return []Level{
+		TraceLevel,
 		DebugLevel,
 		InfoLevel,
 		WarnLevel,
@@ -53,6 +57,7 @@ func (hook *ModifyHook) Fire(entry *Entry) error {
 
 func (hook *ModifyHook) Levels() []Level {
 	return []Level{
+		TraceLevel,
 		DebugLevel,
 		InfoLevel,
 		WarnLevel,
@@ -184,4 +189,28 @@ func TestAddHookRace(t *testing.T) {
 		// before the hook was added, so we can't
 		// actually assert on the hook
 	})
+}
+
+type HookCallFunc struct {
+	F func()
+}
+
+func (h *HookCallFunc) Levels() []Level {
+	return AllLevels
+}
+
+func (h *HookCallFunc) Fire(e *Entry) error {
+	h.F()
+	return nil
+}
+
+func TestHookFireOrder(t *testing.T) {
+	checkers := []string{}
+	h := LevelHooks{}
+	h.Add(&HookCallFunc{F: func() { checkers = append(checkers, "first hook") }})
+	h.Add(&HookCallFunc{F: func() { checkers = append(checkers, "second hook") }})
+	h.Add(&HookCallFunc{F: func() { checkers = append(checkers, "third hook") }})
+
+	h.Fire(InfoLevel, &Entry{})
+	require.Equal(t, []string{"first hook", "second hook", "third hook"}, checkers)
 }

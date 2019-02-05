@@ -67,7 +67,7 @@ func (m *Endpoint) Reset()         { *m = Endpoint{} }
 func (m *Endpoint) String() string { return proto.CompactTextString(m) }
 func (*Endpoint) ProtoMessage()    {}
 func (*Endpoint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ee48cbc4cc013456, []int{0}
+	return fileDescriptor_endpoint_d87650ae3428bec5, []int{0}
 }
 func (m *Endpoint) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Endpoint.Unmarshal(m, b)
@@ -75,8 +75,8 @@ func (m *Endpoint) XXX_Unmarshal(b []byte) error {
 func (m *Endpoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Endpoint.Marshal(b, m, deterministic)
 }
-func (m *Endpoint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Endpoint.Merge(m, src)
+func (dst *Endpoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Endpoint.Merge(dst, src)
 }
 func (m *Endpoint) XXX_Size() int {
 	return xxx_messageInfo_Endpoint.Size(m)
@@ -126,9 +126,9 @@ func init() {
 	proto.RegisterType((*Endpoint)(nil), "google.api.Endpoint")
 }
 
-func init() { proto.RegisterFile("google/api/endpoint.proto", fileDescriptor_ee48cbc4cc013456) }
+func init() { proto.RegisterFile("google/api/endpoint.proto", fileDescriptor_endpoint_d87650ae3428bec5) }
 
-var fileDescriptor_ee48cbc4cc013456 = []byte{
+var fileDescriptor_endpoint_d87650ae3428bec5 = []byte{
 	// 245 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x8f, 0xb1, 0x4e, 0xc3, 0x30,
 	0x10, 0x86, 0xe5, 0x12, 0x4a, 0x72, 0x12, 0x0c, 0x1e, 0x90, 0xa9, 0x40, 0x8a, 0x98, 0x32, 0x25,

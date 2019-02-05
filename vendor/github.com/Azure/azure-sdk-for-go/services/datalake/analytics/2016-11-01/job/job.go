@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -42,6 +43,16 @@ func NewClient() Client {
 // accountName - the Azure Data Lake Analytics account to execute job operations on.
 // parameters - the parameters to build a job.
 func (client Client) Build(ctx context.Context, accountName string, parameters BuildJobParameters) (result Information, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Build")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.BuildPreparer(ctx, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "job.Client", "Build", nil, "Failure preparing request")
@@ -110,6 +121,16 @@ func (client Client) BuildResponder(resp *http.Response) (result Information, er
 // accountName - the Azure Data Lake Analytics account to execute job operations on.
 // jobIdentity - job identifier. Uniquely identifies the job across all jobs submitted to the service.
 func (client Client) Cancel(ctx context.Context, accountName string, jobIdentity uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelPreparer(ctx, accountName, jobIdentity)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "job.Client", "Cancel", nil, "Failure preparing request")
@@ -180,6 +201,16 @@ func (client Client) CancelResponder(resp *http.Response) (result autorest.Respo
 // jobIdentity - job identifier. Uniquely identifies the job across all jobs submitted to the service.
 // parameters - the parameters to submit a job.
 func (client Client) Create(ctx context.Context, accountName string, jobIdentity uuid.UUID, parameters CreateJobParameters) (result Information, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -265,6 +296,16 @@ func (client Client) CreateResponder(resp *http.Response) (result Information, e
 // accountName - the Azure Data Lake Analytics account to execute job operations on.
 // jobIdentity - jobInfo ID.
 func (client Client) Get(ctx context.Context, accountName string, jobIdentity uuid.UUID) (result Information, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, accountName, jobIdentity)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "job.Client", "Get", nil, "Failure preparing request")
@@ -335,6 +376,16 @@ func (client Client) GetResponder(resp *http.Response) (result Information, err 
 // accountName - the Azure Data Lake Analytics account to execute job operations on.
 // jobIdentity - job identifier. Uniquely identifies the job across all jobs submitted to the service.
 func (client Client) GetDebugDataPath(ctx context.Context, accountName string, jobIdentity uuid.UUID) (result DataPath, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetDebugDataPath")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetDebugDataPathPreparer(ctx, accountName, jobIdentity)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "job.Client", "GetDebugDataPath", nil, "Failure preparing request")
@@ -405,6 +456,16 @@ func (client Client) GetDebugDataPathResponder(resp *http.Response) (result Data
 // accountName - the Azure Data Lake Analytics account to execute job operations on.
 // jobIdentity - job Information ID.
 func (client Client) GetStatistics(ctx context.Context, accountName string, jobIdentity uuid.UUID) (result Statistics, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.GetStatistics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetStatisticsPreparer(ctx, accountName, jobIdentity)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "job.Client", "GetStatistics", nil, "Failure preparing request")
@@ -485,6 +546,16 @@ func (client Client) GetStatisticsResponder(resp *http.Response) (result Statist
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client Client) List(ctx context.Context, accountName string, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result InfoListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.ilr.Response.Response != nil {
+				sc = result.ilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -576,8 +647,8 @@ func (client Client) ListResponder(resp *http.Response) (result InfoListResult, 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client Client) listNextResults(lastResults InfoListResult) (result InfoListResult, err error) {
-	req, err := lastResults.infoListResultPreparer()
+func (client Client) listNextResults(ctx context.Context, lastResults InfoListResult) (result InfoListResult, err error) {
+	req, err := lastResults.infoListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "job.Client", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -598,6 +669,16 @@ func (client Client) listNextResults(lastResults InfoListResult) (result InfoLis
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListComplete(ctx context.Context, accountName string, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result InfoListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, accountName, filter, top, skip, selectParameter, orderby, count)
 	return
 }

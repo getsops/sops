@@ -32,6 +32,21 @@ func TestIoctlGetInt(t *testing.T) {
 	t.Logf("%d bits of entropy available", v)
 }
 
+func TestIoctlGetRTCTime(t *testing.T) {
+	f, err := os.Open("/dev/rtc0")
+	if err != nil {
+		t.Skipf("skipping test, %v", err)
+	}
+	defer f.Close()
+
+	v, err := unix.IoctlGetRTCTime(int(f.Fd()))
+	if err != nil {
+		t.Fatalf("failed to perform ioctl: %v", err)
+	}
+
+	t.Logf("RTC time: %04d-%02d-%02d %02d:%02d:%02d", v.Year+1900, v.Mon+1, v.Mday, v.Hour, v.Min, v.Sec)
+}
+
 func TestPpoll(t *testing.T) {
 	if runtime.GOOS == "android" {
 		t.Skip("mkfifo syscall is not available on android, skipping test")
@@ -273,6 +288,23 @@ func TestSchedSetaffinity(t *testing.T) {
 		t.Skip("skipping setaffinity tests on android")
 	}
 
+	// On a system like ppc64x where some cores can be disabled using ppc64_cpu,
+	// setaffinity should only be called with enabled cores. The valid cores
+	// are found from the oldMask, but if none are found then the setaffinity
+	// tests are skipped. Issue #27875.
+	if !oldMask.IsSet(cpu) {
+		newMask.Zero()
+		for i := 0; i < len(oldMask); i++ {
+			if oldMask.IsSet(i) {
+				newMask.Set(i)
+				break
+			}
+		}
+		if newMask.Count() == 0 {
+			t.Skip("skipping setaffinity tests if CPU not available")
+		}
+	}
+
 	err = unix.SchedSetaffinity(0, &newMask)
 	if err != nil {
 		t.Fatalf("SchedSetaffinity: %v", err)
@@ -463,5 +495,38 @@ func TestSyncFileRange(t *testing.T) {
 	err = unix.SyncFileRange(int(file.Fd()), 0, 0, flags)
 	if err != unix.EINVAL {
 		t.Fatalf("SyncFileRange: unexpected error: %v, want EINVAL", err)
+	}
+}
+
+func TestClockNanosleep(t *testing.T) {
+	delay := 100 * time.Millisecond
+
+	// Relative timespec.
+	start := time.Now()
+	rel := unix.NsecToTimespec(delay.Nanoseconds())
+	err := unix.ClockNanosleep(unix.CLOCK_MONOTONIC, 0, &rel, nil)
+	if err == unix.ENOSYS || err == unix.EPERM {
+		t.Skip("clock_nanosleep syscall is not available, skipping test")
+	} else if err != nil {
+		t.Errorf("ClockNanosleep(CLOCK_MONOTONIC, 0, %#v, nil) = %v", &rel, err)
+	} else if slept := time.Now().Sub(start); slept < delay {
+		t.Errorf("ClockNanosleep(CLOCK_MONOTONIC, 0, %#v, nil) slept only %v", &rel, slept)
+	}
+
+	// Absolute timespec.
+	start = time.Now()
+	until := start.Add(delay)
+	abs := unix.NsecToTimespec(until.UnixNano())
+	err = unix.ClockNanosleep(unix.CLOCK_REALTIME, unix.TIMER_ABSTIME, &abs, nil)
+	if err != nil {
+		t.Errorf("ClockNanosleep(CLOCK_REALTIME, TIMER_ABSTIME, %#v (=%v), nil) = %v", &abs, until, err)
+	} else if slept := time.Now().Sub(start); slept < delay {
+		t.Errorf("ClockNanosleep(CLOCK_REALTIME, TIMER_ABSTIME, %#v (=%v), nil) slept only %v", &abs, until, slept)
+	}
+
+	// Invalid clock. clock_nanosleep(2) says EINVAL, but it’s actually EOPNOTSUPP.
+	err = unix.ClockNanosleep(unix.CLOCK_THREAD_CPUTIME_ID, 0, &rel, nil)
+	if err != unix.EINVAL && err != unix.EOPNOTSUPP {
+		t.Errorf("ClockNanosleep(CLOCK_THREAD_CPUTIME_ID, 0, %#v, nil) = %v, want EINVAL or EOPNOTSUPP", &rel, err)
 	}
 }

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -43,6 +44,16 @@ func NewModelClient(endpoint string) ModelClient {
 // closedListModelCreateObject - a model containing the name and words for the new closed list entity
 // extractor.
 func (client ModelClient) AddClosedList(ctx context.Context, appID uuid.UUID, versionID string, closedListModelCreateObject ClosedListModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddClosedList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddClosedListPreparer(ctx, appID, versionID, closedListModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddClosedList", nil, "Failure preparing request")
@@ -110,6 +121,16 @@ func (client ModelClient) AddClosedListResponder(resp *http.Response) (result UU
 // versionID - the version ID.
 // compositeModelCreateObject - a model containing the name and children of the new entity extractor.
 func (client ModelClient) AddCompositeEntity(ctx context.Context, appID uuid.UUID, versionID string, compositeModelCreateObject CompositeEntityModel) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddCompositeEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddCompositeEntityPreparer(ctx, appID, versionID, compositeModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddCompositeEntity", nil, "Failure preparing request")
@@ -178,6 +199,16 @@ func (client ModelClient) AddCompositeEntityResponder(resp *http.Response) (resu
 // cEntityID - the composite entity extractor ID.
 // compositeChildModelCreateObject - a model object containing the name of the new composite child model.
 func (client ModelClient) AddCompositeEntityChild(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, compositeChildModelCreateObject CompositeChildModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddCompositeEntityChild")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddCompositeEntityChildPreparer(ctx, appID, versionID, cEntityID, compositeChildModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddCompositeEntityChild", nil, "Failure preparing request")
@@ -246,6 +277,16 @@ func (client ModelClient) AddCompositeEntityChildResponder(resp *http.Response) 
 // versionID - the version ID.
 // prebuiltDomainObject - a prebuilt domain create object containing the name of the domain.
 func (client ModelClient) AddCustomPrebuiltDomain(ctx context.Context, appID uuid.UUID, versionID string, prebuiltDomainObject PrebuiltDomainCreateBaseObject) (result ListUUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddCustomPrebuiltDomain")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddCustomPrebuiltDomainPreparer(ctx, appID, versionID, prebuiltDomainObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddCustomPrebuiltDomain", nil, "Failure preparing request")
@@ -314,6 +355,16 @@ func (client ModelClient) AddCustomPrebuiltDomainResponder(resp *http.Response) 
 // prebuiltDomainModelCreateObject - a model object containing the name of the custom prebuilt entity and the
 // name of the domain to which this model belongs.
 func (client ModelClient) AddCustomPrebuiltEntity(ctx context.Context, appID uuid.UUID, versionID string, prebuiltDomainModelCreateObject PrebuiltDomainModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddCustomPrebuiltEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddCustomPrebuiltEntityPreparer(ctx, appID, versionID, prebuiltDomainModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddCustomPrebuiltEntity", nil, "Failure preparing request")
@@ -382,6 +433,16 @@ func (client ModelClient) AddCustomPrebuiltEntityResponder(resp *http.Response) 
 // prebuiltDomainModelCreateObject - a model object containing the name of the custom prebuilt intent and the
 // name of the domain to which this model belongs.
 func (client ModelClient) AddCustomPrebuiltIntent(ctx context.Context, appID uuid.UUID, versionID string, prebuiltDomainModelCreateObject PrebuiltDomainModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddCustomPrebuiltIntent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddCustomPrebuiltIntentPreparer(ctx, appID, versionID, prebuiltDomainModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddCustomPrebuiltIntent", nil, "Failure preparing request")
@@ -449,6 +510,16 @@ func (client ModelClient) AddCustomPrebuiltIntentResponder(resp *http.Response) 
 // versionID - the version ID.
 // modelCreateObject - a model object containing the name for the new entity extractor.
 func (client ModelClient) AddEntity(ctx context.Context, appID uuid.UUID, versionID string, modelCreateObject ModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddEntityPreparer(ctx, appID, versionID, modelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddEntity", nil, "Failure preparing request")
@@ -517,6 +588,16 @@ func (client ModelClient) AddEntityResponder(resp *http.Response) (result UUID, 
 // entityID - the Pattern.Any entity extractor ID.
 // item - the new explicit list item.
 func (client ModelClient) AddExplicitListItem(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, item ExplicitListItemCreateObject) (result Int32, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddExplicitListItem")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddExplicitListItemPreparer(ctx, appID, versionID, entityID, item)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddExplicitListItem", nil, "Failure preparing request")
@@ -585,6 +666,16 @@ func (client ModelClient) AddExplicitListItemResponder(resp *http.Response) (res
 // versionID - the version ID.
 // hierarchicalModelCreateObject - a model containing the name and children of the new entity extractor.
 func (client ModelClient) AddHierarchicalEntity(ctx context.Context, appID uuid.UUID, versionID string, hierarchicalModelCreateObject HierarchicalEntityModel) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddHierarchicalEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddHierarchicalEntityPreparer(ctx, appID, versionID, hierarchicalModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddHierarchicalEntity", nil, "Failure preparing request")
@@ -653,6 +744,16 @@ func (client ModelClient) AddHierarchicalEntityResponder(resp *http.Response) (r
 // hEntityID - the hierarchical entity extractor ID.
 // hierarchicalChildModelCreateObject - a model object containing the name of the new hierarchical child model.
 func (client ModelClient) AddHierarchicalEntityChild(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, hierarchicalChildModelCreateObject HierarchicalChildModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddHierarchicalEntityChild")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddHierarchicalEntityChildPreparer(ctx, appID, versionID, hEntityID, hierarchicalChildModelCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddHierarchicalEntityChild", nil, "Failure preparing request")
@@ -721,6 +822,16 @@ func (client ModelClient) AddHierarchicalEntityChildResponder(resp *http.Respons
 // versionID - the version ID.
 // intentCreateObject - a model object containing the name of the new intent classifier.
 func (client ModelClient) AddIntent(ctx context.Context, appID uuid.UUID, versionID string, intentCreateObject ModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddIntent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddIntentPreparer(ctx, appID, versionID, intentCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddIntent", nil, "Failure preparing request")
@@ -788,6 +899,16 @@ func (client ModelClient) AddIntentResponder(resp *http.Response) (result UUID, 
 // versionID - the version ID.
 // prebuiltExtractorNames - an array of prebuilt entity extractor names.
 func (client ModelClient) AddPrebuilt(ctx context.Context, appID uuid.UUID, versionID string, prebuiltExtractorNames []string) (result ListPrebuiltEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddPrebuilt")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: prebuiltExtractorNames,
 			Constraints: []validation.Constraint{{Target: "prebuiltExtractorNames", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -862,6 +983,16 @@ func (client ModelClient) AddPrebuiltResponder(resp *http.Response) (result List
 // clEntityID - the closed list entity extractor ID.
 // wordListCreateObject - words list.
 func (client ModelClient) AddSubList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID, wordListCreateObject WordListObject) (result Int32, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.AddSubList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddSubListPreparer(ctx, appID, versionID, clEntityID, wordListCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "AddSubList", nil, "Failure preparing request")
@@ -931,6 +1062,16 @@ func (client ModelClient) AddSubListResponder(resp *http.Response) (result Int32
 // entityID - the entity model ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreateClosedListEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateClosedListEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateClosedListEntityRolePreparer(ctx, appID, versionID, entityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateClosedListEntityRole", nil, "Failure preparing request")
@@ -1000,6 +1141,16 @@ func (client ModelClient) CreateClosedListEntityRoleResponder(resp *http.Respons
 // cEntityID - the composite entity extractor ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreateCompositeEntityRole(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateCompositeEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateCompositeEntityRolePreparer(ctx, appID, versionID, cEntityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateCompositeEntityRole", nil, "Failure preparing request")
@@ -1069,6 +1220,16 @@ func (client ModelClient) CreateCompositeEntityRoleResponder(resp *http.Response
 // entityID - the entity model ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreateCustomPrebuiltEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateCustomPrebuiltEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateCustomPrebuiltEntityRolePreparer(ctx, appID, versionID, entityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateCustomPrebuiltEntityRole", nil, "Failure preparing request")
@@ -1138,6 +1299,16 @@ func (client ModelClient) CreateCustomPrebuiltEntityRoleResponder(resp *http.Res
 // entityID - the entity model ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreateEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateEntityRolePreparer(ctx, appID, versionID, entityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateEntityRole", nil, "Failure preparing request")
@@ -1207,6 +1378,16 @@ func (client ModelClient) CreateEntityRoleResponder(resp *http.Response) (result
 // hEntityID - the hierarchical entity extractor ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreateHierarchicalEntityRole(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateHierarchicalEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateHierarchicalEntityRolePreparer(ctx, appID, versionID, hEntityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateHierarchicalEntityRole", nil, "Failure preparing request")
@@ -1276,6 +1457,16 @@ func (client ModelClient) CreateHierarchicalEntityRoleResponder(resp *http.Respo
 // extractorCreateObject - a model object containing the name and explicit list for the new Pattern.Any entity
 // extractor.
 func (client ModelClient) CreatePatternAnyEntityModel(ctx context.Context, appID uuid.UUID, versionID string, extractorCreateObject PatternAnyModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreatePatternAnyEntityModel")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePatternAnyEntityModelPreparer(ctx, appID, versionID, extractorCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreatePatternAnyEntityModel", nil, "Failure preparing request")
@@ -1344,6 +1535,16 @@ func (client ModelClient) CreatePatternAnyEntityModelResponder(resp *http.Respon
 // entityID - the entity model ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreatePatternAnyEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreatePatternAnyEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePatternAnyEntityRolePreparer(ctx, appID, versionID, entityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreatePatternAnyEntityRole", nil, "Failure preparing request")
@@ -1413,6 +1614,16 @@ func (client ModelClient) CreatePatternAnyEntityRoleResponder(resp *http.Respons
 // entityID - the entity model ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreatePrebuiltEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreatePrebuiltEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePrebuiltEntityRolePreparer(ctx, appID, versionID, entityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreatePrebuiltEntityRole", nil, "Failure preparing request")
@@ -1482,6 +1693,16 @@ func (client ModelClient) CreatePrebuiltEntityRoleResponder(resp *http.Response)
 // regexEntityExtractorCreateObj - a model object containing the name and regex pattern for the new regex
 // entity extractor.
 func (client ModelClient) CreateRegexEntityModel(ctx context.Context, appID uuid.UUID, versionID string, regexEntityExtractorCreateObj RegexModelCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateRegexEntityModel")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateRegexEntityModelPreparer(ctx, appID, versionID, regexEntityExtractorCreateObj)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateRegexEntityModel", nil, "Failure preparing request")
@@ -1550,6 +1771,16 @@ func (client ModelClient) CreateRegexEntityModelResponder(resp *http.Response) (
 // entityID - the entity model ID.
 // entityRoleCreateObject - an entity role object containing the name of role.
 func (client ModelClient) CreateRegexEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, entityRoleCreateObject EntityRoleCreateObject) (result UUID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.CreateRegexEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateRegexEntityRolePreparer(ctx, appID, versionID, entityID, entityRoleCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "CreateRegexEntityRole", nil, "Failure preparing request")
@@ -1618,6 +1849,16 @@ func (client ModelClient) CreateRegexEntityRoleResponder(resp *http.Response) (r
 // versionID - the version ID.
 // clEntityID - the closed list model ID.
 func (client ModelClient) DeleteClosedList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteClosedList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteClosedListPreparer(ctx, appID, versionID, clEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteClosedList", nil, "Failure preparing request")
@@ -1685,6 +1926,16 @@ func (client ModelClient) DeleteClosedListResponder(resp *http.Response) (result
 // entityID - the entity ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeleteClosedListEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteClosedListEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteClosedListEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteClosedListEntityRole", nil, "Failure preparing request")
@@ -1752,6 +2003,16 @@ func (client ModelClient) DeleteClosedListEntityRoleResponder(resp *http.Respons
 // versionID - the version ID.
 // cEntityID - the composite entity extractor ID.
 func (client ModelClient) DeleteCompositeEntity(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteCompositeEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteCompositeEntityPreparer(ctx, appID, versionID, cEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteCompositeEntity", nil, "Failure preparing request")
@@ -1819,6 +2080,16 @@ func (client ModelClient) DeleteCompositeEntityResponder(resp *http.Response) (r
 // cEntityID - the composite entity extractor ID.
 // cChildID - the hierarchical entity extractor child ID.
 func (client ModelClient) DeleteCompositeEntityChild(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, cChildID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteCompositeEntityChild")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteCompositeEntityChildPreparer(ctx, appID, versionID, cEntityID, cChildID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteCompositeEntityChild", nil, "Failure preparing request")
@@ -1887,6 +2158,16 @@ func (client ModelClient) DeleteCompositeEntityChildResponder(resp *http.Respons
 // cEntityID - the composite entity extractor ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeleteCompositeEntityRole(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteCompositeEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteCompositeEntityRolePreparer(ctx, appID, versionID, cEntityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteCompositeEntityRole", nil, "Failure preparing request")
@@ -1955,6 +2236,16 @@ func (client ModelClient) DeleteCompositeEntityRoleResponder(resp *http.Response
 // entityID - the entity ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeleteCustomEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteCustomEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteCustomEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteCustomEntityRole", nil, "Failure preparing request")
@@ -2022,6 +2313,16 @@ func (client ModelClient) DeleteCustomEntityRoleResponder(resp *http.Response) (
 // versionID - the version ID.
 // domainName - domain name.
 func (client ModelClient) DeleteCustomPrebuiltDomain(ctx context.Context, appID uuid.UUID, versionID string, domainName string) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteCustomPrebuiltDomain")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteCustomPrebuiltDomainPreparer(ctx, appID, versionID, domainName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteCustomPrebuiltDomain", nil, "Failure preparing request")
@@ -2088,6 +2389,16 @@ func (client ModelClient) DeleteCustomPrebuiltDomainResponder(resp *http.Respons
 // versionID - the version ID.
 // entityID - the entity extractor ID.
 func (client ModelClient) DeleteEntity(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteEntityPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteEntity", nil, "Failure preparing request")
@@ -2155,6 +2466,16 @@ func (client ModelClient) DeleteEntityResponder(resp *http.Response) (result Ope
 // entityID - the entity ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeleteEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteEntityRole", nil, "Failure preparing request")
@@ -2223,6 +2544,16 @@ func (client ModelClient) DeleteEntityRoleResponder(resp *http.Response) (result
 // entityID - the pattern.any entity id.
 // itemID - the explicit list item which will be deleted.
 func (client ModelClient) DeleteExplicitListItem(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, itemID int64) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteExplicitListItem")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteExplicitListItemPreparer(ctx, appID, versionID, entityID, itemID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteExplicitListItem", nil, "Failure preparing request")
@@ -2290,6 +2621,16 @@ func (client ModelClient) DeleteExplicitListItemResponder(resp *http.Response) (
 // versionID - the version ID.
 // hEntityID - the hierarchical entity extractor ID.
 func (client ModelClient) DeleteHierarchicalEntity(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteHierarchicalEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteHierarchicalEntityPreparer(ctx, appID, versionID, hEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteHierarchicalEntity", nil, "Failure preparing request")
@@ -2357,6 +2698,16 @@ func (client ModelClient) DeleteHierarchicalEntityResponder(resp *http.Response)
 // hEntityID - the hierarchical entity extractor ID.
 // hChildID - the hierarchical entity extractor child ID.
 func (client ModelClient) DeleteHierarchicalEntityChild(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, hChildID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteHierarchicalEntityChild")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteHierarchicalEntityChildPreparer(ctx, appID, versionID, hEntityID, hChildID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteHierarchicalEntityChild", nil, "Failure preparing request")
@@ -2425,6 +2776,16 @@ func (client ModelClient) DeleteHierarchicalEntityChildResponder(resp *http.Resp
 // hEntityID - the hierarchical entity extractor ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeleteHierarchicalEntityRole(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteHierarchicalEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteHierarchicalEntityRolePreparer(ctx, appID, versionID, hEntityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteHierarchicalEntityRole", nil, "Failure preparing request")
@@ -2494,6 +2855,16 @@ func (client ModelClient) DeleteHierarchicalEntityRoleResponder(resp *http.Respo
 // deleteUtterances - also delete the intent's utterances (true). Or move the utterances to the None intent
 // (false - the default value).
 func (client ModelClient) DeleteIntent(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, deleteUtterances *bool) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteIntent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteIntentPreparer(ctx, appID, versionID, intentID, deleteUtterances)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteIntent", nil, "Failure preparing request")
@@ -2568,6 +2939,16 @@ func (client ModelClient) DeleteIntentResponder(resp *http.Response) (result Ope
 // versionID - the version ID.
 // entityID - the Pattern.Any entity extractor ID.
 func (client ModelClient) DeletePatternAnyEntityModel(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeletePatternAnyEntityModel")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePatternAnyEntityModelPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeletePatternAnyEntityModel", nil, "Failure preparing request")
@@ -2635,6 +3016,16 @@ func (client ModelClient) DeletePatternAnyEntityModelResponder(resp *http.Respon
 // entityID - the entity ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeletePatternAnyEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeletePatternAnyEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePatternAnyEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeletePatternAnyEntityRole", nil, "Failure preparing request")
@@ -2702,6 +3093,16 @@ func (client ModelClient) DeletePatternAnyEntityRoleResponder(resp *http.Respons
 // versionID - the version ID.
 // prebuiltID - the prebuilt entity extractor ID.
 func (client ModelClient) DeletePrebuilt(ctx context.Context, appID uuid.UUID, versionID string, prebuiltID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeletePrebuilt")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePrebuiltPreparer(ctx, appID, versionID, prebuiltID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeletePrebuilt", nil, "Failure preparing request")
@@ -2769,6 +3170,16 @@ func (client ModelClient) DeletePrebuiltResponder(resp *http.Response) (result O
 // entityID - the entity ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeletePrebuiltEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeletePrebuiltEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePrebuiltEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeletePrebuiltEntityRole", nil, "Failure preparing request")
@@ -2836,6 +3247,16 @@ func (client ModelClient) DeletePrebuiltEntityRoleResponder(resp *http.Response)
 // versionID - the version ID.
 // regexEntityID - the regex entity extractor ID.
 func (client ModelClient) DeleteRegexEntityModel(ctx context.Context, appID uuid.UUID, versionID string, regexEntityID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteRegexEntityModel")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteRegexEntityModelPreparer(ctx, appID, versionID, regexEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteRegexEntityModel", nil, "Failure preparing request")
@@ -2903,6 +3324,16 @@ func (client ModelClient) DeleteRegexEntityModelResponder(resp *http.Response) (
 // entityID - the entity ID.
 // roleID - the entity role Id.
 func (client ModelClient) DeleteRegexEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteRegexEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteRegexEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteRegexEntityRole", nil, "Failure preparing request")
@@ -2971,6 +3402,16 @@ func (client ModelClient) DeleteRegexEntityRoleResponder(resp *http.Response) (r
 // clEntityID - the closed list entity extractor ID.
 // subListID - the sublist ID.
 func (client ModelClient) DeleteSubList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID, subListID int32) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.DeleteSubList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteSubListPreparer(ctx, appID, versionID, clEntityID, subListID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "DeleteSubList", nil, "Failure preparing request")
@@ -3040,6 +3481,16 @@ func (client ModelClient) DeleteSubListResponder(resp *http.Response) (result Op
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ExamplesMethod(ctx context.Context, appID uuid.UUID, versionID string, modelID string, skip *int32, take *int32) (result ListLabelTextObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ExamplesMethod")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -3131,6 +3582,16 @@ func (client ModelClient) ExamplesMethodResponder(resp *http.Response) (result L
 // versionID - the version ID.
 // clEntityID - the closed list model ID.
 func (client ModelClient) GetClosedList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID) (result ClosedListEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetClosedList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetClosedListPreparer(ctx, appID, versionID, clEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetClosedList", nil, "Failure preparing request")
@@ -3198,6 +3659,16 @@ func (client ModelClient) GetClosedListResponder(resp *http.Response) (result Cl
 // entityID - entity ID.
 // roleID - entity role ID.
 func (client ModelClient) GetClosedListEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetClosedListEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetClosedListEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetClosedListEntityRole", nil, "Failure preparing request")
@@ -3265,6 +3736,16 @@ func (client ModelClient) GetClosedListEntityRoleResponder(resp *http.Response) 
 // versionID - the version ID.
 // entityID - entity Id
 func (client ModelClient) GetClosedListEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetClosedListEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetClosedListEntityRolesPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetClosedListEntityRoles", nil, "Failure preparing request")
@@ -3331,6 +3812,16 @@ func (client ModelClient) GetClosedListEntityRolesResponder(resp *http.Response)
 // versionID - the version ID.
 // cEntityID - the composite entity extractor ID.
 func (client ModelClient) GetCompositeEntity(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID) (result CompositeEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetCompositeEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetCompositeEntityPreparer(ctx, appID, versionID, cEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetCompositeEntity", nil, "Failure preparing request")
@@ -3398,6 +3889,16 @@ func (client ModelClient) GetCompositeEntityResponder(resp *http.Response) (resu
 // cEntityID - the composite entity extractor ID.
 // roleID - entity role ID.
 func (client ModelClient) GetCompositeEntityRole(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetCompositeEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetCompositeEntityRolePreparer(ctx, appID, versionID, cEntityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetCompositeEntityRole", nil, "Failure preparing request")
@@ -3465,6 +3966,16 @@ func (client ModelClient) GetCompositeEntityRoleResponder(resp *http.Response) (
 // versionID - the version ID.
 // cEntityID - the composite entity extractor ID.
 func (client ModelClient) GetCompositeEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetCompositeEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetCompositeEntityRolesPreparer(ctx, appID, versionID, cEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetCompositeEntityRoles", nil, "Failure preparing request")
@@ -3532,6 +4043,16 @@ func (client ModelClient) GetCompositeEntityRolesResponder(resp *http.Response) 
 // entityID - entity ID.
 // roleID - entity role ID.
 func (client ModelClient) GetCustomEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetCustomEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetCustomEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetCustomEntityRole", nil, "Failure preparing request")
@@ -3599,6 +4120,16 @@ func (client ModelClient) GetCustomEntityRoleResponder(resp *http.Response) (res
 // versionID - the version ID.
 // entityID - entity Id
 func (client ModelClient) GetCustomPrebuiltEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetCustomPrebuiltEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetCustomPrebuiltEntityRolesPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetCustomPrebuiltEntityRoles", nil, "Failure preparing request")
@@ -3665,6 +4196,16 @@ func (client ModelClient) GetCustomPrebuiltEntityRolesResponder(resp *http.Respo
 // versionID - the version ID.
 // entityID - the entity extractor ID.
 func (client ModelClient) GetEntity(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result EntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetEntityPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetEntity", nil, "Failure preparing request")
@@ -3732,6 +4273,16 @@ func (client ModelClient) GetEntityResponder(resp *http.Response) (result Entity
 // entityID - entity ID.
 // roleID - entity role ID.
 func (client ModelClient) GetEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetEntityRole", nil, "Failure preparing request")
@@ -3799,6 +4350,16 @@ func (client ModelClient) GetEntityRoleResponder(resp *http.Response) (result En
 // versionID - the version ID.
 // entityID - entity Id
 func (client ModelClient) GetEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetEntityRolesPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetEntityRoles", nil, "Failure preparing request")
@@ -3866,6 +4427,16 @@ func (client ModelClient) GetEntityRolesResponder(resp *http.Response) (result L
 // entityID - the target entity extractor model to enhance.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) GetEntitySuggestions(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, take *int32) (result ListEntitiesSuggestionExample, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetEntitySuggestions")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: take,
 			Constraints: []validation.Constraint{{Target: "take", Name: validation.Null, Rule: false,
@@ -3949,6 +4520,16 @@ func (client ModelClient) GetEntitySuggestionsResponder(resp *http.Response) (re
 // versionID - the version ID.
 // entityID - the Pattern.Any entity id.
 func (client ModelClient) GetExplicitList(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListExplicitListItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetExplicitList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetExplicitListPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetExplicitList", nil, "Failure preparing request")
@@ -4016,6 +4597,16 @@ func (client ModelClient) GetExplicitListResponder(resp *http.Response) (result 
 // entityID - the Pattern.Any entity Id.
 // itemID - the explicit list item Id.
 func (client ModelClient) GetExplicitListItem(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, itemID int64) (result ExplicitListItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetExplicitListItem")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetExplicitListItemPreparer(ctx, appID, versionID, entityID, itemID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetExplicitListItem", nil, "Failure preparing request")
@@ -4083,6 +4674,16 @@ func (client ModelClient) GetExplicitListItemResponder(resp *http.Response) (res
 // versionID - the version ID.
 // hEntityID - the hierarchical entity extractor ID.
 func (client ModelClient) GetHierarchicalEntity(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID) (result HierarchicalEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetHierarchicalEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetHierarchicalEntityPreparer(ctx, appID, versionID, hEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetHierarchicalEntity", nil, "Failure preparing request")
@@ -4150,6 +4751,16 @@ func (client ModelClient) GetHierarchicalEntityResponder(resp *http.Response) (r
 // hEntityID - the hierarchical entity extractor ID.
 // hChildID - the hierarchical entity extractor child ID.
 func (client ModelClient) GetHierarchicalEntityChild(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, hChildID uuid.UUID) (result HierarchicalChildEntity, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetHierarchicalEntityChild")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetHierarchicalEntityChildPreparer(ctx, appID, versionID, hEntityID, hChildID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetHierarchicalEntityChild", nil, "Failure preparing request")
@@ -4218,6 +4829,16 @@ func (client ModelClient) GetHierarchicalEntityChildResponder(resp *http.Respons
 // hEntityID - the hierarchical entity extractor ID.
 // roleID - entity role ID.
 func (client ModelClient) GetHierarchicalEntityRole(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetHierarchicalEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetHierarchicalEntityRolePreparer(ctx, appID, versionID, hEntityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetHierarchicalEntityRole", nil, "Failure preparing request")
@@ -4285,6 +4906,16 @@ func (client ModelClient) GetHierarchicalEntityRoleResponder(resp *http.Response
 // versionID - the version ID.
 // hEntityID - the hierarchical entity extractor ID.
 func (client ModelClient) GetHierarchicalEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetHierarchicalEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetHierarchicalEntityRolesPreparer(ctx, appID, versionID, hEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetHierarchicalEntityRoles", nil, "Failure preparing request")
@@ -4351,6 +4982,16 @@ func (client ModelClient) GetHierarchicalEntityRolesResponder(resp *http.Respons
 // versionID - the version ID.
 // intentID - the intent classifier ID.
 func (client ModelClient) GetIntent(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID) (result IntentClassifier, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetIntent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetIntentPreparer(ctx, appID, versionID, intentID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetIntent", nil, "Failure preparing request")
@@ -4418,6 +5059,16 @@ func (client ModelClient) GetIntentResponder(resp *http.Response) (result Intent
 // intentID - the intent classifier ID.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) GetIntentSuggestions(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, take *int32) (result ListIntentsSuggestionExample, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetIntentSuggestions")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: take,
 			Constraints: []validation.Constraint{{Target: "take", Name: validation.Null, Rule: false,
@@ -4501,6 +5152,16 @@ func (client ModelClient) GetIntentSuggestionsResponder(resp *http.Response) (re
 // versionID - the version ID.
 // entityID - the entity extractor ID.
 func (client ModelClient) GetPatternAnyEntityInfo(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result PatternAnyEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPatternAnyEntityInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPatternAnyEntityInfoPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetPatternAnyEntityInfo", nil, "Failure preparing request")
@@ -4568,6 +5229,16 @@ func (client ModelClient) GetPatternAnyEntityInfoResponder(resp *http.Response) 
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) GetPatternAnyEntityInfos(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPatternAnyEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPatternAnyEntityInfos")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -4659,6 +5330,16 @@ func (client ModelClient) GetPatternAnyEntityInfosResponder(resp *http.Response)
 // entityID - entity ID.
 // roleID - entity role ID.
 func (client ModelClient) GetPatternAnyEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPatternAnyEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPatternAnyEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetPatternAnyEntityRole", nil, "Failure preparing request")
@@ -4726,6 +5407,16 @@ func (client ModelClient) GetPatternAnyEntityRoleResponder(resp *http.Response) 
 // versionID - the version ID.
 // entityID - entity Id
 func (client ModelClient) GetPatternAnyEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPatternAnyEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPatternAnyEntityRolesPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetPatternAnyEntityRoles", nil, "Failure preparing request")
@@ -4792,6 +5483,16 @@ func (client ModelClient) GetPatternAnyEntityRolesResponder(resp *http.Response)
 // versionID - the version ID.
 // prebuiltID - the prebuilt entity extractor ID.
 func (client ModelClient) GetPrebuilt(ctx context.Context, appID uuid.UUID, versionID string, prebuiltID uuid.UUID) (result PrebuiltEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPrebuilt")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPrebuiltPreparer(ctx, appID, versionID, prebuiltID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetPrebuilt", nil, "Failure preparing request")
@@ -4859,6 +5560,16 @@ func (client ModelClient) GetPrebuiltResponder(resp *http.Response) (result Preb
 // entityID - entity ID.
 // roleID - entity role ID.
 func (client ModelClient) GetPrebuiltEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPrebuiltEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPrebuiltEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetPrebuiltEntityRole", nil, "Failure preparing request")
@@ -4926,6 +5637,16 @@ func (client ModelClient) GetPrebuiltEntityRoleResponder(resp *http.Response) (r
 // versionID - the version ID.
 // entityID - entity Id
 func (client ModelClient) GetPrebuiltEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetPrebuiltEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPrebuiltEntityRolesPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetPrebuiltEntityRoles", nil, "Failure preparing request")
@@ -4992,6 +5713,16 @@ func (client ModelClient) GetPrebuiltEntityRolesResponder(resp *http.Response) (
 // versionID - the version ID.
 // regexEntityID - the regex entity model ID.
 func (client ModelClient) GetRegexEntityEntityInfo(ctx context.Context, appID uuid.UUID, versionID string, regexEntityID uuid.UUID) (result RegexEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetRegexEntityEntityInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetRegexEntityEntityInfoPreparer(ctx, appID, versionID, regexEntityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetRegexEntityEntityInfo", nil, "Failure preparing request")
@@ -5059,6 +5790,16 @@ func (client ModelClient) GetRegexEntityEntityInfoResponder(resp *http.Response)
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) GetRegexEntityInfos(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListRegexEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetRegexEntityInfos")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -5150,6 +5891,16 @@ func (client ModelClient) GetRegexEntityInfosResponder(resp *http.Response) (res
 // entityID - entity ID.
 // roleID - entity role ID.
 func (client ModelClient) GetRegexEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID) (result EntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetRegexEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetRegexEntityRolePreparer(ctx, appID, versionID, entityID, roleID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetRegexEntityRole", nil, "Failure preparing request")
@@ -5217,6 +5968,16 @@ func (client ModelClient) GetRegexEntityRoleResponder(resp *http.Response) (resu
 // versionID - the version ID.
 // entityID - entity Id
 func (client ModelClient) GetRegexEntityRoles(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID) (result ListEntityRole, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.GetRegexEntityRoles")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetRegexEntityRolesPreparer(ctx, appID, versionID, entityID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "GetRegexEntityRoles", nil, "Failure preparing request")
@@ -5284,6 +6045,16 @@ func (client ModelClient) GetRegexEntityRolesResponder(resp *http.Response) (res
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListClosedLists(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListClosedListEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListClosedLists")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -5375,6 +6146,16 @@ func (client ModelClient) ListClosedListsResponder(resp *http.Response) (result 
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListCompositeEntities(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListCompositeEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListCompositeEntities")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -5464,6 +6245,16 @@ func (client ModelClient) ListCompositeEntitiesResponder(resp *http.Response) (r
 // appID - the application ID.
 // versionID - the version ID.
 func (client ModelClient) ListCustomPrebuiltEntities(ctx context.Context, appID uuid.UUID, versionID string) (result ListEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListCustomPrebuiltEntities")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListCustomPrebuiltEntitiesPreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "ListCustomPrebuiltEntities", nil, "Failure preparing request")
@@ -5528,6 +6319,16 @@ func (client ModelClient) ListCustomPrebuiltEntitiesResponder(resp *http.Respons
 // appID - the application ID.
 // versionID - the version ID.
 func (client ModelClient) ListCustomPrebuiltIntents(ctx context.Context, appID uuid.UUID, versionID string) (result ListIntentClassifier, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListCustomPrebuiltIntents")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListCustomPrebuiltIntentsPreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "ListCustomPrebuiltIntents", nil, "Failure preparing request")
@@ -5592,6 +6393,16 @@ func (client ModelClient) ListCustomPrebuiltIntentsResponder(resp *http.Response
 // appID - the application ID.
 // versionID - the version ID.
 func (client ModelClient) ListCustomPrebuiltModels(ctx context.Context, appID uuid.UUID, versionID string) (result ListCustomPrebuiltModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListCustomPrebuiltModels")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListCustomPrebuiltModelsPreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "ListCustomPrebuiltModels", nil, "Failure preparing request")
@@ -5658,6 +6469,16 @@ func (client ModelClient) ListCustomPrebuiltModelsResponder(resp *http.Response)
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListEntities(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListEntities")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -5749,6 +6570,16 @@ func (client ModelClient) ListEntitiesResponder(resp *http.Response) (result Lis
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListHierarchicalEntities(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListHierarchicalEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListHierarchicalEntities")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -5840,6 +6671,16 @@ func (client ModelClient) ListHierarchicalEntitiesResponder(resp *http.Response)
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListIntents(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListIntentClassifier, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListIntents")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -5931,6 +6772,16 @@ func (client ModelClient) ListIntentsResponder(resp *http.Response) (result List
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListModels(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListModelInfoResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListModels")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -6020,6 +6871,16 @@ func (client ModelClient) ListModelsResponder(resp *http.Response) (result ListM
 // appID - the application ID.
 // versionID - the version ID.
 func (client ModelClient) ListPrebuiltEntities(ctx context.Context, appID uuid.UUID, versionID string) (result ListAvailablePrebuiltEntityModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListPrebuiltEntities")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPrebuiltEntitiesPreparer(ctx, appID, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "ListPrebuiltEntities", nil, "Failure preparing request")
@@ -6086,6 +6947,16 @@ func (client ModelClient) ListPrebuiltEntitiesResponder(resp *http.Response) (re
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client ModelClient) ListPrebuilts(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPrebuiltEntityExtractor, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.ListPrebuilts")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -6177,6 +7048,16 @@ func (client ModelClient) ListPrebuiltsResponder(resp *http.Response) (result Li
 // clEntityID - the closed list model ID.
 // closedListModelPatchObject - a words list batch.
 func (client ModelClient) PatchClosedList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID, closedListModelPatchObject ClosedListModelPatchObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.PatchClosedList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchClosedListPreparer(ctx, appID, versionID, clEntityID, closedListModelPatchObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "PatchClosedList", nil, "Failure preparing request")
@@ -6246,6 +7127,16 @@ func (client ModelClient) PatchClosedListResponder(resp *http.Response) (result 
 // clEntityID - the closed list model ID.
 // closedListModelUpdateObject - the new entity name and words list.
 func (client ModelClient) UpdateClosedList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID, closedListModelUpdateObject ClosedListModelUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateClosedList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateClosedListPreparer(ctx, appID, versionID, clEntityID, closedListModelUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateClosedList", nil, "Failure preparing request")
@@ -6316,6 +7207,16 @@ func (client ModelClient) UpdateClosedListResponder(resp *http.Response) (result
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdateClosedListEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateClosedListEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateClosedListEntityRolePreparer(ctx, appID, versionID, entityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateClosedListEntityRole", nil, "Failure preparing request")
@@ -6386,6 +7287,16 @@ func (client ModelClient) UpdateClosedListEntityRoleResponder(resp *http.Respons
 // cEntityID - the composite entity extractor ID.
 // compositeModelUpdateObject - a model object containing the new entity extractor name and children.
 func (client ModelClient) UpdateCompositeEntity(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, compositeModelUpdateObject CompositeEntityModel) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateCompositeEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateCompositeEntityPreparer(ctx, appID, versionID, cEntityID, compositeModelUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateCompositeEntity", nil, "Failure preparing request")
@@ -6456,6 +7367,16 @@ func (client ModelClient) UpdateCompositeEntityResponder(resp *http.Response) (r
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdateCompositeEntityRole(ctx context.Context, appID uuid.UUID, versionID string, cEntityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateCompositeEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateCompositeEntityRolePreparer(ctx, appID, versionID, cEntityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateCompositeEntityRole", nil, "Failure preparing request")
@@ -6527,6 +7448,16 @@ func (client ModelClient) UpdateCompositeEntityRoleResponder(resp *http.Response
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdateCustomPrebuiltEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateCustomPrebuiltEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateCustomPrebuiltEntityRolePreparer(ctx, appID, versionID, entityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateCustomPrebuiltEntityRole", nil, "Failure preparing request")
@@ -6597,6 +7528,16 @@ func (client ModelClient) UpdateCustomPrebuiltEntityRoleResponder(resp *http.Res
 // entityID - the entity extractor ID.
 // modelUpdateObject - a model object containing the new entity extractor name.
 func (client ModelClient) UpdateEntity(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, modelUpdateObject ModelUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateEntityPreparer(ctx, appID, versionID, entityID, modelUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateEntity", nil, "Failure preparing request")
@@ -6667,6 +7608,16 @@ func (client ModelClient) UpdateEntityResponder(resp *http.Response) (result Ope
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdateEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateEntityRolePreparer(ctx, appID, versionID, entityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateEntityRole", nil, "Failure preparing request")
@@ -6738,6 +7689,16 @@ func (client ModelClient) UpdateEntityRoleResponder(resp *http.Response) (result
 // itemID - the explicit list item ID.
 // item - the new explicit list item.
 func (client ModelClient) UpdateExplicitListItem(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, itemID int64, item ExplicitListItemUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateExplicitListItem")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateExplicitListItemPreparer(ctx, appID, versionID, entityID, itemID, item)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateExplicitListItem", nil, "Failure preparing request")
@@ -6808,6 +7769,16 @@ func (client ModelClient) UpdateExplicitListItemResponder(resp *http.Response) (
 // hEntityID - the hierarchical entity extractor ID.
 // hierarchicalModelUpdateObject - model containing names of the children of the hierarchical entity.
 func (client ModelClient) UpdateHierarchicalEntity(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, hierarchicalModelUpdateObject HierarchicalEntityModel) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateHierarchicalEntity")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateHierarchicalEntityPreparer(ctx, appID, versionID, hEntityID, hierarchicalModelUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateHierarchicalEntity", nil, "Failure preparing request")
@@ -6878,6 +7849,16 @@ func (client ModelClient) UpdateHierarchicalEntityResponder(resp *http.Response)
 // hChildID - the hierarchical entity extractor child ID.
 // hierarchicalChildModelUpdateObject - model object containing new name of the hierarchical entity child.
 func (client ModelClient) UpdateHierarchicalEntityChild(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, hChildID uuid.UUID, hierarchicalChildModelUpdateObject HierarchicalChildModelUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateHierarchicalEntityChild")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateHierarchicalEntityChildPreparer(ctx, appID, versionID, hEntityID, hChildID, hierarchicalChildModelUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateHierarchicalEntityChild", nil, "Failure preparing request")
@@ -6949,6 +7930,16 @@ func (client ModelClient) UpdateHierarchicalEntityChildResponder(resp *http.Resp
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdateHierarchicalEntityRole(ctx context.Context, appID uuid.UUID, versionID string, hEntityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateHierarchicalEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateHierarchicalEntityRolePreparer(ctx, appID, versionID, hEntityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateHierarchicalEntityRole", nil, "Failure preparing request")
@@ -7019,6 +8010,16 @@ func (client ModelClient) UpdateHierarchicalEntityRoleResponder(resp *http.Respo
 // intentID - the intent classifier ID.
 // modelUpdateObject - a model object containing the new intent classifier name.
 func (client ModelClient) UpdateIntent(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, modelUpdateObject ModelUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateIntent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateIntentPreparer(ctx, appID, versionID, intentID, modelUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateIntent", nil, "Failure preparing request")
@@ -7088,6 +8089,16 @@ func (client ModelClient) UpdateIntentResponder(resp *http.Response) (result Ope
 // entityID - the Pattern.Any entity extractor ID.
 // patternAnyUpdateObject - an object containing the explicit list of the Pattern.Any entity.
 func (client ModelClient) UpdatePatternAnyEntityModel(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, patternAnyUpdateObject PatternAnyModelUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdatePatternAnyEntityModel")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePatternAnyEntityModelPreparer(ctx, appID, versionID, entityID, patternAnyUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdatePatternAnyEntityModel", nil, "Failure preparing request")
@@ -7158,6 +8169,16 @@ func (client ModelClient) UpdatePatternAnyEntityModelResponder(resp *http.Respon
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdatePatternAnyEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdatePatternAnyEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePatternAnyEntityRolePreparer(ctx, appID, versionID, entityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdatePatternAnyEntityRole", nil, "Failure preparing request")
@@ -7229,6 +8250,16 @@ func (client ModelClient) UpdatePatternAnyEntityRoleResponder(resp *http.Respons
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdatePrebuiltEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdatePrebuiltEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePrebuiltEntityRolePreparer(ctx, appID, versionID, entityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdatePrebuiltEntityRole", nil, "Failure preparing request")
@@ -7299,6 +8330,16 @@ func (client ModelClient) UpdatePrebuiltEntityRoleResponder(resp *http.Response)
 // regexEntityID - the regex entity extractor ID.
 // regexEntityUpdateObject - an object containing the new entity name and regex pattern.
 func (client ModelClient) UpdateRegexEntityModel(ctx context.Context, appID uuid.UUID, versionID string, regexEntityID uuid.UUID, regexEntityUpdateObject RegexModelUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateRegexEntityModel")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateRegexEntityModelPreparer(ctx, appID, versionID, regexEntityID, regexEntityUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateRegexEntityModel", nil, "Failure preparing request")
@@ -7369,6 +8410,16 @@ func (client ModelClient) UpdateRegexEntityModelResponder(resp *http.Response) (
 // roleID - the entity role ID.
 // entityRoleUpdateObject - the new entity role.
 func (client ModelClient) UpdateRegexEntityRole(ctx context.Context, appID uuid.UUID, versionID string, entityID uuid.UUID, roleID uuid.UUID, entityRoleUpdateObject EntityRoleUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateRegexEntityRole")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateRegexEntityRolePreparer(ctx, appID, versionID, entityID, roleID, entityRoleUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateRegexEntityRole", nil, "Failure preparing request")
@@ -7440,6 +8491,16 @@ func (client ModelClient) UpdateRegexEntityRoleResponder(resp *http.Response) (r
 // subListID - the sublist ID.
 // wordListBaseUpdateObject - a sublist update object containing the new canonical form and the list of words.
 func (client ModelClient) UpdateSubList(ctx context.Context, appID uuid.UUID, versionID string, clEntityID uuid.UUID, subListID int32, wordListBaseUpdateObject WordListBaseUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ModelClient.UpdateSubList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateSubListPreparer(ctx, appID, versionID, clEntityID, subListID, wordListBaseUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.ModelClient", "UpdateSubList", nil, "Failure preparing request")

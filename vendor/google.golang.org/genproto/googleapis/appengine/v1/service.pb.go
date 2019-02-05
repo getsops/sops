@@ -38,7 +38,6 @@ var TrafficSplit_ShardBy_name = map[int32]string{
 	1: "COOKIE",
 	2: "IP",
 }
-
 var TrafficSplit_ShardBy_value = map[string]int32{
 	"UNSPECIFIED": 0,
 	"COOKIE":      1,
@@ -48,9 +47,8 @@ var TrafficSplit_ShardBy_value = map[string]int32{
 func (x TrafficSplit_ShardBy) String() string {
 	return proto.EnumName(TrafficSplit_ShardBy_name, int32(x))
 }
-
 func (TrafficSplit_ShardBy) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_c1fc975248a879f7, []int{1, 0}
+	return fileDescriptor_service_c3b4fd6114e9d0a5, []int{1, 0}
 }
 
 // A Service resource is a logical component of an application that can share
@@ -83,7 +81,7 @@ func (m *Service) Reset()         { *m = Service{} }
 func (m *Service) String() string { return proto.CompactTextString(m) }
 func (*Service) ProtoMessage()    {}
 func (*Service) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c1fc975248a879f7, []int{0}
+	return fileDescriptor_service_c3b4fd6114e9d0a5, []int{0}
 }
 func (m *Service) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Service.Unmarshal(m, b)
@@ -91,8 +89,8 @@ func (m *Service) XXX_Unmarshal(b []byte) error {
 func (m *Service) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Service.Marshal(b, m, deterministic)
 }
-func (m *Service) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Service.Merge(m, src)
+func (dst *Service) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Service.Merge(dst, src)
 }
 func (m *Service) XXX_Size() int {
 	return xxx_messageInfo_Service.Size(m)
@@ -149,7 +147,7 @@ func (m *TrafficSplit) Reset()         { *m = TrafficSplit{} }
 func (m *TrafficSplit) String() string { return proto.CompactTextString(m) }
 func (*TrafficSplit) ProtoMessage()    {}
 func (*TrafficSplit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c1fc975248a879f7, []int{1}
+	return fileDescriptor_service_c3b4fd6114e9d0a5, []int{1}
 }
 func (m *TrafficSplit) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrafficSplit.Unmarshal(m, b)
@@ -157,8 +155,8 @@ func (m *TrafficSplit) XXX_Unmarshal(b []byte) error {
 func (m *TrafficSplit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TrafficSplit.Marshal(b, m, deterministic)
 }
-func (m *TrafficSplit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TrafficSplit.Merge(m, src)
+func (dst *TrafficSplit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TrafficSplit.Merge(dst, src)
 }
 func (m *TrafficSplit) XXX_Size() int {
 	return xxx_messageInfo_TrafficSplit.Size(m)
@@ -190,9 +188,11 @@ func init() {
 	proto.RegisterEnum("google.appengine.v1.TrafficSplit_ShardBy", TrafficSplit_ShardBy_name, TrafficSplit_ShardBy_value)
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/service.proto", fileDescriptor_c1fc975248a879f7) }
+func init() {
+	proto.RegisterFile("google/appengine/v1/service.proto", fileDescriptor_service_c3b4fd6114e9d0a5)
+}
 
-var fileDescriptor_c1fc975248a879f7 = []byte{
+var fileDescriptor_service_c3b4fd6114e9d0a5 = []byte{
 	// 356 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x51, 0x8b, 0xda, 0x40,
 	0x10, 0xc7, 0x9b, 0xb5, 0x6a, 0x3b, 0x11, 0x1b, 0xb6, 0x85, 0x06, 0xe9, 0x83, 0xfa, 0x64, 0x5f,

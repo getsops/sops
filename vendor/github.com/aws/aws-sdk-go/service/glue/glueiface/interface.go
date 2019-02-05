@@ -164,6 +164,10 @@ type GlueAPI interface {
 	DeletePartitionWithContext(aws.Context, *glue.DeletePartitionInput, ...request.Option) (*glue.DeletePartitionOutput, error)
 	DeletePartitionRequest(*glue.DeletePartitionInput) (*request.Request, *glue.DeletePartitionOutput)
 
+	DeleteResourcePolicy(*glue.DeleteResourcePolicyInput) (*glue.DeleteResourcePolicyOutput, error)
+	DeleteResourcePolicyWithContext(aws.Context, *glue.DeleteResourcePolicyInput, ...request.Option) (*glue.DeleteResourcePolicyOutput, error)
+	DeleteResourcePolicyRequest(*glue.DeleteResourcePolicyInput) (*request.Request, *glue.DeleteResourcePolicyOutput)
+
 	DeleteSecurityConfiguration(*glue.DeleteSecurityConfigurationInput) (*glue.DeleteSecurityConfigurationOutput, error)
 	DeleteSecurityConfigurationWithContext(aws.Context, *glue.DeleteSecurityConfigurationInput, ...request.Option) (*glue.DeleteSecurityConfigurationOutput, error)
 	DeleteSecurityConfigurationRequest(*glue.DeleteSecurityConfigurationInput) (*request.Request, *glue.DeleteSecurityConfigurationOutput)
@@ -227,6 +231,10 @@ type GlueAPI interface {
 
 	GetCrawlersPages(*glue.GetCrawlersInput, func(*glue.GetCrawlersOutput, bool) bool) error
 	GetCrawlersPagesWithContext(aws.Context, *glue.GetCrawlersInput, func(*glue.GetCrawlersOutput, bool) bool, ...request.Option) error
+
+	GetDataCatalogEncryptionSettings(*glue.GetDataCatalogEncryptionSettingsInput) (*glue.GetDataCatalogEncryptionSettingsOutput, error)
+	GetDataCatalogEncryptionSettingsWithContext(aws.Context, *glue.GetDataCatalogEncryptionSettingsInput, ...request.Option) (*glue.GetDataCatalogEncryptionSettingsOutput, error)
+	GetDataCatalogEncryptionSettingsRequest(*glue.GetDataCatalogEncryptionSettingsInput) (*request.Request, *glue.GetDataCatalogEncryptionSettingsOutput)
 
 	GetDatabase(*glue.GetDatabaseInput) (*glue.GetDatabaseOutput, error)
 	GetDatabaseWithContext(aws.Context, *glue.GetDatabaseInput, ...request.Option) (*glue.GetDatabaseOutput, error)
@@ -295,6 +303,10 @@ type GlueAPI interface {
 	GetPlanWithContext(aws.Context, *glue.GetPlanInput, ...request.Option) (*glue.GetPlanOutput, error)
 	GetPlanRequest(*glue.GetPlanInput) (*request.Request, *glue.GetPlanOutput)
 
+	GetResourcePolicy(*glue.GetResourcePolicyInput) (*glue.GetResourcePolicyOutput, error)
+	GetResourcePolicyWithContext(aws.Context, *glue.GetResourcePolicyInput, ...request.Option) (*glue.GetResourcePolicyOutput, error)
+	GetResourcePolicyRequest(*glue.GetResourcePolicyInput) (*request.Request, *glue.GetResourcePolicyOutput)
+
 	GetSecurityConfiguration(*glue.GetSecurityConfigurationInput) (*glue.GetSecurityConfigurationOutput, error)
 	GetSecurityConfigurationWithContext(aws.Context, *glue.GetSecurityConfigurationInput, ...request.Option) (*glue.GetSecurityConfigurationOutput, error)
 	GetSecurityConfigurationRequest(*glue.GetSecurityConfigurationInput) (*request.Request, *glue.GetSecurityConfigurationOutput)
@@ -354,6 +366,10 @@ type GlueAPI interface {
 	PutDataCatalogEncryptionSettings(*glue.PutDataCatalogEncryptionSettingsInput) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
 	PutDataCatalogEncryptionSettingsWithContext(aws.Context, *glue.PutDataCatalogEncryptionSettingsInput, ...request.Option) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
 	PutDataCatalogEncryptionSettingsRequest(*glue.PutDataCatalogEncryptionSettingsInput) (*request.Request, *glue.PutDataCatalogEncryptionSettingsOutput)
+
+	PutResourcePolicy(*glue.PutResourcePolicyInput) (*glue.PutResourcePolicyOutput, error)
+	PutResourcePolicyWithContext(aws.Context, *glue.PutResourcePolicyInput, ...request.Option) (*glue.PutResourcePolicyOutput, error)
+	PutResourcePolicyRequest(*glue.PutResourcePolicyInput) (*request.Request, *glue.PutResourcePolicyOutput)
 
 	ResetJobBookmark(*glue.ResetJobBookmarkInput) (*glue.ResetJobBookmarkOutput, error)
 	ResetJobBookmarkWithContext(aws.Context, *glue.ResetJobBookmarkInput, ...request.Option) (*glue.ResetJobBookmarkOutput, error)

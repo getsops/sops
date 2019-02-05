@@ -87,6 +87,7 @@
     }
   },
   "shapes":{
+    "CopyTags":{"type":"boolean"},
     "Count":{
       "type":"integer",
       "max":1000,
@@ -322,6 +323,7 @@
       "type":"structure",
       "members":{
         "Name":{"shape":"ScheduleName"},
+        "CopyTags":{"shape":"CopyTags"},
         "TagsToAdd":{"shape":"TagsToAddList"},
         "CreateRule":{"shape":"CreateRule"},
         "RetainRule":{"shape":"RetainRule"}

@@ -49,7 +49,6 @@ var SessionEntityType_EntityOverrideMode_name = map[int32]string{
 	1: "ENTITY_OVERRIDE_MODE_OVERRIDE",
 	2: "ENTITY_OVERRIDE_MODE_SUPPLEMENT",
 }
-
 var SessionEntityType_EntityOverrideMode_value = map[string]int32{
 	"ENTITY_OVERRIDE_MODE_UNSPECIFIED": 0,
 	"ENTITY_OVERRIDE_MODE_OVERRIDE":    1,
@@ -59,9 +58,8 @@ var SessionEntityType_EntityOverrideMode_value = map[string]int32{
 func (x SessionEntityType_EntityOverrideMode) String() string {
 	return proto.EnumName(SessionEntityType_EntityOverrideMode_name, int32(x))
 }
-
 func (SessionEntityType_EntityOverrideMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{0, 0}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{0, 0}
 }
 
 // Represents a session entity type.
@@ -91,7 +89,7 @@ func (m *SessionEntityType) Reset()         { *m = SessionEntityType{} }
 func (m *SessionEntityType) String() string { return proto.CompactTextString(m) }
 func (*SessionEntityType) ProtoMessage()    {}
 func (*SessionEntityType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{0}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{0}
 }
 func (m *SessionEntityType) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SessionEntityType.Unmarshal(m, b)
@@ -99,8 +97,8 @@ func (m *SessionEntityType) XXX_Unmarshal(b []byte) error {
 func (m *SessionEntityType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SessionEntityType.Marshal(b, m, deterministic)
 }
-func (m *SessionEntityType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SessionEntityType.Merge(m, src)
+func (dst *SessionEntityType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SessionEntityType.Merge(dst, src)
 }
 func (m *SessionEntityType) XXX_Size() int {
 	return xxx_messageInfo_SessionEntityType.Size(m)
@@ -151,7 +149,7 @@ func (m *ListSessionEntityTypesRequest) Reset()         { *m = ListSessionEntity
 func (m *ListSessionEntityTypesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListSessionEntityTypesRequest) ProtoMessage()    {}
 func (*ListSessionEntityTypesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{1}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{1}
 }
 func (m *ListSessionEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSessionEntityTypesRequest.Unmarshal(m, b)
@@ -159,8 +157,8 @@ func (m *ListSessionEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListSessionEntityTypesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSessionEntityTypesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListSessionEntityTypesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSessionEntityTypesRequest.Merge(m, src)
+func (dst *ListSessionEntityTypesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSessionEntityTypesRequest.Merge(dst, src)
 }
 func (m *ListSessionEntityTypesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListSessionEntityTypesRequest.Size(m)
@@ -209,7 +207,7 @@ func (m *ListSessionEntityTypesResponse) Reset()         { *m = ListSessionEntit
 func (m *ListSessionEntityTypesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListSessionEntityTypesResponse) ProtoMessage()    {}
 func (*ListSessionEntityTypesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{2}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{2}
 }
 func (m *ListSessionEntityTypesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSessionEntityTypesResponse.Unmarshal(m, b)
@@ -217,8 +215,8 @@ func (m *ListSessionEntityTypesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListSessionEntityTypesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSessionEntityTypesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListSessionEntityTypesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSessionEntityTypesResponse.Merge(m, src)
+func (dst *ListSessionEntityTypesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSessionEntityTypesResponse.Merge(dst, src)
 }
 func (m *ListSessionEntityTypesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListSessionEntityTypesResponse.Size(m)
@@ -258,7 +256,7 @@ func (m *GetSessionEntityTypeRequest) Reset()         { *m = GetSessionEntityTyp
 func (m *GetSessionEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSessionEntityTypeRequest) ProtoMessage()    {}
 func (*GetSessionEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{3}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{3}
 }
 func (m *GetSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetSessionEntityTypeRequest.Unmarshal(m, b)
@@ -266,8 +264,8 @@ func (m *GetSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetSessionEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetSessionEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *GetSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSessionEntityTypeRequest.Merge(m, src)
+func (dst *GetSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSessionEntityTypeRequest.Merge(dst, src)
 }
 func (m *GetSessionEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_GetSessionEntityTypeRequest.Size(m)
@@ -301,7 +299,7 @@ func (m *CreateSessionEntityTypeRequest) Reset()         { *m = CreateSessionEnt
 func (m *CreateSessionEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateSessionEntityTypeRequest) ProtoMessage()    {}
 func (*CreateSessionEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{4}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{4}
 }
 func (m *CreateSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateSessionEntityTypeRequest.Unmarshal(m, b)
@@ -309,8 +307,8 @@ func (m *CreateSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateSessionEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateSessionEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateSessionEntityTypeRequest.Merge(m, src)
+func (dst *CreateSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSessionEntityTypeRequest.Merge(dst, src)
 }
 func (m *CreateSessionEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateSessionEntityTypeRequest.Size(m)
@@ -352,7 +350,7 @@ func (m *UpdateSessionEntityTypeRequest) Reset()         { *m = UpdateSessionEnt
 func (m *UpdateSessionEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateSessionEntityTypeRequest) ProtoMessage()    {}
 func (*UpdateSessionEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{5}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{5}
 }
 func (m *UpdateSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateSessionEntityTypeRequest.Unmarshal(m, b)
@@ -360,8 +358,8 @@ func (m *UpdateSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateSessionEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateSessionEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateSessionEntityTypeRequest.Merge(m, src)
+func (dst *UpdateSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateSessionEntityTypeRequest.Merge(dst, src)
 }
 func (m *UpdateSessionEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateSessionEntityTypeRequest.Size(m)
@@ -401,7 +399,7 @@ func (m *DeleteSessionEntityTypeRequest) Reset()         { *m = DeleteSessionEnt
 func (m *DeleteSessionEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteSessionEntityTypeRequest) ProtoMessage()    {}
 func (*DeleteSessionEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_841e168133818181, []int{6}
+	return fileDescriptor_session_entity_type_f014f04ccf41506d, []int{6}
 }
 func (m *DeleteSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteSessionEntityTypeRequest.Unmarshal(m, b)
@@ -409,8 +407,8 @@ func (m *DeleteSessionEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteSessionEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteSessionEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteSessionEntityTypeRequest.Merge(m, src)
+func (dst *DeleteSessionEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteSessionEntityTypeRequest.Merge(dst, src)
 }
 func (m *DeleteSessionEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteSessionEntityTypeRequest.Size(m)
@@ -654,10 +652,10 @@ var _SessionEntityTypes_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dialogflow/v2/session_entity_type.proto", fileDescriptor_841e168133818181)
+	proto.RegisterFile("google/cloud/dialogflow/v2/session_entity_type.proto", fileDescriptor_session_entity_type_f014f04ccf41506d)
 }
 
-var fileDescriptor_841e168133818181 = []byte{
+var fileDescriptor_session_entity_type_f014f04ccf41506d = []byte{
 	// 793 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xdf, 0x4e, 0xd4, 0x4a,
 	0x18, 0x3f, 0x53, 0xce, 0x21, 0x30, 0xe4, 0x9c, 0x03, 0x73, 0xc8, 0xb2, 0x29, 0x87, 0x75, 0xad,

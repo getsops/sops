@@ -15,6 +15,7 @@
 package trace
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -30,7 +31,6 @@ import (
 	"cloud.google.com/go/datastore"
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/storage"
-	"golang.org/x/net/context"
 	api "google.golang.org/api/cloudtrace/v1"
 	compute "google.golang.org/api/compute/v1"
 	"google.golang.org/api/iterator"
@@ -122,17 +122,15 @@ func makeRequests(t *testing.T, span *Span, rt *fakeRoundTripper, synchronous bo
 		if err != nil {
 			t.Fatal(err)
 		}
-		var objAttrsList []*storage.ObjectAttrs
 		it := storageClient.Bucket("testbucket").Objects(ctx, nil)
 		for {
-			objAttrs, err := it.Next()
+			_, err := it.Next()
 			if err != nil && err != iterator.Done {
 				t.Fatal(err)
 			}
 			if err == iterator.Done {
 				break
 			}
-			objAttrsList = append(objAttrsList, objAttrs)
 		}
 	}
 
@@ -721,7 +719,7 @@ func TestSampling(t *testing.T) {
 			traceClient.bundler.BundleByteLimit = 1
 			p, err := NewLimitedSampler(test.rate, test.maxqps)
 			if err != nil {
-				t.Fatalf("NewLimitedSampler: %v", err)
+				t.Errorf("NewLimitedSampler: %v", err)
 			}
 			traceClient.SetSamplingPolicy(p)
 			ticker := time.NewTicker(25 * time.Millisecond)
@@ -729,7 +727,7 @@ func TestSampling(t *testing.T) {
 			for i := 0; i < 79; i++ {
 				req, err := http.NewRequest("GET", "http://example.com/foo", nil)
 				if err != nil {
-					t.Fatal(err)
+					t.Error(err)
 				}
 				span := traceClient.SpanFromRequest(req)
 				span.Finish()
@@ -766,7 +764,7 @@ func TestBundling(t *testing.T) {
 		go func() {
 			req, err := http.NewRequest("GET", "http://example.com/foo", nil)
 			if err != nil {
-				t.Fatal(err)
+				t.Error(err)
 			}
 			span := traceClient.SpanFromRequest(req)
 			span.Finish()

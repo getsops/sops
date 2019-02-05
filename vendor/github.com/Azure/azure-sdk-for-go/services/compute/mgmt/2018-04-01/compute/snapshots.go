@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewSnapshotsClientWithBaseURI(baseURI string, subscriptionID string) Snapsh
 // is created. Supported characters for the name are a-z, A-Z, 0-9 and _. The max name length is 80 characters.
 // snapshot - snapshot object supplied in the body of the Put disk operation.
 func (client SnapshotsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, snapshotName string, snapshot Snapshot) (result SnapshotsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: snapshot,
 			Constraints: []validation.Constraint{{Target: "snapshot.DiskProperties", Name: validation.Null, Rule: false,
@@ -115,10 +126,6 @@ func (client SnapshotsClient) CreateOrUpdateSender(req *http.Request) (future Sn
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -142,6 +149,16 @@ func (client SnapshotsClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // snapshotName - the name of the snapshot that is being created. The name can't be changed after the snapshot
 // is created. Supported characters for the name are a-z, A-Z, 0-9 and _. The max name length is 80 characters.
 func (client SnapshotsClient) Delete(ctx context.Context, resourceGroupName string, snapshotName string) (result SnapshotsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, snapshotName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.SnapshotsClient", "Delete", nil, "Failure preparing request")
@@ -187,10 +204,6 @@ func (client SnapshotsClient) DeleteSender(req *http.Request) (future SnapshotsD
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -213,6 +226,16 @@ func (client SnapshotsClient) DeleteResponder(resp *http.Response) (result autor
 // snapshotName - the name of the snapshot that is being created. The name can't be changed after the snapshot
 // is created. Supported characters for the name are a-z, A-Z, 0-9 and _. The max name length is 80 characters.
 func (client SnapshotsClient) Get(ctx context.Context, resourceGroupName string, snapshotName string) (result Snapshot, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, snapshotName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.SnapshotsClient", "Get", nil, "Failure preparing request")
@@ -282,6 +305,16 @@ func (client SnapshotsClient) GetResponder(resp *http.Response) (result Snapshot
 // is created. Supported characters for the name are a-z, A-Z, 0-9 and _. The max name length is 80 characters.
 // grantAccessData - access data object supplied in the body of the get snapshot access operation.
 func (client SnapshotsClient) GrantAccess(ctx context.Context, resourceGroupName string, snapshotName string, grantAccessData GrantAccessData) (result SnapshotsGrantAccessFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.GrantAccess")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: grantAccessData,
 			Constraints: []validation.Constraint{{Target: "grantAccessData.DurationInSeconds", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -335,10 +368,6 @@ func (client SnapshotsClient) GrantAccessSender(req *http.Request) (future Snaps
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -358,6 +387,16 @@ func (client SnapshotsClient) GrantAccessResponder(resp *http.Response) (result 
 
 // List lists snapshots under a subscription.
 func (client SnapshotsClient) List(ctx context.Context) (result SnapshotListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.List")
+		defer func() {
+			sc := -1
+			if result.sl.Response.Response != nil {
+				sc = result.sl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -420,8 +459,8 @@ func (client SnapshotsClient) ListResponder(resp *http.Response) (result Snapsho
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client SnapshotsClient) listNextResults(lastResults SnapshotList) (result SnapshotList, err error) {
-	req, err := lastResults.snapshotListPreparer()
+func (client SnapshotsClient) listNextResults(ctx context.Context, lastResults SnapshotList) (result SnapshotList, err error) {
+	req, err := lastResults.snapshotListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "compute.SnapshotsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -442,6 +481,16 @@ func (client SnapshotsClient) listNextResults(lastResults SnapshotList) (result 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SnapshotsClient) ListComplete(ctx context.Context) (result SnapshotListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -450,6 +499,16 @@ func (client SnapshotsClient) ListComplete(ctx context.Context) (result Snapshot
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client SnapshotsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result SnapshotListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.sl.Response.Response != nil {
+				sc = result.sl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -513,8 +572,8 @@ func (client SnapshotsClient) ListByResourceGroupResponder(resp *http.Response) 
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client SnapshotsClient) listByResourceGroupNextResults(lastResults SnapshotList) (result SnapshotList, err error) {
-	req, err := lastResults.snapshotListPreparer()
+func (client SnapshotsClient) listByResourceGroupNextResults(ctx context.Context, lastResults SnapshotList) (result SnapshotList, err error) {
+	req, err := lastResults.snapshotListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "compute.SnapshotsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -535,6 +594,16 @@ func (client SnapshotsClient) listByResourceGroupNextResults(lastResults Snapsho
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SnapshotsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result SnapshotListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -545,6 +614,16 @@ func (client SnapshotsClient) ListByResourceGroupComplete(ctx context.Context, r
 // snapshotName - the name of the snapshot that is being created. The name can't be changed after the snapshot
 // is created. Supported characters for the name are a-z, A-Z, 0-9 and _. The max name length is 80 characters.
 func (client SnapshotsClient) RevokeAccess(ctx context.Context, resourceGroupName string, snapshotName string) (result SnapshotsRevokeAccessFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.RevokeAccess")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RevokeAccessPreparer(ctx, resourceGroupName, snapshotName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.SnapshotsClient", "RevokeAccess", nil, "Failure preparing request")
@@ -590,10 +669,6 @@ func (client SnapshotsClient) RevokeAccessSender(req *http.Request) (future Snap
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -617,6 +692,16 @@ func (client SnapshotsClient) RevokeAccessResponder(resp *http.Response) (result
 // is created. Supported characters for the name are a-z, A-Z, 0-9 and _. The max name length is 80 characters.
 // snapshot - snapshot object supplied in the body of the Patch snapshot operation.
 func (client SnapshotsClient) Update(ctx context.Context, resourceGroupName string, snapshotName string, snapshot SnapshotUpdate) (result SnapshotsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SnapshotsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, snapshotName, snapshot)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.SnapshotsClient", "Update", nil, "Failure preparing request")
@@ -661,10 +746,6 @@ func (client SnapshotsClient) UpdateSender(req *http.Request) (future SnapshotsU
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

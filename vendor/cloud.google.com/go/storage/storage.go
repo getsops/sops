@@ -16,6 +16,7 @@ package storage
 
 import (
 	"bytes"
+	"context"
 	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
@@ -25,7 +26,6 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -36,19 +36,19 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"cloud.google.com/go/internal/trace"
-	"google.golang.org/api/option"
-	htransport "google.golang.org/api/transport/http"
-
 	"cloud.google.com/go/internal/optional"
+	"cloud.google.com/go/internal/trace"
 	"cloud.google.com/go/internal/version"
-	"golang.org/x/net/context"
 	"google.golang.org/api/googleapi"
+	"google.golang.org/api/option"
 	raw "google.golang.org/api/storage/v1"
+	htransport "google.golang.org/api/transport/http"
 )
 
 var (
+	// ErrBucketNotExist indicates that the bucket does not exist.
 	ErrBucketNotExist = errors.New("storage: bucket doesn't exist")
+	// ErrObjectNotExist indicates that the object does not exist.
 	ErrObjectNotExist = errors.New("storage: object doesn't exist")
 )
 
@@ -441,6 +441,14 @@ func (o *ObjectHandle) Update(ctx context.Context, uattrs ObjectAttrsToUpdate) (
 		attrs.CacheControl = optional.ToString(uattrs.CacheControl)
 		forceSendFields = append(forceSendFields, "CacheControl")
 	}
+	if uattrs.EventBasedHold != nil {
+		attrs.EventBasedHold = optional.ToBool(uattrs.EventBasedHold)
+		forceSendFields = append(forceSendFields, "EventBasedHold")
+	}
+	if uattrs.TemporaryHold != nil {
+		attrs.TemporaryHold = optional.ToBool(uattrs.TemporaryHold)
+		forceSendFields = append(forceSendFields, "TemporaryHold")
+	}
 	if uattrs.Metadata != nil {
 		attrs.Metadata = uattrs.Metadata
 		if len(attrs.Metadata) == 0 {
@@ -506,6 +514,8 @@ func (o *ObjectHandle) ObjectName() string {
 //        Metadata: map[string]string{},
 //    }
 type ObjectAttrsToUpdate struct {
+	EventBasedHold     optional.Bool
+	TemporaryHold      optional.Bool
 	ContentType        optional.String
 	ContentLanguage    optional.String
 	ContentEncoding    optional.String
@@ -614,17 +624,24 @@ func parseKey(key []byte) (*rsa.PrivateKey, error) {
 
 // toRawObject copies the editable attributes from o to the raw library's Object type.
 func (o *ObjectAttrs) toRawObject(bucket string) *raw.Object {
+	var ret string
+	if !o.RetentionExpirationTime.IsZero() {
+		ret = o.RetentionExpirationTime.Format(time.RFC3339)
+	}
 	return &raw.Object{
-		Bucket:             bucket,
-		Name:               o.Name,
-		ContentType:        o.ContentType,
-		ContentEncoding:    o.ContentEncoding,
-		ContentLanguage:    o.ContentLanguage,
-		CacheControl:       o.CacheControl,
-		ContentDisposition: o.ContentDisposition,
-		StorageClass:       o.StorageClass,
-		Acl:                toRawObjectACL(o.ACL),
-		Metadata:           o.Metadata,
+		Bucket:                  bucket,
+		Name:                    o.Name,
+		EventBasedHold:          o.EventBasedHold,
+		TemporaryHold:           o.TemporaryHold,
+		RetentionExpirationTime: ret,
+		ContentType:             o.ContentType,
+		ContentEncoding:         o.ContentEncoding,
+		ContentLanguage:         o.ContentLanguage,
+		CacheControl:            o.CacheControl,
+		ContentDisposition:      o.ContentDisposition,
+		StorageClass:            o.StorageClass,
+		Acl:                     toRawObjectACL(o.ACL),
+		Metadata:                o.Metadata,
 	}
 }
 
@@ -647,6 +664,21 @@ type ObjectAttrs struct {
 	// CacheControl is the Cache-Control header to be sent in the response
 	// headers when serving the object data.
 	CacheControl string
+
+	// EventBasedHold specifies whether an object is under event-based hold. New
+	// objects created in a bucket whose DefaultEventBasedHold is set will
+	// default to that value.
+	EventBasedHold bool
+
+	// TemporaryHold specifies whether an object is under temporary hold. While
+	// this flag is set to true, the object is protected against deletion and
+	// overwrites.
+	TemporaryHold bool
+
+	// RetentionExpirationTime is a server-determined value that specifies the
+	// earliest time that the object's retention period expires.
+	// This is a read-only field.
+	RetentionExpirationTime time.Time
 
 	// ACL is the list of access control rules for the object.
 	ACL []ACLRule
@@ -772,28 +804,31 @@ func newObject(o *raw.Object) *ObjectAttrs {
 		sha256 = o.CustomerEncryption.KeySha256
 	}
 	return &ObjectAttrs{
-		Bucket:             o.Bucket,
-		Name:               o.Name,
-		ContentType:        o.ContentType,
-		ContentLanguage:    o.ContentLanguage,
-		CacheControl:       o.CacheControl,
-		ACL:                toObjectACLRules(o.Acl),
-		Owner:              owner,
-		ContentEncoding:    o.ContentEncoding,
-		ContentDisposition: o.ContentDisposition,
-		Size:               int64(o.Size),
-		MD5:                md5,
-		CRC32C:             crc32c,
-		MediaLink:          o.MediaLink,
-		Metadata:           o.Metadata,
-		Generation:         o.Generation,
-		Metageneration:     o.Metageneration,
-		StorageClass:       o.StorageClass,
-		CustomerKeySHA256:  sha256,
-		KMSKeyName:         o.KmsKeyName,
-		Created:            convertTime(o.TimeCreated),
-		Deleted:            convertTime(o.TimeDeleted),
-		Updated:            convertTime(o.Updated),
+		Bucket:                  o.Bucket,
+		Name:                    o.Name,
+		ContentType:             o.ContentType,
+		ContentLanguage:         o.ContentLanguage,
+		CacheControl:            o.CacheControl,
+		EventBasedHold:          o.EventBasedHold,
+		TemporaryHold:           o.TemporaryHold,
+		RetentionExpirationTime: convertTime(o.RetentionExpirationTime),
+		ACL:                     toObjectACLRules(o.Acl),
+		Owner:                   owner,
+		ContentEncoding:         o.ContentEncoding,
+		ContentDisposition:      o.ContentDisposition,
+		Size:                    int64(o.Size),
+		MD5:                     md5,
+		CRC32C:                  crc32c,
+		MediaLink:               o.MediaLink,
+		Metadata:                o.Metadata,
+		Generation:              o.Generation,
+		Metageneration:          o.Metageneration,
+		StorageClass:            o.StorageClass,
+		CustomerKeySHA256:       sha256,
+		KMSKeyName:              o.KmsKeyName,
+		Created:                 convertTime(o.TimeCreated),
+		Deleted:                 convertTime(o.TimeDeleted),
+		Updated:                 convertTime(o.Updated),
 	}
 }
 
@@ -834,17 +869,6 @@ type Query struct {
 	// Versions indicates whether multiple versions of the same
 	// object will be included in the results.
 	Versions bool
-}
-
-// contentTyper implements ContentTyper to enable an
-// io.ReadCloser to specify its MIME type.
-type contentTyper struct {
-	io.Reader
-	t string
-}
-
-func (c *contentTyper) ContentType() string {
-	return c.t
 }
 
 // Conditions constrain methods to act on specific generations of

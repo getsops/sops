@@ -50,7 +50,6 @@ var NoteKind_name = map[int32]string{
 	6: "DISCOVERY",
 	7: "ATTESTATION",
 }
-
 var NoteKind_value = map[string]int32{
 	"NOTE_KIND_UNSPECIFIED": 0,
 	"VULNERABILITY":         1,
@@ -65,9 +64,8 @@ var NoteKind_value = map[string]int32{
 func (x NoteKind) String() string {
 	return proto.EnumName(NoteKind_name, int32(x))
 }
-
 func (NoteKind) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_baf5189c00300310, []int{0}
+	return fileDescriptor_common_bcbfdeee4a2611b3, []int{0}
 }
 
 // Metadata for any related URL information.
@@ -85,7 +83,7 @@ func (m *RelatedUrl) Reset()         { *m = RelatedUrl{} }
 func (m *RelatedUrl) String() string { return proto.CompactTextString(m) }
 func (*RelatedUrl) ProtoMessage()    {}
 func (*RelatedUrl) Descriptor() ([]byte, []int) {
-	return fileDescriptor_baf5189c00300310, []int{0}
+	return fileDescriptor_common_bcbfdeee4a2611b3, []int{0}
 }
 func (m *RelatedUrl) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RelatedUrl.Unmarshal(m, b)
@@ -93,8 +91,8 @@ func (m *RelatedUrl) XXX_Unmarshal(b []byte) error {
 func (m *RelatedUrl) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RelatedUrl.Marshal(b, m, deterministic)
 }
-func (m *RelatedUrl) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RelatedUrl.Merge(m, src)
+func (dst *RelatedUrl) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RelatedUrl.Merge(dst, src)
 }
 func (m *RelatedUrl) XXX_Size() int {
 	return xxx_messageInfo_RelatedUrl.Size(m)
@@ -125,10 +123,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/common/common.proto", fileDescriptor_baf5189c00300310)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/common/common.proto", fileDescriptor_common_bcbfdeee4a2611b3)
 }
 
-var fileDescriptor_baf5189c00300310 = []byte{
+var fileDescriptor_common_bcbfdeee4a2611b3 = []byte{
 	// 322 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x90, 0x41, 0x6b, 0xea, 0x40,
 	0x14, 0x85, 0x5f, 0xf4, 0xa9, 0xcf, 0x2b, 0x3e, 0xa7, 0x43, 0x0b, 0xba, 0x2b, 0x5d, 0x95, 0x2e,

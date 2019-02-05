@@ -24,6 +24,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/addons/mgmt/2017-05-15/addons"
+
 // PlanTypeName enumerates the values for plan type name.
 type PlanTypeName string
 
@@ -223,8 +226,8 @@ type OperationsDisplayDefinition struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// SupportPlanTypesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// SupportPlanTypesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type SupportPlanTypesCreateOrUpdateFuture struct {
 	azure.Future
 }

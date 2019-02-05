@@ -75,7 +75,7 @@ func (m *Api) Reset()         { *m = Api{} }
 func (m *Api) String() string { return proto.CompactTextString(m) }
 func (*Api) ProtoMessage()    {}
 func (*Api) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a2ec32096296c143, []int{0}
+	return fileDescriptor_api_3a57081c831903d2, []int{0}
 }
 func (m *Api) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Api.Unmarshal(m, b)
@@ -83,8 +83,8 @@ func (m *Api) XXX_Unmarshal(b []byte) error {
 func (m *Api) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Api.Marshal(b, m, deterministic)
 }
-func (m *Api) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Api.Merge(m, src)
+func (dst *Api) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Api.Merge(dst, src)
 }
 func (m *Api) XXX_Size() int {
 	return xxx_messageInfo_Api.Size(m)
@@ -169,7 +169,7 @@ func (m *Method) Reset()         { *m = Method{} }
 func (m *Method) String() string { return proto.CompactTextString(m) }
 func (*Method) ProtoMessage()    {}
 func (*Method) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a2ec32096296c143, []int{1}
+	return fileDescriptor_api_3a57081c831903d2, []int{1}
 }
 func (m *Method) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Method.Unmarshal(m, b)
@@ -177,8 +177,8 @@ func (m *Method) XXX_Unmarshal(b []byte) error {
 func (m *Method) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Method.Marshal(b, m, deterministic)
 }
-func (m *Method) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Method.Merge(m, src)
+func (dst *Method) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Method.Merge(dst, src)
 }
 func (m *Method) XXX_Size() int {
 	return xxx_messageInfo_Method.Size(m)
@@ -331,7 +331,7 @@ func (m *Mixin) Reset()         { *m = Mixin{} }
 func (m *Mixin) String() string { return proto.CompactTextString(m) }
 func (*Mixin) ProtoMessage()    {}
 func (*Mixin) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a2ec32096296c143, []int{2}
+	return fileDescriptor_api_3a57081c831903d2, []int{2}
 }
 func (m *Mixin) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mixin.Unmarshal(m, b)
@@ -339,8 +339,8 @@ func (m *Mixin) XXX_Unmarshal(b []byte) error {
 func (m *Mixin) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Mixin.Marshal(b, m, deterministic)
 }
-func (m *Mixin) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Mixin.Merge(m, src)
+func (dst *Mixin) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Mixin.Merge(dst, src)
 }
 func (m *Mixin) XXX_Size() int {
 	return xxx_messageInfo_Mixin.Size(m)
@@ -371,9 +371,9 @@ func init() {
 	proto.RegisterType((*Mixin)(nil), "google.protobuf.Mixin")
 }
 
-func init() { proto.RegisterFile("google/protobuf/api.proto", fileDescriptor_a2ec32096296c143) }
+func init() { proto.RegisterFile("google/protobuf/api.proto", fileDescriptor_api_3a57081c831903d2) }
 
-var fileDescriptor_a2ec32096296c143 = []byte{
+var fileDescriptor_api_3a57081c831903d2 = []byte{
 	// 432 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0xcf, 0x8e, 0xd3, 0x30,
 	0x10, 0xc6, 0x95, 0xa4, 0x4d, 0x17, 0xaf, 0xe8, 0x82, 0x91, 0xc0, 0xf4, 0xb0, 0x8a, 0x56, 0x1c,

@@ -17,7 +17,7 @@ const opCancelSigningProfile = "CancelSigningProfile"
 // CancelSigningProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CancelSigningProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -51,8 +51,7 @@ func (c *Signer) CancelSigningProfileRequest(input *CancelSigningProfileInput) (
 
 	output = &CancelSigningProfileOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -109,7 +108,7 @@ const opDescribeSigningJob = "DescribeSigningJob"
 // DescribeSigningJobRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSigningJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -195,7 +194,7 @@ const opGetSigningPlatform = "GetSigningPlatform"
 // GetSigningPlatformRequest generates a "aws/request.Request" representing the
 // client's request for the GetSigningPlatform operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -280,7 +279,7 @@ const opGetSigningProfile = "GetSigningProfile"
 // GetSigningProfileRequest generates a "aws/request.Request" representing the
 // client's request for the GetSigningProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -368,7 +367,7 @@ const opListSigningJobs = "ListSigningJobs"
 // ListSigningJobsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningJobs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -518,7 +517,7 @@ const opListSigningPlatforms = "ListSigningPlatforms"
 // ListSigningPlatformsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningPlatforms operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -667,7 +666,7 @@ const opListSigningProfiles = "ListSigningProfiles"
 // ListSigningProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListSigningProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -814,7 +813,7 @@ const opPutSigningProfile = "PutSigningProfile"
 // PutSigningProfileRequest generates a "aws/request.Request" representing the
 // client's request for the PutSigningProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -908,7 +907,7 @@ const opStartSigningJob = "StartSigningJob"
 // StartSigningJobRequest generates a "aws/request.Request" representing the
 // client's request for the StartSigningJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1096,6 +1095,9 @@ func (s *DescribeSigningJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeSigningJobInput"}
 	if s.JobId == nil {
 		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1329,6 +1331,9 @@ func (s *GetSigningPlatformInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetSigningPlatformInput"}
 	if s.PlatformId == nil {
 		invalidParams.Add(request.NewErrParamRequired("PlatformId"))
+	}
+	if s.PlatformId != nil && len(*s.PlatformId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PlatformId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2605,9 +2610,7 @@ type StartSigningJobInput struct {
 
 	// String that identifies the signing request. All calls after the first that
 	// use this token return the same response as the first call.
-	//
-	// ClientRequestToken is a required field
-	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" required:"true" idempotencyToken:"true"`
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
 
 	// The S3 bucket in which to save your signed object. The destination contains
 	// the name of your bucket and an optional prefix.
@@ -2638,9 +2641,6 @@ func (s StartSigningJobInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *StartSigningJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "StartSigningJobInput"}
-	if s.ClientRequestToken == nil {
-		invalidParams.Add(request.NewErrParamRequired("ClientRequestToken"))
-	}
 	if s.Destination == nil {
 		invalidParams.Add(request.NewErrParamRequired("Destination"))
 	}

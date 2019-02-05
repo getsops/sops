@@ -27,7 +27,7 @@ const opEmptyStream = "EmptyStream"
 // EmptyStreamRequest generates a "aws/request.Request" representing the
 // client's request for the EmptyStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -103,7 +103,7 @@ const opGetEventStream = "GetEventStream"
 // GetEventStreamRequest generates a "aws/request.Request" representing the
 // client's request for the GetEventStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -282,7 +282,7 @@ type EmptyStreamEventStreamReader interface {
 	// HTTP this will also close the HTTP connection.
 	Close() error
 
-	// Returns any error that has occured while reading from the event stream.
+	// Returns any error that has occurred while reading from the event stream.
 	Err() error
 }
 
@@ -716,7 +716,7 @@ type GetEventStreamEventStreamReader interface {
 	// HTTP this will also close the HTTP connection.
 	Close() error
 
-	// Returns any error that has occured while reading from the event stream.
+	// Returns any error that has occurred while reading from the event stream.
 	Err() error
 }
 

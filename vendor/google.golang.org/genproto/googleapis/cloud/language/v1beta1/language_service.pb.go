@@ -55,7 +55,6 @@ var EncodingType_name = map[int32]string{
 	2: "UTF16",
 	3: "UTF32",
 }
-
 var EncodingType_value = map[string]int32{
 	"NONE":  0,
 	"UTF8":  1,
@@ -66,9 +65,8 @@ var EncodingType_value = map[string]int32{
 func (x EncodingType) String() string {
 	return proto.EnumName(EncodingType_name, int32(x))
 }
-
 func (EncodingType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{0}
 }
 
 // The document types enum.
@@ -88,7 +86,6 @@ var Document_Type_name = map[int32]string{
 	1: "PLAIN_TEXT",
 	2: "HTML",
 }
-
 var Document_Type_value = map[string]int32{
 	"TYPE_UNSPECIFIED": 0,
 	"PLAIN_TEXT":       1,
@@ -98,9 +95,8 @@ var Document_Type_value = map[string]int32{
 func (x Document_Type) String() string {
 	return proto.EnumName(Document_Type_name, int32(x))
 }
-
 func (Document_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{0, 0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{0, 0}
 }
 
 // The type of the entity.
@@ -135,7 +131,6 @@ var Entity_Type_name = map[int32]string{
 	6: "CONSUMER_GOOD",
 	7: "OTHER",
 }
-
 var Entity_Type_value = map[string]int32{
 	"UNKNOWN":       0,
 	"PERSON":        1,
@@ -150,9 +145,8 @@ var Entity_Type_value = map[string]int32{
 func (x Entity_Type) String() string {
 	return proto.EnumName(Entity_Type_name, int32(x))
 }
-
 func (Entity_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{2, 0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{2, 0}
 }
 
 // The part of speech tags enum.
@@ -205,7 +199,6 @@ var PartOfSpeech_Tag_name = map[int32]string{
 	12: "X",
 	13: "AFFIX",
 }
-
 var PartOfSpeech_Tag_value = map[string]int32{
 	"UNKNOWN": 0,
 	"ADJ":     1,
@@ -226,9 +219,8 @@ var PartOfSpeech_Tag_value = map[string]int32{
 func (x PartOfSpeech_Tag) String() string {
 	return proto.EnumName(PartOfSpeech_Tag_name, int32(x))
 }
-
 func (PartOfSpeech_Tag) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 0}
 }
 
 // The characteristic of a verb that expresses time flow during an event.
@@ -251,7 +243,6 @@ var PartOfSpeech_Aspect_name = map[int32]string{
 	2: "IMPERFECTIVE",
 	3: "PROGRESSIVE",
 }
-
 var PartOfSpeech_Aspect_value = map[string]int32{
 	"ASPECT_UNKNOWN": 0,
 	"PERFECTIVE":     1,
@@ -262,9 +253,8 @@ var PartOfSpeech_Aspect_value = map[string]int32{
 func (x PartOfSpeech_Aspect) String() string {
 	return proto.EnumName(PartOfSpeech_Aspect_name, int32(x))
 }
-
 func (PartOfSpeech_Aspect) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 1}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 1}
 }
 
 // The grammatical function performed by a noun or pronoun in a phrase,
@@ -322,7 +312,6 @@ var PartOfSpeech_Case_name = map[int32]string{
 	13: "RELATIVE_CASE",
 	14: "VOCATIVE",
 }
-
 var PartOfSpeech_Case_value = map[string]int32{
 	"CASE_UNKNOWN":   0,
 	"ACCUSATIVE":     1,
@@ -344,9 +333,8 @@ var PartOfSpeech_Case_value = map[string]int32{
 func (x PartOfSpeech_Case) String() string {
 	return proto.EnumName(PartOfSpeech_Case_name, int32(x))
 }
-
 func (PartOfSpeech_Case) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 2}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 2}
 }
 
 // Depending on the language, Form can be categorizing different forms of
@@ -396,7 +384,6 @@ var PartOfSpeech_Form_name = map[int32]string{
 	10: "ORDER",
 	11: "SPECIFIC",
 }
-
 var PartOfSpeech_Form_value = map[string]int32{
 	"FORM_UNKNOWN":   0,
 	"ADNOMIAL":       1,
@@ -415,9 +402,8 @@ var PartOfSpeech_Form_value = map[string]int32{
 func (x PartOfSpeech_Form) String() string {
 	return proto.EnumName(PartOfSpeech_Form_name, int32(x))
 }
-
 func (PartOfSpeech_Form) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 3}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 3}
 }
 
 // Gender classes of nouns reflected in the behaviour of associated words.
@@ -440,7 +426,6 @@ var PartOfSpeech_Gender_name = map[int32]string{
 	2: "MASCULINE",
 	3: "NEUTER",
 }
-
 var PartOfSpeech_Gender_value = map[string]int32{
 	"GENDER_UNKNOWN": 0,
 	"FEMININE":       1,
@@ -451,9 +436,8 @@ var PartOfSpeech_Gender_value = map[string]int32{
 func (x PartOfSpeech_Gender) String() string {
 	return proto.EnumName(PartOfSpeech_Gender_name, int32(x))
 }
-
 func (PartOfSpeech_Gender) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 4}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 4}
 }
 
 // The grammatical feature of verbs, used for showing modality and attitude.
@@ -485,7 +469,6 @@ var PartOfSpeech_Mood_name = map[int32]string{
 	5: "JUSSIVE",
 	6: "SUBJUNCTIVE",
 }
-
 var PartOfSpeech_Mood_value = map[string]int32{
 	"MOOD_UNKNOWN":     0,
 	"CONDITIONAL_MOOD": 1,
@@ -499,9 +482,8 @@ var PartOfSpeech_Mood_value = map[string]int32{
 func (x PartOfSpeech_Mood) String() string {
 	return proto.EnumName(PartOfSpeech_Mood_name, int32(x))
 }
-
 func (PartOfSpeech_Mood) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 5}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 5}
 }
 
 // Count distinctions.
@@ -524,7 +506,6 @@ var PartOfSpeech_Number_name = map[int32]string{
 	2: "PLURAL",
 	3: "DUAL",
 }
-
 var PartOfSpeech_Number_value = map[string]int32{
 	"NUMBER_UNKNOWN": 0,
 	"SINGULAR":       1,
@@ -535,9 +516,8 @@ var PartOfSpeech_Number_value = map[string]int32{
 func (x PartOfSpeech_Number) String() string {
 	return proto.EnumName(PartOfSpeech_Number_name, int32(x))
 }
-
 func (PartOfSpeech_Number) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 6}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 6}
 }
 
 // The distinction between the speaker, second person, third person, etc.
@@ -563,7 +543,6 @@ var PartOfSpeech_Person_name = map[int32]string{
 	3: "THIRD",
 	4: "REFLEXIVE_PERSON",
 }
-
 var PartOfSpeech_Person_value = map[string]int32{
 	"PERSON_UNKNOWN":   0,
 	"FIRST":            1,
@@ -575,9 +554,8 @@ var PartOfSpeech_Person_value = map[string]int32{
 func (x PartOfSpeech_Person) String() string {
 	return proto.EnumName(PartOfSpeech_Person_name, int32(x))
 }
-
 func (PartOfSpeech_Person) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 7}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 7}
 }
 
 // This category shows if the token is part of a proper name.
@@ -597,7 +575,6 @@ var PartOfSpeech_Proper_name = map[int32]string{
 	1: "PROPER",
 	2: "NOT_PROPER",
 }
-
 var PartOfSpeech_Proper_value = map[string]int32{
 	"PROPER_UNKNOWN": 0,
 	"PROPER":         1,
@@ -607,9 +584,8 @@ var PartOfSpeech_Proper_value = map[string]int32{
 func (x PartOfSpeech_Proper) String() string {
 	return proto.EnumName(PartOfSpeech_Proper_name, int32(x))
 }
-
 func (PartOfSpeech_Proper) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 8}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 8}
 }
 
 // Reciprocal features of a pronoun.
@@ -630,7 +606,6 @@ var PartOfSpeech_Reciprocity_name = map[int32]string{
 	1: "RECIPROCAL",
 	2: "NON_RECIPROCAL",
 }
-
 var PartOfSpeech_Reciprocity_value = map[string]int32{
 	"RECIPROCITY_UNKNOWN": 0,
 	"RECIPROCAL":          1,
@@ -640,9 +615,8 @@ var PartOfSpeech_Reciprocity_value = map[string]int32{
 func (x PartOfSpeech_Reciprocity) String() string {
 	return proto.EnumName(PartOfSpeech_Reciprocity_name, int32(x))
 }
-
 func (PartOfSpeech_Reciprocity) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 9}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 9}
 }
 
 // Time reference.
@@ -674,7 +648,6 @@ var PartOfSpeech_Tense_name = map[int32]string{
 	5: "IMPERFECT",
 	6: "PLUPERFECT",
 }
-
 var PartOfSpeech_Tense_value = map[string]int32{
 	"TENSE_UNKNOWN":     0,
 	"CONDITIONAL_TENSE": 1,
@@ -688,9 +661,8 @@ var PartOfSpeech_Tense_value = map[string]int32{
 func (x PartOfSpeech_Tense) String() string {
 	return proto.EnumName(PartOfSpeech_Tense_name, int32(x))
 }
-
 func (PartOfSpeech_Tense) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 10}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 10}
 }
 
 // The relationship between the action that a verb expresses and the
@@ -714,7 +686,6 @@ var PartOfSpeech_Voice_name = map[int32]string{
 	2: "CAUSATIVE",
 	3: "PASSIVE",
 }
-
 var PartOfSpeech_Voice_value = map[string]int32{
 	"VOICE_UNKNOWN": 0,
 	"ACTIVE":        1,
@@ -725,9 +696,8 @@ var PartOfSpeech_Voice_value = map[string]int32{
 func (x PartOfSpeech_Voice) String() string {
 	return proto.EnumName(PartOfSpeech_Voice_name, int32(x))
 }
-
 func (PartOfSpeech_Voice) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5, 11}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5, 11}
 }
 
 // The parse label enum for the token.
@@ -969,7 +939,6 @@ var DependencyEdge_Label_name = map[int32]string{
 	75: "COP",
 	76: "DISLOCATED",
 }
-
 var DependencyEdge_Label_value = map[string]int32{
 	"UNKNOWN":      0,
 	"ABBREV":       1,
@@ -1053,9 +1022,8 @@ var DependencyEdge_Label_value = map[string]int32{
 func (x DependencyEdge_Label) String() string {
 	return proto.EnumName(DependencyEdge_Label_name, int32(x))
 }
-
 func (DependencyEdge_Label) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{6, 0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{6, 0}
 }
 
 // The supported types of mentions.
@@ -1075,7 +1043,6 @@ var EntityMention_Type_name = map[int32]string{
 	1: "PROPER",
 	2: "COMMON",
 }
-
 var EntityMention_Type_value = map[string]int32{
 	"TYPE_UNKNOWN": 0,
 	"PROPER":       1,
@@ -1085,9 +1052,8 @@ var EntityMention_Type_value = map[string]int32{
 func (x EntityMention_Type) String() string {
 	return proto.EnumName(EntityMention_Type_name, int32(x))
 }
-
 func (EntityMention_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{7, 0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{7, 0}
 }
 
 // ################################################################ #
@@ -1122,7 +1088,7 @@ func (m *Document) Reset()         { *m = Document{} }
 func (m *Document) String() string { return proto.CompactTextString(m) }
 func (*Document) ProtoMessage()    {}
 func (*Document) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{0}
 }
 func (m *Document) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Document.Unmarshal(m, b)
@@ -1130,8 +1096,8 @@ func (m *Document) XXX_Unmarshal(b []byte) error {
 func (m *Document) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Document.Marshal(b, m, deterministic)
 }
-func (m *Document) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Document.Merge(m, src)
+func (dst *Document) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Document.Merge(dst, src)
 }
 func (m *Document) XXX_Size() int {
 	return xxx_messageInfo_Document.Size(m)
@@ -1276,7 +1242,7 @@ func (m *Sentence) Reset()         { *m = Sentence{} }
 func (m *Sentence) String() string { return proto.CompactTextString(m) }
 func (*Sentence) ProtoMessage()    {}
 func (*Sentence) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{1}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{1}
 }
 func (m *Sentence) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Sentence.Unmarshal(m, b)
@@ -1284,8 +1250,8 @@ func (m *Sentence) XXX_Unmarshal(b []byte) error {
 func (m *Sentence) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Sentence.Marshal(b, m, deterministic)
 }
-func (m *Sentence) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Sentence.Merge(m, src)
+func (dst *Sentence) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Sentence.Merge(dst, src)
 }
 func (m *Sentence) XXX_Size() int {
 	return xxx_messageInfo_Sentence.Size(m)
@@ -1342,7 +1308,7 @@ func (m *Entity) Reset()         { *m = Entity{} }
 func (m *Entity) String() string { return proto.CompactTextString(m) }
 func (*Entity) ProtoMessage()    {}
 func (*Entity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{2}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{2}
 }
 func (m *Entity) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Entity.Unmarshal(m, b)
@@ -1350,8 +1316,8 @@ func (m *Entity) XXX_Unmarshal(b []byte) error {
 func (m *Entity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Entity.Marshal(b, m, deterministic)
 }
-func (m *Entity) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Entity.Merge(m, src)
+func (dst *Entity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Entity.Merge(dst, src)
 }
 func (m *Entity) XXX_Size() int {
 	return xxx_messageInfo_Entity.Size(m)
@@ -1416,7 +1382,7 @@ func (m *Token) Reset()         { *m = Token{} }
 func (m *Token) String() string { return proto.CompactTextString(m) }
 func (*Token) ProtoMessage()    {}
 func (*Token) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{3}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{3}
 }
 func (m *Token) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Token.Unmarshal(m, b)
@@ -1424,8 +1390,8 @@ func (m *Token) XXX_Unmarshal(b []byte) error {
 func (m *Token) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Token.Marshal(b, m, deterministic)
 }
-func (m *Token) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Token.Merge(m, src)
+func (dst *Token) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Token.Merge(dst, src)
 }
 func (m *Token) XXX_Size() int {
 	return xxx_messageInfo_Token.Size(m)
@@ -1487,7 +1453,7 @@ func (m *Sentiment) Reset()         { *m = Sentiment{} }
 func (m *Sentiment) String() string { return proto.CompactTextString(m) }
 func (*Sentiment) ProtoMessage()    {}
 func (*Sentiment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{4}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{4}
 }
 func (m *Sentiment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Sentiment.Unmarshal(m, b)
@@ -1495,8 +1461,8 @@ func (m *Sentiment) XXX_Unmarshal(b []byte) error {
 func (m *Sentiment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Sentiment.Marshal(b, m, deterministic)
 }
-func (m *Sentiment) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Sentiment.Merge(m, src)
+func (dst *Sentiment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Sentiment.Merge(dst, src)
 }
 func (m *Sentiment) XXX_Size() int {
 	return xxx_messageInfo_Sentiment.Size(m)
@@ -1563,7 +1529,7 @@ func (m *PartOfSpeech) Reset()         { *m = PartOfSpeech{} }
 func (m *PartOfSpeech) String() string { return proto.CompactTextString(m) }
 func (*PartOfSpeech) ProtoMessage()    {}
 func (*PartOfSpeech) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{5}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{5}
 }
 func (m *PartOfSpeech) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PartOfSpeech.Unmarshal(m, b)
@@ -1571,8 +1537,8 @@ func (m *PartOfSpeech) XXX_Unmarshal(b []byte) error {
 func (m *PartOfSpeech) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PartOfSpeech.Marshal(b, m, deterministic)
 }
-func (m *PartOfSpeech) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PartOfSpeech.Merge(m, src)
+func (dst *PartOfSpeech) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PartOfSpeech.Merge(dst, src)
 }
 func (m *PartOfSpeech) XXX_Size() int {
 	return xxx_messageInfo_PartOfSpeech.Size(m)
@@ -1686,7 +1652,7 @@ func (m *DependencyEdge) Reset()         { *m = DependencyEdge{} }
 func (m *DependencyEdge) String() string { return proto.CompactTextString(m) }
 func (*DependencyEdge) ProtoMessage()    {}
 func (*DependencyEdge) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{6}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{6}
 }
 func (m *DependencyEdge) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DependencyEdge.Unmarshal(m, b)
@@ -1694,8 +1660,8 @@ func (m *DependencyEdge) XXX_Unmarshal(b []byte) error {
 func (m *DependencyEdge) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DependencyEdge.Marshal(b, m, deterministic)
 }
-func (m *DependencyEdge) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DependencyEdge.Merge(m, src)
+func (dst *DependencyEdge) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DependencyEdge.Merge(dst, src)
 }
 func (m *DependencyEdge) XXX_Size() int {
 	return xxx_messageInfo_DependencyEdge.Size(m)
@@ -1736,7 +1702,7 @@ func (m *EntityMention) Reset()         { *m = EntityMention{} }
 func (m *EntityMention) String() string { return proto.CompactTextString(m) }
 func (*EntityMention) ProtoMessage()    {}
 func (*EntityMention) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{7}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{7}
 }
 func (m *EntityMention) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityMention.Unmarshal(m, b)
@@ -1744,8 +1710,8 @@ func (m *EntityMention) XXX_Unmarshal(b []byte) error {
 func (m *EntityMention) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EntityMention.Marshal(b, m, deterministic)
 }
-func (m *EntityMention) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EntityMention.Merge(m, src)
+func (dst *EntityMention) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EntityMention.Merge(dst, src)
 }
 func (m *EntityMention) XXX_Size() int {
 	return xxx_messageInfo_EntityMention.Size(m)
@@ -1786,7 +1752,7 @@ func (m *TextSpan) Reset()         { *m = TextSpan{} }
 func (m *TextSpan) String() string { return proto.CompactTextString(m) }
 func (*TextSpan) ProtoMessage()    {}
 func (*TextSpan) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{8}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{8}
 }
 func (m *TextSpan) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TextSpan.Unmarshal(m, b)
@@ -1794,8 +1760,8 @@ func (m *TextSpan) XXX_Unmarshal(b []byte) error {
 func (m *TextSpan) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TextSpan.Marshal(b, m, deterministic)
 }
-func (m *TextSpan) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TextSpan.Merge(m, src)
+func (dst *TextSpan) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TextSpan.Merge(dst, src)
 }
 func (m *TextSpan) XXX_Size() int {
 	return xxx_messageInfo_TextSpan.Size(m)
@@ -1836,7 +1802,7 @@ func (m *AnalyzeSentimentRequest) Reset()         { *m = AnalyzeSentimentRequest
 func (m *AnalyzeSentimentRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSentimentRequest) ProtoMessage()    {}
 func (*AnalyzeSentimentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{9}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{9}
 }
 func (m *AnalyzeSentimentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSentimentRequest.Unmarshal(m, b)
@@ -1844,8 +1810,8 @@ func (m *AnalyzeSentimentRequest) XXX_Unmarshal(b []byte) error {
 func (m *AnalyzeSentimentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnalyzeSentimentRequest.Marshal(b, m, deterministic)
 }
-func (m *AnalyzeSentimentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalyzeSentimentRequest.Merge(m, src)
+func (dst *AnalyzeSentimentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeSentimentRequest.Merge(dst, src)
 }
 func (m *AnalyzeSentimentRequest) XXX_Size() int {
 	return xxx_messageInfo_AnalyzeSentimentRequest.Size(m)
@@ -1889,7 +1855,7 @@ func (m *AnalyzeSentimentResponse) Reset()         { *m = AnalyzeSentimentRespon
 func (m *AnalyzeSentimentResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSentimentResponse) ProtoMessage()    {}
 func (*AnalyzeSentimentResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{10}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{10}
 }
 func (m *AnalyzeSentimentResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSentimentResponse.Unmarshal(m, b)
@@ -1897,8 +1863,8 @@ func (m *AnalyzeSentimentResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnalyzeSentimentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnalyzeSentimentResponse.Marshal(b, m, deterministic)
 }
-func (m *AnalyzeSentimentResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalyzeSentimentResponse.Merge(m, src)
+func (dst *AnalyzeSentimentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeSentimentResponse.Merge(dst, src)
 }
 func (m *AnalyzeSentimentResponse) XXX_Size() int {
 	return xxx_messageInfo_AnalyzeSentimentResponse.Size(m)
@@ -1945,7 +1911,7 @@ func (m *AnalyzeEntitiesRequest) Reset()         { *m = AnalyzeEntitiesRequest{}
 func (m *AnalyzeEntitiesRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeEntitiesRequest) ProtoMessage()    {}
 func (*AnalyzeEntitiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{11}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{11}
 }
 func (m *AnalyzeEntitiesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeEntitiesRequest.Unmarshal(m, b)
@@ -1953,8 +1919,8 @@ func (m *AnalyzeEntitiesRequest) XXX_Unmarshal(b []byte) error {
 func (m *AnalyzeEntitiesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnalyzeEntitiesRequest.Marshal(b, m, deterministic)
 }
-func (m *AnalyzeEntitiesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalyzeEntitiesRequest.Merge(m, src)
+func (dst *AnalyzeEntitiesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeEntitiesRequest.Merge(dst, src)
 }
 func (m *AnalyzeEntitiesRequest) XXX_Size() int {
 	return xxx_messageInfo_AnalyzeEntitiesRequest.Size(m)
@@ -1996,7 +1962,7 @@ func (m *AnalyzeEntitiesResponse) Reset()         { *m = AnalyzeEntitiesResponse
 func (m *AnalyzeEntitiesResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeEntitiesResponse) ProtoMessage()    {}
 func (*AnalyzeEntitiesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{12}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{12}
 }
 func (m *AnalyzeEntitiesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeEntitiesResponse.Unmarshal(m, b)
@@ -2004,8 +1970,8 @@ func (m *AnalyzeEntitiesResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnalyzeEntitiesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnalyzeEntitiesResponse.Marshal(b, m, deterministic)
 }
-func (m *AnalyzeEntitiesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalyzeEntitiesResponse.Merge(m, src)
+func (dst *AnalyzeEntitiesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeEntitiesResponse.Merge(dst, src)
 }
 func (m *AnalyzeEntitiesResponse) XXX_Size() int {
 	return xxx_messageInfo_AnalyzeEntitiesResponse.Size(m)
@@ -2045,7 +2011,7 @@ func (m *AnalyzeSyntaxRequest) Reset()         { *m = AnalyzeSyntaxRequest{} }
 func (m *AnalyzeSyntaxRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSyntaxRequest) ProtoMessage()    {}
 func (*AnalyzeSyntaxRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{13}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{13}
 }
 func (m *AnalyzeSyntaxRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSyntaxRequest.Unmarshal(m, b)
@@ -2053,8 +2019,8 @@ func (m *AnalyzeSyntaxRequest) XXX_Unmarshal(b []byte) error {
 func (m *AnalyzeSyntaxRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnalyzeSyntaxRequest.Marshal(b, m, deterministic)
 }
-func (m *AnalyzeSyntaxRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalyzeSyntaxRequest.Merge(m, src)
+func (dst *AnalyzeSyntaxRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeSyntaxRequest.Merge(dst, src)
 }
 func (m *AnalyzeSyntaxRequest) XXX_Size() int {
 	return xxx_messageInfo_AnalyzeSyntaxRequest.Size(m)
@@ -2098,7 +2064,7 @@ func (m *AnalyzeSyntaxResponse) Reset()         { *m = AnalyzeSyntaxResponse{} }
 func (m *AnalyzeSyntaxResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSyntaxResponse) ProtoMessage()    {}
 func (*AnalyzeSyntaxResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{14}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{14}
 }
 func (m *AnalyzeSyntaxResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSyntaxResponse.Unmarshal(m, b)
@@ -2106,8 +2072,8 @@ func (m *AnalyzeSyntaxResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnalyzeSyntaxResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnalyzeSyntaxResponse.Marshal(b, m, deterministic)
 }
-func (m *AnalyzeSyntaxResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnalyzeSyntaxResponse.Merge(m, src)
+func (dst *AnalyzeSyntaxResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeSyntaxResponse.Merge(dst, src)
 }
 func (m *AnalyzeSyntaxResponse) XXX_Size() int {
 	return xxx_messageInfo_AnalyzeSyntaxResponse.Size(m)
@@ -2157,7 +2123,7 @@ func (m *AnnotateTextRequest) Reset()         { *m = AnnotateTextRequest{} }
 func (m *AnnotateTextRequest) String() string { return proto.CompactTextString(m) }
 func (*AnnotateTextRequest) ProtoMessage()    {}
 func (*AnnotateTextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{15}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{15}
 }
 func (m *AnnotateTextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateTextRequest.Unmarshal(m, b)
@@ -2165,8 +2131,8 @@ func (m *AnnotateTextRequest) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateTextRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateTextRequest.Marshal(b, m, deterministic)
 }
-func (m *AnnotateTextRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateTextRequest.Merge(m, src)
+func (dst *AnnotateTextRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateTextRequest.Merge(dst, src)
 }
 func (m *AnnotateTextRequest) XXX_Size() int {
 	return xxx_messageInfo_AnnotateTextRequest.Size(m)
@@ -2216,7 +2182,7 @@ func (m *AnnotateTextRequest_Features) Reset()         { *m = AnnotateTextReques
 func (m *AnnotateTextRequest_Features) String() string { return proto.CompactTextString(m) }
 func (*AnnotateTextRequest_Features) ProtoMessage()    {}
 func (*AnnotateTextRequest_Features) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{15, 0}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{15, 0}
 }
 func (m *AnnotateTextRequest_Features) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateTextRequest_Features.Unmarshal(m, b)
@@ -2224,8 +2190,8 @@ func (m *AnnotateTextRequest_Features) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateTextRequest_Features) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateTextRequest_Features.Marshal(b, m, deterministic)
 }
-func (m *AnnotateTextRequest_Features) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateTextRequest_Features.Merge(m, src)
+func (dst *AnnotateTextRequest_Features) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateTextRequest_Features.Merge(dst, src)
 }
 func (m *AnnotateTextRequest_Features) XXX_Size() int {
 	return xxx_messageInfo_AnnotateTextRequest_Features.Size(m)
@@ -2286,7 +2252,7 @@ func (m *AnnotateTextResponse) Reset()         { *m = AnnotateTextResponse{} }
 func (m *AnnotateTextResponse) String() string { return proto.CompactTextString(m) }
 func (*AnnotateTextResponse) ProtoMessage()    {}
 func (*AnnotateTextResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ca1a8b57f399672, []int{16}
+	return fileDescriptor_language_service_6923389ebfb7184c, []int{16}
 }
 func (m *AnnotateTextResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateTextResponse.Unmarshal(m, b)
@@ -2294,8 +2260,8 @@ func (m *AnnotateTextResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateTextResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateTextResponse.Marshal(b, m, deterministic)
 }
-func (m *AnnotateTextResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateTextResponse.Merge(m, src)
+func (dst *AnnotateTextResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateTextResponse.Merge(dst, src)
 }
 func (m *AnnotateTextResponse) XXX_Size() int {
 	return xxx_messageInfo_AnnotateTextResponse.Size(m)
@@ -2570,10 +2536,10 @@ var _LanguageService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/language/v1beta1/language_service.proto", fileDescriptor_1ca1a8b57f399672)
+	proto.RegisterFile("google/cloud/language/v1beta1/language_service.proto", fileDescriptor_language_service_6923389ebfb7184c)
 }
 
-var fileDescriptor_1ca1a8b57f399672 = []byte{
+var fileDescriptor_language_service_6923389ebfb7184c = []byte{
 	// 2755 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x59, 0x4f, 0x73, 0xdb, 0xc6,
 	0x15, 0x37, 0xf8, 0x4f, 0xe4, 0x92, 0x92, 0xd6, 0x88, 0x93, 0xb0, 0x6a, 0xd2, 0x38, 0x48, 0x5c,

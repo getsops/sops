@@ -42,7 +42,7 @@ func (m *Http) Reset()         { *m = Http{} }
 func (m *Http) String() string { return proto.CompactTextString(m) }
 func (*Http) ProtoMessage()    {}
 func (*Http) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff9994be407cdcc9, []int{0}
+	return fileDescriptor_http_e457621dddd7365b, []int{0}
 }
 func (m *Http) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Http.Unmarshal(m, b)
@@ -50,8 +50,8 @@ func (m *Http) XXX_Unmarshal(b []byte) error {
 func (m *Http) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Http.Marshal(b, m, deterministic)
 }
-func (m *Http) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Http.Merge(m, src)
+func (dst *Http) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Http.Merge(dst, src)
 }
 func (m *Http) XXX_Size() int {
 	return xxx_messageInfo_Http.Size(m)
@@ -332,7 +332,7 @@ func (m *HttpRule) Reset()         { *m = HttpRule{} }
 func (m *HttpRule) String() string { return proto.CompactTextString(m) }
 func (*HttpRule) ProtoMessage()    {}
 func (*HttpRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff9994be407cdcc9, []int{1}
+	return fileDescriptor_http_e457621dddd7365b, []int{1}
 }
 func (m *HttpRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HttpRule.Unmarshal(m, b)
@@ -340,8 +340,8 @@ func (m *HttpRule) XXX_Unmarshal(b []byte) error {
 func (m *HttpRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HttpRule.Marshal(b, m, deterministic)
 }
-func (m *HttpRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HttpRule.Merge(m, src)
+func (dst *HttpRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpRule.Merge(dst, src)
 }
 func (m *HttpRule) XXX_Size() int {
 	return xxx_messageInfo_HttpRule.Size(m)
@@ -614,7 +614,7 @@ func (m *CustomHttpPattern) Reset()         { *m = CustomHttpPattern{} }
 func (m *CustomHttpPattern) String() string { return proto.CompactTextString(m) }
 func (*CustomHttpPattern) ProtoMessage()    {}
 func (*CustomHttpPattern) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff9994be407cdcc9, []int{2}
+	return fileDescriptor_http_e457621dddd7365b, []int{2}
 }
 func (m *CustomHttpPattern) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CustomHttpPattern.Unmarshal(m, b)
@@ -622,8 +622,8 @@ func (m *CustomHttpPattern) XXX_Unmarshal(b []byte) error {
 func (m *CustomHttpPattern) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CustomHttpPattern.Marshal(b, m, deterministic)
 }
-func (m *CustomHttpPattern) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CustomHttpPattern.Merge(m, src)
+func (dst *CustomHttpPattern) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomHttpPattern.Merge(dst, src)
 }
 func (m *CustomHttpPattern) XXX_Size() int {
 	return xxx_messageInfo_CustomHttpPattern.Size(m)
@@ -654,9 +654,9 @@ func init() {
 	proto.RegisterType((*CustomHttpPattern)(nil), "google.api.CustomHttpPattern")
 }
 
-func init() { proto.RegisterFile("google/api/http.proto", fileDescriptor_ff9994be407cdcc9) }
+func init() { proto.RegisterFile("google/api/http.proto", fileDescriptor_http_e457621dddd7365b) }
 
-var fileDescriptor_ff9994be407cdcc9 = []byte{
+var fileDescriptor_http_e457621dddd7365b = []byte{
 	// 419 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xc1, 0x8e, 0xd3, 0x30,
 	0x10, 0x86, 0x49, 0x9b, 0x76, 0xdb, 0xe9, 0x82, 0x84, 0x59, 0x90, 0x85, 0x40, 0x54, 0xe5, 0x52,

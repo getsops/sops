@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) Defi
 // policyDefinitionName - the name of the policy definition to create.
 // parameters - the policy definition properties.
 func (client DefinitionsClient) CreateOrUpdate(ctx context.Context, policyDefinitionName string, parameters Definition) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, policyDefinitionName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client DefinitionsClient) CreateOrUpdateResponder(resp *http.Response) (re
 // parameters - the policy definition properties.
 // managementGroupID - the ID of the management group.
 func (client DefinitionsClient) CreateOrUpdateAtManagementGroup(ctx context.Context, policyDefinitionName string, parameters Definition, managementGroupID string) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.CreateOrUpdateAtManagementGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdateAtManagementGroupPreparer(ctx, policyDefinitionName, parameters, managementGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "CreateOrUpdateAtManagementGroup", nil, "Failure preparing request")
@@ -182,6 +203,16 @@ func (client DefinitionsClient) CreateOrUpdateAtManagementGroupResponder(resp *h
 // Parameters:
 // policyDefinitionName - the name of the policy definition to delete.
 func (client DefinitionsClient) Delete(ctx context.Context, policyDefinitionName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "Delete", nil, "Failure preparing request")
@@ -248,6 +279,16 @@ func (client DefinitionsClient) DeleteResponder(resp *http.Response) (result aut
 // policyDefinitionName - the name of the policy definition to delete.
 // managementGroupID - the ID of the management group.
 func (client DefinitionsClient) DeleteAtManagementGroup(ctx context.Context, policyDefinitionName string, managementGroupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.DeleteAtManagementGroup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteAtManagementGroupPreparer(ctx, policyDefinitionName, managementGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "DeleteAtManagementGroup", nil, "Failure preparing request")
@@ -312,6 +353,16 @@ func (client DefinitionsClient) DeleteAtManagementGroupResponder(resp *http.Resp
 // Parameters:
 // policyDefinitionName - the name of the policy definition to get.
 func (client DefinitionsClient) Get(ctx context.Context, policyDefinitionName string) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "Get", nil, "Failure preparing request")
@@ -379,6 +430,16 @@ func (client DefinitionsClient) GetResponder(resp *http.Response) (result Defini
 // policyDefinitionName - the name of the policy definition to get.
 // managementGroupID - the ID of the management group.
 func (client DefinitionsClient) GetAtManagementGroup(ctx context.Context, policyDefinitionName string, managementGroupID string) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.GetAtManagementGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAtManagementGroupPreparer(ctx, policyDefinitionName, managementGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "GetAtManagementGroup", nil, "Failure preparing request")
@@ -444,6 +505,16 @@ func (client DefinitionsClient) GetAtManagementGroupResponder(resp *http.Respons
 // Parameters:
 // policyDefinitionName - the name of the built-in policy definition to get.
 func (client DefinitionsClient) GetBuiltIn(ctx context.Context, policyDefinitionName string) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.GetBuiltIn")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetBuiltInPreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "GetBuiltIn", nil, "Failure preparing request")
@@ -506,6 +577,16 @@ func (client DefinitionsClient) GetBuiltInResponder(resp *http.Response) (result
 
 // List this operation retrieves a list of all the policy definitions in a given subscription.
 func (client DefinitionsClient) List(ctx context.Context) (result DefinitionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.List")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -568,8 +649,8 @@ func (client DefinitionsClient) ListResponder(resp *http.Response) (result Defin
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client DefinitionsClient) listNextResults(lastResults DefinitionListResult) (result DefinitionListResult, err error) {
-	req, err := lastResults.definitionListResultPreparer()
+func (client DefinitionsClient) listNextResults(ctx context.Context, lastResults DefinitionListResult) (result DefinitionListResult, err error) {
+	req, err := lastResults.definitionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.DefinitionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -590,12 +671,32 @@ func (client DefinitionsClient) listNextResults(lastResults DefinitionListResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DefinitionsClient) ListComplete(ctx context.Context) (result DefinitionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // ListBuiltIn this operation retrieves a list of all the built-in policy definitions.
 func (client DefinitionsClient) ListBuiltIn(ctx context.Context) (result DefinitionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.ListBuiltIn")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBuiltInNextResults
 	req, err := client.ListBuiltInPreparer(ctx)
 	if err != nil {
@@ -654,8 +755,8 @@ func (client DefinitionsClient) ListBuiltInResponder(resp *http.Response) (resul
 }
 
 // listBuiltInNextResults retrieves the next set of results, if any.
-func (client DefinitionsClient) listBuiltInNextResults(lastResults DefinitionListResult) (result DefinitionListResult, err error) {
-	req, err := lastResults.definitionListResultPreparer()
+func (client DefinitionsClient) listBuiltInNextResults(ctx context.Context, lastResults DefinitionListResult) (result DefinitionListResult, err error) {
+	req, err := lastResults.definitionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.DefinitionsClient", "listBuiltInNextResults", nil, "Failure preparing next results request")
 	}
@@ -676,6 +777,16 @@ func (client DefinitionsClient) listBuiltInNextResults(lastResults DefinitionLis
 
 // ListBuiltInComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DefinitionsClient) ListBuiltInComplete(ctx context.Context) (result DefinitionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.ListBuiltIn")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBuiltIn(ctx)
 	return
 }
@@ -684,6 +795,16 @@ func (client DefinitionsClient) ListBuiltInComplete(ctx context.Context) (result
 // Parameters:
 // managementGroupID - the ID of the management group.
 func (client DefinitionsClient) ListByManagementGroup(ctx context.Context, managementGroupID string) (result DefinitionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.ListByManagementGroup")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByManagementGroupNextResults
 	req, err := client.ListByManagementGroupPreparer(ctx, managementGroupID)
 	if err != nil {
@@ -746,8 +867,8 @@ func (client DefinitionsClient) ListByManagementGroupResponder(resp *http.Respon
 }
 
 // listByManagementGroupNextResults retrieves the next set of results, if any.
-func (client DefinitionsClient) listByManagementGroupNextResults(lastResults DefinitionListResult) (result DefinitionListResult, err error) {
-	req, err := lastResults.definitionListResultPreparer()
+func (client DefinitionsClient) listByManagementGroupNextResults(ctx context.Context, lastResults DefinitionListResult) (result DefinitionListResult, err error) {
+	req, err := lastResults.definitionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.DefinitionsClient", "listByManagementGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -768,6 +889,16 @@ func (client DefinitionsClient) listByManagementGroupNextResults(lastResults Def
 
 // ListByManagementGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DefinitionsClient) ListByManagementGroupComplete(ctx context.Context, managementGroupID string) (result DefinitionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.ListByManagementGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByManagementGroup(ctx, managementGroupID)
 	return
 }

@@ -20,10 +20,10 @@ package handshaker
 
 import (
 	"bytes"
+	"context"
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 	core "google.golang.org/grpc/credentials/alts/internal"
 	altspb "google.golang.org/grpc/credentials/alts/internal/proto/grpc_gcp"
@@ -31,7 +31,6 @@ import (
 )
 
 var (
-	testAppProtocols   = []string{"grpc"}
 	testRecordProtocol = rekeyRecordProtocolName
 	testKey            = []byte{
 		// 44 arbitrary bytes.

@@ -18,10 +18,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
 	"strconv"
-
-	"math/rand"
 
 	"cloud.google.com/go/pubsub/loadtest"
 	pb "cloud.google.com/go/pubsub/loadtest/pb"

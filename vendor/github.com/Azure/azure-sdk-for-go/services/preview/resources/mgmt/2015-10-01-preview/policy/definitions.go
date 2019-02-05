@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) Defi
 // policyDefinitionName - the name of the policy definition to create.
 // parameters - the policy definition properties.
 func (client DefinitionsClient) CreateOrUpdate(ctx context.Context, policyDefinitionName string, parameters Definition) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, policyDefinitionName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -112,6 +123,16 @@ func (client DefinitionsClient) CreateOrUpdateResponder(resp *http.Response) (re
 // Parameters:
 // policyDefinitionName - the name of the policy definition to delete.
 func (client DefinitionsClient) Delete(ctx context.Context, policyDefinitionName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "Delete", nil, "Failure preparing request")
@@ -176,6 +197,16 @@ func (client DefinitionsClient) DeleteResponder(resp *http.Response) (result aut
 // Parameters:
 // policyDefinitionName - the name of the policy definition to get.
 func (client DefinitionsClient) Get(ctx context.Context, policyDefinitionName string) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.DefinitionsClient", "Get", nil, "Failure preparing request")
@@ -241,6 +272,16 @@ func (client DefinitionsClient) GetResponder(resp *http.Response) (result Defini
 // Parameters:
 // filter - the filter to apply on the operation.
 func (client DefinitionsClient) List(ctx context.Context, filter string) (result DefinitionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.List")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter)
 	if err != nil {
@@ -306,8 +347,8 @@ func (client DefinitionsClient) ListResponder(resp *http.Response) (result Defin
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client DefinitionsClient) listNextResults(lastResults DefinitionListResult) (result DefinitionListResult, err error) {
-	req, err := lastResults.definitionListResultPreparer()
+func (client DefinitionsClient) listNextResults(ctx context.Context, lastResults DefinitionListResult) (result DefinitionListResult, err error) {
+	req, err := lastResults.definitionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.DefinitionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -328,6 +369,16 @@ func (client DefinitionsClient) listNextResults(lastResults DefinitionListResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DefinitionsClient) ListComplete(ctx context.Context, filter string) (result DefinitionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter)
 	return
 }

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -39,7 +40,7 @@ func NewAssessedMachinesClientWithBaseURI(baseURI string, subscriptionID string,
 	return AssessedMachinesClient{NewWithBaseURI(baseURI, subscriptionID, acceptLanguage)}
 }
 
-// Get get an assessed machine with its size & cost estimnate that was evaluated in the specified assessment.
+// Get get an assessed machine with its size & cost estimate that was evaluated in the specified assessment.
 // Parameters:
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 // projectName - name of the Azure Migrate project.
@@ -47,6 +48,16 @@ func NewAssessedMachinesClientWithBaseURI(baseURI string, subscriptionID string,
 // assessmentName - unique name of an assessment within a project.
 // assessedMachineName - unique name of an assessed machine evaluated as part of an assessment.
 func (client AssessedMachinesClient) Get(ctx context.Context, resourceGroupName string, projectName string, groupName string, assessmentName string, assessedMachineName string) (result AssessedMachine, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessedMachinesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, projectName, groupName, assessmentName, assessedMachineName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessedMachinesClient", "Get", nil, "Failure preparing request")
@@ -129,6 +140,16 @@ func (client AssessedMachinesClient) GetResponder(resp *http.Response) (result A
 // groupName - unique name of a group within a project.
 // assessmentName - unique name of an assessment within a project.
 func (client AssessedMachinesClient) ListByAssessment(ctx context.Context, resourceGroupName string, projectName string, groupName string, assessmentName string) (result AssessedMachineResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessedMachinesClient.ListByAssessment")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByAssessmentPreparer(ctx, resourceGroupName, projectName, groupName, assessmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessedMachinesClient", "ListByAssessment", nil, "Failure preparing request")

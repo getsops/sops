@@ -309,7 +309,7 @@ func in(set []string, s string) bool {
 }
 
 // attrKey computes a key based on the distinguishable attributes of
-// an element and it's values.
+// an element and its values.
 func attrKey(v reflect.Value, exclude ...string) string {
 	parts := []string{}
 	ename := v.Interface().(Elem).GetCommon().name

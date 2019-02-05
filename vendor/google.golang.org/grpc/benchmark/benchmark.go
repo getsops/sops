@@ -24,19 +24,22 @@ Package benchmark implements the building blocks to setup end-to-end gRPC benchm
 package benchmark
 
 import (
+	"context"
 	"fmt"
 	"io"
+	"log"
 	"net"
 	"sync"
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	testpb "google.golang.org/grpc/benchmark/grpc_testing"
 	"google.golang.org/grpc/benchmark/latency"
 	"google.golang.org/grpc/benchmark/stats"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/status"
 )
 
 // AddOne add 1 to the features slice
@@ -67,7 +70,8 @@ func setPayload(p *testpb.Payload, t testpb.PayloadType, size int) {
 	p.Body = body
 }
 
-func newPayload(t testpb.PayloadType, size int) *testpb.Payload {
+// NewPayload creates a payload with the given type and size.
+func NewPayload(t testpb.PayloadType, size int) *testpb.Payload {
 	p := new(testpb.Payload)
 	setPayload(p, t, size)
 	return p
@@ -78,7 +82,7 @@ type testServer struct {
 
 func (s *testServer) UnaryCall(ctx context.Context, in *testpb.SimpleRequest) (*testpb.SimpleResponse, error) {
 	return &testpb.SimpleResponse{
-		Payload: newPayload(in.ResponseType, int(in.ResponseSize)),
+		Payload: NewPayload(in.ResponseType, int(in.ResponseSize)),
 	}, nil
 }
 
@@ -104,6 +108,52 @@ func (s *testServer) StreamingCall(stream testpb.BenchmarkService_StreamingCallS
 	}
 }
 
+func (s *testServer) UnconstrainedStreamingCall(stream testpb.BenchmarkService_UnconstrainedStreamingCallServer) error {
+	in := new(testpb.SimpleRequest)
+	// Receive a message to learn response type and size.
+	err := stream.RecvMsg(in)
+	if err == io.EOF {
+		// read done.
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+
+	response := &testpb.SimpleResponse{
+		Payload: new(testpb.Payload),
+	}
+	setPayload(response.Payload, in.ResponseType, int(in.ResponseSize))
+
+	go func() {
+		for {
+			// Using RecvMsg rather than Recv to prevent reallocation of SimpleRequest.
+			err := stream.RecvMsg(in)
+			switch status.Code(err) {
+			case codes.Canceled:
+			case codes.OK:
+			default:
+				log.Fatalf("server recv error: %v", err)
+			}
+		}
+	}()
+
+	go func() {
+		for {
+			err := stream.Send(response)
+			switch status.Code(err) {
+			case codes.Unavailable:
+			case codes.OK:
+			default:
+				log.Fatalf("server send error: %v", err)
+			}
+		}
+	}()
+
+	<-stream.Context().Done()
+	return stream.Context().Err()
+}
+
 // byteBufServer is a gRPC server that sends and receives byte buffer.
 // The purpose is to benchmark the gRPC performance without protobuf serialization/deserialization overhead.
 type byteBufServer struct {
@@ -117,6 +167,23 @@ func (s *byteBufServer) UnaryCall(ctx context.Context, in *testpb.SimpleRequest)
 }
 
 func (s *byteBufServer) StreamingCall(stream testpb.BenchmarkService_StreamingCallServer) error {
+	for {
+		var in []byte
+		err := stream.(grpc.ServerStream).RecvMsg(&in)
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		out := make([]byte, s.respSize)
+		if err := stream.(grpc.ServerStream).SendMsg(&out); err != nil {
+			return err
+		}
+	}
+}
+
+func (s *byteBufServer) UnconstrainedStreamingCall(stream testpb.BenchmarkService_UnconstrainedStreamingCallServer) error {
 	for {
 		var in []byte
 		err := stream.(grpc.ServerStream).RecvMsg(&in)
@@ -174,7 +241,7 @@ func StartServer(info ServerInfo, opts ...grpc.ServerOption) func() {
 
 // DoUnaryCall performs an unary RPC with given stub and request and response sizes.
 func DoUnaryCall(tc testpb.BenchmarkServiceClient, reqSize, respSize int) error {
-	pl := newPayload(testpb.PayloadType_COMPRESSABLE, reqSize)
+	pl := NewPayload(testpb.PayloadType_COMPRESSABLE, reqSize)
 	req := &testpb.SimpleRequest{
 		ResponseType: pl.Type,
 		ResponseSize: int32(respSize),
@@ -188,7 +255,7 @@ func DoUnaryCall(tc testpb.BenchmarkServiceClient, reqSize, respSize int) error 
 
 // DoStreamingRoundTrip performs a round trip for a single streaming rpc.
 func DoStreamingRoundTrip(stream testpb.BenchmarkService_StreamingCallClient, reqSize, respSize int) error {
-	pl := newPayload(testpb.PayloadType_COMPRESSABLE, reqSize)
+	pl := NewPayload(testpb.PayloadType_COMPRESSABLE, reqSize)
 	req := &testpb.SimpleRequest{
 		ResponseType: pl.Type,
 		ResponseSize: int32(respSize),

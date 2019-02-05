@@ -511,6 +511,25 @@
         "title": "To remove a virtual MFA device"
       }
     ],
+    "GenerateServiceLastAccessedDetails": [
+      {
+        "input": {
+          "Arn": "arn:aws:iam::123456789012:policy/ExamplePolicy1"
+        },
+        "output": {
+          "JobId": "examplef-1305-c245-eba4-71fe298bcda7"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following operation generates a report for the policy: ExamplePolicy1",
+        "id": "generateaccessdata-policy-1541695178514",
+        "title": "To generate a service last accessed data report for a policy"
+      }
+    ],
     "GetAccountPasswordPolicy": [
       {
         "output": {
@@ -661,6 +680,86 @@
         "description": "The following command gets information about the role named Test-Role.",
         "id": "5b7d03a6-340c-472d-aa77-56425950d8b0",
         "title": "To get information about an IAM role"
+      }
+    ],
+    "GetServiceLastAccessedDetails": [
+      {
+        "input": {
+          "JobId": "examplef-1305-c245-eba4-71fe298bcda7"
+        },
+        "output": {
+          "IsTruncated": false,
+          "JobCompletionDate": "2018-10-24T19:47:35.241Z",
+          "JobCreationDate": "2018-10-24T19:47:31.466Z",
+          "JobStatus": "COMPLETED",
+          "ServicesLastAccessed": [
+            {
+              "LastAuthenticated": "2018-10-24T19:11:00Z",
+              "LastAuthenticatedEntity": "arn:aws:iam::123456789012:user/AWSExampleUser01",
+              "ServiceName": "AWS Identity and Access Management",
+              "ServiceNamespace": "iam",
+              "TotalAuthenticatedEntities": 2
+            },
+            {
+              "ServiceName": "Amazon Simple Storage Service",
+              "ServiceNamespace": "s3",
+              "TotalAuthenticatedEntities": 0
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following operation gets details about the report with the job ID: examplef-1305-c245-eba4-71fe298bcda7",
+        "id": "getserviceaccessdetails-policy-1541696298085",
+        "title": "To get details from a previously-generated report"
+      }
+    ],
+    "GetServiceLastAccessedDetailsWithEntities": [
+      {
+        "input": {
+          "JobId": "examplef-1305-c245-eba4-71fe298bcda7",
+          "ServiceNamespace": "iam"
+        },
+        "output": {
+          "EntityDetailsList": [
+            {
+              "EntityInfo": {
+                "Arn": "arn:aws:iam::123456789012:user/AWSExampleUser01",
+                "Id": "AIDAEX2EXAMPLEB6IGCDC",
+                "Name": "AWSExampleUser01",
+                "Path": "/",
+                "Type": "USER"
+              },
+              "LastAuthenticated": "2018-10-24T19:10:00Z"
+            },
+            {
+              "EntityInfo": {
+                "Arn": "arn:aws:iam::123456789012:role/AWSExampleRole01",
+                "Id": "AROAEAEXAMPLEIANXSIU4",
+                "Name": "AWSExampleRole01",
+                "Path": "/",
+                "Type": "ROLE"
+              }
+            }
+          ],
+          "IsTruncated": false,
+          "JobCompletionDate": "2018-10-24T19:47:35.241Z",
+          "JobCreationDate": "2018-10-24T19:47:31.466Z",
+          "JobStatus": "COMPLETED"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following operation returns details about the entities that attempted to access the IAM service.",
+        "id": "getserviceaccessdetailsentity-policy-1541697621384",
+        "title": "To get sntity details from a previously-generated report"
       }
     ],
     "GetUser": [
@@ -836,6 +935,86 @@
         "title": "To list the groups that an IAM user belongs to"
       }
     ],
+    "ListPoliciesGrantingServiceAccess": [
+      {
+        "input": {
+          "Arn": "arn:aws:iam::123456789012:user/ExampleUser01",
+          "ServiceNamespaces": [
+            "iam",
+            "ec2"
+          ]
+        },
+        "output": {
+          "IsTruncated": false,
+          "PoliciesGrantingServiceAccess": [
+            {
+              "Policies": [
+                {
+                  "PolicyArn": "arn:aws:iam::123456789012:policy/ExampleIamPolicy",
+                  "PolicyName": "ExampleIamPolicy",
+                  "PolicyType": "MANAGED"
+                },
+                {
+                  "EntityName": "AWSExampleGroup1",
+                  "EntityType": "GROUP",
+                  "PolicyName": "ExampleGroup1Policy",
+                  "PolicyType": "INLINE"
+                }
+              ],
+              "ServiceNamespace": "iam"
+            },
+            {
+              "Policies": [
+                {
+                  "PolicyArn": "arn:aws:iam::123456789012:policy/ExampleEc2Policy",
+                  "PolicyName": "ExampleEc2Policy",
+                  "PolicyType": "MANAGED"
+                }
+              ],
+              "ServiceNamespace": "ec2"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following operation lists policies that allow ExampleUser01 to access IAM or EC2.",
+        "id": "listpoliciesaccess-user-1541698749508",
+        "title": "To list policies that allow access to a service"
+      }
+    ],
+    "ListRoleTags": [
+      {
+        "input": {
+          "RoleName": "taggedrole1"
+        },
+        "output": {
+          "IsTruncated": false,
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "12345"
+            },
+            {
+              "Key": "Team",
+              "Value": "Accounting"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to list the tags attached to a role.",
+        "id": "to-list-the-tags-attached-to-an-iam-role-1506719238376",
+        "title": "To list the tags attached to an IAM role"
+      }
+    ],
     "ListSigningCertificates": [
       {
         "input": {
@@ -861,6 +1040,35 @@
         "description": "The following command lists the signing certificates for the IAM user named Bob.",
         "id": "b4c10256-4fc9-457e-b3fd-4a110d4d73dc",
         "title": "To list the signing certificates for an IAM user"
+      }
+    ],
+    "ListUserTags": [
+      {
+        "input": {
+          "UserName": "anika"
+        },
+        "output": {
+          "IsTruncated": false,
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "12345"
+            },
+            {
+              "Key": "Team",
+              "Value": "Accounting"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to list the tags attached to a user.",
+        "id": "to-list-the-tags-attached-to-an-iam-user-1506719473186",
+        "title": "To list the tags attached to an IAM user"
       }
     ],
     "ListUsers": [
@@ -1009,6 +1217,96 @@
         "description": "The following command removes the user named Bob from the IAM group named Admins.",
         "id": "fb54d5b4-0caf-41d8-af0e-10a84413f174",
         "title": "To remove a user from an IAM group"
+      }
+    ],
+    "TagRole": [
+      {
+        "input": {
+          "RoleName": "taggedrole",
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "Accounting"
+            },
+            {
+              "Key": "CostCenter",
+              "Value": "12345"
+            }
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to add tags to an existing role.",
+        "id": "to-add-a-tag-key-and-value-to-an-iam-role-1506718791513",
+        "title": "To add a tag key and value to an IAM role"
+      }
+    ],
+    "TagUser": [
+      {
+        "input": {
+          "Tags": [
+            {
+              "Key": "Dept",
+              "Value": "Accounting"
+            },
+            {
+              "Key": "CostCenter",
+              "Value": "12345"
+            }
+          ],
+          "UserName": "anika"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to add tags to an existing user.",
+        "id": "to-add-a-tag-key-and-value-to-an-iam-user-1506719044227",
+        "title": "To add a tag key and value to an IAM user"
+      }
+    ],
+    "UntagRole": [
+      {
+        "input": {
+          "RoleName": "taggedrole",
+          "TagKeys": [
+            "Dept"
+          ]
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to remove a tag with the key 'Dept' from a role named 'taggedrole'.",
+        "id": "to-remove-a-tag-from-an-iam-role-1506719589943",
+        "title": "To remove a tag from an IAM role"
+      }
+    ],
+    "UntagUser": [
+      {
+        "input": {
+          "TagKeys": [
+            "Dept"
+          ],
+          "UserName": "anika"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following example shows how to remove tags that are attached to a user named 'anika'.",
+        "id": "to-remove-a-tag-from-an-iam-user-1506719725554",
+        "title": "To remove a tag from an IAM user"
       }
     ],
     "UpdateAccessKey": [

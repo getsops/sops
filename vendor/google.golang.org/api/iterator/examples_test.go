@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ package iterator_test
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"html/template"
 	"log"
@@ -24,7 +25,6 @@ import (
 	"sort"
 	"strconv"
 
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 
@@ -43,6 +43,23 @@ var pageTemplate = template.Must(template.New("").Parse(`
   <a href="/entries?pageToken={{.}}">Next Page</a>
 {{end}}
 `))
+
+func Example() {
+	it := Primes(19)
+
+	for {
+		item, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%d ", item)
+	}
+	// Output:
+	// 2 3 5 7 11 13 17 19
+}
 
 // This example demonstrates how to use Pager to support
 // pagination on a web site.
@@ -120,11 +137,11 @@ func Example_serverPages() {
 	var items []int
 	for {
 		item, err := it.Next()
-		if err != nil && err != iterator.Done {
-			log.Fatal(err)
-		}
 		if err == iterator.Done {
 			break
+		}
+		if err != nil {
+			log.Fatal(err)
 		}
 		items = append(items, item)
 		if it.PageInfo().Remaining() == 0 {
@@ -202,6 +219,7 @@ func (it *SieveIterator) calc(max int) {
 outer:
 	for x := it.pos; x < max; x++ {
 		sqrt := int(math.Sqrt(float64(x)))
+	inner:
 		for _, p := range it.p {
 			switch {
 			case x%p == 0:
@@ -209,7 +227,7 @@ outer:
 				continue outer
 			case p > sqrt:
 				// Only need to check up to sqrt.
-				break
+				break inner
 			}
 		}
 		it.p = append(it.p, x)

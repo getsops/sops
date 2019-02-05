@@ -35,7 +35,6 @@ var LabelDescriptor_ValueType_name = map[int32]string{
 	1: "BOOL",
 	2: "INT64",
 }
-
 var LabelDescriptor_ValueType_value = map[string]int32{
 	"STRING": 0,
 	"BOOL":   1,
@@ -45,9 +44,8 @@ var LabelDescriptor_ValueType_value = map[string]int32{
 func (x LabelDescriptor_ValueType) String() string {
 	return proto.EnumName(LabelDescriptor_ValueType_name, int32(x))
 }
-
 func (LabelDescriptor_ValueType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_f372a463e25ba151, []int{0, 0}
+	return fileDescriptor_label_7ab1ab74ef036f1c, []int{0, 0}
 }
 
 // A description of a label.
@@ -67,7 +65,7 @@ func (m *LabelDescriptor) Reset()         { *m = LabelDescriptor{} }
 func (m *LabelDescriptor) String() string { return proto.CompactTextString(m) }
 func (*LabelDescriptor) ProtoMessage()    {}
 func (*LabelDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f372a463e25ba151, []int{0}
+	return fileDescriptor_label_7ab1ab74ef036f1c, []int{0}
 }
 func (m *LabelDescriptor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelDescriptor.Unmarshal(m, b)
@@ -75,8 +73,8 @@ func (m *LabelDescriptor) XXX_Unmarshal(b []byte) error {
 func (m *LabelDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LabelDescriptor.Marshal(b, m, deterministic)
 }
-func (m *LabelDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LabelDescriptor.Merge(m, src)
+func (dst *LabelDescriptor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LabelDescriptor.Merge(dst, src)
 }
 func (m *LabelDescriptor) XXX_Size() int {
 	return xxx_messageInfo_LabelDescriptor.Size(m)
@@ -113,9 +111,9 @@ func init() {
 	proto.RegisterEnum("google.api.LabelDescriptor_ValueType", LabelDescriptor_ValueType_name, LabelDescriptor_ValueType_value)
 }
 
-func init() { proto.RegisterFile("google/api/label.proto", fileDescriptor_f372a463e25ba151) }
+func init() { proto.RegisterFile("google/api/label.proto", fileDescriptor_label_7ab1ab74ef036f1c) }
 
-var fileDescriptor_f372a463e25ba151 = []byte{
+var fileDescriptor_label_7ab1ab74ef036f1c = []byte{
 	// 252 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4b, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x4f, 0x2c, 0xc8, 0xd4, 0xcf, 0x49, 0x4c, 0x4a, 0xcd, 0xd1, 0x2b, 0x28, 0xca,

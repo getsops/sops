@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -43,6 +44,16 @@ func NewFeaturesClient(endpoint string) FeaturesClient {
 // phraselistCreateObject - a Phraselist object containing Name, comma-separated Phrases and the isExchangeable
 // boolean. Default value for isExchangeable is true.
 func (client FeaturesClient) AddPhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistCreateObject PhraselistCreateObject) (result Int32, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.AddPhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddPhraseListPreparer(ctx, appID, versionID, phraselistCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "AddPhraseList", nil, "Failure preparing request")
@@ -110,6 +121,16 @@ func (client FeaturesClient) AddPhraseListResponder(resp *http.Response) (result
 // versionID - the version ID.
 // phraselistID - the ID of the feature to be deleted.
 func (client FeaturesClient) DeletePhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.DeletePhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePhraseListPreparer(ctx, appID, versionID, phraselistID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "DeletePhraseList", nil, "Failure preparing request")
@@ -176,6 +197,16 @@ func (client FeaturesClient) DeletePhraseListResponder(resp *http.Response) (res
 // versionID - the version ID.
 // phraselistID - the ID of the feature to be retrieved.
 func (client FeaturesClient) GetPhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32) (result PhraseListFeatureInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.GetPhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPhraseListPreparer(ctx, appID, versionID, phraselistID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "GetPhraseList", nil, "Failure preparing request")
@@ -243,6 +274,16 @@ func (client FeaturesClient) GetPhraseListResponder(resp *http.Response) (result
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client FeaturesClient) List(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result FeaturesResponseObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -334,6 +375,16 @@ func (client FeaturesClient) ListResponder(resp *http.Response) (result Features
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client FeaturesClient) ListPhraseLists(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPhraseListFeatureInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.ListPhraseLists")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -426,6 +477,16 @@ func (client FeaturesClient) ListPhraseListsResponder(resp *http.Response) (resu
 // phraselistUpdateObject - the new values for: - Just a boolean called IsActive, in which case the status of
 // the feature will be changed. - Name, Pattern, Mode, and a boolean called IsActive to update the feature.
 func (client FeaturesClient) UpdatePhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32, phraselistUpdateObject *PhraselistUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.UpdatePhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePhraseListPreparer(ctx, appID, versionID, phraselistID, phraselistUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "UpdatePhraseList", nil, "Failure preparing request")

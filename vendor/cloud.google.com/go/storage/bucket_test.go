@@ -167,10 +167,11 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 	t.Parallel()
 	au := &BucketAttrsToUpdate{
-		VersioningEnabled: false,
-		RequesterPays:     false,
-		RetentionPolicy:   &RetentionPolicy{RetentionPeriod: time.Hour},
-		Encryption:        &BucketEncryption{DefaultKMSKeyName: "key2"},
+		VersioningEnabled:     false,
+		RequesterPays:         false,
+		DefaultEventBasedHold: false,
+		RetentionPolicy:       &RetentionPolicy{RetentionPeriod: time.Hour},
+		Encryption:            &BucketEncryption{DefaultKMSKeyName: "key2"},
 		Lifecycle: &Lifecycle{
 			Rules: []LifecycleRule{
 				{
@@ -199,9 +200,10 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 			RequesterPays:   false,
 			ForceSendFields: []string{"RequesterPays"},
 		},
-		RetentionPolicy: &raw.BucketRetentionPolicy{RetentionPeriod: 3600},
-		Encryption:      &raw.BucketEncryption{DefaultKmsKeyName: "key2"},
-		NullFields:      []string{"Labels.b"},
+		DefaultEventBasedHold: false,
+		RetentionPolicy:       &raw.BucketRetentionPolicy{RetentionPeriod: 3600},
+		Encryption:            &raw.BucketEncryption{DefaultKmsKeyName: "key2"},
+		NullFields:            []string{"Labels.b"},
 		Lifecycle: &raw.BucketLifecycle{
 			Rule: []*raw.BucketLifecycleRule{
 				{
@@ -210,8 +212,9 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 				},
 			},
 		},
-		Logging: &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
-		Website: &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		Logging:         &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:         &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		ForceSendFields: []string{"DefaultEventBasedHold"},
 	}
 	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
@@ -341,14 +344,15 @@ func TestNewBucket(t *testing.T) {
 	labels := map[string]string{"a": "b"}
 	matchClasses := []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"}
 	rb := &raw.Bucket{
-		Name:           "name",
-		Location:       "loc",
-		Metageneration: 3,
-		StorageClass:   "sc",
-		TimeCreated:    "2017-10-23T04:05:06Z",
-		Versioning:     &raw.BucketVersioning{Enabled: true},
-		Labels:         labels,
-		Billing:        &raw.BucketBilling{RequesterPays: true},
+		Name:                  "name",
+		Location:              "loc",
+		DefaultEventBasedHold: true,
+		Metageneration:        3,
+		StorageClass:          "sc",
+		TimeCreated:           "2017-10-23T04:05:06Z",
+		Versioning:            &raw.BucketVersioning{Enabled: true},
+		Labels:                labels,
+		Billing:               &raw.BucketBilling{RequesterPays: true},
 		Lifecycle: &raw.BucketLifecycle{
 			Rule: []*raw.BucketLifecycleRule{{
 				Action: &raw.BucketLifecycleRuleAction{
@@ -384,14 +388,15 @@ func TestNewBucket(t *testing.T) {
 		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 	}
 	want := &BucketAttrs{
-		Name:              "name",
-		Location:          "loc",
-		MetaGeneration:    3,
-		StorageClass:      "sc",
-		Created:           time.Date(2017, 10, 23, 4, 5, 6, 0, time.UTC),
-		VersioningEnabled: true,
-		Labels:            labels,
-		RequesterPays:     true,
+		Name:                  "name",
+		Location:              "loc",
+		DefaultEventBasedHold: true,
+		MetaGeneration:        3,
+		StorageClass:          "sc",
+		Created:               time.Date(2017, 10, 23, 4, 5, 6, 0, time.UTC),
+		VersioningEnabled:     true,
+		Labels:                labels,
+		RequesterPays:         true,
 		Lifecycle: Lifecycle{
 			Rules: []LifecycleRule{
 				{

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewExpressRouteCrossConnectionPeeringsClientWithBaseURI(baseURI string, sub
 // peeringParameters - parameters supplied to the create or update ExpressRouteCrossConnection peering
 // operation.
 func (client ExpressRouteCrossConnectionPeeringsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, crossConnectionName string, peeringName string, peeringParameters ExpressRouteCrossConnectionPeering) (result ExpressRouteCrossConnectionPeeringsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCrossConnectionPeeringsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: peeringParameters,
 			Constraints: []validation.Constraint{{Target: "peeringParameters.ExpressRouteCrossConnectionPeeringProperties", Name: validation.Null, Rule: false,
@@ -109,10 +120,6 @@ func (client ExpressRouteCrossConnectionPeeringsClient) CreateOrUpdateSender(req
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -136,6 +143,16 @@ func (client ExpressRouteCrossConnectionPeeringsClient) CreateOrUpdateResponder(
 // crossConnectionName - the name of the ExpressRouteCrossConnection.
 // peeringName - the name of the peering.
 func (client ExpressRouteCrossConnectionPeeringsClient) Delete(ctx context.Context, resourceGroupName string, crossConnectionName string, peeringName string) (result ExpressRouteCrossConnectionPeeringsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCrossConnectionPeeringsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, crossConnectionName, peeringName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCrossConnectionPeeringsClient", "Delete", nil, "Failure preparing request")
@@ -182,10 +199,6 @@ func (client ExpressRouteCrossConnectionPeeringsClient) DeleteSender(req *http.R
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -208,6 +221,16 @@ func (client ExpressRouteCrossConnectionPeeringsClient) DeleteResponder(resp *ht
 // crossConnectionName - the name of the ExpressRouteCrossConnection.
 // peeringName - the name of the peering.
 func (client ExpressRouteCrossConnectionPeeringsClient) Get(ctx context.Context, resourceGroupName string, crossConnectionName string, peeringName string) (result ExpressRouteCrossConnectionPeering, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCrossConnectionPeeringsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, crossConnectionName, peeringName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCrossConnectionPeeringsClient", "Get", nil, "Failure preparing request")
@@ -276,6 +299,16 @@ func (client ExpressRouteCrossConnectionPeeringsClient) GetResponder(resp *http.
 // resourceGroupName - the name of the resource group.
 // crossConnectionName - the name of the ExpressRouteCrossConnection.
 func (client ExpressRouteCrossConnectionPeeringsClient) List(ctx context.Context, resourceGroupName string, crossConnectionName string) (result ExpressRouteCrossConnectionPeeringListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCrossConnectionPeeringsClient.List")
+		defer func() {
+			sc := -1
+			if result.erccpl.Response.Response != nil {
+				sc = result.erccpl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, crossConnectionName)
 	if err != nil {
@@ -340,8 +373,8 @@ func (client ExpressRouteCrossConnectionPeeringsClient) ListResponder(resp *http
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ExpressRouteCrossConnectionPeeringsClient) listNextResults(lastResults ExpressRouteCrossConnectionPeeringList) (result ExpressRouteCrossConnectionPeeringList, err error) {
-	req, err := lastResults.expressRouteCrossConnectionPeeringListPreparer()
+func (client ExpressRouteCrossConnectionPeeringsClient) listNextResults(ctx context.Context, lastResults ExpressRouteCrossConnectionPeeringList) (result ExpressRouteCrossConnectionPeeringList, err error) {
+	req, err := lastResults.expressRouteCrossConnectionPeeringListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.ExpressRouteCrossConnectionPeeringsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -362,6 +395,16 @@ func (client ExpressRouteCrossConnectionPeeringsClient) listNextResults(lastResu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ExpressRouteCrossConnectionPeeringsClient) ListComplete(ctx context.Context, resourceGroupName string, crossConnectionName string) (result ExpressRouteCrossConnectionPeeringListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCrossConnectionPeeringsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, crossConnectionName)
 	return
 }

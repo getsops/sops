@@ -527,6 +527,11 @@
                 "parent"
               ],
               "parameters": {
+                "orderBy": {
+                  "description": "Optional comma separated list of fields to order by,\nfollowed by `asc` or `desc` postfix. This list is case-insensitive,\ndefault sorting order is ascending, redundant space characters are\ninsignificant.\n\nExample: `name asc, display_name, create_time desc`\n\nSupported fields are:\n\n- `create_time`: corresponds to time the most recent version of the\nresource was created.\n- `state`: corresponds to the state of the resource.\n- `name`: corresponds to resource name.\n- `display_name`: corresponds to info type's display name.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "pageSize": {
                   "description": "Optional size of the page, can be limited by server. If zero server returns\na page of max size 100.",
                   "format": "int32",
@@ -949,6 +954,11 @@
                   "location": "query",
                   "type": "string"
                 },
+                "orderBy": {
+                  "description": "Optional comma separated list of fields to order by,\nfollowed by `asc` or `desc` postfix. This list is case-insensitive,\ndefault sorting order is ascending, redundant space characters are\ninsignificant.\n\nExample: `name asc, end_time asc, create_time desc`\n\nSupported fields are:\n\n- `create_time`: corresponds to time the job was created.\n- `end_time`: corresponds to time the job ended.\n- `name`: corresponds to job's name.\n- `state`: corresponds to `state`",
+                  "location": "query",
+                  "type": "string"
+                },
                 "pageSize": {
                   "description": "The standard list page size.",
                   "format": "int32",
@@ -1260,8 +1270,13 @@
                 "parent"
               ],
               "parameters": {
+                "filter": {
+                  "description": "Optional. Allows filtering.\n\nSupported syntax:\n\n* Filter expressions are made up of one or more restrictions.\n* Restrictions can be combined by `AND` or `OR` logical operators. A\nsequence of restrictions implicitly uses `AND`.\n* A restriction has the form of `\u003cfield\u003e \u003coperator\u003e \u003cvalue\u003e`.\n* Supported fields/values for inspect jobs:\n    - `status` - HEALTHY|PAUSED|CANCELLED\n    - `inspected_storage` - DATASTORE|CLOUD_STORAGE|BIGQUERY\n    - 'last_run_time` - RFC 3339 formatted timestamp, surrounded by\n    quotation marks. Nanoseconds are ignored.\n    - 'error_count' - Number of errors that have occurred while running.\n* The operator must be `=` or `!=` for status and inspected_storage.\n\nExamples:\n\n* inspected_storage = cloud_storage AND status = HEALTHY\n* inspected_storage = cloud_storage OR inspected_storage = bigquery\n* inspected_storage = cloud_storage AND (state = PAUSED OR state = HEALTHY)\n* last_run_time \u003e \\\"2017-12-12T00:00:00+00:00\\\"\n\nThe length of this field should be no more than 500 characters.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "orderBy": {
-                  "description": "Optional comma separated list of triggeredJob fields to order by,\nfollowed by `asc` or `desc` postfix. This list is case-insensitive,\ndefault sorting order is ascending, redundant space characters are\ninsignificant.\n\nExample: `name asc,update_time, create_time desc`\n\nSupported fields are:\n\n- `create_time`: corresponds to time the JobTrigger was created.\n- `update_time`: corresponds to time the JobTrigger was last updated.\n- `name`: corresponds to JobTrigger's name.\n- `display_name`: corresponds to JobTrigger's display name.\n- `status`: corresponds to JobTrigger's status.",
+                  "description": "Optional comma separated list of triggeredJob fields to order by,\nfollowed by `asc` or `desc` postfix. This list is case-insensitive,\ndefault sorting order is ascending, redundant space characters are\ninsignificant.\n\nExample: `name asc,update_time, create_time desc`\n\nSupported fields are:\n\n- `create_time`: corresponds to time the JobTrigger was created.\n- `update_time`: corresponds to time the JobTrigger was last updated.\n- `last_run_time`: corresponds to the last time the JobTrigger ran.\n- `name`: corresponds to JobTrigger's name.\n- `display_name`: corresponds to JobTrigger's display name.\n- `status`: corresponds to JobTrigger's status.",
                   "location": "query",
                   "type": "string"
                 },
@@ -1411,6 +1426,11 @@
                 "parent"
               ],
               "parameters": {
+                "orderBy": {
+                  "description": "Optional comma separated list of fields to order by,\nfollowed by `asc` or `desc` postfix. This list is case-insensitive,\ndefault sorting order is ascending, redundant space characters are\ninsignificant.\n\nExample: `name asc, display_name, create_time desc`\n\nSupported fields are:\n\n- `create_time`: corresponds to time the most recent version of the\nresource was created.\n- `state`: corresponds to the state of the resource.\n- `name`: corresponds to resource name.\n- `display_name`: corresponds to info type's display name.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "pageSize": {
                   "description": "Optional size of the page, can be limited by server. If zero server returns\na page of max size 100.",
                   "format": "int32",
@@ -1471,13 +1491,17 @@
       }
     }
   },
-  "revision": "20180904",
+  "revision": "20190129",
   "rootUrl": "https://dlp.googleapis.com/",
   "schemas": {
     "GooglePrivacyDlpV2Action": {
       "description": "A task to execute on the completion of a job.\nSee https://cloud.google.com/dlp/docs/concepts-actions to learn more.",
       "id": "GooglePrivacyDlpV2Action",
       "properties": {
+        "jobNotificationEmails": {
+          "$ref": "GooglePrivacyDlpV2JobNotificationEmails",
+          "description": "Enable email notification to project owners and editors on job‘s\ncompletion/failure."
+        },
         "pubSub": {
           "$ref": "GooglePrivacyDlpV2PublishToPubSub",
           "description": "Publish a notification to a pubsub topic."
@@ -1583,6 +1607,13 @@
       "description": "Options defining BigQuery table and row identifiers.",
       "id": "GooglePrivacyDlpV2BigQueryOptions",
       "properties": {
+        "excludedFields": {
+          "description": "References to fields excluded from scanning. This allows you to skip\ninspection of entire columns which you know have no findings.",
+          "items": {
+            "$ref": "GooglePrivacyDlpV2FieldId"
+          },
+          "type": "array"
+        },
         "identifyingFields": {
           "description": "References to fields uniquely identifying rows within the table.\nNested fields in the format, like `person.birthdate.year`, are allowed.",
           "items": {
@@ -1883,7 +1914,7 @@
           "description": "The set of one or more files to scan."
         },
         "fileTypes": {
-          "description": "List of file type groups to include in the scan.\nIf empty, all files are scanned and available data format processors\nare applied.",
+          "description": "List of file type groups to include in the scan.\nIf empty, all files are scanned and available data format processors\nare applied. In addition, the binary content of the selected files\nis always scanned as well.",
           "enumDescriptions": [
             "Includes all files.",
             "Includes all file extensions not covered by text file types.",
@@ -1927,6 +1958,31 @@
         "path": {
           "description": "A url representing a file or path (no wildcards) in Cloud Storage.\nExample: gs://[BUCKET_NAME]/dictionary.txt",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GooglePrivacyDlpV2CloudStorageRegexFileSet": {
+      "description": "Message representing a set of files in a Cloud Storage bucket. Regular\nexpressions are used to allow fine-grained control over which files in the\nbucket to include.\n\nIncluded files are those that match at least one item in `include_regex` and\ndo not match any items in `exclude_regex`. Note that a file that matches\nitems from both lists will _not_ be included. For a match to occur, the\nentire file path (i.e., everything in the url after the bucket name) must\nmatch the regular expression.\n\nFor example, given the input `{bucket_name: \"mybucket\", include_regex:\n[\"directory1/.*\"], exclude_regex:\n[\"directory1/excluded.*\"]}`:\n\n* `gs://mybucket/directory1/myfile` will be included\n* `gs://mybucket/directory1/directory2/myfile` will be included (`.*` matches\nacross `/`)\n* `gs://mybucket/directory0/directory1/myfile` will _not_ be included (the\nfull path doesn't match any items in `include_regex`)\n* `gs://mybucket/directory1/excludedfile` will _not_ be included (the path\nmatches an item in `exclude_regex`)\n\nIf `include_regex` is left empty, it will match all files by default\n(this is equivalent to setting `include_regex: [\".*\"]`).\n\nSome other common use cases:\n\n* `{bucket_name: \"mybucket\", exclude_regex: [\".*\\.pdf\"]}` will include all\nfiles in `mybucket` except for .pdf files\n* `{bucket_name: \"mybucket\", include_regex: [\"directory/[^/]+\"]}` will\ninclude all files directly under `gs://mybucket/directory/`, without matching\nacross `/`",
+      "id": "GooglePrivacyDlpV2CloudStorageRegexFileSet",
+      "properties": {
+        "bucketName": {
+          "description": "The name of a Cloud Storage bucket. Required.",
+          "type": "string"
+        },
+        "excludeRegex": {
+          "description": "A list of regular expressions matching file paths to exclude. All files in\nthe bucket that match at least one of these regular expressions will be\nexcluded from the scan.\n\nRegular expressions use RE2\n[syntax](https://github.com/google/re2/wiki/Syntax); a guide can be found\nunder the google/re2 repository on GitHub.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "includeRegex": {
+          "description": "A list of regular expressions matching file paths to include. All files in\nthe bucket that match at least one of these regular expressions will be\nincluded in the set of files, except for those that also match an item in\n`exclude_regex`. Leaving this field empty will match all files by default\n(this is equivalent to including `.*` in the list).\n\nRegular expressions use RE2\n[syntax](https://github.com/google/re2/wiki/Syntax); a guide can be found\nunder the google/re2 repository on GitHub.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2029,7 +2085,7 @@
       "id": "GooglePrivacyDlpV2ContentLocation",
       "properties": {
         "containerName": {
-          "description": "Name of the container where the finding is located.\nThe top level name is the source file name or table name. Nested names\ncould be absent if the embedded object has no string identifier\n(for an example an image contained within a document).",
+          "description": "Name of the container where the finding is located.\nThe top level name is the source file name or table name. Names of some\ncommon storage containers are formatted as follows:\n\n* BigQuery tables:  `\u003cproject_id\u003e:\u003cdataset_id\u003e.\u003ctable_id\u003e`\n* Cloud Storage files: `gs://\u003cbucket\u003e/\u003cpath\u003e`\n* Datastore namespace: \u003cnamespace\u003e\n\nNested names could be absent if the embedded object has no string\nidentifier (for an example an image contained within a document).",
           "type": "string"
         },
         "containerTimestamp": {
@@ -2134,7 +2190,7 @@
       "type": "object"
     },
     "GooglePrivacyDlpV2CryptoHashConfig": {
-      "description": "Pseudonymization method that generates surrogates via cryptographic hashing.\nUses SHA-256.\nThe key size must be either 32 or 64 bytes.\nOutputs a 32 byte digest as an uppercase hex string\n(for example, 41D1567F7F99F1DC2A5FAB886DEE5BEE).\nCurrently, only string and integer values can be hashed.",
+      "description": "Pseudonymization method that generates surrogates via cryptographic hashing.\nUses SHA-256.\nThe key size must be either 32 or 64 bytes.\nOutputs a base64 encoded representation of the hashed output\n(for example, L7k0BHmF1ha5U3NfGykjro4xWi1MPVQPjhMAZbSV9mM=).\nCurrently, only string and integer values can be hashed.\nSee https://cloud.google.com/dlp/docs/pseudonymization to learn more.",
       "id": "GooglePrivacyDlpV2CryptoHashConfig",
       "properties": {
         "cryptoKey": {
@@ -2220,9 +2276,21 @@
           "$ref": "GooglePrivacyDlpV2Dictionary",
           "description": "A list of phrases to detect as a CustomInfoType."
         },
+        "exclusionType": {
+          "description": "If set to EXCLUSION_TYPE_EXCLUDE this infoType will not cause a finding\nto be returned. It still can be used for rules matching.",
+          "enum": [
+            "EXCLUSION_TYPE_UNSPECIFIED",
+            "EXCLUSION_TYPE_EXCLUDE"
+          ],
+          "enumDescriptions": [
+            "A finding of this custom info type will not be excluded from results.",
+            "A finding of this custom info type will be excluded from final results,\nbut can still affect rule execution."
+          ],
+          "type": "string"
+        },
         "infoType": {
           "$ref": "GooglePrivacyDlpV2InfoType",
-          "description": "All CustomInfoTypes must have a name\nthat does not conflict with built-in InfoTypes or other CustomInfoTypes."
+          "description": "CustomInfoType can either be a new infoType, or an extension of built-in\ninfoType, when the name matches one of existing infoTypes and that infoType\nis specified in `InspectContent.info_types` field. Specifying the latter\nadds findings to the one detected by the system. If built-in info type is\nnot specified in `InspectContent.info_types` list then the name is treated\nas a custom info type."
         },
         "likelihood": {
           "description": "Likelihood to return for this CustomInfoType. This base value can be\naltered by a detection rule if the finding meets the criteria specified by\nthe rule. Defaults to `VERY_LIKELY` if not specified.",
@@ -2311,7 +2379,7 @@
       "type": "object"
     },
     "GooglePrivacyDlpV2DateTime": {
-      "description": "Message for a date time object.",
+      "description": "Message for a date time object.\ne.g. 2018-01-01, 5th August.",
       "id": "GooglePrivacyDlpV2DateTime",
       "properties": {
         "date": {
@@ -2678,6 +2746,55 @@
       },
       "type": "object"
     },
+    "GooglePrivacyDlpV2ExcludeInfoTypes": {
+      "description": "List of exclude infoTypes.",
+      "id": "GooglePrivacyDlpV2ExcludeInfoTypes",
+      "properties": {
+        "infoTypes": {
+          "description": "InfoType list in ExclusionRule rule drops a finding when it overlaps or\ncontained within with a finding of an infoType from this list. For\nexample, for `InspectionRuleSet.info_types` containing \"PHONE_NUMBER\"` and\n`exclusion_rule` containing `exclude_info_types.info_types` with\n\"EMAIL_ADDRESS\" the phone number findings are dropped if they overlap\nwith EMAIL_ADDRESS finding.\nThat leads to \"555-222-2222@example.org\" to generate only a single\nfinding, namely email address.",
+          "items": {
+            "$ref": "GooglePrivacyDlpV2InfoType"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GooglePrivacyDlpV2ExclusionRule": {
+      "description": "The rule that specifies conditions when findings of infoTypes specified in\n`InspectionRuleSet` are removed from results.",
+      "id": "GooglePrivacyDlpV2ExclusionRule",
+      "properties": {
+        "dictionary": {
+          "$ref": "GooglePrivacyDlpV2Dictionary",
+          "description": "Dictionary which defines the rule."
+        },
+        "excludeInfoTypes": {
+          "$ref": "GooglePrivacyDlpV2ExcludeInfoTypes",
+          "description": "Set of infoTypes for which findings would affect this rule."
+        },
+        "matchingType": {
+          "description": "How the rule is applied, see MatchingType documentation for details.",
+          "enum": [
+            "MATCHING_TYPE_UNSPECIFIED",
+            "MATCHING_TYPE_FULL_MATCH",
+            "MATCHING_TYPE_PARTIAL_MATCH",
+            "MATCHING_TYPE_INVERSE_MATCH"
+          ],
+          "enumDescriptions": [
+            "Invalid.",
+            "Full match.\n\n- Dictionary: join of Dictionary results matched complete finding quote\n- Regex: all regex matches fill a finding quote start to end\n- Exclude info type: completely inside affecting info types findings",
+            "Partial match.\n\n- Dictionary: at least one of the tokens in the finding matches\n- Regex: substring of the finding matches\n- Exclude info type: intersects with affecting info types findings",
+            "Inverse match.\n\n- Dictionary: no tokens in the finding match the dictionary\n- Regex: finding doesn't match the regex\n- Exclude info type: no intersection with affecting info types findings"
+          ],
+          "type": "string"
+        },
+        "regex": {
+          "$ref": "GooglePrivacyDlpV2Regex",
+          "description": "Regular expression which defines the rule."
+        }
+      },
+      "type": "object"
+    },
     "GooglePrivacyDlpV2Expressions": {
       "description": "An expression, consisting or an operator and conditions.",
       "id": "GooglePrivacyDlpV2Expressions",
@@ -2741,8 +2858,12 @@
       "description": "Set of files to scan.",
       "id": "GooglePrivacyDlpV2FileSet",
       "properties": {
+        "regexFileSet": {
+          "$ref": "GooglePrivacyDlpV2CloudStorageRegexFileSet",
+          "description": "The regex-filtered set of files to scan. Exactly one of `url` or\n`regex_file_set` must be set."
+        },
         "url": {
-          "description": "The Cloud Storage url of the file(s) to scan, in the format\n`gs://\u003cbucket\u003e/\u003cpath\u003e`. Trailing wildcard in the path is allowed.",
+          "description": "The Cloud Storage url of the file(s) to scan, in the format\n`gs://\u003cbucket\u003e/\u003cpath\u003e`. Trailing wildcard in the path is allowed.\n\nIf the url ends in a trailing slash, the bucket or directory represented\nby the url will be scanned non-recursively (content in sub-directories\nwill not be scanned). This means that `gs://mybucket/` is equivalent to\n`gs://mybucket/*`, and `gs://mybucket/directory/` is equivalent to\n`gs://mybucket/directory/*`.\n\nExactly one of `url` or `regex_file_set` must be set.",
           "type": "string"
         }
       },
@@ -2896,7 +3017,7 @@
       "id": "GooglePrivacyDlpV2InfoType",
       "properties": {
         "name": {
-          "description": "Name of the information type. Either a name of your choosing when\ncreating a CustomInfoType, or one of the names listed\nat https://cloud.google.com/dlp/docs/infotypes-reference when specifying\na built-in type.",
+          "description": "Name of the information type. Either a name of your choosing when\ncreating a CustomInfoType, or one of the names listed\nat https://cloud.google.com/dlp/docs/infotypes-reference when specifying\na built-in type. InfoType names should conform to the pattern\n[a-zA-Z0-9_]{1,64}.",
           "type": "string"
         }
       },
@@ -3063,6 +3184,13 @@
             "Many matching elements."
           ],
           "type": "string"
+        },
+        "ruleSet": {
+          "description": "Set of rules to apply to the findings for this InspectConfig.\nExclusion rules, contained in the set are executed in the end, other\nrules are executed in the order they are specified for each info type.",
+          "items": {
+            "$ref": "GooglePrivacyDlpV2InspectionRuleSet"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -3188,6 +3316,48 @@
       },
       "type": "object"
     },
+    "GooglePrivacyDlpV2InspectionRule": {
+      "description": "A single inspection rule to be applied to infoTypes, specified in\n`InspectionRuleSet`.",
+      "id": "GooglePrivacyDlpV2InspectionRule",
+      "properties": {
+        "exclusionRule": {
+          "$ref": "GooglePrivacyDlpV2ExclusionRule",
+          "description": "Exclusion rule."
+        },
+        "hotwordRule": {
+          "$ref": "GooglePrivacyDlpV2HotwordRule",
+          "description": "Hotword-based detection rule."
+        }
+      },
+      "type": "object"
+    },
+    "GooglePrivacyDlpV2InspectionRuleSet": {
+      "description": "Rule set for modifying a set of infoTypes to alter behavior under certain\ncircumstances, depending on the specific details of the rules within the set.",
+      "id": "GooglePrivacyDlpV2InspectionRuleSet",
+      "properties": {
+        "infoTypes": {
+          "description": "List of infoTypes this rule set is applied to.",
+          "items": {
+            "$ref": "GooglePrivacyDlpV2InfoType"
+          },
+          "type": "array"
+        },
+        "rules": {
+          "description": "Set of rules to be applied to infoTypes. The rules are applied in order.",
+          "items": {
+            "$ref": "GooglePrivacyDlpV2InspectionRule"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GooglePrivacyDlpV2JobNotificationEmails": {
+      "description": "Enable email notification to project owners and editors on jobs's\ncompletion/failure.",
+      "id": "GooglePrivacyDlpV2JobNotificationEmails",
+      "properties": {},
+      "type": "object"
+    },
     "GooglePrivacyDlpV2JobTrigger": {
       "description": "Contains a configuration to make dlp api calls on a repeating basis.\nSee https://cloud.google.com/dlp/docs/concepts-job-triggers to learn more.",
       "id": "GooglePrivacyDlpV2JobTrigger",
@@ -3206,7 +3376,7 @@
           "type": "string"
         },
         "errors": {
-          "description": "A stream of errors encountered when the trigger was activated. Repeated\nerrors may result in the JobTrigger automaticaly being paused.\nWill return the last 100 errors. Whenever the JobTrigger is modified\nthis list will be cleared. Output only field.",
+          "description": "A stream of errors encountered when the trigger was activated. Repeated\nerrors may result in the JobTrigger automatically being paused.\nWill return the last 100 errors. Whenever the JobTrigger is modified\nthis list will be cleared. Output only field.",
           "items": {
             "$ref": "GooglePrivacyDlpV2Error"
           },
@@ -3261,7 +3431,7 @@
       "properties": {
         "entityId": {
           "$ref": "GooglePrivacyDlpV2EntityId",
-          "description": "Optional message indicating that multiple rows might be associated to a\nsingle individual. If the same entity_id is associated to multiple\nquasi-identifier tuples over distict rows, we consider the entire\ncollection of tuples as the composite quasi-identifier. This collection\nis a multiset: the order in which the different tuples appear in the\ndataset is ignored, but their frequency is taken into account.\n\nImportant note: a maximum of 1000 rows can be associated to a single\nentity ID. If more rows are associated with the same entity ID, some\nmight be ignored."
+          "description": "Optional message indicating that multiple rows might be associated to a\nsingle individual. If the same entity_id is associated to multiple\nquasi-identifier tuples over distinct rows, we consider the entire\ncollection of tuples as the composite quasi-identifier. This collection\nis a multiset: the order in which the different tuples appear in the\ndataset is ignored, but their frequency is taken into account.\n\nImportant note: a maximum of 1000 rows can be associated to a single\nentity ID. If more rows are associated with the same entity ID, some\nmight be ignored."
         },
         "quasiIds": {
           "description": "Set of fields to compute k-anonymity over. When multiple fields are\nspecified, they are considered a single composite key. Structs and\nrepeated data types are not supported; however, nested fields are\nsupported so long as they are not structs themselves or nested within\na repeated field.",
@@ -3787,7 +3957,7 @@
       "id": "GooglePrivacyDlpV2OutputStorageConfig",
       "properties": {
         "outputSchema": {
-          "description": "Schema used for writing the findings for Inspect jobs. This field is only\nused for Inspect and must be unspecified for Risk jobs. Columns are derived\nfrom the `Finding` object. If appending to an existing table, any columns\nfrom the predefined schema that are missing will be added. No columns in\nthe existing table will be deleted.\n\nIf unspecified, then all available columns will be used for a new table,\nand no changes will be made to an existing table.",
+          "description": "Schema used for writing the findings for Inspect jobs. This field is only\nused for Inspect and must be unspecified for Risk jobs. Columns are derived\nfrom the `Finding` object. If appending to an existing table, any columns\nfrom the predefined schema that are missing will be added. No columns in\nthe existing table will be deleted.\n\nIf unspecified, then all available columns will be used for a new table or\nan (existing) table with no schema, and no changes will be made to an\nexisting table that has a schema.",
           "enum": [
             "OUTPUT_SCHEMA_UNSPECIFIED",
             "BASIC_COLUMNS",
@@ -3998,7 +4168,8 @@
       "id": "GooglePrivacyDlpV2QuoteInfo",
       "properties": {
         "dateTime": {
-          "$ref": "GooglePrivacyDlpV2DateTime"
+          "$ref": "GooglePrivacyDlpV2DateTime",
+          "description": "The date time indicated by the quote."
         }
       },
       "type": "object"
@@ -4040,6 +4211,13 @@
         },
         "datastoreKey": {
           "$ref": "GooglePrivacyDlpV2DatastoreKey"
+        },
+        "idValues": {
+          "description": "Values of identifying columns in the given row. Order of values matches\nthe order of field identifiers specified in the scanning request.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -4151,6 +4329,14 @@
       "description": "Message defining a custom regular expression.",
       "id": "GooglePrivacyDlpV2Regex",
       "properties": {
+        "groupIndexes": {
+          "description": "The index of the submatch to extract as findings. When not\nspecified, the entire match is returned. No more than 3 may be included.",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "type": "array"
+        },
         "pattern": {
           "description": "Pattern defining the regular expression. Its syntax\n(https://github.com/google/re2/wiki/Syntax) can be found under the\ngoogle/re2 repository on GitHub.",
           "type": "string"
@@ -4638,7 +4824,7 @@
         },
         "infoType": {
           "$ref": "GooglePrivacyDlpV2InfoType",
-          "description": "Set if the transformation was limited to a specific info_type."
+          "description": "Set if the transformation was limited to a specific InfoType."
         },
         "recordSuppress": {
           "$ref": "GooglePrivacyDlpV2RecordSuppression",
@@ -4878,16 +5064,16 @@
       "type": "object"
     },
     "GoogleTypeDate": {
-      "description": "Represents a whole calendar date, e.g. date of birth. The time of day and\ntime zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day may be 0 to\nrepresent a year and month where the day is not significant, e.g. credit card\nexpiration date. The year may be 0 to represent a month and day independent\nof year, e.g. anniversary date. Related types are google.type.TimeOfDay\nand `google.protobuf.Timestamp`.",
+      "description": "Represents a whole or partial calendar date, e.g. a birthday. The time of day\nand time zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. This can represent:\n\n* A full date, with non-zero year, month and day values\n* A month and day value, with a zero year, e.g. an anniversary\n* A year on its own, with zero month and day values\n* A year and month value, with a zero day, e.g. a credit card expiration date\n\nRelated types are google.type.TimeOfDay and `google.protobuf.Timestamp`.",
       "id": "GoogleTypeDate",
       "properties": {
         "day": {
-          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year/month where the day is not significant.",
+          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year by itself or a year and month where the day is not\nsignificant.",
           "format": "int32",
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a year without a\nmonth and day.",
           "format": "int32",
           "type": "integer"
         },

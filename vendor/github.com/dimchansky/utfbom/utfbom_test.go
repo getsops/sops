@@ -231,3 +231,16 @@ func TestReader_ReadEmpty(t *testing.T) {
 		}
 	}
 }
+
+func TestEncoding_String(t *testing.T) {
+	for e := Unknown; e <= UTF32LittleEndian; e++ {
+		s := e.String()
+		if s == "" {
+			t.Errorf("no string for %#v", e)
+		}
+	}
+	s := Encoding(999).String()
+	if s != "Unknown" {
+		t.Errorf("wrong string '%s' for invalid encoding", s)
+	}
+}

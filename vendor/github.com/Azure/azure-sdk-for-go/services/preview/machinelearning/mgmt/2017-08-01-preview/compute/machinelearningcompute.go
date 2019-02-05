@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewMachineLearningComputeClientWithBaseURI(baseURI string, subscriptionID s
 
 // ListAvailableOperations gets all available operations.
 func (client MachineLearningComputeClient) ListAvailableOperations(ctx context.Context) (result AvailableOperations, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineLearningComputeClient.ListAvailableOperations")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListAvailableOperationsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "compute.MachineLearningComputeClient", "ListAvailableOperations", nil, "Failure preparing request")

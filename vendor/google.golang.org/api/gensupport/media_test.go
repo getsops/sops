@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All rights reserved.
+// Copyright 2015 Google LLC
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -280,12 +280,10 @@ func TestUploadRequestGetBody(t *testing.T) {
 	}()
 
 	for _, test := range []struct {
-		desc            string
-		r               io.Reader
-		chunkSize       int
-		wantGetBody     bool
-		wantContentType string
-		wantUploadType  string
+		desc        string
+		r           io.Reader
+		chunkSize   int
+		wantGetBody bool
 	}{
 		{
 			desc:        "chunk size of zero: no getBody",

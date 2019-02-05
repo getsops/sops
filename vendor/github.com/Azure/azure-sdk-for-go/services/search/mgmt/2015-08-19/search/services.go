@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -48,6 +49,16 @@ func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) Service
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client ServicesClient) CheckNameAvailability(ctx context.Context, checkNameAvailabilityInput CheckNameAvailabilityInput, clientRequestID *uuid.UUID) (result CheckNameAvailabilityOutput, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: checkNameAvailabilityInput,
 			Constraints: []validation.Constraint{{Target: "checkNameAvailabilityInput.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -135,6 +146,16 @@ func (client ServicesClient) CheckNameAvailabilityResponder(resp *http.Response)
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client ServicesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, searchServiceName string, service Service, clientRequestID *uuid.UUID) (result ServicesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: service,
 			Constraints: []validation.Constraint{{Target: "service.ServiceProperties", Name: validation.Null, Rule: false,
@@ -201,10 +222,6 @@ func (client ServicesClient) CreateOrUpdateSender(req *http.Request) (future Ser
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -230,6 +247,16 @@ func (client ServicesClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client ServicesClient) Delete(ctx context.Context, resourceGroupName string, searchServiceName string, clientRequestID *uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, searchServiceName, clientRequestID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "Delete", nil, "Failure preparing request")
@@ -303,6 +330,16 @@ func (client ServicesClient) DeleteResponder(resp *http.Response) (result autore
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client ServicesClient) Get(ctx context.Context, resourceGroupName string, searchServiceName string, clientRequestID *uuid.UUID) (result Service, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, searchServiceName, clientRequestID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "Get", nil, "Failure preparing request")
@@ -376,6 +413,16 @@ func (client ServicesClient) GetResponder(resp *http.Response) (result Service, 
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client ServicesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, clientRequestID *uuid.UUID) (result ServiceListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, clientRequestID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -450,6 +497,16 @@ func (client ServicesClient) ListByResourceGroupResponder(resp *http.Response) (
 // clientRequestID - a client-generated GUID value that identifies this request. If specified, this will be
 // included in response information as a way to track the request.
 func (client ServicesClient) Update(ctx context.Context, resourceGroupName string, searchServiceName string, service Service, clientRequestID *uuid.UUID) (result Service, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, searchServiceName, service, clientRequestID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "Update", nil, "Failure preparing request")

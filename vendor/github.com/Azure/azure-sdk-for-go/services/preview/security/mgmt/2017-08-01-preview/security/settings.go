@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,8 +43,18 @@ func NewSettingsClientWithBaseURI(baseURI string, subscriptionID string, ascLoca
 
 // Get settings of different configurations in security center
 // Parameters:
-// settingName - name of setting
-func (client SettingsClient) Get(ctx context.Context, settingName string) (result SettingModel, err error) {
+// settingName - name of setting: (MCAS/WDATP)
+func (client SettingsClient) Get(ctx context.Context, settingName string) (result Setting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -100,7 +111,7 @@ func (client SettingsClient) GetSender(req *http.Request) (*http.Response, error
 
 // GetResponder handles the response to the Get request. The method always
 // closes the http.Response Body.
-func (client SettingsClient) GetResponder(resp *http.Response) (result SettingModel, err error) {
+func (client SettingsClient) GetResponder(resp *http.Response) (result Setting, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -113,6 +124,16 @@ func (client SettingsClient) GetResponder(resp *http.Response) (result SettingMo
 
 // List settings about different configurations in security center
 func (client SettingsClient) List(ctx context.Context) (result SettingsListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.sl.Response.Response != nil {
+				sc = result.sl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -181,8 +202,8 @@ func (client SettingsClient) ListResponder(resp *http.Response) (result Settings
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client SettingsClient) listNextResults(lastResults SettingsList) (result SettingsList, err error) {
-	req, err := lastResults.settingsListPreparer()
+func (client SettingsClient) listNextResults(ctx context.Context, lastResults SettingsList) (result SettingsList, err error) {
+	req, err := lastResults.settingsListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.SettingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -203,15 +224,35 @@ func (client SettingsClient) listNextResults(lastResults SettingsList) (result S
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SettingsClient) ListComplete(ctx context.Context) (result SettingsListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // Update updating settings about different configurations in security center
 // Parameters:
-// settingName - name of setting
+// settingName - name of setting: (MCAS/WDATP)
 // setting - setting object
-func (client SettingsClient) Update(ctx context.Context, settingName string, setting BasicSetting) (result SettingModel, err error) {
+func (client SettingsClient) Update(ctx context.Context, settingName string, setting Setting) (result Setting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SettingsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -240,7 +281,7 @@ func (client SettingsClient) Update(ctx context.Context, settingName string, set
 }
 
 // UpdatePreparer prepares the Update request.
-func (client SettingsClient) UpdatePreparer(ctx context.Context, settingName string, setting BasicSetting) (*http.Request, error) {
+func (client SettingsClient) UpdatePreparer(ctx context.Context, settingName string, setting Setting) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"settingName":    autorest.Encode("path", settingName),
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
@@ -270,7 +311,7 @@ func (client SettingsClient) UpdateSender(req *http.Request) (*http.Response, er
 
 // UpdateResponder handles the response to the Update request. The method always
 // closes the http.Response Body.
-func (client SettingsClient) UpdateResponder(resp *http.Response) (result SettingModel, err error) {
+func (client SettingsClient) UpdateResponder(resp *http.Response) (result Setting, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),

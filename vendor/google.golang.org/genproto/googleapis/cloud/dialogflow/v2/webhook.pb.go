@@ -44,7 +44,7 @@ func (m *WebhookRequest) Reset()         { *m = WebhookRequest{} }
 func (m *WebhookRequest) String() string { return proto.CompactTextString(m) }
 func (*WebhookRequest) ProtoMessage()    {}
 func (*WebhookRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ba880626f278d96, []int{0}
+	return fileDescriptor_webhook_d01678681840ffff, []int{0}
 }
 func (m *WebhookRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WebhookRequest.Unmarshal(m, b)
@@ -52,8 +52,8 @@ func (m *WebhookRequest) XXX_Unmarshal(b []byte) error {
 func (m *WebhookRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WebhookRequest.Marshal(b, m, deterministic)
 }
-func (m *WebhookRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WebhookRequest.Merge(m, src)
+func (dst *WebhookRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WebhookRequest.Merge(dst, src)
 }
 func (m *WebhookRequest) XXX_Size() int {
 	return xxx_messageInfo_WebhookRequest.Size(m)
@@ -141,7 +141,7 @@ func (m *WebhookResponse) Reset()         { *m = WebhookResponse{} }
 func (m *WebhookResponse) String() string { return proto.CompactTextString(m) }
 func (*WebhookResponse) ProtoMessage()    {}
 func (*WebhookResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ba880626f278d96, []int{1}
+	return fileDescriptor_webhook_d01678681840ffff, []int{1}
 }
 func (m *WebhookResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WebhookResponse.Unmarshal(m, b)
@@ -149,8 +149,8 @@ func (m *WebhookResponse) XXX_Unmarshal(b []byte) error {
 func (m *WebhookResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WebhookResponse.Marshal(b, m, deterministic)
 }
-func (m *WebhookResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WebhookResponse.Merge(m, src)
+func (dst *WebhookResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WebhookResponse.Merge(dst, src)
 }
 func (m *WebhookResponse) XXX_Size() int {
 	return xxx_messageInfo_WebhookResponse.Size(m)
@@ -221,7 +221,7 @@ func (m *OriginalDetectIntentRequest) Reset()         { *m = OriginalDetectInten
 func (m *OriginalDetectIntentRequest) String() string { return proto.CompactTextString(m) }
 func (*OriginalDetectIntentRequest) ProtoMessage()    {}
 func (*OriginalDetectIntentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2ba880626f278d96, []int{2}
+	return fileDescriptor_webhook_d01678681840ffff, []int{2}
 }
 func (m *OriginalDetectIntentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OriginalDetectIntentRequest.Unmarshal(m, b)
@@ -229,8 +229,8 @@ func (m *OriginalDetectIntentRequest) XXX_Unmarshal(b []byte) error {
 func (m *OriginalDetectIntentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OriginalDetectIntentRequest.Marshal(b, m, deterministic)
 }
-func (m *OriginalDetectIntentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OriginalDetectIntentRequest.Merge(m, src)
+func (dst *OriginalDetectIntentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OriginalDetectIntentRequest.Merge(dst, src)
 }
 func (m *OriginalDetectIntentRequest) XXX_Size() int {
 	return xxx_messageInfo_OriginalDetectIntentRequest.Size(m)
@@ -262,10 +262,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dialogflow/v2/webhook.proto", fileDescriptor_2ba880626f278d96)
+	proto.RegisterFile("google/cloud/dialogflow/v2/webhook.proto", fileDescriptor_webhook_d01678681840ffff)
 }
 
-var fileDescriptor_2ba880626f278d96 = []byte{
+var fileDescriptor_webhook_d01678681840ffff = []byte{
 	// 536 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xc1, 0x6f, 0xd3, 0x30,
 	0x14, 0xc6, 0x95, 0x14, 0x3a, 0xcd, 0x9d, 0x56, 0x64, 0x26, 0x88, 0x3a, 0x34, 0xaa, 0x22, 0xb1,

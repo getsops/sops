@@ -18,12 +18,40 @@ package insights
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/monitor/mgmt/2017-05-01-preview/insights"
+
+// AggregationType enumerates the values for aggregation type.
+type AggregationType string
+
+const (
+	// Average ...
+	Average AggregationType = "Average"
+	// Count ...
+	Count AggregationType = "Count"
+	// Maximum ...
+	Maximum AggregationType = "Maximum"
+	// Minimum ...
+	Minimum AggregationType = "Minimum"
+	// None ...
+	None AggregationType = "None"
+	// Total ...
+	Total AggregationType = "Total"
+)
+
+// PossibleAggregationTypeValues returns an array of possible values for the AggregationType const type.
+func PossibleAggregationTypeValues() []AggregationType {
+	return []AggregationType{Average, Count, Maximum, Minimum, None, Total}
+}
 
 // CategoryType enumerates the values for category type.
 type CategoryType string
@@ -82,23 +110,44 @@ func PossibleConditionOperatorValues() []ConditionOperator {
 	return []ConditionOperator{ConditionOperatorGreaterThan, ConditionOperatorGreaterThanOrEqual, ConditionOperatorLessThan, ConditionOperatorLessThanOrEqual}
 }
 
+// EventLevel enumerates the values for event level.
+type EventLevel string
+
+const (
+	// Critical ...
+	Critical EventLevel = "Critical"
+	// Error ...
+	Error EventLevel = "Error"
+	// Informational ...
+	Informational EventLevel = "Informational"
+	// Verbose ...
+	Verbose EventLevel = "Verbose"
+	// Warning ...
+	Warning EventLevel = "Warning"
+)
+
+// PossibleEventLevelValues returns an array of possible values for the EventLevel const type.
+func PossibleEventLevelValues() []EventLevel {
+	return []EventLevel{Critical, Error, Informational, Verbose, Warning}
+}
+
 // MetricStatisticType enumerates the values for metric statistic type.
 type MetricStatisticType string
 
 const (
-	// Average ...
-	Average MetricStatisticType = "Average"
-	// Max ...
-	Max MetricStatisticType = "Max"
-	// Min ...
-	Min MetricStatisticType = "Min"
-	// Sum ...
-	Sum MetricStatisticType = "Sum"
+	// MetricStatisticTypeAverage ...
+	MetricStatisticTypeAverage MetricStatisticType = "Average"
+	// MetricStatisticTypeMax ...
+	MetricStatisticTypeMax MetricStatisticType = "Max"
+	// MetricStatisticTypeMin ...
+	MetricStatisticTypeMin MetricStatisticType = "Min"
+	// MetricStatisticTypeSum ...
+	MetricStatisticTypeSum MetricStatisticType = "Sum"
 )
 
 // PossibleMetricStatisticTypeValues returns an array of possible values for the MetricStatisticType const type.
 func PossibleMetricStatisticTypeValues() []MetricStatisticType {
-	return []MetricStatisticType{Average, Max, Min, Sum}
+	return []MetricStatisticType{MetricStatisticTypeAverage, MetricStatisticTypeMax, MetricStatisticTypeMin, MetricStatisticTypeSum}
 }
 
 // OdataType enumerates the values for odata type.
@@ -175,27 +224,42 @@ func PossibleReceiverStatusValues() []ReceiverStatus {
 type RecurrenceFrequency string
 
 const (
-	// Day ...
-	Day RecurrenceFrequency = "Day"
-	// Hour ...
-	Hour RecurrenceFrequency = "Hour"
-	// Minute ...
-	Minute RecurrenceFrequency = "Minute"
-	// Month ...
-	Month RecurrenceFrequency = "Month"
-	// None ...
-	None RecurrenceFrequency = "None"
-	// Second ...
-	Second RecurrenceFrequency = "Second"
-	// Week ...
-	Week RecurrenceFrequency = "Week"
-	// Year ...
-	Year RecurrenceFrequency = "Year"
+	// RecurrenceFrequencyDay ...
+	RecurrenceFrequencyDay RecurrenceFrequency = "Day"
+	// RecurrenceFrequencyHour ...
+	RecurrenceFrequencyHour RecurrenceFrequency = "Hour"
+	// RecurrenceFrequencyMinute ...
+	RecurrenceFrequencyMinute RecurrenceFrequency = "Minute"
+	// RecurrenceFrequencyMonth ...
+	RecurrenceFrequencyMonth RecurrenceFrequency = "Month"
+	// RecurrenceFrequencyNone ...
+	RecurrenceFrequencyNone RecurrenceFrequency = "None"
+	// RecurrenceFrequencySecond ...
+	RecurrenceFrequencySecond RecurrenceFrequency = "Second"
+	// RecurrenceFrequencyWeek ...
+	RecurrenceFrequencyWeek RecurrenceFrequency = "Week"
+	// RecurrenceFrequencyYear ...
+	RecurrenceFrequencyYear RecurrenceFrequency = "Year"
 )
 
 // PossibleRecurrenceFrequencyValues returns an array of possible values for the RecurrenceFrequency const type.
 func PossibleRecurrenceFrequencyValues() []RecurrenceFrequency {
-	return []RecurrenceFrequency{Day, Hour, Minute, Month, None, Second, Week, Year}
+	return []RecurrenceFrequency{RecurrenceFrequencyDay, RecurrenceFrequencyHour, RecurrenceFrequencyMinute, RecurrenceFrequencyMonth, RecurrenceFrequencyNone, RecurrenceFrequencySecond, RecurrenceFrequencyWeek, RecurrenceFrequencyYear}
+}
+
+// ResultType enumerates the values for result type.
+type ResultType string
+
+const (
+	// Data ...
+	Data ResultType = "Data"
+	// Metadata ...
+	Metadata ResultType = "Metadata"
+)
+
+// PossibleResultTypeValues returns an array of possible values for the ResultType const type.
+func PossibleResultTypeValues() []ResultType {
+	return []ResultType{Data, Metadata}
 }
 
 // ScaleDirection enumerates the values for scale direction.
@@ -232,6 +296,23 @@ func PossibleScaleTypeValues() []ScaleType {
 	return []ScaleType{ChangeCount, ExactCount, PercentChangeCount}
 }
 
+// Sensitivity enumerates the values for sensitivity.
+type Sensitivity string
+
+const (
+	// High ...
+	High Sensitivity = "High"
+	// Low ...
+	Low Sensitivity = "Low"
+	// Medium ...
+	Medium Sensitivity = "Medium"
+)
+
+// PossibleSensitivityValues returns an array of possible values for the Sensitivity const type.
+func PossibleSensitivityValues() []Sensitivity {
+	return []Sensitivity{High, Low, Medium}
+}
+
 // TimeAggregationOperator enumerates the values for time aggregation operator.
 type TimeAggregationOperator string
 
@@ -261,6 +342,8 @@ const (
 	TimeAggregationTypeAverage TimeAggregationType = "Average"
 	// TimeAggregationTypeCount ...
 	TimeAggregationTypeCount TimeAggregationType = "Count"
+	// TimeAggregationTypeLast ...
+	TimeAggregationTypeLast TimeAggregationType = "Last"
 	// TimeAggregationTypeMaximum ...
 	TimeAggregationTypeMaximum TimeAggregationType = "Maximum"
 	// TimeAggregationTypeMinimum ...
@@ -271,7 +354,36 @@ const (
 
 // PossibleTimeAggregationTypeValues returns an array of possible values for the TimeAggregationType const type.
 func PossibleTimeAggregationTypeValues() []TimeAggregationType {
-	return []TimeAggregationType{TimeAggregationTypeAverage, TimeAggregationTypeCount, TimeAggregationTypeMaximum, TimeAggregationTypeMinimum, TimeAggregationTypeTotal}
+	return []TimeAggregationType{TimeAggregationTypeAverage, TimeAggregationTypeCount, TimeAggregationTypeLast, TimeAggregationTypeMaximum, TimeAggregationTypeMinimum, TimeAggregationTypeTotal}
+}
+
+// Unit enumerates the values for unit.
+type Unit string
+
+const (
+	// UnitBytes ...
+	UnitBytes Unit = "Bytes"
+	// UnitByteSeconds ...
+	UnitByteSeconds Unit = "ByteSeconds"
+	// UnitBytesPerSecond ...
+	UnitBytesPerSecond Unit = "BytesPerSecond"
+	// UnitCount ...
+	UnitCount Unit = "Count"
+	// UnitCountPerSecond ...
+	UnitCountPerSecond Unit = "CountPerSecond"
+	// UnitMilliSeconds ...
+	UnitMilliSeconds Unit = "MilliSeconds"
+	// UnitPercent ...
+	UnitPercent Unit = "Percent"
+	// UnitSeconds ...
+	UnitSeconds Unit = "Seconds"
+	// UnitUnspecified ...
+	UnitUnspecified Unit = "Unspecified"
+)
+
+// PossibleUnitValues returns an array of possible values for the Unit const type.
+func PossibleUnitValues() []Unit {
+	return []Unit{UnitBytes, UnitByteSeconds, UnitBytesPerSecond, UnitCount, UnitCountPerSecond, UnitMilliSeconds, UnitPercent, UnitSeconds, UnitUnspecified}
 }
 
 // ActionGroup an Azure action group.
@@ -292,6 +404,14 @@ type ActionGroup struct {
 	AzureAppPushReceivers *[]AzureAppPushReceiver `json:"azureAppPushReceivers,omitempty"`
 	// AutomationRunbookReceivers - The list of AutomationRunbook receivers that are part of this action group.
 	AutomationRunbookReceivers *[]AutomationRunbookReceiver `json:"automationRunbookReceivers,omitempty"`
+	// VoiceReceivers - The list of voice receivers that are part of this action group.
+	VoiceReceivers *[]VoiceReceiver `json:"voiceReceivers,omitempty"`
+	// LogicAppReceivers - The list of logic app receivers that are part of this action group.
+	LogicAppReceivers *[]LogicAppReceiver `json:"logicAppReceivers,omitempty"`
+	// AzureFunctionReceivers - The list of azure function receivers that are part of this action group.
+	AzureFunctionReceivers *[]AzureFunctionReceiver `json:"azureFunctionReceivers,omitempty"`
+	// ArmRoleReceivers - The list of ARM role receivers that are part of this action group. Roles are Azure RBAC roles and only built-in roles are supported.
+	ArmRoleReceivers *[]ArmRoleReceiver `json:"armRoleReceivers,omitempty"`
 }
 
 // ActionGroupList a list of action groups.
@@ -512,15 +632,15 @@ type ActivityLogAlertActionList struct {
 	ActionGroups *[]ActivityLogAlertActionGroup `json:"actionGroups,omitempty"`
 }
 
-// ActivityLogAlertAllOfCondition an Activity Log alert condition that is met when all its member conditions are
-// met.
+// ActivityLogAlertAllOfCondition an Activity Log alert condition that is met when all its member
+// conditions are met.
 type ActivityLogAlertAllOfCondition struct {
 	// AllOf - The list of activity log alert conditions.
 	AllOf *[]ActivityLogAlertLeafCondition `json:"allOf,omitempty"`
 }
 
-// ActivityLogAlertLeafCondition an Activity Log alert condition that is met by comparing an activity log field and
-// value.
+// ActivityLogAlertLeafCondition an Activity Log alert condition that is met by comparing an activity log
+// field and value.
 type ActivityLogAlertLeafCondition struct {
 	// Field - The name of the field that this condition will examine. The possible values for this field are (case-insensitive): 'resourceId', 'category', 'caller', 'level', 'operationName', 'resourceGroup', 'resourceProvider', 'status', 'subStatus', 'resourceType', or anything beginning with 'properties.'.
 	Field *string `json:"field,omitempty"`
@@ -959,6 +1079,14 @@ func (arrp *AlertRuleResourcePatch) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// ArmRoleReceiver an arm role receiver.
+type ArmRoleReceiver struct {
+	// Name - The name of the arm role receiver. Names must be unique across all receivers within an action group.
+	Name *string `json:"name,omitempty"`
+	// RoleID - The arm role id.
+	RoleID *string `json:"roleId,omitempty"`
+}
+
 // AutomationRunbookReceiver the Azure Automation Runbook notification receiver.
 type AutomationRunbookReceiver struct {
 	// AutomationAccountID - The Azure automation account Id which holds this runbook and authenticate to Azure resource.
@@ -999,7 +1127,8 @@ type AutoscaleProfile struct {
 	Recurrence *Recurrence `json:"recurrence,omitempty"`
 }
 
-// AutoscaleSetting a setting that contains all of the configuration for the automatic scaling of a resource.
+// AutoscaleSetting a setting that contains all of the configuration for the automatic scaling of a
+// resource.
 type AutoscaleSetting struct {
 	// Profiles - the collection of automatic scaling profiles that specify different scaling parameters for different time periods. A maximum of 20 profiles can be specified.
 	Profiles *[]AutoscaleProfile `json:"profiles,omitempty"`
@@ -1132,27 +1261,44 @@ type AutoscaleSettingResourceCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// AutoscaleSettingResourceCollectionIterator provides access to a complete listing of AutoscaleSettingResource
-// values.
+// AutoscaleSettingResourceCollectionIterator provides access to a complete listing of
+// AutoscaleSettingResource values.
 type AutoscaleSettingResourceCollectionIterator struct {
 	i    int
 	page AutoscaleSettingResourceCollectionPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AutoscaleSettingResourceCollectionIterator) Next() error {
+func (iter *AutoscaleSettingResourceCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingResourceCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AutoscaleSettingResourceCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1174,6 +1320,11 @@ func (iter AutoscaleSettingResourceCollectionIterator) Value() AutoscaleSettingR
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AutoscaleSettingResourceCollectionIterator type.
+func NewAutoscaleSettingResourceCollectionIterator(page AutoscaleSettingResourceCollectionPage) AutoscaleSettingResourceCollectionIterator {
+	return AutoscaleSettingResourceCollectionIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (asrc AutoscaleSettingResourceCollection) IsEmpty() bool {
 	return asrc.Value == nil || len(*asrc.Value) == 0
@@ -1181,11 +1332,11 @@ func (asrc AutoscaleSettingResourceCollection) IsEmpty() bool {
 
 // autoscaleSettingResourceCollectionPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (asrc AutoscaleSettingResourceCollection) autoscaleSettingResourceCollectionPreparer() (*http.Request, error) {
+func (asrc AutoscaleSettingResourceCollection) autoscaleSettingResourceCollectionPreparer(ctx context.Context) (*http.Request, error) {
 	if asrc.NextLink == nil || len(to.String(asrc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(asrc.NextLink)))
@@ -1193,19 +1344,36 @@ func (asrc AutoscaleSettingResourceCollection) autoscaleSettingResourceCollectio
 
 // AutoscaleSettingResourceCollectionPage contains a page of AutoscaleSettingResource values.
 type AutoscaleSettingResourceCollectionPage struct {
-	fn   func(AutoscaleSettingResourceCollection) (AutoscaleSettingResourceCollection, error)
+	fn   func(context.Context, AutoscaleSettingResourceCollection) (AutoscaleSettingResourceCollection, error)
 	asrc AutoscaleSettingResourceCollection
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AutoscaleSettingResourceCollectionPage) Next() error {
-	next, err := page.fn(page.asrc)
+func (page *AutoscaleSettingResourceCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingResourceCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.asrc)
 	if err != nil {
 		return err
 	}
 	page.asrc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AutoscaleSettingResourceCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1224,6 +1392,11 @@ func (page AutoscaleSettingResourceCollectionPage) Values() []AutoscaleSettingRe
 		return nil
 	}
 	return *page.asrc.Value
+}
+
+// Creates a new instance of the AutoscaleSettingResourceCollectionPage type.
+func NewAutoscaleSettingResourceCollectionPage(getNextPage func(context.Context, AutoscaleSettingResourceCollection) (AutoscaleSettingResourceCollection, error)) AutoscaleSettingResourceCollectionPage {
+	return AutoscaleSettingResourceCollectionPage{fn: getNextPage}
 }
 
 // AutoscaleSettingResourcePatch the autoscale setting object for patch operations.
@@ -1285,6 +1458,145 @@ type AzureAppPushReceiver struct {
 	Name *string `json:"name,omitempty"`
 	// EmailAddress - The email address registered for the Azure mobile app.
 	EmailAddress *string `json:"emailAddress,omitempty"`
+}
+
+// AzureFunctionReceiver an azure function receiver.
+type AzureFunctionReceiver struct {
+	// Name - The name of the azure function receiver. Names must be unique across all receivers within an action group.
+	Name *string `json:"name,omitempty"`
+	// FunctionAppResourceID - The azure resource id of the function app.
+	FunctionAppResourceID *string `json:"functionAppResourceId,omitempty"`
+	// FunctionName - The function name in the function app.
+	FunctionName *string `json:"functionName,omitempty"`
+	// HTTPTriggerURL - The http trigger url where http request sent to.
+	HTTPTriggerURL *string `json:"httpTriggerUrl,omitempty"`
+}
+
+// Baseline the baseline values for a single sensitivity value.
+type Baseline struct {
+	// Sensitivity - the sensitivity of the baseline. Possible values include: 'Low', 'Medium', 'High'
+	Sensitivity Sensitivity `json:"sensitivity,omitempty"`
+	// LowThresholds - The low thresholds of the baseline.
+	LowThresholds *[]float64 `json:"lowThresholds,omitempty"`
+	// HighThresholds - The high thresholds of the baseline.
+	HighThresholds *[]float64 `json:"highThresholds,omitempty"`
+}
+
+// BaselineMetadataValue represents a baseline metadata value.
+type BaselineMetadataValue struct {
+	// Name - the name of the metadata.
+	Name *LocalizableString `json:"name,omitempty"`
+	// Value - the value of the metadata.
+	Value *string `json:"value,omitempty"`
+}
+
+// BaselineProperties the baseline properties class.
+type BaselineProperties struct {
+	// Timespan - The timespan for which the data was retrieved. Its value consists of two datetimes concatenated, separated by '/'.  This may be adjusted in the future and returned back from what was originally requested.
+	Timespan *string `json:"timespan,omitempty"`
+	// Interval - The interval (window size) for which the metric data was returned in.  This may be adjusted in the future and returned back from what was originally requested.  This is not present if a metadata request was made.
+	Interval *string `json:"interval,omitempty"`
+	// Aggregation - The aggregation type of the metric.
+	Aggregation *string `json:"aggregation,omitempty"`
+	// Timestamps - the array of timestamps of the baselines.
+	Timestamps *[]date.Time `json:"timestamps,omitempty"`
+	// Baseline - the baseline values for each sensitivity.
+	Baseline *[]Baseline `json:"baseline,omitempty"`
+	// Metadata - the baseline metadata values.
+	Metadata *[]BaselineMetadataValue `json:"metadata,omitempty"`
+}
+
+// BaselineResponse the response to a baseline query.
+type BaselineResponse struct {
+	autorest.Response `json:"-"`
+	// ID - the metric baseline Id.
+	ID *string `json:"id,omitempty"`
+	// Type - the resource type of the baseline resource.
+	Type *string `json:"type,omitempty"`
+	// Name - the name and the display name of the metric, i.e. it is localizable string.
+	Name *LocalizableString `json:"name,omitempty"`
+	// BaselineProperties - the properties of the baseline.
+	*BaselineProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for BaselineResponse.
+func (br BaselineResponse) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if br.ID != nil {
+		objectMap["id"] = br.ID
+	}
+	if br.Type != nil {
+		objectMap["type"] = br.Type
+	}
+	if br.Name != nil {
+		objectMap["name"] = br.Name
+	}
+	if br.BaselineProperties != nil {
+		objectMap["properties"] = br.BaselineProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for BaselineResponse struct.
+func (br *BaselineResponse) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				br.ID = &ID
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				br.Type = &typeVar
+			}
+		case "name":
+			if v != nil {
+				var name LocalizableString
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				br.Name = &name
+			}
+		case "properties":
+			if v != nil {
+				var baselineProperties BaselineProperties
+				err = json.Unmarshal(*v, &baselineProperties)
+				if err != nil {
+					return err
+				}
+				br.BaselineProperties = &baselineProperties
+			}
+		}
+	}
+
+	return nil
+}
+
+// CalculateBaselineResponse the response to a calculate baseline call.
+type CalculateBaselineResponse struct {
+	autorest.Response `json:"-"`
+	// Type - the resource type of the baseline resource.
+	Type *string `json:"type,omitempty"`
+	// Timestamps - the array of timestamps of the baselines.
+	Timestamps *[]date.Time `json:"timestamps,omitempty"`
+	// Baseline - the baseline values for each sensitivity.
+	Baseline *[]Baseline `json:"baseline,omitempty"`
 }
 
 // DiagnosticSettings the diagnostic settings.
@@ -1393,7 +1705,8 @@ func (dscr *DiagnosticSettingsCategoryResource) UnmarshalJSON(body []byte) error
 	return nil
 }
 
-// DiagnosticSettingsCategoryResourceCollection represents a collection of diagnostic setting category resources.
+// DiagnosticSettingsCategoryResourceCollection represents a collection of diagnostic setting category
+// resources.
 type DiagnosticSettingsCategoryResourceCollection struct {
 	autorest.Response `json:"-"`
 	// Value - The collection of diagnostic settings category resources.
@@ -1523,6 +1836,302 @@ type ErrorResponse struct {
 	Message *string `json:"message,omitempty"`
 }
 
+// EventCategoryCollection a collection of event categories. Currently possible values are: Administrative,
+// Security, ServiceHealth, Alert, Recommendation, Policy.
+type EventCategoryCollection struct {
+	autorest.Response `json:"-"`
+	// Value - the list that includes the Azure event categories.
+	Value *[]LocalizableString `json:"value,omitempty"`
+}
+
+// EventData the Azure event log entries are of type EventData
+type EventData struct {
+	// Authorization - The sender authorization information.
+	Authorization *SenderAuthorization `json:"authorization,omitempty"`
+	// Claims - key value pairs to identify ARM permissions.
+	Claims map[string]*string `json:"claims"`
+	// Caller - the email address of the user who has performed the operation, the UPN claim or SPN claim based on availability.
+	Caller *string `json:"caller,omitempty"`
+	// Description - the description of the event.
+	Description *string `json:"description,omitempty"`
+	// ID - the Id of this event as required by ARM for RBAC. It contains the EventDataID and a timestamp information.
+	ID *string `json:"id,omitempty"`
+	// EventDataID - the event data Id. This is a unique identifier for an event.
+	EventDataID *string `json:"eventDataId,omitempty"`
+	// CorrelationID - the correlation Id, usually a GUID in the string format. The correlation Id is shared among the events that belong to the same uber operation.
+	CorrelationID *string `json:"correlationId,omitempty"`
+	// EventName - the event name. This value should not be confused with OperationName. For practical purposes, OperationName might be more appealing to end users.
+	EventName *LocalizableString `json:"eventName,omitempty"`
+	// Category - the event category.
+	Category *LocalizableString `json:"category,omitempty"`
+	// HTTPRequest - the HTTP request info. Usually includes the 'clientRequestId', 'clientIpAddress' (IP address of the user who initiated the event) and 'method' (HTTP method e.g. PUT).
+	HTTPRequest *HTTPRequestInfo `json:"httpRequest,omitempty"`
+	// Level - the event level. Possible values include: 'Critical', 'Error', 'Warning', 'Informational', 'Verbose'
+	Level EventLevel `json:"level,omitempty"`
+	// ResourceGroupName - the resource group name of the impacted resource.
+	ResourceGroupName *string `json:"resourceGroupName,omitempty"`
+	// ResourceProviderName - the resource provider name of the impacted resource.
+	ResourceProviderName *LocalizableString `json:"resourceProviderName,omitempty"`
+	// ResourceID - the resource uri that uniquely identifies the resource that caused this event.
+	ResourceID *string `json:"resourceId,omitempty"`
+	// ResourceType - the resource type
+	ResourceType *LocalizableString `json:"resourceType,omitempty"`
+	// OperationID - It is usually a GUID shared among the events corresponding to single operation. This value should not be confused with EventName.
+	OperationID *string `json:"operationId,omitempty"`
+	// OperationName - the operation name.
+	OperationName *LocalizableString `json:"operationName,omitempty"`
+	// Properties - the set of <Key, Value> pairs (usually a Dictionary<String, String>) that includes details about the event.
+	Properties map[string]*string `json:"properties"`
+	// Status - a string describing the status of the operation. Some typical values are: Started, In progress, Succeeded, Failed, Resolved.
+	Status *LocalizableString `json:"status,omitempty"`
+	// SubStatus - the event sub status. Most of the time, when included, this captures the HTTP status code of the REST call. Common values are: OK (HTTP Status Code: 200), Created (HTTP Status Code: 201), Accepted (HTTP Status Code: 202), No Content (HTTP Status Code: 204), Bad Request(HTTP Status Code: 400), Not Found (HTTP Status Code: 404), Conflict (HTTP Status Code: 409), Internal Server Error (HTTP Status Code: 500), Service Unavailable (HTTP Status Code:503), Gateway Timeout (HTTP Status Code: 504)
+	SubStatus *LocalizableString `json:"subStatus,omitempty"`
+	// EventTimestamp - the timestamp of when the event was generated by the Azure service processing the request corresponding the event. It in ISO 8601 format.
+	EventTimestamp *date.Time `json:"eventTimestamp,omitempty"`
+	// SubmissionTimestamp - the timestamp of when the event became available for querying via this API. It is in ISO 8601 format. This value should not be confused eventTimestamp. As there might be a delay between the occurrence time of the event, and the time that the event is submitted to the Azure logging infrastructure.
+	SubmissionTimestamp *date.Time `json:"submissionTimestamp,omitempty"`
+	// SubscriptionID - the Azure subscription Id usually a GUID.
+	SubscriptionID *string `json:"subscriptionId,omitempty"`
+	// TenantID - the Azure tenant Id
+	TenantID *string `json:"tenantId,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EventData.
+func (ed EventData) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ed.Authorization != nil {
+		objectMap["authorization"] = ed.Authorization
+	}
+	if ed.Claims != nil {
+		objectMap["claims"] = ed.Claims
+	}
+	if ed.Caller != nil {
+		objectMap["caller"] = ed.Caller
+	}
+	if ed.Description != nil {
+		objectMap["description"] = ed.Description
+	}
+	if ed.ID != nil {
+		objectMap["id"] = ed.ID
+	}
+	if ed.EventDataID != nil {
+		objectMap["eventDataId"] = ed.EventDataID
+	}
+	if ed.CorrelationID != nil {
+		objectMap["correlationId"] = ed.CorrelationID
+	}
+	if ed.EventName != nil {
+		objectMap["eventName"] = ed.EventName
+	}
+	if ed.Category != nil {
+		objectMap["category"] = ed.Category
+	}
+	if ed.HTTPRequest != nil {
+		objectMap["httpRequest"] = ed.HTTPRequest
+	}
+	if ed.Level != "" {
+		objectMap["level"] = ed.Level
+	}
+	if ed.ResourceGroupName != nil {
+		objectMap["resourceGroupName"] = ed.ResourceGroupName
+	}
+	if ed.ResourceProviderName != nil {
+		objectMap["resourceProviderName"] = ed.ResourceProviderName
+	}
+	if ed.ResourceID != nil {
+		objectMap["resourceId"] = ed.ResourceID
+	}
+	if ed.ResourceType != nil {
+		objectMap["resourceType"] = ed.ResourceType
+	}
+	if ed.OperationID != nil {
+		objectMap["operationId"] = ed.OperationID
+	}
+	if ed.OperationName != nil {
+		objectMap["operationName"] = ed.OperationName
+	}
+	if ed.Properties != nil {
+		objectMap["properties"] = ed.Properties
+	}
+	if ed.Status != nil {
+		objectMap["status"] = ed.Status
+	}
+	if ed.SubStatus != nil {
+		objectMap["subStatus"] = ed.SubStatus
+	}
+	if ed.EventTimestamp != nil {
+		objectMap["eventTimestamp"] = ed.EventTimestamp
+	}
+	if ed.SubmissionTimestamp != nil {
+		objectMap["submissionTimestamp"] = ed.SubmissionTimestamp
+	}
+	if ed.SubscriptionID != nil {
+		objectMap["subscriptionId"] = ed.SubscriptionID
+	}
+	if ed.TenantID != nil {
+		objectMap["tenantId"] = ed.TenantID
+	}
+	return json.Marshal(objectMap)
+}
+
+// EventDataCollection represents collection of events.
+type EventDataCollection struct {
+	autorest.Response `json:"-"`
+	// Value - this list that includes the Azure audit logs.
+	Value *[]EventData `json:"value,omitempty"`
+	// NextLink - Provides the link to retrieve the next set of events.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// EventDataCollectionIterator provides access to a complete listing of EventData values.
+type EventDataCollectionIterator struct {
+	i    int
+	page EventDataCollectionPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *EventDataCollectionIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventDataCollectionIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *EventDataCollectionIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter EventDataCollectionIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter EventDataCollectionIterator) Response() EventDataCollection {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter EventDataCollectionIterator) Value() EventData {
+	if !iter.page.NotDone() {
+		return EventData{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the EventDataCollectionIterator type.
+func NewEventDataCollectionIterator(page EventDataCollectionPage) EventDataCollectionIterator {
+	return EventDataCollectionIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (edc EventDataCollection) IsEmpty() bool {
+	return edc.Value == nil || len(*edc.Value) == 0
+}
+
+// eventDataCollectionPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (edc EventDataCollection) eventDataCollectionPreparer(ctx context.Context) (*http.Request, error) {
+	if edc.NextLink == nil || len(to.String(edc.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(edc.NextLink)))
+}
+
+// EventDataCollectionPage contains a page of EventData values.
+type EventDataCollectionPage struct {
+	fn  func(context.Context, EventDataCollection) (EventDataCollection, error)
+	edc EventDataCollection
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *EventDataCollectionPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventDataCollectionPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.edc)
+	if err != nil {
+		return err
+	}
+	page.edc = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *EventDataCollectionPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page EventDataCollectionPage) NotDone() bool {
+	return !page.edc.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page EventDataCollectionPage) Response() EventDataCollection {
+	return page.edc
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page EventDataCollectionPage) Values() []EventData {
+	if page.edc.IsEmpty() {
+		return nil
+	}
+	return *page.edc.Value
+}
+
+// Creates a new instance of the EventDataCollectionPage type.
+func NewEventDataCollectionPage(getNextPage func(context.Context, EventDataCollection) (EventDataCollection, error)) EventDataCollectionPage {
+	return EventDataCollectionPage{fn: getNextPage}
+}
+
+// HTTPRequestInfo the Http request info.
+type HTTPRequestInfo struct {
+	// ClientRequestID - the client request id.
+	ClientRequestID *string `json:"clientRequestId,omitempty"`
+	// ClientIPAddress - the client Ip Address
+	ClientIPAddress *string `json:"clientIpAddress,omitempty"`
+	// Method - the Http request method.
+	Method *string `json:"method,omitempty"`
+	// URI - the Uri.
+	URI *string `json:"uri,omitempty"`
+}
+
 // Incident an alert incident indicates the activation status of an alert rule.
 type Incident struct {
 	autorest.Response `json:"-"`
@@ -1557,6 +2166,14 @@ type ItsmReceiver struct {
 	TicketConfiguration *string `json:"ticketConfiguration,omitempty"`
 	// Region - Region in which workspace resides. Supported values:'centralindia','japaneast','southeastasia','australiasoutheast','uksouth','westcentralus','canadacentral','eastus','westeurope'
 	Region *string `json:"region,omitempty"`
+}
+
+// LocalizableString the localizable string class.
+type LocalizableString struct {
+	// Value - the invariant value.
+	Value *string `json:"value,omitempty"`
+	// LocalizedValue - the locale specific value.
+	LocalizedValue *string `json:"localizedValue,omitempty"`
 }
 
 // LocationThresholdRuleCondition a rule condition based on a certain number of locations failing.
@@ -1661,6 +2278,16 @@ func (ltrc *LocationThresholdRuleCondition) UnmarshalJSON(body []byte) error {
 	}
 
 	return nil
+}
+
+// LogicAppReceiver a logic app receiver.
+type LogicAppReceiver struct {
+	// Name - The name of the logic app receiver. Names must be unique across all receivers within an action group.
+	Name *string `json:"name,omitempty"`
+	// ResourceID - The azure resource id of the logic app receiver.
+	ResourceID *string `json:"resourceId,omitempty"`
+	// CallbackURL - The callback url where http request sent to.
+	CallbackURL *string `json:"callbackUrl,omitempty"`
 }
 
 // LogProfileCollection represents a collection of log profiles.
@@ -1957,6 +2584,64 @@ func (merc *ManagementEventRuleCondition) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// MetadataValue represents a metric metadata value.
+type MetadataValue struct {
+	// Name - the name of the metadata.
+	Name *LocalizableString `json:"name,omitempty"`
+	// Value - the value of the metadata.
+	Value *string `json:"value,omitempty"`
+}
+
+// Metric the result data of a query.
+type Metric struct {
+	// ID - the metric Id.
+	ID *string `json:"id,omitempty"`
+	// Type - the resource type of the metric resource.
+	Type *string `json:"type,omitempty"`
+	// Name - the name and the display name of the metric, i.e. it is localizable string.
+	Name *LocalizableString `json:"name,omitempty"`
+	// Unit - the unit of the metric. Possible values include: 'UnitCount', 'UnitBytes', 'UnitSeconds', 'UnitCountPerSecond', 'UnitBytesPerSecond', 'UnitPercent', 'UnitMilliSeconds', 'UnitByteSeconds', 'UnitUnspecified'
+	Unit Unit `json:"unit,omitempty"`
+	// Timeseries - the time series returned when a data query is performed.
+	Timeseries *[]TimeSeriesElement `json:"timeseries,omitempty"`
+}
+
+// MetricAvailability metric availability specifies the time grain (aggregation interval or frequency) and
+// the retention period for that time grain.
+type MetricAvailability struct {
+	// TimeGrain - the time grain specifies the aggregation interval for the metric. Expressed as a duration 'PT1M', 'P1D', etc.
+	TimeGrain *string `json:"timeGrain,omitempty"`
+	// Retention - the retention period for the metric at the specified timegrain.  Expressed as a duration 'PT1M', 'P1D', etc.
+	Retention *string `json:"retention,omitempty"`
+}
+
+// MetricDefinition metric definition class specifies the metadata for a metric.
+type MetricDefinition struct {
+	// IsDimensionRequired - Flag to indicate whether the dimension is required.
+	IsDimensionRequired *bool `json:"isDimensionRequired,omitempty"`
+	// ResourceID - the resource identifier of the resource that emitted the metric.
+	ResourceID *string `json:"resourceId,omitempty"`
+	// Name - the name and the display name of the metric, i.e. it is a localizable string.
+	Name *LocalizableString `json:"name,omitempty"`
+	// Unit - the unit of the metric. Possible values include: 'UnitCount', 'UnitBytes', 'UnitSeconds', 'UnitCountPerSecond', 'UnitBytesPerSecond', 'UnitPercent', 'UnitMilliSeconds', 'UnitByteSeconds', 'UnitUnspecified'
+	Unit Unit `json:"unit,omitempty"`
+	// PrimaryAggregationType - the primary aggregation type value defining how to use the values for display. Possible values include: 'None', 'Average', 'Count', 'Minimum', 'Maximum', 'Total'
+	PrimaryAggregationType AggregationType `json:"primaryAggregationType,omitempty"`
+	// MetricAvailabilities - the collection of what aggregation intervals are available to be queried.
+	MetricAvailabilities *[]MetricAvailability `json:"metricAvailabilities,omitempty"`
+	// ID - the resource identifier of the metric definition.
+	ID *string `json:"id,omitempty"`
+	// Dimensions - the name and the display name of the dimension, i.e. it is a localizable string.
+	Dimensions *[]LocalizableString `json:"dimensions,omitempty"`
+}
+
+// MetricDefinitionCollection represents collection of metric definitions.
+type MetricDefinitionCollection struct {
+	autorest.Response `json:"-"`
+	// Value - the values for the metric definitions.
+	Value *[]MetricDefinition `json:"value,omitempty"`
+}
+
 // MetricSettings part of MultiTenantDiagnosticSettings. Specifies the settings for a particular metric.
 type MetricSettings struct {
 	// TimeGrain - the timegrain of the metric in ISO8601 format.
@@ -1977,16 +2662,32 @@ type MetricTrigger struct {
 	MetricResourceURI *string `json:"metricResourceUri,omitempty"`
 	// TimeGrain - the granularity of metrics the rule monitors. Must be one of the predefined values returned from metric definitions for the metric. Must be between 12 hours and 1 minute.
 	TimeGrain *string `json:"timeGrain,omitempty"`
-	// Statistic - the metric statistic type. How the metrics from multiple instances are combined. Possible values include: 'Average', 'Min', 'Max', 'Sum'
+	// Statistic - the metric statistic type. How the metrics from multiple instances are combined. Possible values include: 'MetricStatisticTypeAverage', 'MetricStatisticTypeMin', 'MetricStatisticTypeMax', 'MetricStatisticTypeSum'
 	Statistic MetricStatisticType `json:"statistic,omitempty"`
 	// TimeWindow - the range of time in which instance data is collected. This value must be greater than the delay in metric collection, which can vary from resource-to-resource. Must be between 12 hours and 5 minutes.
 	TimeWindow *string `json:"timeWindow,omitempty"`
-	// TimeAggregation - time aggregation type. How the data that is collected should be combined over time. The default value is Average. Possible values include: 'TimeAggregationTypeAverage', 'TimeAggregationTypeMinimum', 'TimeAggregationTypeMaximum', 'TimeAggregationTypeTotal', 'TimeAggregationTypeCount'
+	// TimeAggregation - time aggregation type. How the data that is collected should be combined over time. The default value is Average. Possible values include: 'TimeAggregationTypeAverage', 'TimeAggregationTypeMinimum', 'TimeAggregationTypeMaximum', 'TimeAggregationTypeTotal', 'TimeAggregationTypeCount', 'TimeAggregationTypeLast'
 	TimeAggregation TimeAggregationType `json:"timeAggregation,omitempty"`
 	// Operator - the operator that is used to compare the metric data and the threshold. Possible values include: 'Equals', 'NotEquals', 'GreaterThan', 'GreaterThanOrEqual', 'LessThan', 'LessThanOrEqual'
 	Operator ComparisonOperationType `json:"operator,omitempty"`
 	// Threshold - the threshold of the metric that triggers the scale action.
 	Threshold *float64 `json:"threshold,omitempty"`
+}
+
+// MetricValue represents a metric value.
+type MetricValue struct {
+	// TimeStamp - the timestamp for the metric value in ISO 8601 format.
+	TimeStamp *date.Time `json:"timeStamp,omitempty"`
+	// Average - the average value in the time range.
+	Average *float64 `json:"average,omitempty"`
+	// Minimum - the least value in the time range.
+	Minimum *float64 `json:"minimum,omitempty"`
+	// Maximum - the greatest value in the time range.
+	Maximum *float64 `json:"maximum,omitempty"`
+	// Total - the sum of all of the values in the time range.
+	Total *float64 `json:"total,omitempty"`
+	// Count - the number of samples in the time range. Can be used to determine the number of values that contributed to the average value.
+	Count *int64 `json:"count,omitempty"`
 }
 
 // Operation microsoft Insights API operation definition.
@@ -2027,10 +2728,10 @@ type ProxyOnlyResource struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// Recurrence the repeating times at which this profile begins. This element is not used if the FixedDate element
-// is used.
+// Recurrence the repeating times at which this profile begins. This element is not used if the FixedDate
+// element is used.
 type Recurrence struct {
-	// Frequency - the recurrence frequency. How often the schedule profile should take effect. This value must be Week, meaning each week will have the same set of profiles. For example, to set a daily schedule, set **schedule** to every day of the week. The frequency property specifies that the schedule is repeated weekly. Possible values include: 'None', 'Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year'
+	// Frequency - the recurrence frequency. How often the schedule profile should take effect. This value must be Week, meaning each week will have the same set of profiles. For example, to set a daily schedule, set **schedule** to every day of the week. The frequency property specifies that the schedule is repeated weekly. Possible values include: 'RecurrenceFrequencyNone', 'RecurrenceFrequencySecond', 'RecurrenceFrequencyMinute', 'RecurrenceFrequencyHour', 'RecurrenceFrequencyDay', 'RecurrenceFrequencyWeek', 'RecurrenceFrequencyMonth', 'RecurrenceFrequencyYear'
 	Frequency RecurrenceFrequency `json:"frequency,omitempty"`
 	// Schedule - the scheduling constraints for when the profile begins.
 	Schedule *RecurrentSchedule `json:"schedule,omitempty"`
@@ -2038,7 +2739,7 @@ type Recurrence struct {
 
 // RecurrentSchedule the scheduling constraints for when the profile begins.
 type RecurrentSchedule struct {
-	// TimeZone - the timezone for the hours of the profile. Some examples of valid timezones are: Dateline Standard Time, UTC-11, Hawaiian Standard Time, Alaskan Standard Time, Pacific Standard Time (Mexico), Pacific Standard Time, US Mountain Standard Time, Mountain Standard Time (Mexico), Mountain Standard Time, Central America Standard Time, Central Standard Time, Central Standard Time (Mexico), Canada Central Standard Time, SA Pacific Standard Time, Eastern Standard Time, US Eastern Standard Time, Venezuela Standard Time, Paraguay Standard Time, Atlantic Standard Time, Central Brazilian Standard Time, SA Western Standard Time, Pacific SA Standard Time, Newfoundland Standard Time, E. South America Standard Time, Argentina Standard Time, SA Eastern Standard Time, Greenland Standard Time, Montevideo Standard Time, Bahia Standard Time, UTC-02, Mid-Atlantic Standard Time, Azores Standard Time, Cape Verde Standard Time, Morocco Standard Time, UTC, GMT Standard Time, Greenwich Standard Time, W. Europe Standard Time, Central Europe Standard Time, Romance Standard Time, Central European Standard Time, W. Central Africa Standard Time, Namibia Standard Time, Jordan Standard Time, GTB Standard Time, Middle East Standard Time, Egypt Standard Time, Syria Standard Time, E. Europe Standard Time, South Africa Standard Time, FLE Standard Time, Turkey Standard Time, Israel Standard Time, Kaliningrad Standard Time, Libya Standard Time, Arabic Standard Time, Arab Standard Time, Belarus Standard Time, Russian Standard Time, E. Africa Standard Time, Iran Standard Time, Arabian Standard Time, Azerbaijan Standard Time, Russia Time Zone 3, Mauritius Standard Time, Georgian Standard Time, Caucasus Standard Time, Afghanistan Standard Time, West Asia Standard Time, Ekaterinburg Standard Time, Pakistan Standard Time, India Standard Time, Sri Lanka Standard Time, Nepal Standard Time, Central Asia Standard Time, Bangladesh Standard Time, N. Central Asia Standard Time, Myanmar Standard Time, SE Asia Standard Time, North Asia Standard Time, China Standard Time, North Asia East Standard Time, Singapore Standard Time, W. Australia Standard Time, Taipei Standard Time, Ulaanbaatar Standard Time, Tokyo Standard Time, Korea Standard Time, Yakutsk Standard Time, Cen. Australia Standard Time, AUS Central Standard Time, E. Australia Standard Time, AUS Eastern Standard Time, West Pacific Standard Time, Tasmania Standard Time, Magadan Standard Time, Vladivostok Standard Time, Russia Time Zone 10, Central Pacific Standard Time, Russia Time Zone 11, New Zealand Standard Time, UTC+12, Fiji Standard Time, Kamchatka Standard Time, Tonga Standard Time, Samoa Standard Time, Line Islands Standard Time
+	// TimeZone - the timezone for the hours of the profile. Some examples of valid time zones are: Dateline Standard Time, UTC-11, Hawaiian Standard Time, Alaskan Standard Time, Pacific Standard Time (Mexico), Pacific Standard Time, US Mountain Standard Time, Mountain Standard Time (Mexico), Mountain Standard Time, Central America Standard Time, Central Standard Time, Central Standard Time (Mexico), Canada Central Standard Time, SA Pacific Standard Time, Eastern Standard Time, US Eastern Standard Time, Venezuela Standard Time, Paraguay Standard Time, Atlantic Standard Time, Central Brazilian Standard Time, SA Western Standard Time, Pacific SA Standard Time, Newfoundland Standard Time, E. South America Standard Time, Argentina Standard Time, SA Eastern Standard Time, Greenland Standard Time, Montevideo Standard Time, Bahia Standard Time, UTC-02, Mid-Atlantic Standard Time, Azores Standard Time, Cape Verde Standard Time, Morocco Standard Time, UTC, GMT Standard Time, Greenwich Standard Time, W. Europe Standard Time, Central Europe Standard Time, Romance Standard Time, Central European Standard Time, W. Central Africa Standard Time, Namibia Standard Time, Jordan Standard Time, GTB Standard Time, Middle East Standard Time, Egypt Standard Time, Syria Standard Time, E. Europe Standard Time, South Africa Standard Time, FLE Standard Time, Turkey Standard Time, Israel Standard Time, Kaliningrad Standard Time, Libya Standard Time, Arabic Standard Time, Arab Standard Time, Belarus Standard Time, Russian Standard Time, E. Africa Standard Time, Iran Standard Time, Arabian Standard Time, Azerbaijan Standard Time, Russia Time Zone 3, Mauritius Standard Time, Georgian Standard Time, Caucasus Standard Time, Afghanistan Standard Time, West Asia Standard Time, Ekaterinburg Standard Time, Pakistan Standard Time, India Standard Time, Sri Lanka Standard Time, Nepal Standard Time, Central Asia Standard Time, Bangladesh Standard Time, N. Central Asia Standard Time, Myanmar Standard Time, SE Asia Standard Time, North Asia Standard Time, China Standard Time, North Asia East Standard Time, Singapore Standard Time, W. Australia Standard Time, Taipei Standard Time, Ulaanbaatar Standard Time, Tokyo Standard Time, Korea Standard Time, Yakutsk Standard Time, Cen. Australia Standard Time, AUS Central Standard Time, E. Australia Standard Time, AUS Eastern Standard Time, West Pacific Standard Time, Tasmania Standard Time, Magadan Standard Time, Vladivostok Standard Time, Russia Time Zone 10, Central Pacific Standard Time, Russia Time Zone 11, New Zealand Standard Time, UTC+12, Fiji Standard Time, Kamchatka Standard Time, Tonga Standard Time, Samoa Standard Time, Line Islands Standard Time
 	TimeZone *string `json:"timeZone,omitempty"`
 	// Days - the collection of days that the profile takes effect on. Possible values are Sunday through Saturday.
 	Days *[]string `json:"days,omitempty"`
@@ -2081,6 +2782,19 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 		objectMap["tags"] = r.Tags
 	}
 	return json.Marshal(objectMap)
+}
+
+// Response the response to a metrics query.
+type Response struct {
+	autorest.Response `json:"-"`
+	// Cost - The integer value representing the cost of the query, for data case.
+	Cost *float64 `json:"cost,omitempty"`
+	// Timespan - The timespan for which the data was retrieved. Its value consists of two datetimes concatenated, separated by '/'.  This may be adjusted in the future and returned back from what was originally requested.
+	Timespan *string `json:"timespan,omitempty"`
+	// Interval - The interval (window size) for which the metric data was returned in.  This may be adjusted in the future and returned back from what was originally requested.  This is not present if a metadata request was made.
+	Interval *string `json:"interval,omitempty"`
+	// Value - the value of the collection.
+	Value *[]Metric `json:"value,omitempty"`
 }
 
 // RetentionPolicy specifies the retention policy for the log.
@@ -2395,8 +3109,8 @@ func (rds RuleDataSource) AsBasicRuleDataSource() (BasicRuleDataSource, bool) {
 	return &rds, true
 }
 
-// RuleEmailAction specifies the action to send email when the rule condition is evaluated. The discriminator is
-// always RuleEmailAction in this case.
+// RuleEmailAction specifies the action to send email when the rule condition is evaluated. The
+// discriminator is always RuleEmailAction in this case.
 type RuleEmailAction struct {
 	// SendToServiceOwners - Whether the administrators (service and co-administrators) of the service should be notified when the alert is activated.
 	SendToServiceOwners *bool `json:"sendToServiceOwners,omitempty"`
@@ -2535,8 +3249,8 @@ func (rmeds RuleManagementEventDataSource) AsBasicRuleDataSource() (BasicRuleDat
 	return &rmeds, true
 }
 
-// RuleMetricDataSource a rule metric data source. The discriminator value is always RuleMetricDataSource in this
-// case.
+// RuleMetricDataSource a rule metric data source. The discriminator value is always RuleMetricDataSource
+// in this case.
 type RuleMetricDataSource struct {
 	// MetricName - the name of the metric that defines what the rule monitors.
 	MetricName *string `json:"metricName,omitempty"`
@@ -2657,6 +3371,18 @@ type ScaleRule struct {
 	MetricTrigger *MetricTrigger `json:"metricTrigger,omitempty"`
 	// ScaleAction - the parameters for the scaling action.
 	ScaleAction *ScaleAction `json:"scaleAction,omitempty"`
+}
+
+// SenderAuthorization the authorization used by the user who has performed the operation that led to this
+// event. This captures the RBAC properties of the event. These usually include the 'action', 'role' and
+// the 'scope'
+type SenderAuthorization struct {
+	// Action - the permissible actions. For instance: microsoft.support/supporttickets/write
+	Action *string `json:"action,omitempty"`
+	// Role - the role of the user. For instance: Subscription Admin
+	Role *string `json:"role,omitempty"`
+	// Scope - the scope.
+	Scope *string `json:"scope,omitempty"`
 }
 
 // SmsReceiver an SMS receiver.
@@ -2803,14 +3529,42 @@ func (trc *ThresholdRuleCondition) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// TimeSeriesElement a time series result type. The discriminator value is always TimeSeries in this case.
+type TimeSeriesElement struct {
+	// Metadatavalues - the metadata values returned if $filter was specified in the call.
+	Metadatavalues *[]MetadataValue `json:"metadatavalues,omitempty"`
+	// Data - An array of data points representing the metric values.  This is only returned if a result type of data is specified.
+	Data *[]MetricValue `json:"data,omitempty"`
+}
+
+// TimeSeriesInformation the time series info needed for calculating the baseline.
+type TimeSeriesInformation struct {
+	// Sensitivities - the list of sensitivities for calculating the baseline.
+	Sensitivities *[]string `json:"sensitivities,omitempty"`
+	// Values - The metric values to calculate the baseline.
+	Values *[]float64 `json:"values,omitempty"`
+	// Timestamps - the array of timestamps of the baselines.
+	Timestamps *[]date.Time `json:"timestamps,omitempty"`
+}
+
 // TimeWindow a specific date-time for the profile.
 type TimeWindow struct {
-	// TimeZone - the timezone of the start and end times for the profile. Some examples of valid timezones are: Dateline Standard Time, UTC-11, Hawaiian Standard Time, Alaskan Standard Time, Pacific Standard Time (Mexico), Pacific Standard Time, US Mountain Standard Time, Mountain Standard Time (Mexico), Mountain Standard Time, Central America Standard Time, Central Standard Time, Central Standard Time (Mexico), Canada Central Standard Time, SA Pacific Standard Time, Eastern Standard Time, US Eastern Standard Time, Venezuela Standard Time, Paraguay Standard Time, Atlantic Standard Time, Central Brazilian Standard Time, SA Western Standard Time, Pacific SA Standard Time, Newfoundland Standard Time, E. South America Standard Time, Argentina Standard Time, SA Eastern Standard Time, Greenland Standard Time, Montevideo Standard Time, Bahia Standard Time, UTC-02, Mid-Atlantic Standard Time, Azores Standard Time, Cape Verde Standard Time, Morocco Standard Time, UTC, GMT Standard Time, Greenwich Standard Time, W. Europe Standard Time, Central Europe Standard Time, Romance Standard Time, Central European Standard Time, W. Central Africa Standard Time, Namibia Standard Time, Jordan Standard Time, GTB Standard Time, Middle East Standard Time, Egypt Standard Time, Syria Standard Time, E. Europe Standard Time, South Africa Standard Time, FLE Standard Time, Turkey Standard Time, Israel Standard Time, Kaliningrad Standard Time, Libya Standard Time, Arabic Standard Time, Arab Standard Time, Belarus Standard Time, Russian Standard Time, E. Africa Standard Time, Iran Standard Time, Arabian Standard Time, Azerbaijan Standard Time, Russia Time Zone 3, Mauritius Standard Time, Georgian Standard Time, Caucasus Standard Time, Afghanistan Standard Time, West Asia Standard Time, Ekaterinburg Standard Time, Pakistan Standard Time, India Standard Time, Sri Lanka Standard Time, Nepal Standard Time, Central Asia Standard Time, Bangladesh Standard Time, N. Central Asia Standard Time, Myanmar Standard Time, SE Asia Standard Time, North Asia Standard Time, China Standard Time, North Asia East Standard Time, Singapore Standard Time, W. Australia Standard Time, Taipei Standard Time, Ulaanbaatar Standard Time, Tokyo Standard Time, Korea Standard Time, Yakutsk Standard Time, Cen. Australia Standard Time, AUS Central Standard Time, E. Australia Standard Time, AUS Eastern Standard Time, West Pacific Standard Time, Tasmania Standard Time, Magadan Standard Time, Vladivostok Standard Time, Russia Time Zone 10, Central Pacific Standard Time, Russia Time Zone 11, New Zealand Standard Time, UTC+12, Fiji Standard Time, Kamchatka Standard Time, Tonga Standard Time, Samoa Standard Time, Line Islands Standard Time
+	// TimeZone - the timezone of the start and end times for the profile. Some examples of valid time zones are: Dateline Standard Time, UTC-11, Hawaiian Standard Time, Alaskan Standard Time, Pacific Standard Time (Mexico), Pacific Standard Time, US Mountain Standard Time, Mountain Standard Time (Mexico), Mountain Standard Time, Central America Standard Time, Central Standard Time, Central Standard Time (Mexico), Canada Central Standard Time, SA Pacific Standard Time, Eastern Standard Time, US Eastern Standard Time, Venezuela Standard Time, Paraguay Standard Time, Atlantic Standard Time, Central Brazilian Standard Time, SA Western Standard Time, Pacific SA Standard Time, Newfoundland Standard Time, E. South America Standard Time, Argentina Standard Time, SA Eastern Standard Time, Greenland Standard Time, Montevideo Standard Time, Bahia Standard Time, UTC-02, Mid-Atlantic Standard Time, Azores Standard Time, Cape Verde Standard Time, Morocco Standard Time, UTC, GMT Standard Time, Greenwich Standard Time, W. Europe Standard Time, Central Europe Standard Time, Romance Standard Time, Central European Standard Time, W. Central Africa Standard Time, Namibia Standard Time, Jordan Standard Time, GTB Standard Time, Middle East Standard Time, Egypt Standard Time, Syria Standard Time, E. Europe Standard Time, South Africa Standard Time, FLE Standard Time, Turkey Standard Time, Israel Standard Time, Kaliningrad Standard Time, Libya Standard Time, Arabic Standard Time, Arab Standard Time, Belarus Standard Time, Russian Standard Time, E. Africa Standard Time, Iran Standard Time, Arabian Standard Time, Azerbaijan Standard Time, Russia Time Zone 3, Mauritius Standard Time, Georgian Standard Time, Caucasus Standard Time, Afghanistan Standard Time, West Asia Standard Time, Ekaterinburg Standard Time, Pakistan Standard Time, India Standard Time, Sri Lanka Standard Time, Nepal Standard Time, Central Asia Standard Time, Bangladesh Standard Time, N. Central Asia Standard Time, Myanmar Standard Time, SE Asia Standard Time, North Asia Standard Time, China Standard Time, North Asia East Standard Time, Singapore Standard Time, W. Australia Standard Time, Taipei Standard Time, Ulaanbaatar Standard Time, Tokyo Standard Time, Korea Standard Time, Yakutsk Standard Time, Cen. Australia Standard Time, AUS Central Standard Time, E. Australia Standard Time, AUS Eastern Standard Time, West Pacific Standard Time, Tasmania Standard Time, Magadan Standard Time, Vladivostok Standard Time, Russia Time Zone 10, Central Pacific Standard Time, Russia Time Zone 11, New Zealand Standard Time, UTC+12, Fiji Standard Time, Kamchatka Standard Time, Tonga Standard Time, Samoa Standard Time, Line Islands Standard Time
 	TimeZone *string `json:"timeZone,omitempty"`
 	// Start - the start time for the profile in ISO 8601 format.
 	Start *date.Time `json:"start,omitempty"`
 	// End - the end time for the profile in ISO 8601 format.
 	End *date.Time `json:"end,omitempty"`
+}
+
+// VoiceReceiver a voice receiver.
+type VoiceReceiver struct {
+	// Name - The name of the voice receiver. Names must be unique across all receivers within an action group.
+	Name *string `json:"name,omitempty"`
+	// CountryCode - The country code of the voice receiver.
+	CountryCode *string `json:"countryCode,omitempty"`
+	// PhoneNumber - The phone number of the voice receiver.
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
 }
 
 // WebhookNotification webhook notification of an autoscale event.

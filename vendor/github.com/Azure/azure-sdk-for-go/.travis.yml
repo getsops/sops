@@ -2,11 +2,9 @@ sudo: false
 
 language: go
 go:
-  - 1.8.x
   - 1.9.x
   - 1.10.x
   - 1.11.x
-  - master
 
 branches:
   only:
@@ -21,15 +19,10 @@ env:
     - GOARCH="amd64"
     - GOARCH="386"
 
-matrix:
-  allow_failures:
-    - go: master
-
 before_install:
   - curl -sSL https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 install:
-  - go get -u github.com/golang/lint/golint
   - dep ensure
 
 script:
@@ -40,3 +33,5 @@ script:
   - go vet $(go list ./... | grep -v vendor)
   - go test $(sh ./findTestedPackages.sh)
   - go run ./tools/apidiff/main.go packages ./services FETCH_HEAD~1 FETCH_HEAD --copyrepo --breakingchanges || $IGNORE_BREAKING_CHANGES
+  - go run ./tools/pkgchk/main.go ./services --exceptions ./tools/pkgchk/exceptions.txt
+  - git diff --exit-code

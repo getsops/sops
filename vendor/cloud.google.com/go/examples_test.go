@@ -15,10 +15,10 @@
 package cloud_test
 
 import (
+	"context"
 	"time"
 
 	"cloud.google.com/go/bigquery"
-	"golang.org/x/net/context"
 )
 
 // To set a timeout for an RPC, use context.WithTimeout.

@@ -3,7 +3,7 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/tasks": {
-          "description": "Manage your tasks"
+          "description": "Create, edit, organize, and delete all your tasks"
         },
         "https://www.googleapis.com/auth/tasks.readonly": {
           "description": "View your tasks"
@@ -17,7 +17,7 @@
   "description": "Lets you manage your tasks and task lists.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/google-apps/tasks/firstapp",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/iaDWjOjFfrYuDwmaQrhLvwQHzIw\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/W2TG0cyt9byJofHcFFCCyL93uQQ\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/tasks-16.png",
     "x32": "https://www.google.com/images/icons/product/tasks-32.png"

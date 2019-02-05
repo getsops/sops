@@ -12,7 +12,7 @@
   "baseUrl": "https://redis.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud Redis",
-  "description": "The Google Cloud Memorystore for Redis API is used for creating and managing Redis instances on the Google Cloud Platform.",
+  "description": "Creates and manages Redis instances on the Google Cloud Platform.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/memorystore/docs/redis/",
   "fullyEncodeReservedExpansion": true,
@@ -458,7 +458,7 @@
       }
     }
   },
-  "revision": "20180906",
+  "revision": "20190128",
   "rootUrl": "https://redis.googleapis.com/",
   "schemas": {
     "Empty": {
@@ -490,7 +490,7 @@
           "type": "string"
         },
         "cancelRequested": {
-          "description": "Specifies if cancellation was requested for the operaiton.",
+          "description": "Specifies if cancellation was requested for the operation.",
           "type": "boolean"
         },
         "createTime": {
@@ -610,7 +610,7 @@
             "Redis instance has been created and is fully usable.",
             "Redis instance configuration is being updated. Certain kinds of updates\nmay cause the instance to become unusable while the update is in\nprogress.",
             "Redis instance is being deleted.",
-            "Redis instance is being repaired and may be unusable. Details can be\nfound in the `status_message` field.",
+            "Redis instance is being repaired and may be unusable.",
             "Maintenance is being performed on this Redis instance."
           ],
           "type": "string"
@@ -650,6 +650,13 @@
         "nextPageToken": {
           "description": "Token to retrieve the next page of results, or empty if there are no more\nresults in the list.",
           "type": "string"
+        },
+        "unreachable": {
+          "description": "Locations that could not be reached.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"

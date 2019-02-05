@@ -72,9 +72,27 @@ type EKSAPI interface {
 	DescribeClusterWithContext(aws.Context, *eks.DescribeClusterInput, ...request.Option) (*eks.DescribeClusterOutput, error)
 	DescribeClusterRequest(*eks.DescribeClusterInput) (*request.Request, *eks.DescribeClusterOutput)
 
+	DescribeUpdate(*eks.DescribeUpdateInput) (*eks.DescribeUpdateOutput, error)
+	DescribeUpdateWithContext(aws.Context, *eks.DescribeUpdateInput, ...request.Option) (*eks.DescribeUpdateOutput, error)
+	DescribeUpdateRequest(*eks.DescribeUpdateInput) (*request.Request, *eks.DescribeUpdateOutput)
+
 	ListClusters(*eks.ListClustersInput) (*eks.ListClustersOutput, error)
 	ListClustersWithContext(aws.Context, *eks.ListClustersInput, ...request.Option) (*eks.ListClustersOutput, error)
 	ListClustersRequest(*eks.ListClustersInput) (*request.Request, *eks.ListClustersOutput)
+
+	ListUpdates(*eks.ListUpdatesInput) (*eks.ListUpdatesOutput, error)
+	ListUpdatesWithContext(aws.Context, *eks.ListUpdatesInput, ...request.Option) (*eks.ListUpdatesOutput, error)
+	ListUpdatesRequest(*eks.ListUpdatesInput) (*request.Request, *eks.ListUpdatesOutput)
+
+	UpdateClusterVersion(*eks.UpdateClusterVersionInput) (*eks.UpdateClusterVersionOutput, error)
+	UpdateClusterVersionWithContext(aws.Context, *eks.UpdateClusterVersionInput, ...request.Option) (*eks.UpdateClusterVersionOutput, error)
+	UpdateClusterVersionRequest(*eks.UpdateClusterVersionInput) (*request.Request, *eks.UpdateClusterVersionOutput)
+
+	WaitUntilClusterActive(*eks.DescribeClusterInput) error
+	WaitUntilClusterActiveWithContext(aws.Context, *eks.DescribeClusterInput, ...request.WaiterOption) error
+
+	WaitUntilClusterDeleted(*eks.DescribeClusterInput) error
+	WaitUntilClusterDeletedWithContext(aws.Context, *eks.DescribeClusterInput, ...request.WaiterOption) error
 }
 
 var _ EKSAPI = (*eks.EKS)(nil)

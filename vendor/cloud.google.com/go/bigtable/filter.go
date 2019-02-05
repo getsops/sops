@@ -314,7 +314,7 @@ func (clf cellsPerRowLimitFilter) proto() *btpb.RowFilter {
 	return &btpb.RowFilter{Filter: &btpb.RowFilter_CellsPerRowLimitFilter{CellsPerRowLimitFilter: int32(clf)}}
 }
 
-// RowSampleFilter returns a filter that returns each row with a probability of P (must be in the interval (0, 1)).
+// RowSampleFilter returns a filter that matches a row with a probability of p (must be in the interval (0, 1)).
 func RowSampleFilter(p float64) Filter {
 	return rowSampleFilter(p)
 }

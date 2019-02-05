@@ -9,6 +9,7 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -28,8 +29,14 @@ func (cr keyboardInteractive) Challenge(user string, instruction string, questio
 var clientPassword = "tiger"
 
 // tryAuth runs a handshake with a given config against an SSH server
-// with config serverConfig
+// with config serverConfig. Returns both client and server side errors.
 func tryAuth(t *testing.T, config *ClientConfig) error {
+	err, _ := tryAuthBothSides(t, config)
+	return err
+}
+
+// tryAuthBothSides runs the handshake and returns the resulting errors from both sides of the connection.
+func tryAuthBothSides(t *testing.T, config *ClientConfig) (clientError error, serverAuthErrors []error) {
 	c1, c2, err := netPipe()
 	if err != nil {
 		t.Fatalf("netPipe: %v", err)
@@ -79,9 +86,13 @@ func tryAuth(t *testing.T, config *ClientConfig) error {
 	}
 	serverConfig.AddHostKey(testSigners["rsa"])
 
+	serverConfig.AuthLogCallback = func(conn ConnMetadata, method string, err error) {
+		serverAuthErrors = append(serverAuthErrors, err)
+	}
+
 	go newServer(c1, serverConfig)
 	_, _, _, err = NewClientConn(c2, "", config)
-	return err
+	return err, serverAuthErrors
 }
 
 func TestClientAuthPublicKey(t *testing.T) {
@@ -210,6 +221,45 @@ func TestAuthMethodRSAandDSA(t *testing.T) {
 	}
 	if err := tryAuth(t, config); err != nil {
 		t.Fatalf("client could not authenticate with rsa key: %v", err)
+	}
+}
+
+type invalidAlgSigner struct {
+	Signer
+}
+
+func (s *invalidAlgSigner) Sign(rand io.Reader, data []byte) (*Signature, error) {
+	sig, err := s.Signer.Sign(rand, data)
+	if sig != nil {
+		sig.Format = "invalid"
+	}
+	return sig, err
+}
+
+func TestMethodInvalidAlgorithm(t *testing.T) {
+	config := &ClientConfig{
+		User: "testuser",
+		Auth: []AuthMethod{
+			PublicKeys(&invalidAlgSigner{testSigners["rsa"]}),
+		},
+		HostKeyCallback: InsecureIgnoreHostKey(),
+	}
+
+	err, serverErrors := tryAuthBothSides(t, config)
+	if err == nil {
+		t.Fatalf("login succeeded")
+	}
+
+	found := false
+	want := "algorithm \"invalid\""
+
+	var errStrings []string
+	for _, err := range serverErrors {
+		found = found || (err != nil && strings.Contains(err.Error(), want))
+		errStrings = append(errStrings, err.Error())
+	}
+	if !found {
+		t.Errorf("server got error %q, want substring %q", errStrings, want)
 	}
 }
 

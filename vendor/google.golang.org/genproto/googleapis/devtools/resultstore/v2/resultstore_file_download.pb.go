@@ -51,7 +51,7 @@ func (m *GetFileRequest) Reset()         { *m = GetFileRequest{} }
 func (m *GetFileRequest) String() string { return proto.CompactTextString(m) }
 func (*GetFileRequest) ProtoMessage()    {}
 func (*GetFileRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8107699981ff9308, []int{0}
+	return fileDescriptor_resultstore_file_download_258c94f8298cac64, []int{0}
 }
 func (m *GetFileRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetFileRequest.Unmarshal(m, b)
@@ -59,8 +59,8 @@ func (m *GetFileRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetFileRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetFileRequest.Marshal(b, m, deterministic)
 }
-func (m *GetFileRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFileRequest.Merge(m, src)
+func (dst *GetFileRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFileRequest.Merge(dst, src)
 }
 func (m *GetFileRequest) XXX_Size() int {
 	return xxx_messageInfo_GetFileRequest.Size(m)
@@ -105,7 +105,7 @@ func (m *GetFileResponse) Reset()         { *m = GetFileResponse{} }
 func (m *GetFileResponse) String() string { return proto.CompactTextString(m) }
 func (*GetFileResponse) ProtoMessage()    {}
 func (*GetFileResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8107699981ff9308, []int{1}
+	return fileDescriptor_resultstore_file_download_258c94f8298cac64, []int{1}
 }
 func (m *GetFileResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetFileResponse.Unmarshal(m, b)
@@ -113,8 +113,8 @@ func (m *GetFileResponse) XXX_Unmarshal(b []byte) error {
 func (m *GetFileResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetFileResponse.Marshal(b, m, deterministic)
 }
-func (m *GetFileResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFileResponse.Merge(m, src)
+func (dst *GetFileResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFileResponse.Merge(dst, src)
 }
 func (m *GetFileResponse) XXX_Size() int {
 	return xxx_messageInfo_GetFileResponse.Size(m)
@@ -157,7 +157,7 @@ func (m *GetFileTailRequest) Reset()         { *m = GetFileTailRequest{} }
 func (m *GetFileTailRequest) String() string { return proto.CompactTextString(m) }
 func (*GetFileTailRequest) ProtoMessage()    {}
 func (*GetFileTailRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8107699981ff9308, []int{2}
+	return fileDescriptor_resultstore_file_download_258c94f8298cac64, []int{2}
 }
 func (m *GetFileTailRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetFileTailRequest.Unmarshal(m, b)
@@ -165,8 +165,8 @@ func (m *GetFileTailRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetFileTailRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetFileTailRequest.Marshal(b, m, deterministic)
 }
-func (m *GetFileTailRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFileTailRequest.Merge(m, src)
+func (dst *GetFileTailRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFileTailRequest.Merge(dst, src)
 }
 func (m *GetFileTailRequest) XXX_Size() int {
 	return xxx_messageInfo_GetFileTailRequest.Size(m)
@@ -211,7 +211,7 @@ func (m *GetFileTailResponse) Reset()         { *m = GetFileTailResponse{} }
 func (m *GetFileTailResponse) String() string { return proto.CompactTextString(m) }
 func (*GetFileTailResponse) ProtoMessage()    {}
 func (*GetFileTailResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8107699981ff9308, []int{3}
+	return fileDescriptor_resultstore_file_download_258c94f8298cac64, []int{3}
 }
 func (m *GetFileTailResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetFileTailResponse.Unmarshal(m, b)
@@ -219,8 +219,8 @@ func (m *GetFileTailResponse) XXX_Unmarshal(b []byte) error {
 func (m *GetFileTailResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetFileTailResponse.Marshal(b, m, deterministic)
 }
-func (m *GetFileTailResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFileTailResponse.Merge(m, src)
+func (dst *GetFileTailResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFileTailResponse.Merge(dst, src)
 }
 func (m *GetFileTailResponse) XXX_Size() int {
 	return xxx_messageInfo_GetFileTailResponse.Size(m)
@@ -401,10 +401,10 @@ var _ResultStoreFileDownload_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/resultstore/v2/resultstore_file_download.proto", fileDescriptor_8107699981ff9308)
+	proto.RegisterFile("google/devtools/resultstore/v2/resultstore_file_download.proto", fileDescriptor_resultstore_file_download_258c94f8298cac64)
 }
 
-var fileDescriptor_8107699981ff9308 = []byte{
+var fileDescriptor_resultstore_file_download_258c94f8298cac64 = []byte{
 	// 384 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x53, 0xc1, 0x4a, 0xe3, 0x40,
 	0x18, 0x26, 0xed, 0xb2, 0x4b, 0xa7, 0xcb, 0x6e, 0x99, 0x65, 0x69, 0x28, 0xdb, 0xb5, 0x04, 0x84,

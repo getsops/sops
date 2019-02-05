@@ -18,12 +18,18 @@ package aad
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/domainservices/mgmt/2017-06-01/aad"
 
 // ExternalAccess enumerates the values for external access.
 type ExternalAccess string
@@ -40,6 +46,21 @@ func PossibleExternalAccessValues() []ExternalAccess {
 	return []ExternalAccess{Disabled, Enabled}
 }
 
+// FilteredSync enumerates the values for filtered sync.
+type FilteredSync string
+
+const (
+	// FilteredSyncDisabled ...
+	FilteredSyncDisabled FilteredSync = "Disabled"
+	// FilteredSyncEnabled ...
+	FilteredSyncEnabled FilteredSync = "Enabled"
+)
+
+// PossibleFilteredSyncValues returns an array of possible values for the FilteredSync const type.
+func PossibleFilteredSyncValues() []FilteredSync {
+	return []FilteredSync{FilteredSyncDisabled, FilteredSyncEnabled}
+}
+
 // Ldaps enumerates the values for ldaps.
 type Ldaps string
 
@@ -53,6 +74,91 @@ const (
 // PossibleLdapsValues returns an array of possible values for the Ldaps const type.
 func PossibleLdapsValues() []Ldaps {
 	return []Ldaps{LdapsDisabled, LdapsEnabled}
+}
+
+// NotifyDcAdmins enumerates the values for notify dc admins.
+type NotifyDcAdmins string
+
+const (
+	// NotifyDcAdminsDisabled ...
+	NotifyDcAdminsDisabled NotifyDcAdmins = "Disabled"
+	// NotifyDcAdminsEnabled ...
+	NotifyDcAdminsEnabled NotifyDcAdmins = "Enabled"
+)
+
+// PossibleNotifyDcAdminsValues returns an array of possible values for the NotifyDcAdmins const type.
+func PossibleNotifyDcAdminsValues() []NotifyDcAdmins {
+	return []NotifyDcAdmins{NotifyDcAdminsDisabled, NotifyDcAdminsEnabled}
+}
+
+// NotifyGlobalAdmins enumerates the values for notify global admins.
+type NotifyGlobalAdmins string
+
+const (
+	// NotifyGlobalAdminsDisabled ...
+	NotifyGlobalAdminsDisabled NotifyGlobalAdmins = "Disabled"
+	// NotifyGlobalAdminsEnabled ...
+	NotifyGlobalAdminsEnabled NotifyGlobalAdmins = "Enabled"
+)
+
+// PossibleNotifyGlobalAdminsValues returns an array of possible values for the NotifyGlobalAdmins const type.
+func PossibleNotifyGlobalAdminsValues() []NotifyGlobalAdmins {
+	return []NotifyGlobalAdmins{NotifyGlobalAdminsDisabled, NotifyGlobalAdminsEnabled}
+}
+
+// NtlmV1 enumerates the values for ntlm v1.
+type NtlmV1 string
+
+const (
+	// NtlmV1Disabled ...
+	NtlmV1Disabled NtlmV1 = "Disabled"
+	// NtlmV1Enabled ...
+	NtlmV1Enabled NtlmV1 = "Enabled"
+)
+
+// PossibleNtlmV1Values returns an array of possible values for the NtlmV1 const type.
+func PossibleNtlmV1Values() []NtlmV1 {
+	return []NtlmV1{NtlmV1Disabled, NtlmV1Enabled}
+}
+
+// SyncNtlmPasswords enumerates the values for sync ntlm passwords.
+type SyncNtlmPasswords string
+
+const (
+	// SyncNtlmPasswordsDisabled ...
+	SyncNtlmPasswordsDisabled SyncNtlmPasswords = "Disabled"
+	// SyncNtlmPasswordsEnabled ...
+	SyncNtlmPasswordsEnabled SyncNtlmPasswords = "Enabled"
+)
+
+// PossibleSyncNtlmPasswordsValues returns an array of possible values for the SyncNtlmPasswords const type.
+func PossibleSyncNtlmPasswordsValues() []SyncNtlmPasswords {
+	return []SyncNtlmPasswords{SyncNtlmPasswordsDisabled, SyncNtlmPasswordsEnabled}
+}
+
+// TLSV1 enumerates the values for tlsv1.
+type TLSV1 string
+
+const (
+	// TLSV1Disabled ...
+	TLSV1Disabled TLSV1 = "Disabled"
+	// TLSV1Enabled ...
+	TLSV1Enabled TLSV1 = "Enabled"
+)
+
+// PossibleTLSV1Values returns an array of possible values for the TLSV1 const type.
+func PossibleTLSV1Values() []TLSV1 {
+	return []TLSV1{TLSV1Disabled, TLSV1Enabled}
+}
+
+// DomainSecuritySettings domain Security Settings
+type DomainSecuritySettings struct {
+	// NtlmV1 - A flag to determine whether or not NtlmV1 is enabled or disabled. Possible values include: 'NtlmV1Enabled', 'NtlmV1Disabled'
+	NtlmV1 NtlmV1 `json:"ntlmV1,omitempty"`
+	// TLSV1 - A flag to determine whether or not TlsV1 is enabled or disabled. Possible values include: 'TLSV1Enabled', 'TLSV1Disabled'
+	TLSV1 TLSV1 `json:"tlsV1,omitempty"`
+	// SyncNtlmPasswords - A flag to determine whether or not SyncNtlmPasswords is enabled or disabled. Possible values include: 'SyncNtlmPasswordsEnabled', 'SyncNtlmPasswordsDisabled'
+	SyncNtlmPasswords SyncNtlmPasswords `json:"syncNtlmPasswords,omitempty"`
 }
 
 // DomainService domain service.
@@ -184,12 +290,145 @@ type DomainServiceListResult struct {
 	autorest.Response `json:"-"`
 	// Value - the list of domain services.
 	Value *[]DomainService `json:"value,omitempty"`
+	// NextLink - The continuation token for the next page of results.
+	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DomainServicePatchProperties update Properties of the Domain Service.
-type DomainServicePatchProperties struct {
-	// LdapsSettings - Secure LDAP Settings
-	LdapsSettings *LdapsSettings `json:"ldapsSettings,omitempty"`
+// DomainServiceListResultIterator provides access to a complete listing of DomainService values.
+type DomainServiceListResultIterator struct {
+	i    int
+	page DomainServiceListResultPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *DomainServiceListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DomainServiceListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DomainServiceListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter DomainServiceListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter DomainServiceListResultIterator) Response() DomainServiceListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter DomainServiceListResultIterator) Value() DomainService {
+	if !iter.page.NotDone() {
+		return DomainService{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the DomainServiceListResultIterator type.
+func NewDomainServiceListResultIterator(page DomainServiceListResultPage) DomainServiceListResultIterator {
+	return DomainServiceListResultIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (dslr DomainServiceListResult) IsEmpty() bool {
+	return dslr.Value == nil || len(*dslr.Value) == 0
+}
+
+// domainServiceListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (dslr DomainServiceListResult) domainServiceListResultPreparer(ctx context.Context) (*http.Request, error) {
+	if dslr.NextLink == nil || len(to.String(dslr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(dslr.NextLink)))
+}
+
+// DomainServiceListResultPage contains a page of DomainService values.
+type DomainServiceListResultPage struct {
+	fn   func(context.Context, DomainServiceListResult) (DomainServiceListResult, error)
+	dslr DomainServiceListResult
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *DomainServiceListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DomainServiceListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dslr)
+	if err != nil {
+		return err
+	}
+	page.dslr = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DomainServiceListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page DomainServiceListResultPage) NotDone() bool {
+	return !page.dslr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page DomainServiceListResultPage) Response() DomainServiceListResult {
+	return page.dslr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page DomainServiceListResultPage) Values() []DomainService {
+	if page.dslr.IsEmpty() {
+		return nil
+	}
+	return *page.dslr.Value
+}
+
+// Creates a new instance of the DomainServiceListResultPage type.
+func NewDomainServiceListResultPage(getNextPage func(context.Context, DomainServiceListResult) (DomainServiceListResult, error)) DomainServiceListResultPage {
+	return DomainServiceListResultPage{fn: getNextPage}
 }
 
 // DomainServiceProperties properties of the Domain Service.
@@ -204,6 +443,18 @@ type DomainServiceProperties struct {
 	SubnetID *string `json:"subnetId,omitempty"`
 	// LdapsSettings - Secure LDAP Settings
 	LdapsSettings *LdapsSettings `json:"ldapsSettings,omitempty"`
+	// HealthLastEvaluated - Last domain evaluation run DateTime
+	HealthLastEvaluated *date.Time `json:"healthLastEvaluated,omitempty"`
+	// HealthMonitors - List of Domain Health Monitors
+	HealthMonitors *[]HealthMonitor `json:"healthMonitors,omitempty"`
+	// HealthAlerts - List of Domain Health Alerts
+	HealthAlerts *[]HealthAlert `json:"healthAlerts,omitempty"`
+	// NotificationSettings - Notification Settings
+	NotificationSettings *NotificationSettings `json:"notificationSettings,omitempty"`
+	// DomainSecuritySettings - DomainSecurity Settings
+	DomainSecuritySettings *DomainSecuritySettings `json:"domainSecuritySettings,omitempty"`
+	// FilteredSync - Enabled or Disabled flag to turn on Group-based filtered sync. Possible values include: 'FilteredSyncEnabled', 'FilteredSyncDisabled'
+	FilteredSync FilteredSync `json:"filteredSync,omitempty"`
 	// DomainControllerIPAddress - List of Domain Controller IP Address
 	DomainControllerIPAddress *[]string `json:"domainControllerIpAddress,omitempty"`
 	// ServiceStatus - Status of Domain Service instance
@@ -212,8 +463,8 @@ type DomainServiceProperties struct {
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 }
 
-// DomainServicesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// DomainServicesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type DomainServicesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -241,7 +492,8 @@ func (future *DomainServicesCreateOrUpdateFuture) Result(client DomainServicesCl
 	return
 }
 
-// DomainServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DomainServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DomainServicesDeleteFuture struct {
 	azure.Future
 }
@@ -269,7 +521,8 @@ func (future *DomainServicesDeleteFuture) Result(client DomainServicesClient) (d
 	return
 }
 
-// DomainServicesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DomainServicesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DomainServicesUpdateFuture struct {
 	azure.Future
 }
@@ -297,6 +550,34 @@ func (future *DomainServicesUpdateFuture) Result(client DomainServicesClient) (d
 	return
 }
 
+// HealthAlert health Alert Description
+type HealthAlert struct {
+	// ID - Health Alert Id
+	ID *string `json:"id,omitempty"`
+	// Name - Health Alert Name
+	Name *string `json:"name,omitempty"`
+	// Issue - Health Alert Issue
+	Issue *string `json:"issue,omitempty"`
+	// Severity - Health Alert Severity
+	Severity *string `json:"severity,omitempty"`
+	// Raised - Health Alert Raised DateTime
+	Raised *date.Time `json:"raised,omitempty"`
+	// LastDetected - Health Alert Last Detected DateTime
+	LastDetected *date.Time `json:"lastDetected,omitempty"`
+	// ResolutionURI - Health Alert TSG Link
+	ResolutionURI *string `json:"resolutionUri,omitempty"`
+}
+
+// HealthMonitor health Monitor Description
+type HealthMonitor struct {
+	// ID - Health Monitor Id
+	ID *string `json:"id,omitempty"`
+	// Name - Health Monitor Name
+	Name *string `json:"name,omitempty"`
+	// Details - Health Monitor Details
+	Details *string `json:"details,omitempty"`
+}
+
 // LdapsSettings secure LDAP Settings
 type LdapsSettings struct {
 	// Ldaps - A flag to determine whether or not Secure LDAP is enabled or disabled. Possible values include: 'LdapsEnabled', 'LdapsDisabled'
@@ -315,6 +596,16 @@ type LdapsSettings struct {
 	ExternalAccess ExternalAccess `json:"externalAccess,omitempty"`
 	// ExternalAccessIPAddress - External access ip address.
 	ExternalAccessIPAddress *string `json:"externalAccessIpAddress,omitempty"`
+}
+
+// NotificationSettings settings for notification
+type NotificationSettings struct {
+	// NotifyGlobalAdmins - Should global admins be notified. Possible values include: 'NotifyGlobalAdminsEnabled', 'NotifyGlobalAdminsDisabled'
+	NotifyGlobalAdmins NotifyGlobalAdmins `json:"notifyGlobalAdmins,omitempty"`
+	// NotifyDcAdmins - Should domain controller admins be notified. Possible values include: 'NotifyDcAdminsEnabled', 'NotifyDcAdminsDisabled'
+	NotifyDcAdmins NotifyDcAdmins `json:"notifyDcAdmins,omitempty"`
+	// AdditionalRecipients - The list of additional recipients
+	AdditionalRecipients *[]string `json:"additionalRecipients,omitempty"`
 }
 
 // OperationDisplayInfo the operation supported by Domain Services.
@@ -344,6 +635,145 @@ type OperationEntityListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of operations.
 	Value *[]OperationEntity `json:"value,omitempty"`
+	// NextLink - The continuation token for the next page of results.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// OperationEntityListResultIterator provides access to a complete listing of OperationEntity values.
+type OperationEntityListResultIterator struct {
+	i    int
+	page OperationEntityListResultPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *OperationEntityListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationEntityListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationEntityListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter OperationEntityListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter OperationEntityListResultIterator) Response() OperationEntityListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter OperationEntityListResultIterator) Value() OperationEntity {
+	if !iter.page.NotDone() {
+		return OperationEntity{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the OperationEntityListResultIterator type.
+func NewOperationEntityListResultIterator(page OperationEntityListResultPage) OperationEntityListResultIterator {
+	return OperationEntityListResultIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (oelr OperationEntityListResult) IsEmpty() bool {
+	return oelr.Value == nil || len(*oelr.Value) == 0
+}
+
+// operationEntityListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (oelr OperationEntityListResult) operationEntityListResultPreparer(ctx context.Context) (*http.Request, error) {
+	if oelr.NextLink == nil || len(to.String(oelr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(oelr.NextLink)))
+}
+
+// OperationEntityListResultPage contains a page of OperationEntity values.
+type OperationEntityListResultPage struct {
+	fn   func(context.Context, OperationEntityListResult) (OperationEntityListResult, error)
+	oelr OperationEntityListResult
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *OperationEntityListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationEntityListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.oelr)
+	if err != nil {
+		return err
+	}
+	page.oelr = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationEntityListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page OperationEntityListResultPage) NotDone() bool {
+	return !page.oelr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page OperationEntityListResultPage) Response() OperationEntityListResult {
+	return page.oelr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page OperationEntityListResultPage) Values() []OperationEntity {
+	if page.oelr.IsEmpty() {
+		return nil
+	}
+	return *page.oelr.Value
+}
+
+// Creates a new instance of the OperationEntityListResultPage type.
+func NewOperationEntityListResultPage(getNextPage func(context.Context, OperationEntityListResult) (OperationEntityListResult, error)) OperationEntityListResultPage {
+	return OperationEntityListResultPage{fn: getNextPage}
 }
 
 // Resource the Resource model definition.

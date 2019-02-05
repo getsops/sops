@@ -19,11 +19,11 @@
 package credentials
 
 import (
+	"context"
 	"crypto/tls"
 	"net"
 	"testing"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/testdata"
 )
 

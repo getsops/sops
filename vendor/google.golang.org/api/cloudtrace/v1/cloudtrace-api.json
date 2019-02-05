@@ -250,7 +250,7 @@
       }
     }
   },
-  "revision": "20180820",
+  "revision": "20180910",
   "rootUrl": "https://cloudtrace.googleapis.com/",
   "schemas": {
     "Empty": {
@@ -293,7 +293,7 @@
           "type": "array"
         },
         "traceId": {
-          "description": "Globally unique identifier for the trace. This identifier is a 128-bit\nnumeric value formatted as a 32-byte hex string.",
+          "description": "Globally unique identifier for the trace. This identifier is a 128-bit\nnumeric value formatted as a 32-byte hex string. For example,\n`382d4f4c6b7bb2f4a972559d9085001d`.",
           "type": "string"
         }
       },
@@ -339,7 +339,7 @@
           "type": "string"
         },
         "spanId": {
-          "description": "Identifier for the span. Must be a 64-bit integer other than 0 and\nunique within a trace.",
+          "description": "Identifier for the span. Must be a 64-bit integer other than 0 and\nunique within a trace. For example, `2205310701640571284`.",
           "format": "uint64",
           "type": "string"
         },

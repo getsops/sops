@@ -18,7 +18,7 @@ const opAddTags = "AddTags"
 // AddTagsRequest generates a "aws/request.Request" representing the
 // client's request for the AddTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -50,8 +50,7 @@ func (c *ElasticsearchService) AddTagsRequest(input *AddTagsInput) (req *request
 
 	output = &AddTagsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -106,12 +105,103 @@ func (c *ElasticsearchService) AddTagsWithContext(ctx aws.Context, input *AddTag
 	return out, req.Send()
 }
 
+const opCancelElasticsearchServiceSoftwareUpdate = "CancelElasticsearchServiceSoftwareUpdate"
+
+// CancelElasticsearchServiceSoftwareUpdateRequest generates a "aws/request.Request" representing the
+// client's request for the CancelElasticsearchServiceSoftwareUpdate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelElasticsearchServiceSoftwareUpdate for more information on using the CancelElasticsearchServiceSoftwareUpdate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelElasticsearchServiceSoftwareUpdateRequest method.
+//    req, resp := client.CancelElasticsearchServiceSoftwareUpdateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *ElasticsearchService) CancelElasticsearchServiceSoftwareUpdateRequest(input *CancelElasticsearchServiceSoftwareUpdateInput) (req *request.Request, output *CancelElasticsearchServiceSoftwareUpdateOutput) {
+	op := &request.Operation{
+		Name:       opCancelElasticsearchServiceSoftwareUpdate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/2015-01-01/es/serviceSoftwareUpdate/cancel",
+	}
+
+	if input == nil {
+		input = &CancelElasticsearchServiceSoftwareUpdateInput{}
+	}
+
+	output = &CancelElasticsearchServiceSoftwareUpdateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CancelElasticsearchServiceSoftwareUpdate API operation for Amazon Elasticsearch Service.
+//
+// Cancels a scheduled service software update for an Amazon ES domain. You
+// can only perform this operation before the AutomatedUpdateDate and when the
+// UpdateStatus is in the PENDING_UPDATE state.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elasticsearch Service's
+// API operation CancelElasticsearchServiceSoftwareUpdate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBaseException "BaseException"
+//   An error occurred while processing the request.
+//
+//   * ErrCodeInternalException "InternalException"
+//   The request processing has failed because of an unknown error, exception
+//   or failure (the failure is internal to the service) . Gives http status code
+//   of 500.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   An exception for accessing or deleting a resource that does not exist. Gives
+//   http status code of 400.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   An exception for missing / invalid input fields. Gives http status code of
+//   400.
+//
+func (c *ElasticsearchService) CancelElasticsearchServiceSoftwareUpdate(input *CancelElasticsearchServiceSoftwareUpdateInput) (*CancelElasticsearchServiceSoftwareUpdateOutput, error) {
+	req, out := c.CancelElasticsearchServiceSoftwareUpdateRequest(input)
+	return out, req.Send()
+}
+
+// CancelElasticsearchServiceSoftwareUpdateWithContext is the same as CancelElasticsearchServiceSoftwareUpdate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelElasticsearchServiceSoftwareUpdate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ElasticsearchService) CancelElasticsearchServiceSoftwareUpdateWithContext(ctx aws.Context, input *CancelElasticsearchServiceSoftwareUpdateInput, opts ...request.Option) (*CancelElasticsearchServiceSoftwareUpdateOutput, error) {
+	req, out := c.CancelElasticsearchServiceSoftwareUpdateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateElasticsearchDomain = "CreateElasticsearchDomain"
 
 // CreateElasticsearchDomainRequest generates a "aws/request.Request" representing the
 // client's request for the CreateElasticsearchDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -214,7 +304,7 @@ const opDeleteElasticsearchDomain = "DeleteElasticsearchDomain"
 // DeleteElasticsearchDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteElasticsearchDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -304,7 +394,7 @@ const opDeleteElasticsearchServiceRole = "DeleteElasticsearchServiceRole"
 // DeleteElasticsearchServiceRoleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteElasticsearchServiceRole operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -336,8 +426,7 @@ func (c *ElasticsearchService) DeleteElasticsearchServiceRoleRequest(input *Dele
 
 	output = &DeleteElasticsearchServiceRoleOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -395,7 +484,7 @@ const opDescribeElasticsearchDomain = "DescribeElasticsearchDomain"
 // DescribeElasticsearchDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeElasticsearchDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -485,7 +574,7 @@ const opDescribeElasticsearchDomainConfig = "DescribeElasticsearchDomainConfig"
 // DescribeElasticsearchDomainConfigRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeElasticsearchDomainConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -576,7 +665,7 @@ const opDescribeElasticsearchDomains = "DescribeElasticsearchDomains"
 // DescribeElasticsearchDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeElasticsearchDomains operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -662,7 +751,7 @@ const opDescribeElasticsearchInstanceTypeLimits = "DescribeElasticsearchInstance
 // DescribeElasticsearchInstanceTypeLimitsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeElasticsearchInstanceTypeLimits operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -761,7 +850,7 @@ const opDescribeReservedElasticsearchInstanceOfferings = "DescribeReservedElasti
 // DescribeReservedElasticsearchInstanceOfferingsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReservedElasticsearchInstanceOfferings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -907,7 +996,7 @@ const opDescribeReservedElasticsearchInstances = "DescribeReservedElasticsearchI
 // DescribeReservedElasticsearchInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReservedElasticsearchInstances operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1053,7 +1142,7 @@ const opGetCompatibleElasticsearchVersions = "GetCompatibleElasticsearchVersions
 // GetCompatibleElasticsearchVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetCompatibleElasticsearchVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1148,7 +1237,7 @@ const opGetUpgradeHistory = "GetUpgradeHistory"
 // GetUpgradeHistoryRequest generates a "aws/request.Request" representing the
 // client's request for the GetUpgradeHistory operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1298,7 +1387,7 @@ const opGetUpgradeStatus = "GetUpgradeStatus"
 // GetUpgradeStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetUpgradeStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1392,7 +1481,7 @@ const opListDomainNames = "ListDomainNames"
 // ListDomainNamesRequest generates a "aws/request.Request" representing the
 // client's request for the ListDomainNames operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1473,7 +1562,7 @@ const opListElasticsearchInstanceTypes = "ListElasticsearchInstanceTypes"
 // ListElasticsearchInstanceTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListElasticsearchInstanceTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1618,7 +1707,7 @@ const opListElasticsearchVersions = "ListElasticsearchVersions"
 // ListElasticsearchVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListElasticsearchVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1763,7 +1852,7 @@ const opListTags = "ListTags"
 // ListTagsRequest generates a "aws/request.Request" representing the
 // client's request for the ListTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1852,7 +1941,7 @@ const opPurchaseReservedElasticsearchInstanceOffering = "PurchaseReservedElastic
 // PurchaseReservedElasticsearchInstanceOfferingRequest generates a "aws/request.Request" representing the
 // client's request for the PurchaseReservedElasticsearchInstanceOffering operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1950,7 +2039,7 @@ const opRemoveTags = "RemoveTags"
 // RemoveTagsRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1982,8 +2071,7 @@ func (c *ElasticsearchService) RemoveTagsRequest(input *RemoveTagsInput) (req *r
 
 	output = &RemoveTagsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2032,12 +2120,101 @@ func (c *ElasticsearchService) RemoveTagsWithContext(ctx aws.Context, input *Rem
 	return out, req.Send()
 }
 
+const opStartElasticsearchServiceSoftwareUpdate = "StartElasticsearchServiceSoftwareUpdate"
+
+// StartElasticsearchServiceSoftwareUpdateRequest generates a "aws/request.Request" representing the
+// client's request for the StartElasticsearchServiceSoftwareUpdate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartElasticsearchServiceSoftwareUpdate for more information on using the StartElasticsearchServiceSoftwareUpdate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartElasticsearchServiceSoftwareUpdateRequest method.
+//    req, resp := client.StartElasticsearchServiceSoftwareUpdateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *ElasticsearchService) StartElasticsearchServiceSoftwareUpdateRequest(input *StartElasticsearchServiceSoftwareUpdateInput) (req *request.Request, output *StartElasticsearchServiceSoftwareUpdateOutput) {
+	op := &request.Operation{
+		Name:       opStartElasticsearchServiceSoftwareUpdate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/2015-01-01/es/serviceSoftwareUpdate/start",
+	}
+
+	if input == nil {
+		input = &StartElasticsearchServiceSoftwareUpdateInput{}
+	}
+
+	output = &StartElasticsearchServiceSoftwareUpdateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartElasticsearchServiceSoftwareUpdate API operation for Amazon Elasticsearch Service.
+//
+// Schedules a service software update for an Amazon ES domain.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elasticsearch Service's
+// API operation StartElasticsearchServiceSoftwareUpdate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBaseException "BaseException"
+//   An error occurred while processing the request.
+//
+//   * ErrCodeInternalException "InternalException"
+//   The request processing has failed because of an unknown error, exception
+//   or failure (the failure is internal to the service) . Gives http status code
+//   of 500.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   An exception for accessing or deleting a resource that does not exist. Gives
+//   http status code of 400.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   An exception for missing / invalid input fields. Gives http status code of
+//   400.
+//
+func (c *ElasticsearchService) StartElasticsearchServiceSoftwareUpdate(input *StartElasticsearchServiceSoftwareUpdateInput) (*StartElasticsearchServiceSoftwareUpdateOutput, error) {
+	req, out := c.StartElasticsearchServiceSoftwareUpdateRequest(input)
+	return out, req.Send()
+}
+
+// StartElasticsearchServiceSoftwareUpdateWithContext is the same as StartElasticsearchServiceSoftwareUpdate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartElasticsearchServiceSoftwareUpdate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ElasticsearchService) StartElasticsearchServiceSoftwareUpdateWithContext(ctx aws.Context, input *StartElasticsearchServiceSoftwareUpdateInput, opts ...request.Option) (*StartElasticsearchServiceSoftwareUpdateOutput, error) {
+	req, out := c.StartElasticsearchServiceSoftwareUpdateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateElasticsearchDomainConfig = "UpdateElasticsearchDomainConfig"
 
 // UpdateElasticsearchDomainConfigRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateElasticsearchDomainConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2135,7 +2312,7 @@ const opUpgradeElasticsearchDomain = "UpgradeElasticsearchDomain"
 // UpgradeElasticsearchDomainRequest generates a "aws/request.Request" representing the
 // client's request for the UpgradeElasticsearchDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2435,6 +2612,76 @@ func (s *AdvancedOptionsStatus) SetStatus(v *OptionStatus) *AdvancedOptionsStatu
 	return s
 }
 
+// Container for the parameters to the CancelElasticsearchServiceSoftwareUpdate
+// operation. Specifies the name of the Elasticsearch domain that you wish to
+// cancel a service software update on.
+type CancelElasticsearchServiceSoftwareUpdateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the domain that you want to stop the latest service software
+	// update on.
+	//
+	// DomainName is a required field
+	DomainName *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelElasticsearchServiceSoftwareUpdateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelElasticsearchServiceSoftwareUpdateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelElasticsearchServiceSoftwareUpdateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelElasticsearchServiceSoftwareUpdateInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *CancelElasticsearchServiceSoftwareUpdateInput) SetDomainName(v string) *CancelElasticsearchServiceSoftwareUpdateInput {
+	s.DomainName = &v
+	return s
+}
+
+// The result of a CancelElasticsearchServiceSoftwareUpdate operation. Contains
+// the status of the update.
+type CancelElasticsearchServiceSoftwareUpdateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current status of the Elasticsearch service software update.
+	ServiceSoftwareOptions *ServiceSoftwareOptions `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelElasticsearchServiceSoftwareUpdateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelElasticsearchServiceSoftwareUpdateOutput) GoString() string {
+	return s.String()
+}
+
+// SetServiceSoftwareOptions sets the ServiceSoftwareOptions field's value.
+func (s *CancelElasticsearchServiceSoftwareUpdateOutput) SetServiceSoftwareOptions(v *ServiceSoftwareOptions) *CancelElasticsearchServiceSoftwareUpdateOutput {
+	s.ServiceSoftwareOptions = v
+	return s
+}
+
 // Options to specify the Cognito user and identity pools for Kibana authentication.
 // For more information, see Amazon Cognito Authentication for Kibana (http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html).
 type CognitoOptions struct {
@@ -2623,6 +2870,9 @@ type CreateElasticsearchDomainInput struct {
 	// a given type of Elasticsearch log.
 	LogPublishingOptions map[string]*LogPublishingOption `type:"map"`
 
+	// Specifies the NodeToNodeEncryptionOptions.
+	NodeToNodeEncryptionOptions *NodeToNodeEncryptionOptions `type:"structure"`
+
 	// Option to set time, in UTC format, of the daily automated snapshot. Default
 	// value is 0 hours.
 	SnapshotOptions *SnapshotOptions `type:"structure"`
@@ -2720,6 +2970,12 @@ func (s *CreateElasticsearchDomainInput) SetEncryptionAtRestOptions(v *Encryptio
 // SetLogPublishingOptions sets the LogPublishingOptions field's value.
 func (s *CreateElasticsearchDomainInput) SetLogPublishingOptions(v map[string]*LogPublishingOption) *CreateElasticsearchDomainInput {
 	s.LogPublishingOptions = v
+	return s
+}
+
+// SetNodeToNodeEncryptionOptions sets the NodeToNodeEncryptionOptions field's value.
+func (s *CreateElasticsearchDomainInput) SetNodeToNodeEncryptionOptions(v *NodeToNodeEncryptionOptions) *CreateElasticsearchDomainInput {
+	s.NodeToNodeEncryptionOptions = v
 	return s
 }
 
@@ -3104,8 +3360,14 @@ func (s *DescribeElasticsearchInstanceTypeLimitsInput) Validate() error {
 	if s.ElasticsearchVersion == nil {
 		invalidParams.Add(request.NewErrParamRequired("ElasticsearchVersion"))
 	}
+	if s.ElasticsearchVersion != nil && len(*s.ElasticsearchVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ElasticsearchVersion", 1))
+	}
 	if s.InstanceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceType"))
+	}
+	if s.InstanceType != nil && len(*s.InstanceType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceType", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3572,6 +3834,9 @@ type ElasticsearchDomainConfig struct {
 	// Log publishing options for the given domain.
 	LogPublishingOptions *LogPublishingOptionsStatus `type:"structure"`
 
+	// Specifies the NodeToNodeEncryptionOptions for the Elasticsearch domain.
+	NodeToNodeEncryptionOptions *NodeToNodeEncryptionOptionsStatus `type:"structure"`
+
 	// Specifies the SnapshotOptions for the Elasticsearch domain.
 	SnapshotOptions *SnapshotOptionsStatus `type:"structure"`
 
@@ -3635,6 +3900,12 @@ func (s *ElasticsearchDomainConfig) SetEncryptionAtRestOptions(v *EncryptionAtRe
 // SetLogPublishingOptions sets the LogPublishingOptions field's value.
 func (s *ElasticsearchDomainConfig) SetLogPublishingOptions(v *LogPublishingOptionsStatus) *ElasticsearchDomainConfig {
 	s.LogPublishingOptions = v
+	return s
+}
+
+// SetNodeToNodeEncryptionOptions sets the NodeToNodeEncryptionOptions field's value.
+func (s *ElasticsearchDomainConfig) SetNodeToNodeEncryptionOptions(v *NodeToNodeEncryptionOptionsStatus) *ElasticsearchDomainConfig {
+	s.NodeToNodeEncryptionOptions = v
 	return s
 }
 
@@ -3720,10 +3991,16 @@ type ElasticsearchDomainStatus struct {
 	// Log publishing options for the given domain.
 	LogPublishingOptions map[string]*LogPublishingOption `type:"map"`
 
+	// Specifies the status of the NodeToNodeEncryptionOptions.
+	NodeToNodeEncryptionOptions *NodeToNodeEncryptionOptions `type:"structure"`
+
 	// The status of the Elasticsearch domain configuration. True if Amazon Elasticsearch
 	// Service is processing configuration changes. False if the configuration is
 	// active.
 	Processing *bool `type:"boolean"`
+
+	// The current status of the Elasticsearch domain's service software.
+	ServiceSoftwareOptions *ServiceSoftwareOptions `type:"structure"`
 
 	// Specifies the status of the SnapshotOptions
 	SnapshotOptions *SnapshotOptions `type:"structure"`
@@ -3837,9 +4114,21 @@ func (s *ElasticsearchDomainStatus) SetLogPublishingOptions(v map[string]*LogPub
 	return s
 }
 
+// SetNodeToNodeEncryptionOptions sets the NodeToNodeEncryptionOptions field's value.
+func (s *ElasticsearchDomainStatus) SetNodeToNodeEncryptionOptions(v *NodeToNodeEncryptionOptions) *ElasticsearchDomainStatus {
+	s.NodeToNodeEncryptionOptions = v
+	return s
+}
+
 // SetProcessing sets the Processing field's value.
 func (s *ElasticsearchDomainStatus) SetProcessing(v bool) *ElasticsearchDomainStatus {
 	s.Processing = &v
+	return s
+}
+
+// SetServiceSoftwareOptions sets the ServiceSoftwareOptions field's value.
+func (s *ElasticsearchDomainStatus) SetServiceSoftwareOptions(v *ServiceSoftwareOptions) *ElasticsearchDomainStatus {
+	s.ServiceSoftwareOptions = v
 	return s
 }
 
@@ -4433,6 +4722,9 @@ func (s *ListElasticsearchInstanceTypesInput) Validate() error {
 	if s.ElasticsearchVersion == nil {
 		invalidParams.Add(request.NewErrParamRequired("ElasticsearchVersion"))
 	}
+	if s.ElasticsearchVersion != nil && len(*s.ElasticsearchVersion) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ElasticsearchVersion", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4709,6 +5001,70 @@ func (s *LogPublishingOptionsStatus) SetOptions(v map[string]*LogPublishingOptio
 
 // SetStatus sets the Status field's value.
 func (s *LogPublishingOptionsStatus) SetStatus(v *OptionStatus) *LogPublishingOptionsStatus {
+	s.Status = v
+	return s
+}
+
+// Specifies the node-to-node encryption options.
+type NodeToNodeEncryptionOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Specify true to enable node-to-node encryption.
+	Enabled *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s NodeToNodeEncryptionOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NodeToNodeEncryptionOptions) GoString() string {
+	return s.String()
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *NodeToNodeEncryptionOptions) SetEnabled(v bool) *NodeToNodeEncryptionOptions {
+	s.Enabled = &v
+	return s
+}
+
+// Status of the node-to-node encryption options for the specified Elasticsearch
+// domain.
+type NodeToNodeEncryptionOptionsStatus struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the node-to-node encryption options for the specified Elasticsearch
+	// domain.
+	//
+	// Options is a required field
+	Options *NodeToNodeEncryptionOptions `type:"structure" required:"true"`
+
+	// Specifies the status of the node-to-node encryption options for the specified
+	// Elasticsearch domain.
+	//
+	// Status is a required field
+	Status *OptionStatus `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s NodeToNodeEncryptionOptionsStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NodeToNodeEncryptionOptionsStatus) GoString() string {
+	return s.String()
+}
+
+// SetOptions sets the Options field's value.
+func (s *NodeToNodeEncryptionOptionsStatus) SetOptions(v *NodeToNodeEncryptionOptions) *NodeToNodeEncryptionOptionsStatus {
+	s.Options = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *NodeToNodeEncryptionOptionsStatus) SetStatus(v *OptionStatus) *NodeToNodeEncryptionOptionsStatus {
 	s.Status = v
 	return s
 }
@@ -5212,6 +5568,88 @@ func (s *ReservedElasticsearchInstanceOffering) SetUsagePrice(v float64) *Reserv
 	return s
 }
 
+// The current options of an Elasticsearch domain service software options.
+type ServiceSoftwareOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Timestamp, in Epoch time, until which you can manually request a service
+	// software update. After this date, we automatically update your service software.
+	AutomatedUpdateDate *time.Time `type:"timestamp"`
+
+	// True if you are able to cancel your service software version update. False
+	// if you are not able to cancel your service software version.
+	Cancellable *bool `type:"boolean"`
+
+	// The current service software version that is present on the domain.
+	CurrentVersion *string `type:"string"`
+
+	// The description of the UpdateStatus.
+	Description *string `type:"string"`
+
+	// The new service software version if one is available.
+	NewVersion *string `type:"string"`
+
+	// True if you are able to update you service software version. False if you
+	// are not able to update your service software version.
+	UpdateAvailable *bool `type:"boolean"`
+
+	// The status of your service software update. This field can take the following
+	// values: ELIGIBLE, PENDING_UPDATE, IN_PROGRESS, COMPLETED, and NOT_ELIGIBLE.
+	UpdateStatus *string `type:"string" enum:"DeploymentStatus"`
+}
+
+// String returns the string representation
+func (s ServiceSoftwareOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServiceSoftwareOptions) GoString() string {
+	return s.String()
+}
+
+// SetAutomatedUpdateDate sets the AutomatedUpdateDate field's value.
+func (s *ServiceSoftwareOptions) SetAutomatedUpdateDate(v time.Time) *ServiceSoftwareOptions {
+	s.AutomatedUpdateDate = &v
+	return s
+}
+
+// SetCancellable sets the Cancellable field's value.
+func (s *ServiceSoftwareOptions) SetCancellable(v bool) *ServiceSoftwareOptions {
+	s.Cancellable = &v
+	return s
+}
+
+// SetCurrentVersion sets the CurrentVersion field's value.
+func (s *ServiceSoftwareOptions) SetCurrentVersion(v string) *ServiceSoftwareOptions {
+	s.CurrentVersion = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ServiceSoftwareOptions) SetDescription(v string) *ServiceSoftwareOptions {
+	s.Description = &v
+	return s
+}
+
+// SetNewVersion sets the NewVersion field's value.
+func (s *ServiceSoftwareOptions) SetNewVersion(v string) *ServiceSoftwareOptions {
+	s.NewVersion = &v
+	return s
+}
+
+// SetUpdateAvailable sets the UpdateAvailable field's value.
+func (s *ServiceSoftwareOptions) SetUpdateAvailable(v bool) *ServiceSoftwareOptions {
+	s.UpdateAvailable = &v
+	return s
+}
+
+// SetUpdateStatus sets the UpdateStatus field's value.
+func (s *ServiceSoftwareOptions) SetUpdateStatus(v string) *ServiceSoftwareOptions {
+	s.UpdateStatus = &v
+	return s
+}
+
 // Specifies the time, in UTC format, when the service takes a daily automated
 // snapshot of the specified Elasticsearch domain. Default value is 0 hours.
 type SnapshotOptions struct {
@@ -5272,6 +5710,75 @@ func (s *SnapshotOptionsStatus) SetOptions(v *SnapshotOptions) *SnapshotOptionsS
 // SetStatus sets the Status field's value.
 func (s *SnapshotOptionsStatus) SetStatus(v *OptionStatus) *SnapshotOptionsStatus {
 	s.Status = v
+	return s
+}
+
+// Container for the parameters to the StartElasticsearchServiceSoftwareUpdate
+// operation. Specifies the name of the Elasticsearch domain that you wish to
+// schedule a service software update on.
+type StartElasticsearchServiceSoftwareUpdateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the domain that you want to update to the latest service software.
+	//
+	// DomainName is a required field
+	DomainName *string `min:"3" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartElasticsearchServiceSoftwareUpdateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartElasticsearchServiceSoftwareUpdateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartElasticsearchServiceSoftwareUpdateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartElasticsearchServiceSoftwareUpdateInput"}
+	if s.DomainName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainName"))
+	}
+	if s.DomainName != nil && len(*s.DomainName) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainName", 3))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainName sets the DomainName field's value.
+func (s *StartElasticsearchServiceSoftwareUpdateInput) SetDomainName(v string) *StartElasticsearchServiceSoftwareUpdateInput {
+	s.DomainName = &v
+	return s
+}
+
+// The result of a StartElasticsearchServiceSoftwareUpdate operation. Contains
+// the status of the update.
+type StartElasticsearchServiceSoftwareUpdateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current status of the Elasticsearch service software update.
+	ServiceSoftwareOptions *ServiceSoftwareOptions `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartElasticsearchServiceSoftwareUpdateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartElasticsearchServiceSoftwareUpdateOutput) GoString() string {
+	return s.String()
+}
+
+// SetServiceSoftwareOptions sets the ServiceSoftwareOptions field's value.
+func (s *StartElasticsearchServiceSoftwareUpdateOutput) SetServiceSoftwareOptions(v *ServiceSoftwareOptions) *StartElasticsearchServiceSoftwareUpdateOutput {
+	s.ServiceSoftwareOptions = v
 	return s
 }
 
@@ -5940,6 +6447,23 @@ func (s *VPCOptions) SetSubnetIds(v []*string) *VPCOptions {
 	s.SubnetIds = v
 	return s
 }
+
+const (
+	// DeploymentStatusPendingUpdate is a DeploymentStatus enum value
+	DeploymentStatusPendingUpdate = "PENDING_UPDATE"
+
+	// DeploymentStatusInProgress is a DeploymentStatus enum value
+	DeploymentStatusInProgress = "IN_PROGRESS"
+
+	// DeploymentStatusCompleted is a DeploymentStatus enum value
+	DeploymentStatusCompleted = "COMPLETED"
+
+	// DeploymentStatusNotEligible is a DeploymentStatus enum value
+	DeploymentStatusNotEligible = "NOT_ELIGIBLE"
+
+	// DeploymentStatusEligible is a DeploymentStatus enum value
+	DeploymentStatusEligible = "ELIGIBLE"
+)
 
 const (
 	// ESPartitionInstanceTypeM3MediumElasticsearch is a ESPartitionInstanceType enum value

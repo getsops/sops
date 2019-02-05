@@ -25,6 +25,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/storage/mgmt/2015-06-15/storage"
+
 // AccountStatus enumerates the values for account status.
 type AccountStatus string
 
@@ -225,7 +228,8 @@ func (a *Account) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// AccountCheckNameAvailabilityParameters the parameters used to check the availabity of the storage account name.
+// AccountCheckNameAvailabilityParameters the parameters used to check the availability of the storage
+// account name.
 type AccountCheckNameAvailabilityParameters struct {
 	Name *string `json:"name,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -358,7 +362,8 @@ type AccountRegenerateKeyParameters struct {
 	KeyName *string `json:"keyName,omitempty"`
 }
 
-// AccountsCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// AccountsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type AccountsCreateFuture struct {
 	azure.Future
 }
@@ -453,8 +458,8 @@ type CheckNameAvailabilityResult struct {
 type CustomDomain struct {
 	// Name - The custom domain name. Name is the CNAME source.
 	Name *string `json:"name,omitempty"`
-	// UseSubDomain - Indicates whether indirect CName validation is enabled. Default value is false. This should only be set on updates
-	UseSubDomain *bool `json:"useSubDomain,omitempty"`
+	// UseSubDomainName - Indicates whether indirect CName validation is enabled. Default value is false. This should only be set on updates
+	UseSubDomainName *bool `json:"useSubDomainName,omitempty"`
 }
 
 // Endpoints the URIs that are used to perform a retrieval of a public blob, queue or table object.

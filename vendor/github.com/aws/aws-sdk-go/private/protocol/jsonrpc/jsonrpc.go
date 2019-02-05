@@ -7,7 +7,7 @@ package jsonrpc
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -82,25 +82,17 @@ func UnmarshalMeta(req *request.Request) {
 // UnmarshalError unmarshals an error response for a JSON RPC service.
 func UnmarshalError(req *request.Request) {
 	defer req.HTTPResponse.Body.Close()
-	bodyBytes, err := ioutil.ReadAll(req.HTTPResponse.Body)
-	if err != nil {
-		req.Error = awserr.NewRequestFailure(
-			awserr.New("SerializationError", "failed reading JSON RPC error response", err),
-			req.HTTPResponse.StatusCode,
-			req.RequestID,
-		)
-		return
-	}
-	if len(bodyBytes) == 0 {
+
+	var jsonErr jsonErrorResponse
+	err := json.NewDecoder(req.HTTPResponse.Body).Decode(&jsonErr)
+	if err == io.EOF {
 		req.Error = awserr.NewRequestFailure(
 			awserr.New("SerializationError", req.HTTPResponse.Status, nil),
 			req.HTTPResponse.StatusCode,
 			req.RequestID,
 		)
 		return
-	}
-	var jsonErr jsonErrorResponse
-	if err := json.Unmarshal(bodyBytes, &jsonErr); err != nil {
+	} else if err != nil {
 		req.Error = awserr.NewRequestFailure(
 			awserr.New("SerializationError", "failed decoding JSON RPC error response", err),
 			req.HTTPResponse.StatusCode,

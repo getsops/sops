@@ -23,7 +23,7 @@
   "description": "Configures and serves authoritative DNS records.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/cloud-dns",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/EQMOijfSxjBH7q8fB_7QzVLzbgs\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/1ElZY34eO24rnTnPiiM5_YKoRVc\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -760,11 +760,11 @@
       }
     }
   },
-  "revision": "20180808",
+  "revision": "20181212",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Change": {
-      "description": "An atomic update to a collection of ResourceRecordSets.",
+      "description": "A Change represents a set of ResourceRecordSet additions and deletions applied atomically to a ManagedZone. ResourceRecordSets within a ManagedZone are modified by creating a new Change element in the Changes collection. In turn the Changes collection also records the past modifications to the ResourceRecordSets in a ManagedZone. The current state of the ManagedZone is the sum effect of applying all Change elements in the Changes collection in sequence.",
       "id": "Change",
       "properties": {
         "additions": {
@@ -799,7 +799,7 @@
           "type": "string"
         },
         "status": {
-          "description": "Status of the operation (output only).",
+          "description": "Status of the operation (output only). A status of \"done\" means that the request to update the authoritative servers has been sent, but the servers might not be updated yet.",
           "enum": [
             "done",
             "pending"
@@ -970,7 +970,7 @@
           "type": "integer"
         },
         "keyType": {
-          "description": "One of \"KEY_SIGNING\" or \"ZONE_SIGNING\". Keys of type KEY_SIGNING have the Secure Entry Point flag set and, when active, will be used to sign only resource record sets of type DNSKEY. Otherwise, the Secure Entry Point flag will be cleared and this key will be used to sign only resource record sets of other types.",
+          "description": "Specifies whether this is a key signing key (KSK) or a zone signing key (ZSK). Key signing keys have the Secure Entry Point flag set and, when active, will only be used to sign resource record sets of type DNSKEY. Zone signing keys do not have the Secure Entry Point flag set and will be used to sign all other types of resource record sets.",
           "enum": [
             "keySigning",
             "zoneSigning"
@@ -1186,7 +1186,7 @@
           "type": "string"
         },
         "status": {
-          "description": "Status of the operation. Can be one of the following: \"PENDING\" or \"DONE\" (output only).",
+          "description": "Status of the operation. Can be one of the following: \"PENDING\" or \"DONE\" (output only). A status of \"DONE\" means that the request to update the authoritative servers has been sent, but the servers might not be updated yet.",
           "enum": [
             "done",
             "pending"
@@ -1352,7 +1352,7 @@
           "type": "integer"
         },
         "type": {
-          "description": "The identifier of a supported record type, for example, A, AAAA, MX, TXT, and so on.",
+          "description": "The identifier of a supported record type. See the list of Supported DNS record types.",
           "type": "string"
         }
       },

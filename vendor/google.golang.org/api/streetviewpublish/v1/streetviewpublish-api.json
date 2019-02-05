@@ -157,6 +157,11 @@
             "photoId"
           ],
           "parameters": {
+            "languageCode": {
+              "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.\nIf language_code is unspecified, the user's language preference for Google\nservices will be used.",
+              "location": "query",
+              "type": "string"
+            },
             "photoId": {
               "description": "Required. ID of the Photo.",
               "location": "path",
@@ -261,6 +266,11 @@
           "id": "streetviewpublish.photos.batchGet",
           "parameterOrder": [],
           "parameters": {
+            "languageCode": {
+              "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.\nIf language_code is unspecified, the user's language preference for Google\nservices will be used.",
+              "location": "query",
+              "type": "string"
+            },
             "photoIds": {
               "description": "Required. IDs of the Photos. For HTTP\nGET requests, the URL query parameter should be\n`photoIds=\u003cid1\u003e\u0026photoIds=\u003cid2\u003e\u0026...`.",
               "location": "query",
@@ -286,7 +296,7 @@
           ]
         },
         "batchUpdate": {
-          "description": "Updates the metadata of Photos, such\nas pose, place association, connections, etc. Changing the pixels of photos\nis not supported.\n\nNote that if\nBatchUpdatePhotos\nfails, either critical fields are missing or there was an authentication\nerror. Even if\nBatchUpdatePhotos\nsucceeds, there may have been failures for single photos in the batch.\nThese failures will be specified in each\nPhotoResponse.status\nin\nBatchUpdatePhotosResponse.results.\nSee\nUpdatePhoto\nfor specific failures that can occur per photo.\n\nOnly the fields specified in\nupdateMask\nfield are used. If `updateMask` is not present, the update applies to all\nfields.\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e To update\nPose.altitude,\nPose.latLngPair has to be\nfilled as well. Otherwise, the request will fail.\u003c/aside\u003e",
+          "description": "Updates the metadata of Photos, such\nas pose, place association, connections, etc. Changing the pixels of photos\nis not supported.\n\nNote that if\nBatchUpdatePhotos\nfails, either critical fields are missing or there was an authentication\nerror. Even if\nBatchUpdatePhotos\nsucceeds, there may have been failures for single photos in the batch.\nThese failures will be specified in each\nPhotoResponse.status\nin\nBatchUpdatePhotosResponse.results.\nSee\nUpdatePhoto\nfor specific failures that can occur per photo.\n\nOnly the fields specified in\nupdateMask\nfield are used. If `updateMask` is not present, the update applies to all\nfields.\n\nThe number of\nUpdatePhotoRequest\nmessages in a\nBatchUpdatePhotosRequest\nmust not exceed 20.\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e To update\nPose.altitude,\nPose.latLngPair has to be\nfilled as well. Otherwise, the request will fail.\u003c/aside\u003e",
           "flatPath": "v1/photos:batchUpdate",
           "httpMethod": "POST",
           "id": "streetviewpublish.photos.batchUpdate",
@@ -312,6 +322,11 @@
           "parameters": {
             "filter": {
               "description": "The filter expression. For example: `placeId=ChIJj61dQgK6j4AR4GeTYWZsKWw`.\n\nThe only filter supported at the moment is `placeId`.",
+              "location": "query",
+              "type": "string"
+            },
+            "languageCode": {
+              "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.\nIf language_code is unspecified, the user's language preference for Google\nservices will be used.",
               "location": "query",
               "type": "string"
             },
@@ -347,7 +362,7 @@
       }
     }
   },
-  "revision": "20180601",
+  "revision": "20181212",
   "rootUrl": "https://streetviewpublish.googleapis.com/",
   "schemas": {
     "BatchDeletePhotosRequest": {
@@ -543,6 +558,20 @@
           "description": "Output only. The download URL for the photo bytes. This field is set only\nwhen\nGetPhotoRequest.view\nis set to\nPhotoView.INCLUDE_DOWNLOAD_URL.",
           "type": "string"
         },
+        "mapsPublishStatus": {
+          "description": "Output only. Status in Google Maps, whether this photo was published, or\nrejected for a possibly specified reason.",
+          "enum": [
+            "UNSPECIFIED_MAPS_PUBLISH_STATUS",
+            "PUBLISHED",
+            "REJECTED_UNKNOWN"
+          ],
+          "enumDescriptions": [
+            "The status of the photo is unknown.",
+            "The photo is published to the public through Google Maps.",
+            "The photo has been rejected for an unknown reason."
+          ],
+          "type": "string"
+        },
         "photoId": {
           "$ref": "PhotoId",
           "description": "Required when updating a photo. Output only when creating a photo.\nIdentifier for the photo, which is unique among all photos in\nGoogle."
@@ -564,6 +593,30 @@
         },
         "thumbnailUrl": {
           "description": "Output only. The thumbnail URL for showing a preview of the given photo.",
+          "type": "string"
+        },
+        "transferStatus": {
+          "description": "Output only. Status of rights transfer on this photo.",
+          "enum": [
+            "TRANSFER_STATUS_UNKNOWN",
+            "NEVER_TRANSFERRED",
+            "PENDING",
+            "COMPLETED",
+            "REJECTED",
+            "EXPIRED",
+            "CANCELLED",
+            "RECEIVED_VIA_TRANSFER"
+          ],
+          "enumDescriptions": [
+            "The status of this transfer is unspecified.",
+            "This photo has never been in a transfer.",
+            "This photo transfer has been initiated, but the receiver has not yet\nresponded.",
+            "The photo transfer has been completed, and this photo has been\ntransferred to the recipient.",
+            "The recipient rejected this photo transfer.",
+            "The photo transfer expired before the recipient took any action.",
+            "The sender cancelled this photo transfer.",
+            "The recipient owns this photo due to a rights transfer."
+          ],
           "type": "string"
         },
         "uploadReference": {
@@ -608,6 +661,14 @@
       "description": "Place metadata for an entity.",
       "id": "Place",
       "properties": {
+        "languageCode": {
+          "description": "Output-only. The language_code that the name is localized with. This should\nbe the language_code specified in the request, but may be a fallback.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Output-only. The name of the place, localized to the language_code.",
+          "type": "string"
+        },
         "placeId": {
           "description": "Place identifier, as described in\nhttps://developers.google.com/places/place-id.",
           "type": "string"
@@ -619,6 +680,11 @@
       "description": "Raw pose measurement for an entity.",
       "id": "Pose",
       "properties": {
+        "accuracyMeters": {
+          "description": "The estimated horizontal accuracy of this pose in meters with 68%\nconfidence (one standard deviation). For example, on Android, this value is\navailable from this method:\nhttps://developer.android.com/reference/android/location/Location#getAccuracy().\nOther platforms have different methods of obtaining similar accuracy\nestimations.",
+          "format": "float",
+          "type": "number"
+        },
         "altitude": {
           "description": "Altitude of the pose in meters above WGS84 ellipsoid.\nNaN indicates an unmeasured quantity.",
           "format": "double",

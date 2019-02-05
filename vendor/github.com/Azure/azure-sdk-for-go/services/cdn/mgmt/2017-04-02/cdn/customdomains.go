@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewCustomDomainsClientWithBaseURI(baseURI string, subscriptionID string) Cu
 // customDomainName - name of the custom domain within an endpoint.
 // customDomainProperties - properties required to create a new custom domain.
 func (client CustomDomainsClient) Create(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string, customDomainProperties CustomDomainParameters) (result CustomDomainsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -109,10 +120,6 @@ func (client CustomDomainsClient) CreateSender(req *http.Request) (future Custom
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -137,6 +144,16 @@ func (client CustomDomainsClient) CreateResponder(resp *http.Response) (result C
 // endpointName - name of the endpoint under the profile which is unique globally.
 // customDomainName - name of the custom domain within an endpoint.
 func (client CustomDomainsClient) Delete(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string) (result CustomDomainsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -192,10 +209,6 @@ func (client CustomDomainsClient) DeleteSender(req *http.Request) (future Custom
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -220,6 +233,16 @@ func (client CustomDomainsClient) DeleteResponder(resp *http.Response) (result C
 // endpointName - name of the endpoint under the profile which is unique globally.
 // customDomainName - name of the custom domain within an endpoint.
 func (client CustomDomainsClient) DisableCustomHTTPS(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string) (result CustomDomain, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.DisableCustomHTTPS")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -299,6 +322,16 @@ func (client CustomDomainsClient) DisableCustomHTTPSResponder(resp *http.Respons
 // endpointName - name of the endpoint under the profile which is unique globally.
 // customDomainName - name of the custom domain within an endpoint.
 func (client CustomDomainsClient) EnableCustomHTTPS(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string) (result CustomDomain, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.EnableCustomHTTPS")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -371,13 +404,23 @@ func (client CustomDomainsClient) EnableCustomHTTPSResponder(resp *http.Response
 	return
 }
 
-// Get gets an exisitng custom domain within an endpoint.
+// Get gets an existing custom domain within an endpoint.
 // Parameters:
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 // customDomainName - name of the custom domain within an endpoint.
 func (client CustomDomainsClient) Get(ctx context.Context, resourceGroupName string, profileName string, endpointName string, customDomainName string) (result CustomDomain, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -456,6 +499,16 @@ func (client CustomDomainsClient) GetResponder(resp *http.Response) (result Cust
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client CustomDomainsClient) ListByEndpoint(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result CustomDomainListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.ListByEndpoint")
+		defer func() {
+			sc := -1
+			if result.cdlr.Response.Response != nil {
+				sc = result.cdlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -529,8 +582,8 @@ func (client CustomDomainsClient) ListByEndpointResponder(resp *http.Response) (
 }
 
 // listByEndpointNextResults retrieves the next set of results, if any.
-func (client CustomDomainsClient) listByEndpointNextResults(lastResults CustomDomainListResult) (result CustomDomainListResult, err error) {
-	req, err := lastResults.customDomainListResultPreparer()
+func (client CustomDomainsClient) listByEndpointNextResults(ctx context.Context, lastResults CustomDomainListResult) (result CustomDomainListResult, err error) {
+	req, err := lastResults.customDomainListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "cdn.CustomDomainsClient", "listByEndpointNextResults", nil, "Failure preparing next results request")
 	}
@@ -551,6 +604,16 @@ func (client CustomDomainsClient) listByEndpointNextResults(lastResults CustomDo
 
 // ListByEndpointComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CustomDomainsClient) ListByEndpointComplete(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result CustomDomainListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomDomainsClient.ListByEndpoint")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByEndpoint(ctx, resourceGroupName, profileName, endpointName)
 	return
 }

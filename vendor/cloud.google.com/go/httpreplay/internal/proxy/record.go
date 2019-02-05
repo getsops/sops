@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
-// The proxy package provides a record/replay HTTP proxy. It is designed to support
+// Package proxy provides a record/replay HTTP proxy. It is designed to support
 // both an in-memory API (cloud.google.com/go/httpreplay) and a standalone server
 // (cloud.google.com/go/httpreplay/cmd/httpr).
 package proxy
@@ -75,7 +73,7 @@ func ForRecording(filename string, port int) (*Proxy, error) {
 	skipAuth := skipLoggingByHost("accounts.google.com")
 	logGroup.AddRequestModifier(skipAuth)
 	logGroup.AddResponseModifier(skipAuth)
-	p.logger = NewLogger()
+	p.logger = newLogger()
 	logGroup.AddRequestModifier(p.logger)
 	logGroup.AddResponseModifier(p.logger)
 
@@ -119,15 +117,11 @@ func newProxy(filename string) (*Proxy, error) {
 		return nil, err
 	}
 	mproxy.SetMITM(mc)
-	ih := map[string]bool{}
-	for k, v := range ignoreHeaders {
-		ih[k] = v
-	}
 	return &Proxy{
 		mproxy:        mproxy,
 		CACert:        x509c,
 		filename:      filename,
-		ignoreHeaders: ih,
+		ignoreHeaders: map[string]bool{},
 	}, nil
 }
 
@@ -151,7 +145,52 @@ func (p *Proxy) Transport() *http.Transport {
 	}
 }
 
+// RemoveRequestHeaders will remove request headers matching patterns from the log,
+// and skip matching them. Pattern is taken literally except for *, which matches any
+// sequence of characters.
+//
+// This only needs to be called during recording; the patterns will be saved to the
+// log for replay.
+func (p *Proxy) RemoveRequestHeaders(patterns []string) {
+	for _, pat := range patterns {
+		p.logger.log.Converter.registerRemoveRequestHeaders(pat)
+	}
+}
+
+// ClearHeaders will replace matching headers with CLEARED.
+//
+// This only needs to be called during recording; the patterns will be saved to the
+// log for replay.
+func (p *Proxy) ClearHeaders(patterns []string) {
+	for _, pat := range patterns {
+		p.logger.log.Converter.registerClearHeaders(pat)
+	}
+}
+
+// RemoveQueryParams will remove query parameters matching patterns from the request
+// URL before logging, and skip matching them. Pattern is taken literally except for
+// *, which matches any sequence of characters.
+//
+// This only needs to be called during recording; the patterns will be saved to the
+// log for replay.
+func (p *Proxy) RemoveQueryParams(patterns []string) {
+	for _, pat := range patterns {
+		p.logger.log.Converter.registerRemoveParams(pat)
+	}
+}
+
+// ClearQueryParams will replace matching query params in the request URL with CLEARED.
+//
+// This only needs to be called during recording; the patterns will be saved to the
+// log for replay.
+func (p *Proxy) ClearQueryParams(patterns []string) {
+	for _, pat := range patterns {
+		p.logger.log.Converter.registerClearParams(pat)
+	}
+}
+
 // IgnoreHeader will cause h to be ignored during matching on replay.
+// Deprecated: use RemoveRequestHeaders instead.
 func (p *Proxy) IgnoreHeader(h string) {
 	p.ignoreHeaders[http.CanonicalHeaderKey(h)] = true
 }

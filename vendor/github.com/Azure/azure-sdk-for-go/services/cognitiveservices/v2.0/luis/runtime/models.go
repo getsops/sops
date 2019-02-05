@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/luis/runtime"
+
 // APIError error information returned by the API
 type APIError struct {
 	// StatusCode - HTTP Status code
@@ -83,6 +86,69 @@ func (em EntityModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for EntityModel struct.
+func (em *EntityModel) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if em.AdditionalProperties == nil {
+					em.AdditionalProperties = make(map[string]interface{})
+				}
+				em.AdditionalProperties[k] = additionalProperties
+			}
+		case "entity":
+			if v != nil {
+				var entity string
+				err = json.Unmarshal(*v, &entity)
+				if err != nil {
+					return err
+				}
+				em.Entity = &entity
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				em.Type = &typeVar
+			}
+		case "startIndex":
+			if v != nil {
+				var startIndex int32
+				err = json.Unmarshal(*v, &startIndex)
+				if err != nil {
+					return err
+				}
+				em.StartIndex = &startIndex
+			}
+		case "endIndex":
+			if v != nil {
+				var endIndex int32
+				err = json.Unmarshal(*v, &endIndex)
+				if err != nil {
+					return err
+				}
+				em.EndIndex = &endIndex
+			}
+		}
+	}
+
+	return nil
+}
+
 // EntityWithResolution ...
 type EntityWithResolution struct {
 	// Resolution - Resolution values for pre-built LUIS entities.
@@ -102,7 +168,9 @@ type EntityWithResolution struct {
 // MarshalJSON is the custom marshaler for EntityWithResolution.
 func (ewr EntityWithResolution) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["resolution"] = ewr.Resolution
+	if ewr.Resolution != nil {
+		objectMap["resolution"] = ewr.Resolution
+	}
 	if ewr.Entity != nil {
 		objectMap["entity"] = ewr.Entity
 	}
@@ -119,6 +187,78 @@ func (ewr EntityWithResolution) MarshalJSON() ([]byte, error) {
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for EntityWithResolution struct.
+func (ewr *EntityWithResolution) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "resolution":
+			if v != nil {
+				var resolution interface{}
+				err = json.Unmarshal(*v, &resolution)
+				if err != nil {
+					return err
+				}
+				ewr.Resolution = resolution
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ewr.AdditionalProperties == nil {
+					ewr.AdditionalProperties = make(map[string]interface{})
+				}
+				ewr.AdditionalProperties[k] = additionalProperties
+			}
+		case "entity":
+			if v != nil {
+				var entity string
+				err = json.Unmarshal(*v, &entity)
+				if err != nil {
+					return err
+				}
+				ewr.Entity = &entity
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ewr.Type = &typeVar
+			}
+		case "startIndex":
+			if v != nil {
+				var startIndex int32
+				err = json.Unmarshal(*v, &startIndex)
+				if err != nil {
+					return err
+				}
+				ewr.StartIndex = &startIndex
+			}
+		case "endIndex":
+			if v != nil {
+				var endIndex int32
+				err = json.Unmarshal(*v, &endIndex)
+				if err != nil {
+					return err
+				}
+				ewr.EndIndex = &endIndex
+			}
+		}
+	}
+
+	return nil
 }
 
 // EntityWithScore ...
@@ -161,6 +301,78 @@ func (ews EntityWithScore) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for EntityWithScore struct.
+func (ews *EntityWithScore) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "score":
+			if v != nil {
+				var score float64
+				err = json.Unmarshal(*v, &score)
+				if err != nil {
+					return err
+				}
+				ews.Score = &score
+			}
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if ews.AdditionalProperties == nil {
+					ews.AdditionalProperties = make(map[string]interface{})
+				}
+				ews.AdditionalProperties[k] = additionalProperties
+			}
+		case "entity":
+			if v != nil {
+				var entity string
+				err = json.Unmarshal(*v, &entity)
+				if err != nil {
+					return err
+				}
+				ews.Entity = &entity
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ews.Type = &typeVar
+			}
+		case "startIndex":
+			if v != nil {
+				var startIndex int32
+				err = json.Unmarshal(*v, &startIndex)
+				if err != nil {
+					return err
+				}
+				ews.StartIndex = &startIndex
+			}
+		case "endIndex":
+			if v != nil {
+				var endIndex int32
+				err = json.Unmarshal(*v, &endIndex)
+				if err != nil {
+					return err
+				}
+				ews.EndIndex = &endIndex
+			}
+		}
+	}
+
+	return nil
+}
+
 // IntentModel an intent detected from the utterance.
 type IntentModel struct {
 	// Intent - Name of the intent, as defined in LUIS.
@@ -172,7 +384,7 @@ type IntentModel struct {
 // LuisResult prediction, based on the input query, containing intent(s) and entities.
 type LuisResult struct {
 	autorest.Response `json:"-"`
-	// Query - The input utterance that was analized.
+	// Query - The input utterance that was analyzed.
 	Query *string `json:"query,omitempty"`
 	// AlteredQuery - The corrected utterance (when spell checking was enabled).
 	AlteredQuery     *string      `json:"alteredQuery,omitempty"`
@@ -182,8 +394,9 @@ type LuisResult struct {
 	// Entities - The entities extracted from the utterance.
 	Entities *[]EntityModel `json:"entities,omitempty"`
 	// CompositeEntities - The composite entities extracted from the utterance.
-	CompositeEntities *[]CompositeEntityModel `json:"compositeEntities,omitempty"`
-	SentimentAnalysis *Sentiment              `json:"sentimentAnalysis,omitempty"`
+	CompositeEntities      *[]CompositeEntityModel `json:"compositeEntities,omitempty"`
+	SentimentAnalysis      *Sentiment              `json:"sentimentAnalysis,omitempty"`
+	ConnectedServiceResult *LuisResult             `json:"connectedServiceResult,omitempty"`
 }
 
 // Sentiment sentiment of the input utterance.

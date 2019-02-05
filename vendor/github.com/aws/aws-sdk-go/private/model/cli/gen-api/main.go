@@ -13,7 +13,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime/debug"
-	"sort"
 	"strings"
 	"sync"
 
@@ -21,87 +20,21 @@ import (
 	"github.com/aws/aws-sdk-go/private/util"
 )
 
-type generateInfo struct {
-	*api.API
-	PackageDir string
-}
+func usage() {
+	fmt.Fprintln(os.Stderr, `Usage: api-gen <options> [model path | file path]
+Loads API models from file and generates SDK clients from the models.
 
-var excludeServices = map[string]struct{}{
-	"importexport": {},
-}
+The model path arguments can be globs, or paths to individual files. The
+utiliity requires that the API model files follow the following pattern:
 
-// newGenerateInfo initializes the service API's folder structure for a specific service.
-// If the SERVICES environment variable is set, and this service is not apart of the list
-// this service will be skipped.
-func newGenerateInfo(modelFile, svcPath, svcImportPath string) *generateInfo {
-	g := &generateInfo{API: &api.API{SvcClientImportPath: svcImportPath, BaseCrosslinkURL: "https://docs.aws.amazon.com"}}
-	g.API.Attach(modelFile)
+<root>/<servicename>/<api-version>/<model json files>
 
-	if _, ok := excludeServices[g.API.PackageName()]; ok {
-		return nil
-	}
+e.g:
 
-	paginatorsFile := strings.Replace(modelFile, "api-2.json", "paginators-1.json", -1)
-	if _, err := os.Stat(paginatorsFile); err == nil {
-		g.API.AttachPaginators(paginatorsFile)
-	} else if !os.IsNotExist(err) {
-		fmt.Println("api-2.json error:", err)
-	}
+./models/apis/s3/2006-03-01/*.json
 
-	docsFile := strings.Replace(modelFile, "api-2.json", "docs-2.json", -1)
-	if _, err := os.Stat(docsFile); err == nil {
-		g.API.AttachDocs(docsFile)
-	} else {
-		fmt.Println("docs-2.json error:", err)
-	}
-
-	waitersFile := strings.Replace(modelFile, "api-2.json", "waiters-2.json", -1)
-	if _, err := os.Stat(waitersFile); err == nil {
-		g.API.AttachWaiters(waitersFile)
-	} else if !os.IsNotExist(err) {
-		fmt.Println("waiters-2.json error:", err)
-	}
-
-	examplesFile := strings.Replace(modelFile, "api-2.json", "examples-1.json", -1)
-	if _, err := os.Stat(examplesFile); err == nil {
-		g.API.AttachExamples(examplesFile)
-	} else if !os.IsNotExist(err) {
-		fmt.Println("examples-1.json error:", err)
-	}
-
-	//	pkgDocAddonsFile := strings.Replace(modelFile, "api-2.json", "go-pkg-doc.gotmpl", -1)
-	//	if _, err := os.Stat(pkgDocAddonsFile); err == nil {
-	//		g.API.AttachPackageDocAddons(pkgDocAddonsFile)
-	//	} else if !os.IsNotExist(err) {
-	//		fmt.Println("go-pkg-doc.gotmpl error:", err)
-	//	}
-
-	g.API.Setup()
-
-	if svc := os.Getenv("SERVICES"); svc != "" {
-		svcs := strings.Split(svc, ",")
-
-		included := false
-		for _, s := range svcs {
-			if s == g.API.PackageName() {
-				included = true
-				break
-			}
-		}
-		if !included {
-			// skip this non-included service
-			return nil
-		}
-	}
-
-	// ensure the directory exists
-	pkgDir := filepath.Join(svcPath, g.API.PackageName())
-	os.MkdirAll(pkgDir, 0775)
-	os.MkdirAll(filepath.Join(pkgDir, g.API.InterfacePackageName()), 0775)
-
-	g.PackageDir = pkgDir
-
-	return g
+Flags:`)
+	flag.PrintDefaults()
 }
 
 // Generates service api, examples, and interface from api json definition files.
@@ -112,92 +45,109 @@ func newGenerateInfo(modelFile, svcPath, svcImportPath string) *generateInfo {
 // Env:
 //  SERVICES comma separated list of services to generate.
 func main() {
-	var svcPath, sessionPath, svcImportPath string
-	flag.StringVar(&svcPath, "path", "service", "directory to generate service clients in")
-	flag.StringVar(&sessionPath, "sessionPath", filepath.Join("aws", "session"), "generate session service client factories")
-	flag.StringVar(&svcImportPath, "svc-import-path", "github.com/aws/aws-sdk-go/service", "namespace to generate service client Go code import path under")
+	var svcPath, svcImportPath string
+	flag.StringVar(&svcPath, "path", "service",
+		"The `path` to generate service clients in to.",
+	)
+	flag.StringVar(&svcImportPath, "svc-import-path",
+		"github.com/aws/aws-sdk-go/service",
+		"The Go `import path` to generate client to be under.",
+	)
+	flag.Usage = usage
 	flag.Parse()
-	api.Bootstrap()
 
 	if len(os.Getenv("AWS_SDK_CODEGEN_DEBUG")) != 0 {
 		api.LogDebug(os.Stdout)
 	}
 
-	files := []string{}
-	for i := 0; i < flag.NArg(); i++ {
-		file := flag.Arg(i)
-		if strings.Contains(file, "*") {
-			paths, _ := filepath.Glob(file)
-			files = append(files, paths...)
-		} else {
-			files = append(files, file)
+	// Make sure all paths are based on platform's pathing not Unix
+	globs := flag.Args()
+	for i, g := range globs {
+		globs[i] = filepath.FromSlash(g)
+	}
+	svcPath = filepath.FromSlash(svcPath)
+
+	modelPaths, err := api.ExpandModelGlobPath(globs...)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "failed to glob file pattern", err)
+		os.Exit(1)
+	}
+	modelPaths, _ = api.TrimModelServiceVersions(modelPaths)
+
+	apis, err := api.LoadAPIs(modelPaths, svcImportPath)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "failed to load API models", err)
+		os.Exit(1)
+	}
+	if len(apis) == 0 {
+		fmt.Fprintf(os.Stderr, "expected to load models, but found none")
+		os.Exit(1)
+	}
+
+	if v := os.Getenv("SERVICES"); len(v) != 0 {
+		svcs := strings.Split(v, ",")
+		for pkgName, a := range apis {
+			var found bool
+			for _, include := range svcs {
+				if a.PackageName() == include {
+					found = true
+					break
+				}
+			}
+			if !found {
+				delete(apis, pkgName)
+			}
 		}
 	}
 
-	for svcName := range excludeServices {
-		if strings.Contains(os.Getenv("SERVICES"), svcName) {
-			fmt.Fprintf(os.Stderr, "Service %s is not supported\n", svcName)
-			os.Exit(1)
-		}
-	}
-
-	sort.Strings(files)
-
-	// Remove old API versions from list
-	m := map[string]bool{}
-	// caches paths to ensure we are not overriding previously generated
-	// code.
+	var wg sync.WaitGroup
 	servicePaths := map[string]struct{}{}
-
-	for i := range files {
-		idx := len(files) - 1 - i
-		parts := strings.Split(files[idx], string(filepath.Separator))
-		svc := parts[len(parts)-3] // service name is 2nd-to-last component
-
-		if m[svc] {
-			files[idx] = "" // wipe this one out if we already saw the service
-		}
-		m[svc] = true
-	}
-
-	wg := sync.WaitGroup{}
-	for i := range files {
-		filename := files[i]
-		if filename == "" { // empty file
+	for _, a := range apis {
+		if _, ok := excludeServices[a.PackageName()]; ok {
 			continue
 		}
 
-		genInfo := newGenerateInfo(filename, svcPath, svcImportPath)
-		if genInfo == nil {
-			continue
-		}
-		if _, ok := excludeServices[genInfo.API.PackageName()]; ok {
-			// Skip services not yet supported.
-			continue
-		}
+		// Create the output path for the model.
+		pkgDir := filepath.Join(svcPath, a.PackageName())
+		os.MkdirAll(filepath.Join(pkgDir, a.InterfacePackageName()), 0775)
 
-		if _, ok := servicePaths[genInfo.PackageDir]; ok {
-			fmt.Fprintf(os.Stderr, "Path %q has already been generated", genInfo.PackageDir)
+		if _, ok := servicePaths[pkgDir]; ok {
+			fmt.Fprintf(os.Stderr,
+				"attempted to generate a client into %s twice. Second model package, %v\n",
+				pkgDir, a.PackageName())
 			os.Exit(1)
 		}
+		servicePaths[pkgDir] = struct{}{}
 
-		servicePaths[genInfo.PackageDir] = struct{}{}
+		g := &generateInfo{
+			API:        a,
+			PackageDir: pkgDir,
+		}
 
 		wg.Add(1)
-		go func(g *generateInfo, filename string) {
+		go func() {
 			defer wg.Done()
-			writeServiceFiles(g, filename)
-		}(genInfo, filename)
+			writeServiceFiles(g, pkgDir)
+		}()
 	}
 
 	wg.Wait()
 }
 
-func writeServiceFiles(g *generateInfo, filename string) {
+type generateInfo struct {
+	*api.API
+	PackageDir string
+}
+
+var excludeServices = map[string]struct{}{
+	"importexport": {},
+}
+
+func writeServiceFiles(g *generateInfo, pkgDir string) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Fprintf(os.Stderr, "Error generating %s\n%s\n%s\n",
-				filename, r, debug.Stack())
+				pkgDir, r, debug.Stack())
 			os.Exit(1)
 		}
 	}()
@@ -216,6 +166,14 @@ func writeServiceFiles(g *generateInfo, filename string) {
 
 	if g.API.HasEventStream {
 		Must(writeAPIEventStreamTestFile(g))
+	}
+
+	if g.API.PackageName() == "s3" {
+		Must(writeS3ManagerUploadInputFile(g))
+	}
+
+	if len(g.API.SmokeTests.TestCases) > 0 {
+		Must(writeAPISmokeTestsFile(g))
 	}
 }
 
@@ -328,5 +286,23 @@ func writeAPIEventStreamTestFile(g *generateInfo) error {
 		"// +build go1.6\n",
 		g.API.PackageName(),
 		g.API.APIEventStreamTestGoCode(),
+	)
+}
+
+func writeS3ManagerUploadInputFile(g *generateInfo) error {
+	return writeGoFile(filepath.Join(g.PackageDir, "s3manager", "upload_input.go"),
+		codeLayout,
+		"",
+		"s3manager",
+		api.S3ManagerUploadInputGoCode(g.API),
+	)
+}
+
+func writeAPISmokeTestsFile(g *generateInfo) error {
+	return writeGoFile(filepath.Join(g.PackageDir, "integ_test.go"),
+		codeLayout,
+		"// +build go1.10,integration\n",
+		g.API.PackageName()+"_test",
+		g.API.APISmokeTestsGoCode(),
 	)
 }

@@ -18,7 +18,7 @@ const opCreateFileSystem = "CreateFileSystem"
 // CreateFileSystemRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFileSystem operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -165,7 +165,7 @@ const opCreateMountTarget = "CreateMountTarget"
 // CreateMountTargetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateMountTarget operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -382,7 +382,7 @@ const opCreateTags = "CreateTags"
 // CreateTagsRequest generates a "aws/request.Request" representing the
 // client's request for the CreateTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -416,8 +416,7 @@ func (c *EFS) CreateTagsRequest(input *CreateTagsInput) (req *request.Request, o
 
 	output = &CreateTagsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -477,7 +476,7 @@ const opDeleteFileSystem = "DeleteFileSystem"
 // DeleteFileSystemRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFileSystem operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -511,8 +510,7 @@ func (c *EFS) DeleteFileSystemRequest(input *DeleteFileSystemInput) (req *reques
 
 	output = &DeleteFileSystemOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -584,7 +582,7 @@ const opDeleteMountTarget = "DeleteMountTarget"
 // DeleteMountTargetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteMountTarget operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -618,8 +616,7 @@ func (c *EFS) DeleteMountTargetRequest(input *DeleteMountTargetInput) (req *requ
 
 	output = &DeleteMountTargetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -701,7 +698,7 @@ const opDeleteTags = "DeleteTags"
 // DeleteTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -735,8 +732,7 @@ func (c *EFS) DeleteTagsRequest(input *DeleteTagsInput) (req *request.Request, o
 
 	output = &DeleteTagsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -797,7 +793,7 @@ const opDescribeFileSystems = "DescribeFileSystems"
 // DescribeFileSystemsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeFileSystems operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -909,7 +905,7 @@ const opDescribeMountTargetSecurityGroups = "DescribeMountTargetSecurityGroups"
 // DescribeMountTargetSecurityGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMountTargetSecurityGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1009,7 +1005,7 @@ const opDescribeMountTargets = "DescribeMountTargets"
 // DescribeMountTargetsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMountTargets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1106,7 +1102,7 @@ const opDescribeTags = "DescribeTags"
 // DescribeTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1198,7 +1194,7 @@ const opModifyMountTargetSecurityGroups = "ModifyMountTargetSecurityGroups"
 // ModifyMountTargetSecurityGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyMountTargetSecurityGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1232,8 +1228,7 @@ func (c *EFS) ModifyMountTargetSecurityGroupsRequest(input *ModifyMountTargetSec
 
 	output = &ModifyMountTargetSecurityGroupsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1313,7 +1308,7 @@ const opUpdateFileSystem = "UpdateFileSystem"
 // UpdateFileSystemRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFileSystem operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1637,6 +1632,9 @@ func (s *CreateTagsInput) Validate() error {
 	if s.FileSystemId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
 	}
+	if s.FileSystemId != nil && len(*s.FileSystemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 1))
+	}
 	if s.Tags == nil {
 		invalidParams.Add(request.NewErrParamRequired("Tags"))
 	}
@@ -1708,6 +1706,9 @@ func (s *DeleteFileSystemInput) Validate() error {
 	if s.FileSystemId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
 	}
+	if s.FileSystemId != nil && len(*s.FileSystemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1759,6 +1760,9 @@ func (s *DeleteMountTargetInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteMountTargetInput"}
 	if s.MountTargetId == nil {
 		invalidParams.Add(request.NewErrParamRequired("MountTargetId"))
+	}
+	if s.MountTargetId != nil && len(*s.MountTargetId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MountTargetId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1816,6 +1820,9 @@ func (s *DeleteTagsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteTagsInput"}
 	if s.FileSystemId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
+	}
+	if s.FileSystemId != nil && len(*s.FileSystemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 1))
 	}
 	if s.TagKeys == nil {
 		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
@@ -1993,6 +2000,9 @@ func (s *DescribeMountTargetSecurityGroupsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeMountTargetSecurityGroupsInput"}
 	if s.MountTargetId == nil {
 		invalidParams.Add(request.NewErrParamRequired("MountTargetId"))
+	}
+	if s.MountTargetId != nil && len(*s.MountTargetId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MountTargetId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2178,6 +2188,9 @@ func (s *DescribeTagsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeTagsInput"}
 	if s.FileSystemId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
+	}
+	if s.FileSystemId != nil && len(*s.FileSystemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 1))
 	}
 	if s.MaxItems != nil && *s.MaxItems < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("MaxItems", 1))
@@ -2493,6 +2506,9 @@ func (s *ModifyMountTargetSecurityGroupsInput) Validate() error {
 	if s.MountTargetId == nil {
 		invalidParams.Add(request.NewErrParamRequired("MountTargetId"))
 	}
+	if s.MountTargetId != nil && len(*s.MountTargetId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MountTargetId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2704,6 +2720,9 @@ func (s *UpdateFileSystemInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateFileSystemInput"}
 	if s.FileSystemId == nil {
 		invalidParams.Add(request.NewErrParamRequired("FileSystemId"))
+	}
+	if s.FileSystemId != nil && len(*s.FileSystemId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FileSystemId", 1))
 	}
 
 	if invalidParams.Len() > 0 {

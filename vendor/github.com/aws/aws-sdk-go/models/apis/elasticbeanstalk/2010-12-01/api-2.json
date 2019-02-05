@@ -1476,6 +1476,7 @@
         "AutoScalingGroups":{"shape":"AutoScalingGroupList"},
         "Instances":{"shape":"InstanceList"},
         "LaunchConfigurations":{"shape":"LaunchConfigurationList"},
+        "LaunchTemplates":{"shape":"LaunchTemplateList"},
         "LoadBalancers":{"shape":"LoadBalancerList"},
         "Triggers":{"shape":"TriggerList"},
         "Queues":{"shape":"QueueList"}
@@ -1673,6 +1674,16 @@
     "LaunchConfigurationList":{
       "type":"list",
       "member":{"shape":"LaunchConfiguration"}
+    },
+    "LaunchTemplate":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"ResourceId"}
+      }
+    },
+    "LaunchTemplateList":{
+      "type":"list",
+      "member":{"shape":"LaunchTemplate"}
     },
     "LaunchedAt":{"type":"timestamp"},
     "ListAvailableSolutionStacksResultMessage":{

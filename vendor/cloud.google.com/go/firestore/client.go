@@ -15,23 +15,22 @@
 package firestore
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"time"
 
-	"google.golang.org/api/iterator"
-
-	vkit "cloud.google.com/go/firestore/apiv1beta1"
-
+	vkit "cloud.google.com/go/firestore/apiv1"
 	"cloud.google.com/go/internal/version"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
 	"github.com/golang/protobuf/ptypes"
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
+	gax "github.com/googleapis/gax-go/v2"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -50,7 +49,18 @@ type Client struct {
 
 // NewClient creates a new Firestore client that uses the given project.
 func NewClient(ctx context.Context, projectID string, opts ...option.ClientOption) (*Client, error) {
-	vc, err := vkit.NewClient(ctx, opts...)
+	var o []option.ClientOption
+	// Environment variables for gcloud emulator:
+	// https://cloud.google.com/sdk/gcloud/reference/beta/emulators/firestore/
+	if addr := os.Getenv("FIRESTORE_EMULATOR_HOST"); addr != "" {
+		conn, err := grpc.Dial(addr, grpc.WithInsecure())
+		if err != nil {
+			return nil, fmt.Errorf("firestore: dialing address from env var FIRESTORE_EMULATOR_HOST: %v", err)
+		}
+		o = []option.ClientOption{option.WithGRPCConn(conn)}
+	}
+	o = append(o, opts...)
+	vc, err := vkit.NewClient(ctx, o...)
 	if err != nil {
 		return nil, err
 	}
@@ -128,9 +138,6 @@ func (c *Client) idsToRef(IDs []string, dbPath string) (*CollectionRef, *Documen
 //
 // If a document is not present, the corresponding DocumentSnapshot's Exists method will return false.
 func (c *Client) GetAll(ctx context.Context, docRefs []*DocumentRef) ([]*DocumentSnapshot, error) {
-	if err := checkTransaction(ctx); err != nil {
-		return nil, err
-	}
 	return c.getAll(ctx, docRefs, nil)
 }
 
@@ -201,11 +208,10 @@ func (c *Client) getAll(ctx context.Context, docRefs []*DocumentRef, tid []byte)
 // Collections returns an interator over the top-level collections.
 func (c *Client) Collections(ctx context.Context) *CollectionIterator {
 	it := &CollectionIterator{
-		err:    checkTransaction(ctx),
 		client: c,
 		it: c.c.ListCollectionIds(
 			withResourceHeader(ctx, c.path()),
-			&pb.ListCollectionIdsRequest{Parent: c.path()}),
+			&pb.ListCollectionIdsRequest{Parent: c.path() + "/documents"}),
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(
 		it.fetch,
@@ -221,9 +227,6 @@ func (c *Client) Batch() *WriteBatch {
 
 // commit calls the Commit RPC outside of a transaction.
 func (c *Client) commit(ctx context.Context, ws []*pb.Write) ([]*WriteResult, error) {
-	if err := checkTransaction(ctx); err != nil {
-		return nil, err
-	}
 	req := &pb.CommitRequest{
 		Database: c.path(),
 		Writes:   ws,

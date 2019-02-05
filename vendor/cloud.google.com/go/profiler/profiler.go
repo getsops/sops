@@ -38,10 +38,12 @@ package profiler
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"runtime"
 	"runtime/pprof"
 	"sync"
@@ -52,8 +54,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/google/pprof/profile"
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
+	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	gtransport "google.golang.org/api/transport/grpc"
 	pb "google.golang.org/genproto/googleapis/devtools/cloudprofiler/v2"
@@ -78,6 +79,7 @@ var (
 	sleep            = gax.Sleep
 	dialGRPC         = gtransport.Dial
 	onGCE            = gcemd.OnGCE
+	serviceRegexp    = regexp.MustCompile(`^[a-z]([-a-z0-9_.]{0,253}[a-z0-9])?$`)
 )
 
 const (
@@ -262,6 +264,7 @@ func (r *retryer) Retry(err error) (time.Duration, bool) {
 // increasing value, bounded by maxBackoff.
 func (a *agent) createProfile(ctx context.Context) *pb.Profile {
 	req := pb.CreateProfileRequest{
+		Parent:      "projects/" + a.deployment.ProjectId,
 		Deployment:  a.deployment,
 		ProfileType: a.profileTypes,
 	}
@@ -467,6 +470,9 @@ func initializeConfig(cfg Config) error {
 	if config.Service == "" {
 		return errors.New("service name must be configured")
 	}
+	if !serviceRegexp.MatchString(config.Service) {
+		return fmt.Errorf("service name %q does not match regular expression %v", config.Service, serviceRegexp)
+	}
 
 	if config.ServiceVersion == "" {
 		config.ServiceVersion = os.Getenv("GAE_VERSION")
@@ -485,16 +491,19 @@ func initializeConfig(cfg Config) error {
 		var err error
 		if config.ProjectID == "" {
 			if config.ProjectID, err = getProjectID(); err != nil {
-				return fmt.Errorf("failed to get the project ID from Compute Engine: %v", err)
+				return fmt.Errorf("failed to get the project ID from Compute Engine metadata: %v", err)
 			}
 		}
 
 		if config.zone, err = getZone(); err != nil {
-			return fmt.Errorf("failed to get zone from Compute Engine: %v", err)
+			return fmt.Errorf("failed to get zone from Compute Engine metadata: %v", err)
 		}
 
 		if config.instance, err = getInstanceName(); err != nil {
-			return fmt.Errorf("failed to get instance from Compute Engine: %v", err)
+			if _, ok := err.(gcemd.NotDefinedError); !ok {
+				return fmt.Errorf("failed to get instance name from Compute Engine metadata: %v", err)
+			}
+			debugLog("failed to get instance name from Compute Engine metadata, will use empty name: %v", err)
 		}
 
 	} else {

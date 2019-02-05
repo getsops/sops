@@ -35,7 +35,6 @@ var PgpSignedAttestation_ContentType_name = map[int32]string{
 	0: "CONTENT_TYPE_UNSPECIFIED",
 	1: "SIMPLE_SIGNING_JSON",
 }
-
 var PgpSignedAttestation_ContentType_value = map[string]int32{
 	"CONTENT_TYPE_UNSPECIFIED": 0,
 	"SIMPLE_SIGNING_JSON":      1,
@@ -44,9 +43,8 @@ var PgpSignedAttestation_ContentType_value = map[string]int32{
 func (x PgpSignedAttestation_ContentType) String() string {
 	return proto.EnumName(PgpSignedAttestation_ContentType_name, int32(x))
 }
-
 func (PgpSignedAttestation_ContentType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a004b79c48a9c453, []int{0, 0}
+	return fileDescriptor_attestation_c9ed0362441a7a04, []int{0, 0}
 }
 
 // An attestation wrapper with a PGP-compatible signature. This message only
@@ -89,7 +87,7 @@ func (m *PgpSignedAttestation) Reset()         { *m = PgpSignedAttestation{} }
 func (m *PgpSignedAttestation) String() string { return proto.CompactTextString(m) }
 func (*PgpSignedAttestation) ProtoMessage()    {}
 func (*PgpSignedAttestation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a004b79c48a9c453, []int{0}
+	return fileDescriptor_attestation_c9ed0362441a7a04, []int{0}
 }
 func (m *PgpSignedAttestation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PgpSignedAttestation.Unmarshal(m, b)
@@ -97,8 +95,8 @@ func (m *PgpSignedAttestation) XXX_Unmarshal(b []byte) error {
 func (m *PgpSignedAttestation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PgpSignedAttestation.Marshal(b, m, deterministic)
 }
-func (m *PgpSignedAttestation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PgpSignedAttestation.Merge(m, src)
+func (dst *PgpSignedAttestation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PgpSignedAttestation.Merge(dst, src)
 }
 func (m *PgpSignedAttestation) XXX_Size() int {
 	return xxx_messageInfo_PgpSignedAttestation.Size(m)
@@ -218,7 +216,7 @@ func (m *Authority) Reset()         { *m = Authority{} }
 func (m *Authority) String() string { return proto.CompactTextString(m) }
 func (*Authority) ProtoMessage()    {}
 func (*Authority) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a004b79c48a9c453, []int{1}
+	return fileDescriptor_attestation_c9ed0362441a7a04, []int{1}
 }
 func (m *Authority) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Authority.Unmarshal(m, b)
@@ -226,8 +224,8 @@ func (m *Authority) XXX_Unmarshal(b []byte) error {
 func (m *Authority) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Authority.Marshal(b, m, deterministic)
 }
-func (m *Authority) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Authority.Merge(m, src)
+func (dst *Authority) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Authority.Merge(dst, src)
 }
 func (m *Authority) XXX_Size() int {
 	return xxx_messageInfo_Authority.Size(m)
@@ -264,7 +262,7 @@ func (m *Authority_Hint) Reset()         { *m = Authority_Hint{} }
 func (m *Authority_Hint) String() string { return proto.CompactTextString(m) }
 func (*Authority_Hint) ProtoMessage()    {}
 func (*Authority_Hint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a004b79c48a9c453, []int{1, 0}
+	return fileDescriptor_attestation_c9ed0362441a7a04, []int{1, 0}
 }
 func (m *Authority_Hint) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Authority_Hint.Unmarshal(m, b)
@@ -272,8 +270,8 @@ func (m *Authority_Hint) XXX_Unmarshal(b []byte) error {
 func (m *Authority_Hint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Authority_Hint.Marshal(b, m, deterministic)
 }
-func (m *Authority_Hint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Authority_Hint.Merge(m, src)
+func (dst *Authority_Hint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Authority_Hint.Merge(dst, src)
 }
 func (m *Authority_Hint) XXX_Size() int {
 	return xxx_messageInfo_Authority_Hint.Size(m)
@@ -304,7 +302,7 @@ func (m *Details) Reset()         { *m = Details{} }
 func (m *Details) String() string { return proto.CompactTextString(m) }
 func (*Details) ProtoMessage()    {}
 func (*Details) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a004b79c48a9c453, []int{2}
+	return fileDescriptor_attestation_c9ed0362441a7a04, []int{2}
 }
 func (m *Details) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Details.Unmarshal(m, b)
@@ -312,8 +310,8 @@ func (m *Details) XXX_Unmarshal(b []byte) error {
 func (m *Details) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Details.Marshal(b, m, deterministic)
 }
-func (m *Details) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Details.Merge(m, src)
+func (dst *Details) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Details.Merge(dst, src)
 }
 func (m *Details) XXX_Size() int {
 	return xxx_messageInfo_Details.Size(m)
@@ -356,7 +354,7 @@ func (m *Attestation) Reset()         { *m = Attestation{} }
 func (m *Attestation) String() string { return proto.CompactTextString(m) }
 func (*Attestation) ProtoMessage()    {}
 func (*Attestation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a004b79c48a9c453, []int{3}
+	return fileDescriptor_attestation_c9ed0362441a7a04, []int{3}
 }
 func (m *Attestation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Attestation.Unmarshal(m, b)
@@ -364,8 +362,8 @@ func (m *Attestation) XXX_Unmarshal(b []byte) error {
 func (m *Attestation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Attestation.Marshal(b, m, deterministic)
 }
-func (m *Attestation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Attestation.Merge(m, src)
+func (dst *Attestation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Attestation.Merge(dst, src)
 }
 func (m *Attestation) XXX_Size() int {
 	return xxx_messageInfo_Attestation.Size(m)
@@ -465,10 +463,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/attestation/attestation.proto", fileDescriptor_a004b79c48a9c453)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/attestation/attestation.proto", fileDescriptor_attestation_c9ed0362441a7a04)
 }
 
-var fileDescriptor_a004b79c48a9c453 = []byte{
+var fileDescriptor_attestation_c9ed0362441a7a04 = []byte{
 	// 452 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x5d, 0x6f, 0xd3, 0x30,
 	0x14, 0x6d, 0xba, 0x69, 0xac, 0x37, 0x08, 0x8d, 0x6c, 0x82, 0x0a, 0xa6, 0x69, 0xca, 0x53, 0x25,

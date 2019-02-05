@@ -23,6 +23,9 @@ import (
 	"github.com/satori/go.uuid"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.1/customvision/prediction"
+
 // BoundingBox ...
 type BoundingBox struct {
 	Left   *float64 `json:"left,omitempty"`

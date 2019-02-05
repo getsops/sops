@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,12 +21,6 @@ package face
 
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/face"
 
-type BaseClient = original.BaseClient
-type Client = original.Client
-type LargeFaceListClient = original.LargeFaceListClient
-type LargePersonGroupClient = original.LargePersonGroupClient
-type LargePersonGroupPersonClient = original.LargePersonGroupPersonClient
-type ListClient = original.ListClient
 type AccessoryType = original.AccessoryType
 
 const (
@@ -115,19 +109,46 @@ const (
 	NoiseLevelMedium NoiseLevel = original.NoiseLevelMedium
 )
 
+type OperationStatusType = original.OperationStatusType
+
+const (
+	Failed     OperationStatusType = original.Failed
+	Notstarted OperationStatusType = original.Notstarted
+	Running    OperationStatusType = original.Running
+	Succeeded  OperationStatusType = original.Succeeded
+)
+
+type SnapshotApplyMode = original.SnapshotApplyMode
+
+const (
+	CreateNew SnapshotApplyMode = original.CreateNew
+)
+
+type SnapshotObjectType = original.SnapshotObjectType
+
+const (
+	SnapshotObjectTypeFaceList         SnapshotObjectType = original.SnapshotObjectTypeFaceList
+	SnapshotObjectTypeLargeFaceList    SnapshotObjectType = original.SnapshotObjectTypeLargeFaceList
+	SnapshotObjectTypeLargePersonGroup SnapshotObjectType = original.SnapshotObjectTypeLargePersonGroup
+	SnapshotObjectTypePersonGroup      SnapshotObjectType = original.SnapshotObjectTypePersonGroup
+)
+
 type TrainingStatusType = original.TrainingStatusType
 
 const (
-	Failed     TrainingStatusType = original.Failed
-	Nonstarted TrainingStatusType = original.Nonstarted
-	Running    TrainingStatusType = original.Running
-	Succeeded  TrainingStatusType = original.Succeeded
+	TrainingStatusTypeFailed     TrainingStatusType = original.TrainingStatusTypeFailed
+	TrainingStatusTypeNonstarted TrainingStatusType = original.TrainingStatusTypeNonstarted
+	TrainingStatusTypeRunning    TrainingStatusType = original.TrainingStatusTypeRunning
+	TrainingStatusTypeSucceeded  TrainingStatusType = original.TrainingStatusTypeSucceeded
 )
 
-type Accessory = original.Accessory
 type APIError = original.APIError
+type Accessory = original.Accessory
+type ApplySnapshotRequest = original.ApplySnapshotRequest
 type Attributes = original.Attributes
+type BaseClient = original.BaseClient
 type Blur = original.Blur
+type Client = original.Client
 type Coordinate = original.Coordinate
 type DetectedFace = original.DetectedFace
 type Emotion = original.Emotion
@@ -146,8 +167,12 @@ type IdentifyResult = original.IdentifyResult
 type ImageURL = original.ImageURL
 type Landmarks = original.Landmarks
 type LargeFaceList = original.LargeFaceList
+type LargeFaceListClient = original.LargeFaceListClient
 type LargePersonGroup = original.LargePersonGroup
+type LargePersonGroupClient = original.LargePersonGroupClient
+type LargePersonGroupPersonClient = original.LargePersonGroupPersonClient
 type List = original.List
+type ListClient = original.ListClient
 type ListDetectedFace = original.ListDetectedFace
 type ListIdentifyResult = original.ListIdentifyResult
 type ListLargeFaceList = original.ListLargeFaceList
@@ -157,28 +182,31 @@ type ListPersistedFace = original.ListPersistedFace
 type ListPerson = original.ListPerson
 type ListPersonGroup = original.ListPersonGroup
 type ListSimilarFace = original.ListSimilarFace
+type ListSnapshot = original.ListSnapshot
 type Makeup = original.Makeup
 type NameAndUserDataContract = original.NameAndUserDataContract
 type Noise = original.Noise
 type Occlusion = original.Occlusion
+type OperationStatus = original.OperationStatus
 type PersistedFace = original.PersistedFace
 type Person = original.Person
 type PersonGroup = original.PersonGroup
+type PersonGroupClient = original.PersonGroupClient
+type PersonGroupPersonClient = original.PersonGroupPersonClient
 type Rectangle = original.Rectangle
 type SimilarFace = original.SimilarFace
+type Snapshot = original.Snapshot
+type SnapshotClient = original.SnapshotClient
+type TakeSnapshotRequest = original.TakeSnapshotRequest
 type TrainingStatus = original.TrainingStatus
 type UpdateFaceRequest = original.UpdateFaceRequest
+type UpdateSnapshotRequest = original.UpdateSnapshotRequest
 type VerifyFaceToFaceRequest = original.VerifyFaceToFaceRequest
 type VerifyFaceToPersonRequest = original.VerifyFaceToPersonRequest
 type VerifyResult = original.VerifyResult
-type PersonGroupClient = original.PersonGroupClient
-type PersonGroupPersonClient = original.PersonGroupPersonClient
 
 func New(endpoint string) BaseClient {
 	return original.New(endpoint)
-}
-func NewWithoutDefaults(endpoint string) BaseClient {
-	return original.NewWithoutDefaults(endpoint)
 }
 func NewClient(endpoint string) Client {
 	return original.NewClient(endpoint)
@@ -194,6 +222,18 @@ func NewLargePersonGroupPersonClient(endpoint string) LargePersonGroupPersonClie
 }
 func NewListClient(endpoint string) ListClient {
 	return original.NewListClient(endpoint)
+}
+func NewPersonGroupClient(endpoint string) PersonGroupClient {
+	return original.NewPersonGroupClient(endpoint)
+}
+func NewPersonGroupPersonClient(endpoint string) PersonGroupPersonClient {
+	return original.NewPersonGroupPersonClient(endpoint)
+}
+func NewSnapshotClient(endpoint string) SnapshotClient {
+	return original.NewSnapshotClient(endpoint)
+}
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func PossibleAccessoryTypeValues() []AccessoryType {
 	return original.PossibleAccessoryTypeValues()
@@ -222,14 +262,17 @@ func PossibleHairColorTypeValues() []HairColorType {
 func PossibleNoiseLevelValues() []NoiseLevel {
 	return original.PossibleNoiseLevelValues()
 }
+func PossibleOperationStatusTypeValues() []OperationStatusType {
+	return original.PossibleOperationStatusTypeValues()
+}
+func PossibleSnapshotApplyModeValues() []SnapshotApplyMode {
+	return original.PossibleSnapshotApplyModeValues()
+}
+func PossibleSnapshotObjectTypeValues() []SnapshotObjectType {
+	return original.PossibleSnapshotObjectTypeValues()
+}
 func PossibleTrainingStatusTypeValues() []TrainingStatusType {
 	return original.PossibleTrainingStatusTypeValues()
-}
-func NewPersonGroupClient(endpoint string) PersonGroupClient {
-	return original.NewPersonGroupClient(endpoint)
-}
-func NewPersonGroupPersonClient(endpoint string) PersonGroupPersonClient {
-	return original.NewPersonGroupPersonClient(endpoint)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

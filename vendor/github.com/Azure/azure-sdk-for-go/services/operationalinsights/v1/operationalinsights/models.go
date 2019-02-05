@@ -21,6 +21,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/operationalinsights/v1/operationalinsights"
+
 // Column a column in a table.
 type Column struct {
 	// Name - The name of this column.
@@ -88,5 +91,5 @@ type Table struct {
 	// Columns - The list of columns in this table.
 	Columns *[]Column `json:"columns,omitempty"`
 	// Rows - The resulting rows from this query.
-	Rows *[][]string `json:"rows,omitempty"`
+	Rows *[][]interface{} `json:"rows,omitempty"`
 }

@@ -798,7 +798,7 @@
       }
     }
   },
-  "revision": "20180730",
+  "revision": "20181210",
   "rootUrl": "https://runtimeconfig.googleapis.com/",
   "schemas": {
     "Binding": {
@@ -824,7 +824,7 @@
       "type": "object"
     },
     "Cardinality": {
-      "description": "A Cardinality condition for the Waiter resource. A cardinality condition is\nmet when the number of variables under a specified path prefix reaches a\npredefined number. For example, if you set a Cardinality condition where\nthe `path` is set to `/foo` and the number of paths is set to 2, the\nfollowing variables would meet the condition in a RuntimeConfig resource:\n\n+ `/foo/variable1 = \"value1\"`\n+ `/foo/variable2 = \"value2\"`\n+ `/bar/variable3 = \"value3\"`\n\nIt would not would not satisify the same condition with the `number` set to\n3, however, because there is only 2 paths that start with `/foo`.\nCardinality conditions are recursive; all subtrees under the specific\npath prefix are counted.",
+      "description": "A Cardinality condition for the Waiter resource. A cardinality condition is\nmet when the number of variables under a specified path prefix reaches a\npredefined number. For example, if you set a Cardinality condition where\nthe `path` is set to `/foo` and the number of paths is set to `2`, the\nfollowing variables would meet the condition in a RuntimeConfig resource:\n\n+ `/foo/variable1 = \"value1\"`\n+ `/foo/variable2 = \"value2\"`\n+ `/bar/variable3 = \"value3\"`\n\nIt would not satisfy the same condition with the `number` set to\n`3`, however, because there is only 2 paths that start with `/foo`.\nCardinality conditions are recursive; all subtrees under the specific\npath prefix are counted.",
       "id": "Cardinality",
       "properties": {
         "number": {
@@ -1078,11 +1078,11 @@
       "id": "Variable",
       "properties": {
         "name": {
-          "description": "The name of the variable resource, in the format:\n\n    projects/[PROJECT_ID]/configs/[CONFIG_NAME]/variables/[VARIABLE_NAME]\n\nThe `[PROJECT_ID]` must be a valid project ID, `[CONFIG_NAME]` must be a\nvalid RuntimeConfig reource and `[VARIABLE_NAME]` follows Unix file system\nfile path naming.\n\nThe `[VARIABLE_NAME]` can contain ASCII letters, numbers, slashes and\ndashes. Slashes are used as path element separators and are not part of the\n`[VARIABLE_NAME]` itself, so `[VARIABLE_NAME]` must contain at least one\nnon-slash character. Multiple slashes are coalesced into single slash\ncharacter. Each path segment should match\n[0-9A-Za-z](?:[_.A-Za-z0-9-]{0,62}[_.A-Za-z0-9])? regular expression.\nThe length of a `[VARIABLE_NAME]` must be less than 256 characters.\n\nOnce you create a variable, you cannot change the variable name.",
+          "description": "The name of the variable resource, in the format:\n\n    projects/[PROJECT_ID]/configs/[CONFIG_NAME]/variables/[VARIABLE_NAME]\n\nThe `[PROJECT_ID]` must be a valid project ID, `[CONFIG_NAME]` must be a\nvalid RuntimeConfig resource and `[VARIABLE_NAME]` follows Unix file system\nfile path naming.\n\nThe `[VARIABLE_NAME]` can contain ASCII letters, numbers, slashes and\ndashes. Slashes are used as path element separators and are not part of the\n`[VARIABLE_NAME]` itself, so `[VARIABLE_NAME]` must contain at least one\nnon-slash character. Multiple slashes are coalesced into single slash\ncharacter. Each path segment should match\n[0-9A-Za-z](?:[_.A-Za-z0-9-]{0,62}[_.A-Za-z0-9])? regular expression.\nThe length of a `[VARIABLE_NAME]` must be less than 256 characters.\n\nOnce you create a variable, you cannot change the variable name.",
           "type": "string"
         },
         "state": {
-          "description": "[Ouput only] The current state of the variable. The variable state indicates\nthe outcome of the `variables().watch` call and is visible through the\n`get` and `list` calls.",
+          "description": "Output only. The current state of the variable. The variable state indicates\nthe outcome of the `variables().watch` call and is visible through the\n`get` and `list` calls.",
           "enum": [
             "VARIABLE_STATE_UNSPECIFIED",
             "UPDATED",
@@ -1100,12 +1100,12 @@
           "type": "string"
         },
         "updateTime": {
-          "description": "Output only. The time of the last variable update.",
+          "description": "Output only. The time of the last variable update.\nTimestamp will be UTC timestamp.",
           "format": "google-datetime",
           "type": "string"
         },
         "value": {
-          "description": "The binary value of the variable. The length of the value must be less\nthan 4096 bytes. Empty values are also accepted. The value must be\nbase64 encoded. Only one of `value` or `text` can be set.",
+          "description": "The binary value of the variable. The length of the value must be less\nthan 4096 bytes. Empty values are also accepted. The value must be\nbase64 encoded, and must comply with IETF RFC4648\n(https://www.ietf.org/rfc/rfc4648.txt). Only one of `value` or `text`\ncan be set.",
           "format": "byte",
           "type": "string"
         }

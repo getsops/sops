@@ -349,6 +349,47 @@
       "max":512,
       "pattern":"[\\sa-zA-Z0-9_\\.-]*"
     },
+    "GroupFilter":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Values"
+      ],
+      "members":{
+        "Name":{"shape":"GroupFilterName"},
+        "Values":{"shape":"GroupFilterValues"}
+      }
+    },
+    "GroupFilterList":{
+      "type":"list",
+      "member":{"shape":"GroupFilter"}
+    },
+    "GroupFilterName":{
+      "type":"string",
+      "enum":["resource-type"]
+    },
+    "GroupFilterValue":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "GroupFilterValues":{
+      "type":"list",
+      "member":{"shape":"GroupFilterValue"},
+      "max":5,
+      "min":1
+    },
+    "GroupIdentifier":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"GroupName"},
+        "GroupArn":{"shape":"GroupArn"}
+      }
+    },
+    "GroupIdentifierList":{
+      "type":"list",
+      "member":{"shape":"GroupIdentifier"}
+    },
     "GroupList":{
       "type":"list",
       "member":{"shape":"Group"}
@@ -404,12 +445,14 @@
       "type":"structure",
       "members":{
         "ResourceIdentifiers":{"shape":"ResourceIdentifierList"},
-        "NextToken":{"shape":"NextToken"}
+        "NextToken":{"shape":"NextToken"},
+        "QueryErrors":{"shape":"QueryErrorList"}
       }
     },
     "ListGroupsInput":{
       "type":"structure",
       "members":{
+        "Filters":{"shape":"GroupFilterList"},
         "MaxResults":{
           "shape":"MaxResults",
           "location":"querystring",
@@ -425,7 +468,12 @@
     "ListGroupsOutput":{
       "type":"structure",
       "members":{
-        "Groups":{"shape":"GroupList"},
+        "GroupIdentifiers":{"shape":"GroupIdentifierList"},
+        "Groups":{
+          "shape":"GroupList",
+          "deprecated":true,
+          "deprecatedMessage":"This field is deprecated, use GroupIdentifiers instead."
+        },
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -455,9 +503,31 @@
       "type":"string",
       "max":2048
     },
+    "QueryError":{
+      "type":"structure",
+      "members":{
+        "ErrorCode":{"shape":"QueryErrorCode"},
+        "Message":{"shape":"QueryErrorMessage"}
+      }
+    },
+    "QueryErrorCode":{
+      "type":"string",
+      "enum":[
+        "CLOUDFORMATION_STACK_INACTIVE",
+        "CLOUDFORMATION_STACK_NOT_EXISTING"
+      ]
+    },
+    "QueryErrorList":{
+      "type":"list",
+      "member":{"shape":"QueryError"}
+    },
+    "QueryErrorMessage":{"type":"string"},
     "QueryType":{
       "type":"string",
-      "enum":["TAG_FILTERS_1_0"]
+      "enum":[
+        "TAG_FILTERS_1_0",
+        "CLOUDFORMATION_STACK_1_0"
+      ]
     },
     "ResourceArn":{
       "type":"string",
@@ -533,7 +603,8 @@
       "type":"structure",
       "members":{
         "ResourceIdentifiers":{"shape":"ResourceIdentifierList"},
-        "NextToken":{"shape":"NextToken"}
+        "NextToken":{"shape":"NextToken"},
+        "QueryErrors":{"shape":"QueryErrorList"}
       }
     },
     "TagInput":{

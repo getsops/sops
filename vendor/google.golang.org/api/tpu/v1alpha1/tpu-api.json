@@ -658,7 +658,7 @@
       }
     }
   },
-  "revision": "20180902",
+  "revision": "20181010",
   "rootUrl": "https://tpu.googleapis.com/",
   "schemas": {
     "AcceleratorType": {
@@ -730,6 +730,13 @@
           "description": "The listed nodes.",
           "items": {
             "$ref": "Node"
+          },
+          "type": "array"
+        },
+        "unreachable": {
+          "description": "Locations that could not be reached.",
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }

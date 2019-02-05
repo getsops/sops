@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewReplicationAlertSettingsClientWithBaseURI(baseURI string, subscriptionID
 // alertSettingName - the name of the email notification(alert) configuration.
 // request - the input to configure the email notification(alert).
 func (client ReplicationAlertSettingsClient) Create(ctx context.Context, alertSettingName string, request ConfigureAlertRequest) (result Alert, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationAlertSettingsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, alertSettingName, request)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationAlertSettingsClient", "Create", nil, "Failure preparing request")
@@ -113,6 +124,16 @@ func (client ReplicationAlertSettingsClient) CreateResponder(resp *http.Response
 // Parameters:
 // alertSettingName - the name of the email notification configuration.
 func (client ReplicationAlertSettingsClient) Get(ctx context.Context, alertSettingName string) (result Alert, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationAlertSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, alertSettingName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationAlertSettingsClient", "Get", nil, "Failure preparing request")
@@ -178,6 +199,16 @@ func (client ReplicationAlertSettingsClient) GetResponder(resp *http.Response) (
 
 // List gets the list of email notification(alert) configurations for the vault.
 func (client ReplicationAlertSettingsClient) List(ctx context.Context) (result AlertCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationAlertSettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.ac.Response.Response != nil {
+				sc = result.ac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -242,8 +273,8 @@ func (client ReplicationAlertSettingsClient) ListResponder(resp *http.Response) 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationAlertSettingsClient) listNextResults(lastResults AlertCollection) (result AlertCollection, err error) {
-	req, err := lastResults.alertCollectionPreparer()
+func (client ReplicationAlertSettingsClient) listNextResults(ctx context.Context, lastResults AlertCollection) (result AlertCollection, err error) {
+	req, err := lastResults.alertCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationAlertSettingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -264,6 +295,16 @@ func (client ReplicationAlertSettingsClient) listNextResults(lastResults AlertCo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationAlertSettingsClient) ListComplete(ctx context.Context) (result AlertCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationAlertSettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

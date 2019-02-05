@@ -21,6 +21,7 @@
   "description": "Creates and manages rules that determine when a Firebase Rules-enabled service should permit a request.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://firebase.google.com/docs/storage/security",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -237,7 +238,7 @@
               ],
               "parameters": {
                 "executableVersion": {
-                  "description": "The requested runtime executable version.\nDefaults to FIREBASE_RULES_EXECUTABLE_V1",
+                  "description": "The requested runtime executable version.\nDefaults to FIREBASE_RULES_EXECUTABLE_V1.",
                   "enum": [
                     "RELEASE_EXECUTABLE_VERSION_UNSPECIFIED",
                     "FIREBASE_RULES_EXECUTABLE_V1",
@@ -470,7 +471,7 @@
       }
     }
   },
-  "revision": "20180605",
+  "revision": "20181005",
   "rootUrl": "https://firebaserules.googleapis.com/",
   "schemas": {
     "Arg": {
@@ -593,6 +594,11 @@
         },
         "rulesetName": {
           "description": "`Ruleset` name associated with the `Release` executable.",
+          "type": "string"
+        },
+        "syncTime": {
+          "description": "Optional, indicates the freshness of the result. The response is\nguaranteed to be the latest within an interval up to the\nsync_time (inclusive).",
+          "format": "google-datetime",
           "type": "string"
         },
         "updateTime": {

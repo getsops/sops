@@ -63,7 +63,7 @@ func (m *AuditData) Reset()         { *m = AuditData{} }
 func (m *AuditData) String() string { return proto.CompactTextString(m) }
 func (*AuditData) ProtoMessage()    {}
 func (*AuditData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{0}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{0}
 }
 func (m *AuditData) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuditData.Unmarshal(m, b)
@@ -71,8 +71,8 @@ func (m *AuditData) XXX_Unmarshal(b []byte) error {
 func (m *AuditData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuditData.Marshal(b, m, deterministic)
 }
-func (m *AuditData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuditData.Merge(m, src)
+func (dst *AuditData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuditData.Merge(dst, src)
 }
 func (m *AuditData) XXX_Size() int {
 	return xxx_messageInfo_AuditData.Size(m)
@@ -717,7 +717,7 @@ func (m *TableInsertRequest) Reset()         { *m = TableInsertRequest{} }
 func (m *TableInsertRequest) String() string { return proto.CompactTextString(m) }
 func (*TableInsertRequest) ProtoMessage()    {}
 func (*TableInsertRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{1}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{1}
 }
 func (m *TableInsertRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableInsertRequest.Unmarshal(m, b)
@@ -725,8 +725,8 @@ func (m *TableInsertRequest) XXX_Unmarshal(b []byte) error {
 func (m *TableInsertRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableInsertRequest.Marshal(b, m, deterministic)
 }
-func (m *TableInsertRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableInsertRequest.Merge(m, src)
+func (dst *TableInsertRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableInsertRequest.Merge(dst, src)
 }
 func (m *TableInsertRequest) XXX_Size() int {
 	return xxx_messageInfo_TableInsertRequest.Size(m)
@@ -757,7 +757,7 @@ func (m *TableUpdateRequest) Reset()         { *m = TableUpdateRequest{} }
 func (m *TableUpdateRequest) String() string { return proto.CompactTextString(m) }
 func (*TableUpdateRequest) ProtoMessage()    {}
 func (*TableUpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{2}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{2}
 }
 func (m *TableUpdateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableUpdateRequest.Unmarshal(m, b)
@@ -765,8 +765,8 @@ func (m *TableUpdateRequest) XXX_Unmarshal(b []byte) error {
 func (m *TableUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableUpdateRequest.Marshal(b, m, deterministic)
 }
-func (m *TableUpdateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableUpdateRequest.Merge(m, src)
+func (dst *TableUpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableUpdateRequest.Merge(dst, src)
 }
 func (m *TableUpdateRequest) XXX_Size() int {
 	return xxx_messageInfo_TableUpdateRequest.Size(m)
@@ -797,7 +797,7 @@ func (m *TableInsertResponse) Reset()         { *m = TableInsertResponse{} }
 func (m *TableInsertResponse) String() string { return proto.CompactTextString(m) }
 func (*TableInsertResponse) ProtoMessage()    {}
 func (*TableInsertResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{3}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{3}
 }
 func (m *TableInsertResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableInsertResponse.Unmarshal(m, b)
@@ -805,8 +805,8 @@ func (m *TableInsertResponse) XXX_Unmarshal(b []byte) error {
 func (m *TableInsertResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableInsertResponse.Marshal(b, m, deterministic)
 }
-func (m *TableInsertResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableInsertResponse.Merge(m, src)
+func (dst *TableInsertResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableInsertResponse.Merge(dst, src)
 }
 func (m *TableInsertResponse) XXX_Size() int {
 	return xxx_messageInfo_TableInsertResponse.Size(m)
@@ -837,7 +837,7 @@ func (m *TableUpdateResponse) Reset()         { *m = TableUpdateResponse{} }
 func (m *TableUpdateResponse) String() string { return proto.CompactTextString(m) }
 func (*TableUpdateResponse) ProtoMessage()    {}
 func (*TableUpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{4}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{4}
 }
 func (m *TableUpdateResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableUpdateResponse.Unmarshal(m, b)
@@ -845,8 +845,8 @@ func (m *TableUpdateResponse) XXX_Unmarshal(b []byte) error {
 func (m *TableUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableUpdateResponse.Marshal(b, m, deterministic)
 }
-func (m *TableUpdateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableUpdateResponse.Merge(m, src)
+func (dst *TableUpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableUpdateResponse.Merge(dst, src)
 }
 func (m *TableUpdateResponse) XXX_Size() int {
 	return xxx_messageInfo_TableUpdateResponse.Size(m)
@@ -877,7 +877,7 @@ func (m *DatasetListRequest) Reset()         { *m = DatasetListRequest{} }
 func (m *DatasetListRequest) String() string { return proto.CompactTextString(m) }
 func (*DatasetListRequest) ProtoMessage()    {}
 func (*DatasetListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{5}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{5}
 }
 func (m *DatasetListRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetListRequest.Unmarshal(m, b)
@@ -885,8 +885,8 @@ func (m *DatasetListRequest) XXX_Unmarshal(b []byte) error {
 func (m *DatasetListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetListRequest.Marshal(b, m, deterministic)
 }
-func (m *DatasetListRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetListRequest.Merge(m, src)
+func (dst *DatasetListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetListRequest.Merge(dst, src)
 }
 func (m *DatasetListRequest) XXX_Size() int {
 	return xxx_messageInfo_DatasetListRequest.Size(m)
@@ -917,7 +917,7 @@ func (m *DatasetInsertRequest) Reset()         { *m = DatasetInsertRequest{} }
 func (m *DatasetInsertRequest) String() string { return proto.CompactTextString(m) }
 func (*DatasetInsertRequest) ProtoMessage()    {}
 func (*DatasetInsertRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{6}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{6}
 }
 func (m *DatasetInsertRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetInsertRequest.Unmarshal(m, b)
@@ -925,8 +925,8 @@ func (m *DatasetInsertRequest) XXX_Unmarshal(b []byte) error {
 func (m *DatasetInsertRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetInsertRequest.Marshal(b, m, deterministic)
 }
-func (m *DatasetInsertRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetInsertRequest.Merge(m, src)
+func (dst *DatasetInsertRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetInsertRequest.Merge(dst, src)
 }
 func (m *DatasetInsertRequest) XXX_Size() int {
 	return xxx_messageInfo_DatasetInsertRequest.Size(m)
@@ -957,7 +957,7 @@ func (m *DatasetInsertResponse) Reset()         { *m = DatasetInsertResponse{} }
 func (m *DatasetInsertResponse) String() string { return proto.CompactTextString(m) }
 func (*DatasetInsertResponse) ProtoMessage()    {}
 func (*DatasetInsertResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{7}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{7}
 }
 func (m *DatasetInsertResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetInsertResponse.Unmarshal(m, b)
@@ -965,8 +965,8 @@ func (m *DatasetInsertResponse) XXX_Unmarshal(b []byte) error {
 func (m *DatasetInsertResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetInsertResponse.Marshal(b, m, deterministic)
 }
-func (m *DatasetInsertResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetInsertResponse.Merge(m, src)
+func (dst *DatasetInsertResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetInsertResponse.Merge(dst, src)
 }
 func (m *DatasetInsertResponse) XXX_Size() int {
 	return xxx_messageInfo_DatasetInsertResponse.Size(m)
@@ -997,7 +997,7 @@ func (m *DatasetUpdateRequest) Reset()         { *m = DatasetUpdateRequest{} }
 func (m *DatasetUpdateRequest) String() string { return proto.CompactTextString(m) }
 func (*DatasetUpdateRequest) ProtoMessage()    {}
 func (*DatasetUpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{8}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{8}
 }
 func (m *DatasetUpdateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetUpdateRequest.Unmarshal(m, b)
@@ -1005,8 +1005,8 @@ func (m *DatasetUpdateRequest) XXX_Unmarshal(b []byte) error {
 func (m *DatasetUpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetUpdateRequest.Marshal(b, m, deterministic)
 }
-func (m *DatasetUpdateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetUpdateRequest.Merge(m, src)
+func (dst *DatasetUpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetUpdateRequest.Merge(dst, src)
 }
 func (m *DatasetUpdateRequest) XXX_Size() int {
 	return xxx_messageInfo_DatasetUpdateRequest.Size(m)
@@ -1037,7 +1037,7 @@ func (m *DatasetUpdateResponse) Reset()         { *m = DatasetUpdateResponse{} }
 func (m *DatasetUpdateResponse) String() string { return proto.CompactTextString(m) }
 func (*DatasetUpdateResponse) ProtoMessage()    {}
 func (*DatasetUpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{9}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{9}
 }
 func (m *DatasetUpdateResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetUpdateResponse.Unmarshal(m, b)
@@ -1045,8 +1045,8 @@ func (m *DatasetUpdateResponse) XXX_Unmarshal(b []byte) error {
 func (m *DatasetUpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetUpdateResponse.Marshal(b, m, deterministic)
 }
-func (m *DatasetUpdateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetUpdateResponse.Merge(m, src)
+func (dst *DatasetUpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetUpdateResponse.Merge(dst, src)
 }
 func (m *DatasetUpdateResponse) XXX_Size() int {
 	return xxx_messageInfo_DatasetUpdateResponse.Size(m)
@@ -1077,7 +1077,7 @@ func (m *JobInsertRequest) Reset()         { *m = JobInsertRequest{} }
 func (m *JobInsertRequest) String() string { return proto.CompactTextString(m) }
 func (*JobInsertRequest) ProtoMessage()    {}
 func (*JobInsertRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{10}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{10}
 }
 func (m *JobInsertRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobInsertRequest.Unmarshal(m, b)
@@ -1085,8 +1085,8 @@ func (m *JobInsertRequest) XXX_Unmarshal(b []byte) error {
 func (m *JobInsertRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobInsertRequest.Marshal(b, m, deterministic)
 }
-func (m *JobInsertRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobInsertRequest.Merge(m, src)
+func (dst *JobInsertRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobInsertRequest.Merge(dst, src)
 }
 func (m *JobInsertRequest) XXX_Size() int {
 	return xxx_messageInfo_JobInsertRequest.Size(m)
@@ -1117,7 +1117,7 @@ func (m *JobInsertResponse) Reset()         { *m = JobInsertResponse{} }
 func (m *JobInsertResponse) String() string { return proto.CompactTextString(m) }
 func (*JobInsertResponse) ProtoMessage()    {}
 func (*JobInsertResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{11}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{11}
 }
 func (m *JobInsertResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobInsertResponse.Unmarshal(m, b)
@@ -1125,8 +1125,8 @@ func (m *JobInsertResponse) XXX_Unmarshal(b []byte) error {
 func (m *JobInsertResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobInsertResponse.Marshal(b, m, deterministic)
 }
-func (m *JobInsertResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobInsertResponse.Merge(m, src)
+func (dst *JobInsertResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobInsertResponse.Merge(dst, src)
 }
 func (m *JobInsertResponse) XXX_Size() int {
 	return xxx_messageInfo_JobInsertResponse.Size(m)
@@ -1165,7 +1165,7 @@ func (m *JobQueryRequest) Reset()         { *m = JobQueryRequest{} }
 func (m *JobQueryRequest) String() string { return proto.CompactTextString(m) }
 func (*JobQueryRequest) ProtoMessage()    {}
 func (*JobQueryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{12}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{12}
 }
 func (m *JobQueryRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobQueryRequest.Unmarshal(m, b)
@@ -1173,8 +1173,8 @@ func (m *JobQueryRequest) XXX_Unmarshal(b []byte) error {
 func (m *JobQueryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobQueryRequest.Marshal(b, m, deterministic)
 }
-func (m *JobQueryRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobQueryRequest.Merge(m, src)
+func (dst *JobQueryRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobQueryRequest.Merge(dst, src)
 }
 func (m *JobQueryRequest) XXX_Size() int {
 	return xxx_messageInfo_JobQueryRequest.Size(m)
@@ -1235,7 +1235,7 @@ func (m *JobQueryResponse) Reset()         { *m = JobQueryResponse{} }
 func (m *JobQueryResponse) String() string { return proto.CompactTextString(m) }
 func (*JobQueryResponse) ProtoMessage()    {}
 func (*JobQueryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{13}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{13}
 }
 func (m *JobQueryResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobQueryResponse.Unmarshal(m, b)
@@ -1243,8 +1243,8 @@ func (m *JobQueryResponse) XXX_Unmarshal(b []byte) error {
 func (m *JobQueryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobQueryResponse.Marshal(b, m, deterministic)
 }
-func (m *JobQueryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobQueryResponse.Merge(m, src)
+func (dst *JobQueryResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobQueryResponse.Merge(dst, src)
 }
 func (m *JobQueryResponse) XXX_Size() int {
 	return xxx_messageInfo_JobQueryResponse.Size(m)
@@ -1284,7 +1284,7 @@ func (m *JobGetQueryResultsRequest) Reset()         { *m = JobGetQueryResultsReq
 func (m *JobGetQueryResultsRequest) String() string { return proto.CompactTextString(m) }
 func (*JobGetQueryResultsRequest) ProtoMessage()    {}
 func (*JobGetQueryResultsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{14}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{14}
 }
 func (m *JobGetQueryResultsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobGetQueryResultsRequest.Unmarshal(m, b)
@@ -1292,8 +1292,8 @@ func (m *JobGetQueryResultsRequest) XXX_Unmarshal(b []byte) error {
 func (m *JobGetQueryResultsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobGetQueryResultsRequest.Marshal(b, m, deterministic)
 }
-func (m *JobGetQueryResultsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobGetQueryResultsRequest.Merge(m, src)
+func (dst *JobGetQueryResultsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobGetQueryResultsRequest.Merge(dst, src)
 }
 func (m *JobGetQueryResultsRequest) XXX_Size() int {
 	return xxx_messageInfo_JobGetQueryResultsRequest.Size(m)
@@ -1335,7 +1335,7 @@ func (m *JobGetQueryResultsResponse) Reset()         { *m = JobGetQueryResultsRe
 func (m *JobGetQueryResultsResponse) String() string { return proto.CompactTextString(m) }
 func (*JobGetQueryResultsResponse) ProtoMessage()    {}
 func (*JobGetQueryResultsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{15}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{15}
 }
 func (m *JobGetQueryResultsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobGetQueryResultsResponse.Unmarshal(m, b)
@@ -1343,8 +1343,8 @@ func (m *JobGetQueryResultsResponse) XXX_Unmarshal(b []byte) error {
 func (m *JobGetQueryResultsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobGetQueryResultsResponse.Marshal(b, m, deterministic)
 }
-func (m *JobGetQueryResultsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobGetQueryResultsResponse.Merge(m, src)
+func (dst *JobGetQueryResultsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobGetQueryResultsResponse.Merge(dst, src)
 }
 func (m *JobGetQueryResultsResponse) XXX_Size() int {
 	return xxx_messageInfo_JobGetQueryResultsResponse.Size(m)
@@ -1383,7 +1383,7 @@ func (m *JobQueryDoneResponse) Reset()         { *m = JobQueryDoneResponse{} }
 func (m *JobQueryDoneResponse) String() string { return proto.CompactTextString(m) }
 func (*JobQueryDoneResponse) ProtoMessage()    {}
 func (*JobQueryDoneResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{16}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{16}
 }
 func (m *JobQueryDoneResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobQueryDoneResponse.Unmarshal(m, b)
@@ -1391,8 +1391,8 @@ func (m *JobQueryDoneResponse) XXX_Unmarshal(b []byte) error {
 func (m *JobQueryDoneResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobQueryDoneResponse.Marshal(b, m, deterministic)
 }
-func (m *JobQueryDoneResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobQueryDoneResponse.Merge(m, src)
+func (dst *JobQueryDoneResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobQueryDoneResponse.Merge(dst, src)
 }
 func (m *JobQueryDoneResponse) XXX_Size() int {
 	return xxx_messageInfo_JobQueryDoneResponse.Size(m)
@@ -1425,7 +1425,7 @@ func (m *JobCompletedEvent) Reset()         { *m = JobCompletedEvent{} }
 func (m *JobCompletedEvent) String() string { return proto.CompactTextString(m) }
 func (*JobCompletedEvent) ProtoMessage()    {}
 func (*JobCompletedEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{17}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{17}
 }
 func (m *JobCompletedEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobCompletedEvent.Unmarshal(m, b)
@@ -1433,8 +1433,8 @@ func (m *JobCompletedEvent) XXX_Unmarshal(b []byte) error {
 func (m *JobCompletedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobCompletedEvent.Marshal(b, m, deterministic)
 }
-func (m *JobCompletedEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobCompletedEvent.Merge(m, src)
+func (dst *JobCompletedEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobCompletedEvent.Merge(dst, src)
 }
 func (m *JobCompletedEvent) XXX_Size() int {
 	return xxx_messageInfo_JobCompletedEvent.Size(m)
@@ -1474,7 +1474,7 @@ func (m *TableDataListRequest) Reset()         { *m = TableDataListRequest{} }
 func (m *TableDataListRequest) String() string { return proto.CompactTextString(m) }
 func (*TableDataListRequest) ProtoMessage()    {}
 func (*TableDataListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{18}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{18}
 }
 func (m *TableDataListRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableDataListRequest.Unmarshal(m, b)
@@ -1482,8 +1482,8 @@ func (m *TableDataListRequest) XXX_Unmarshal(b []byte) error {
 func (m *TableDataListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableDataListRequest.Marshal(b, m, deterministic)
 }
-func (m *TableDataListRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableDataListRequest.Merge(m, src)
+func (dst *TableDataListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableDataListRequest.Merge(dst, src)
 }
 func (m *TableDataListRequest) XXX_Size() int {
 	return xxx_messageInfo_TableDataListRequest.Size(m)
@@ -1541,7 +1541,7 @@ func (m *Table) Reset()         { *m = Table{} }
 func (m *Table) String() string { return proto.CompactTextString(m) }
 func (*Table) ProtoMessage()    {}
 func (*Table) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{19}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{19}
 }
 func (m *Table) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Table.Unmarshal(m, b)
@@ -1549,8 +1549,8 @@ func (m *Table) XXX_Unmarshal(b []byte) error {
 func (m *Table) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Table.Marshal(b, m, deterministic)
 }
-func (m *Table) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Table.Merge(m, src)
+func (dst *Table) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Table.Merge(dst, src)
 }
 func (m *Table) XXX_Size() int {
 	return xxx_messageInfo_Table.Size(m)
@@ -1626,7 +1626,7 @@ func (m *TableInfo) Reset()         { *m = TableInfo{} }
 func (m *TableInfo) String() string { return proto.CompactTextString(m) }
 func (*TableInfo) ProtoMessage()    {}
 func (*TableInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{20}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{20}
 }
 func (m *TableInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableInfo.Unmarshal(m, b)
@@ -1634,8 +1634,8 @@ func (m *TableInfo) XXX_Unmarshal(b []byte) error {
 func (m *TableInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableInfo.Marshal(b, m, deterministic)
 }
-func (m *TableInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableInfo.Merge(m, src)
+func (dst *TableInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableInfo.Merge(dst, src)
 }
 func (m *TableInfo) XXX_Size() int {
 	return xxx_messageInfo_TableInfo.Size(m)
@@ -1673,7 +1673,7 @@ func (m *TableViewDefinition) Reset()         { *m = TableViewDefinition{} }
 func (m *TableViewDefinition) String() string { return proto.CompactTextString(m) }
 func (*TableViewDefinition) ProtoMessage()    {}
 func (*TableViewDefinition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{21}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{21}
 }
 func (m *TableViewDefinition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableViewDefinition.Unmarshal(m, b)
@@ -1681,8 +1681,8 @@ func (m *TableViewDefinition) XXX_Unmarshal(b []byte) error {
 func (m *TableViewDefinition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableViewDefinition.Marshal(b, m, deterministic)
 }
-func (m *TableViewDefinition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableViewDefinition.Merge(m, src)
+func (dst *TableViewDefinition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableViewDefinition.Merge(dst, src)
 }
 func (m *TableViewDefinition) XXX_Size() int {
 	return xxx_messageInfo_TableViewDefinition.Size(m)
@@ -1728,7 +1728,7 @@ func (m *Dataset) Reset()         { *m = Dataset{} }
 func (m *Dataset) String() string { return proto.CompactTextString(m) }
 func (*Dataset) ProtoMessage()    {}
 func (*Dataset) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{22}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{22}
 }
 func (m *Dataset) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Dataset.Unmarshal(m, b)
@@ -1736,8 +1736,8 @@ func (m *Dataset) XXX_Unmarshal(b []byte) error {
 func (m *Dataset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Dataset.Marshal(b, m, deterministic)
 }
-func (m *Dataset) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Dataset.Merge(m, src)
+func (dst *Dataset) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Dataset.Merge(dst, src)
 }
 func (m *Dataset) XXX_Size() int {
 	return xxx_messageInfo_Dataset.Size(m)
@@ -1806,7 +1806,7 @@ func (m *DatasetInfo) Reset()         { *m = DatasetInfo{} }
 func (m *DatasetInfo) String() string { return proto.CompactTextString(m) }
 func (*DatasetInfo) ProtoMessage()    {}
 func (*DatasetInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{23}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{23}
 }
 func (m *DatasetInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetInfo.Unmarshal(m, b)
@@ -1814,8 +1814,8 @@ func (m *DatasetInfo) XXX_Unmarshal(b []byte) error {
 func (m *DatasetInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetInfo.Marshal(b, m, deterministic)
 }
-func (m *DatasetInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetInfo.Merge(m, src)
+func (dst *DatasetInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetInfo.Merge(dst, src)
 }
 func (m *DatasetInfo) XXX_Size() int {
 	return xxx_messageInfo_DatasetInfo.Size(m)
@@ -1853,7 +1853,7 @@ func (m *BigQueryAcl) Reset()         { *m = BigQueryAcl{} }
 func (m *BigQueryAcl) String() string { return proto.CompactTextString(m) }
 func (*BigQueryAcl) ProtoMessage()    {}
 func (*BigQueryAcl) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{24}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{24}
 }
 func (m *BigQueryAcl) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BigQueryAcl.Unmarshal(m, b)
@@ -1861,8 +1861,8 @@ func (m *BigQueryAcl) XXX_Unmarshal(b []byte) error {
 func (m *BigQueryAcl) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BigQueryAcl.Marshal(b, m, deterministic)
 }
-func (m *BigQueryAcl) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BigQueryAcl.Merge(m, src)
+func (dst *BigQueryAcl) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BigQueryAcl.Merge(dst, src)
 }
 func (m *BigQueryAcl) XXX_Size() int {
 	return xxx_messageInfo_BigQueryAcl.Size(m)
@@ -1904,7 +1904,7 @@ func (m *BigQueryAcl_Entry) Reset()         { *m = BigQueryAcl_Entry{} }
 func (m *BigQueryAcl_Entry) String() string { return proto.CompactTextString(m) }
 func (*BigQueryAcl_Entry) ProtoMessage()    {}
 func (*BigQueryAcl_Entry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{24, 0}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{24, 0}
 }
 func (m *BigQueryAcl_Entry) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BigQueryAcl_Entry.Unmarshal(m, b)
@@ -1912,8 +1912,8 @@ func (m *BigQueryAcl_Entry) XXX_Unmarshal(b []byte) error {
 func (m *BigQueryAcl_Entry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BigQueryAcl_Entry.Marshal(b, m, deterministic)
 }
-func (m *BigQueryAcl_Entry) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BigQueryAcl_Entry.Merge(m, src)
+func (dst *BigQueryAcl_Entry) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BigQueryAcl_Entry.Merge(dst, src)
 }
 func (m *BigQueryAcl_Entry) XXX_Size() int {
 	return xxx_messageInfo_BigQueryAcl_Entry.Size(m)
@@ -1985,7 +1985,7 @@ func (m *Job) Reset()         { *m = Job{} }
 func (m *Job) String() string { return proto.CompactTextString(m) }
 func (*Job) ProtoMessage()    {}
 func (*Job) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{25}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{25}
 }
 func (m *Job) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Job.Unmarshal(m, b)
@@ -1993,8 +1993,8 @@ func (m *Job) XXX_Unmarshal(b []byte) error {
 func (m *Job) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Job.Marshal(b, m, deterministic)
 }
-func (m *Job) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Job.Merge(m, src)
+func (dst *Job) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Job.Merge(dst, src)
 }
 func (m *Job) XXX_Size() int {
 	return xxx_messageInfo_Job.Size(m)
@@ -2056,7 +2056,7 @@ func (m *JobConfiguration) Reset()         { *m = JobConfiguration{} }
 func (m *JobConfiguration) String() string { return proto.CompactTextString(m) }
 func (*JobConfiguration) ProtoMessage()    {}
 func (*JobConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{26}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{26}
 }
 func (m *JobConfiguration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobConfiguration.Unmarshal(m, b)
@@ -2064,8 +2064,8 @@ func (m *JobConfiguration) XXX_Unmarshal(b []byte) error {
 func (m *JobConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobConfiguration.Marshal(b, m, deterministic)
 }
-func (m *JobConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobConfiguration.Merge(m, src)
+func (dst *JobConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobConfiguration.Merge(dst, src)
 }
 func (m *JobConfiguration) XXX_Size() int {
 	return xxx_messageInfo_JobConfiguration.Size(m)
@@ -2284,7 +2284,7 @@ func (m *JobConfiguration_Query) Reset()         { *m = JobConfiguration_Query{}
 func (m *JobConfiguration_Query) String() string { return proto.CompactTextString(m) }
 func (*JobConfiguration_Query) ProtoMessage()    {}
 func (*JobConfiguration_Query) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{26, 0}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{26, 0}
 }
 func (m *JobConfiguration_Query) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobConfiguration_Query.Unmarshal(m, b)
@@ -2292,8 +2292,8 @@ func (m *JobConfiguration_Query) XXX_Unmarshal(b []byte) error {
 func (m *JobConfiguration_Query) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobConfiguration_Query.Marshal(b, m, deterministic)
 }
-func (m *JobConfiguration_Query) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobConfiguration_Query.Merge(m, src)
+func (dst *JobConfiguration_Query) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobConfiguration_Query.Merge(dst, src)
 }
 func (m *JobConfiguration_Query) XXX_Size() int {
 	return xxx_messageInfo_JobConfiguration_Query.Size(m)
@@ -2371,7 +2371,7 @@ func (m *JobConfiguration_Load) Reset()         { *m = JobConfiguration_Load{} }
 func (m *JobConfiguration_Load) String() string { return proto.CompactTextString(m) }
 func (*JobConfiguration_Load) ProtoMessage()    {}
 func (*JobConfiguration_Load) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{26, 1}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{26, 1}
 }
 func (m *JobConfiguration_Load) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobConfiguration_Load.Unmarshal(m, b)
@@ -2379,8 +2379,8 @@ func (m *JobConfiguration_Load) XXX_Unmarshal(b []byte) error {
 func (m *JobConfiguration_Load) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobConfiguration_Load.Marshal(b, m, deterministic)
 }
-func (m *JobConfiguration_Load) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobConfiguration_Load.Merge(m, src)
+func (dst *JobConfiguration_Load) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobConfiguration_Load.Merge(dst, src)
 }
 func (m *JobConfiguration_Load) XXX_Size() int {
 	return xxx_messageInfo_JobConfiguration_Load.Size(m)
@@ -2442,7 +2442,7 @@ func (m *JobConfiguration_Extract) Reset()         { *m = JobConfiguration_Extra
 func (m *JobConfiguration_Extract) String() string { return proto.CompactTextString(m) }
 func (*JobConfiguration_Extract) ProtoMessage()    {}
 func (*JobConfiguration_Extract) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{26, 2}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{26, 2}
 }
 func (m *JobConfiguration_Extract) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobConfiguration_Extract.Unmarshal(m, b)
@@ -2450,8 +2450,8 @@ func (m *JobConfiguration_Extract) XXX_Unmarshal(b []byte) error {
 func (m *JobConfiguration_Extract) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobConfiguration_Extract.Marshal(b, m, deterministic)
 }
-func (m *JobConfiguration_Extract) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobConfiguration_Extract.Merge(m, src)
+func (dst *JobConfiguration_Extract) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobConfiguration_Extract.Merge(dst, src)
 }
 func (m *JobConfiguration_Extract) XXX_Size() int {
 	return xxx_messageInfo_JobConfiguration_Extract.Size(m)
@@ -2497,7 +2497,7 @@ func (m *JobConfiguration_TableCopy) Reset()         { *m = JobConfiguration_Tab
 func (m *JobConfiguration_TableCopy) String() string { return proto.CompactTextString(m) }
 func (*JobConfiguration_TableCopy) ProtoMessage()    {}
 func (*JobConfiguration_TableCopy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{26, 3}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{26, 3}
 }
 func (m *JobConfiguration_TableCopy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobConfiguration_TableCopy.Unmarshal(m, b)
@@ -2505,8 +2505,8 @@ func (m *JobConfiguration_TableCopy) XXX_Unmarshal(b []byte) error {
 func (m *JobConfiguration_TableCopy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobConfiguration_TableCopy.Marshal(b, m, deterministic)
 }
-func (m *JobConfiguration_TableCopy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobConfiguration_TableCopy.Merge(m, src)
+func (dst *JobConfiguration_TableCopy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobConfiguration_TableCopy.Merge(dst, src)
 }
 func (m *JobConfiguration_TableCopy) XXX_Size() int {
 	return xxx_messageInfo_JobConfiguration_TableCopy.Size(m)
@@ -2560,7 +2560,7 @@ func (m *TableDefinition) Reset()         { *m = TableDefinition{} }
 func (m *TableDefinition) String() string { return proto.CompactTextString(m) }
 func (*TableDefinition) ProtoMessage()    {}
 func (*TableDefinition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{27}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{27}
 }
 func (m *TableDefinition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableDefinition.Unmarshal(m, b)
@@ -2568,8 +2568,8 @@ func (m *TableDefinition) XXX_Unmarshal(b []byte) error {
 func (m *TableDefinition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableDefinition.Marshal(b, m, deterministic)
 }
-func (m *TableDefinition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableDefinition.Merge(m, src)
+func (dst *TableDefinition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableDefinition.Merge(dst, src)
 }
 func (m *TableDefinition) XXX_Size() int {
 	return xxx_messageInfo_TableDefinition.Size(m)
@@ -2609,7 +2609,7 @@ func (m *JobStatus) Reset()         { *m = JobStatus{} }
 func (m *JobStatus) String() string { return proto.CompactTextString(m) }
 func (*JobStatus) ProtoMessage()    {}
 func (*JobStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{28}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{28}
 }
 func (m *JobStatus) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobStatus.Unmarshal(m, b)
@@ -2617,8 +2617,8 @@ func (m *JobStatus) XXX_Unmarshal(b []byte) error {
 func (m *JobStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobStatus.Marshal(b, m, deterministic)
 }
-func (m *JobStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobStatus.Merge(m, src)
+func (dst *JobStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobStatus.Merge(dst, src)
 }
 func (m *JobStatus) XXX_Size() int {
 	return xxx_messageInfo_JobStatus.Size(m)
@@ -2666,7 +2666,7 @@ func (m *JobStatistics) Reset()         { *m = JobStatistics{} }
 func (m *JobStatistics) String() string { return proto.CompactTextString(m) }
 func (*JobStatistics) ProtoMessage()    {}
 func (*JobStatistics) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{29}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{29}
 }
 func (m *JobStatistics) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobStatistics.Unmarshal(m, b)
@@ -2674,8 +2674,8 @@ func (m *JobStatistics) XXX_Unmarshal(b []byte) error {
 func (m *JobStatistics) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobStatistics.Marshal(b, m, deterministic)
 }
-func (m *JobStatistics) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobStatistics.Merge(m, src)
+func (dst *JobStatistics) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobStatistics.Merge(dst, src)
 }
 func (m *JobStatistics) XXX_Size() int {
 	return xxx_messageInfo_JobStatistics.Size(m)
@@ -2743,7 +2743,7 @@ func (m *DatasetName) Reset()         { *m = DatasetName{} }
 func (m *DatasetName) String() string { return proto.CompactTextString(m) }
 func (*DatasetName) ProtoMessage()    {}
 func (*DatasetName) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{30}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{30}
 }
 func (m *DatasetName) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DatasetName.Unmarshal(m, b)
@@ -2751,8 +2751,8 @@ func (m *DatasetName) XXX_Unmarshal(b []byte) error {
 func (m *DatasetName) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DatasetName.Marshal(b, m, deterministic)
 }
-func (m *DatasetName) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DatasetName.Merge(m, src)
+func (dst *DatasetName) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DatasetName.Merge(dst, src)
 }
 func (m *DatasetName) XXX_Size() int {
 	return xxx_messageInfo_DatasetName.Size(m)
@@ -2794,7 +2794,7 @@ func (m *TableName) Reset()         { *m = TableName{} }
 func (m *TableName) String() string { return proto.CompactTextString(m) }
 func (*TableName) ProtoMessage()    {}
 func (*TableName) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{31}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{31}
 }
 func (m *TableName) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableName.Unmarshal(m, b)
@@ -2802,8 +2802,8 @@ func (m *TableName) XXX_Unmarshal(b []byte) error {
 func (m *TableName) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TableName.Marshal(b, m, deterministic)
 }
-func (m *TableName) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TableName.Merge(m, src)
+func (dst *TableName) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TableName.Merge(dst, src)
 }
 func (m *TableName) XXX_Size() int {
 	return xxx_messageInfo_TableName.Size(m)
@@ -2850,7 +2850,7 @@ func (m *JobName) Reset()         { *m = JobName{} }
 func (m *JobName) String() string { return proto.CompactTextString(m) }
 func (*JobName) ProtoMessage()    {}
 func (*JobName) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d113473d81b6d20, []int{32}
+	return fileDescriptor_audit_data_c8c983cfffeff6d8, []int{32}
 }
 func (m *JobName) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobName.Unmarshal(m, b)
@@ -2858,8 +2858,8 @@ func (m *JobName) XXX_Unmarshal(b []byte) error {
 func (m *JobName) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_JobName.Marshal(b, m, deterministic)
 }
-func (m *JobName) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobName.Merge(m, src)
+func (dst *JobName) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JobName.Merge(dst, src)
 }
 func (m *JobName) XXX_Size() int {
 	return xxx_messageInfo_JobName.Size(m)
@@ -2926,10 +2926,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/bigquery/logging/v1/audit_data.proto", fileDescriptor_3d113473d81b6d20)
+	proto.RegisterFile("google/cloud/bigquery/logging/v1/audit_data.proto", fileDescriptor_audit_data_c8c983cfffeff6d8)
 }
 
-var fileDescriptor_3d113473d81b6d20 = []byte{
+var fileDescriptor_audit_data_c8c983cfffeff6d8 = []byte{
 	// 2036 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x59, 0x4f, 0x73, 0x1b, 0x49,
 	0x15, 0x8f, 0x2c, 0xc9, 0x92, 0x9e, 0xec, 0xd8, 0xee, 0xd8, 0x9b, 0x58, 0x90, 0xdd, 0x30, 0x40,

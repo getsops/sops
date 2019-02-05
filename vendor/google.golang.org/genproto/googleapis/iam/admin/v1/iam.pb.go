@@ -45,7 +45,6 @@ var ServiceAccountKeyAlgorithm_name = map[int32]string{
 	1: "KEY_ALG_RSA_1024",
 	2: "KEY_ALG_RSA_2048",
 }
-
 var ServiceAccountKeyAlgorithm_value = map[string]int32{
 	"KEY_ALG_UNSPECIFIED": 0,
 	"KEY_ALG_RSA_1024":    1,
@@ -55,9 +54,8 @@ var ServiceAccountKeyAlgorithm_value = map[string]int32{
 func (x ServiceAccountKeyAlgorithm) String() string {
 	return proto.EnumName(ServiceAccountKeyAlgorithm_name, int32(x))
 }
-
 func (ServiceAccountKeyAlgorithm) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{0}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{0}
 }
 
 // Supported private key output formats.
@@ -79,7 +77,6 @@ var ServiceAccountPrivateKeyType_name = map[int32]string{
 	1: "TYPE_PKCS12_FILE",
 	2: "TYPE_GOOGLE_CREDENTIALS_FILE",
 }
-
 var ServiceAccountPrivateKeyType_value = map[string]int32{
 	"TYPE_UNSPECIFIED":             0,
 	"TYPE_PKCS12_FILE":             1,
@@ -89,9 +86,8 @@ var ServiceAccountPrivateKeyType_value = map[string]int32{
 func (x ServiceAccountPrivateKeyType) String() string {
 	return proto.EnumName(ServiceAccountPrivateKeyType_name, int32(x))
 }
-
 func (ServiceAccountPrivateKeyType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{1}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{1}
 }
 
 // Supported public key output formats.
@@ -111,7 +107,6 @@ var ServiceAccountPublicKeyType_name = map[int32]string{
 	1: "TYPE_X509_PEM_FILE",
 	2: "TYPE_RAW_PUBLIC_KEY",
 }
-
 var ServiceAccountPublicKeyType_value = map[string]int32{
 	"TYPE_NONE":           0,
 	"TYPE_X509_PEM_FILE":  1,
@@ -121,9 +116,8 @@ var ServiceAccountPublicKeyType_value = map[string]int32{
 func (x ServiceAccountPublicKeyType) String() string {
 	return proto.EnumName(ServiceAccountPublicKeyType_name, int32(x))
 }
-
 func (ServiceAccountPublicKeyType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{2}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{2}
 }
 
 // A view for Role objects.
@@ -141,7 +135,6 @@ var RoleView_name = map[int32]string{
 	0: "BASIC",
 	1: "FULL",
 }
-
 var RoleView_value = map[string]int32{
 	"BASIC": 0,
 	"FULL":  1,
@@ -150,9 +143,8 @@ var RoleView_value = map[string]int32{
 func (x RoleView) String() string {
 	return proto.EnumName(RoleView_name, int32(x))
 }
-
 func (RoleView) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{3}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{3}
 }
 
 // `KeyType` filters to selectively retrieve certain varieties
@@ -174,7 +166,6 @@ var ListServiceAccountKeysRequest_KeyType_name = map[int32]string{
 	1: "USER_MANAGED",
 	2: "SYSTEM_MANAGED",
 }
-
 var ListServiceAccountKeysRequest_KeyType_value = map[string]int32{
 	"KEY_TYPE_UNSPECIFIED": 0,
 	"USER_MANAGED":         1,
@@ -184,9 +175,8 @@ var ListServiceAccountKeysRequest_KeyType_value = map[string]int32{
 func (x ListServiceAccountKeysRequest_KeyType) String() string {
 	return proto.EnumName(ListServiceAccountKeysRequest_KeyType_name, int32(x))
 }
-
 func (ListServiceAccountKeysRequest_KeyType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{6, 0}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{6, 0}
 }
 
 // A stage representing a role's lifecycle phase.
@@ -216,7 +206,6 @@ var Role_RoleLaunchStage_name = map[int32]string{
 	5: "DISABLED",
 	6: "EAP",
 }
-
 var Role_RoleLaunchStage_value = map[string]int32{
 	"ALPHA":      0,
 	"BETA":       1,
@@ -229,9 +218,8 @@ var Role_RoleLaunchStage_value = map[string]int32{
 func (x Role_RoleLaunchStage) String() string {
 	return proto.EnumName(Role_RoleLaunchStage_name, int32(x))
 }
-
 func (Role_RoleLaunchStage) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{16, 0}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{16, 0}
 }
 
 // A stage representing a permission's lifecycle phase.
@@ -254,7 +242,6 @@ var Permission_PermissionLaunchStage_name = map[int32]string{
 	2: "GA",
 	3: "DEPRECATED",
 }
-
 var Permission_PermissionLaunchStage_value = map[string]int32{
 	"ALPHA":      0,
 	"BETA":       1,
@@ -265,9 +252,8 @@ var Permission_PermissionLaunchStage_value = map[string]int32{
 func (x Permission_PermissionLaunchStage) String() string {
 	return proto.EnumName(Permission_PermissionLaunchStage_name, int32(x))
 }
-
 func (Permission_PermissionLaunchStage) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{26, 0}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{26, 0}
 }
 
 // The state of the permission with regards to custom roles.
@@ -287,7 +273,6 @@ var Permission_CustomRolesSupportLevel_name = map[int32]string{
 	1: "TESTING",
 	2: "NOT_SUPPORTED",
 }
-
 var Permission_CustomRolesSupportLevel_value = map[string]int32{
 	"SUPPORTED":     0,
 	"TESTING":       1,
@@ -297,9 +282,8 @@ var Permission_CustomRolesSupportLevel_value = map[string]int32{
 func (x Permission_CustomRolesSupportLevel) String() string {
 	return proto.EnumName(Permission_CustomRolesSupportLevel_name, int32(x))
 }
-
 func (Permission_CustomRolesSupportLevel) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{26, 1}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{26, 1}
 }
 
 // A service account in the Identity and Access Management API.
@@ -354,7 +338,7 @@ func (m *ServiceAccount) Reset()         { *m = ServiceAccount{} }
 func (m *ServiceAccount) String() string { return proto.CompactTextString(m) }
 func (*ServiceAccount) ProtoMessage()    {}
 func (*ServiceAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{0}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{0}
 }
 func (m *ServiceAccount) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServiceAccount.Unmarshal(m, b)
@@ -362,8 +346,8 @@ func (m *ServiceAccount) XXX_Unmarshal(b []byte) error {
 func (m *ServiceAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ServiceAccount.Marshal(b, m, deterministic)
 }
-func (m *ServiceAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceAccount.Merge(m, src)
+func (dst *ServiceAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceAccount.Merge(dst, src)
 }
 func (m *ServiceAccount) XXX_Size() int {
 	return xxx_messageInfo_ServiceAccount.Size(m)
@@ -446,7 +430,7 @@ func (m *CreateServiceAccountRequest) Reset()         { *m = CreateServiceAccoun
 func (m *CreateServiceAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateServiceAccountRequest) ProtoMessage()    {}
 func (*CreateServiceAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{1}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{1}
 }
 func (m *CreateServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateServiceAccountRequest.Unmarshal(m, b)
@@ -454,8 +438,8 @@ func (m *CreateServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateServiceAccountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateServiceAccountRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateServiceAccountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateServiceAccountRequest.Merge(m, src)
+func (dst *CreateServiceAccountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateServiceAccountRequest.Merge(dst, src)
 }
 func (m *CreateServiceAccountRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateServiceAccountRequest.Size(m)
@@ -509,7 +493,7 @@ func (m *ListServiceAccountsRequest) Reset()         { *m = ListServiceAccountsR
 func (m *ListServiceAccountsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListServiceAccountsRequest) ProtoMessage()    {}
 func (*ListServiceAccountsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{2}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{2}
 }
 func (m *ListServiceAccountsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListServiceAccountsRequest.Unmarshal(m, b)
@@ -517,8 +501,8 @@ func (m *ListServiceAccountsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListServiceAccountsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListServiceAccountsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListServiceAccountsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListServiceAccountsRequest.Merge(m, src)
+func (dst *ListServiceAccountsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListServiceAccountsRequest.Merge(dst, src)
 }
 func (m *ListServiceAccountsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListServiceAccountsRequest.Size(m)
@@ -567,7 +551,7 @@ func (m *ListServiceAccountsResponse) Reset()         { *m = ListServiceAccounts
 func (m *ListServiceAccountsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListServiceAccountsResponse) ProtoMessage()    {}
 func (*ListServiceAccountsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{3}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{3}
 }
 func (m *ListServiceAccountsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListServiceAccountsResponse.Unmarshal(m, b)
@@ -575,8 +559,8 @@ func (m *ListServiceAccountsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListServiceAccountsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListServiceAccountsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListServiceAccountsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListServiceAccountsResponse.Merge(m, src)
+func (dst *ListServiceAccountsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListServiceAccountsResponse.Merge(dst, src)
 }
 func (m *ListServiceAccountsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListServiceAccountsResponse.Size(m)
@@ -618,7 +602,7 @@ func (m *GetServiceAccountRequest) Reset()         { *m = GetServiceAccountReque
 func (m *GetServiceAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*GetServiceAccountRequest) ProtoMessage()    {}
 func (*GetServiceAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{4}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{4}
 }
 func (m *GetServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetServiceAccountRequest.Unmarshal(m, b)
@@ -626,8 +610,8 @@ func (m *GetServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetServiceAccountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetServiceAccountRequest.Marshal(b, m, deterministic)
 }
-func (m *GetServiceAccountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetServiceAccountRequest.Merge(m, src)
+func (dst *GetServiceAccountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetServiceAccountRequest.Merge(dst, src)
 }
 func (m *GetServiceAccountRequest) XXX_Size() int {
 	return xxx_messageInfo_GetServiceAccountRequest.Size(m)
@@ -662,7 +646,7 @@ func (m *DeleteServiceAccountRequest) Reset()         { *m = DeleteServiceAccoun
 func (m *DeleteServiceAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteServiceAccountRequest) ProtoMessage()    {}
 func (*DeleteServiceAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{5}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{5}
 }
 func (m *DeleteServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteServiceAccountRequest.Unmarshal(m, b)
@@ -670,8 +654,8 @@ func (m *DeleteServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteServiceAccountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteServiceAccountRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteServiceAccountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteServiceAccountRequest.Merge(m, src)
+func (dst *DeleteServiceAccountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteServiceAccountRequest.Merge(dst, src)
 }
 func (m *DeleteServiceAccountRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteServiceAccountRequest.Size(m)
@@ -711,7 +695,7 @@ func (m *ListServiceAccountKeysRequest) Reset()         { *m = ListServiceAccoun
 func (m *ListServiceAccountKeysRequest) String() string { return proto.CompactTextString(m) }
 func (*ListServiceAccountKeysRequest) ProtoMessage()    {}
 func (*ListServiceAccountKeysRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{6}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{6}
 }
 func (m *ListServiceAccountKeysRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListServiceAccountKeysRequest.Unmarshal(m, b)
@@ -719,8 +703,8 @@ func (m *ListServiceAccountKeysRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListServiceAccountKeysRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListServiceAccountKeysRequest.Marshal(b, m, deterministic)
 }
-func (m *ListServiceAccountKeysRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListServiceAccountKeysRequest.Merge(m, src)
+func (dst *ListServiceAccountKeysRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListServiceAccountKeysRequest.Merge(dst, src)
 }
 func (m *ListServiceAccountKeysRequest) XXX_Size() int {
 	return xxx_messageInfo_ListServiceAccountKeysRequest.Size(m)
@@ -758,7 +742,7 @@ func (m *ListServiceAccountKeysResponse) Reset()         { *m = ListServiceAccou
 func (m *ListServiceAccountKeysResponse) String() string { return proto.CompactTextString(m) }
 func (*ListServiceAccountKeysResponse) ProtoMessage()    {}
 func (*ListServiceAccountKeysResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{7}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{7}
 }
 func (m *ListServiceAccountKeysResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListServiceAccountKeysResponse.Unmarshal(m, b)
@@ -766,8 +750,8 @@ func (m *ListServiceAccountKeysResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListServiceAccountKeysResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListServiceAccountKeysResponse.Marshal(b, m, deterministic)
 }
-func (m *ListServiceAccountKeysResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListServiceAccountKeysResponse.Merge(m, src)
+func (dst *ListServiceAccountKeysResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListServiceAccountKeysResponse.Merge(dst, src)
 }
 func (m *ListServiceAccountKeysResponse) XXX_Size() int {
 	return xxx_messageInfo_ListServiceAccountKeysResponse.Size(m)
@@ -806,7 +790,7 @@ func (m *GetServiceAccountKeyRequest) Reset()         { *m = GetServiceAccountKe
 func (m *GetServiceAccountKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetServiceAccountKeyRequest) ProtoMessage()    {}
 func (*GetServiceAccountKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{8}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{8}
 }
 func (m *GetServiceAccountKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetServiceAccountKeyRequest.Unmarshal(m, b)
@@ -814,8 +798,8 @@ func (m *GetServiceAccountKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetServiceAccountKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetServiceAccountKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetServiceAccountKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetServiceAccountKeyRequest.Merge(m, src)
+func (dst *GetServiceAccountKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetServiceAccountKeyRequest.Merge(dst, src)
 }
 func (m *GetServiceAccountKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetServiceAccountKeyRequest.Size(m)
@@ -892,7 +876,7 @@ func (m *ServiceAccountKey) Reset()         { *m = ServiceAccountKey{} }
 func (m *ServiceAccountKey) String() string { return proto.CompactTextString(m) }
 func (*ServiceAccountKey) ProtoMessage()    {}
 func (*ServiceAccountKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{9}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{9}
 }
 func (m *ServiceAccountKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServiceAccountKey.Unmarshal(m, b)
@@ -900,8 +884,8 @@ func (m *ServiceAccountKey) XXX_Unmarshal(b []byte) error {
 func (m *ServiceAccountKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ServiceAccountKey.Marshal(b, m, deterministic)
 }
-func (m *ServiceAccountKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceAccountKey.Merge(m, src)
+func (dst *ServiceAccountKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceAccountKey.Merge(dst, src)
 }
 func (m *ServiceAccountKey) XXX_Size() int {
 	return xxx_messageInfo_ServiceAccountKey.Size(m)
@@ -985,7 +969,7 @@ func (m *CreateServiceAccountKeyRequest) Reset()         { *m = CreateServiceAcc
 func (m *CreateServiceAccountKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateServiceAccountKeyRequest) ProtoMessage()    {}
 func (*CreateServiceAccountKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{10}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{10}
 }
 func (m *CreateServiceAccountKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateServiceAccountKeyRequest.Unmarshal(m, b)
@@ -993,8 +977,8 @@ func (m *CreateServiceAccountKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateServiceAccountKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateServiceAccountKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateServiceAccountKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateServiceAccountKeyRequest.Merge(m, src)
+func (dst *CreateServiceAccountKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateServiceAccountKeyRequest.Merge(dst, src)
 }
 func (m *CreateServiceAccountKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateServiceAccountKeyRequest.Size(m)
@@ -1043,7 +1027,7 @@ func (m *DeleteServiceAccountKeyRequest) Reset()         { *m = DeleteServiceAcc
 func (m *DeleteServiceAccountKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteServiceAccountKeyRequest) ProtoMessage()    {}
 func (*DeleteServiceAccountKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{11}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{11}
 }
 func (m *DeleteServiceAccountKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteServiceAccountKeyRequest.Unmarshal(m, b)
@@ -1051,8 +1035,8 @@ func (m *DeleteServiceAccountKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteServiceAccountKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteServiceAccountKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteServiceAccountKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteServiceAccountKeyRequest.Merge(m, src)
+func (dst *DeleteServiceAccountKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteServiceAccountKeyRequest.Merge(dst, src)
 }
 func (m *DeleteServiceAccountKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteServiceAccountKeyRequest.Size(m)
@@ -1089,7 +1073,7 @@ func (m *SignBlobRequest) Reset()         { *m = SignBlobRequest{} }
 func (m *SignBlobRequest) String() string { return proto.CompactTextString(m) }
 func (*SignBlobRequest) ProtoMessage()    {}
 func (*SignBlobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{12}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{12}
 }
 func (m *SignBlobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignBlobRequest.Unmarshal(m, b)
@@ -1097,8 +1081,8 @@ func (m *SignBlobRequest) XXX_Unmarshal(b []byte) error {
 func (m *SignBlobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignBlobRequest.Marshal(b, m, deterministic)
 }
-func (m *SignBlobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignBlobRequest.Merge(m, src)
+func (dst *SignBlobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignBlobRequest.Merge(dst, src)
 }
 func (m *SignBlobRequest) XXX_Size() int {
 	return xxx_messageInfo_SignBlobRequest.Size(m)
@@ -1138,7 +1122,7 @@ func (m *SignBlobResponse) Reset()         { *m = SignBlobResponse{} }
 func (m *SignBlobResponse) String() string { return proto.CompactTextString(m) }
 func (*SignBlobResponse) ProtoMessage()    {}
 func (*SignBlobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{13}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{13}
 }
 func (m *SignBlobResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignBlobResponse.Unmarshal(m, b)
@@ -1146,8 +1130,8 @@ func (m *SignBlobResponse) XXX_Unmarshal(b []byte) error {
 func (m *SignBlobResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignBlobResponse.Marshal(b, m, deterministic)
 }
-func (m *SignBlobResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignBlobResponse.Merge(m, src)
+func (dst *SignBlobResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignBlobResponse.Merge(dst, src)
 }
 func (m *SignBlobResponse) XXX_Size() int {
 	return xxx_messageInfo_SignBlobResponse.Size(m)
@@ -1191,7 +1175,7 @@ func (m *SignJwtRequest) Reset()         { *m = SignJwtRequest{} }
 func (m *SignJwtRequest) String() string { return proto.CompactTextString(m) }
 func (*SignJwtRequest) ProtoMessage()    {}
 func (*SignJwtRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{14}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{14}
 }
 func (m *SignJwtRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignJwtRequest.Unmarshal(m, b)
@@ -1199,8 +1183,8 @@ func (m *SignJwtRequest) XXX_Unmarshal(b []byte) error {
 func (m *SignJwtRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignJwtRequest.Marshal(b, m, deterministic)
 }
-func (m *SignJwtRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignJwtRequest.Merge(m, src)
+func (dst *SignJwtRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignJwtRequest.Merge(dst, src)
 }
 func (m *SignJwtRequest) XXX_Size() int {
 	return xxx_messageInfo_SignJwtRequest.Size(m)
@@ -1240,7 +1224,7 @@ func (m *SignJwtResponse) Reset()         { *m = SignJwtResponse{} }
 func (m *SignJwtResponse) String() string { return proto.CompactTextString(m) }
 func (*SignJwtResponse) ProtoMessage()    {}
 func (*SignJwtResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{15}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{15}
 }
 func (m *SignJwtResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignJwtResponse.Unmarshal(m, b)
@@ -1248,8 +1232,8 @@ func (m *SignJwtResponse) XXX_Unmarshal(b []byte) error {
 func (m *SignJwtResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignJwtResponse.Marshal(b, m, deterministic)
 }
-func (m *SignJwtResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignJwtResponse.Merge(m, src)
+func (dst *SignJwtResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignJwtResponse.Merge(dst, src)
 }
 func (m *SignJwtResponse) XXX_Size() int {
 	return xxx_messageInfo_SignJwtResponse.Size(m)
@@ -1307,7 +1291,7 @@ func (m *Role) Reset()         { *m = Role{} }
 func (m *Role) String() string { return proto.CompactTextString(m) }
 func (*Role) ProtoMessage()    {}
 func (*Role) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{16}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{16}
 }
 func (m *Role) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Role.Unmarshal(m, b)
@@ -1315,8 +1299,8 @@ func (m *Role) XXX_Unmarshal(b []byte) error {
 func (m *Role) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Role.Marshal(b, m, deterministic)
 }
-func (m *Role) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Role.Merge(m, src)
+func (dst *Role) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Role.Merge(dst, src)
 }
 func (m *Role) XXX_Size() int {
 	return xxx_messageInfo_Role.Size(m)
@@ -1399,7 +1383,7 @@ func (m *QueryGrantableRolesRequest) Reset()         { *m = QueryGrantableRolesR
 func (m *QueryGrantableRolesRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryGrantableRolesRequest) ProtoMessage()    {}
 func (*QueryGrantableRolesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{17}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{17}
 }
 func (m *QueryGrantableRolesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryGrantableRolesRequest.Unmarshal(m, b)
@@ -1407,8 +1391,8 @@ func (m *QueryGrantableRolesRequest) XXX_Unmarshal(b []byte) error {
 func (m *QueryGrantableRolesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryGrantableRolesRequest.Marshal(b, m, deterministic)
 }
-func (m *QueryGrantableRolesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGrantableRolesRequest.Merge(m, src)
+func (dst *QueryGrantableRolesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGrantableRolesRequest.Merge(dst, src)
 }
 func (m *QueryGrantableRolesRequest) XXX_Size() int {
 	return xxx_messageInfo_QueryGrantableRolesRequest.Size(m)
@@ -1463,7 +1447,7 @@ func (m *QueryGrantableRolesResponse) Reset()         { *m = QueryGrantableRoles
 func (m *QueryGrantableRolesResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryGrantableRolesResponse) ProtoMessage()    {}
 func (*QueryGrantableRolesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{18}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{18}
 }
 func (m *QueryGrantableRolesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryGrantableRolesResponse.Unmarshal(m, b)
@@ -1471,8 +1455,8 @@ func (m *QueryGrantableRolesResponse) XXX_Unmarshal(b []byte) error {
 func (m *QueryGrantableRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryGrantableRolesResponse.Marshal(b, m, deterministic)
 }
-func (m *QueryGrantableRolesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryGrantableRolesResponse.Merge(m, src)
+func (dst *QueryGrantableRolesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryGrantableRolesResponse.Merge(dst, src)
 }
 func (m *QueryGrantableRolesResponse) XXX_Size() int {
 	return xxx_messageInfo_QueryGrantableRolesResponse.Size(m)
@@ -1521,7 +1505,7 @@ func (m *ListRolesRequest) Reset()         { *m = ListRolesRequest{} }
 func (m *ListRolesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListRolesRequest) ProtoMessage()    {}
 func (*ListRolesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{19}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{19}
 }
 func (m *ListRolesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListRolesRequest.Unmarshal(m, b)
@@ -1529,8 +1513,8 @@ func (m *ListRolesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListRolesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListRolesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListRolesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListRolesRequest.Merge(m, src)
+func (dst *ListRolesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListRolesRequest.Merge(dst, src)
 }
 func (m *ListRolesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListRolesRequest.Size(m)
@@ -1592,7 +1576,7 @@ func (m *ListRolesResponse) Reset()         { *m = ListRolesResponse{} }
 func (m *ListRolesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListRolesResponse) ProtoMessage()    {}
 func (*ListRolesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{20}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{20}
 }
 func (m *ListRolesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListRolesResponse.Unmarshal(m, b)
@@ -1600,8 +1584,8 @@ func (m *ListRolesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListRolesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListRolesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListRolesResponse.Merge(m, src)
+func (dst *ListRolesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListRolesResponse.Merge(dst, src)
 }
 func (m *ListRolesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListRolesResponse.Size(m)
@@ -1642,7 +1626,7 @@ func (m *GetRoleRequest) Reset()         { *m = GetRoleRequest{} }
 func (m *GetRoleRequest) String() string { return proto.CompactTextString(m) }
 func (*GetRoleRequest) ProtoMessage()    {}
 func (*GetRoleRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{21}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{21}
 }
 func (m *GetRoleRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetRoleRequest.Unmarshal(m, b)
@@ -1650,8 +1634,8 @@ func (m *GetRoleRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetRoleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetRoleRequest.Marshal(b, m, deterministic)
 }
-func (m *GetRoleRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetRoleRequest.Merge(m, src)
+func (dst *GetRoleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRoleRequest.Merge(dst, src)
 }
 func (m *GetRoleRequest) XXX_Size() int {
 	return xxx_messageInfo_GetRoleRequest.Size(m)
@@ -1688,7 +1672,7 @@ func (m *CreateRoleRequest) Reset()         { *m = CreateRoleRequest{} }
 func (m *CreateRoleRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateRoleRequest) ProtoMessage()    {}
 func (*CreateRoleRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{22}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{22}
 }
 func (m *CreateRoleRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateRoleRequest.Unmarshal(m, b)
@@ -1696,8 +1680,8 @@ func (m *CreateRoleRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateRoleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateRoleRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateRoleRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateRoleRequest.Merge(m, src)
+func (dst *CreateRoleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRoleRequest.Merge(dst, src)
 }
 func (m *CreateRoleRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateRoleRequest.Size(m)
@@ -1749,7 +1733,7 @@ func (m *UpdateRoleRequest) Reset()         { *m = UpdateRoleRequest{} }
 func (m *UpdateRoleRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateRoleRequest) ProtoMessage()    {}
 func (*UpdateRoleRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{23}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{23}
 }
 func (m *UpdateRoleRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateRoleRequest.Unmarshal(m, b)
@@ -1757,8 +1741,8 @@ func (m *UpdateRoleRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateRoleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateRoleRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateRoleRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateRoleRequest.Merge(m, src)
+func (dst *UpdateRoleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateRoleRequest.Merge(dst, src)
 }
 func (m *UpdateRoleRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateRoleRequest.Size(m)
@@ -1807,7 +1791,7 @@ func (m *DeleteRoleRequest) Reset()         { *m = DeleteRoleRequest{} }
 func (m *DeleteRoleRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteRoleRequest) ProtoMessage()    {}
 func (*DeleteRoleRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{24}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{24}
 }
 func (m *DeleteRoleRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteRoleRequest.Unmarshal(m, b)
@@ -1815,8 +1799,8 @@ func (m *DeleteRoleRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteRoleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteRoleRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteRoleRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteRoleRequest.Merge(m, src)
+func (dst *DeleteRoleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRoleRequest.Merge(dst, src)
 }
 func (m *DeleteRoleRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteRoleRequest.Size(m)
@@ -1858,7 +1842,7 @@ func (m *UndeleteRoleRequest) Reset()         { *m = UndeleteRoleRequest{} }
 func (m *UndeleteRoleRequest) String() string { return proto.CompactTextString(m) }
 func (*UndeleteRoleRequest) ProtoMessage()    {}
 func (*UndeleteRoleRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{25}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{25}
 }
 func (m *UndeleteRoleRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UndeleteRoleRequest.Unmarshal(m, b)
@@ -1866,8 +1850,8 @@ func (m *UndeleteRoleRequest) XXX_Unmarshal(b []byte) error {
 func (m *UndeleteRoleRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UndeleteRoleRequest.Marshal(b, m, deterministic)
 }
-func (m *UndeleteRoleRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UndeleteRoleRequest.Merge(m, src)
+func (dst *UndeleteRoleRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UndeleteRoleRequest.Merge(dst, src)
 }
 func (m *UndeleteRoleRequest) XXX_Size() int {
 	return xxx_messageInfo_UndeleteRoleRequest.Size(m)
@@ -1915,7 +1899,7 @@ func (m *Permission) Reset()         { *m = Permission{} }
 func (m *Permission) String() string { return proto.CompactTextString(m) }
 func (*Permission) ProtoMessage()    {}
 func (*Permission) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{26}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{26}
 }
 func (m *Permission) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Permission.Unmarshal(m, b)
@@ -1923,8 +1907,8 @@ func (m *Permission) XXX_Unmarshal(b []byte) error {
 func (m *Permission) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Permission.Marshal(b, m, deterministic)
 }
-func (m *Permission) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Permission.Merge(m, src)
+func (dst *Permission) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Permission.Merge(dst, src)
 }
 func (m *Permission) XXX_Size() int {
 	return xxx_messageInfo_Permission.Size(m)
@@ -2000,7 +1984,7 @@ func (m *QueryTestablePermissionsRequest) Reset()         { *m = QueryTestablePe
 func (m *QueryTestablePermissionsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryTestablePermissionsRequest) ProtoMessage()    {}
 func (*QueryTestablePermissionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{27}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{27}
 }
 func (m *QueryTestablePermissionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryTestablePermissionsRequest.Unmarshal(m, b)
@@ -2008,8 +1992,8 @@ func (m *QueryTestablePermissionsRequest) XXX_Unmarshal(b []byte) error {
 func (m *QueryTestablePermissionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryTestablePermissionsRequest.Marshal(b, m, deterministic)
 }
-func (m *QueryTestablePermissionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryTestablePermissionsRequest.Merge(m, src)
+func (dst *QueryTestablePermissionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTestablePermissionsRequest.Merge(dst, src)
 }
 func (m *QueryTestablePermissionsRequest) XXX_Size() int {
 	return xxx_messageInfo_QueryTestablePermissionsRequest.Size(m)
@@ -2057,7 +2041,7 @@ func (m *QueryTestablePermissionsResponse) Reset()         { *m = QueryTestableP
 func (m *QueryTestablePermissionsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryTestablePermissionsResponse) ProtoMessage()    {}
 func (*QueryTestablePermissionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ffbc3f16f9a3a9d, []int{28}
+	return fileDescriptor_iam_0b2e61fc3ef32ffa, []int{28}
 }
 func (m *QueryTestablePermissionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryTestablePermissionsResponse.Unmarshal(m, b)
@@ -2065,8 +2049,8 @@ func (m *QueryTestablePermissionsResponse) XXX_Unmarshal(b []byte) error {
 func (m *QueryTestablePermissionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryTestablePermissionsResponse.Marshal(b, m, deterministic)
 }
-func (m *QueryTestablePermissionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryTestablePermissionsResponse.Merge(m, src)
+func (dst *QueryTestablePermissionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryTestablePermissionsResponse.Merge(dst, src)
 }
 func (m *QueryTestablePermissionsResponse) XXX_Size() int {
 	return xxx_messageInfo_QueryTestablePermissionsResponse.Size(m)
@@ -2986,9 +2970,9 @@ var _IAM_serviceDesc = grpc.ServiceDesc{
 	Metadata: "google/iam/admin/v1/iam.proto",
 }
 
-func init() { proto.RegisterFile("google/iam/admin/v1/iam.proto", fileDescriptor_8ffbc3f16f9a3a9d) }
+func init() { proto.RegisterFile("google/iam/admin/v1/iam.proto", fileDescriptor_iam_0b2e61fc3ef32ffa) }
 
-var fileDescriptor_8ffbc3f16f9a3a9d = []byte{
+var fileDescriptor_iam_0b2e61fc3ef32ffa = []byte{
 	// 2430 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x5a, 0x4f, 0x73, 0xdb, 0xc6,
 	0x15, 0x37, 0x28, 0xea, 0x0f, 0x9f, 0x24, 0x0a, 0x5a, 0xc9, 0x16, 0x4b, 0x59, 0xb6, 0xb2, 0xb5,

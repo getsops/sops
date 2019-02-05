@@ -28,7 +28,7 @@ func TestBOM(t *testing.T) {
 			So(err, ShouldBeNil)
 			So(f, ShouldNotBeNil)
 
-			So(f.Section("author").Key("E-MAIL").String(), ShouldEqual, "u@gogs.io")
+			So(f.Section("author").Key("E-MAIL").String(), ShouldEqual, "example@email.com")
 		})
 
 		Convey("UTF-16-LE-BOM", func() {

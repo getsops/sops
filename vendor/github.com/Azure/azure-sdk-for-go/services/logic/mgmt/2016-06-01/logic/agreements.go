@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewAgreementsClientWithBaseURI(baseURI string, subscriptionID string) Agree
 // agreementName - the integration account agreement name.
 // agreement - the integration account agreement.
 func (client AgreementsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, agreementName string, agreement IntegrationAccountAgreement) (result IntegrationAccountAgreement, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AgreementsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: agreement,
 			Constraints: []validation.Constraint{{Target: "agreement.IntegrationAccountAgreementProperties", Name: validation.Null, Rule: true,
@@ -553,6 +564,16 @@ func (client AgreementsClient) CreateOrUpdateResponder(resp *http.Response) (res
 // integrationAccountName - the integration account name.
 // agreementName - the integration account agreement name.
 func (client AgreementsClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, agreementName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AgreementsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, agreementName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.AgreementsClient", "Delete", nil, "Failure preparing request")
@@ -621,6 +642,16 @@ func (client AgreementsClient) DeleteResponder(resp *http.Response) (result auto
 // integrationAccountName - the integration account name.
 // agreementName - the integration account agreement name.
 func (client AgreementsClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, agreementName string) (result IntegrationAccountAgreement, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AgreementsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, agreementName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.AgreementsClient", "Get", nil, "Failure preparing request")
@@ -691,6 +722,16 @@ func (client AgreementsClient) GetResponder(resp *http.Response) (result Integra
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation. Options for filters include: AgreementType.
 func (client AgreementsClient) ListByIntegrationAccounts(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountAgreementListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AgreementsClient.ListByIntegrationAccounts")
+		defer func() {
+			sc := -1
+			if result.iaalr.Response.Response != nil {
+				sc = result.iaalr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByIntegrationAccountsNextResults
 	req, err := client.ListByIntegrationAccountsPreparer(ctx, resourceGroupName, integrationAccountName, top, filter)
 	if err != nil {
@@ -761,8 +802,8 @@ func (client AgreementsClient) ListByIntegrationAccountsResponder(resp *http.Res
 }
 
 // listByIntegrationAccountsNextResults retrieves the next set of results, if any.
-func (client AgreementsClient) listByIntegrationAccountsNextResults(lastResults IntegrationAccountAgreementListResult) (result IntegrationAccountAgreementListResult, err error) {
-	req, err := lastResults.integrationAccountAgreementListResultPreparer()
+func (client AgreementsClient) listByIntegrationAccountsNextResults(ctx context.Context, lastResults IntegrationAccountAgreementListResult) (result IntegrationAccountAgreementListResult, err error) {
+	req, err := lastResults.integrationAccountAgreementListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.AgreementsClient", "listByIntegrationAccountsNextResults", nil, "Failure preparing next results request")
 	}
@@ -783,6 +824,16 @@ func (client AgreementsClient) listByIntegrationAccountsNextResults(lastResults 
 
 // ListByIntegrationAccountsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AgreementsClient) ListByIntegrationAccountsComplete(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountAgreementListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AgreementsClient.ListByIntegrationAccounts")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByIntegrationAccounts(ctx, resourceGroupName, integrationAccountName, top, filter)
 	return
 }
@@ -793,6 +844,16 @@ func (client AgreementsClient) ListByIntegrationAccountsComplete(ctx context.Con
 // integrationAccountName - the integration account name.
 // agreementName - the integration account agreement name.
 func (client AgreementsClient) ListContentCallbackURL(ctx context.Context, resourceGroupName string, integrationAccountName string, agreementName string, listContentCallbackURL GetCallbackURLParameters) (result WorkflowTriggerCallbackURL, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AgreementsClient.ListContentCallbackURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListContentCallbackURLPreparer(ctx, resourceGroupName, integrationAccountName, agreementName, listContentCallbackURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.AgreementsClient", "ListContentCallbackURL", nil, "Failure preparing request")

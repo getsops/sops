@@ -39,7 +39,6 @@ var Deployment_Platform_name = map[int32]string{
 	2: "FLEX",
 	3: "CUSTOM",
 }
-
 var Deployment_Platform_value = map[string]int32{
 	"PLATFORM_UNSPECIFIED": 0,
 	"GKE":                  1,
@@ -50,9 +49,8 @@ var Deployment_Platform_value = map[string]int32{
 func (x Deployment_Platform) String() string {
 	return proto.EnumName(Deployment_Platform_name, int32(x))
 }
-
 func (Deployment_Platform) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_27c2fb509818da47, []int{2, 0}
+	return fileDescriptor_deployment_6b1a45811f125482, []int{2, 0}
 }
 
 // An artifact that can be deployed in some runtime.
@@ -68,7 +66,7 @@ func (m *Deployable) Reset()         { *m = Deployable{} }
 func (m *Deployable) String() string { return proto.CompactTextString(m) }
 func (*Deployable) ProtoMessage()    {}
 func (*Deployable) Descriptor() ([]byte, []int) {
-	return fileDescriptor_27c2fb509818da47, []int{0}
+	return fileDescriptor_deployment_6b1a45811f125482, []int{0}
 }
 func (m *Deployable) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Deployable.Unmarshal(m, b)
@@ -76,8 +74,8 @@ func (m *Deployable) XXX_Unmarshal(b []byte) error {
 func (m *Deployable) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Deployable.Marshal(b, m, deterministic)
 }
-func (m *Deployable) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Deployable.Merge(m, src)
+func (dst *Deployable) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Deployable.Merge(dst, src)
 }
 func (m *Deployable) XXX_Size() int {
 	return xxx_messageInfo_Deployable.Size(m)
@@ -108,7 +106,7 @@ func (m *Details) Reset()         { *m = Details{} }
 func (m *Details) String() string { return proto.CompactTextString(m) }
 func (*Details) ProtoMessage()    {}
 func (*Details) Descriptor() ([]byte, []int) {
-	return fileDescriptor_27c2fb509818da47, []int{1}
+	return fileDescriptor_deployment_6b1a45811f125482, []int{1}
 }
 func (m *Details) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Details.Unmarshal(m, b)
@@ -116,8 +114,8 @@ func (m *Details) XXX_Unmarshal(b []byte) error {
 func (m *Details) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Details.Marshal(b, m, deterministic)
 }
-func (m *Details) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Details.Merge(m, src)
+func (dst *Details) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Details.Merge(dst, src)
 }
 func (m *Details) XXX_Size() int {
 	return xxx_messageInfo_Details.Size(m)
@@ -161,7 +159,7 @@ func (m *Deployment) Reset()         { *m = Deployment{} }
 func (m *Deployment) String() string { return proto.CompactTextString(m) }
 func (*Deployment) ProtoMessage()    {}
 func (*Deployment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_27c2fb509818da47, []int{2}
+	return fileDescriptor_deployment_6b1a45811f125482, []int{2}
 }
 func (m *Deployment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Deployment.Unmarshal(m, b)
@@ -169,8 +167,8 @@ func (m *Deployment) XXX_Unmarshal(b []byte) error {
 func (m *Deployment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Deployment.Marshal(b, m, deterministic)
 }
-func (m *Deployment) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Deployment.Merge(m, src)
+func (dst *Deployment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Deployment.Merge(dst, src)
 }
 func (m *Deployment) XXX_Size() int {
 	return xxx_messageInfo_Deployment.Size(m)
@@ -238,10 +236,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/deployment/deployment.proto", fileDescriptor_27c2fb509818da47)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/deployment/deployment.proto", fileDescriptor_deployment_6b1a45811f125482)
 }
 
-var fileDescriptor_27c2fb509818da47 = []byte{
+var fileDescriptor_deployment_6b1a45811f125482 = []byte{
 	// 434 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x52, 0x4d, 0x6b, 0xdb, 0x40,
 	0x10, 0xad, 0xac, 0xd4, 0x1f, 0xe3, 0xb4, 0x98, 0xa5, 0x14, 0x61, 0x08, 0x75, 0x7d, 0x28, 0x3e,

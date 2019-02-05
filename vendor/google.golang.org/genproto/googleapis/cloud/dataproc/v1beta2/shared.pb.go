@@ -20,10 +20,10 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 func init() {
-	proto.RegisterFile("google/cloud/dataproc/v1beta2/shared.proto", fileDescriptor_2474c85b30841989)
+	proto.RegisterFile("google/cloud/dataproc/v1beta2/shared.proto", fileDescriptor_shared_a231fcd9ac6a326c)
 }
 
-var fileDescriptor_2474c85b30841989 = []byte{
+var fileDescriptor_shared_a231fcd9ac6a326c = []byte{
 	// 157 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x8e, 0xa1, 0x0e, 0x02, 0x31,
 	0x0c, 0x40, 0x83, 0x41, 0x1c, 0x0e, 0x49, 0x40, 0x60, 0x11, 0x6d, 0x00, 0x89, 0xbb, 0x04, 0x7f,

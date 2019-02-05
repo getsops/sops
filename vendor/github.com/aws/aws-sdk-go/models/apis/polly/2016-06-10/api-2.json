@@ -320,6 +320,7 @@
     "LanguageCode":{
       "type":"string",
       "enum":[
+        "cmn-CN",
         "cy-GB",
         "da-DK",
         "de-DE",
@@ -329,6 +330,7 @@
         "en-IN",
         "en-US",
         "es-ES",
+        "es-MX",
         "es-US",
         "fr-CA",
         "fr-FR",
@@ -777,7 +779,11 @@
         "Vicki",
         "Takumi",
         "Seoyeon",
-        "Aditi"
+        "Aditi",
+        "Zhiyu",
+        "Bianca",
+        "Lucia",
+        "Mia"
       ]
     },
     "VoiceList":{

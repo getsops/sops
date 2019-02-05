@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewAuthorizationPoliciesClientWithBaseURI(baseURI string, subscriptionID st
 // authorizationPolicyName - the name of the policy.
 // parameters - parameters supplied to the CreateOrUpdate authorization policy operation.
 func (client AuthorizationPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, authorizationPolicyName string, parameters AuthorizationPolicyResourceFormat) (result AuthorizationPolicyResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: authorizationPolicyName,
 			Constraints: []validation.Constraint{{Target: "authorizationPolicyName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -133,6 +144,16 @@ func (client AuthorizationPoliciesClient) CreateOrUpdateResponder(resp *http.Res
 // hubName - the name of the hub.
 // authorizationPolicyName - the name of the policy.
 func (client AuthorizationPoliciesClient) Get(ctx context.Context, resourceGroupName string, hubName string, authorizationPolicyName string) (result AuthorizationPolicyResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hubName, authorizationPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.AuthorizationPoliciesClient", "Get", nil, "Failure preparing request")
@@ -201,6 +222,16 @@ func (client AuthorizationPoliciesClient) GetResponder(resp *http.Response) (res
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 func (client AuthorizationPoliciesClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string) (result AuthorizationPolicyListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationPoliciesClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.aplr.Response.Response != nil {
+				sc = result.aplr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName)
 	if err != nil {
@@ -265,8 +296,8 @@ func (client AuthorizationPoliciesClient) ListByHubResponder(resp *http.Response
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client AuthorizationPoliciesClient) listByHubNextResults(lastResults AuthorizationPolicyListResult) (result AuthorizationPolicyListResult, err error) {
-	req, err := lastResults.authorizationPolicyListResultPreparer()
+func (client AuthorizationPoliciesClient) listByHubNextResults(ctx context.Context, lastResults AuthorizationPolicyListResult) (result AuthorizationPolicyListResult, err error) {
+	req, err := lastResults.authorizationPolicyListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.AuthorizationPoliciesClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -287,6 +318,16 @@ func (client AuthorizationPoliciesClient) listByHubNextResults(lastResults Autho
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AuthorizationPoliciesClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string) (result AuthorizationPolicyListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationPoliciesClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName)
 	return
 }
@@ -297,6 +338,16 @@ func (client AuthorizationPoliciesClient) ListByHubComplete(ctx context.Context,
 // hubName - the name of the hub.
 // authorizationPolicyName - the name of the policy.
 func (client AuthorizationPoliciesClient) RegeneratePrimaryKey(ctx context.Context, resourceGroupName string, hubName string, authorizationPolicyName string) (result AuthorizationPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationPoliciesClient.RegeneratePrimaryKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegeneratePrimaryKeyPreparer(ctx, resourceGroupName, hubName, authorizationPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.AuthorizationPoliciesClient", "RegeneratePrimaryKey", nil, "Failure preparing request")
@@ -366,6 +417,16 @@ func (client AuthorizationPoliciesClient) RegeneratePrimaryKeyResponder(resp *ht
 // hubName - the name of the hub.
 // authorizationPolicyName - the name of the policy.
 func (client AuthorizationPoliciesClient) RegenerateSecondaryKey(ctx context.Context, resourceGroupName string, hubName string, authorizationPolicyName string) (result AuthorizationPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationPoliciesClient.RegenerateSecondaryKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateSecondaryKeyPreparer(ctx, resourceGroupName, hubName, authorizationPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.AuthorizationPoliciesClient", "RegenerateSecondaryKey", nil, "Failure preparing request")

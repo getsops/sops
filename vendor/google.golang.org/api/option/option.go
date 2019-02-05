@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -61,6 +61,20 @@ func WithServiceAccountFile(filename string) ClientOption {
 	return WithCredentialsFile(filename)
 }
 
+// WithCredentialsJSON returns a ClientOption that authenticates
+// API calls with the given service account or refresh token JSON
+// credentials.
+func WithCredentialsJSON(p []byte) ClientOption {
+	return withCredentialsJSON(p)
+}
+
+type withCredentialsJSON []byte
+
+func (w withCredentialsJSON) Apply(o *internal.DialSettings) {
+	o.CredentialsJSON = make([]byte, len(w))
+	copy(o.CredentialsJSON, w)
+}
+
 // WithEndpoint returns a ClientOption that overrides the default endpoint
 // to be used for a service.
 func WithEndpoint(url string) ClientOption {
@@ -82,9 +96,8 @@ func WithScopes(scope ...string) ClientOption {
 type withScopes []string
 
 func (w withScopes) Apply(o *internal.DialSettings) {
-	s := make([]string, len(w))
-	copy(s, w)
-	o.Scopes = s
+	o.Scopes = make([]string, len(w))
+	copy(o.Scopes, w)
 }
 
 // WithUserAgent returns a ClientOption that sets the User-Agent.
@@ -163,6 +176,19 @@ func WithAPIKey(apiKey string) ClientOption {
 type withAPIKey string
 
 func (w withAPIKey) Apply(o *internal.DialSettings) { o.APIKey = string(w) }
+
+// WithAudiences returns a ClientOption that specifies an audience to be used
+// as the audience field ("aud") for the JWT token authentication.
+func WithAudiences(audience ...string) ClientOption {
+	return withAudiences(audience)
+}
+
+type withAudiences []string
+
+func (w withAudiences) Apply(o *internal.DialSettings) {
+	o.Audiences = make([]string, len(w))
+	copy(o.Audiences, w)
+}
 
 // WithoutAuthentication returns a ClientOption that specifies that no
 // authentication should be used. It is suitable only for testing and for

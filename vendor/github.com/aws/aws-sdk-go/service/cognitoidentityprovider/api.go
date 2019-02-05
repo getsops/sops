@@ -19,7 +19,7 @@ const opAddCustomAttributes = "AddCustomAttributes"
 // AddCustomAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the AddCustomAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -53,6 +53,7 @@ func (c *CognitoIdentityProvider) AddCustomAttributesRequest(input *AddCustomAtt
 
 	output = &AddCustomAttributesOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -117,7 +118,7 @@ const opAdminAddUserToGroup = "AdminAddUserToGroup"
 // AdminAddUserToGroupRequest generates a "aws/request.Request" representing the
 // client's request for the AdminAddUserToGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -151,8 +152,7 @@ func (c *CognitoIdentityProvider) AdminAddUserToGroupRequest(input *AdminAddUser
 
 	output = &AdminAddUserToGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -218,7 +218,7 @@ const opAdminConfirmSignUp = "AdminConfirmSignUp"
 // AdminConfirmSignUpRequest generates a "aws/request.Request" representing the
 // client's request for the AdminConfirmSignUp operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -252,6 +252,7 @@ func (c *CognitoIdentityProvider) AdminConfirmSignUpRequest(input *AdminConfirmS
 
 	output = &AdminConfirmSignUpOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -338,7 +339,7 @@ const opAdminCreateUser = "AdminCreateUser"
 // AdminCreateUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminCreateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -489,7 +490,7 @@ const opAdminDeleteUser = "AdminDeleteUser"
 // AdminDeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminDeleteUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -523,8 +524,7 @@ func (c *CognitoIdentityProvider) AdminDeleteUserRequest(input *AdminDeleteUserI
 
 	output = &AdminDeleteUserOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -590,7 +590,7 @@ const opAdminDeleteUserAttributes = "AdminDeleteUserAttributes"
 // AdminDeleteUserAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the AdminDeleteUserAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -624,6 +624,7 @@ func (c *CognitoIdentityProvider) AdminDeleteUserAttributesRequest(input *AdminD
 
 	output = &AdminDeleteUserAttributesOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -690,7 +691,7 @@ const opAdminDisableProviderForUser = "AdminDisableProviderForUser"
 // AdminDisableProviderForUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminDisableProviderForUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -724,6 +725,7 @@ func (c *CognitoIdentityProvider) AdminDisableProviderForUserRequest(input *Admi
 
 	output = &AdminDisableProviderForUserOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -821,7 +823,7 @@ const opAdminDisableUser = "AdminDisableUser"
 // AdminDisableUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminDisableUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -855,6 +857,7 @@ func (c *CognitoIdentityProvider) AdminDisableUserRequest(input *AdminDisableUse
 
 	output = &AdminDisableUserOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -920,7 +923,7 @@ const opAdminEnableUser = "AdminEnableUser"
 // AdminEnableUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminEnableUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -954,6 +957,7 @@ func (c *CognitoIdentityProvider) AdminEnableUserRequest(input *AdminEnableUserI
 
 	output = &AdminEnableUserOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1019,7 +1023,7 @@ const opAdminForgetDevice = "AdminForgetDevice"
 // AdminForgetDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the AdminForgetDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1053,8 +1057,7 @@ func (c *CognitoIdentityProvider) AdminForgetDeviceRequest(input *AdminForgetDev
 
 	output = &AdminForgetDeviceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1123,7 +1126,7 @@ const opAdminGetDevice = "AdminGetDevice"
 // AdminGetDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the AdminGetDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1222,7 +1225,7 @@ const opAdminGetUser = "AdminGetUser"
 // AdminGetUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminGetUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1322,7 +1325,7 @@ const opAdminInitiateAuth = "AdminInitiateAuth"
 // AdminInitiateAuthRequest generates a "aws/request.Request" representing the
 // client's request for the AdminInitiateAuth operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1456,7 +1459,7 @@ const opAdminLinkProviderForUser = "AdminLinkProviderForUser"
 // AdminLinkProviderForUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminLinkProviderForUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1490,6 +1493,7 @@ func (c *CognitoIdentityProvider) AdminLinkProviderForUserRequest(input *AdminLi
 
 	output = &AdminLinkProviderForUserOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1577,7 +1581,7 @@ const opAdminListDevices = "AdminListDevices"
 // AdminListDevicesRequest generates a "aws/request.Request" representing the
 // client's request for the AdminListDevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1676,7 +1680,7 @@ const opAdminListGroupsForUser = "AdminListGroupsForUser"
 // AdminListGroupsForUserRequest generates a "aws/request.Request" representing the
 // client's request for the AdminListGroupsForUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1775,7 +1779,7 @@ const opAdminListUserAuthEvents = "AdminListUserAuthEvents"
 // AdminListUserAuthEventsRequest generates a "aws/request.Request" representing the
 // client's request for the AdminListUserAuthEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1876,7 +1880,7 @@ const opAdminRemoveUserFromGroup = "AdminRemoveUserFromGroup"
 // AdminRemoveUserFromGroupRequest generates a "aws/request.Request" representing the
 // client's request for the AdminRemoveUserFromGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1910,8 +1914,7 @@ func (c *CognitoIdentityProvider) AdminRemoveUserFromGroupRequest(input *AdminRe
 
 	output = &AdminRemoveUserFromGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1977,7 +1980,7 @@ const opAdminResetUserPassword = "AdminResetUserPassword"
 // AdminResetUserPasswordRequest generates a "aws/request.Request" representing the
 // client's request for the AdminResetUserPassword operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2011,6 +2014,7 @@ func (c *CognitoIdentityProvider) AdminResetUserPasswordRequest(input *AdminRese
 
 	output = &AdminResetUserPasswordOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2117,7 +2121,7 @@ const opAdminRespondToAuthChallenge = "AdminRespondToAuthChallenge"
 // AdminRespondToAuthChallengeRequest generates a "aws/request.Request" representing the
 // client's request for the AdminRespondToAuthChallenge operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2272,7 +2276,7 @@ const opAdminSetUserMFAPreference = "AdminSetUserMFAPreference"
 // AdminSetUserMFAPreferenceRequest generates a "aws/request.Request" representing the
 // client's request for the AdminSetUserMFAPreference operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2306,6 +2310,7 @@ func (c *CognitoIdentityProvider) AdminSetUserMFAPreferenceRequest(input *AdminS
 
 	output = &AdminSetUserMFAPreferenceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2371,7 +2376,7 @@ const opAdminSetUserSettings = "AdminSetUserSettings"
 // AdminSetUserSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the AdminSetUserSettings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2405,6 +2410,7 @@ func (c *CognitoIdentityProvider) AdminSetUserSettingsRequest(input *AdminSetUse
 
 	output = &AdminSetUserSettingsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2466,7 +2472,7 @@ const opAdminUpdateAuthEventFeedback = "AdminUpdateAuthEventFeedback"
 // AdminUpdateAuthEventFeedbackRequest generates a "aws/request.Request" representing the
 // client's request for the AdminUpdateAuthEventFeedback operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2500,6 +2506,7 @@ func (c *CognitoIdentityProvider) AdminUpdateAuthEventFeedbackRequest(input *Adm
 
 	output = &AdminUpdateAuthEventFeedbackOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2568,7 +2575,7 @@ const opAdminUpdateDeviceStatus = "AdminUpdateDeviceStatus"
 // AdminUpdateDeviceStatusRequest generates a "aws/request.Request" representing the
 // client's request for the AdminUpdateDeviceStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2602,6 +2609,7 @@ func (c *CognitoIdentityProvider) AdminUpdateDeviceStatusRequest(input *AdminUpd
 
 	output = &AdminUpdateDeviceStatusOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2670,7 +2678,7 @@ const opAdminUpdateUserAttributes = "AdminUpdateUserAttributes"
 // AdminUpdateUserAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the AdminUpdateUserAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2704,6 +2712,7 @@ func (c *CognitoIdentityProvider) AdminUpdateUserAttributesRequest(input *AdminU
 
 	output = &AdminUpdateUserAttributesOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2794,7 +2803,7 @@ const opAdminUserGlobalSignOut = "AdminUserGlobalSignOut"
 // AdminUserGlobalSignOutRequest generates a "aws/request.Request" representing the
 // client's request for the AdminUserGlobalSignOut operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2828,6 +2837,7 @@ func (c *CognitoIdentityProvider) AdminUserGlobalSignOutRequest(input *AdminUser
 
 	output = &AdminUserGlobalSignOutOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2893,7 +2903,7 @@ const opAssociateSoftwareToken = "AssociateSoftwareToken"
 // AssociateSoftwareTokenRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateSoftwareToken operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2988,7 +2998,7 @@ const opChangePassword = "ChangePassword"
 // ChangePasswordRequest generates a "aws/request.Request" representing the
 // client's request for the ChangePassword operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3023,6 +3033,7 @@ func (c *CognitoIdentityProvider) ChangePasswordRequest(input *ChangePasswordInp
 	output = &ChangePasswordOutput{}
 	req = c.newRequest(op, input, output)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3100,7 +3111,7 @@ const opConfirmDevice = "ConfirmDevice"
 // ConfirmDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the ConfirmDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3219,7 +3230,7 @@ const opConfirmForgotPassword = "ConfirmForgotPassword"
 // ConfirmForgotPasswordRequest generates a "aws/request.Request" representing the
 // client's request for the ConfirmForgotPassword operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3254,6 +3265,7 @@ func (c *CognitoIdentityProvider) ConfirmForgotPasswordRequest(input *ConfirmFor
 	output = &ConfirmForgotPasswordOutput{}
 	req = c.newRequest(op, input, output)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3351,7 +3363,7 @@ const opConfirmSignUp = "ConfirmSignUp"
 // ConfirmSignUpRequest generates a "aws/request.Request" representing the
 // client's request for the ConfirmSignUp operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3386,6 +3398,7 @@ func (c *CognitoIdentityProvider) ConfirmSignUpRequest(input *ConfirmSignUpInput
 	output = &ConfirmSignUpOutput{}
 	req = c.newRequest(op, input, output)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3483,7 +3496,7 @@ const opCreateGroup = "CreateGroup"
 // CreateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3587,7 +3600,7 @@ const opCreateIdentityProvider = "CreateIdentityProvider"
 // CreateIdentityProviderRequest generates a "aws/request.Request" representing the
 // client's request for the CreateIdentityProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3689,7 +3702,7 @@ const opCreateResourceServer = "CreateResourceServer"
 // CreateResourceServerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateResourceServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3787,7 +3800,7 @@ const opCreateUserImportJob = "CreateUserImportJob"
 // CreateUserImportJobRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUserImportJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3888,7 +3901,7 @@ const opCreateUserPool = "CreateUserPool"
 // CreateUserPoolRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUserPool operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4000,7 +4013,7 @@ const opCreateUserPoolClient = "CreateUserPoolClient"
 // CreateUserPoolClientRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUserPoolClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4104,7 +4117,7 @@ const opCreateUserPoolDomain = "CreateUserPoolDomain"
 // CreateUserPoolDomainRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUserPoolDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4198,7 +4211,7 @@ const opDeleteGroup = "DeleteGroup"
 // DeleteGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4232,8 +4245,7 @@ func (c *CognitoIdentityProvider) DeleteGroupRequest(input *DeleteGroupInput) (r
 
 	output = &DeleteGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4296,7 +4308,7 @@ const opDeleteIdentityProvider = "DeleteIdentityProvider"
 // DeleteIdentityProviderRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteIdentityProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4330,8 +4342,7 @@ func (c *CognitoIdentityProvider) DeleteIdentityProviderRequest(input *DeleteIde
 
 	output = &DeleteIdentityProviderOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4395,7 +4406,7 @@ const opDeleteResourceServer = "DeleteResourceServer"
 // DeleteResourceServerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteResourceServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4429,8 +4440,7 @@ func (c *CognitoIdentityProvider) DeleteResourceServerRequest(input *DeleteResou
 
 	output = &DeleteResourceServerOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4491,7 +4501,7 @@ const opDeleteUser = "DeleteUser"
 // DeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4525,9 +4535,8 @@ func (c *CognitoIdentityProvider) DeleteUserRequest(input *DeleteUserInput) (req
 
 	output = &DeleteUserOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4597,7 +4606,7 @@ const opDeleteUserAttributes = "DeleteUserAttributes"
 // DeleteUserAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4632,6 +4641,7 @@ func (c *CognitoIdentityProvider) DeleteUserAttributesRequest(input *DeleteUserA
 	output = &DeleteUserAttributesOutput{}
 	req = c.newRequest(op, input, output)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4701,7 +4711,7 @@ const opDeleteUserPool = "DeleteUserPool"
 // DeleteUserPoolRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserPool operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4735,8 +4745,7 @@ func (c *CognitoIdentityProvider) DeleteUserPoolRequest(input *DeleteUserPoolInp
 
 	output = &DeleteUserPoolOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4801,7 +4810,7 @@ const opDeleteUserPoolClient = "DeleteUserPoolClient"
 // DeleteUserPoolClientRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserPoolClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4835,8 +4844,7 @@ func (c *CognitoIdentityProvider) DeleteUserPoolClientRequest(input *DeleteUserP
 
 	output = &DeleteUserPoolClientOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4897,7 +4905,7 @@ const opDeleteUserPoolDomain = "DeleteUserPoolDomain"
 // DeleteUserPoolDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUserPoolDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4931,6 +4939,7 @@ func (c *CognitoIdentityProvider) DeleteUserPoolDomainRequest(input *DeleteUserP
 
 	output = &DeleteUserPoolDomainOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4987,7 +4996,7 @@ const opDescribeIdentityProvider = "DescribeIdentityProvider"
 // DescribeIdentityProviderRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeIdentityProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5081,7 +5090,7 @@ const opDescribeResourceServer = "DescribeResourceServer"
 // DescribeResourceServerRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeResourceServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5175,7 +5184,7 @@ const opDescribeRiskConfiguration = "DescribeRiskConfiguration"
 // DescribeRiskConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeRiskConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5272,7 +5281,7 @@ const opDescribeUserImportJob = "DescribeUserImportJob"
 // DescribeUserImportJobRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserImportJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5366,7 +5375,7 @@ const opDescribeUserPool = "DescribeUserPool"
 // DescribeUserPoolRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserPool operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5464,7 +5473,7 @@ const opDescribeUserPoolClient = "DescribeUserPoolClient"
 // DescribeUserPoolClientRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserPoolClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5559,7 +5568,7 @@ const opDescribeUserPoolDomain = "DescribeUserPoolDomain"
 // DescribeUserPoolDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserPoolDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5649,7 +5658,7 @@ const opForgetDevice = "ForgetDevice"
 // ForgetDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the ForgetDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5683,8 +5692,7 @@ func (c *CognitoIdentityProvider) ForgetDeviceRequest(input *ForgetDeviceInput) 
 
 	output = &ForgetDeviceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -5757,7 +5765,7 @@ const opForgotPassword = "ForgotPassword"
 // ForgotPasswordRequest generates a "aws/request.Request" representing the
 // client's request for the ForgotPassword operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5898,7 +5906,7 @@ const opGetCSVHeader = "GetCSVHeader"
 // GetCSVHeaderRequest generates a "aws/request.Request" representing the
 // client's request for the GetCSVHeader operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5993,7 +6001,7 @@ const opGetDevice = "GetDevice"
 // GetDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the GetDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6099,7 +6107,7 @@ const opGetGroup = "GetGroup"
 // GetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the GetGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6195,7 +6203,7 @@ const opGetIdentityProviderByIdentifier = "GetIdentityProviderByIdentifier"
 // GetIdentityProviderByIdentifierRequest generates a "aws/request.Request" representing the
 // client's request for the GetIdentityProviderByIdentifier operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6289,7 +6297,7 @@ const opGetSigningCertificate = "GetSigningCertificate"
 // GetSigningCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the GetSigningCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6372,7 +6380,7 @@ const opGetUICustomization = "GetUICustomization"
 // GetUICustomizationRequest generates a "aws/request.Request" representing the
 // client's request for the GetUICustomization operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6469,7 +6477,7 @@ const opGetUser = "GetUser"
 // GetUserRequest generates a "aws/request.Request" representing the
 // client's request for the GetUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6573,7 +6581,7 @@ const opGetUserAttributeVerificationCode = "GetUserAttributeVerificationCode"
 // GetUserAttributeVerificationCodeRequest generates a "aws/request.Request" representing the
 // client's request for the GetUserAttributeVerificationCode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6710,7 +6718,7 @@ const opGetUserPoolMfaConfig = "GetUserPoolMfaConfig"
 // GetUserPoolMfaConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetUserPoolMfaConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6804,7 +6812,7 @@ const opGlobalSignOut = "GlobalSignOut"
 // GlobalSignOutRequest generates a "aws/request.Request" representing the
 // client's request for the GlobalSignOut operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6838,6 +6846,7 @@ func (c *CognitoIdentityProvider) GlobalSignOutRequest(input *GlobalSignOutInput
 
 	output = &GlobalSignOutOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -6904,7 +6913,7 @@ const opInitiateAuth = "InitiateAuth"
 // InitiateAuthRequest generates a "aws/request.Request" representing the
 // client's request for the InitiateAuth operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7022,7 +7031,7 @@ const opListDevices = "ListDevices"
 // ListDevicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListDevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7128,7 +7137,7 @@ const opListGroups = "ListGroups"
 // ListGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7224,7 +7233,7 @@ const opListIdentityProviders = "ListIdentityProviders"
 // ListIdentityProvidersRequest generates a "aws/request.Request" representing the
 // client's request for the ListIdentityProviders operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7318,7 +7327,7 @@ const opListResourceServers = "ListResourceServers"
 // ListResourceServersRequest generates a "aws/request.Request" representing the
 // client's request for the ListResourceServers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7412,7 +7421,7 @@ const opListUserImportJobs = "ListUserImportJobs"
 // ListUserImportJobsRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserImportJobs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7506,7 +7515,7 @@ const opListUserPoolClients = "ListUserPoolClients"
 // ListUserPoolClientsRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserPoolClients operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7600,7 +7609,7 @@ const opListUserPools = "ListUserPools"
 // ListUserPoolsRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserPools operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7690,7 +7699,7 @@ const opListUsers = "ListUsers"
 // ListUsersRequest generates a "aws/request.Request" representing the
 // client's request for the ListUsers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7784,7 +7793,7 @@ const opListUsersInGroup = "ListUsersInGroup"
 // ListUsersInGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ListUsersInGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7880,7 +7889,7 @@ const opResendConfirmationCode = "ResendConfirmationCode"
 // ResendConfirmationCodeRequest generates a "aws/request.Request" representing the
 // client's request for the ResendConfirmationCode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8012,7 +8021,7 @@ const opRespondToAuthChallenge = "RespondToAuthChallenge"
 // RespondToAuthChallengeRequest generates a "aws/request.Request" representing the
 // client's request for the RespondToAuthChallenge operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8165,7 +8174,7 @@ const opSetRiskConfiguration = "SetRiskConfiguration"
 // SetRiskConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the SetRiskConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8275,7 +8284,7 @@ const opSetUICustomization = "SetUICustomization"
 // SetUICustomizationRequest generates a "aws/request.Request" representing the
 // client's request for the SetUICustomization operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8380,7 +8389,7 @@ const opSetUserMFAPreference = "SetUserMFAPreference"
 // SetUserMFAPreferenceRequest generates a "aws/request.Request" representing the
 // client's request for the SetUserMFAPreference operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8414,6 +8423,7 @@ func (c *CognitoIdentityProvider) SetUserMFAPreferenceRequest(input *SetUserMFAP
 
 	output = &SetUserMFAPreferenceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -8479,7 +8489,7 @@ const opSetUserPoolMfaConfig = "SetUserPoolMfaConfig"
 // SetUserPoolMfaConfigRequest generates a "aws/request.Request" representing the
 // client's request for the SetUserPoolMfaConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8583,7 +8593,7 @@ const opSetUserSettings = "SetUserSettings"
 // SetUserSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the SetUserSettings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8618,6 +8628,7 @@ func (c *CognitoIdentityProvider) SetUserSettingsRequest(input *SetUserSettingsI
 	output = &SetUserSettingsOutput{}
 	req = c.newRequest(op, input, output)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -8685,7 +8696,7 @@ const opSignUp = "SignUp"
 // SignUpRequest generates a "aws/request.Request" representing the
 // client's request for the SignUp operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8818,7 +8829,7 @@ const opStartUserImportJob = "StartUserImportJob"
 // StartUserImportJobRequest generates a "aws/request.Request" representing the
 // client's request for the StartUserImportJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8915,7 +8926,7 @@ const opStopUserImportJob = "StopUserImportJob"
 // StopUserImportJobRequest generates a "aws/request.Request" representing the
 // client's request for the StopUserImportJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9012,7 +9023,7 @@ const opUpdateAuthEventFeedback = "UpdateAuthEventFeedback"
 // UpdateAuthEventFeedbackRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAuthEventFeedback operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9046,6 +9057,7 @@ func (c *CognitoIdentityProvider) UpdateAuthEventFeedbackRequest(input *UpdateAu
 
 	output = &UpdateAuthEventFeedbackOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -9114,7 +9126,7 @@ const opUpdateDeviceStatus = "UpdateDeviceStatus"
 // UpdateDeviceStatusRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDeviceStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9148,6 +9160,7 @@ func (c *CognitoIdentityProvider) UpdateDeviceStatusRequest(input *UpdateDeviceS
 
 	output = &UpdateDeviceStatusOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -9220,7 +9233,7 @@ const opUpdateGroup = "UpdateGroup"
 // UpdateGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9316,7 +9329,7 @@ const opUpdateIdentityProvider = "UpdateIdentityProvider"
 // UpdateIdentityProviderRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateIdentityProvider operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9413,7 +9426,7 @@ const opUpdateResourceServer = "UpdateResourceServer"
 // UpdateResourceServerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateResourceServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9507,7 +9520,7 @@ const opUpdateUserAttributes = "UpdateUserAttributes"
 // UpdateUserAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9653,7 +9666,7 @@ const opUpdateUserPool = "UpdateUserPool"
 // UpdateUserPoolRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserPool operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9687,6 +9700,7 @@ func (c *CognitoIdentityProvider) UpdateUserPoolRequest(input *UpdateUserPoolInp
 
 	output = &UpdateUserPoolOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -9773,7 +9787,7 @@ const opUpdateUserPoolClient = "UpdateUserPoolClient"
 // UpdateUserPoolClientRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserPoolClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -9874,12 +9888,134 @@ func (c *CognitoIdentityProvider) UpdateUserPoolClientWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
+const opUpdateUserPoolDomain = "UpdateUserPoolDomain"
+
+// UpdateUserPoolDomainRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateUserPoolDomain operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateUserPoolDomain for more information on using the UpdateUserPoolDomain
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateUserPoolDomainRequest method.
+//    req, resp := client.UpdateUserPoolDomainRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/UpdateUserPoolDomain
+func (c *CognitoIdentityProvider) UpdateUserPoolDomainRequest(input *UpdateUserPoolDomainInput) (req *request.Request, output *UpdateUserPoolDomainOutput) {
+	op := &request.Operation{
+		Name:       opUpdateUserPoolDomain,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateUserPoolDomainInput{}
+	}
+
+	output = &UpdateUserPoolDomainOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateUserPoolDomain API operation for Amazon Cognito Identity Provider.
+//
+// Updates the Secure Sockets Layer (SSL) certificate for the custom domain
+// for your user pool.
+//
+// You can use this operation to provide the Amazon Resource Name (ARN) of a
+// new certificate to Amazon Cognito. You cannot use it to change the domain
+// for a user pool.
+//
+// A custom domain is used to host the Amazon Cognito hosted UI, which provides
+// sign-up and sign-in pages for your application. When you set up a custom
+// domain, you provide a certificate that you manage with AWS Certificate Manager
+// (ACM). When necessary, you can use this operation to change the certificate
+// that you applied to your custom domain.
+//
+// Usually, this is unnecessary following routine certificate renewal with ACM.
+// When you renew your existing certificate in ACM, the ARN for your certificate
+// remains the same, and your custom domain uses the new certificate automatically.
+//
+// However, if you replace your existing certificate with a new one, ACM gives
+// the new certificate a new ARN. To apply the new certificate to your custom
+// domain, you must provide this ARN to Amazon Cognito.
+//
+// When you add your new certificate in ACM, you must choose US East (N. Virginia)
+// as the AWS Region.
+//
+// After you submit your request, Amazon Cognito requires up to 1 hour to distribute
+// your new certificate to your custom domain.
+//
+// For more information about adding a custom domain to your user pool, see
+// Using Your Own Domain for the Hosted UI (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Cognito Identity Provider's
+// API operation UpdateUserPoolDomain for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   This exception is thrown when the Amazon Cognito service encounters an invalid
+//   parameter.
+//
+//   * ErrCodeNotAuthorizedException "NotAuthorizedException"
+//   This exception is thrown when a user is not authorized.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   This exception is thrown when the Amazon Cognito service cannot find the
+//   requested resource.
+//
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   This exception is thrown when the user has made too many requests for a given
+//   operation.
+//
+//   * ErrCodeInternalErrorException "InternalErrorException"
+//   This exception is thrown when Amazon Cognito encounters an internal error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cognito-idp-2016-04-18/UpdateUserPoolDomain
+func (c *CognitoIdentityProvider) UpdateUserPoolDomain(input *UpdateUserPoolDomainInput) (*UpdateUserPoolDomainOutput, error) {
+	req, out := c.UpdateUserPoolDomainRequest(input)
+	return out, req.Send()
+}
+
+// UpdateUserPoolDomainWithContext is the same as UpdateUserPoolDomain with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateUserPoolDomain for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CognitoIdentityProvider) UpdateUserPoolDomainWithContext(ctx aws.Context, input *UpdateUserPoolDomainInput, opts ...request.Option) (*UpdateUserPoolDomainOutput, error) {
+	req, out := c.UpdateUserPoolDomainRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opVerifySoftwareToken = "VerifySoftwareToken"
 
 // VerifySoftwareTokenRequest generates a "aws/request.Request" representing the
 // client's request for the VerifySoftwareToken operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10002,7 +10138,7 @@ const opVerifyUserAttribute = "VerifyUserAttribute"
 // VerifyUserAttributeRequest generates a "aws/request.Request" representing the
 // client's request for the VerifyUserAttribute operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -10037,6 +10173,7 @@ func (c *CognitoIdentityProvider) VerifyUserAttributeRequest(input *VerifyUserAt
 	output = &VerifyUserAttributeOutput{}
 	req = c.newRequest(op, input, output)
 	req.Config.Credentials = credentials.AnonymousCredentials
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -10401,7 +10538,7 @@ type AdminAddUserToGroupInput struct {
 	// The username for the user.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -10486,7 +10623,7 @@ type AdminConfirmSignUpInput struct {
 	// The user name for which you want to confirm user registration.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -10652,7 +10789,7 @@ type AdminCreateUserInput struct {
 	// limit that you specified when you created the user pool. To reset the account
 	// after that time limit, you must call AdminCreateUser again, specifying "RESEND"
 	// for the MessageAction parameter.
-	TemporaryPassword *string `min:"6" type:"string"`
+	TemporaryPassword *string `min:"6" type:"string" sensitive:"true"`
 
 	// An array of name-value pairs that contain user attributes and attribute values
 	// to be set for the user to be created. You can create a user without specifying
@@ -10694,7 +10831,7 @@ type AdminCreateUserInput struct {
 	// username cannot be changed.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The user's validation data. This is an array of name-value pairs that contain
 	// user attributes and attribute values that you can use for custom validation,
@@ -10858,7 +10995,7 @@ type AdminDeleteUserAttributesInput struct {
 	// The user name of the user from which you would like to delete attributes.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -10942,7 +11079,7 @@ type AdminDeleteUserInput struct {
 	// The user name of the user you wish to delete.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11086,7 +11223,7 @@ type AdminDisableUserInput struct {
 	// The user name of the user you wish to disable.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11161,7 +11298,7 @@ type AdminEnableUserInput struct {
 	// The user name of the user you wish to enable.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11241,7 +11378,7 @@ type AdminForgetDeviceInput struct {
 	// The user name.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11331,7 +11468,7 @@ type AdminGetDeviceInput struct {
 	// The user name.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11429,7 +11566,7 @@ type AdminGetUserInput struct {
 	// The user name of the user you wish to retrieve.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11518,7 +11655,7 @@ type AdminGetUserOutput struct {
 	// The user name of the user about whom you are receiving information.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -11646,7 +11783,7 @@ type AdminInitiateAuthInput struct {
 	// The app client ID.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// This is a random key-value pair map which can contain any key and will be
 	// passed to your PreAuthentication Lambda trigger as-is. It can be used to
@@ -11983,7 +12120,7 @@ type AdminListDevicesInput struct {
 	// The user name.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12096,7 +12233,7 @@ type AdminListGroupsForUserInput struct {
 	// The username for the user.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12208,7 +12345,7 @@ type AdminListUserAuthEventsInput struct {
 	// The user pool username or an alias.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12319,7 +12456,7 @@ type AdminRemoveUserFromGroupInput struct {
 	// The username for the user.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12404,7 +12541,7 @@ type AdminResetUserPasswordInput struct {
 	// The user name of the user whose password you wish to reset.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12505,7 +12642,7 @@ type AdminRespondToAuthChallengeInput struct {
 	// The app client ID.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
 	// used for evaluating the risk of an unexpected event by Amazon Cognito advanced
@@ -12682,7 +12819,7 @@ type AdminSetUserMFAPreferenceInput struct {
 	// The user pool username or alias.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12773,7 +12910,7 @@ type AdminSetUserSettingsInput struct {
 	// The user name of the user for whom you wish to set user settings.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12875,7 +13012,7 @@ type AdminUpdateAuthEventFeedbackInput struct {
 	// The user pool username.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -12977,7 +13114,7 @@ type AdminUpdateDeviceStatusInput struct {
 	// The user name.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -13077,7 +13214,7 @@ type AdminUpdateUserAttributesInput struct {
 	// The user name of the user for whom you want to update user attributes.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -13171,7 +13308,7 @@ type AdminUserGlobalSignOutInput struct {
 	// The user name.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -13346,7 +13483,7 @@ type AssociateSoftwareTokenInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
-	AccessToken *string `type:"string"`
+	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The session which should be passed both ways in challenge-response calls
 	// to the service. This allows authentication of the user as part of the MFA
@@ -13394,7 +13531,7 @@ type AssociateSoftwareTokenOutput struct {
 
 	// A unique generated shared secret code that is used in the TOTP algorithm
 	// to generate a one time code.
-	SecretCode *string `min:"16" type:"string"`
+	SecretCode *string `min:"16" type:"string" sensitive:"true"`
 
 	// The session which should be passed both ways in challenge-response calls
 	// to the service. This allows authentication of the user as part of the MFA
@@ -13434,7 +13571,7 @@ type AttributeType struct {
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// The value of the attribute.
-	Value *string `type:"string"`
+	Value *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -13569,19 +13706,19 @@ type AuthenticationResultType struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
-	AccessToken *string `type:"string"`
+	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The expiration period of the authentication result in seconds.
 	ExpiresIn *int64 `type:"integer"`
 
 	// The ID token.
-	IdToken *string `type:"string"`
+	IdToken *string `type:"string" sensitive:"true"`
 
 	// The new device metadata from an authentication result.
 	NewDeviceMetadata *NewDeviceMetadataType `type:"structure"`
 
 	// The refresh token.
-	RefreshToken *string `type:"string"`
+	RefreshToken *string `type:"string" sensitive:"true"`
 
 	// The token type.
 	TokenType *string `type:"string"`
@@ -13673,17 +13810,17 @@ type ChangePasswordInput struct {
 	// The access token.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The old password.
 	//
 	// PreviousPassword is a required field
-	PreviousPassword *string `min:"6" type:"string" required:"true"`
+	PreviousPassword *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// The new password.
 	//
 	// ProposedPassword is a required field
-	ProposedPassword *string `min:"6" type:"string" required:"true"`
+	ProposedPassword *string `min:"6" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -13896,7 +14033,7 @@ type ConfirmDeviceInput struct {
 	// The access token.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The device key.
 	//
@@ -14002,7 +14139,7 @@ type ConfirmForgotPasswordInput struct {
 	// The app client ID of the app associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The confirmation code sent by a user's request to retrieve a forgotten password.
 	// For more information, see
@@ -14013,11 +14150,11 @@ type ConfirmForgotPasswordInput struct {
 	// The password sent by a user's request to retrieve a forgotten password.
 	//
 	// Password is a required field
-	Password *string `min:"6" type:"string" required:"true"`
+	Password *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
-	SecretHash *string `min:"1" type:"string"`
+	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
 	// used for evaluating the risk of an unexpected event by Amazon Cognito advanced
@@ -14028,7 +14165,7 @@ type ConfirmForgotPasswordInput struct {
 	// forgotten password.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -14147,7 +14284,7 @@ type ConfirmSignUpInput struct {
 	// The ID of the app client associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The confirmation code sent by a user's request to confirm registration.
 	//
@@ -14164,7 +14301,7 @@ type ConfirmSignUpInput struct {
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
-	SecretHash *string `min:"1" type:"string"`
+	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
 	// used for evaluating the risk of an unexpected event by Amazon Cognito advanced
@@ -14174,7 +14311,7 @@ type ConfirmSignUpInput struct {
 	// The user name of the user whose registration you wish to confirm.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -14934,7 +15071,15 @@ type CreateUserPoolClientInput struct {
 	// UserPoolId is a required field
 	UserPoolId *string `min:"1" type:"string" required:"true"`
 
-	// The write attributes.
+	// The user pool attributes that the app client can write to.
+	//
+	// If your app client allows users to sign in through an identity provider,
+	// this array must include all attributes that are mapped to identity provider
+	// attributes. Amazon Cognito updates mapped attributes when users sign in to
+	// your application through an identity provider. If your app client lacks write
+	// access to a mapped attribute, Amazon Cognito throws an error when it attempts
+	// to update the attribute. For more information, see Specifying Identity Provider
+	// Attribute Mappings for Your User Pool (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html).
 	WriteAttributes []*string `type:"list"`
 }
 
@@ -15098,8 +15243,8 @@ type CreateUserPoolDomainInput struct {
 	// The configuration for a custom domain that hosts the sign-up and sign-in
 	// webpages for your application.
 	//
-	// Provide this parameter only if you want to use own custom domain for your
-	// user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito
+	// Provide this parameter only if you want to use a custom domain for your user
+	// pool. Otherwise, you can exclude this parameter and use the Amazon Cognito
 	// hosted domain instead.
 	//
 	// For more information about the hosted domain and custom domains, see Configuring
@@ -15767,7 +15912,7 @@ type DeleteUserAttributesInput struct {
 	// The access token used in the request to delete user attributes.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// An array of strings representing the user attribute names you wish to delete.
 	//
@@ -15838,7 +15983,7 @@ type DeleteUserInput struct {
 	// The access token from a request to delete a user.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -15891,7 +16036,7 @@ type DeleteUserPoolClientInput struct {
 	// The app client ID of the app associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The user pool ID for the user pool where you want to delete the client.
 	//
@@ -16255,7 +16400,7 @@ type DescribeRiskConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
 	// The app client ID.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The user pool ID.
 	//
@@ -16420,7 +16565,7 @@ type DescribeUserPoolClientInput struct {
 	// The app client ID of the app associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The user pool ID for the user pool you want to describe.
 	//
@@ -17032,7 +17177,7 @@ type ForgetDeviceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token for the forgotten device request.
-	AccessToken *string `type:"string"`
+	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The device key.
 	//
@@ -17103,11 +17248,11 @@ type ForgotPasswordInput struct {
 	// The ID of the client associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
-	SecretHash *string `min:"1" type:"string"`
+	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
 	// used for evaluating the risk of an unexpected event by Amazon Cognito advanced
@@ -17118,7 +17263,7 @@ type ForgotPasswordInput struct {
 	// password.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -17294,7 +17439,7 @@ type GetDeviceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
-	AccessToken *string `type:"string"`
+	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The device key.
 	//
@@ -17600,7 +17745,7 @@ type GetUICustomizationInput struct {
 	_ struct{} `type:"structure"`
 
 	// The client ID for the client app.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The user pool ID for the user pool.
 	//
@@ -17682,7 +17827,7 @@ type GetUserAttributeVerificationCodeInput struct {
 	// verification code.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The attribute name returned by the server response to get the user attribute
 	// verification code.
@@ -17766,7 +17911,7 @@ type GetUserInput struct {
 	// the user.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -17823,7 +17968,7 @@ type GetUserOutput struct {
 	// The user name of the user you wish to retrieve from the get user request.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -17955,7 +18100,7 @@ type GlobalSignOutInput struct {
 	// The access token.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -18270,7 +18415,7 @@ type InitiateAuthInput struct {
 	// The app client ID.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// This is a random key-value pair map which can contain any key and will be
 	// passed to your PreAuthentication Lambda trigger as-is. It can be used to
@@ -18588,7 +18733,7 @@ type ListDevicesInput struct {
 	// The access tokens for the request to list devices.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The limit of the device request.
 	Limit *int64 `type:"integer"`
@@ -20081,11 +20226,11 @@ type ResendConfirmationCodeInput struct {
 	// The ID of the client associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
-	SecretHash *string `min:"1" type:"string"`
+	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// Contextual data such as the user's device fingerprint, IP address, or location
 	// used for evaluating the risk of an unexpected event by Amazon Cognito advanced
@@ -20095,7 +20240,7 @@ type ResendConfirmationCodeInput struct {
 	// The user name of the user to whom you wish to resend a confirmation code.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -20331,7 +20476,7 @@ type RespondToAuthChallengeInput struct {
 	// The app client ID.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The session which should be passed both ways in challenge-response calls
 	// to the service. If InitiateAuth or RespondToAuthChallenge API call determines
@@ -20479,7 +20624,7 @@ type RiskConfigurationType struct {
 	AccountTakeoverRiskConfiguration *AccountTakeoverRiskConfigurationType `type:"structure"`
 
 	// The app client ID.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The compromised credentials risk configuration object including the EventFilter
 	// and the EventAction
@@ -20621,6 +20766,13 @@ type SchemaAttributeType struct {
 	DeveloperOnlyAttribute *bool `type:"boolean"`
 
 	// Specifies whether the value of the attribute can be changed.
+	//
+	// For any user pool attribute that's mapped to an identity provider attribute,
+	// you must set this parameter to true. Amazon Cognito updates mapped attributes
+	// when users sign in to your application through an identity provider. If an
+	// attribute is immutable, Amazon Cognito throws an error when it attempts to
+	// update the attribute. For more information, see Specifying Identity Provider
+	// Attribute Mappings for Your User Pool (http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html).
 	Mutable *bool `type:"boolean"`
 
 	// A schema attribute of the name type.
@@ -20716,7 +20868,7 @@ type SetRiskConfigurationInput struct {
 	// Otherwise, ClientId is mapped to the client. When the client ID is not null,
 	// the user pool configuration is overridden and the risk configuration for
 	// the client is used instead.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The compromised credentials risk configuration.
 	CompromisedCredentialsRiskConfiguration *CompromisedCredentialsRiskConfigurationType `type:"structure"`
@@ -20831,7 +20983,7 @@ type SetUICustomizationInput struct {
 	CSS *string `type:"string"`
 
 	// The client ID for the client app.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The uploaded logo image for the UI customization.
 	//
@@ -20928,7 +21080,7 @@ type SetUserMFAPreferenceInput struct {
 	// The access token.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The SMS text message multi-factor authentication (MFA) settings.
 	SMSMfaSettings *SMSMfaSettingsType `type:"structure"`
@@ -21113,7 +21265,7 @@ type SetUserSettingsInput struct {
 	// The access token for the set user settings request.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// Specifies the options for MFA (e.g., email or phone number).
 	//
@@ -21195,16 +21347,16 @@ type SignUpInput struct {
 	// The ID of the client associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The password of the user you wish to register.
 	//
 	// Password is a required field
-	Password *string `min:"6" type:"string" required:"true"`
+	Password *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// A keyed-hash message authentication code (HMAC) calculated using the secret
 	// key of a user pool client and username plus the client ID in the message.
-	SecretHash *string `min:"1" type:"string"`
+	SecretHash *string `min:"1" type:"string" sensitive:"true"`
 
 	// An array of name-value pairs representing user attributes.
 	//
@@ -21220,7 +21372,7 @@ type SignUpInput struct {
 	// The user name of the user you wish to register.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The validation data in the request to register a user.
 	ValidationData []*AttributeType `type:"list"`
@@ -21755,7 +21907,7 @@ type UICustomizationType struct {
 	CSSVersion *string `type:"string"`
 
 	// The client ID for the client app.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The creation date for the UI customization.
 	CreationDate *time.Time `type:"timestamp"`
@@ -21833,7 +21985,7 @@ type UpdateAuthEventFeedbackInput struct {
 	// The feedback token.
 	//
 	// FeedbackToken is a required field
-	FeedbackToken *string `type:"string" required:"true"`
+	FeedbackToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The authentication event feedback value.
 	//
@@ -21848,7 +22000,7 @@ type UpdateAuthEventFeedbackInput struct {
 	// The user pool username.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -21946,7 +22098,7 @@ type UpdateDeviceStatusInput struct {
 	// The access token.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The device key.
 	//
@@ -22368,7 +22520,7 @@ type UpdateUserAttributesInput struct {
 	// The access token for the request to update user attributes.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// An array of name-value pairs representing user attributes.
 	//
@@ -22497,7 +22649,7 @@ type UpdateUserPoolClientInput struct {
 	// The ID of the client associated with the user pool.
 	//
 	// ClientId is a required field
-	ClientId *string `min:"1" type:"string" required:"true"`
+	ClientId *string `min:"1" type:"string" required:"true" sensitive:"true"`
 
 	// The client name from the update user pool client request.
 	ClientName *string `min:"1" type:"string"`
@@ -22703,6 +22855,117 @@ func (s UpdateUserPoolClientOutput) GoString() string {
 // SetUserPoolClient sets the UserPoolClient field's value.
 func (s *UpdateUserPoolClientOutput) SetUserPoolClient(v *UserPoolClientType) *UpdateUserPoolClientOutput {
 	s.UserPoolClient = v
+	return s
+}
+
+// The UpdateUserPoolDomain request input.
+type UpdateUserPoolDomainInput struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration for a custom domain that hosts the sign-up and sign-in
+	// pages for your application. Use this object to specify an SSL certificate
+	// that is managed by ACM.
+	//
+	// CustomDomainConfig is a required field
+	CustomDomainConfig *CustomDomainConfigType `type:"structure" required:"true"`
+
+	// The domain name for the custom domain that hosts the sign-up and sign-in
+	// pages for your application. For example: auth.example.com.
+	//
+	// This string can include only lowercase letters, numbers, and hyphens. Do
+	// not use a hyphen for the first or last character. Use periods to separate
+	// subdomain names.
+	//
+	// Domain is a required field
+	Domain *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the user pool that is associated with the custom domain that you
+	// are updating the certificate for.
+	//
+	// UserPoolId is a required field
+	UserPoolId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateUserPoolDomainInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateUserPoolDomainInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateUserPoolDomainInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateUserPoolDomainInput"}
+	if s.CustomDomainConfig == nil {
+		invalidParams.Add(request.NewErrParamRequired("CustomDomainConfig"))
+	}
+	if s.Domain == nil {
+		invalidParams.Add(request.NewErrParamRequired("Domain"))
+	}
+	if s.Domain != nil && len(*s.Domain) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Domain", 1))
+	}
+	if s.UserPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserPoolId"))
+	}
+	if s.UserPoolId != nil && len(*s.UserPoolId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserPoolId", 1))
+	}
+	if s.CustomDomainConfig != nil {
+		if err := s.CustomDomainConfig.Validate(); err != nil {
+			invalidParams.AddNested("CustomDomainConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCustomDomainConfig sets the CustomDomainConfig field's value.
+func (s *UpdateUserPoolDomainInput) SetCustomDomainConfig(v *CustomDomainConfigType) *UpdateUserPoolDomainInput {
+	s.CustomDomainConfig = v
+	return s
+}
+
+// SetDomain sets the Domain field's value.
+func (s *UpdateUserPoolDomainInput) SetDomain(v string) *UpdateUserPoolDomainInput {
+	s.Domain = &v
+	return s
+}
+
+// SetUserPoolId sets the UserPoolId field's value.
+func (s *UpdateUserPoolDomainInput) SetUserPoolId(v string) *UpdateUserPoolDomainInput {
+	s.UserPoolId = &v
+	return s
+}
+
+// The UpdateUserPoolDomain response output.
+type UpdateUserPoolDomainOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon CloudFront endpoint that Amazon Cognito set up when you added
+	// the custom domain to your user pool.
+	CloudFrontDomain *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateUserPoolDomainOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateUserPoolDomainOutput) GoString() string {
+	return s.String()
+}
+
+// SetCloudFrontDomain sets the CloudFrontDomain field's value.
+func (s *UpdateUserPoolDomainOutput) SetCloudFrontDomain(v string) *UpdateUserPoolDomainOutput {
+	s.CloudFrontDomain = &v
 	return s
 }
 
@@ -23185,7 +23448,7 @@ type UserPoolClientDescription struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the client associated with the user pool.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The client name from the user pool client description.
 	ClientName *string `min:"1" type:"string"`
@@ -23265,13 +23528,13 @@ type UserPoolClientType struct {
 	CallbackURLs []*string `type:"list"`
 
 	// The ID of the client associated with the user pool.
-	ClientId *string `min:"1" type:"string"`
+	ClientId *string `min:"1" type:"string" sensitive:"true"`
 
 	// The client name from the user pool request of the client type.
 	ClientName *string `min:"1" type:"string"`
 
 	// The client secret from the user pool request of the client type.
-	ClientSecret *string `min:"1" type:"string"`
+	ClientSecret *string `min:"1" type:"string" sensitive:"true"`
 
 	// The date the user pool client was created.
 	CreationDate *time.Time `type:"timestamp"`
@@ -23865,7 +24128,7 @@ type UserType struct {
 	UserStatus *string `type:"string" enum:"UserStatusType"`
 
 	// The user name of the user you wish to describe.
-	Username *string `min:"1" type:"string"`
+	Username *string `min:"1" type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -24019,7 +24282,7 @@ type VerifySoftwareTokenInput struct {
 	_ struct{} `type:"structure"`
 
 	// The access token.
-	AccessToken *string `type:"string"`
+	AccessToken *string `type:"string" sensitive:"true"`
 
 	// The friendly device name.
 	FriendlyDeviceName *string `type:"string"`
@@ -24127,7 +24390,7 @@ type VerifyUserAttributeInput struct {
 	// Represents the access token of the request to verify user attributes.
 	//
 	// AccessToken is a required field
-	AccessToken *string `type:"string" required:"true"`
+	AccessToken *string `type:"string" required:"true" sensitive:"true"`
 
 	// The attribute name in the request to verify user attributes.
 	//

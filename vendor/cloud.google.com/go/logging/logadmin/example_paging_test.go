@@ -16,6 +16,7 @@ package logadmin_test
 
 import (
 	"bytes"
+	"context"
 	"flag"
 	"fmt"
 	"html/template"
@@ -24,7 +25,6 @@ import (
 
 	"cloud.google.com/go/logging"
 	"cloud.google.com/go/logging/logadmin"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 

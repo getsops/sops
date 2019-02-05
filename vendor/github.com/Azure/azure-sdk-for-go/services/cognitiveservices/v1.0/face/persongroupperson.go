@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
@@ -49,6 +50,16 @@ func NewPersonGroupPersonClient(endpoint string) PersonGroupPersonClient {
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client PersonGroupPersonClient) AddFaceFromStream(ctx context.Context, personGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.AddFaceFromStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -140,6 +151,16 @@ func (client PersonGroupPersonClient) AddFaceFromStreamResponder(resp *http.Resp
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client PersonGroupPersonClient) AddFaceFromURL(ctx context.Context, personGroupID string, personID uuid.UUID, imageURL ImageURL, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.AddFaceFromURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -226,6 +247,16 @@ func (client PersonGroupPersonClient) AddFaceFromURLResponder(resp *http.Respons
 // personGroupID - id referencing a particular person group.
 // body - request body for creating new person.
 func (client PersonGroupPersonClient) Create(ctx context.Context, personGroupID string, body NameAndUserDataContract) (result Person, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -304,6 +335,16 @@ func (client PersonGroupPersonClient) CreateResponder(resp *http.Response) (resu
 // personGroupID - id referencing a particular person group.
 // personID - id referencing a particular person.
 func (client PersonGroupPersonClient) Delete(ctx context.Context, personGroupID string, personID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -375,6 +416,16 @@ func (client PersonGroupPersonClient) DeleteResponder(resp *http.Response) (resu
 // personID - id referencing a particular person.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client PersonGroupPersonClient) DeleteFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.DeleteFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -446,6 +497,16 @@ func (client PersonGroupPersonClient) DeleteFaceResponder(resp *http.Response) (
 // personGroupID - id referencing a particular person group.
 // personID - id referencing a particular person.
 func (client PersonGroupPersonClient) Get(ctx context.Context, personGroupID string, personID uuid.UUID) (result Person, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -519,6 +580,16 @@ func (client PersonGroupPersonClient) GetResponder(resp *http.Response) (result 
 // personID - id referencing a particular person.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client PersonGroupPersonClient) GetFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.GetFace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -593,6 +664,16 @@ func (client PersonGroupPersonClient) GetFaceResponder(resp *http.Response) (res
 // start - starting person id to return (used to list a range of persons).
 // top - number of persons to return starting with the person id indicated by the 'start' parameter.
 func (client PersonGroupPersonClient) List(ctx context.Context, personGroupID string, start string, top *int32) (result ListPerson, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -678,6 +759,16 @@ func (client PersonGroupPersonClient) ListResponder(resp *http.Response) (result
 // personID - id referencing a particular person.
 // body - request body for person update operation.
 func (client PersonGroupPersonClient) Update(ctx context.Context, personGroupID string, personID uuid.UUID, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -752,6 +843,16 @@ func (client PersonGroupPersonClient) UpdateResponder(resp *http.Response) (resu
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 // body - request body for updating persisted face.
 func (client PersonGroupPersonClient) UpdateFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID, body UpdateFaceRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PersonGroupPersonClient.UpdateFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},

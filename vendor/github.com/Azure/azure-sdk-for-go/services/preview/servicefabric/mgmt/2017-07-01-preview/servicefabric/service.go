@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewServiceClientWithBaseURI(baseURI string) ServiceClient {
 // applicationName - the name of the application resource.
 // serviceName - the name of the service resource in the format of {applicationName}~{serviceName}.
 func (client ServiceClient) Delete(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationName string, serviceName string) (result ServiceDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ServiceClient", "Delete", nil, "Failure preparing request")
@@ -94,10 +105,6 @@ func (client ServiceClient) DeleteSender(req *http.Request) (future ServiceDelet
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -122,6 +129,16 @@ func (client ServiceClient) DeleteResponder(resp *http.Response) (result autores
 // applicationName - the name of the application resource.
 // serviceName - the name of the service resource in the format of {applicationName}~{serviceName}.
 func (client ServiceClient) Get(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationName string, serviceName string) (result ServiceResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ServiceClient", "Get", nil, "Failure preparing request")
@@ -193,6 +210,16 @@ func (client ServiceClient) GetResponder(resp *http.Response) (result ServiceRes
 // clusterName - the name of the cluster resource
 // applicationName - the name of the application resource.
 func (client ServiceClient) List(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationName string) (result ServiceResourceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ServiceClient", "List", nil, "Failure preparing request")
@@ -265,6 +292,16 @@ func (client ServiceClient) ListResponder(resp *http.Response) (result ServiceRe
 // serviceName - the name of the service resource in the format of {applicationName}~{serviceName}.
 // parameters - the service resource for patch operations.
 func (client ServiceClient) Patch(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationName string, serviceName string, parameters ServiceResourceUpdate) (result ServicePatchFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Patch")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationName, serviceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ServiceClient", "Patch", nil, "Failure preparing request")
@@ -314,10 +351,6 @@ func (client ServiceClient) PatchSender(req *http.Request) (future ServicePatchF
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -344,6 +377,16 @@ func (client ServiceClient) PatchResponder(resp *http.Response) (result ServiceR
 // serviceName - the name of the service resource in the format of {applicationName}~{serviceName}.
 // parameters - the service resource.
 func (client ServiceClient) Put(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationName string, serviceName string, parameters ServiceResource) (result ServicePutFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.Put")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PutPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationName, serviceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ServiceClient", "Put", nil, "Failure preparing request")
@@ -390,10 +433,6 @@ func (client ServiceClient) PutSender(req *http.Request) (future ServicePutFutur
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

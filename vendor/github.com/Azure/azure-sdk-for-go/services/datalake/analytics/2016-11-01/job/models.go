@@ -18,13 +18,18 @@ package job
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/datalake/analytics/2016-11-01/job"
 
 // CompileMode enumerates the values for compile mode.
 type CompileMode string
@@ -281,8 +286,10 @@ func (bjp *BuildJobParameters) UnmarshalJSON(body []byte) error {
 type CreateJobParameters struct {
 	// Name - the friendly name of the job to submit.
 	Name *string `json:"name,omitempty"`
-	// DegreeOfParallelism - the degree of parallelism to use for this job. This must be greater than 0, if set to less than 0 it will default to 1.
+	// DegreeOfParallelism - the degree of parallelism used for this job. At most one of degreeOfParallelism and degreeOfParallelismPercent should be specified. If none, a default value of 1 will be used.
 	DegreeOfParallelism *int32 `json:"degreeOfParallelism,omitempty"`
+	// DegreeOfParallelismPercent - the degree of parallelism in percentage used for this job. At most one of degreeOfParallelism and degreeOfParallelismPercent should be specified. If none, a default value of 1 will be used for degreeOfParallelism.
+	DegreeOfParallelismPercent *float64 `json:"degreeOfParallelismPercent,omitempty"`
 	// Priority - the priority value to use for the current job. Lower numbers have a higher priority. By default, a job has a priority of 1000. This must be greater than 0.
 	Priority *int32 `json:"priority,omitempty"`
 	// LogFilePatterns - the list of log file name patterns to find in the logFolder. '*' is the only matching character allowed. Example format: jobExecution*.log or *mylog*.txt
@@ -321,6 +328,15 @@ func (cjp *CreateJobParameters) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				cjp.DegreeOfParallelism = &degreeOfParallelism
+			}
+		case "degreeOfParallelismPercent":
+			if v != nil {
+				var degreeOfParallelismPercent float64
+				err = json.Unmarshal(*v, &degreeOfParallelismPercent)
+				if err != nil {
+					return err
+				}
+				cjp.DegreeOfParallelismPercent = &degreeOfParallelismPercent
 			}
 		case "priority":
 			if v != nil {
@@ -515,11 +531,11 @@ type DataPath struct {
 
 // Diagnostics error diagnostic information for failed jobs.
 type Diagnostics struct {
-	// ColumnNumber - the column where the error occured.
+	// ColumnNumber - the column where the error occurred.
 	ColumnNumber *int32 `json:"columnNumber,omitempty"`
 	// End - the ending index of the error.
 	End *int32 `json:"end,omitempty"`
-	// LineNumber - the line number the error occured on.
+	// LineNumber - the line number the error occurred on.
 	LineNumber *int32 `json:"lineNumber,omitempty"`
 	// Message - the error message.
 	Message *string `json:"message,omitempty"`
@@ -545,7 +561,7 @@ type ErrorDetails struct {
 	HelpLink *string `json:"helpLink,omitempty"`
 	// InternalDiagnostics - the internal diagnostic stack trace if the user requesting the job error details has sufficient permissions it will be retrieved, otherwise it will be empty.
 	InternalDiagnostics *string `json:"internalDiagnostics,omitempty"`
-	// LineNumber - the specific line number in the job where the error occured.
+	// LineNumber - the specific line number in the job where the error occurred.
 	LineNumber *int32 `json:"lineNumber,omitempty"`
 	// Message - the user friendly error message for the failure.
 	Message *string `json:"message,omitempty"`
@@ -642,20 +658,37 @@ type InfoListResultIterator struct {
 	page InfoListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *InfoListResultIterator) Next() error {
+func (iter *InfoListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InfoListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *InfoListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -677,6 +710,11 @@ func (iter InfoListResultIterator) Value() InformationBasic {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the InfoListResultIterator type.
+func NewInfoListResultIterator(page InfoListResultPage) InfoListResultIterator {
+	return InfoListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ilr InfoListResult) IsEmpty() bool {
 	return ilr.Value == nil || len(*ilr.Value) == 0
@@ -684,11 +722,11 @@ func (ilr InfoListResult) IsEmpty() bool {
 
 // infoListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ilr InfoListResult) infoListResultPreparer() (*http.Request, error) {
+func (ilr InfoListResult) infoListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if ilr.NextLink == nil || len(to.String(ilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ilr.NextLink)))
@@ -696,19 +734,36 @@ func (ilr InfoListResult) infoListResultPreparer() (*http.Request, error) {
 
 // InfoListResultPage contains a page of InformationBasic values.
 type InfoListResultPage struct {
-	fn  func(InfoListResult) (InfoListResult, error)
+	fn  func(context.Context, InfoListResult) (InfoListResult, error)
 	ilr InfoListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *InfoListResultPage) Next() error {
-	next, err := page.fn(page.ilr)
+func (page *InfoListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InfoListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ilr)
 	if err != nil {
 		return err
 	}
 	page.ilr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *InfoListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -729,7 +784,13 @@ func (page InfoListResultPage) Values() []InformationBasic {
 	return *page.ilr.Value
 }
 
-// Information the extended Data Lake Analytics job information properties returned when retrieving a specific job.
+// Creates a new instance of the InfoListResultPage type.
+func NewInfoListResultPage(getNextPage func(context.Context, InfoListResult) (InfoListResult, error)) InfoListResultPage {
+	return InfoListResultPage{fn: getNextPage}
+}
+
+// Information the extended Data Lake Analytics job information properties returned when retrieving a
+// specific job.
 type Information struct {
 	autorest.Response `json:"-"`
 	// ErrorMessage - the error message details for the job, if the job failed.
@@ -746,8 +807,10 @@ type Information struct {
 	Type TypeEnum `json:"type,omitempty"`
 	// Submitter - the user or account that submitted the job.
 	Submitter *string `json:"submitter,omitempty"`
-	// DegreeOfParallelism - the degree of parallelism used for this job. This must be greater than 0, if set to less than 0 it will default to 1.
+	// DegreeOfParallelism - the degree of parallelism used for this job.
 	DegreeOfParallelism *int32 `json:"degreeOfParallelism,omitempty"`
+	// DegreeOfParallelismPercent - the degree of parallelism in percentage used for this job.
+	DegreeOfParallelismPercent *float64 `json:"degreeOfParallelismPercent,omitempty"`
 	// Priority - the priority value for the current job. Lower numbers have a higher priority. By default, a job has a priority of 1000. This must be greater than 0.
 	Priority *int32 `json:"priority,omitempty"`
 	// SubmitTime - the time the job was submitted to the service.
@@ -766,6 +829,8 @@ type Information struct {
 	LogFilePatterns *[]string `json:"logFilePatterns,omitempty"`
 	// Related - the recurring job relationship information properties.
 	Related *RelationshipProperties `json:"related,omitempty"`
+	// HierarchyQueueNode - the name of hierarchy queue node this job is assigned to, null if job has not been assigned yet or the account doesn't have hierarchy queue.
+	HierarchyQueueNode *string `json:"hierarchyQueueNode,omitempty"`
 }
 
 // UnmarshalJSON is the custom unmarshaler for Information struct.
@@ -848,6 +913,15 @@ func (i *Information) UnmarshalJSON(body []byte) error {
 				}
 				i.DegreeOfParallelism = &degreeOfParallelism
 			}
+		case "degreeOfParallelismPercent":
+			if v != nil {
+				var degreeOfParallelismPercent float64
+				err = json.Unmarshal(*v, &degreeOfParallelismPercent)
+				if err != nil {
+					return err
+				}
+				i.DegreeOfParallelismPercent = &degreeOfParallelismPercent
+			}
 		case "priority":
 			if v != nil {
 				var priority int32
@@ -929,6 +1003,15 @@ func (i *Information) UnmarshalJSON(body []byte) error {
 				}
 				i.Related = &related
 			}
+		case "hierarchyQueueNode":
+			if v != nil {
+				var hierarchyQueueNode string
+				err = json.Unmarshal(*v, &hierarchyQueueNode)
+				if err != nil {
+					return err
+				}
+				i.HierarchyQueueNode = &hierarchyQueueNode
+			}
 		}
 	}
 
@@ -945,8 +1028,10 @@ type InformationBasic struct {
 	Type TypeEnum `json:"type,omitempty"`
 	// Submitter - the user or account that submitted the job.
 	Submitter *string `json:"submitter,omitempty"`
-	// DegreeOfParallelism - the degree of parallelism used for this job. This must be greater than 0, if set to less than 0 it will default to 1.
+	// DegreeOfParallelism - the degree of parallelism used for this job.
 	DegreeOfParallelism *int32 `json:"degreeOfParallelism,omitempty"`
+	// DegreeOfParallelismPercent - the degree of parallelism in percentage used for this job.
+	DegreeOfParallelismPercent *float64 `json:"degreeOfParallelismPercent,omitempty"`
 	// Priority - the priority value for the current job. Lower numbers have a higher priority. By default, a job has a priority of 1000. This must be greater than 0.
 	Priority *int32 `json:"priority,omitempty"`
 	// SubmitTime - the time the job was submitted to the service.
@@ -965,6 +1050,8 @@ type InformationBasic struct {
 	LogFilePatterns *[]string `json:"logFilePatterns,omitempty"`
 	// Related - the recurring job relationship information properties.
 	Related *RelationshipProperties `json:"related,omitempty"`
+	// HierarchyQueueNode - the name of hierarchy queue node this job is assigned to, null if job has not been assigned yet or the account doesn't have hierarchy queue.
+	HierarchyQueueNode *string `json:"hierarchyQueueNode,omitempty"`
 }
 
 // InnerError the Data Lake Analytics job error details.
@@ -995,8 +1082,8 @@ type InnerError struct {
 	InnerError *InnerError `json:"innerError,omitempty"`
 }
 
-// PipelineInformation job Pipeline Information, showing the relationship of jobs and recurrences of those jobs in
-// a pipeline.
+// PipelineInformation job Pipeline Information, showing the relationship of jobs and recurrences of those
+// jobs in a pipeline.
 type PipelineInformation struct {
 	autorest.Response `json:"-"`
 	// PipelineID - the job relationship pipeline identifier (a GUID).
@@ -1034,26 +1121,44 @@ type PipelineInformationListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// PipelineInformationListResultIterator provides access to a complete listing of PipelineInformation values.
+// PipelineInformationListResultIterator provides access to a complete listing of PipelineInformation
+// values.
 type PipelineInformationListResultIterator struct {
 	i    int
 	page PipelineInformationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PipelineInformationListResultIterator) Next() error {
+func (iter *PipelineInformationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelineInformationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *PipelineInformationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1075,6 +1180,11 @@ func (iter PipelineInformationListResultIterator) Value() PipelineInformation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the PipelineInformationListResultIterator type.
+func NewPipelineInformationListResultIterator(page PipelineInformationListResultPage) PipelineInformationListResultIterator {
+	return PipelineInformationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pilr PipelineInformationListResult) IsEmpty() bool {
 	return pilr.Value == nil || len(*pilr.Value) == 0
@@ -1082,11 +1192,11 @@ func (pilr PipelineInformationListResult) IsEmpty() bool {
 
 // pipelineInformationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pilr PipelineInformationListResult) pipelineInformationListResultPreparer() (*http.Request, error) {
+func (pilr PipelineInformationListResult) pipelineInformationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if pilr.NextLink == nil || len(to.String(pilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pilr.NextLink)))
@@ -1094,19 +1204,36 @@ func (pilr PipelineInformationListResult) pipelineInformationListResultPreparer(
 
 // PipelineInformationListResultPage contains a page of PipelineInformation values.
 type PipelineInformationListResultPage struct {
-	fn   func(PipelineInformationListResult) (PipelineInformationListResult, error)
+	fn   func(context.Context, PipelineInformationListResult) (PipelineInformationListResult, error)
 	pilr PipelineInformationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PipelineInformationListResultPage) Next() error {
-	next, err := page.fn(page.pilr)
+func (page *PipelineInformationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelineInformationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pilr)
 	if err != nil {
 		return err
 	}
 	page.pilr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *PipelineInformationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1125,6 +1252,11 @@ func (page PipelineInformationListResultPage) Values() []PipelineInformation {
 		return nil
 	}
 	return *page.pilr.Value
+}
+
+// Creates a new instance of the PipelineInformationListResultPage type.
+func NewPipelineInformationListResultPage(getNextPage func(context.Context, PipelineInformationListResult) (PipelineInformationListResult, error)) PipelineInformationListResultPage {
+	return PipelineInformationListResultPage{fn: getNextPage}
 }
 
 // PipelineRunInformation run info for a specific job pipeline.
@@ -1261,26 +1393,44 @@ type RecurrenceInformationListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// RecurrenceInformationListResultIterator provides access to a complete listing of RecurrenceInformation values.
+// RecurrenceInformationListResultIterator provides access to a complete listing of RecurrenceInformation
+// values.
 type RecurrenceInformationListResultIterator struct {
 	i    int
 	page RecurrenceInformationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RecurrenceInformationListResultIterator) Next() error {
+func (iter *RecurrenceInformationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecurrenceInformationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *RecurrenceInformationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1302,6 +1452,11 @@ func (iter RecurrenceInformationListResultIterator) Value() RecurrenceInformatio
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the RecurrenceInformationListResultIterator type.
+func NewRecurrenceInformationListResultIterator(page RecurrenceInformationListResultPage) RecurrenceInformationListResultIterator {
+	return RecurrenceInformationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rilr RecurrenceInformationListResult) IsEmpty() bool {
 	return rilr.Value == nil || len(*rilr.Value) == 0
@@ -1309,11 +1464,11 @@ func (rilr RecurrenceInformationListResult) IsEmpty() bool {
 
 // recurrenceInformationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rilr RecurrenceInformationListResult) recurrenceInformationListResultPreparer() (*http.Request, error) {
+func (rilr RecurrenceInformationListResult) recurrenceInformationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if rilr.NextLink == nil || len(to.String(rilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rilr.NextLink)))
@@ -1321,19 +1476,36 @@ func (rilr RecurrenceInformationListResult) recurrenceInformationListResultPrepa
 
 // RecurrenceInformationListResultPage contains a page of RecurrenceInformation values.
 type RecurrenceInformationListResultPage struct {
-	fn   func(RecurrenceInformationListResult) (RecurrenceInformationListResult, error)
+	fn   func(context.Context, RecurrenceInformationListResult) (RecurrenceInformationListResult, error)
 	rilr RecurrenceInformationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RecurrenceInformationListResultPage) Next() error {
-	next, err := page.fn(page.rilr)
+func (page *RecurrenceInformationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecurrenceInformationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rilr)
 	if err != nil {
 		return err
 	}
 	page.rilr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *RecurrenceInformationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1354,8 +1526,13 @@ func (page RecurrenceInformationListResultPage) Values() []RecurrenceInformation
 	return *page.rilr.Value
 }
 
-// RelationshipProperties job relationship information properties including pipeline information, correlation
-// information, etc.
+// Creates a new instance of the RecurrenceInformationListResultPage type.
+func NewRecurrenceInformationListResultPage(getNextPage func(context.Context, RecurrenceInformationListResult) (RecurrenceInformationListResult, error)) RecurrenceInformationListResultPage {
+	return RecurrenceInformationListResultPage{fn: getNextPage}
+}
+
+// RelationshipProperties job relationship information properties including pipeline information,
+// correlation information, etc.
 type RelationshipProperties struct {
 	// PipelineID - the job relationship pipeline identifier (a GUID).
 	PipelineID *uuid.UUID `json:"pipelineId,omitempty"`
@@ -1418,7 +1595,7 @@ type StatisticsVertexStage struct {
 	DataWritten *int64 `json:"dataWritten,omitempty"`
 	// DuplicateDiscardCount - the number of duplicates that were discarded.
 	DuplicateDiscardCount *int32 `json:"duplicateDiscardCount,omitempty"`
-	// FailedCount - the number of failures that occured in this stage.
+	// FailedCount - the number of failures that occurred in this stage.
 	FailedCount *int32 `json:"failedCount,omitempty"`
 	// MaxVertexDataRead - the maximum amount of data read in a single vertex, in bytes.
 	MaxVertexDataRead *int64 `json:"maxVertexDataRead,omitempty"`

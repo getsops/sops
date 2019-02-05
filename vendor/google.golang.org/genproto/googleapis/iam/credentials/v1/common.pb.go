@@ -24,8 +24,6 @@ type GenerateAccessTokenRequest struct {
 	// The resource name of the service account for which the credentials
 	// are requested, in the following format:
 	// `projects/-/serviceAccounts/{ACCOUNT_EMAIL_OR_UNIQUEID}`.
-	// Using `-` as a wildcard for the project will infer the project from
-	// the account.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The sequence of service accounts in a delegation chain. Each service
 	// account must be granted the `roles/iam.serviceAccountTokenCreator` role
@@ -56,7 +54,7 @@ func (m *GenerateAccessTokenRequest) Reset()         { *m = GenerateAccessTokenR
 func (m *GenerateAccessTokenRequest) String() string { return proto.CompactTextString(m) }
 func (*GenerateAccessTokenRequest) ProtoMessage()    {}
 func (*GenerateAccessTokenRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{0}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{0}
 }
 func (m *GenerateAccessTokenRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GenerateAccessTokenRequest.Unmarshal(m, b)
@@ -64,8 +62,8 @@ func (m *GenerateAccessTokenRequest) XXX_Unmarshal(b []byte) error {
 func (m *GenerateAccessTokenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GenerateAccessTokenRequest.Marshal(b, m, deterministic)
 }
-func (m *GenerateAccessTokenRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenerateAccessTokenRequest.Merge(m, src)
+func (dst *GenerateAccessTokenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenerateAccessTokenRequest.Merge(dst, src)
 }
 func (m *GenerateAccessTokenRequest) XXX_Size() int {
 	return xxx_messageInfo_GenerateAccessTokenRequest.Size(m)
@@ -119,7 +117,7 @@ func (m *GenerateAccessTokenResponse) Reset()         { *m = GenerateAccessToken
 func (m *GenerateAccessTokenResponse) String() string { return proto.CompactTextString(m) }
 func (*GenerateAccessTokenResponse) ProtoMessage()    {}
 func (*GenerateAccessTokenResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{1}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{1}
 }
 func (m *GenerateAccessTokenResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GenerateAccessTokenResponse.Unmarshal(m, b)
@@ -127,8 +125,8 @@ func (m *GenerateAccessTokenResponse) XXX_Unmarshal(b []byte) error {
 func (m *GenerateAccessTokenResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GenerateAccessTokenResponse.Marshal(b, m, deterministic)
 }
-func (m *GenerateAccessTokenResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenerateAccessTokenResponse.Merge(m, src)
+func (dst *GenerateAccessTokenResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenerateAccessTokenResponse.Merge(dst, src)
 }
 func (m *GenerateAccessTokenResponse) XXX_Size() int {
 	return xxx_messageInfo_GenerateAccessTokenResponse.Size(m)
@@ -157,8 +155,6 @@ type SignBlobRequest struct {
 	// The resource name of the service account for which the credentials
 	// are requested, in the following format:
 	// `projects/-/serviceAccounts/{ACCOUNT_EMAIL_OR_UNIQUEID}`.
-	// Using `-` as a wildcard for the project will infer the project from
-	// the account.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The sequence of service accounts in a delegation chain. Each service
 	// account must be granted the `roles/iam.serviceAccountTokenCreator` role
@@ -181,7 +177,7 @@ func (m *SignBlobRequest) Reset()         { *m = SignBlobRequest{} }
 func (m *SignBlobRequest) String() string { return proto.CompactTextString(m) }
 func (*SignBlobRequest) ProtoMessage()    {}
 func (*SignBlobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{2}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{2}
 }
 func (m *SignBlobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignBlobRequest.Unmarshal(m, b)
@@ -189,8 +185,8 @@ func (m *SignBlobRequest) XXX_Unmarshal(b []byte) error {
 func (m *SignBlobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignBlobRequest.Marshal(b, m, deterministic)
 }
-func (m *SignBlobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignBlobRequest.Merge(m, src)
+func (dst *SignBlobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignBlobRequest.Merge(dst, src)
 }
 func (m *SignBlobRequest) XXX_Size() int {
 	return xxx_messageInfo_SignBlobRequest.Size(m)
@@ -236,7 +232,7 @@ func (m *SignBlobResponse) Reset()         { *m = SignBlobResponse{} }
 func (m *SignBlobResponse) String() string { return proto.CompactTextString(m) }
 func (*SignBlobResponse) ProtoMessage()    {}
 func (*SignBlobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{3}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{3}
 }
 func (m *SignBlobResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignBlobResponse.Unmarshal(m, b)
@@ -244,8 +240,8 @@ func (m *SignBlobResponse) XXX_Unmarshal(b []byte) error {
 func (m *SignBlobResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignBlobResponse.Marshal(b, m, deterministic)
 }
-func (m *SignBlobResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignBlobResponse.Merge(m, src)
+func (dst *SignBlobResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignBlobResponse.Merge(dst, src)
 }
 func (m *SignBlobResponse) XXX_Size() int {
 	return xxx_messageInfo_SignBlobResponse.Size(m)
@@ -274,8 +270,6 @@ type SignJwtRequest struct {
 	// The resource name of the service account for which the credentials
 	// are requested, in the following format:
 	// `projects/-/serviceAccounts/{ACCOUNT_EMAIL_OR_UNIQUEID}`.
-	// Using `-` as a wildcard for the project will infer the project from
-	// the account.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The sequence of service accounts in a delegation chain. Each service
 	// account must be granted the `roles/iam.serviceAccountTokenCreator` role
@@ -298,7 +292,7 @@ func (m *SignJwtRequest) Reset()         { *m = SignJwtRequest{} }
 func (m *SignJwtRequest) String() string { return proto.CompactTextString(m) }
 func (*SignJwtRequest) ProtoMessage()    {}
 func (*SignJwtRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{4}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{4}
 }
 func (m *SignJwtRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignJwtRequest.Unmarshal(m, b)
@@ -306,8 +300,8 @@ func (m *SignJwtRequest) XXX_Unmarshal(b []byte) error {
 func (m *SignJwtRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignJwtRequest.Marshal(b, m, deterministic)
 }
-func (m *SignJwtRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignJwtRequest.Merge(m, src)
+func (dst *SignJwtRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignJwtRequest.Merge(dst, src)
 }
 func (m *SignJwtRequest) XXX_Size() int {
 	return xxx_messageInfo_SignJwtRequest.Size(m)
@@ -353,7 +347,7 @@ func (m *SignJwtResponse) Reset()         { *m = SignJwtResponse{} }
 func (m *SignJwtResponse) String() string { return proto.CompactTextString(m) }
 func (*SignJwtResponse) ProtoMessage()    {}
 func (*SignJwtResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{5}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{5}
 }
 func (m *SignJwtResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SignJwtResponse.Unmarshal(m, b)
@@ -361,8 +355,8 @@ func (m *SignJwtResponse) XXX_Unmarshal(b []byte) error {
 func (m *SignJwtResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SignJwtResponse.Marshal(b, m, deterministic)
 }
-func (m *SignJwtResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignJwtResponse.Merge(m, src)
+func (dst *SignJwtResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignJwtResponse.Merge(dst, src)
 }
 func (m *SignJwtResponse) XXX_Size() int {
 	return xxx_messageInfo_SignJwtResponse.Size(m)
@@ -391,8 +385,6 @@ type GenerateIdTokenRequest struct {
 	// The resource name of the service account for which the credentials
 	// are requested, in the following format:
 	// `projects/-/serviceAccounts/{ACCOUNT_EMAIL_OR_UNIQUEID}`.
-	// Using `-` as a wildcard for the project will infer the project from
-	// the account.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The sequence of service accounts in a delegation chain. Each service
 	// account must be granted the `roles/iam.serviceAccountTokenCreator` role
@@ -419,7 +411,7 @@ func (m *GenerateIdTokenRequest) Reset()         { *m = GenerateIdTokenRequest{}
 func (m *GenerateIdTokenRequest) String() string { return proto.CompactTextString(m) }
 func (*GenerateIdTokenRequest) ProtoMessage()    {}
 func (*GenerateIdTokenRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{6}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{6}
 }
 func (m *GenerateIdTokenRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GenerateIdTokenRequest.Unmarshal(m, b)
@@ -427,8 +419,8 @@ func (m *GenerateIdTokenRequest) XXX_Unmarshal(b []byte) error {
 func (m *GenerateIdTokenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GenerateIdTokenRequest.Marshal(b, m, deterministic)
 }
-func (m *GenerateIdTokenRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenerateIdTokenRequest.Merge(m, src)
+func (dst *GenerateIdTokenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenerateIdTokenRequest.Merge(dst, src)
 }
 func (m *GenerateIdTokenRequest) XXX_Size() int {
 	return xxx_messageInfo_GenerateIdTokenRequest.Size(m)
@@ -479,7 +471,7 @@ func (m *GenerateIdTokenResponse) Reset()         { *m = GenerateIdTokenResponse
 func (m *GenerateIdTokenResponse) String() string { return proto.CompactTextString(m) }
 func (*GenerateIdTokenResponse) ProtoMessage()    {}
 func (*GenerateIdTokenResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e91212214ea1422e, []int{7}
+	return fileDescriptor_common_7e5e13abca9c147a, []int{7}
 }
 func (m *GenerateIdTokenResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GenerateIdTokenResponse.Unmarshal(m, b)
@@ -487,8 +479,8 @@ func (m *GenerateIdTokenResponse) XXX_Unmarshal(b []byte) error {
 func (m *GenerateIdTokenResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GenerateIdTokenResponse.Marshal(b, m, deterministic)
 }
-func (m *GenerateIdTokenResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenerateIdTokenResponse.Merge(m, src)
+func (dst *GenerateIdTokenResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenerateIdTokenResponse.Merge(dst, src)
 }
 func (m *GenerateIdTokenResponse) XXX_Size() int {
 	return xxx_messageInfo_GenerateIdTokenResponse.Size(m)
@@ -506,6 +498,167 @@ func (m *GenerateIdTokenResponse) GetToken() string {
 	return ""
 }
 
+type GenerateIdentityBindingAccessTokenRequest struct {
+	// The resource name of the service account for which the credentials
+	// are requested, in the following format:
+	// `projects/-/serviceAccounts/{ACCOUNT_EMAIL_OR_UNIQUEID}`.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Code to identify the scopes to be included in the OAuth 2.0 access token.
+	// See https://developers.google.com/identity/protocols/googlescopes for more
+	// information.
+	// At least one value required.
+	Scope []string `protobuf:"bytes,2,rep,name=scope,proto3" json:"scope,omitempty"`
+	// Required. Input token.
+	// Must be in JWT format according to
+	// RFC7523 (https://tools.ietf.org/html/rfc7523)
+	// and must have 'kid' field in the header.
+	// Supported signing algorithms: RS256 (RS512, ES256, ES512 coming soon).
+	// Mandatory payload fields (along the lines of RFC 7523, section 3):
+	// - iss: issuer of the token. Must provide a discovery document at
+	//        $iss/.well-known/openid-configuration . The document needs to be
+	//        formatted according to section 4.2 of the OpenID Connect Discovery
+	//        1.0 specification.
+	// - iat: Issue time in seconds since epoch. Must be in the past.
+	// - exp: Expiration time in seconds since epoch. Must be less than 48 hours
+	//        after iat. We recommend to create tokens that last shorter than 6
+	//        hours to improve security unless business reasons mandate longer
+	//        expiration times. Shorter token lifetimes are generally more secure
+	//        since tokens that have been exfiltrated by attackers can be used for
+	//        a shorter time. you can configure the maximum lifetime of the
+	//        incoming token in the configuration of the mapper.
+	//        The resulting Google token will expire within an hour or at "exp",
+	//        whichever is earlier.
+	// - sub: JWT subject, identity asserted in the JWT.
+	// - aud: Configured in the mapper policy. By default the service account
+	//        email.
+	//
+	// Claims from the incoming token can be transferred into the output token
+	// accoding to the mapper configuration. The outgoing claim size is limited.
+	// Outgoing claims size must be less than 4kB serialized as JSON without
+	// whitespace.
+	//
+	// Example header:
+	// {
+	//   "alg": "RS256",
+	//   "kid": "92a4265e14ab04d4d228a48d10d4ca31610936f8"
+	// }
+	// Example payload:
+	// {
+	//   "iss": "https://accounts.google.com",
+	//   "iat": 1517963104,
+	//   "exp": 1517966704,
+	//   "aud": "https://iamcredentials.googleapis.com/",
+	//   "sub": "113475438248934895348",
+	//   "my_claims": {
+	//     "additional_claim": "value"
+	//   }
+	// }
+	Jwt                  string   `protobuf:"bytes,3,opt,name=jwt,proto3" json:"jwt,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GenerateIdentityBindingAccessTokenRequest) Reset() {
+	*m = GenerateIdentityBindingAccessTokenRequest{}
+}
+func (m *GenerateIdentityBindingAccessTokenRequest) String() string { return proto.CompactTextString(m) }
+func (*GenerateIdentityBindingAccessTokenRequest) ProtoMessage()    {}
+func (*GenerateIdentityBindingAccessTokenRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_common_7e5e13abca9c147a, []int{8}
+}
+func (m *GenerateIdentityBindingAccessTokenRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GenerateIdentityBindingAccessTokenRequest.Unmarshal(m, b)
+}
+func (m *GenerateIdentityBindingAccessTokenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GenerateIdentityBindingAccessTokenRequest.Marshal(b, m, deterministic)
+}
+func (dst *GenerateIdentityBindingAccessTokenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenerateIdentityBindingAccessTokenRequest.Merge(dst, src)
+}
+func (m *GenerateIdentityBindingAccessTokenRequest) XXX_Size() int {
+	return xxx_messageInfo_GenerateIdentityBindingAccessTokenRequest.Size(m)
+}
+func (m *GenerateIdentityBindingAccessTokenRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GenerateIdentityBindingAccessTokenRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GenerateIdentityBindingAccessTokenRequest proto.InternalMessageInfo
+
+func (m *GenerateIdentityBindingAccessTokenRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *GenerateIdentityBindingAccessTokenRequest) GetScope() []string {
+	if m != nil {
+		return m.Scope
+	}
+	return nil
+}
+
+func (m *GenerateIdentityBindingAccessTokenRequest) GetJwt() string {
+	if m != nil {
+		return m.Jwt
+	}
+	return ""
+}
+
+type GenerateIdentityBindingAccessTokenResponse struct {
+	// The OAuth 2.0 access token.
+	AccessToken string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+	// Token expiration time.
+	// The expiration time is always set.
+	ExpireTime           *timestamp.Timestamp `protobuf:"bytes,2,opt,name=expire_time,json=expireTime,proto3" json:"expire_time,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *GenerateIdentityBindingAccessTokenResponse) Reset() {
+	*m = GenerateIdentityBindingAccessTokenResponse{}
+}
+func (m *GenerateIdentityBindingAccessTokenResponse) String() string {
+	return proto.CompactTextString(m)
+}
+func (*GenerateIdentityBindingAccessTokenResponse) ProtoMessage() {}
+func (*GenerateIdentityBindingAccessTokenResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_common_7e5e13abca9c147a, []int{9}
+}
+func (m *GenerateIdentityBindingAccessTokenResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GenerateIdentityBindingAccessTokenResponse.Unmarshal(m, b)
+}
+func (m *GenerateIdentityBindingAccessTokenResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GenerateIdentityBindingAccessTokenResponse.Marshal(b, m, deterministic)
+}
+func (dst *GenerateIdentityBindingAccessTokenResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GenerateIdentityBindingAccessTokenResponse.Merge(dst, src)
+}
+func (m *GenerateIdentityBindingAccessTokenResponse) XXX_Size() int {
+	return xxx_messageInfo_GenerateIdentityBindingAccessTokenResponse.Size(m)
+}
+func (m *GenerateIdentityBindingAccessTokenResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GenerateIdentityBindingAccessTokenResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GenerateIdentityBindingAccessTokenResponse proto.InternalMessageInfo
+
+func (m *GenerateIdentityBindingAccessTokenResponse) GetAccessToken() string {
+	if m != nil {
+		return m.AccessToken
+	}
+	return ""
+}
+
+func (m *GenerateIdentityBindingAccessTokenResponse) GetExpireTime() *timestamp.Timestamp {
+	if m != nil {
+		return m.ExpireTime
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*GenerateAccessTokenRequest)(nil), "google.iam.credentials.v1.GenerateAccessTokenRequest")
 	proto.RegisterType((*GenerateAccessTokenResponse)(nil), "google.iam.credentials.v1.GenerateAccessTokenResponse")
@@ -515,45 +668,50 @@ func init() {
 	proto.RegisterType((*SignJwtResponse)(nil), "google.iam.credentials.v1.SignJwtResponse")
 	proto.RegisterType((*GenerateIdTokenRequest)(nil), "google.iam.credentials.v1.GenerateIdTokenRequest")
 	proto.RegisterType((*GenerateIdTokenResponse)(nil), "google.iam.credentials.v1.GenerateIdTokenResponse")
+	proto.RegisterType((*GenerateIdentityBindingAccessTokenRequest)(nil), "google.iam.credentials.v1.GenerateIdentityBindingAccessTokenRequest")
+	proto.RegisterType((*GenerateIdentityBindingAccessTokenResponse)(nil), "google.iam.credentials.v1.GenerateIdentityBindingAccessTokenResponse")
 }
 
 func init() {
-	proto.RegisterFile("google/iam/credentials/v1/common.proto", fileDescriptor_e91212214ea1422e)
+	proto.RegisterFile("google/iam/credentials/v1/common.proto", fileDescriptor_common_7e5e13abca9c147a)
 }
 
-var fileDescriptor_e91212214ea1422e = []byte{
-	// 514 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0x95, 0x9b, 0xa4, 0x8d, 0x27, 0xe1, 0x43, 0x56, 0x01, 0x27, 0x50, 0x1a, 0x8c, 0x84, 0x72,
-	0xb2, 0x55, 0x10, 0xa7, 0x9e, 0x9a, 0x16, 0x55, 0x89, 0x84, 0x54, 0x99, 0x9e, 0x10, 0xc8, 0xda,
-	0xd8, 0x53, 0x6b, 0xc9, 0x7a, 0xd7, 0x78, 0x37, 0x0d, 0x39, 0x70, 0xe4, 0xc4, 0x4f, 0xe0, 0x8f,
-	0x72, 0x44, 0xde, 0xdd, 0x34, 0x51, 0x5b, 0x10, 0x12, 0xdc, 0x3c, 0x6f, 0xde, 0xcc, 0xbc, 0x7d,
-	0x3b, 0x6b, 0x78, 0x91, 0x0b, 0x91, 0x33, 0x8c, 0x28, 0x29, 0xa2, 0xb4, 0xc2, 0x0c, 0xb9, 0xa2,
-	0x84, 0xc9, 0xe8, 0xf2, 0x20, 0x4a, 0x45, 0x51, 0x08, 0x1e, 0x96, 0x95, 0x50, 0xc2, 0xeb, 0x19,
-	0x5e, 0x48, 0x49, 0x11, 0x6e, 0xf0, 0xc2, 0xcb, 0x83, 0xfe, 0x53, 0xdb, 0x42, 0x13, 0xa7, 0xf3,
-	0x8b, 0x28, 0x9b, 0x57, 0x44, 0xd1, 0x55, 0x69, 0x7f, 0xff, 0x7a, 0x5e, 0xd1, 0x02, 0xa5, 0x22,
-	0x45, 0x69, 0x08, 0xc1, 0x0f, 0x07, 0xfa, 0xa7, 0xc8, 0xb1, 0x22, 0x0a, 0x8f, 0xd2, 0x14, 0xa5,
-	0x3c, 0x17, 0x33, 0xe4, 0x31, 0x7e, 0x9e, 0xa3, 0x54, 0x9e, 0x07, 0x4d, 0x4e, 0x0a, 0xf4, 0x9d,
-	0x81, 0x33, 0x74, 0x63, 0xfd, 0xed, 0x3d, 0x01, 0x37, 0x43, 0x86, 0x39, 0x51, 0x28, 0xfd, 0xad,
-	0x41, 0x63, 0xe8, 0xc6, 0x6b, 0xc0, 0xdb, 0x85, 0x96, 0x4c, 0x45, 0x89, 0x7e, 0x53, 0x67, 0x4c,
-	0xe0, 0xbd, 0x86, 0x36, 0xa3, 0x17, 0x58, 0x4f, 0xf7, 0x77, 0x06, 0xce, 0xb0, 0xf3, 0xb2, 0x17,
-	0xda, 0x53, 0xad, 0xa4, 0x85, 0x27, 0x56, 0x7a, 0x7c, 0x45, 0x0d, 0xbe, 0xc2, 0xe3, 0x5b, 0xc5,
-	0xc9, 0x52, 0x70, 0x89, 0xde, 0x33, 0xe8, 0x12, 0x0d, 0x27, 0xaa, 0xc6, 0xad, 0xca, 0x0e, 0x59,
-	0x53, 0xbd, 0x43, 0xe8, 0xe0, 0x97, 0x92, 0x56, 0x98, 0xe8, 0xd9, 0x0d, 0x3d, 0xbb, 0x7f, 0x63,
-	0xf6, 0xf9, 0xca, 0x96, 0x18, 0x0c, 0xbd, 0x06, 0x82, 0x8f, 0x70, 0xef, 0x1d, 0xcd, 0xf9, 0x88,
-	0x89, 0xe9, 0x5f, 0x1b, 0xd2, 0xb8, 0x6e, 0x88, 0x0f, 0x3b, 0x25, 0x59, 0x32, 0x41, 0x32, 0xbf,
-	0x35, 0x70, 0x86, 0xdd, 0x78, 0x15, 0x06, 0x13, 0xb8, 0xbf, 0x6e, 0x6f, 0x8f, 0xf4, 0x00, 0xb6,
-	0x67, 0xb8, 0x4c, 0x68, 0x66, 0x27, 0xb4, 0x66, 0xb8, 0x1c, 0x67, 0xde, 0x3e, 0x74, 0x24, 0xcd,
-	0x39, 0x66, 0xc9, 0x94, 0x89, 0xa9, 0xdf, 0xd4, 0x8d, 0xc0, 0x40, 0x75, 0x7d, 0xf0, 0x01, 0xee,
-	0xd6, 0xbd, 0x26, 0x0b, 0xf5, 0xdf, 0x94, 0xba, 0x6b, 0xa5, 0xa7, 0xc6, 0x08, 0xdd, 0xfd, 0xcf,
-	0x42, 0xf7, 0xc0, 0xaa, 0x4a, 0x3e, 0x2d, 0x94, 0xbf, 0xa5, 0x53, 0xae, 0x41, 0x26, 0x0b, 0x15,
-	0x7c, 0x77, 0xe0, 0xe1, 0xea, 0x46, 0xc7, 0xd9, 0x3f, 0xae, 0x5a, 0x1f, 0xda, 0x64, 0x9e, 0x51,
-	0xe4, 0xa9, 0xb9, 0x58, 0x37, 0xbe, 0x8a, 0xbd, 0xe7, 0x70, 0x87, 0xf2, 0x94, 0xcd, 0x33, 0x4c,
-	0xb0, 0x20, 0x94, 0x69, 0xcb, 0xda, 0x71, 0xd7, 0x82, 0x6f, 0x6a, 0x2c, 0x88, 0xe0, 0xd1, 0x0d,
-	0x31, 0xf6, 0x78, 0xbb, 0xd0, 0xda, 0xdc, 0x29, 0x13, 0x8c, 0xbe, 0x39, 0xb0, 0x97, 0x8a, 0x22,
-	0xfc, 0xed, 0x83, 0x1c, 0xf5, 0xc6, 0x47, 0x6f, 0x8f, 0xd7, 0xd0, 0xb1, 0x7e, 0xc7, 0x67, 0xf5,
-	0x9a, 0x9d, 0x39, 0xef, 0x4f, 0x6c, 0x5d, 0x2e, 0x18, 0xe1, 0x79, 0x28, 0xaa, 0x3c, 0xca, 0x91,
-	0xeb, 0x25, 0x8c, 0x4c, 0x8a, 0x94, 0x54, 0xde, 0xf2, 0x3f, 0x38, 0xdc, 0x08, 0x7f, 0x3a, 0xce,
-	0x74, 0x5b, 0xd7, 0xbc, 0xfa, 0x15, 0x00, 0x00, 0xff, 0xff, 0x0a, 0x93, 0x59, 0x07, 0x42, 0x04,
-	0x00, 0x00,
+var fileDescriptor_common_7e5e13abca9c147a = []byte{
+	// 563 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0x96, 0x93, 0xa6, 0x8d, 0x27, 0x01, 0x2a, 0xab, 0x80, 0x13, 0x7e, 0x1a, 0x5c, 0x09, 0x05,
+	0x0e, 0xb6, 0x0a, 0xe2, 0xd4, 0x53, 0xd3, 0xa2, 0x2a, 0x91, 0x90, 0x2a, 0xd3, 0x13, 0x02, 0x59,
+	0x1b, 0xef, 0xd4, 0x5a, 0x62, 0xef, 0x1a, 0x7b, 0xdd, 0x90, 0x03, 0x4f, 0x50, 0xde, 0x80, 0x17,
+	0xe5, 0x88, 0xbc, 0xb6, 0xe3, 0xa8, 0x8d, 0x50, 0xf8, 0xb9, 0xed, 0x7c, 0xf3, 0xcd, 0xcc, 0x37,
+	0xb3, 0x3b, 0x0b, 0xcf, 0x03, 0x21, 0x82, 0x10, 0x1d, 0x46, 0x22, 0xc7, 0x4f, 0x90, 0x22, 0x97,
+	0x8c, 0x84, 0xa9, 0x73, 0x75, 0xe8, 0xf8, 0x22, 0x8a, 0x04, 0xb7, 0xe3, 0x44, 0x48, 0x61, 0xf4,
+	0x0a, 0x9e, 0xcd, 0x48, 0x64, 0xaf, 0xf0, 0xec, 0xab, 0xc3, 0xfe, 0xd3, 0x32, 0x85, 0x22, 0x4e,
+	0xb3, 0x4b, 0x87, 0x66, 0x09, 0x91, 0xac, 0x0a, 0xed, 0xef, 0xdf, 0xf4, 0x4b, 0x16, 0x61, 0x2a,
+	0x49, 0x14, 0x17, 0x04, 0xeb, 0x87, 0x06, 0xfd, 0x33, 0xe4, 0x98, 0x10, 0x89, 0xc7, 0xbe, 0x8f,
+	0x69, 0x7a, 0x21, 0x66, 0xc8, 0x5d, 0xfc, 0x92, 0x61, 0x2a, 0x0d, 0x03, 0xb6, 0x38, 0x89, 0xd0,
+	0xd4, 0x06, 0xda, 0x50, 0x77, 0xd5, 0xd9, 0x78, 0x0c, 0x3a, 0xc5, 0x10, 0x03, 0x22, 0x31, 0x35,
+	0x1b, 0x83, 0xe6, 0x50, 0x77, 0x6b, 0xc0, 0xd8, 0x83, 0x56, 0xea, 0x8b, 0x18, 0xcd, 0x2d, 0xe5,
+	0x29, 0x0c, 0xe3, 0x0d, 0xb4, 0x43, 0x76, 0x89, 0x79, 0x75, 0x73, 0x67, 0xa0, 0x0d, 0x3b, 0xaf,
+	0x7a, 0x76, 0xd9, 0x55, 0x25, 0xcd, 0x3e, 0x2d, 0xa5, 0xbb, 0x4b, 0xaa, 0xf5, 0x0d, 0x1e, 0xad,
+	0x15, 0x97, 0xc6, 0x82, 0xa7, 0x68, 0x3c, 0x83, 0x2e, 0x51, 0xb0, 0x27, 0x73, 0xbc, 0x54, 0xd9,
+	0x21, 0x35, 0xd5, 0x38, 0x82, 0x0e, 0x7e, 0x8d, 0x59, 0x82, 0x9e, 0xaa, 0xdd, 0x54, 0xb5, 0xfb,
+	0xb7, 0x6a, 0x5f, 0x54, 0x63, 0x71, 0xa1, 0xa0, 0xe7, 0x80, 0xf5, 0x09, 0xee, 0xbd, 0x67, 0x01,
+	0x1f, 0x85, 0x62, 0xba, 0xf1, 0x40, 0x9a, 0x37, 0x07, 0x62, 0xc2, 0x4e, 0x4c, 0x16, 0xa1, 0x20,
+	0xd4, 0x6c, 0x0d, 0xb4, 0x61, 0xd7, 0xad, 0x4c, 0x6b, 0x02, 0xbb, 0x75, 0xfa, 0xb2, 0xa5, 0xfb,
+	0xb0, 0x3d, 0xc3, 0x85, 0xc7, 0x68, 0x59, 0xa1, 0x35, 0xc3, 0xc5, 0x98, 0x1a, 0xfb, 0xd0, 0x49,
+	0x59, 0xc0, 0x91, 0x7a, 0xd3, 0x50, 0x4c, 0xcd, 0x2d, 0x95, 0x08, 0x0a, 0x28, 0x8f, 0xb7, 0x3e,
+	0xc2, 0xdd, 0x3c, 0xd7, 0x64, 0x2e, 0xff, 0x9b, 0x52, 0xbd, 0x56, 0x7a, 0x56, 0x0c, 0x42, 0x65,
+	0xff, 0xbd, 0xd0, 0x27, 0x50, 0xaa, 0xf2, 0x3e, 0xcf, 0xa5, 0xd9, 0x50, 0x2e, 0xbd, 0x40, 0x26,
+	0x73, 0x69, 0x5d, 0x6b, 0xf0, 0xa0, 0xba, 0xd1, 0x31, 0xfd, 0xc7, 0xa7, 0xd6, 0x87, 0x36, 0xc9,
+	0x28, 0x43, 0xee, 0x17, 0x17, 0xab, 0xbb, 0x4b, 0xdb, 0x38, 0x80, 0x3b, 0x8c, 0xfb, 0x61, 0x46,
+	0xd1, 0xc3, 0x88, 0xb0, 0x50, 0x8d, 0xac, 0xed, 0x76, 0x4b, 0xf0, 0x6d, 0x8e, 0x59, 0x0e, 0x3c,
+	0xbc, 0x25, 0xa6, 0x6c, 0x6f, 0x0f, 0x5a, 0xab, 0x6f, 0xaa, 0x30, 0xac, 0x00, 0x5e, 0xd4, 0x01,
+	0xf9, 0x1a, 0xca, 0xc5, 0x88, 0x71, 0xca, 0x78, 0xb0, 0xe1, 0xee, 0x2c, 0xb7, 0xa3, 0xb1, 0xba,
+	0x1d, 0xbb, 0xd0, 0xcc, 0xa7, 0x55, 0xf4, 0x90, 0x1f, 0xad, 0xef, 0x1a, 0xbc, 0xdc, 0xa4, 0xd2,
+	0x5f, 0x2f, 0x42, 0xe3, 0x4f, 0x16, 0x61, 0x74, 0xad, 0xc1, 0x81, 0x2f, 0xa2, 0x8a, 0xed, 0x87,
+	0x22, 0xa3, 0x6b, 0xbe, 0xa3, 0x51, 0x6f, 0x7c, 0xfc, 0xee, 0xa4, 0x86, 0x4e, 0xd4, 0x2f, 0x76,
+	0x9e, 0xe7, 0x3e, 0xd7, 0x3e, 0x9c, 0x96, 0xd1, 0x81, 0x08, 0x09, 0x0f, 0x6c, 0x91, 0x04, 0x4e,
+	0x80, 0x5c, 0x55, 0x76, 0x0a, 0x17, 0x89, 0x59, 0xba, 0xe6, 0x37, 0x3c, 0x5a, 0x31, 0x7f, 0x6a,
+	0xda, 0x74, 0x5b, 0xc5, 0xbc, 0xfe, 0x15, 0x00, 0x00, 0xff, 0xff, 0x97, 0xa7, 0x4c, 0xe2, 0x40,
+	0x05, 0x00, 0x00,
 }

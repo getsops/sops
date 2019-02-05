@@ -26,7 +26,7 @@ import (
 	"time"
 )
 
-func TestParseLoadBalancer(t *testing.T) {
+func (s) TestParseLoadBalancer(t *testing.T) {
 	testcases := []struct {
 		scjs    string
 		wantSC  ServiceConfig
@@ -85,7 +85,7 @@ func TestParseLoadBalancer(t *testing.T) {
 	}
 }
 
-func TestParseWaitForReady(t *testing.T) {
+func (s) TestParseWaitForReady(t *testing.T) {
 	testcases := []struct {
 		scjs    string
 		wantSC  ServiceConfig
@@ -173,7 +173,7 @@ func TestParseWaitForReady(t *testing.T) {
 	}
 }
 
-func TestPraseTimeOut(t *testing.T) {
+func (s) TestPraseTimeOut(t *testing.T) {
 	testcases := []struct {
 		scjs    string
 		wantSC  ServiceConfig
@@ -255,7 +255,7 @@ func TestPraseTimeOut(t *testing.T) {
 	}
 }
 
-func TestPraseMsgSize(t *testing.T) {
+func (s) TestPraseMsgSize(t *testing.T) {
 	testcases := []struct {
 		scjs    string
 		wantSC  ServiceConfig
@@ -324,7 +324,7 @@ func TestPraseMsgSize(t *testing.T) {
 	}
 }
 
-func TestParseDuration(t *testing.T) {
+func (s) TestParseDuration(t *testing.T) {
 	testCases := []struct {
 		s    *string
 		want *time.Duration

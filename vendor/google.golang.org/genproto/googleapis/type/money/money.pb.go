@@ -41,7 +41,7 @@ func (m *Money) Reset()         { *m = Money{} }
 func (m *Money) String() string { return proto.CompactTextString(m) }
 func (*Money) ProtoMessage()    {}
 func (*Money) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f093d3d05ab4bbee, []int{0}
+	return fileDescriptor_money_608c90f64d8c0d93, []int{0}
 }
 func (m *Money) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Money.Unmarshal(m, b)
@@ -49,8 +49,8 @@ func (m *Money) XXX_Unmarshal(b []byte) error {
 func (m *Money) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Money.Marshal(b, m, deterministic)
 }
-func (m *Money) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Money.Merge(m, src)
+func (dst *Money) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Money.Merge(dst, src)
 }
 func (m *Money) XXX_Size() int {
 	return xxx_messageInfo_Money.Size(m)
@@ -86,9 +86,9 @@ func init() {
 	proto.RegisterType((*Money)(nil), "google.type.Money")
 }
 
-func init() { proto.RegisterFile("google/type/money.proto", fileDescriptor_f093d3d05ab4bbee) }
+func init() { proto.RegisterFile("google/type/money.proto", fileDescriptor_money_608c90f64d8c0d93) }
 
-var fileDescriptor_f093d3d05ab4bbee = []byte{
+var fileDescriptor_money_608c90f64d8c0d93 = []byte{
 	// 190 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4f, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x2f, 0xa9, 0x2c, 0x48, 0xd5, 0xcf, 0xcd, 0xcf, 0x4b, 0xad, 0xd4, 0x2b, 0x28,

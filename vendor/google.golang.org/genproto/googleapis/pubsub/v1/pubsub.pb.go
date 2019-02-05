@@ -29,8 +29,8 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
 type MessageStoragePolicy struct {
-	// The list of GCP regions where messages that are published to the topic may
-	// be persisted in storage. Messages published by publishers running in
+	// The list of GCP region IDs where messages that are published to the topic
+	// may be persisted in storage. Messages published by publishers running in
 	// non-allowed GCP regions (or running outside of GCP altogether) will be
 	// routed for storage in one of the allowed regions. An empty list indicates a
 	// misconfiguration at the project or organization level, which will result in
@@ -45,7 +45,7 @@ func (m *MessageStoragePolicy) Reset()         { *m = MessageStoragePolicy{} }
 func (m *MessageStoragePolicy) String() string { return proto.CompactTextString(m) }
 func (*MessageStoragePolicy) ProtoMessage()    {}
 func (*MessageStoragePolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{0}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{0}
 }
 func (m *MessageStoragePolicy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MessageStoragePolicy.Unmarshal(m, b)
@@ -53,8 +53,8 @@ func (m *MessageStoragePolicy) XXX_Unmarshal(b []byte) error {
 func (m *MessageStoragePolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MessageStoragePolicy.Marshal(b, m, deterministic)
 }
-func (m *MessageStoragePolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MessageStoragePolicy.Merge(m, src)
+func (dst *MessageStoragePolicy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MessageStoragePolicy.Merge(dst, src)
 }
 func (m *MessageStoragePolicy) XXX_Size() int {
 	return xxx_messageInfo_MessageStoragePolicy.Size(m)
@@ -81,7 +81,8 @@ type Topic struct {
 	// signs (`%`). It must be between 3 and 255 characters in length, and it
 	// must not start with `"goog"`.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// User labels.
+	// See <a href="https://cloud.google.com/pubsub/docs/labels"> Creating and
+	// managing labels</a>.
 	Labels map[string]string `protobuf:"bytes,2,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Policy constraining how messages published to the topic may be stored. It
 	// is determined when the topic is created based on the policy configured at
@@ -99,7 +100,7 @@ func (m *Topic) Reset()         { *m = Topic{} }
 func (m *Topic) String() string { return proto.CompactTextString(m) }
 func (*Topic) ProtoMessage()    {}
 func (*Topic) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{1}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{1}
 }
 func (m *Topic) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Topic.Unmarshal(m, b)
@@ -107,8 +108,8 @@ func (m *Topic) XXX_Unmarshal(b []byte) error {
 func (m *Topic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Topic.Marshal(b, m, deterministic)
 }
-func (m *Topic) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Topic.Merge(m, src)
+func (dst *Topic) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Topic.Merge(dst, src)
 }
 func (m *Topic) XXX_Size() int {
 	return xxx_messageInfo_Topic.Size(m)
@@ -140,10 +141,17 @@ func (m *Topic) GetMessageStoragePolicy() *MessageStoragePolicy {
 	return nil
 }
 
-// A message data and its attributes. The message payload must not be empty;
-// it must contain either a non-empty data field, or at least one attribute.
+// A message that is published by publishers and consumed by subscribers. The
+// message must contain either a non-empty data field or at least one attribute.
+// Note that client libraries represent this object differently
+// depending on the language. See the corresponding
+// <a href="https://cloud.google.com/pubsub/docs/reference/libraries">client
+// library documentation</a> for more information. See
+// <a href="https://cloud.google.com/pubsub/quotas">Quotas and limits</a>
+// for more information about message limits.
 type PubsubMessage struct {
-	// The message payload.
+	// The message data field. If this field is empty, the message must contain
+	// at least one attribute.
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	// Optional attributes for this message.
 	Attributes map[string]string `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
@@ -165,7 +173,7 @@ func (m *PubsubMessage) Reset()         { *m = PubsubMessage{} }
 func (m *PubsubMessage) String() string { return proto.CompactTextString(m) }
 func (*PubsubMessage) ProtoMessage()    {}
 func (*PubsubMessage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{2}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{2}
 }
 func (m *PubsubMessage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PubsubMessage.Unmarshal(m, b)
@@ -173,8 +181,8 @@ func (m *PubsubMessage) XXX_Unmarshal(b []byte) error {
 func (m *PubsubMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PubsubMessage.Marshal(b, m, deterministic)
 }
-func (m *PubsubMessage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PubsubMessage.Merge(m, src)
+func (dst *PubsubMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PubsubMessage.Merge(dst, src)
 }
 func (m *PubsubMessage) XXX_Size() int {
 	return xxx_messageInfo_PubsubMessage.Size(m)
@@ -227,7 +235,7 @@ func (m *GetTopicRequest) Reset()         { *m = GetTopicRequest{} }
 func (m *GetTopicRequest) String() string { return proto.CompactTextString(m) }
 func (*GetTopicRequest) ProtoMessage()    {}
 func (*GetTopicRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{3}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{3}
 }
 func (m *GetTopicRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetTopicRequest.Unmarshal(m, b)
@@ -235,8 +243,8 @@ func (m *GetTopicRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetTopicRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetTopicRequest.Marshal(b, m, deterministic)
 }
-func (m *GetTopicRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetTopicRequest.Merge(m, src)
+func (dst *GetTopicRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTopicRequest.Merge(dst, src)
 }
 func (m *GetTopicRequest) XXX_Size() int {
 	return xxx_messageInfo_GetTopicRequest.Size(m)
@@ -273,7 +281,7 @@ func (m *UpdateTopicRequest) Reset()         { *m = UpdateTopicRequest{} }
 func (m *UpdateTopicRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateTopicRequest) ProtoMessage()    {}
 func (*UpdateTopicRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{4}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{4}
 }
 func (m *UpdateTopicRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateTopicRequest.Unmarshal(m, b)
@@ -281,8 +289,8 @@ func (m *UpdateTopicRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateTopicRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateTopicRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateTopicRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateTopicRequest.Merge(m, src)
+func (dst *UpdateTopicRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateTopicRequest.Merge(dst, src)
 }
 func (m *UpdateTopicRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateTopicRequest.Size(m)
@@ -323,7 +331,7 @@ func (m *PublishRequest) Reset()         { *m = PublishRequest{} }
 func (m *PublishRequest) String() string { return proto.CompactTextString(m) }
 func (*PublishRequest) ProtoMessage()    {}
 func (*PublishRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{5}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{5}
 }
 func (m *PublishRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PublishRequest.Unmarshal(m, b)
@@ -331,8 +339,8 @@ func (m *PublishRequest) XXX_Unmarshal(b []byte) error {
 func (m *PublishRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PublishRequest.Marshal(b, m, deterministic)
 }
-func (m *PublishRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PublishRequest.Merge(m, src)
+func (dst *PublishRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PublishRequest.Merge(dst, src)
 }
 func (m *PublishRequest) XXX_Size() int {
 	return xxx_messageInfo_PublishRequest.Size(m)
@@ -372,7 +380,7 @@ func (m *PublishResponse) Reset()         { *m = PublishResponse{} }
 func (m *PublishResponse) String() string { return proto.CompactTextString(m) }
 func (*PublishResponse) ProtoMessage()    {}
 func (*PublishResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{6}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{6}
 }
 func (m *PublishResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PublishResponse.Unmarshal(m, b)
@@ -380,8 +388,8 @@ func (m *PublishResponse) XXX_Unmarshal(b []byte) error {
 func (m *PublishResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PublishResponse.Marshal(b, m, deterministic)
 }
-func (m *PublishResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PublishResponse.Merge(m, src)
+func (dst *PublishResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PublishResponse.Merge(dst, src)
 }
 func (m *PublishResponse) XXX_Size() int {
 	return xxx_messageInfo_PublishResponse.Size(m)
@@ -401,8 +409,8 @@ func (m *PublishResponse) GetMessageIds() []string {
 
 // Request for the `ListTopics` method.
 type ListTopicsRequest struct {
-	// The name of the cloud project that topics belong to.
-	// Format is `projects/{project}`.
+	// The name of the project in which to list topics.
+	// Format is `projects/{project-id}`.
 	Project string `protobuf:"bytes,1,opt,name=project,proto3" json:"project,omitempty"`
 	// Maximum number of topics to return.
 	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
@@ -419,7 +427,7 @@ func (m *ListTopicsRequest) Reset()         { *m = ListTopicsRequest{} }
 func (m *ListTopicsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListTopicsRequest) ProtoMessage()    {}
 func (*ListTopicsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{7}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{7}
 }
 func (m *ListTopicsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTopicsRequest.Unmarshal(m, b)
@@ -427,8 +435,8 @@ func (m *ListTopicsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListTopicsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTopicsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListTopicsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTopicsRequest.Merge(m, src)
+func (dst *ListTopicsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTopicsRequest.Merge(dst, src)
 }
 func (m *ListTopicsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListTopicsRequest.Size(m)
@@ -476,7 +484,7 @@ func (m *ListTopicsResponse) Reset()         { *m = ListTopicsResponse{} }
 func (m *ListTopicsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListTopicsResponse) ProtoMessage()    {}
 func (*ListTopicsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{8}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{8}
 }
 func (m *ListTopicsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTopicsResponse.Unmarshal(m, b)
@@ -484,8 +492,8 @@ func (m *ListTopicsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListTopicsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTopicsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListTopicsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTopicsResponse.Merge(m, src)
+func (dst *ListTopicsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTopicsResponse.Merge(dst, src)
 }
 func (m *ListTopicsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListTopicsResponse.Size(m)
@@ -530,7 +538,7 @@ func (m *ListTopicSubscriptionsRequest) Reset()         { *m = ListTopicSubscrip
 func (m *ListTopicSubscriptionsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListTopicSubscriptionsRequest) ProtoMessage()    {}
 func (*ListTopicSubscriptionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{9}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{9}
 }
 func (m *ListTopicSubscriptionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTopicSubscriptionsRequest.Unmarshal(m, b)
@@ -538,8 +546,8 @@ func (m *ListTopicSubscriptionsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListTopicSubscriptionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTopicSubscriptionsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListTopicSubscriptionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTopicSubscriptionsRequest.Merge(m, src)
+func (dst *ListTopicSubscriptionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTopicSubscriptionsRequest.Merge(dst, src)
 }
 func (m *ListTopicSubscriptionsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListTopicSubscriptionsRequest.Size(m)
@@ -588,7 +596,7 @@ func (m *ListTopicSubscriptionsResponse) Reset()         { *m = ListTopicSubscri
 func (m *ListTopicSubscriptionsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListTopicSubscriptionsResponse) ProtoMessage()    {}
 func (*ListTopicSubscriptionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{10}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{10}
 }
 func (m *ListTopicSubscriptionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTopicSubscriptionsResponse.Unmarshal(m, b)
@@ -596,8 +604,8 @@ func (m *ListTopicSubscriptionsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListTopicSubscriptionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTopicSubscriptionsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListTopicSubscriptionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTopicSubscriptionsResponse.Merge(m, src)
+func (dst *ListTopicSubscriptionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTopicSubscriptionsResponse.Merge(dst, src)
 }
 func (m *ListTopicSubscriptionsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListTopicSubscriptionsResponse.Size(m)
@@ -622,8 +630,8 @@ func (m *ListTopicSubscriptionsResponse) GetNextPageToken() string {
 	return ""
 }
 
-// Request for the `ListTopicSnapshots` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// Request for the `ListTopicSnapshots` method. <br><br>
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type ListTopicSnapshotsRequest struct {
@@ -645,7 +653,7 @@ func (m *ListTopicSnapshotsRequest) Reset()         { *m = ListTopicSnapshotsReq
 func (m *ListTopicSnapshotsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListTopicSnapshotsRequest) ProtoMessage()    {}
 func (*ListTopicSnapshotsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{11}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{11}
 }
 func (m *ListTopicSnapshotsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTopicSnapshotsRequest.Unmarshal(m, b)
@@ -653,8 +661,8 @@ func (m *ListTopicSnapshotsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListTopicSnapshotsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTopicSnapshotsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListTopicSnapshotsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTopicSnapshotsRequest.Merge(m, src)
+func (dst *ListTopicSnapshotsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTopicSnapshotsRequest.Merge(dst, src)
 }
 func (m *ListTopicSnapshotsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListTopicSnapshotsRequest.Size(m)
@@ -687,7 +695,7 @@ func (m *ListTopicSnapshotsRequest) GetPageToken() string {
 }
 
 // Response for the `ListTopicSnapshots` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type ListTopicSnapshotsResponse struct {
@@ -706,7 +714,7 @@ func (m *ListTopicSnapshotsResponse) Reset()         { *m = ListTopicSnapshotsRe
 func (m *ListTopicSnapshotsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListTopicSnapshotsResponse) ProtoMessage()    {}
 func (*ListTopicSnapshotsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{12}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{12}
 }
 func (m *ListTopicSnapshotsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTopicSnapshotsResponse.Unmarshal(m, b)
@@ -714,8 +722,8 @@ func (m *ListTopicSnapshotsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListTopicSnapshotsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTopicSnapshotsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListTopicSnapshotsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTopicSnapshotsResponse.Merge(m, src)
+func (dst *ListTopicSnapshotsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTopicSnapshotsResponse.Merge(dst, src)
 }
 func (m *ListTopicSnapshotsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListTopicSnapshotsResponse.Size(m)
@@ -754,7 +762,7 @@ func (m *DeleteTopicRequest) Reset()         { *m = DeleteTopicRequest{} }
 func (m *DeleteTopicRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteTopicRequest) ProtoMessage()    {}
 func (*DeleteTopicRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{13}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{13}
 }
 func (m *DeleteTopicRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteTopicRequest.Unmarshal(m, b)
@@ -762,8 +770,8 @@ func (m *DeleteTopicRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteTopicRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteTopicRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteTopicRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteTopicRequest.Merge(m, src)
+func (dst *DeleteTopicRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteTopicRequest.Merge(dst, src)
 }
 func (m *DeleteTopicRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteTopicRequest.Size(m)
@@ -799,11 +807,11 @@ type Subscription struct {
 	// used to configure it. An empty `pushConfig` signifies that the subscriber
 	// will pull and ack messages using API methods.
 	PushConfig *PushConfig `protobuf:"bytes,4,opt,name=push_config,json=pushConfig,proto3" json:"push_config,omitempty"`
-	// This value is the maximum time after a subscriber receives a message
-	// before the subscriber should acknowledge the message. After message
-	// delivery but before the ack deadline expires and before the message is
-	// acknowledged, it is an outstanding message and will not be delivered
-	// again during that time (on a best-effort basis).
+	// The approximate amount of time (on a best-effort basis) Pub/Sub waits for
+	// the subscriber to acknowledge receipt before resending the message. In the
+	// interval after the message is delivered and before it is acknowledged, it
+	// is considered to be <i>outstanding</i>. During that time period, the
+	// message will not be redelivered (on a best-effort basis).
 	//
 	// For pull subscriptions, this value is used as the initial value for the ack
 	// deadline. To override this value for a given message, call
@@ -823,8 +831,11 @@ type Subscription struct {
 	// Indicates whether to retain acknowledged messages. If true, then
 	// messages are not expunged from the subscription's backlog, even if they are
 	// acknowledged, until they fall out of the `message_retention_duration`
-	// window.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// window. This must be true if you would like to
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview#seek_to_a_time">
+	// Seek to a timestamp</a>.
+	// <br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	RetainAckedMessages bool `protobuf:"varint,7,opt,name=retain_acked_messages,json=retainAckedMessages,proto3" json:"retain_acked_messages,omitempty"`
@@ -834,12 +845,23 @@ type Subscription struct {
 	// of acknowledged messages, and thus configures how far back in time a `Seek`
 	// can be done. Defaults to 7 days. Cannot be more than 7 days or less than 10
 	// minutes.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	MessageRetentionDuration *duration.Duration `protobuf:"bytes,8,opt,name=message_retention_duration,json=messageRetentionDuration,proto3" json:"message_retention_duration,omitempty"`
-	// User labels.
-	Labels               map[string]string `protobuf:"bytes,9,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// See <a href="https://cloud.google.com/pubsub/docs/labels"> Creating and
+	// managing labels</a>.
+	Labels map[string]string `protobuf:"bytes,9,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// A policy that specifies the conditions for this subscription's expiration.
+	// A subscription is considered active as long as any connected subscriber is
+	// successfully consuming messages from the subscription or is issuing
+	// operations on the subscription. If `expiration_policy` is not set, a
+	// *default policy* with `ttl` of 31 days will be used. The minimum allowed
+	// value for `expiration_policy.ttl` is 1 day.
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
+	// changed in backward-incompatible ways and is not recommended for production
+	// use. It is not subject to any SLA or deprecation policy.
+	ExpirationPolicy     *ExpirationPolicy `protobuf:"bytes,11,opt,name=expiration_policy,json=expirationPolicy,proto3" json:"expiration_policy,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
@@ -849,7 +871,7 @@ func (m *Subscription) Reset()         { *m = Subscription{} }
 func (m *Subscription) String() string { return proto.CompactTextString(m) }
 func (*Subscription) ProtoMessage()    {}
 func (*Subscription) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{14}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{14}
 }
 func (m *Subscription) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Subscription.Unmarshal(m, b)
@@ -857,8 +879,8 @@ func (m *Subscription) XXX_Unmarshal(b []byte) error {
 func (m *Subscription) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Subscription.Marshal(b, m, deterministic)
 }
-func (m *Subscription) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Subscription.Merge(m, src)
+func (dst *Subscription) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Subscription.Merge(dst, src)
 }
 func (m *Subscription) XXX_Size() int {
 	return xxx_messageInfo_Subscription.Size(m)
@@ -918,6 +940,59 @@ func (m *Subscription) GetLabels() map[string]string {
 	return nil
 }
 
+func (m *Subscription) GetExpirationPolicy() *ExpirationPolicy {
+	if m != nil {
+		return m.ExpirationPolicy
+	}
+	return nil
+}
+
+// A policy that specifies the conditions for resource expiration (i.e.,
+// automatic resource deletion).
+type ExpirationPolicy struct {
+	// Specifies the "time-to-live" duration for an associated resource. The
+	// resource expires if it is not active for a period of `ttl`. The definition
+	// of "activity" depends on the type of the associated resource. The minimum
+	// and maximum allowed values for `ttl` depend on the type of the associated
+	// resource, as well. If `ttl` is not set, the associated resource never
+	// expires.
+	Ttl                  *duration.Duration `protobuf:"bytes,1,opt,name=ttl,proto3" json:"ttl,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *ExpirationPolicy) Reset()         { *m = ExpirationPolicy{} }
+func (m *ExpirationPolicy) String() string { return proto.CompactTextString(m) }
+func (*ExpirationPolicy) ProtoMessage()    {}
+func (*ExpirationPolicy) Descriptor() ([]byte, []int) {
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{15}
+}
+func (m *ExpirationPolicy) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ExpirationPolicy.Unmarshal(m, b)
+}
+func (m *ExpirationPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ExpirationPolicy.Marshal(b, m, deterministic)
+}
+func (dst *ExpirationPolicy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExpirationPolicy.Merge(dst, src)
+}
+func (m *ExpirationPolicy) XXX_Size() int {
+	return xxx_messageInfo_ExpirationPolicy.Size(m)
+}
+func (m *ExpirationPolicy) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExpirationPolicy.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExpirationPolicy proto.InternalMessageInfo
+
+func (m *ExpirationPolicy) GetTtl() *duration.Duration {
+	if m != nil {
+		return m.Ttl
+	}
+	return nil
+}
+
 // Configuration for a push delivery endpoint.
 type PushConfig struct {
 	// A URL locating the endpoint to which messages should be pushed.
@@ -954,7 +1029,7 @@ func (m *PushConfig) Reset()         { *m = PushConfig{} }
 func (m *PushConfig) String() string { return proto.CompactTextString(m) }
 func (*PushConfig) ProtoMessage()    {}
 func (*PushConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{15}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{16}
 }
 func (m *PushConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PushConfig.Unmarshal(m, b)
@@ -962,8 +1037,8 @@ func (m *PushConfig) XXX_Unmarshal(b []byte) error {
 func (m *PushConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PushConfig.Marshal(b, m, deterministic)
 }
-func (m *PushConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PushConfig.Merge(m, src)
+func (dst *PushConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PushConfig.Merge(dst, src)
 }
 func (m *PushConfig) XXX_Size() int {
 	return xxx_messageInfo_PushConfig.Size(m)
@@ -1003,7 +1078,7 @@ func (m *ReceivedMessage) Reset()         { *m = ReceivedMessage{} }
 func (m *ReceivedMessage) String() string { return proto.CompactTextString(m) }
 func (*ReceivedMessage) ProtoMessage()    {}
 func (*ReceivedMessage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{16}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{17}
 }
 func (m *ReceivedMessage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReceivedMessage.Unmarshal(m, b)
@@ -1011,8 +1086,8 @@ func (m *ReceivedMessage) XXX_Unmarshal(b []byte) error {
 func (m *ReceivedMessage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReceivedMessage.Marshal(b, m, deterministic)
 }
-func (m *ReceivedMessage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReceivedMessage.Merge(m, src)
+func (dst *ReceivedMessage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReceivedMessage.Merge(dst, src)
 }
 func (m *ReceivedMessage) XXX_Size() int {
 	return xxx_messageInfo_ReceivedMessage.Size(m)
@@ -1051,7 +1126,7 @@ func (m *GetSubscriptionRequest) Reset()         { *m = GetSubscriptionRequest{}
 func (m *GetSubscriptionRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSubscriptionRequest) ProtoMessage()    {}
 func (*GetSubscriptionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{17}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{18}
 }
 func (m *GetSubscriptionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetSubscriptionRequest.Unmarshal(m, b)
@@ -1059,8 +1134,8 @@ func (m *GetSubscriptionRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetSubscriptionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetSubscriptionRequest.Marshal(b, m, deterministic)
 }
-func (m *GetSubscriptionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSubscriptionRequest.Merge(m, src)
+func (dst *GetSubscriptionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSubscriptionRequest.Merge(dst, src)
 }
 func (m *GetSubscriptionRequest) XXX_Size() int {
 	return xxx_messageInfo_GetSubscriptionRequest.Size(m)
@@ -1094,7 +1169,7 @@ func (m *UpdateSubscriptionRequest) Reset()         { *m = UpdateSubscriptionReq
 func (m *UpdateSubscriptionRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateSubscriptionRequest) ProtoMessage()    {}
 func (*UpdateSubscriptionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{18}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{19}
 }
 func (m *UpdateSubscriptionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateSubscriptionRequest.Unmarshal(m, b)
@@ -1102,8 +1177,8 @@ func (m *UpdateSubscriptionRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateSubscriptionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateSubscriptionRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateSubscriptionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateSubscriptionRequest.Merge(m, src)
+func (dst *UpdateSubscriptionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateSubscriptionRequest.Merge(dst, src)
 }
 func (m *UpdateSubscriptionRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateSubscriptionRequest.Size(m)
@@ -1130,8 +1205,8 @@ func (m *UpdateSubscriptionRequest) GetUpdateMask() *field_mask.FieldMask {
 
 // Request for the `ListSubscriptions` method.
 type ListSubscriptionsRequest struct {
-	// The name of the cloud project that subscriptions belong to.
-	// Format is `projects/{project}`.
+	// The name of the project in which to list subscriptions.
+	// Format is `projects/{project-id}`.
 	Project string `protobuf:"bytes,1,opt,name=project,proto3" json:"project,omitempty"`
 	// Maximum number of subscriptions to return.
 	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
@@ -1148,7 +1223,7 @@ func (m *ListSubscriptionsRequest) Reset()         { *m = ListSubscriptionsReque
 func (m *ListSubscriptionsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListSubscriptionsRequest) ProtoMessage()    {}
 func (*ListSubscriptionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{19}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{20}
 }
 func (m *ListSubscriptionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSubscriptionsRequest.Unmarshal(m, b)
@@ -1156,8 +1231,8 @@ func (m *ListSubscriptionsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListSubscriptionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSubscriptionsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListSubscriptionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSubscriptionsRequest.Merge(m, src)
+func (dst *ListSubscriptionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSubscriptionsRequest.Merge(dst, src)
 }
 func (m *ListSubscriptionsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListSubscriptionsRequest.Size(m)
@@ -1206,7 +1281,7 @@ func (m *ListSubscriptionsResponse) Reset()         { *m = ListSubscriptionsResp
 func (m *ListSubscriptionsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListSubscriptionsResponse) ProtoMessage()    {}
 func (*ListSubscriptionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{20}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{21}
 }
 func (m *ListSubscriptionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSubscriptionsResponse.Unmarshal(m, b)
@@ -1214,8 +1289,8 @@ func (m *ListSubscriptionsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListSubscriptionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSubscriptionsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListSubscriptionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSubscriptionsResponse.Merge(m, src)
+func (dst *ListSubscriptionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSubscriptionsResponse.Merge(dst, src)
 }
 func (m *ListSubscriptionsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListSubscriptionsResponse.Size(m)
@@ -1254,7 +1329,7 @@ func (m *DeleteSubscriptionRequest) Reset()         { *m = DeleteSubscriptionReq
 func (m *DeleteSubscriptionRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteSubscriptionRequest) ProtoMessage()    {}
 func (*DeleteSubscriptionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{21}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{22}
 }
 func (m *DeleteSubscriptionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteSubscriptionRequest.Unmarshal(m, b)
@@ -1262,8 +1337,8 @@ func (m *DeleteSubscriptionRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteSubscriptionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteSubscriptionRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteSubscriptionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteSubscriptionRequest.Merge(m, src)
+func (dst *DeleteSubscriptionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteSubscriptionRequest.Merge(dst, src)
 }
 func (m *DeleteSubscriptionRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteSubscriptionRequest.Size(m)
@@ -1302,7 +1377,7 @@ func (m *ModifyPushConfigRequest) Reset()         { *m = ModifyPushConfigRequest
 func (m *ModifyPushConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*ModifyPushConfigRequest) ProtoMessage()    {}
 func (*ModifyPushConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{22}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{23}
 }
 func (m *ModifyPushConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ModifyPushConfigRequest.Unmarshal(m, b)
@@ -1310,8 +1385,8 @@ func (m *ModifyPushConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *ModifyPushConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ModifyPushConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *ModifyPushConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ModifyPushConfigRequest.Merge(m, src)
+func (dst *ModifyPushConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ModifyPushConfigRequest.Merge(dst, src)
 }
 func (m *ModifyPushConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_ModifyPushConfigRequest.Size(m)
@@ -1344,9 +1419,7 @@ type PullRequest struct {
 	// If this field set to true, the system will respond immediately even if
 	// it there are no messages available to return in the `Pull` response.
 	// Otherwise, the system may wait (for a bounded amount of time) until at
-	// least one message is available, rather than returning no messages. The
-	// client may cancel the request if it does not wish to wait any longer for
-	// the response.
+	// least one message is available, rather than returning no messages.
 	ReturnImmediately bool `protobuf:"varint,2,opt,name=return_immediately,json=returnImmediately,proto3" json:"return_immediately,omitempty"`
 	// The maximum number of messages returned for this request. The Pub/Sub
 	// system may return fewer than the number specified.
@@ -1360,7 +1433,7 @@ func (m *PullRequest) Reset()         { *m = PullRequest{} }
 func (m *PullRequest) String() string { return proto.CompactTextString(m) }
 func (*PullRequest) ProtoMessage()    {}
 func (*PullRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{23}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{24}
 }
 func (m *PullRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PullRequest.Unmarshal(m, b)
@@ -1368,8 +1441,8 @@ func (m *PullRequest) XXX_Unmarshal(b []byte) error {
 func (m *PullRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PullRequest.Marshal(b, m, deterministic)
 }
-func (m *PullRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PullRequest.Merge(m, src)
+func (dst *PullRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PullRequest.Merge(dst, src)
 }
 func (m *PullRequest) XXX_Size() int {
 	return xxx_messageInfo_PullRequest.Size(m)
@@ -1403,10 +1476,10 @@ func (m *PullRequest) GetMaxMessages() int32 {
 
 // Response for the `Pull` method.
 type PullResponse struct {
-	// Received Pub/Sub messages. The Pub/Sub system will return zero messages if
-	// there are no more available in the backlog. The Pub/Sub system may return
-	// fewer than the `maxMessages` requested even if there are more messages
-	// available in the backlog.
+	// Received Pub/Sub messages. The list will be empty if there are no more
+	// messages available in the backlog. For JSON, the response can be entirely
+	// empty. The Pub/Sub system may return fewer than the `maxMessages` requested
+	// even if there are more messages available in the backlog.
 	ReceivedMessages     []*ReceivedMessage `protobuf:"bytes,1,rep,name=received_messages,json=receivedMessages,proto3" json:"received_messages,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
@@ -1417,7 +1490,7 @@ func (m *PullResponse) Reset()         { *m = PullResponse{} }
 func (m *PullResponse) String() string { return proto.CompactTextString(m) }
 func (*PullResponse) ProtoMessage()    {}
 func (*PullResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{24}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{25}
 }
 func (m *PullResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PullResponse.Unmarshal(m, b)
@@ -1425,8 +1498,8 @@ func (m *PullResponse) XXX_Unmarshal(b []byte) error {
 func (m *PullResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PullResponse.Marshal(b, m, deterministic)
 }
-func (m *PullResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PullResponse.Merge(m, src)
+func (dst *PullResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PullResponse.Merge(dst, src)
 }
 func (m *PullResponse) XXX_Size() int {
 	return xxx_messageInfo_PullResponse.Size(m)
@@ -1454,8 +1527,9 @@ type ModifyAckDeadlineRequest struct {
 	// The new ack deadline with respect to the time this request was sent to
 	// the Pub/Sub system. For example, if the value is 10, the new
 	// ack deadline will expire 10 seconds after the `ModifyAckDeadline` call
-	// was made. Specifying zero may immediately make the message available for
-	// another pull request.
+	// was made. Specifying zero might immediately make the message available for
+	// delivery to another subscriber client. This typically results in an
+	// increase in the rate of message redeliveries (that is, duplicates).
 	// The minimum deadline you can specify is 0 seconds.
 	// The maximum deadline you can specify is 600 seconds (10 minutes).
 	AckDeadlineSeconds   int32    `protobuf:"varint,3,opt,name=ack_deadline_seconds,json=ackDeadlineSeconds,proto3" json:"ack_deadline_seconds,omitempty"`
@@ -1468,7 +1542,7 @@ func (m *ModifyAckDeadlineRequest) Reset()         { *m = ModifyAckDeadlineReque
 func (m *ModifyAckDeadlineRequest) String() string { return proto.CompactTextString(m) }
 func (*ModifyAckDeadlineRequest) ProtoMessage()    {}
 func (*ModifyAckDeadlineRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{25}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{26}
 }
 func (m *ModifyAckDeadlineRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ModifyAckDeadlineRequest.Unmarshal(m, b)
@@ -1476,8 +1550,8 @@ func (m *ModifyAckDeadlineRequest) XXX_Unmarshal(b []byte) error {
 func (m *ModifyAckDeadlineRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ModifyAckDeadlineRequest.Marshal(b, m, deterministic)
 }
-func (m *ModifyAckDeadlineRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ModifyAckDeadlineRequest.Merge(m, src)
+func (dst *ModifyAckDeadlineRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ModifyAckDeadlineRequest.Merge(dst, src)
 }
 func (m *ModifyAckDeadlineRequest) XXX_Size() int {
 	return xxx_messageInfo_ModifyAckDeadlineRequest.Size(m)
@@ -1526,7 +1600,7 @@ func (m *AcknowledgeRequest) Reset()         { *m = AcknowledgeRequest{} }
 func (m *AcknowledgeRequest) String() string { return proto.CompactTextString(m) }
 func (*AcknowledgeRequest) ProtoMessage()    {}
 func (*AcknowledgeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{26}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{27}
 }
 func (m *AcknowledgeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AcknowledgeRequest.Unmarshal(m, b)
@@ -1534,8 +1608,8 @@ func (m *AcknowledgeRequest) XXX_Unmarshal(b []byte) error {
 func (m *AcknowledgeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AcknowledgeRequest.Marshal(b, m, deterministic)
 }
-func (m *AcknowledgeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AcknowledgeRequest.Merge(m, src)
+func (dst *AcknowledgeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AcknowledgeRequest.Merge(dst, src)
 }
 func (m *AcknowledgeRequest) XXX_Size() int {
 	return xxx_messageInfo_AcknowledgeRequest.Size(m)
@@ -1607,7 +1681,7 @@ func (m *StreamingPullRequest) Reset()         { *m = StreamingPullRequest{} }
 func (m *StreamingPullRequest) String() string { return proto.CompactTextString(m) }
 func (*StreamingPullRequest) ProtoMessage()    {}
 func (*StreamingPullRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{27}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{28}
 }
 func (m *StreamingPullRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StreamingPullRequest.Unmarshal(m, b)
@@ -1615,8 +1689,8 @@ func (m *StreamingPullRequest) XXX_Unmarshal(b []byte) error {
 func (m *StreamingPullRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StreamingPullRequest.Marshal(b, m, deterministic)
 }
-func (m *StreamingPullRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StreamingPullRequest.Merge(m, src)
+func (dst *StreamingPullRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StreamingPullRequest.Merge(dst, src)
 }
 func (m *StreamingPullRequest) XXX_Size() int {
 	return xxx_messageInfo_StreamingPullRequest.Size(m)
@@ -1676,7 +1750,7 @@ func (m *StreamingPullResponse) Reset()         { *m = StreamingPullResponse{} }
 func (m *StreamingPullResponse) String() string { return proto.CompactTextString(m) }
 func (*StreamingPullResponse) ProtoMessage()    {}
 func (*StreamingPullResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{28}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{29}
 }
 func (m *StreamingPullResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StreamingPullResponse.Unmarshal(m, b)
@@ -1684,8 +1758,8 @@ func (m *StreamingPullResponse) XXX_Unmarshal(b []byte) error {
 func (m *StreamingPullResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StreamingPullResponse.Marshal(b, m, deterministic)
 }
-func (m *StreamingPullResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StreamingPullResponse.Merge(m, src)
+func (dst *StreamingPullResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StreamingPullResponse.Merge(dst, src)
 }
 func (m *StreamingPullResponse) XXX_Size() int {
 	return xxx_messageInfo_StreamingPullResponse.Size(m)
@@ -1704,14 +1778,16 @@ func (m *StreamingPullResponse) GetReceivedMessages() []*ReceivedMessage {
 }
 
 // Request for the `CreateSnapshot` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be changed in
+// <b>BETA:</b> This feature is part of a beta release. This API might be changed in
 // backward-incompatible ways and is not recommended for production use.
 // It is not subject to any SLA or deprecation policy.
 type CreateSnapshotRequest struct {
 	// Optional user-provided name for this snapshot.
 	// If the name is not provided in the request, the server will assign a random
 	// name for this snapshot on the same project as the subscription.
-	// Note that for REST API requests, you must specify a name.
+	// Note that for REST API requests, you must specify a name.  See the
+	// <a href="https://cloud.google.com/pubsub/docs/admin#resource_names">
+	// resource name rules</a>.
 	// Format is `projects/{project}/snapshots/{snap}`.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// The subscription whose backlog the snapshot retains.
@@ -1724,7 +1800,8 @@ type CreateSnapshotRequest struct {
 	//      successful completion of the CreateSnapshot request.
 	// Format is `projects/{project}/subscriptions/{sub}`.
 	Subscription string `protobuf:"bytes,2,opt,name=subscription,proto3" json:"subscription,omitempty"`
-	// User labels.
+	// See <a href="https://cloud.google.com/pubsub/docs/labels"> Creating and
+	// managing labels</a>.
 	Labels               map[string]string `protobuf:"bytes,3,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
@@ -1735,7 +1812,7 @@ func (m *CreateSnapshotRequest) Reset()         { *m = CreateSnapshotRequest{} }
 func (m *CreateSnapshotRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateSnapshotRequest) ProtoMessage()    {}
 func (*CreateSnapshotRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{29}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{30}
 }
 func (m *CreateSnapshotRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateSnapshotRequest.Unmarshal(m, b)
@@ -1743,8 +1820,8 @@ func (m *CreateSnapshotRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateSnapshotRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateSnapshotRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateSnapshotRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateSnapshotRequest.Merge(m, src)
+func (dst *CreateSnapshotRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSnapshotRequest.Merge(dst, src)
 }
 func (m *CreateSnapshotRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateSnapshotRequest.Size(m)
@@ -1777,7 +1854,7 @@ func (m *CreateSnapshotRequest) GetLabels() map[string]string {
 }
 
 // Request for the UpdateSnapshot method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type UpdateSnapshotRequest struct {
@@ -1795,7 +1872,7 @@ func (m *UpdateSnapshotRequest) Reset()         { *m = UpdateSnapshotRequest{} }
 func (m *UpdateSnapshotRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateSnapshotRequest) ProtoMessage()    {}
 func (*UpdateSnapshotRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{30}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{31}
 }
 func (m *UpdateSnapshotRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateSnapshotRequest.Unmarshal(m, b)
@@ -1803,8 +1880,8 @@ func (m *UpdateSnapshotRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateSnapshotRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateSnapshotRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateSnapshotRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateSnapshotRequest.Merge(m, src)
+func (dst *UpdateSnapshotRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateSnapshotRequest.Merge(dst, src)
 }
 func (m *UpdateSnapshotRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateSnapshotRequest.Size(m)
@@ -1829,8 +1906,13 @@ func (m *UpdateSnapshotRequest) GetUpdateMask() *field_mask.FieldMask {
 	return nil
 }
 
-// A snapshot resource.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// A snapshot resource. Snapshots are used in
+// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+// operations, which allow
+// you to manage message acknowledgments in bulk. That is, you can set the
+// acknowledgment state of messages in an existing subscription to the state
+// captured by a snapshot.<br><br>
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type Snapshot struct {
@@ -1849,7 +1931,8 @@ type Snapshot struct {
 	// exists -- will expire in 4 days. The service will refuse to create a
 	// snapshot that would expire in less than 1 hour after creation.
 	ExpireTime *timestamp.Timestamp `protobuf:"bytes,3,opt,name=expire_time,json=expireTime,proto3" json:"expire_time,omitempty"`
-	// User labels.
+	// See <a href="https://cloud.google.com/pubsub/docs/labels"> Creating and
+	// managing labels</a>.
 	Labels               map[string]string `protobuf:"bytes,4,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_unrecognized     []byte            `json:"-"`
@@ -1860,7 +1943,7 @@ func (m *Snapshot) Reset()         { *m = Snapshot{} }
 func (m *Snapshot) String() string { return proto.CompactTextString(m) }
 func (*Snapshot) ProtoMessage()    {}
 func (*Snapshot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{31}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{32}
 }
 func (m *Snapshot) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Snapshot.Unmarshal(m, b)
@@ -1868,8 +1951,8 @@ func (m *Snapshot) XXX_Unmarshal(b []byte) error {
 func (m *Snapshot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Snapshot.Marshal(b, m, deterministic)
 }
-func (m *Snapshot) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Snapshot.Merge(m, src)
+func (dst *Snapshot) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Snapshot.Merge(dst, src)
 }
 func (m *Snapshot) XXX_Size() int {
 	return xxx_messageInfo_Snapshot.Size(m)
@@ -1909,7 +1992,7 @@ func (m *Snapshot) GetLabels() map[string]string {
 }
 
 // Request for the GetSnapshot method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type GetSnapshotRequest struct {
@@ -1925,7 +2008,7 @@ func (m *GetSnapshotRequest) Reset()         { *m = GetSnapshotRequest{} }
 func (m *GetSnapshotRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSnapshotRequest) ProtoMessage()    {}
 func (*GetSnapshotRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{32}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{33}
 }
 func (m *GetSnapshotRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetSnapshotRequest.Unmarshal(m, b)
@@ -1933,8 +2016,8 @@ func (m *GetSnapshotRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetSnapshotRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetSnapshotRequest.Marshal(b, m, deterministic)
 }
-func (m *GetSnapshotRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSnapshotRequest.Merge(m, src)
+func (dst *GetSnapshotRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSnapshotRequest.Merge(dst, src)
 }
 func (m *GetSnapshotRequest) XXX_Size() int {
 	return xxx_messageInfo_GetSnapshotRequest.Size(m)
@@ -1953,12 +2036,12 @@ func (m *GetSnapshotRequest) GetSnapshot() string {
 }
 
 // Request for the `ListSnapshots` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type ListSnapshotsRequest struct {
-	// The name of the cloud project that snapshots belong to.
-	// Format is `projects/{project}`.
+	// The name of the project in which to list snapshots.
+	// Format is `projects/{project-id}`.
 	Project string `protobuf:"bytes,1,opt,name=project,proto3" json:"project,omitempty"`
 	// Maximum number of snapshots to return.
 	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
@@ -1975,7 +2058,7 @@ func (m *ListSnapshotsRequest) Reset()         { *m = ListSnapshotsRequest{} }
 func (m *ListSnapshotsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListSnapshotsRequest) ProtoMessage()    {}
 func (*ListSnapshotsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{33}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{34}
 }
 func (m *ListSnapshotsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSnapshotsRequest.Unmarshal(m, b)
@@ -1983,8 +2066,8 @@ func (m *ListSnapshotsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListSnapshotsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSnapshotsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListSnapshotsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSnapshotsRequest.Merge(m, src)
+func (dst *ListSnapshotsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSnapshotsRequest.Merge(dst, src)
 }
 func (m *ListSnapshotsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListSnapshotsRequest.Size(m)
@@ -2017,7 +2100,7 @@ func (m *ListSnapshotsRequest) GetPageToken() string {
 }
 
 // Response for the `ListSnapshots` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type ListSnapshotsResponse struct {
@@ -2035,7 +2118,7 @@ func (m *ListSnapshotsResponse) Reset()         { *m = ListSnapshotsResponse{} }
 func (m *ListSnapshotsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListSnapshotsResponse) ProtoMessage()    {}
 func (*ListSnapshotsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{34}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{35}
 }
 func (m *ListSnapshotsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSnapshotsResponse.Unmarshal(m, b)
@@ -2043,8 +2126,8 @@ func (m *ListSnapshotsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListSnapshotsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSnapshotsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListSnapshotsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSnapshotsResponse.Merge(m, src)
+func (dst *ListSnapshotsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSnapshotsResponse.Merge(dst, src)
 }
 func (m *ListSnapshotsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListSnapshotsResponse.Size(m)
@@ -2070,7 +2153,7 @@ func (m *ListSnapshotsResponse) GetNextPageToken() string {
 }
 
 // Request for the `DeleteSnapshot` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type DeleteSnapshotRequest struct {
@@ -2086,7 +2169,7 @@ func (m *DeleteSnapshotRequest) Reset()         { *m = DeleteSnapshotRequest{} }
 func (m *DeleteSnapshotRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteSnapshotRequest) ProtoMessage()    {}
 func (*DeleteSnapshotRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{35}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{36}
 }
 func (m *DeleteSnapshotRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteSnapshotRequest.Unmarshal(m, b)
@@ -2094,8 +2177,8 @@ func (m *DeleteSnapshotRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteSnapshotRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteSnapshotRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteSnapshotRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteSnapshotRequest.Merge(m, src)
+func (dst *DeleteSnapshotRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteSnapshotRequest.Merge(dst, src)
 }
 func (m *DeleteSnapshotRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteSnapshotRequest.Size(m)
@@ -2113,8 +2196,8 @@ func (m *DeleteSnapshotRequest) GetSnapshot() string {
 	return ""
 }
 
-// Request for the `Seek` method.<br><br>
-// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+// Request for the `Seek` method. <br><br>
+// <b>BETA:</b> This feature is part of a beta release. This API might be
 // changed in backward-incompatible ways and is not recommended for production
 // use. It is not subject to any SLA or deprecation policy.
 type SeekRequest struct {
@@ -2133,7 +2216,7 @@ func (m *SeekRequest) Reset()         { *m = SeekRequest{} }
 func (m *SeekRequest) String() string { return proto.CompactTextString(m) }
 func (*SeekRequest) ProtoMessage()    {}
 func (*SeekRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{36}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{37}
 }
 func (m *SeekRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SeekRequest.Unmarshal(m, b)
@@ -2141,8 +2224,8 @@ func (m *SeekRequest) XXX_Unmarshal(b []byte) error {
 func (m *SeekRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SeekRequest.Marshal(b, m, deterministic)
 }
-func (m *SeekRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SeekRequest.Merge(m, src)
+func (dst *SeekRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SeekRequest.Merge(dst, src)
 }
 func (m *SeekRequest) XXX_Size() int {
 	return xxx_messageInfo_SeekRequest.Size(m)
@@ -2267,6 +2350,7 @@ func _SeekRequest_OneofSizer(msg proto.Message) (n int) {
 	return n
 }
 
+// Response for the `Seek` method (this response is empty).
 type SeekResponse struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -2277,7 +2361,7 @@ func (m *SeekResponse) Reset()         { *m = SeekResponse{} }
 func (m *SeekResponse) String() string { return proto.CompactTextString(m) }
 func (*SeekResponse) ProtoMessage()    {}
 func (*SeekResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f602d910f9a348fe, []int{37}
+	return fileDescriptor_pubsub_5db998c1dc179e5b, []int{38}
 }
 func (m *SeekResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SeekResponse.Unmarshal(m, b)
@@ -2285,8 +2369,8 @@ func (m *SeekResponse) XXX_Unmarshal(b []byte) error {
 func (m *SeekResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SeekResponse.Marshal(b, m, deterministic)
 }
-func (m *SeekResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SeekResponse.Merge(m, src)
+func (dst *SeekResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SeekResponse.Merge(dst, src)
 }
 func (m *SeekResponse) XXX_Size() int {
 	return xxx_messageInfo_SeekResponse.Size(m)
@@ -2316,6 +2400,7 @@ func init() {
 	proto.RegisterType((*DeleteTopicRequest)(nil), "google.pubsub.v1.DeleteTopicRequest")
 	proto.RegisterType((*Subscription)(nil), "google.pubsub.v1.Subscription")
 	proto.RegisterMapType((map[string]string)(nil), "google.pubsub.v1.Subscription.LabelsEntry")
+	proto.RegisterType((*ExpirationPolicy)(nil), "google.pubsub.v1.ExpirationPolicy")
 	proto.RegisterType((*PushConfig)(nil), "google.pubsub.v1.PushConfig")
 	proto.RegisterMapType((map[string]string)(nil), "google.pubsub.v1.PushConfig.AttributesEntry")
 	proto.RegisterType((*ReceivedMessage)(nil), "google.pubsub.v1.ReceivedMessage")
@@ -2357,14 +2442,14 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PublisherClient interface {
 	// Creates the given topic with the given name. See the
-	// <a href="/pubsub/docs/admin#resource_names"> resource name rules</a>.
+	// <a href="https://cloud.google.com/pubsub/docs/admin#resource_names">
+	// resource name rules</a>.
 	CreateTopic(ctx context.Context, in *Topic, opts ...grpc.CallOption) (*Topic, error)
 	// Updates an existing topic. Note that certain properties of a
 	// topic are not modifiable.
 	UpdateTopic(ctx context.Context, in *UpdateTopicRequest, opts ...grpc.CallOption) (*Topic, error)
 	// Adds one or more messages to the topic. Returns `NOT_FOUND` if the topic
-	// does not exist. The message payload must not be empty; it must contain
-	//  either a non-empty data field, or at least one attribute.
+	// does not exist.
 	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error)
 	// Gets the configuration of a topic.
 	GetTopic(ctx context.Context, in *GetTopicRequest, opts ...grpc.CallOption) (*Topic, error)
@@ -2372,8 +2457,13 @@ type PublisherClient interface {
 	ListTopics(ctx context.Context, in *ListTopicsRequest, opts ...grpc.CallOption) (*ListTopicsResponse, error)
 	// Lists the names of the subscriptions on this topic.
 	ListTopicSubscriptions(ctx context.Context, in *ListTopicSubscriptionsRequest, opts ...grpc.CallOption) (*ListTopicSubscriptionsResponse, error)
-	// Lists the names of the snapshots on this topic.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Lists the names of the snapshots on this topic. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	ListTopicSnapshots(ctx context.Context, in *ListTopicSnapshotsRequest, opts ...grpc.CallOption) (*ListTopicSnapshotsResponse, error)
@@ -2468,14 +2558,14 @@ func (c *publisherClient) DeleteTopic(ctx context.Context, in *DeleteTopicReques
 // PublisherServer is the server API for Publisher service.
 type PublisherServer interface {
 	// Creates the given topic with the given name. See the
-	// <a href="/pubsub/docs/admin#resource_names"> resource name rules</a>.
+	// <a href="https://cloud.google.com/pubsub/docs/admin#resource_names">
+	// resource name rules</a>.
 	CreateTopic(context.Context, *Topic) (*Topic, error)
 	// Updates an existing topic. Note that certain properties of a
 	// topic are not modifiable.
 	UpdateTopic(context.Context, *UpdateTopicRequest) (*Topic, error)
 	// Adds one or more messages to the topic. Returns `NOT_FOUND` if the topic
-	// does not exist. The message payload must not be empty; it must contain
-	//  either a non-empty data field, or at least one attribute.
+	// does not exist.
 	Publish(context.Context, *PublishRequest) (*PublishResponse, error)
 	// Gets the configuration of a topic.
 	GetTopic(context.Context, *GetTopicRequest) (*Topic, error)
@@ -2483,8 +2573,13 @@ type PublisherServer interface {
 	ListTopics(context.Context, *ListTopicsRequest) (*ListTopicsResponse, error)
 	// Lists the names of the subscriptions on this topic.
 	ListTopicSubscriptions(context.Context, *ListTopicSubscriptionsRequest) (*ListTopicSubscriptionsResponse, error)
-	// Lists the names of the snapshots on this topic.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Lists the names of the snapshots on this topic. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	ListTopicSnapshots(context.Context, *ListTopicSnapshotsRequest) (*ListTopicSnapshotsResponse, error)
@@ -2690,14 +2785,15 @@ var _Publisher_serviceDesc = grpc.ServiceDesc{
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type SubscriberClient interface {
 	// Creates a subscription to a given topic. See the
-	// <a href="/pubsub/docs/admin#resource_names"> resource name rules</a>.
+	// <a href="https://cloud.google.com/pubsub/docs/admin#resource_names">
+	// resource name rules</a>.
 	// If the subscription already exists, returns `ALREADY_EXISTS`.
 	// If the corresponding topic doesn't exist, returns `NOT_FOUND`.
 	//
 	// If the name is not provided in the request, the server will assign a random
 	// name for this subscription on the same project as the topic, conforming
 	// to the
-	// [resource name format](https://cloud.google.com/pubsub/docs/overview#names).
+	// [resource name format](https://cloud.google.com/pubsub/docs/admin#resource_names).
 	// The generated name is populated in the returned Subscription object.
 	// Note that for REST API requests, you must specify a name in the request.
 	CreateSubscription(ctx context.Context, in *Subscription, opts ...grpc.CallOption) (*Subscription, error)
@@ -2728,8 +2824,7 @@ type SubscriberClient interface {
 	// but such a message may be redelivered later. Acknowledging a message more
 	// than once will not result in an error.
 	Acknowledge(ctx context.Context, in *AcknowledgeRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	// Pulls messages from the server. Returns an empty list if there are no
-	// messages available in the backlog. The server may return `UNAVAILABLE` if
+	// Pulls messages from the server. The server may return `UNAVAILABLE` if
 	// there are too many concurrent pull requests pending for the given
 	// subscription.
 	Pull(ctx context.Context, in *PullRequest, opts ...grpc.CallOption) (*PullResponse, error)
@@ -2748,20 +2843,35 @@ type SubscriberClient interface {
 	// attributes of a push subscription. Messages will accumulate for delivery
 	// continuously through the call regardless of changes to the `PushConfig`.
 	ModifyPushConfig(ctx context.Context, in *ModifyPushConfigRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	// Gets the configuration details of a snapshot.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Gets the configuration details of a snapshot. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow you to manage message acknowledgments in bulk. That
+	// is, you can set the acknowledgment state of messages in an existing
+	// subscription to the state captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	GetSnapshot(ctx context.Context, in *GetSnapshotRequest, opts ...grpc.CallOption) (*Snapshot, error)
-	// Lists the existing snapshots.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Lists the existing snapshots. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	ListSnapshots(ctx context.Context, in *ListSnapshotsRequest, opts ...grpc.CallOption) (*ListSnapshotsResponse, error)
-	// Creates a snapshot from the requested subscription.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Creates a snapshot from the requested subscription. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.
+	// <br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
-	// use. It is not subject to any SLA or deprecation policy.
+	// use. It is not subject to any SLA or deprecation policy.<br><br>
 	// If the snapshot already exists, returns `ALREADY_EXISTS`.
 	// If the requested subscription doesn't exist, returns `NOT_FOUND`.
 	// If the backlog in the subscription is too old -- and the resulting snapshot
@@ -2769,19 +2879,29 @@ type SubscriberClient interface {
 	// See also the `Snapshot.expire_time` field. If the name is not provided in
 	// the request, the server will assign a random
 	// name for this snapshot on the same project as the subscription, conforming
-	// to the [resource name format](https://cloud.google.com/pubsub/docs/overview#names).
-	// The generated
-	// name is populated in the returned Snapshot object. Note that for REST API
-	// requests, you must specify a name in the request.
+	// to the
+	// [resource name format](https://cloud.google.com/pubsub/docs/admin#resource_names).
+	// The generated name is populated in the returned Snapshot object. Note that
+	// for REST API requests, you must specify a name in the request.
 	CreateSnapshot(ctx context.Context, in *CreateSnapshotRequest, opts ...grpc.CallOption) (*Snapshot, error)
-	// Updates an existing snapshot.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Updates an existing snapshot. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	// Note that certain properties of a snapshot are not modifiable.
 	UpdateSnapshot(ctx context.Context, in *UpdateSnapshotRequest, opts ...grpc.CallOption) (*Snapshot, error)
-	// Removes an existing snapshot. <br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Removes an existing snapshot. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	// When the snapshot is deleted, all messages retained in the snapshot
@@ -2790,8 +2910,14 @@ type SubscriberClient interface {
 	// snapshot or its subscription, unless the same subscription is specified.
 	DeleteSnapshot(ctx context.Context, in *DeleteSnapshotRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	// Seeks an existing subscription to a point in time or to a given snapshot,
-	// whichever is provided in the request.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// whichever is provided in the request. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot. Note that both the subscription and the snapshot
+	// must be on the same topic.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	Seek(ctx context.Context, in *SeekRequest, opts ...grpc.CallOption) (*SeekResponse, error)
@@ -2974,14 +3100,15 @@ func (c *subscriberClient) Seek(ctx context.Context, in *SeekRequest, opts ...gr
 // SubscriberServer is the server API for Subscriber service.
 type SubscriberServer interface {
 	// Creates a subscription to a given topic. See the
-	// <a href="/pubsub/docs/admin#resource_names"> resource name rules</a>.
+	// <a href="https://cloud.google.com/pubsub/docs/admin#resource_names">
+	// resource name rules</a>.
 	// If the subscription already exists, returns `ALREADY_EXISTS`.
 	// If the corresponding topic doesn't exist, returns `NOT_FOUND`.
 	//
 	// If the name is not provided in the request, the server will assign a random
 	// name for this subscription on the same project as the topic, conforming
 	// to the
-	// [resource name format](https://cloud.google.com/pubsub/docs/overview#names).
+	// [resource name format](https://cloud.google.com/pubsub/docs/admin#resource_names).
 	// The generated name is populated in the returned Subscription object.
 	// Note that for REST API requests, you must specify a name in the request.
 	CreateSubscription(context.Context, *Subscription) (*Subscription, error)
@@ -3012,8 +3139,7 @@ type SubscriberServer interface {
 	// but such a message may be redelivered later. Acknowledging a message more
 	// than once will not result in an error.
 	Acknowledge(context.Context, *AcknowledgeRequest) (*empty.Empty, error)
-	// Pulls messages from the server. Returns an empty list if there are no
-	// messages available in the backlog. The server may return `UNAVAILABLE` if
+	// Pulls messages from the server. The server may return `UNAVAILABLE` if
 	// there are too many concurrent pull requests pending for the given
 	// subscription.
 	Pull(context.Context, *PullRequest) (*PullResponse, error)
@@ -3032,20 +3158,35 @@ type SubscriberServer interface {
 	// attributes of a push subscription. Messages will accumulate for delivery
 	// continuously through the call regardless of changes to the `PushConfig`.
 	ModifyPushConfig(context.Context, *ModifyPushConfigRequest) (*empty.Empty, error)
-	// Gets the configuration details of a snapshot.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Gets the configuration details of a snapshot. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow you to manage message acknowledgments in bulk. That
+	// is, you can set the acknowledgment state of messages in an existing
+	// subscription to the state captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	GetSnapshot(context.Context, *GetSnapshotRequest) (*Snapshot, error)
-	// Lists the existing snapshots.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Lists the existing snapshots. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	ListSnapshots(context.Context, *ListSnapshotsRequest) (*ListSnapshotsResponse, error)
-	// Creates a snapshot from the requested subscription.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Creates a snapshot from the requested subscription. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.
+	// <br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
-	// use. It is not subject to any SLA or deprecation policy.
+	// use. It is not subject to any SLA or deprecation policy.<br><br>
 	// If the snapshot already exists, returns `ALREADY_EXISTS`.
 	// If the requested subscription doesn't exist, returns `NOT_FOUND`.
 	// If the backlog in the subscription is too old -- and the resulting snapshot
@@ -3053,19 +3194,29 @@ type SubscriberServer interface {
 	// See also the `Snapshot.expire_time` field. If the name is not provided in
 	// the request, the server will assign a random
 	// name for this snapshot on the same project as the subscription, conforming
-	// to the [resource name format](https://cloud.google.com/pubsub/docs/overview#names).
-	// The generated
-	// name is populated in the returned Snapshot object. Note that for REST API
-	// requests, you must specify a name in the request.
+	// to the
+	// [resource name format](https://cloud.google.com/pubsub/docs/admin#resource_names).
+	// The generated name is populated in the returned Snapshot object. Note that
+	// for REST API requests, you must specify a name in the request.
 	CreateSnapshot(context.Context, *CreateSnapshotRequest) (*Snapshot, error)
-	// Updates an existing snapshot.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Updates an existing snapshot. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	// Note that certain properties of a snapshot are not modifiable.
 	UpdateSnapshot(context.Context, *UpdateSnapshotRequest) (*Snapshot, error)
-	// Removes an existing snapshot. <br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// Removes an existing snapshot. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	// When the snapshot is deleted, all messages retained in the snapshot
@@ -3074,8 +3225,14 @@ type SubscriberServer interface {
 	// snapshot or its subscription, unless the same subscription is specified.
 	DeleteSnapshot(context.Context, *DeleteSnapshotRequest) (*empty.Empty, error)
 	// Seeks an existing subscription to a point in time or to a given snapshot,
-	// whichever is provided in the request.<br><br>
-	// <b>ALPHA:</b> This feature is part of an alpha release. This API might be
+	// whichever is provided in the request. Snapshots are used in
+	// <a href="https://cloud.google.com/pubsub/docs/replay-overview">Seek</a>
+	// operations, which allow
+	// you to manage message acknowledgments in bulk. That is, you can set the
+	// acknowledgment state of messages in an existing subscription to the state
+	// captured by a snapshot. Note that both the subscription and the snapshot
+	// must be on the same topic.<br><br>
+	// <b>BETA:</b> This feature is part of a beta release. This API might be
 	// changed in backward-incompatible ways and is not recommended for production
 	// use. It is not subject to any SLA or deprecation policy.
 	Seek(context.Context, *SeekRequest) (*SeekResponse, error)
@@ -3457,146 +3614,152 @@ var _Subscriber_serviceDesc = grpc.ServiceDesc{
 	Metadata: "google/pubsub/v1/pubsub.proto",
 }
 
-func init() { proto.RegisterFile("google/pubsub/v1/pubsub.proto", fileDescriptor_f602d910f9a348fe) }
+func init() {
+	proto.RegisterFile("google/pubsub/v1/pubsub.proto", fileDescriptor_pubsub_5db998c1dc179e5b)
+}
 
-var fileDescriptor_f602d910f9a348fe = []byte{
-	// 2199 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_pubsub_5db998c1dc179e5b = []byte{
+	// 2261 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x5a, 0xcd, 0x73, 0x1b, 0x49,
-	0x15, 0xdf, 0x96, 0x1c, 0x47, 0x7e, 0xb2, 0xe3, 0xb8, 0xb1, 0x1d, 0x79, 0xf2, 0x65, 0x4f, 0x8c,
-	0xed, 0x28, 0x89, 0x64, 0x2b, 0xb5, 0x61, 0x13, 0xe3, 0x6c, 0xd9, 0x71, 0xc8, 0x06, 0x12, 0x30,
-	0xe3, 0x10, 0xaa, 0xa8, 0x14, 0xaa, 0x91, 0xd4, 0x51, 0x66, 0x35, 0x9a, 0x99, 0x9d, 0x19, 0x79,
-	0xe3, 0x85, 0x50, 0x61, 0x97, 0xa2, 0x8a, 0x22, 0x07, 0x76, 0xb9, 0xee, 0x81, 0x82, 0x1b, 0x47,
-	0xaa, 0xb8, 0xc2, 0x9d, 0x2b, 0x07, 0xfe, 0x01, 0x8e, 0x5c, 0x38, 0xc1, 0x71, 0xab, 0x3f, 0x66,
-	0x34, 0x1f, 0x3d, 0x92, 0x65, 0x6f, 0x6e, 0xa3, 0xee, 0xd7, 0xfd, 0x7e, 0xef, 0xbb, 0xdf, 0x2b,
-	0xc1, 0xc5, 0xb6, 0x6d, 0xb7, 0x4d, 0x52, 0x75, 0x7a, 0x0d, 0xaf, 0xd7, 0xa8, 0x1e, 0x6c, 0x88,
-	0xaf, 0x8a, 0xe3, 0xda, 0xbe, 0x8d, 0xcf, 0xf2, 0xed, 0x8a, 0x58, 0x3c, 0xd8, 0x50, 0x2e, 0x88,
-	0x03, 0xba, 0x63, 0x54, 0x75, 0xcb, 0xb2, 0x7d, 0xdd, 0x37, 0x6c, 0xcb, 0xe3, 0xf4, 0xca, 0xa5,
-	0xe0, 0x3a, 0xfa, 0xab, 0xd1, 0x7b, 0x5e, 0x6d, 0xf5, 0x5c, 0x46, 0x20, 0xf6, 0xcf, 0x27, 0xf7,
-	0x49, 0xd7, 0xf1, 0x0f, 0xc5, 0xe6, 0x62, 0x72, 0xf3, 0xb9, 0x41, 0xcc, 0x56, 0xbd, 0xab, 0x7b,
-	0x1d, 0x41, 0x71, 0x39, 0x49, 0xe1, 0x1b, 0x5d, 0xe2, 0xf9, 0x7a, 0xd7, 0xe1, 0x04, 0xea, 0x53,
-	0x98, 0x7d, 0x4c, 0x3c, 0x4f, 0x6f, 0x93, 0x7d, 0xdf, 0x76, 0xf5, 0x36, 0xd9, 0xb3, 0x4d, 0xa3,
-	0x79, 0x88, 0xef, 0xc2, 0x79, 0xdd, 0x34, 0xed, 0x8f, 0x49, 0xab, 0xee, 0x10, 0xd7, 0x33, 0x3c,
-	0x9f, 0x58, 0x4d, 0x52, 0x77, 0x49, 0x9b, 0x82, 0x2f, 0xa1, 0xc5, 0xfc, 0xda, 0x84, 0xb6, 0x20,
-	0x48, 0xf6, 0xfa, 0x14, 0x1a, 0x27, 0x50, 0xff, 0x8b, 0xe0, 0xd4, 0x13, 0xdb, 0x31, 0x9a, 0x18,
-	0xc3, 0x98, 0xa5, 0x77, 0x49, 0x09, 0x2d, 0xa2, 0xb5, 0x09, 0x8d, 0x7d, 0xe3, 0x4d, 0x18, 0x37,
-	0xf5, 0x06, 0x31, 0xbd, 0x52, 0x6e, 0x31, 0xbf, 0x56, 0xac, 0x5d, 0xa9, 0x24, 0xd5, 0x56, 0x61,
-	0x87, 0x2b, 0x8f, 0x18, 0xd5, 0x7d, 0xcb, 0x77, 0x0f, 0x35, 0x71, 0x04, 0x3f, 0x83, 0xf9, 0x2e,
-	0x87, 0x5c, 0xf7, 0x38, 0xe6, 0xba, 0xc3, 0x40, 0x97, 0xf2, 0x8b, 0x68, 0xad, 0x58, 0x5b, 0x49,
-	0x5f, 0x26, 0x13, 0x51, 0x9b, 0xed, 0x4a, 0x56, 0x95, 0xdb, 0x50, 0x8c, 0x30, 0xc5, 0x67, 0x21,
-	0xdf, 0x21, 0x87, 0x02, 0x3c, 0xfd, 0xc4, 0xb3, 0x70, 0xea, 0x40, 0x37, 0x7b, 0xa4, 0x94, 0x63,
-	0x6b, 0xfc, 0xc7, 0x9d, 0xdc, 0x7b, 0x48, 0xfd, 0x3c, 0x07, 0x53, 0x7b, 0x8c, 0xa7, 0xe0, 0x47,
-	0x65, 0x6f, 0xe9, 0xbe, 0xce, 0x8e, 0x4f, 0x6a, 0xec, 0x1b, 0xff, 0x00, 0x40, 0xf7, 0x7d, 0xd7,
-	0x68, 0xf4, 0x7c, 0x12, 0xc8, 0x5f, 0x4d, 0x43, 0x8e, 0x5d, 0x54, 0xd9, 0x0e, 0x4f, 0x70, 0x5d,
-	0x44, 0xae, 0xc0, 0x17, 0x01, 0x02, 0x7d, 0x18, 0x2d, 0xa6, 0x83, 0x09, 0x6d, 0x42, 0xac, 0x3c,
-	0x6c, 0xe1, 0x2d, 0x98, 0x74, 0x7a, 0x0d, 0xd3, 0xf0, 0x5e, 0xd4, 0xa9, 0xf1, 0x4b, 0x63, 0x4c,
-	0x49, 0x4a, 0xc8, 0x51, 0x78, 0x46, 0xe5, 0x49, 0xe0, 0x19, 0x5a, 0x51, 0xd0, 0xd3, 0x15, 0x65,
-	0x0b, 0xa6, 0x13, 0xcc, 0x47, 0xd2, 0xc9, 0x2a, 0x4c, 0x3f, 0x20, 0x3e, 0x33, 0xa6, 0x46, 0x3e,
-	0xea, 0x11, 0xcf, 0xa7, 0xc4, 0x3e, 0xfd, 0x2d, 0x2e, 0xe0, 0x3f, 0xd4, 0xd7, 0x08, 0xf0, 0x8f,
-	0x9c, 0x96, 0xee, 0x93, 0x18, 0xf1, 0x8d, 0x28, 0x71, 0xb1, 0x76, 0x2e, 0xc3, 0x51, 0xc4, 0x2d,
-	0x78, 0x13, 0x8a, 0x3d, 0x76, 0x09, 0x0b, 0x02, 0x06, 0x47, 0x26, 0xeb, 0x77, 0x68, 0x9c, 0x3c,
-	0xd6, 0xbd, 0x8e, 0x06, 0x9c, 0x9c, 0x7e, 0xab, 0x4d, 0x38, 0xb3, 0xc7, 0x25, 0x1f, 0x08, 0x15,
-	0x6f, 0x42, 0x41, 0xa8, 0x37, 0xb0, 0xdf, 0xe5, 0x21, 0xf6, 0xd3, 0xc2, 0x03, 0x6a, 0x0d, 0xa6,
-	0x43, 0x26, 0x9e, 0x63, 0x5b, 0x1e, 0xc1, 0x97, 0xa1, 0xd8, 0x37, 0x60, 0x10, 0x5b, 0x10, 0x5a,
-	0xd0, 0x53, 0x0d, 0x98, 0x79, 0x64, 0x78, 0x5c, 0x8b, 0x5e, 0x80, 0xad, 0x04, 0xa7, 0x1d, 0xd7,
-	0xfe, 0x90, 0x34, 0x7d, 0x81, 0x2e, 0xf8, 0x89, 0xcf, 0xc3, 0x84, 0xc3, 0xa2, 0xc3, 0xf8, 0x84,
-	0x5b, 0xe4, 0x94, 0x56, 0xa0, 0x0b, 0xfb, 0xc6, 0x27, 0x84, 0x7a, 0x0b, 0xdb, 0xf4, 0xed, 0x0e,
-	0xb1, 0x02, 0x6f, 0xa1, 0x2b, 0x4f, 0xe8, 0x82, 0xda, 0x05, 0x1c, 0x65, 0x25, 0x10, 0x56, 0x61,
-	0x9c, 0x89, 0xce, 0xc1, 0x0d, 0x30, 0x83, 0x20, 0xc3, 0x2b, 0x30, 0x6d, 0x91, 0x97, 0x7e, 0x3d,
-	0xc2, 0x8a, 0xbb, 0xc6, 0x14, 0x5d, 0xde, 0x0b, 0xd9, 0x7d, 0x04, 0x17, 0x43, 0x76, 0xfb, 0xbd,
-	0x86, 0xd7, 0x74, 0x0d, 0x87, 0xa5, 0xc7, 0xc1, 0x16, 0x38, 0x89, 0x84, 0x16, 0x5c, 0xca, 0x62,
-	0x29, 0xa4, 0x5d, 0x86, 0x29, 0x2f, 0xba, 0x21, 0x2c, 0x12, 0x5f, 0x3c, 0xb2, 0x88, 0x5d, 0x58,
-	0xe8, 0xf3, 0xb3, 0x74, 0xc7, 0x7b, 0x61, 0xfb, 0x6f, 0x51, 0xbc, 0x06, 0x28, 0x32, 0x76, 0x42,
-	0xb4, 0x0b, 0x30, 0xe1, 0x05, 0x8b, 0x42, 0xac, 0xfe, 0xc2, 0x91, 0x45, 0x2a, 0x03, 0xde, 0x25,
-	0x26, 0x49, 0x84, 0xaa, 0x3c, 0xae, 0xff, 0x9a, 0x87, 0xc9, 0xa8, 0x9a, 0xa5, 0xf5, 0x20, 0x3c,
-	0x9a, 0x8b, 0xaa, 0x61, 0x0b, 0x8a, 0x4e, 0xcf, 0x7b, 0x51, 0x6f, 0xda, 0xd6, 0x73, 0xa3, 0x2d,
-	0x12, 0xd7, 0x05, 0x59, 0xa8, 0x79, 0x2f, 0xee, 0x31, 0x1a, 0x0d, 0x9c, 0xf0, 0x1b, 0xaf, 0xc3,
-	0xac, 0xde, 0xec, 0xd4, 0x5b, 0x44, 0x6f, 0x99, 0x86, 0x45, 0xea, 0x1e, 0x69, 0xda, 0x56, 0xcb,
-	0x2b, 0x9d, 0x62, 0x0a, 0xc5, 0x7a, 0xb3, 0xb3, 0x2b, 0xb6, 0xf6, 0xf9, 0x0e, 0xae, 0xc1, 0x9c,
-	0x4b, 0x7c, 0xdd, 0xb0, 0xea, 0x7a, 0xb3, 0x43, 0x5a, 0xf5, 0x30, 0xca, 0x4f, 0x2f, 0xa2, 0xb5,
-	0x82, 0xf6, 0x0d, 0xbe, 0xb9, 0x4d, 0xf7, 0x44, 0x60, 0x7b, 0xf8, 0xc7, 0xa0, 0x04, 0xc1, 0xeb,
-	0x12, 0x9f, 0x58, 0x54, 0xc6, 0x7a, 0x50, 0xc4, 0x4b, 0x05, 0x86, 0x79, 0x21, 0x95, 0x80, 0x76,
-	0x05, 0x81, 0x56, 0x12, 0x87, 0xb5, 0xe0, 0x6c, 0xb0, 0x83, 0x77, 0xc2, 0x1a, 0x39, 0xc1, 0x62,
-	0xae, 0x9c, 0x16, 0x3c, 0xaa, 0x57, 0x59, 0xa9, 0x3c, 0x49, 0x31, 0xfb, 0x1b, 0x02, 0xe8, 0x2b,
-	0x16, 0x5f, 0x81, 0x29, 0x66, 0x0b, 0x62, 0xb5, 0x1c, 0xdb, 0xb0, 0x82, 0x9c, 0x33, 0x49, 0x17,
-	0xef, 0x8b, 0x35, 0xfc, 0x48, 0x52, 0xda, 0xae, 0x0f, 0xb2, 0xd7, 0xa0, 0xba, 0x76, 0xd2, 0xca,
-	0xd3, 0x84, 0x69, 0x8d, 0x34, 0x89, 0x71, 0x10, 0x1a, 0x0b, 0xcf, 0xc1, 0x38, 0xf5, 0x08, 0xa3,
-	0x15, 0xb8, 0xa8, 0xde, 0xec, 0x3c, 0x6c, 0xe1, 0xdb, 0x70, 0x5a, 0x58, 0x41, 0x14, 0x8c, 0xa1,
-	0xe9, 0x3c, 0xa0, 0x57, 0xbf, 0x0d, 0xf3, 0x0f, 0x88, 0x1f, 0xb5, 0x43, 0x10, 0x0d, 0x2a, 0x4c,
-	0x46, 0xf3, 0x45, 0xa0, 0xaf, 0xe8, 0x9a, 0xfa, 0x25, 0x82, 0x05, 0x5e, 0xf3, 0x64, 0x37, 0xec,
-	0x48, 0x6e, 0x28, 0xd6, 0x2e, 0x0d, 0x76, 0x83, 0x38, 0x87, 0x93, 0xd5, 0x43, 0x07, 0x4a, 0x34,
-	0x95, 0x48, 0xf3, 0xf2, 0xdb, 0xa9, 0x3e, 0xbf, 0x41, 0x3c, 0x59, 0xca, 0xf3, 0xf2, 0xae, 0x2c,
-	0x2f, 0x0f, 0xd7, 0xc8, 0x31, 0xf3, 0xf6, 0xfb, 0xb0, 0xc0, 0x93, 0xdc, 0x71, 0xad, 0xfb, 0x73,
-	0x38, 0xf7, 0xd8, 0x6e, 0x19, 0xcf, 0x0f, 0x23, 0xf9, 0xe9, 0xe8, 0xc7, 0x93, 0xd9, 0x2f, 0x37,
-	0x5a, 0xf6, 0x53, 0x3f, 0x43, 0x50, 0xdc, 0xeb, 0x99, 0xe6, 0x28, 0x2c, 0x6f, 0x00, 0x76, 0x89,
-	0xdf, 0x73, 0xad, 0xba, 0xd1, 0xed, 0x92, 0x96, 0xa1, 0xfb, 0xc4, 0x3c, 0x64, 0x9c, 0x0b, 0xda,
-	0x0c, 0xdf, 0x79, 0xd8, 0xdf, 0xc0, 0x4b, 0x30, 0xd9, 0xd5, 0x5f, 0xf6, 0xb3, 0x64, 0x9e, 0x19,
-	0xbb, 0xd8, 0xd5, 0x5f, 0x06, 0xd9, 0x51, 0xfd, 0x29, 0x4c, 0x72, 0x10, 0xc2, 0x84, 0xdf, 0x87,
-	0x19, 0x57, 0x04, 0x65, 0xff, 0x1c, 0x37, 0xe3, 0x52, 0x5a, 0xb4, 0x44, 0xfc, 0x6a, 0x67, 0xdd,
-	0xf8, 0x82, 0x47, 0x1d, 0xa6, 0xc4, 0x95, 0xbc, 0xdd, 0x4f, 0xe7, 0xa3, 0x88, 0x7c, 0x0e, 0x4e,
-	0xf3, 0x94, 0xe0, 0x95, 0xc6, 0x58, 0x39, 0x1c, 0x67, 0x39, 0xc1, 0xcb, 0xac, 0x1e, 0xf9, 0xac,
-	0xea, 0xa1, 0xfe, 0x10, 0xf0, 0x76, 0xb3, 0x63, 0xd9, 0x1f, 0x9b, 0xa4, 0xd5, 0x3e, 0x2e, 0x88,
-	0x5c, 0x14, 0x84, 0xfa, 0xcb, 0x1c, 0xcc, 0xee, 0xfb, 0x2e, 0xd1, 0xbb, 0x86, 0xd5, 0x1e, 0xd5,
-	0x9a, 0x59, 0xb7, 0xe2, 0x5b, 0x70, 0xae, 0xcb, 0x74, 0x26, 0x93, 0x2e, 0xbf, 0x76, 0x4a, 0x9b,
-	0xe3, 0xdb, 0xc9, 0xf2, 0xf8, 0x6e, 0xfa, 0x5c, 0x5c, 0x77, 0xb3, 0xf1, 0x73, 0xdb, 0x9c, 0xdd,
-	0x16, 0x9c, 0xf7, 0x98, 0x0c, 0xf5, 0x01, 0xe5, 0xb8, 0xc4, 0x49, 0xb6, 0xd3, 0x6a, 0x6d, 0xc3,
-	0x5c, 0x42, 0x05, 0x6f, 0xc9, 0x97, 0xfe, 0x85, 0x60, 0xee, 0x9e, 0x4b, 0x68, 0x36, 0x16, 0x2f,
-	0xa2, 0x40, 0xdb, 0xb2, 0x27, 0x4b, 0xd2, 0x02, 0x39, 0x89, 0x05, 0xbe, 0x17, 0x96, 0xf0, 0x3c,
-	0x83, 0x75, 0x33, 0x0d, 0x4b, 0xca, 0xf0, 0xeb, 0xae, 0xe5, 0x6f, 0x10, 0xcc, 0x89, 0x3a, 0x93,
-	0x90, 0xec, 0x16, 0x14, 0x82, 0xe7, 0x9f, 0xa8, 0x2f, 0x8a, 0x24, 0x9b, 0x06, 0x87, 0x42, 0xda,
-	0x93, 0xd5, 0x95, 0xff, 0x20, 0x28, 0x04, 0x77, 0x8e, 0xf0, 0x1c, 0xdc, 0x84, 0x22, 0x79, 0xe9,
-	0x18, 0x2e, 0xe1, 0x7d, 0x6c, 0x7e, 0x68, 0x1f, 0x0b, 0x9c, 0x9c, 0x2e, 0xe0, 0xbb, 0xa1, 0x29,
-	0xc6, 0x98, 0x29, 0x56, 0xb2, 0xc5, 0xfc, 0xba, 0xb5, 0xbf, 0x0e, 0x98, 0xbe, 0x11, 0x12, 0x9a,
-	0x57, 0x12, 0x9a, 0x9f, 0xe8, 0x6b, 0x57, 0x35, 0x61, 0x96, 0x55, 0xc1, 0x64, 0xb7, 0xf0, 0x76,
-	0x8a, 0xee, 0x21, 0xcc, 0x25, 0xb8, 0x89, 0x00, 0x7b, 0x2f, 0xd9, 0x2c, 0x0c, 0xf6, 0x8e, 0x63,
-	0x34, 0x12, 0x37, 0x61, 0x4e, 0xd4, 0xd8, 0x11, 0xb4, 0xf3, 0x5b, 0x04, 0xc5, 0x7d, 0x42, 0x3a,
-	0xa3, 0xe4, 0xc2, 0x75, 0x18, 0x63, 0x4e, 0x93, 0x1b, 0xe6, 0x34, 0x1f, 0xbc, 0xa3, 0x31, 0x4a,
-	0x7c, 0x21, 0x82, 0x80, 0xa9, 0xec, 0x83, 0x77, 0xfa, 0x18, 0x76, 0x0a, 0x30, 0xee, 0xeb, 0x6e,
-	0x9b, 0xf8, 0xea, 0x19, 0x98, 0xe4, 0x60, 0xb8, 0xd2, 0x6a, 0x7f, 0x2f, 0xc0, 0x84, 0x68, 0xf0,
-	0x89, 0x8b, 0x3f, 0x84, 0x22, 0x8f, 0x70, 0x3e, 0x0b, 0xcb, 0xea, 0x9b, 0x95, 0xac, 0x0d, 0xf5,
-	0xea, 0xa7, 0xff, 0xfc, 0xf7, 0xef, 0x73, 0x57, 0x94, 0x4b, 0xd5, 0x83, 0x8d, 0xea, 0xcf, 0x68,
-	0x74, 0x6c, 0x09, 0x9b, 0x7b, 0xd5, 0x72, 0x95, 0x77, 0xdb, 0xd5, 0xf2, 0xab, 0x3b, 0xa8, 0x8c,
-	0x5f, 0x41, 0x31, 0x32, 0x40, 0xc1, 0xcb, 0xe9, 0x2b, 0xd3, 0xf3, 0x95, 0x6c, 0xc6, 0x55, 0xc6,
-	0xf8, 0x6a, 0x6d, 0x99, 0x31, 0x66, 0x8c, 0x2a, 0x03, 0xd9, 0x7f, 0x8a, 0xe0, 0xb4, 0x10, 0x1c,
-	0x2f, 0x4a, 0x1f, 0xd0, 0x91, 0xc9, 0x8a, 0xb2, 0x34, 0x80, 0x82, 0x6b, 0x52, 0xad, 0x31, 0x04,
-	0xd7, 0xd5, 0xd5, 0x3e, 0x02, 0x39, 0x73, 0x31, 0xae, 0xa2, 0x20, 0x6c, 0x28, 0x04, 0xe3, 0x26,
-	0x2c, 0x61, 0x91, 0x18, 0x45, 0x65, 0x4b, 0xbf, 0xca, 0x78, 0x2f, 0xe1, 0xcb, 0x43, 0x78, 0xe3,
-	0xd7, 0x08, 0xa0, 0x3f, 0x30, 0xc1, 0x92, 0x41, 0x66, 0x6a, 0x72, 0xa3, 0x2c, 0x0f, 0x26, 0x12,
-	0xe2, 0xc7, 0x21, 0x08, 0xe6, 0x11, 0x10, 0xaf, 0x04, 0x0a, 0xfc, 0x17, 0x04, 0xf3, 0xf2, 0x89,
-	0x06, 0xae, 0x0e, 0xe0, 0x24, 0x7b, 0xd6, 0x2b, 0xeb, 0x47, 0x3f, 0x20, 0x60, 0xbe, 0xcb, 0x60,
-	0x56, 0xf1, 0x8d, 0x21, 0x9a, 0xaa, 0xc6, 0x5f, 0xe1, 0x7f, 0x44, 0x91, 0x41, 0x53, 0x98, 0x7a,
-	0xf0, 0xb5, 0x41, 0xfc, 0x13, 0xe9, 0x50, 0xb9, 0x7e, 0x34, 0x62, 0x01, 0x74, 0x83, 0x01, 0xbd,
-	0x86, 0xaf, 0x0e, 0x05, 0x1a, 0xa2, 0xf1, 0xa1, 0x18, 0x99, 0x73, 0xc8, 0x22, 0x2a, 0x3d, 0x06,
-	0x51, 0xe6, 0x53, 0xc9, 0xe5, 0x7e, 0xd7, 0xf1, 0x0f, 0x03, 0x7b, 0x96, 0x87, 0xb9, 0x54, 0xed,
-	0x7f, 0x33, 0x00, 0x42, 0xd7, 0x0d, 0xe2, 0xe2, 0x5f, 0x23, 0xc0, 0xe2, 0x95, 0x10, 0xcd, 0x68,
-	0x43, 0xba, 0x1e, 0x65, 0xc8, 0xbe, 0xba, 0xce, 0xe0, 0x94, 0x95, 0x6f, 0x4a, 0x13, 0x4b, 0xcc,
-	0x58, 0x22, 0xc0, 0xbf, 0x40, 0x6c, 0x96, 0x1b, 0x43, 0xb1, 0x26, 0x8d, 0x31, 0x49, 0xc7, 0x34,
-	0x14, 0x4f, 0xdc, 0x8f, 0xa2, 0xfc, 0x07, 0xe1, 0xc2, 0x7f, 0x08, 0xc7, 0xc6, 0x31, 0x5c, 0xd7,
-	0xb2, 0x92, 0xdf, 0x71, 0xa0, 0x6d, 0x31, 0x68, 0xdf, 0xaa, 0xd5, 0x52, 0xd0, 0x2a, 0x47, 0xd1,
-	0xdb, 0x97, 0x88, 0x8f, 0x6f, 0xe3, 0xa1, 0x59, 0x96, 0x3b, 0xaf, 0x34, 0x2a, 0xaf, 0x1d, 0x89,
-	0x56, 0xf8, 0x79, 0x85, 0xa1, 0x5d, 0xc3, 0x2b, 0x99, 0x79, 0x23, 0x1e, 0x89, 0xbf, 0x43, 0xc1,
-	0x34, 0x6f, 0x98, 0x06, 0x33, 0xdb, 0xe1, 0x4c, 0x9f, 0x17, 0x46, 0x2d, 0x8f, 0x68, 0xd4, 0x3f,
-	0x21, 0x98, 0x49, 0x75, 0x75, 0x32, 0x8d, 0x65, 0xb5, 0x7e, 0x99, 0x80, 0xbe, 0xcb, 0x00, 0xed,
-	0xaa, 0xef, 0x8f, 0x04, 0xe8, 0x4e, 0x37, 0xc9, 0x87, 0xda, 0xf5, 0x73, 0x04, 0xc5, 0x48, 0xc3,
-	0x27, 0x4b, 0x0f, 0xe9, 0x7e, 0x30, 0x13, 0xd9, 0x2e, 0x43, 0x76, 0x57, 0xbd, 0x3d, 0x1a, 0x32,
-	0xbd, 0xcf, 0x81, 0x62, 0xfa, 0x15, 0x82, 0x31, 0xda, 0x24, 0xe1, 0x8b, 0xb2, 0xfa, 0x1a, 0xf6,
-	0x8f, 0x32, 0x97, 0x8f, 0xf6, 0x56, 0x81, 0xcb, 0xab, 0xb5, 0xd1, 0xd0, 0x38, 0x3d, 0xd3, 0xa4,
-	0x30, 0x5a, 0x30, 0x15, 0xeb, 0xd9, 0xb0, 0xec, 0xb9, 0x2d, 0xe9, 0x6b, 0x95, 0xd5, 0xa1, 0x74,
-	0x1c, 0xe0, 0x1a, 0x5a, 0x47, 0x34, 0xf6, 0xcf, 0x26, 0x27, 0x2c, 0xf8, 0x6a, 0x96, 0x97, 0xa4,
-	0xa6, 0x30, 0x99, 0xa6, 0x78, 0xc8, 0x84, 0xbf, 0xa7, 0xde, 0x3d, 0x8e, 0x93, 0xf4, 0xd9, 0x50,
-	0x45, 0xfc, 0x02, 0x8a, 0x91, 0xb7, 0xbf, 0xcc, 0x45, 0xd2, 0xad, 0x81, 0x32, 0xe0, 0x91, 0xad,
-	0xde, 0x60, 0xd8, 0x56, 0x31, 0x4f, 0xdb, 0x41, 0xa9, 0x8a, 0xe1, 0x0a, 0xca, 0x17, 0x8d, 0xa4,
-	0x37, 0x08, 0xa6, 0x62, 0x8f, 0x7b, 0x99, 0x25, 0x64, 0xbd, 0x86, 0xcc, 0x12, 0xd2, 0x2e, 0x41,
-	0x2d, 0x33, 0x44, 0xcb, 0x58, 0xcd, 0xce, 0x37, 0x21, 0xf3, 0xcf, 0x10, 0x9c, 0x89, 0x77, 0xbc,
-	0x78, 0xf5, 0x88, 0x3d, 0xf1, 0x40, 0xad, 0x5c, 0x67, 0x18, 0x56, 0x94, 0x25, 0x79, 0x31, 0x8b,
-	0x68, 0x84, 0x1a, 0xe5, 0x0d, 0x82, 0x33, 0xf1, 0x76, 0x58, 0x86, 0x42, 0xda, 0x30, 0x0f, 0x44,
-	0x21, 0xb2, 0x5d, 0xad, 0x1c, 0xb3, 0x4d, 0x65, 0x18, 0x9c, 0xd7, 0x08, 0xce, 0xc4, 0xbb, 0x20,
-	0x19, 0x1c, 0x69, 0x9f, 0x94, 0xe9, 0xc2, 0xc2, 0x4d, 0xca, 0x47, 0x74, 0x13, 0x9a, 0x36, 0x68,
-	0x17, 0x23, 0x4b, 0x1b, 0x91, 0x56, 0x4b, 0x5a, 0x29, 0x23, 0xcd, 0xcf, 0x71, 0xd3, 0x86, 0x47,
-	0x48, 0xe7, 0x0e, 0x2a, 0xef, 0x7c, 0x81, 0x60, 0xb6, 0x69, 0x77, 0x53, 0x4c, 0x76, 0x8a, 0x7c,
-	0xfc, 0xbe, 0x47, 0x85, 0xdc, 0x43, 0x3f, 0xb9, 0x25, 0x08, 0xda, 0xb6, 0xa9, 0x5b, 0xed, 0x8a,
-	0xed, 0xb6, 0xab, 0x6d, 0x62, 0x31, 0x15, 0x54, 0xf9, 0x96, 0xee, 0x18, 0x5e, 0xff, 0x2f, 0x1a,
-	0x9b, 0xfc, 0xeb, 0xff, 0x08, 0xfd, 0x39, 0x37, 0xff, 0x80, 0x9f, 0xbd, 0x67, 0xda, 0xbd, 0x16,
-	0xed, 0x39, 0xf6, 0x7b, 0x8d, 0xca, 0xd3, 0x8d, 0x7f, 0x04, 0x1b, 0xcf, 0xd8, 0xc6, 0x33, 0xbe,
-	0xf1, 0xec, 0xe9, 0x46, 0x63, 0x9c, 0xdd, 0x7b, 0xf3, 0xab, 0x00, 0x00, 0x00, 0xff, 0xff, 0x52,
-	0x93, 0x85, 0x71, 0xf9, 0x21, 0x00, 0x00,
+	0x15, 0xcf, 0x48, 0x8e, 0x23, 0xbf, 0xb1, 0x13, 0xbb, 0xb1, 0x13, 0x79, 0xf2, 0xe5, 0x4c, 0x8c,
+	0xed, 0xc8, 0x89, 0x64, 0x2b, 0xb5, 0x61, 0x23, 0xe3, 0xa4, 0xec, 0x38, 0x64, 0x03, 0x09, 0x6b,
+	0xc6, 0x21, 0x54, 0x51, 0x29, 0x54, 0x23, 0xa9, 0xad, 0xcc, 0x6a, 0x34, 0x33, 0x3b, 0x33, 0xf2,
+	0xc6, 0x0b, 0xa1, 0xc2, 0x2e, 0xb5, 0x55, 0x14, 0x39, 0xb0, 0x70, 0xdd, 0x03, 0x05, 0x37, 0x0e,
+	0x1c, 0xf8, 0x03, 0xe0, 0xce, 0x95, 0x03, 0xff, 0x00, 0x27, 0x8a, 0x0b, 0x37, 0xb8, 0x51, 0xfd,
+	0x31, 0xa3, 0xf9, 0xe8, 0x91, 0x2c, 0x9b, 0xdc, 0x46, 0xfd, 0x5e, 0xf7, 0xfb, 0xbd, 0xef, 0x7e,
+	0x5d, 0x82, 0xcb, 0x6d, 0xdb, 0x6e, 0x9b, 0xb8, 0xe2, 0xf4, 0x1a, 0x5e, 0xaf, 0x51, 0x39, 0x58,
+	0xe7, 0x5f, 0x65, 0xc7, 0xb5, 0x7d, 0x1b, 0x4d, 0x33, 0x72, 0x99, 0x2f, 0x1e, 0xac, 0x2b, 0x97,
+	0xf8, 0x06, 0xdd, 0x31, 0x2a, 0xba, 0x65, 0xd9, 0xbe, 0xee, 0x1b, 0xb6, 0xe5, 0x31, 0x7e, 0xe5,
+	0x4a, 0x70, 0x1c, 0xf9, 0xd5, 0xe8, 0xed, 0x57, 0x5a, 0x3d, 0x97, 0x32, 0x70, 0xfa, 0xc5, 0x24,
+	0x1d, 0x77, 0x1d, 0xff, 0x90, 0x13, 0x17, 0x92, 0xc4, 0x7d, 0x03, 0x9b, 0xad, 0x7a, 0x57, 0xf7,
+	0x3a, 0x9c, 0xe3, 0x6a, 0x92, 0xc3, 0x37, 0xba, 0xd8, 0xf3, 0xf5, 0xae, 0xc3, 0x18, 0xd4, 0xe7,
+	0x30, 0xfb, 0x14, 0x7b, 0x9e, 0xde, 0xc6, 0x7b, 0xbe, 0xed, 0xea, 0x6d, 0xbc, 0x6b, 0x9b, 0x46,
+	0xf3, 0x10, 0xdd, 0x83, 0x8b, 0xba, 0x69, 0xda, 0x9f, 0xe0, 0x56, 0xdd, 0xc1, 0xae, 0x67, 0x78,
+	0x3e, 0xb6, 0x9a, 0xb8, 0xee, 0xe2, 0x36, 0x01, 0x5f, 0x94, 0x16, 0xf2, 0x2b, 0x13, 0xda, 0x3c,
+	0x67, 0xd9, 0xed, 0x73, 0x68, 0x8c, 0x41, 0xfd, 0xb7, 0x04, 0xa7, 0x9f, 0xd9, 0x8e, 0xd1, 0x44,
+	0x08, 0xc6, 0x2c, 0xbd, 0x8b, 0x8b, 0xd2, 0x82, 0xb4, 0x32, 0xa1, 0xd1, 0x6f, 0xb4, 0x01, 0xe3,
+	0xa6, 0xde, 0xc0, 0xa6, 0x57, 0xcc, 0x2d, 0xe4, 0x57, 0xe4, 0xea, 0xf5, 0x72, 0xd2, 0x6c, 0x65,
+	0xba, 0xb9, 0xfc, 0x84, 0x72, 0x3d, 0xb4, 0x7c, 0xf7, 0x50, 0xe3, 0x5b, 0xd0, 0x0b, 0x38, 0xdf,
+	0x65, 0x90, 0xeb, 0x1e, 0xc3, 0x5c, 0x77, 0x28, 0xe8, 0x62, 0x7e, 0x41, 0x5a, 0x91, 0xab, 0x4b,
+	0xe9, 0xc3, 0x44, 0x2a, 0x6a, 0xb3, 0x5d, 0xc1, 0xaa, 0x72, 0x17, 0xe4, 0x88, 0x50, 0x34, 0x0d,
+	0xf9, 0x0e, 0x3e, 0xe4, 0xe0, 0xc9, 0x27, 0x9a, 0x85, 0xd3, 0x07, 0xba, 0xd9, 0xc3, 0xc5, 0x1c,
+	0x5d, 0x63, 0x3f, 0x6a, 0xb9, 0xf7, 0x25, 0xf5, 0xcb, 0x1c, 0x4c, 0xed, 0x52, 0x99, 0x5c, 0x1e,
+	0xd1, 0xbd, 0xa5, 0xfb, 0x3a, 0xdd, 0x3e, 0xa9, 0xd1, 0x6f, 0xf4, 0x21, 0x80, 0xee, 0xfb, 0xae,
+	0xd1, 0xe8, 0xf9, 0x38, 0xd0, 0xbf, 0x92, 0x86, 0x1c, 0x3b, 0xa8, 0xbc, 0x15, 0xee, 0x60, 0xb6,
+	0x88, 0x1c, 0x81, 0x2e, 0x03, 0x04, 0xf6, 0x30, 0x5a, 0xd4, 0x06, 0x13, 0xda, 0x04, 0x5f, 0x79,
+	0xdc, 0x42, 0x9b, 0x30, 0xe9, 0xf4, 0x1a, 0xa6, 0xe1, 0xbd, 0xac, 0x13, 0xe7, 0x17, 0xc7, 0xa8,
+	0x91, 0x94, 0x50, 0x22, 0x8f, 0x8c, 0xf2, 0xb3, 0x20, 0x32, 0x34, 0x99, 0xf3, 0x93, 0x15, 0x65,
+	0x13, 0xce, 0x25, 0x84, 0x8f, 0x64, 0x93, 0x65, 0x38, 0xf7, 0x08, 0xfb, 0xd4, 0x99, 0x1a, 0xfe,
+	0xb8, 0x87, 0x3d, 0x9f, 0x30, 0xfb, 0xe4, 0x37, 0x3f, 0x80, 0xfd, 0x50, 0xdf, 0x48, 0x80, 0xbe,
+	0xef, 0xb4, 0x74, 0x1f, 0xc7, 0x98, 0x6f, 0x45, 0x99, 0xe5, 0xea, 0x85, 0x8c, 0x40, 0xe1, 0xa7,
+	0xa0, 0x0d, 0x90, 0x7b, 0xf4, 0x10, 0x9a, 0x04, 0x14, 0x8e, 0x48, 0xd7, 0x6f, 0x91, 0x3c, 0x79,
+	0xaa, 0x7b, 0x1d, 0x0d, 0x18, 0x3b, 0xf9, 0x56, 0x9b, 0x70, 0x76, 0x97, 0x69, 0x3e, 0x10, 0x2a,
+	0xda, 0x80, 0x02, 0x37, 0x6f, 0xe0, 0xbf, 0xab, 0x43, 0xfc, 0xa7, 0x85, 0x1b, 0xd4, 0x2a, 0x9c,
+	0x0b, 0x85, 0x78, 0x8e, 0x6d, 0x79, 0x18, 0x5d, 0x05, 0xb9, 0xef, 0xc0, 0x20, 0xb7, 0x20, 0xf4,
+	0xa0, 0xa7, 0x1a, 0x30, 0xf3, 0xc4, 0xf0, 0x98, 0x15, 0xbd, 0x00, 0x5b, 0x11, 0xce, 0x38, 0xae,
+	0xfd, 0x11, 0x6e, 0xfa, 0x1c, 0x5d, 0xf0, 0x13, 0x5d, 0x84, 0x09, 0x87, 0x66, 0x87, 0xf1, 0x29,
+	0xf3, 0xc8, 0x69, 0xad, 0x40, 0x16, 0xf6, 0x8c, 0x4f, 0x31, 0x89, 0x16, 0x4a, 0xf4, 0xed, 0x0e,
+	0xb6, 0x82, 0x68, 0x21, 0x2b, 0xcf, 0xc8, 0x82, 0xda, 0x05, 0x14, 0x15, 0xc5, 0x11, 0x56, 0x60,
+	0x9c, 0xaa, 0xce, 0xc0, 0x0d, 0x70, 0x03, 0x67, 0x43, 0x4b, 0x70, 0xce, 0xc2, 0xaf, 0xfc, 0x7a,
+	0x44, 0x14, 0x0b, 0x8d, 0x29, 0xb2, 0xbc, 0x1b, 0x8a, 0xfb, 0x18, 0x2e, 0x87, 0xe2, 0xf6, 0x7a,
+	0x0d, 0xaf, 0xe9, 0x1a, 0x0e, 0x2d, 0x8f, 0x83, 0x3d, 0x70, 0x12, 0x0d, 0x2d, 0xb8, 0x92, 0x25,
+	0x92, 0x6b, 0xbb, 0x08, 0x53, 0x5e, 0x94, 0xc0, 0x3d, 0x12, 0x5f, 0x3c, 0xb2, 0x8a, 0x5d, 0x98,
+	0xef, 0xcb, 0xb3, 0x74, 0xc7, 0x7b, 0x69, 0xfb, 0xef, 0x50, 0xbd, 0x06, 0x28, 0x22, 0x71, 0x5c,
+	0xb5, 0x4b, 0x30, 0xe1, 0x05, 0x8b, 0x5c, 0xad, 0xfe, 0xc2, 0x91, 0x55, 0x2a, 0x01, 0xda, 0xc1,
+	0x26, 0x4e, 0xa4, 0xaa, 0x38, 0xaf, 0xbf, 0x18, 0x83, 0xc9, 0xa8, 0x99, 0x85, 0xfd, 0x20, 0xdc,
+	0x9a, 0x8b, 0x9a, 0x61, 0x13, 0x64, 0xa7, 0xe7, 0xbd, 0xac, 0x37, 0x6d, 0x6b, 0xdf, 0x68, 0xf3,
+	0xc2, 0x75, 0x49, 0x94, 0x6a, 0xde, 0xcb, 0x07, 0x94, 0x47, 0x03, 0x27, 0xfc, 0x46, 0x6b, 0x30,
+	0xab, 0x37, 0x3b, 0xf5, 0x16, 0xd6, 0x5b, 0xa6, 0x61, 0xe1, 0xba, 0x87, 0x9b, 0xb6, 0xd5, 0xf2,
+	0x8a, 0xa7, 0xa9, 0x41, 0x91, 0xde, 0xec, 0xec, 0x70, 0xd2, 0x1e, 0xa3, 0xa0, 0x2a, 0xcc, 0xb9,
+	0xd8, 0xd7, 0x0d, 0xab, 0xae, 0x37, 0x3b, 0xb8, 0x55, 0x0f, 0xb3, 0xfc, 0xcc, 0x82, 0xb4, 0x52,
+	0xd0, 0xbe, 0xc6, 0x88, 0x5b, 0x84, 0xc6, 0x13, 0xdb, 0x43, 0x3f, 0x00, 0x25, 0x48, 0x5e, 0x17,
+	0xfb, 0xd8, 0x22, 0x3a, 0xd6, 0x83, 0x26, 0x5e, 0x2c, 0x50, 0xcc, 0xf3, 0xa9, 0x02, 0xb4, 0xc3,
+	0x19, 0xb4, 0x22, 0xdf, 0xac, 0x05, 0x7b, 0x03, 0x0a, 0xda, 0x0e, 0x7b, 0xe4, 0x04, 0xcd, 0xb9,
+	0x52, 0x5a, 0xf1, 0xa8, 0x5d, 0x85, 0xad, 0xf2, 0x43, 0x98, 0xc1, 0xaf, 0x1c, 0x83, 0x9d, 0x18,
+	0x74, 0x49, 0x99, 0x62, 0x52, 0xd3, 0xc7, 0x3d, 0x0c, 0x59, 0x79, 0x87, 0x9c, 0xc6, 0x89, 0x95,
+	0x93, 0x74, 0xc7, 0xfb, 0x30, 0x9d, 0x14, 0x80, 0x56, 0x21, 0xef, 0xfb, 0x26, 0xaf, 0xed, 0x03,
+	0xac, 0x44, 0xb8, 0xd4, 0x3f, 0x4b, 0x00, 0x7d, 0x57, 0xa3, 0xeb, 0x30, 0x45, 0xa3, 0x03, 0x5b,
+	0x2d, 0xc7, 0x36, 0xac, 0xa0, 0x0a, 0x4e, 0x92, 0xc5, 0x87, 0x7c, 0x0d, 0x3d, 0x11, 0x34, 0xdb,
+	0x9b, 0x83, 0x22, 0x68, 0x50, 0xa7, 0x3d, 0x69, 0x2f, 0x6c, 0xc2, 0x39, 0x0d, 0x37, 0xb1, 0x71,
+	0x10, 0x86, 0x0f, 0x9a, 0x83, 0x71, 0x12, 0xa3, 0x46, 0x2b, 0x48, 0x1a, 0xbd, 0xd9, 0x79, 0xdc,
+	0x42, 0x77, 0xe1, 0x0c, 0x8f, 0x0b, 0xde, 0xc2, 0x86, 0x36, 0x98, 0x80, 0x5f, 0xfd, 0x26, 0x9c,
+	0x7f, 0x84, 0xfd, 0x68, 0x64, 0x04, 0xf9, 0xa9, 0xc2, 0x64, 0xb4, 0x82, 0x05, 0xf6, 0x8a, 0xae,
+	0xa9, 0x5f, 0x49, 0x30, 0xcf, 0xba, 0xb0, 0xe8, 0x84, 0x6d, 0xc1, 0x09, 0x72, 0xf5, 0xca, 0xe0,
+	0xc0, 0x8c, 0x4b, 0x38, 0x59, 0x87, 0x76, 0xa0, 0x48, 0x8a, 0x9b, 0xb0, 0x53, 0xbc, 0x9b, 0x7e,
+	0xf8, 0x0b, 0x89, 0x95, 0x6f, 0x71, 0xa7, 0xd8, 0x11, 0x75, 0x8a, 0xe1, 0x16, 0x39, 0x66, 0x27,
+	0xb9, 0x0f, 0xf3, 0xac, 0xec, 0x1e, 0xd7, 0xbb, 0x3f, 0x81, 0x0b, 0x4f, 0xed, 0x96, 0xb1, 0x7f,
+	0x18, 0xa9, 0x98, 0x47, 0xdf, 0x9e, 0xac, 0xc7, 0xb9, 0xd1, 0xea, 0xb1, 0xfa, 0xb9, 0x04, 0xf2,
+	0x6e, 0xcf, 0x34, 0x47, 0x11, 0x79, 0x0b, 0x90, 0x8b, 0xfd, 0x9e, 0x6b, 0xd5, 0x8d, 0x6e, 0x17,
+	0xb7, 0x0c, 0xdd, 0xc7, 0xe6, 0x21, 0x95, 0x5c, 0xd0, 0x66, 0x18, 0xe5, 0x71, 0x9f, 0x80, 0xae,
+	0xc1, 0x64, 0x57, 0x7f, 0xd5, 0xaf, 0xdb, 0x79, 0xea, 0x6c, 0xb9, 0xab, 0xbf, 0x0a, 0xea, 0xb5,
+	0xfa, 0x23, 0x98, 0x64, 0x20, 0xb8, 0x0b, 0xbf, 0x0b, 0x33, 0x2e, 0x4f, 0xca, 0xfe, 0x3e, 0xe6,
+	0xc6, 0x6b, 0x69, 0xd5, 0x12, 0xf9, 0xab, 0x4d, 0xbb, 0xf1, 0x05, 0x8f, 0x04, 0x4c, 0x91, 0x19,
+	0x79, 0xab, 0xdf, 0x60, 0x46, 0x51, 0xf9, 0x02, 0x9c, 0x61, 0x25, 0xc1, 0x2b, 0x8e, 0xd1, 0x06,
+	0x3d, 0x4e, 0x6b, 0x82, 0x97, 0xd9, 0xcf, 0xf2, 0x59, 0xfd, 0x4c, 0xfd, 0x1e, 0xa0, 0xad, 0x66,
+	0xc7, 0xb2, 0x3f, 0x31, 0x71, 0xab, 0x7d, 0x5c, 0x10, 0xb9, 0x28, 0x08, 0xf5, 0x67, 0x39, 0x98,
+	0xdd, 0xf3, 0x5d, 0xac, 0x77, 0x0d, 0xab, 0x3d, 0xaa, 0x37, 0xb3, 0x4e, 0x45, 0x77, 0xe0, 0x42,
+	0x97, 0xda, 0x4c, 0xa4, 0x5d, 0x7e, 0xe5, 0xb4, 0x36, 0xc7, 0xc8, 0xc9, 0x86, 0xfd, 0x5e, 0x7a,
+	0x5f, 0xdc, 0x76, 0xb3, 0xf1, 0x7d, 0x5b, 0x4c, 0xdc, 0x26, 0x5c, 0xf4, 0xa8, 0x0e, 0xf5, 0x01,
+	0x17, 0x84, 0x22, 0x63, 0xd9, 0x4a, 0x9b, 0xb5, 0x0d, 0x73, 0x09, 0x13, 0xbc, 0xa3, 0x58, 0xfa,
+	0xbb, 0x04, 0x73, 0x0f, 0x5c, 0x4c, 0xaa, 0x31, 0xbf, 0xa3, 0x05, 0xd6, 0x16, 0x5d, 0xa2, 0x92,
+	0x1e, 0xc8, 0x09, 0x3c, 0xf0, 0x9d, 0xf0, 0x52, 0x91, 0xa7, 0xb0, 0x6e, 0xa7, 0x61, 0x09, 0x05,
+	0x8a, 0x6e, 0x17, 0x27, 0xb9, 0x0c, 0xbc, 0x95, 0x60, 0x8e, 0xf7, 0x99, 0x84, 0x66, 0x77, 0xa0,
+	0x10, 0x5c, 0x48, 0x79, 0x7f, 0x51, 0x04, 0xd5, 0x34, 0xd8, 0x14, 0xf2, 0x9e, 0xac, 0xaf, 0xfc,
+	0x4b, 0x82, 0x42, 0x70, 0xe6, 0x08, 0x17, 0xd4, 0x0d, 0x90, 0xe9, 0x0d, 0x09, 0xb3, 0xc9, 0x3a,
+	0x3f, 0x74, 0xb2, 0x06, 0xc6, 0x4e, 0x16, 0xd0, 0xbd, 0xd0, 0x15, 0x63, 0xd4, 0x15, 0x4b, 0xd9,
+	0x6a, 0xfe, 0xbf, 0xad, 0xbf, 0x06, 0x88, 0xdc, 0x11, 0x12, 0x96, 0x57, 0x12, 0x96, 0x9f, 0xe8,
+	0x5b, 0x57, 0x35, 0x61, 0x96, 0x76, 0xc1, 0xe4, 0xfc, 0xf2, 0x6e, 0x9a, 0xee, 0x21, 0xcc, 0x25,
+	0xa4, 0xf1, 0x04, 0x7b, 0x3f, 0x39, 0xbe, 0x0c, 0x8e, 0x8e, 0x63, 0x8c, 0x36, 0xb7, 0x61, 0x8e,
+	0xf7, 0xd8, 0x11, 0xac, 0xf3, 0x4b, 0x09, 0xe4, 0x3d, 0x8c, 0x3b, 0xa3, 0xd4, 0xc2, 0x35, 0x18,
+	0xa3, 0x41, 0x93, 0x1b, 0x16, 0x34, 0x1f, 0x9c, 0xd2, 0x28, 0x27, 0xba, 0x14, 0x41, 0x40, 0x4d,
+	0xf6, 0xc1, 0xa9, 0x3e, 0x86, 0xed, 0x02, 0x8c, 0xfb, 0xba, 0xdb, 0xc6, 0xbe, 0x7a, 0x16, 0x26,
+	0x19, 0x18, 0x66, 0xb4, 0xea, 0x5f, 0x0a, 0x30, 0xc1, 0x9f, 0x1c, 0xb0, 0x8b, 0x3e, 0x02, 0x99,
+	0x65, 0x38, 0x7b, 0x9d, 0xcb, 0x9a, 0xe4, 0x95, 0x2c, 0x82, 0x7a, 0xe3, 0xb3, 0xbf, 0xfd, 0xe3,
+	0x37, 0xb9, 0xeb, 0xca, 0x95, 0xca, 0xc1, 0x7a, 0xe5, 0xc7, 0x24, 0x3b, 0x36, 0xb9, 0xcf, 0xbd,
+	0x4a, 0xa9, 0xc2, 0xe6, 0xff, 0x4a, 0xe9, 0x75, 0x4d, 0x2a, 0xa1, 0xd7, 0x20, 0x47, 0x9e, 0x74,
+	0xd0, 0x62, 0xfa, 0xc8, 0xf4, 0x8b, 0x4f, 0xb6, 0xe0, 0x0a, 0x15, 0x7c, 0xa3, 0xba, 0x48, 0x05,
+	0x53, 0x41, 0xe5, 0x81, 0xe2, 0x3f, 0x93, 0xe0, 0x0c, 0x57, 0x1c, 0x2d, 0x08, 0x2f, 0xd0, 0x91,
+	0xb7, 0x1e, 0xe5, 0xda, 0x00, 0x0e, 0x66, 0x49, 0xb5, 0x4a, 0x11, 0xdc, 0x54, 0x97, 0xfb, 0x08,
+	0xc4, 0xc2, 0xf9, 0x03, 0x1a, 0x01, 0x61, 0x43, 0x21, 0x78, 0x00, 0x43, 0x02, 0x11, 0x89, 0xc7,
+	0xb1, 0x6c, 0xed, 0x97, 0xa9, 0xec, 0x6b, 0xe8, 0xea, 0x10, 0xd9, 0xe8, 0x8d, 0x04, 0xd0, 0x7f,
+	0xc2, 0x41, 0x82, 0xa7, 0xd5, 0xd4, 0x5b, 0x92, 0xb2, 0x38, 0x98, 0x89, 0xab, 0x1f, 0x87, 0xc0,
+	0x85, 0x47, 0x40, 0xbc, 0xe6, 0x28, 0xd0, 0x9f, 0x24, 0x38, 0x2f, 0x7e, 0x63, 0x41, 0x95, 0x01,
+	0x92, 0x44, 0xd7, 0x7a, 0x65, 0xed, 0xe8, 0x1b, 0x38, 0xcc, 0xf7, 0x28, 0xcc, 0x0a, 0xba, 0x35,
+	0xc4, 0x52, 0x95, 0xf8, 0x2d, 0xfc, 0x77, 0x52, 0xe4, 0xe9, 0x2b, 0x2c, 0x3d, 0x68, 0x75, 0x90,
+	0xfc, 0x44, 0x39, 0x54, 0x6e, 0x1e, 0x8d, 0x99, 0x03, 0x5d, 0xa7, 0x40, 0x57, 0xd1, 0x8d, 0xa1,
+	0x40, 0x43, 0x34, 0x3e, 0xc8, 0x91, 0x97, 0x17, 0x51, 0x46, 0xa5, 0x1f, 0x66, 0x94, 0xf3, 0xa9,
+	0xe2, 0xf2, 0xb0, 0xeb, 0xf8, 0x87, 0x81, 0x3f, 0x4b, 0xc3, 0x42, 0xaa, 0xfa, 0xdf, 0x19, 0x00,
+	0x6e, 0xeb, 0x06, 0x76, 0xd1, 0x17, 0x12, 0x20, 0x7e, 0x4b, 0x88, 0x56, 0xb4, 0x21, 0x53, 0x8f,
+	0x32, 0x84, 0xae, 0xae, 0x51, 0x38, 0x25, 0xe5, 0xeb, 0xc2, 0xc2, 0x12, 0x73, 0x16, 0x4f, 0xf0,
+	0x5f, 0x4b, 0xf4, 0x75, 0x39, 0x86, 0x62, 0x45, 0x98, 0x63, 0x82, 0x89, 0x69, 0x28, 0x9e, 0x78,
+	0x1c, 0x45, 0xe5, 0x0f, 0xc2, 0x85, 0x7e, 0x1b, 0x3e, 0x64, 0xc7, 0x70, 0xad, 0x66, 0x15, 0xbf,
+	0xe3, 0x40, 0xdb, 0xa4, 0xd0, 0xbe, 0x51, 0xad, 0xa6, 0xa0, 0x95, 0x8f, 0x62, 0xb7, 0xaf, 0x24,
+	0xf6, 0xa0, 0x1c, 0x4f, 0xcd, 0x92, 0x38, 0x78, 0x85, 0x59, 0xb9, 0x7a, 0x24, 0x5e, 0x1e, 0xe7,
+	0x65, 0x8a, 0x76, 0x05, 0x2d, 0x65, 0xd6, 0x8d, 0x78, 0x26, 0xfe, 0x4a, 0x0a, 0xde, 0x17, 0x87,
+	0x59, 0x30, 0x73, 0x1c, 0xce, 0x8c, 0x79, 0xee, 0xd4, 0xd2, 0x88, 0x4e, 0xfd, 0xbd, 0x04, 0x33,
+	0xa9, 0xa9, 0x4e, 0x64, 0xb1, 0xac, 0xd1, 0x2f, 0x13, 0xd0, 0xb7, 0x29, 0xa0, 0x1d, 0xf5, 0xfe,
+	0x48, 0x80, 0x6a, 0xdd, 0xa4, 0x1c, 0xe2, 0xd7, 0x2f, 0x25, 0x90, 0x23, 0x03, 0x9f, 0xa8, 0x3c,
+	0xa4, 0xe7, 0xc1, 0x4c, 0x64, 0x3b, 0x14, 0xd9, 0x3d, 0xf5, 0xee, 0x68, 0xc8, 0xf4, 0xbe, 0x04,
+	0x82, 0xe9, 0xe7, 0x12, 0x8c, 0x91, 0x21, 0x09, 0x5d, 0x16, 0xf5, 0xd7, 0x70, 0x7e, 0x14, 0x85,
+	0x7c, 0x74, 0xb6, 0x0a, 0x42, 0x5e, 0xad, 0x8e, 0x86, 0xc6, 0xe9, 0x99, 0x26, 0x81, 0xb1, 0x0f,
+	0x53, 0xb1, 0x99, 0x0d, 0x89, 0xae, 0xdb, 0x82, 0xb9, 0x56, 0x59, 0x1e, 0xca, 0xc7, 0x01, 0x9e,
+	0x5a, 0x91, 0xd6, 0x24, 0x92, 0xfd, 0xd3, 0xc9, 0x37, 0x16, 0x74, 0x23, 0x2b, 0x4e, 0x52, 0xef,
+	0x30, 0x99, 0xce, 0x78, 0x4c, 0xd5, 0x7f, 0xa0, 0xde, 0x3b, 0x4e, 0x98, 0xf4, 0xc5, 0x10, 0x53,
+	0xfc, 0x14, 0xe4, 0xc8, 0xed, 0x5f, 0x14, 0x24, 0xe9, 0xe1, 0x40, 0x19, 0x70, 0xcd, 0x56, 0x6f,
+	0x51, 0x6c, 0xcb, 0x88, 0x15, 0xee, 0xa0, 0x59, 0xc5, 0x70, 0x05, 0x0d, 0x8c, 0xe4, 0xd2, 0x5b,
+	0x09, 0xa6, 0x62, 0xd7, 0x7b, 0x91, 0x2f, 0x44, 0xd3, 0x86, 0xc8, 0x17, 0xc2, 0x39, 0x41, 0x2d,
+	0x51, 0x44, 0x8b, 0x48, 0xcd, 0xae, 0x38, 0xa1, 0xf0, 0xcf, 0x25, 0x38, 0x1b, 0x9f, 0x79, 0xd1,
+	0xf2, 0x11, 0xa7, 0xe2, 0x81, 0x56, 0xb9, 0x49, 0x31, 0x2c, 0x29, 0xd7, 0xc4, 0xed, 0x2c, 0x62,
+	0x11, 0xe2, 0x94, 0xb7, 0x12, 0x9c, 0x8d, 0x0f, 0xc4, 0x22, 0x14, 0xc2, 0x91, 0x79, 0x20, 0x0a,
+	0x5e, 0xef, 0xaa, 0xa5, 0x98, 0x6f, 0xca, 0xc3, 0xe0, 0xbc, 0x91, 0xe0, 0x6c, 0x7c, 0x0e, 0x12,
+	0xc1, 0x11, 0x4e, 0x4a, 0x99, 0x21, 0xcc, 0xc3, 0xa4, 0x74, 0xc4, 0x30, 0x21, 0x85, 0x83, 0xcc,
+	0x31, 0xa2, 0xc2, 0x11, 0x19, 0xb6, 0x84, 0xbd, 0x32, 0x32, 0xfe, 0x1c, 0xb7, 0x70, 0x78, 0x18,
+	0x77, 0x6a, 0x52, 0x69, 0xfb, 0x8f, 0x12, 0xcc, 0x36, 0xed, 0x6e, 0x4a, 0xc8, 0xb6, 0xcc, 0x1e,
+	0xe0, 0x77, 0x89, 0x92, 0xbb, 0xd2, 0x0f, 0xef, 0x70, 0x86, 0xb6, 0x6d, 0xea, 0x56, 0xbb, 0x6c,
+	0xbb, 0xed, 0x4a, 0x1b, 0x5b, 0xd4, 0x04, 0x15, 0x46, 0xd2, 0x1d, 0xc3, 0xeb, 0xff, 0x6d, 0x64,
+	0x83, 0x7d, 0xfd, 0x47, 0x92, 0xfe, 0x90, 0x3b, 0xff, 0x88, 0xed, 0x7d, 0x60, 0xda, 0xbd, 0x16,
+	0x99, 0x3a, 0xf6, 0x7a, 0x8d, 0xf2, 0xf3, 0xf5, 0xbf, 0x06, 0x84, 0x17, 0x94, 0xf0, 0x82, 0x11,
+	0x5e, 0x3c, 0x5f, 0xff, 0x67, 0x6e, 0x9e, 0x11, 0x6a, 0x35, 0x4a, 0xa9, 0xd5, 0x18, 0xa9, 0x56,
+	0x7b, 0xbe, 0xde, 0x18, 0xa7, 0x32, 0x6f, 0xff, 0x2f, 0x00, 0x00, 0xff, 0xff, 0x9f, 0xd8, 0x13,
+	0x5a, 0xa9, 0x22, 0x00, 0x00,
 }

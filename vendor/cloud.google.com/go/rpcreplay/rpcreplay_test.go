@@ -16,6 +16,7 @@ package rpcreplay
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"io"
 	"strings"
@@ -26,7 +27,6 @@ import (
 	rpb "cloud.google.com/go/rpcreplay/proto/rpcreplay"
 	"github.com/golang/protobuf/proto"
 	"github.com/google/go-cmp/cmp"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -255,7 +255,11 @@ func TestReplay(t *testing.T) {
 		t.Fatalf("got %v, want %v", got, want)
 	}
 	// Replay the test.
-	testService(t, srv.Addr, rep.DialOptions())
+	conn, err := rep.Connection()
+	if err != nil {
+		t.Fatal(err)
+	}
+	testService(t, conn)
 }
 
 func record(t *testing.T, srv *intStoreServer) *bytes.Buffer {
@@ -264,20 +268,20 @@ func record(t *testing.T, srv *intStoreServer) *bytes.Buffer {
 	if err != nil {
 		t.Fatal(err)
 	}
-	testService(t, srv.Addr, rec.DialOptions())
+	conn, err := grpc.Dial(srv.Addr,
+		append([]grpc.DialOption{grpc.WithInsecure()}, rec.DialOptions()...)...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
+	testService(t, conn)
 	if err := rec.Close(); err != nil {
 		t.Fatal(err)
 	}
 	return buf
 }
 
-func testService(t *testing.T, addr string, opts []grpc.DialOption) {
-	conn, err := grpc.Dial(addr,
-		append([]grpc.DialOption{grpc.WithInsecure()}, opts...)...)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer conn.Close()
+func testService(t *testing.T, conn *grpc.ClientConn) {
 	client := ipb.NewIntStoreClient(conn)
 	ctx := context.Background()
 	item := &ipb.Item{Name: "a", Value: 1}

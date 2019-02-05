@@ -1,0 +1,28 @@
+{
+    "include": [
+        "../../services/storage/mgmt/2016-01-01/storage",
+        "../../services/storage/mgmt/2016-01-01/storage/storageapi",
+        "../../services/network/mgmt/2015-06-15/network",
+        "../../services/network/mgmt/2015-06-15/network/networkapi",
+        "../../services/compute/mgmt/2016-03-30/compute",
+        "../../services/compute/mgmt/2016-03-30/compute/computeapi",
+        "../../services/keyvault/2016-10-01/keyvault",
+        "../../services/keyvault/2016-10-01/keyvault/keyvaultapi",
+        "../../services/keyvault/mgmt/2016-10-01/keyvault",
+        "../../services/keyvault/mgmt/2016-10-01/keyvault/keyvaultapi",
+        "../../services/resources/mgmt/2015-12-01/features",
+        "../../services/resources/mgmt/2015-12-01/features/featuresapi",
+        "../../services/resources/mgmt/2016-09-01/links",
+        "../../services/resources/mgmt/2016-09-01/links/linksapi",
+        "../../services/resources/mgmt/2015-01-01/locks",
+        "../../services/resources/mgmt/2015-01-01/locks/locksapi",
+        "../../services/preview/resources/mgmt/2015-10-01-preview/policy",
+        "../../services/resources/mgmt/2016-02-01/resources",
+        "../../services/resources/mgmt/2016-02-01/resources/resourcesapi",
+        "../../services/resources/mgmt/2016-06-01/subscriptions",
+        "../../services/resources/mgmt/2016-06-01/subscriptions/subscriptionsapi"
+    ],
+    "pathOverride": {
+        "github.com/Azure/azure-sdk-for-go/services/preview/resources/mgmt/2015-10-01-preview/policy": "resources/mgmt/policy"
+    }
+}

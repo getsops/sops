@@ -39,7 +39,7 @@ func (m *GetConfigRequest) Reset()         { *m = GetConfigRequest{} }
 func (m *GetConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*GetConfigRequest) ProtoMessage()    {}
 func (*GetConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9d9ea4142d12cde4, []int{0}
+	return fileDescriptor_project_service_00dbe1d4c2a6bfee, []int{0}
 }
 func (m *GetConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetConfigRequest.Unmarshal(m, b)
@@ -47,8 +47,8 @@ func (m *GetConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *GetConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetConfigRequest.Merge(m, src)
+func (dst *GetConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetConfigRequest.Merge(dst, src)
 }
 func (m *GetConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_GetConfigRequest.Size(m)
@@ -81,7 +81,7 @@ func (m *GetConfigResponse) Reset()         { *m = GetConfigResponse{} }
 func (m *GetConfigResponse) String() string { return proto.CompactTextString(m) }
 func (*GetConfigResponse) ProtoMessage()    {}
 func (*GetConfigResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9d9ea4142d12cde4, []int{1}
+	return fileDescriptor_project_service_00dbe1d4c2a6bfee, []int{1}
 }
 func (m *GetConfigResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetConfigResponse.Unmarshal(m, b)
@@ -89,8 +89,8 @@ func (m *GetConfigResponse) XXX_Unmarshal(b []byte) error {
 func (m *GetConfigResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetConfigResponse.Marshal(b, m, deterministic)
 }
-func (m *GetConfigResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetConfigResponse.Merge(m, src)
+func (dst *GetConfigResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetConfigResponse.Merge(dst, src)
 }
 func (m *GetConfigResponse) XXX_Size() int {
 	return xxx_messageInfo_GetConfigResponse.Size(m)
@@ -201,10 +201,10 @@ var _ProjectManagementService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/ml/v1/project_service.proto", fileDescriptor_9d9ea4142d12cde4)
+	proto.RegisterFile("google/cloud/ml/v1/project_service.proto", fileDescriptor_project_service_00dbe1d4c2a6bfee)
 }
 
-var fileDescriptor_9d9ea4142d12cde4 = []byte{
+var fileDescriptor_project_service_00dbe1d4c2a6bfee = []byte{
 	// 319 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x91, 0xbf, 0x4a, 0x43, 0x31,
 	0x14, 0xc6, 0xb9, 0x55, 0x84, 0x66, 0xf0, 0x4f, 0x44, 0x2c, 0x45, 0xb0, 0x16, 0xb5, 0xc5, 0x21,

@@ -16,7 +16,7 @@ const opBatchMeterUsage = "BatchMeterUsage"
 // BatchMeterUsageRequest generates a "aws/request.Request" representing the
 // client's request for the BatchMeterUsage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -93,7 +93,10 @@ func (c *MarketplaceMetering) BatchMeterUsageRequest(input *BatchMeterUsageInput
 //   The timestamp value passed in the meterUsage() is out of allowed range.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
-//   The calls to the MeterUsage API are throttled.
+//   The calls to the API are throttled.
+//
+//   * ErrCodeDisabledApiException "DisabledApiException"
+//   The API is disabled in the Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/meteringmarketplace-2016-01-14/BatchMeterUsage
 func (c *MarketplaceMetering) BatchMeterUsage(input *BatchMeterUsageInput) (*BatchMeterUsageOutput, error) {
@@ -122,7 +125,7 @@ const opMeterUsage = "MeterUsage"
 // MeterUsageRequest generates a "aws/request.Request" representing the
 // client's request for the MeterUsage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -188,8 +191,8 @@ func (c *MarketplaceMetering) MeterUsageRequest(input *MeterUsageInput) (req *re
 //   with products.
 //
 //   * ErrCodeInvalidEndpointRegionException "InvalidEndpointRegionException"
-//   The endpoint being called is in a region different from your EC2 instance.
-//   The region of the Metering service endpoint and the region of the EC2 instance
+//   The endpoint being called is in a Region different from your EC2 instance.
+//   The Region of the Metering Service endpoint and the Region of the EC2 instance
 //   must match.
 //
 //   * ErrCodeTimestampOutOfBoundsException "TimestampOutOfBoundsException"
@@ -200,7 +203,7 @@ func (c *MarketplaceMetering) MeterUsageRequest(input *MeterUsageInput) (req *re
 //   given {usageDimension, timestamp} with a different usageQuantity.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
-//   The calls to the MeterUsage API are throttled.
+//   The calls to the API are throttled.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/meteringmarketplace-2016-01-14/MeterUsage
 func (c *MarketplaceMetering) MeterUsage(input *MeterUsageInput) (*MeterUsageOutput, error) {
@@ -224,12 +227,148 @@ func (c *MarketplaceMetering) MeterUsageWithContext(ctx aws.Context, input *Mete
 	return out, req.Send()
 }
 
+const opRegisterUsage = "RegisterUsage"
+
+// RegisterUsageRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterUsage operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RegisterUsage for more information on using the RegisterUsage
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RegisterUsageRequest method.
+//    req, resp := client.RegisterUsageRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/meteringmarketplace-2016-01-14/RegisterUsage
+func (c *MarketplaceMetering) RegisterUsageRequest(input *RegisterUsageInput) (req *request.Request, output *RegisterUsageOutput) {
+	op := &request.Operation{
+		Name:       opRegisterUsage,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterUsageInput{}
+	}
+
+	output = &RegisterUsageOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RegisterUsage API operation for AWSMarketplace Metering.
+//
+// Paid container software products sold through AWS Marketplace must integrate
+// with the AWS Marketplace Metering Service and call the RegisterUsage operation
+// for software entitlement and metering. Calling RegisterUsage from containers
+// running outside of ECS is not currently supported. Free and BYOL products
+// for ECS aren't required to call RegisterUsage, but you may choose to do so
+// if you would like to receive usage data in your seller reports. The sections
+// below explain the behavior of RegisterUsage. RegisterUsage performs two primary
+// functions: metering and entitlement.
+//
+//    * Entitlement: RegisterUsage allows you to verify that the customer running
+//    your paid software is subscribed to your product on AWS Marketplace, enabling
+//    you to guard against unauthorized use. Your container image that integrates
+//    with RegisterUsage is only required to guard against unauthorized use
+//    at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException
+//    will only be thrown on the initial call to RegisterUsage. Subsequent calls
+//    from the same Amazon ECS task instance (e.g. task-id) will not throw a
+//    CustomerNotSubscribedException, even if the customer unsubscribes while
+//    the Amazon ECS task is still running.
+//
+//    * Metering: RegisterUsage meters software use per ECS task, per hour,
+//    with usage prorated to the second. A minimum of 1 minute of usage applies
+//    to tasks that are short lived. For example, if a customer has a 10 node
+//    ECS cluster and creates an ECS service configured as a Daemon Set, then
+//    ECS will launch a task on all 10 cluster nodes and the customer will be
+//    charged: (10 * hourly_rate). Metering for software use is automatically
+//    handled by the AWS Marketplace Metering Control Plane -- your software
+//    is not required to perform any metering specific actions, other than call
+//    RegisterUsage once for metering of software use to commence. The AWS Marketplace
+//    Metering Control Plane will also continue to bill customers for running
+//    ECS tasks, regardless of the customers subscription state, removing the
+//    need for your software to perform entitlement checks at runtime.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWSMarketplace Metering's
+// API operation RegisterUsage for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidProductCodeException "InvalidProductCodeException"
+//   The product code passed does not match the product code used for publishing
+//   the product.
+//
+//   * ErrCodeInvalidRegionException "InvalidRegionException"
+//   RegisterUsage must be called in the same AWS Region the ECS task was launched
+//   in. This prevents a container from hardcoding a Region (e.g. withRegion(“us-east-1”)
+//   when calling RegisterUsage.
+//
+//   * ErrCodeInvalidPublicKeyVersionException "InvalidPublicKeyVersionException"
+//   Public Key version is invalid.
+//
+//   * ErrCodePlatformNotSupportedException "PlatformNotSupportedException"
+//   AWS Marketplace does not support metering usage from the underlying platform.
+//   Currently, only Amazon ECS is supported.
+//
+//   * ErrCodeCustomerNotEntitledException "CustomerNotEntitledException"
+//   Exception thrown when the customer does not have a valid subscription for
+//   the product.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The calls to the API are throttled.
+//
+//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   An internal error has occurred. Retry your request. If the problem persists,
+//   post a message with details on the AWS forums.
+//
+//   * ErrCodeDisabledApiException "DisabledApiException"
+//   The API is disabled in the Region.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/meteringmarketplace-2016-01-14/RegisterUsage
+func (c *MarketplaceMetering) RegisterUsage(input *RegisterUsageInput) (*RegisterUsageOutput, error) {
+	req, out := c.RegisterUsageRequest(input)
+	return out, req.Send()
+}
+
+// RegisterUsageWithContext is the same as RegisterUsage with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RegisterUsage for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MarketplaceMetering) RegisterUsageWithContext(ctx aws.Context, input *RegisterUsageInput, opts ...request.Option) (*RegisterUsageOutput, error) {
+	req, out := c.RegisterUsageRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opResolveCustomer = "ResolveCustomer"
 
 // ResolveCustomerRequest generates a "aws/request.Request" representing the
 // client's request for the ResolveCustomer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -282,6 +421,7 @@ func (c *MarketplaceMetering) ResolveCustomerRequest(input *ResolveCustomerInput
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidTokenException "InvalidTokenException"
+//   Registration token is invalid.
 //
 //   * ErrCodeExpiredTokenException "ExpiredTokenException"
 //   The submitted registration token has expired. This can happen if the buyer's
@@ -291,11 +431,14 @@ func (c *MarketplaceMetering) ResolveCustomerRequest(input *ResolveCustomerInput
 //   as soon as it is submitted by the buyer's browser.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
-//   The calls to the MeterUsage API are throttled.
+//   The calls to the API are throttled.
 //
 //   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
 //   An internal error has occurred. Retry your request. If the problem persists,
 //   post a message with details on the AWS forums.
+//
+//   * ErrCodeDisabledApiException "DisabledApiException"
+//   The API is disabled in the Region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/meteringmarketplace-2016-01-14/ResolveCustomer
 func (c *MarketplaceMetering) ResolveCustomer(input *ResolveCustomerInput) (*ResolveCustomerOutput, error) {
@@ -535,6 +678,7 @@ func (s *MeterUsageInput) SetUsageQuantity(v int64) *MeterUsageInput {
 type MeterUsageOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Metering record id.
 	MeteringRecordId *string `type:"string"`
 }
 
@@ -551,6 +695,108 @@ func (s MeterUsageOutput) GoString() string {
 // SetMeteringRecordId sets the MeteringRecordId field's value.
 func (s *MeterUsageOutput) SetMeteringRecordId(v string) *MeterUsageOutput {
 	s.MeteringRecordId = &v
+	return s
+}
+
+type RegisterUsageInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) To scope down the registration to a specific running software
+	// instance and guard against replay attacks.
+	Nonce *string `type:"string"`
+
+	// Product code is used to uniquely identify a product in AWS Marketplace. The
+	// product code should be the same as the one used during the publishing of
+	// a new product.
+	//
+	// ProductCode is a required field
+	ProductCode *string `min:"1" type:"string" required:"true"`
+
+	// Public Key Version provided by AWS Marketplace
+	//
+	// PublicKeyVersion is a required field
+	PublicKeyVersion *int64 `min:"1" type:"integer" required:"true"`
+}
+
+// String returns the string representation
+func (s RegisterUsageInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterUsageInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterUsageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterUsageInput"}
+	if s.ProductCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductCode"))
+	}
+	if s.ProductCode != nil && len(*s.ProductCode) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ProductCode", 1))
+	}
+	if s.PublicKeyVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("PublicKeyVersion"))
+	}
+	if s.PublicKeyVersion != nil && *s.PublicKeyVersion < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("PublicKeyVersion", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNonce sets the Nonce field's value.
+func (s *RegisterUsageInput) SetNonce(v string) *RegisterUsageInput {
+	s.Nonce = &v
+	return s
+}
+
+// SetProductCode sets the ProductCode field's value.
+func (s *RegisterUsageInput) SetProductCode(v string) *RegisterUsageInput {
+	s.ProductCode = &v
+	return s
+}
+
+// SetPublicKeyVersion sets the PublicKeyVersion field's value.
+func (s *RegisterUsageInput) SetPublicKeyVersion(v int64) *RegisterUsageInput {
+	s.PublicKeyVersion = &v
+	return s
+}
+
+type RegisterUsageOutput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) Only included when public key version has expired
+	PublicKeyRotationTimestamp *time.Time `type:"timestamp"`
+
+	// JWT Token
+	Signature *string `type:"string"`
+}
+
+// String returns the string representation
+func (s RegisterUsageOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterUsageOutput) GoString() string {
+	return s.String()
+}
+
+// SetPublicKeyRotationTimestamp sets the PublicKeyRotationTimestamp field's value.
+func (s *RegisterUsageOutput) SetPublicKeyRotationTimestamp(v time.Time) *RegisterUsageOutput {
+	s.PublicKeyRotationTimestamp = &v
+	return s
+}
+
+// SetSignature sets the Signature field's value.
+func (s *RegisterUsageOutput) SetSignature(v string) *RegisterUsageOutput {
+	s.Signature = &v
 	return s
 }
 

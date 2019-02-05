@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewUserIdentitiesClientWithBaseURI(baseURI string, subscriptionID string) U
 // serviceName - the name of the API Management service.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client UserIdentitiesClient) List(ctx context.Context, resourceGroupName string, serviceName string, UID string) (result UserIdentityCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserIdentitiesClient.List")
+		defer func() {
+			sc := -1
+			if result.uic.Response.Response != nil {
+				sc = result.uic.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -123,8 +134,8 @@ func (client UserIdentitiesClient) ListResponder(resp *http.Response) (result Us
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UserIdentitiesClient) listNextResults(lastResults UserIdentityCollection) (result UserIdentityCollection, err error) {
-	req, err := lastResults.userIdentityCollectionPreparer()
+func (client UserIdentitiesClient) listNextResults(ctx context.Context, lastResults UserIdentityCollection) (result UserIdentityCollection, err error) {
+	req, err := lastResults.userIdentityCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.UserIdentitiesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -145,6 +156,16 @@ func (client UserIdentitiesClient) listNextResults(lastResults UserIdentityColle
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UserIdentitiesClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, UID string) (result UserIdentityCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserIdentitiesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, UID)
 	return
 }

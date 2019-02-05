@@ -83,7 +83,6 @@ var TrainingInput_ScaleTier_name = map[int32]string{
 	6: "BASIC_GPU",
 	5: "CUSTOM",
 }
-
 var TrainingInput_ScaleTier_value = map[string]int32{
 	"BASIC":      0,
 	"STANDARD_1": 1,
@@ -95,9 +94,8 @@ var TrainingInput_ScaleTier_value = map[string]int32{
 func (x TrainingInput_ScaleTier) String() string {
 	return proto.EnumName(TrainingInput_ScaleTier_name, int32(x))
 }
-
 func (TrainingInput_ScaleTier) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{0, 0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{0, 0}
 }
 
 // The available types of optimization goals.
@@ -117,7 +115,6 @@ var HyperparameterSpec_GoalType_name = map[int32]string{
 	1: "MAXIMIZE",
 	2: "MINIMIZE",
 }
-
 var HyperparameterSpec_GoalType_value = map[string]int32{
 	"GOAL_TYPE_UNSPECIFIED": 0,
 	"MAXIMIZE":              1,
@@ -127,9 +124,8 @@ var HyperparameterSpec_GoalType_value = map[string]int32{
 func (x HyperparameterSpec_GoalType) String() string {
 	return proto.EnumName(HyperparameterSpec_GoalType_name, int32(x))
 }
-
 func (HyperparameterSpec_GoalType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{1, 0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{1, 0}
 }
 
 // The type of the parameter.
@@ -159,7 +155,6 @@ var ParameterSpec_ParameterType_name = map[int32]string{
 	3: "CATEGORICAL",
 	4: "DISCRETE",
 }
-
 var ParameterSpec_ParameterType_value = map[string]int32{
 	"PARAMETER_TYPE_UNSPECIFIED": 0,
 	"DOUBLE":                     1,
@@ -171,9 +166,8 @@ var ParameterSpec_ParameterType_value = map[string]int32{
 func (x ParameterSpec_ParameterType) String() string {
 	return proto.EnumName(ParameterSpec_ParameterType_name, int32(x))
 }
-
 func (ParameterSpec_ParameterType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{2, 0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{2, 0}
 }
 
 // The type of scaling that should be applied to this parameter.
@@ -200,7 +194,6 @@ var ParameterSpec_ScaleType_name = map[int32]string{
 	2: "UNIT_LOG_SCALE",
 	3: "UNIT_REVERSE_LOG_SCALE",
 }
-
 var ParameterSpec_ScaleType_value = map[string]int32{
 	"NONE":                   0,
 	"UNIT_LINEAR_SCALE":      1,
@@ -211,9 +204,8 @@ var ParameterSpec_ScaleType_value = map[string]int32{
 func (x ParameterSpec_ScaleType) String() string {
 	return proto.EnumName(ParameterSpec_ScaleType_name, int32(x))
 }
-
 func (ParameterSpec_ScaleType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{2, 1}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{2, 1}
 }
 
 // The format used to separate data instances in the source files.
@@ -237,7 +229,6 @@ var PredictionInput_DataFormat_name = map[int32]string{
 	2: "TF_RECORD",
 	3: "TF_RECORD_GZIP",
 }
-
 var PredictionInput_DataFormat_value = map[string]int32{
 	"DATA_FORMAT_UNSPECIFIED": 0,
 	"TEXT":                    1,
@@ -248,9 +239,8 @@ var PredictionInput_DataFormat_value = map[string]int32{
 func (x PredictionInput_DataFormat) String() string {
 	return proto.EnumName(PredictionInput_DataFormat_name, int32(x))
 }
-
 func (PredictionInput_DataFormat) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{5, 0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{5, 0}
 }
 
 // Describes the job state.
@@ -288,7 +278,6 @@ var Job_State_name = map[int32]string{
 	6: "CANCELLING",
 	7: "CANCELLED",
 }
-
 var Job_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"QUEUED":            1,
@@ -303,9 +292,8 @@ var Job_State_value = map[string]int32{
 func (x Job_State) String() string {
 	return proto.EnumName(Job_State_name, int32(x))
 }
-
 func (Job_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{7, 0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{7, 0}
 }
 
 // Represents input parameters for a training job.
@@ -422,7 +410,7 @@ func (m *TrainingInput) Reset()         { *m = TrainingInput{} }
 func (m *TrainingInput) String() string { return proto.CompactTextString(m) }
 func (*TrainingInput) ProtoMessage()    {}
 func (*TrainingInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{0}
 }
 func (m *TrainingInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrainingInput.Unmarshal(m, b)
@@ -430,8 +418,8 @@ func (m *TrainingInput) XXX_Unmarshal(b []byte) error {
 func (m *TrainingInput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TrainingInput.Marshal(b, m, deterministic)
 }
-func (m *TrainingInput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TrainingInput.Merge(m, src)
+func (dst *TrainingInput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TrainingInput.Merge(dst, src)
 }
 func (m *TrainingInput) XXX_Size() int {
 	return xxx_messageInfo_TrainingInput.Size(m)
@@ -573,7 +561,7 @@ func (m *HyperparameterSpec) Reset()         { *m = HyperparameterSpec{} }
 func (m *HyperparameterSpec) String() string { return proto.CompactTextString(m) }
 func (*HyperparameterSpec) ProtoMessage()    {}
 func (*HyperparameterSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{1}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{1}
 }
 func (m *HyperparameterSpec) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HyperparameterSpec.Unmarshal(m, b)
@@ -581,8 +569,8 @@ func (m *HyperparameterSpec) XXX_Unmarshal(b []byte) error {
 func (m *HyperparameterSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HyperparameterSpec.Marshal(b, m, deterministic)
 }
-func (m *HyperparameterSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HyperparameterSpec.Merge(m, src)
+func (dst *HyperparameterSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HyperparameterSpec.Merge(dst, src)
 }
 func (m *HyperparameterSpec) XXX_Size() int {
 	return xxx_messageInfo_HyperparameterSpec.Size(m)
@@ -665,7 +653,7 @@ func (m *ParameterSpec) Reset()         { *m = ParameterSpec{} }
 func (m *ParameterSpec) String() string { return proto.CompactTextString(m) }
 func (*ParameterSpec) ProtoMessage()    {}
 func (*ParameterSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{2}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{2}
 }
 func (m *ParameterSpec) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ParameterSpec.Unmarshal(m, b)
@@ -673,8 +661,8 @@ func (m *ParameterSpec) XXX_Unmarshal(b []byte) error {
 func (m *ParameterSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ParameterSpec.Marshal(b, m, deterministic)
 }
-func (m *ParameterSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ParameterSpec.Merge(m, src)
+func (dst *ParameterSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ParameterSpec.Merge(dst, src)
 }
 func (m *ParameterSpec) XXX_Size() int {
 	return xxx_messageInfo_ParameterSpec.Size(m)
@@ -756,7 +744,7 @@ func (m *HyperparameterOutput) Reset()         { *m = HyperparameterOutput{} }
 func (m *HyperparameterOutput) String() string { return proto.CompactTextString(m) }
 func (*HyperparameterOutput) ProtoMessage()    {}
 func (*HyperparameterOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{3}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{3}
 }
 func (m *HyperparameterOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HyperparameterOutput.Unmarshal(m, b)
@@ -764,8 +752,8 @@ func (m *HyperparameterOutput) XXX_Unmarshal(b []byte) error {
 func (m *HyperparameterOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HyperparameterOutput.Marshal(b, m, deterministic)
 }
-func (m *HyperparameterOutput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HyperparameterOutput.Merge(m, src)
+func (dst *HyperparameterOutput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HyperparameterOutput.Merge(dst, src)
 }
 func (m *HyperparameterOutput) XXX_Size() int {
 	return xxx_messageInfo_HyperparameterOutput.Size(m)
@@ -821,7 +809,7 @@ func (m *HyperparameterOutput_HyperparameterMetric) Reset() {
 func (m *HyperparameterOutput_HyperparameterMetric) String() string { return proto.CompactTextString(m) }
 func (*HyperparameterOutput_HyperparameterMetric) ProtoMessage()    {}
 func (*HyperparameterOutput_HyperparameterMetric) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{3, 0}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{3, 0}
 }
 func (m *HyperparameterOutput_HyperparameterMetric) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HyperparameterOutput_HyperparameterMetric.Unmarshal(m, b)
@@ -829,8 +817,8 @@ func (m *HyperparameterOutput_HyperparameterMetric) XXX_Unmarshal(b []byte) erro
 func (m *HyperparameterOutput_HyperparameterMetric) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HyperparameterOutput_HyperparameterMetric.Marshal(b, m, deterministic)
 }
-func (m *HyperparameterOutput_HyperparameterMetric) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HyperparameterOutput_HyperparameterMetric.Merge(m, src)
+func (dst *HyperparameterOutput_HyperparameterMetric) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HyperparameterOutput_HyperparameterMetric.Merge(dst, src)
 }
 func (m *HyperparameterOutput_HyperparameterMetric) XXX_Size() int {
 	return xxx_messageInfo_HyperparameterOutput_HyperparameterMetric.Size(m)
@@ -876,7 +864,7 @@ func (m *TrainingOutput) Reset()         { *m = TrainingOutput{} }
 func (m *TrainingOutput) String() string { return proto.CompactTextString(m) }
 func (*TrainingOutput) ProtoMessage()    {}
 func (*TrainingOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{4}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{4}
 }
 func (m *TrainingOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrainingOutput.Unmarshal(m, b)
@@ -884,8 +872,8 @@ func (m *TrainingOutput) XXX_Unmarshal(b []byte) error {
 func (m *TrainingOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TrainingOutput.Marshal(b, m, deterministic)
 }
-func (m *TrainingOutput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TrainingOutput.Merge(m, src)
+func (dst *TrainingOutput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TrainingOutput.Merge(dst, src)
 }
 func (m *TrainingOutput) XXX_Size() int {
 	return xxx_messageInfo_TrainingOutput.Size(m)
@@ -960,7 +948,7 @@ func (m *PredictionInput) Reset()         { *m = PredictionInput{} }
 func (m *PredictionInput) String() string { return proto.CompactTextString(m) }
 func (*PredictionInput) ProtoMessage()    {}
 func (*PredictionInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{5}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{5}
 }
 func (m *PredictionInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PredictionInput.Unmarshal(m, b)
@@ -968,8 +956,8 @@ func (m *PredictionInput) XXX_Unmarshal(b []byte) error {
 func (m *PredictionInput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PredictionInput.Marshal(b, m, deterministic)
 }
-func (m *PredictionInput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PredictionInput.Merge(m, src)
+func (dst *PredictionInput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PredictionInput.Merge(dst, src)
 }
 func (m *PredictionInput) XXX_Size() int {
 	return xxx_messageInfo_PredictionInput.Size(m)
@@ -1172,7 +1160,7 @@ func (m *PredictionOutput) Reset()         { *m = PredictionOutput{} }
 func (m *PredictionOutput) String() string { return proto.CompactTextString(m) }
 func (*PredictionOutput) ProtoMessage()    {}
 func (*PredictionOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{6}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{6}
 }
 func (m *PredictionOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PredictionOutput.Unmarshal(m, b)
@@ -1180,8 +1168,8 @@ func (m *PredictionOutput) XXX_Unmarshal(b []byte) error {
 func (m *PredictionOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PredictionOutput.Marshal(b, m, deterministic)
 }
-func (m *PredictionOutput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PredictionOutput.Merge(m, src)
+func (dst *PredictionOutput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PredictionOutput.Merge(dst, src)
 }
 func (m *PredictionOutput) XXX_Size() int {
 	return xxx_messageInfo_PredictionOutput.Size(m)
@@ -1255,7 +1243,7 @@ func (m *Job) Reset()         { *m = Job{} }
 func (m *Job) String() string { return proto.CompactTextString(m) }
 func (*Job) ProtoMessage()    {}
 func (*Job) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{7}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{7}
 }
 func (m *Job) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Job.Unmarshal(m, b)
@@ -1263,8 +1251,8 @@ func (m *Job) XXX_Unmarshal(b []byte) error {
 func (m *Job) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Job.Marshal(b, m, deterministic)
 }
-func (m *Job) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Job.Merge(m, src)
+func (dst *Job) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Job.Merge(dst, src)
 }
 func (m *Job) XXX_Size() int {
 	return xxx_messageInfo_Job.Size(m)
@@ -1532,7 +1520,7 @@ func (m *CreateJobRequest) Reset()         { *m = CreateJobRequest{} }
 func (m *CreateJobRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateJobRequest) ProtoMessage()    {}
 func (*CreateJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{8}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{8}
 }
 func (m *CreateJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateJobRequest.Unmarshal(m, b)
@@ -1540,8 +1528,8 @@ func (m *CreateJobRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateJobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateJobRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateJobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateJobRequest.Merge(m, src)
+func (dst *CreateJobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateJobRequest.Merge(dst, src)
 }
 func (m *CreateJobRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateJobRequest.Size(m)
@@ -1594,7 +1582,7 @@ func (m *ListJobsRequest) Reset()         { *m = ListJobsRequest{} }
 func (m *ListJobsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListJobsRequest) ProtoMessage()    {}
 func (*ListJobsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{9}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{9}
 }
 func (m *ListJobsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListJobsRequest.Unmarshal(m, b)
@@ -1602,8 +1590,8 @@ func (m *ListJobsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListJobsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListJobsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListJobsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListJobsRequest.Merge(m, src)
+func (dst *ListJobsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListJobsRequest.Merge(dst, src)
 }
 func (m *ListJobsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListJobsRequest.Size(m)
@@ -1658,7 +1646,7 @@ func (m *ListJobsResponse) Reset()         { *m = ListJobsResponse{} }
 func (m *ListJobsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListJobsResponse) ProtoMessage()    {}
 func (*ListJobsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{10}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{10}
 }
 func (m *ListJobsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListJobsResponse.Unmarshal(m, b)
@@ -1666,8 +1654,8 @@ func (m *ListJobsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListJobsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListJobsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListJobsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListJobsResponse.Merge(m, src)
+func (dst *ListJobsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListJobsResponse.Merge(dst, src)
 }
 func (m *ListJobsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListJobsResponse.Size(m)
@@ -1707,7 +1695,7 @@ func (m *GetJobRequest) Reset()         { *m = GetJobRequest{} }
 func (m *GetJobRequest) String() string { return proto.CompactTextString(m) }
 func (*GetJobRequest) ProtoMessage()    {}
 func (*GetJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{11}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{11}
 }
 func (m *GetJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetJobRequest.Unmarshal(m, b)
@@ -1715,8 +1703,8 @@ func (m *GetJobRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetJobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetJobRequest.Marshal(b, m, deterministic)
 }
-func (m *GetJobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetJobRequest.Merge(m, src)
+func (dst *GetJobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetJobRequest.Merge(dst, src)
 }
 func (m *GetJobRequest) XXX_Size() int {
 	return xxx_messageInfo_GetJobRequest.Size(m)
@@ -1749,7 +1737,7 @@ func (m *CancelJobRequest) Reset()         { *m = CancelJobRequest{} }
 func (m *CancelJobRequest) String() string { return proto.CompactTextString(m) }
 func (*CancelJobRequest) ProtoMessage()    {}
 func (*CancelJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a9e7ba15cb43988d, []int{12}
+	return fileDescriptor_job_service_43f5d77a25caf017, []int{12}
 }
 func (m *CancelJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CancelJobRequest.Unmarshal(m, b)
@@ -1757,8 +1745,8 @@ func (m *CancelJobRequest) XXX_Unmarshal(b []byte) error {
 func (m *CancelJobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CancelJobRequest.Marshal(b, m, deterministic)
 }
-func (m *CancelJobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CancelJobRequest.Merge(m, src)
+func (dst *CancelJobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CancelJobRequest.Merge(dst, src)
 }
 func (m *CancelJobRequest) XXX_Size() int {
 	return xxx_messageInfo_CancelJobRequest.Size(m)
@@ -1980,10 +1968,10 @@ var _JobService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/ml/v1/job_service.proto", fileDescriptor_a9e7ba15cb43988d)
+	proto.RegisterFile("google/cloud/ml/v1/job_service.proto", fileDescriptor_job_service_43f5d77a25caf017)
 }
 
-var fileDescriptor_a9e7ba15cb43988d = []byte{
+var fileDescriptor_job_service_43f5d77a25caf017 = []byte{
 	// 2070 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x58, 0xdb, 0x6e, 0x1b, 0xc9,
 	0x11, 0x15, 0xaf, 0x22, 0x8b, 0x12, 0x39, 0x6e, 0x5b, 0x36, 0x4d, 0xdb, 0x6b, 0x79, 0xe4, 0x38,

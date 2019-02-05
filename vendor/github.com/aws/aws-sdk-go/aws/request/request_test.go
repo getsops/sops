@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -535,7 +536,7 @@ func TestIsSerializationErrorRetryable(t *testing.T) {
 			expected: false,
 		},
 		{
-			err:      awserr.New(request.ErrCodeSerialization, "foo error", stubConnectionResetError),
+			err:      awserr.New(request.ErrCodeSerialization, "foo error", errAcceptConnectionResetStub),
 			expected: true,
 		},
 	}
@@ -612,23 +613,26 @@ func TestWithGetResponseHeaders(t *testing.T) {
 }
 
 type connResetCloser struct {
+	Err error
 }
 
 func (rc *connResetCloser) Read(b []byte) (int, error) {
-	return 0, stubConnectionResetError
+	return 0, rc.Err
 }
 
 func (rc *connResetCloser) Close() error {
 	return nil
 }
 
-func TestSerializationErrConnectionReset(t *testing.T) {
+func TestSerializationErrConnectionReset_accept(t *testing.T) {
 	count := 0
 	handlers := request.Handlers{}
 	handlers.Send.PushBack(func(r *request.Request) {
 		count++
 		r.HTTPResponse = &http.Response{}
-		r.HTTPResponse.Body = &connResetCloser{}
+		r.HTTPResponse.Body = &connResetCloser{
+			Err: errAcceptConnectionResetStub,
+		}
 	})
 
 	handlers.Sign.PushBackNamed(v4.SignRequestHandler)
@@ -668,7 +672,7 @@ func TestSerializationErrConnectionReset(t *testing.T) {
 		}{},
 	)
 
-	osErr := stubConnectionResetError
+	osErr := errAcceptConnectionResetStub
 	req.ApplyOptions(request.WithResponseReadTimeout(time.Second))
 	err := req.Send()
 	if err == nil {
@@ -1118,4 +1122,47 @@ func Test501NotRetrying(t *testing.T) {
 	if e, a := 1, int(r.RetryCount); e != a {
 		t.Errorf("expect %d retry count, got %d", e, a)
 	}
+}
+
+func TestRequestNoConnection(t *testing.T) {
+	port, err := getFreePort()
+	if err != nil {
+		t.Fatalf("failed to get free port for test")
+	}
+	s := awstesting.NewClient(aws.NewConfig().
+		WithMaxRetries(10).
+		WithEndpoint("https://localhost:" + strconv.Itoa(port)).
+		WithSleepDelay(func(time.Duration) {}),
+	)
+	s.Handlers.Validate.Clear()
+	s.Handlers.Unmarshal.PushBack(unmarshal)
+	s.Handlers.UnmarshalError.PushBack(unmarshalError)
+
+	out := &testData{}
+	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
+
+	if err = r.Send(); err == nil {
+		t.Fatal("expect error, but got none")
+	}
+
+	if e, a := 10, r.RetryCount; e != a {
+		t.Errorf("expect %v retry count, got %v", e, a)
+	}
+}
+
+func getFreePort() (int, error) {
+	l, err := net.Listen("tcp", ":0")
+	if err != nil {
+		return 0, err
+	}
+	defer l.Close()
+
+	strAddr := l.Addr().String()
+	parts := strings.Split(strAddr, ":")
+	strPort := parts[len(parts)-1]
+	port, err := strconv.ParseInt(strPort, 10, 32)
+	if err != nil {
+		return 0, err
+	}
+	return int(port), nil
 }

@@ -360,7 +360,32 @@ func TestFormatGeneric(t *testing.T) {
 	}
 }
 
+func wrappedNew(message string) error { // This function will be mid-stack inlined in go 1.12+
+	return New(message)
+}
+
+func TestFormatWrappedNew(t *testing.T) {
+	tests := []struct {
+		error
+		format string
+		want   string
+	}{{
+		wrappedNew("error"),
+		"%+v",
+		"error\n" +
+			"github.com/pkg/errors.wrappedNew\n" +
+			"\t.+/github.com/pkg/errors/format_test.go:364\n" +
+			"github.com/pkg/errors.TestFormatWrappedNew\n" +
+			"\t.+/github.com/pkg/errors/format_test.go:373",
+	}}
+
+	for i, tt := range tests {
+		testFormatRegexp(t, i, tt.error, tt.format, tt.want)
+	}
+}
+
 func testFormatRegexp(t *testing.T, n int, arg interface{}, format, want string) {
+	t.Helper()
 	got := fmt.Sprintf(format, arg)
 	gotLines := strings.SplitN(got, "\n", -1)
 	wantLines := strings.SplitN(want, "\n", -1)

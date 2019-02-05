@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewListManagementTermClient(endpoint string) ListManagementTermClient {
 // term - term to be deleted
 // language - language of the terms.
 func (client ListManagementTermClient) AddTerm(ctx context.Context, listID string, term string, language string) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermClient.AddTerm")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddTermPreparer(ctx, listID, term, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermClient", "AddTerm", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client ListManagementTermClient) AddTermResponder(resp *http.Response) (re
 // listID - list Id of the image list.
 // language - language of the terms.
 func (client ListManagementTermClient) DeleteAllTerms(ctx context.Context, listID string, language string) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermClient.DeleteAllTerms")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteAllTermsPreparer(ctx, listID, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermClient", "DeleteAllTerms", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client ListManagementTermClient) DeleteAllTermsResponder(resp *http.Respon
 // term - term to be deleted
 // language - language of the terms.
 func (client ListManagementTermClient) DeleteTerm(ctx context.Context, listID string, term string, language string) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermClient.DeleteTerm")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteTermPreparer(ctx, listID, term, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermClient", "DeleteTerm", nil, "Failure preparing request")
@@ -256,6 +287,16 @@ func (client ListManagementTermClient) DeleteTermResponder(resp *http.Response) 
 // offset - the pagination start index.
 // limit - the max limit.
 func (client ListManagementTermClient) GetAllTerms(ctx context.Context, listID string, language string, offset *int32, limit *int32) (result Terms, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermClient.GetAllTerms")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAllTermsPreparer(ctx, listID, language, offset, limit)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermClient", "GetAllTerms", nil, "Failure preparing request")

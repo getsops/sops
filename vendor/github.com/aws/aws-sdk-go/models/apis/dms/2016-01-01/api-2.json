@@ -725,7 +725,9 @@
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
         "DmsTransferSettings":{"shape":"DmsTransferSettings"},
-        "MongoDbSettings":{"shape":"MongoDbSettings"}
+        "MongoDbSettings":{"shape":"MongoDbSettings"},
+        "KinesisSettings":{"shape":"KinesisSettings"},
+        "ElasticsearchSettings":{"shape":"ElasticsearchSettings"}
       }
     },
     "CreateEndpointResponse":{
@@ -775,7 +777,8 @@
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "Tags":{"shape":"TagList"},
         "KmsKeyId":{"shape":"String"},
-        "PubliclyAccessible":{"shape":"BooleanOptional"}
+        "PubliclyAccessible":{"shape":"BooleanOptional"},
+        "DnsNameServers":{"shape":"String"}
       }
     },
     "CreateReplicationInstanceResponse":{
@@ -1194,6 +1197,19 @@
         "ServiceAccessRoleArn":{"shape":"String"}
       }
     },
+    "ElasticsearchSettings":{
+      "type":"structure",
+      "required":[
+        "ServiceAccessRoleArn",
+        "EndpointUri"
+      ],
+      "members":{
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "EndpointUri":{"shape":"String"},
+        "FullLoadErrorPercentage":{"shape":"IntegerOptional"},
+        "ErrorRetryDuration":{"shape":"IntegerOptional"}
+      }
+    },
     "Endpoint":{
       "type":"structure",
       "members":{
@@ -1217,7 +1233,9 @@
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
         "DmsTransferSettings":{"shape":"DmsTransferSettings"},
-        "MongoDbSettings":{"shape":"MongoDbSettings"}
+        "MongoDbSettings":{"shape":"MongoDbSettings"},
+        "KinesisSettings":{"shape":"KinesisSettings"},
+        "ElasticsearchSettings":{"shape":"ElasticsearchSettings"}
       }
     },
     "EndpointList":{
@@ -1348,6 +1366,14 @@
       "type":"list",
       "member":{"shape":"String"}
     },
+    "KinesisSettings":{
+      "type":"structure",
+      "members":{
+        "StreamArn":{"shape":"String"},
+        "MessageFormat":{"shape":"MessageFormatValue"},
+        "ServiceAccessRoleArn":{"shape":"String"}
+      }
+    },
     "ListTagsForResourceMessage":{
       "type":"structure",
       "required":["ResourceArn"],
@@ -1362,6 +1388,10 @@
       }
     },
     "Long":{"type":"long"},
+    "MessageFormatValue":{
+      "type":"string",
+      "enum":["json"]
+    },
     "MigrationTypeValue":{
       "type":"string",
       "enum":[
@@ -1391,7 +1421,9 @@
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
         "DmsTransferSettings":{"shape":"DmsTransferSettings"},
-        "MongoDbSettings":{"shape":"MongoDbSettings"}
+        "MongoDbSettings":{"shape":"MongoDbSettings"},
+        "KinesisSettings":{"shape":"KinesisSettings"},
+        "ElasticsearchSettings":{"shape":"ElasticsearchSettings"}
       }
     },
     "ModifyEndpointResponse":{
@@ -1645,7 +1677,8 @@
         "ReplicationInstancePrivateIpAddresses":{"shape":"ReplicationInstancePrivateIpAddressList"},
         "PubliclyAccessible":{"shape":"Boolean"},
         "SecondaryAvailabilityZone":{"shape":"String"},
-        "FreeUntil":{"shape":"TStamp"}
+        "FreeUntil":{"shape":"TStamp"},
+        "DnsNameServers":{"shape":"String"}
       }
     },
     "ReplicationInstanceList":{

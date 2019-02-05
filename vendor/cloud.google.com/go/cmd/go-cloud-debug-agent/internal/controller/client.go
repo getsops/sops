@@ -16,6 +16,7 @@
 package controller
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
@@ -23,7 +24,6 @@ import (
 	"log"
 	"sync"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	cd "google.golang.org/api/clouddebugger/v2"
 	"google.golang.org/api/googleapi"

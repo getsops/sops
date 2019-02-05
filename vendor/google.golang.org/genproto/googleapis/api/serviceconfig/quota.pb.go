@@ -87,7 +87,7 @@ func (m *Quota) Reset()         { *m = Quota{} }
 func (m *Quota) String() string { return proto.CompactTextString(m) }
 func (*Quota) ProtoMessage()    {}
 func (*Quota) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6822ef0454b3845a, []int{0}
+	return fileDescriptor_quota_8acf07194df27b7e, []int{0}
 }
 func (m *Quota) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Quota.Unmarshal(m, b)
@@ -95,8 +95,8 @@ func (m *Quota) XXX_Unmarshal(b []byte) error {
 func (m *Quota) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Quota.Marshal(b, m, deterministic)
 }
-func (m *Quota) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Quota.Merge(m, src)
+func (dst *Quota) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Quota.Merge(dst, src)
 }
 func (m *Quota) XXX_Size() int {
 	return xxx_messageInfo_Quota.Size(m)
@@ -147,7 +147,7 @@ func (m *MetricRule) Reset()         { *m = MetricRule{} }
 func (m *MetricRule) String() string { return proto.CompactTextString(m) }
 func (*MetricRule) ProtoMessage()    {}
 func (*MetricRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6822ef0454b3845a, []int{1}
+	return fileDescriptor_quota_8acf07194df27b7e, []int{1}
 }
 func (m *MetricRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MetricRule.Unmarshal(m, b)
@@ -155,8 +155,8 @@ func (m *MetricRule) XXX_Unmarshal(b []byte) error {
 func (m *MetricRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MetricRule.Marshal(b, m, deterministic)
 }
-func (m *MetricRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MetricRule.Merge(m, src)
+func (dst *MetricRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MetricRule.Merge(dst, src)
 }
 func (m *MetricRule) XXX_Size() int {
 	return xxx_messageInfo_MetricRule.Size(m)
@@ -330,7 +330,7 @@ func (m *QuotaLimit) Reset()         { *m = QuotaLimit{} }
 func (m *QuotaLimit) String() string { return proto.CompactTextString(m) }
 func (*QuotaLimit) ProtoMessage()    {}
 func (*QuotaLimit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6822ef0454b3845a, []int{2}
+	return fileDescriptor_quota_8acf07194df27b7e, []int{2}
 }
 func (m *QuotaLimit) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QuotaLimit.Unmarshal(m, b)
@@ -338,8 +338,8 @@ func (m *QuotaLimit) XXX_Unmarshal(b []byte) error {
 func (m *QuotaLimit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QuotaLimit.Marshal(b, m, deterministic)
 }
-func (m *QuotaLimit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuotaLimit.Merge(m, src)
+func (dst *QuotaLimit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuotaLimit.Merge(dst, src)
 }
 func (m *QuotaLimit) XXX_Size() int {
 	return xxx_messageInfo_QuotaLimit.Size(m)
@@ -428,9 +428,9 @@ func init() {
 	proto.RegisterMapType((map[string]int64)(nil), "google.api.QuotaLimit.ValuesEntry")
 }
 
-func init() { proto.RegisterFile("google/api/quota.proto", fileDescriptor_6822ef0454b3845a) }
+func init() { proto.RegisterFile("google/api/quota.proto", fileDescriptor_quota_8acf07194df27b7e) }
 
-var fileDescriptor_6822ef0454b3845a = []byte{
+var fileDescriptor_quota_8acf07194df27b7e = []byte{
 	// 466 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0xc1, 0x8e, 0xd3, 0x30,
 	0x10, 0x55, 0x9a, 0xb6, 0xb4, 0xd3, 0x82, 0x56, 0x16, 0xaa, 0xac, 0xc2, 0xa1, 0x94, 0x03, 0x3d,

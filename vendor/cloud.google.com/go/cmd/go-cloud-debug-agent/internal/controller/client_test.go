@@ -16,14 +16,13 @@ package controller
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
 	"testing"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
-
 	cd "google.golang.org/api/clouddebugger/v2"
 	"google.golang.org/api/googleapi"
 )

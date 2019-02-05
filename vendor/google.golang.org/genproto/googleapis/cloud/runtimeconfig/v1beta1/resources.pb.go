@@ -41,7 +41,6 @@ var VariableState_name = map[int32]string{
 	1: "UPDATED",
 	2: "DELETED",
 }
-
 var VariableState_value = map[string]int32{
 	"VARIABLE_STATE_UNSPECIFIED": 0,
 	"UPDATED":                    1,
@@ -51,9 +50,8 @@ var VariableState_value = map[string]int32{
 func (x VariableState) String() string {
 	return proto.EnumName(VariableState_name, int32(x))
 }
-
 func (VariableState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_7913f3704a8d250c, []int{0}
+	return fileDescriptor_resources_a4c042e63b7976fe, []int{0}
 }
 
 // A RuntimeConfig resource is the primary resource in the Cloud RuntimeConfig
@@ -83,7 +81,7 @@ func (m *RuntimeConfig) Reset()         { *m = RuntimeConfig{} }
 func (m *RuntimeConfig) String() string { return proto.CompactTextString(m) }
 func (*RuntimeConfig) ProtoMessage()    {}
 func (*RuntimeConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7913f3704a8d250c, []int{0}
+	return fileDescriptor_resources_a4c042e63b7976fe, []int{0}
 }
 func (m *RuntimeConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RuntimeConfig.Unmarshal(m, b)
@@ -91,8 +89,8 @@ func (m *RuntimeConfig) XXX_Unmarshal(b []byte) error {
 func (m *RuntimeConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RuntimeConfig.Marshal(b, m, deterministic)
 }
-func (m *RuntimeConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RuntimeConfig.Merge(m, src)
+func (dst *RuntimeConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RuntimeConfig.Merge(dst, src)
 }
 func (m *RuntimeConfig) XXX_Size() int {
 	return xxx_messageInfo_RuntimeConfig.Size(m)
@@ -163,7 +161,7 @@ func (m *Variable) Reset()         { *m = Variable{} }
 func (m *Variable) String() string { return proto.CompactTextString(m) }
 func (*Variable) ProtoMessage()    {}
 func (*Variable) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7913f3704a8d250c, []int{1}
+	return fileDescriptor_resources_a4c042e63b7976fe, []int{1}
 }
 func (m *Variable) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Variable.Unmarshal(m, b)
@@ -171,8 +169,8 @@ func (m *Variable) XXX_Unmarshal(b []byte) error {
 func (m *Variable) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Variable.Marshal(b, m, deterministic)
 }
-func (m *Variable) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Variable.Merge(m, src)
+func (dst *Variable) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Variable.Merge(dst, src)
 }
 func (m *Variable) XXX_Size() int {
 	return xxx_messageInfo_Variable.Size(m)
@@ -324,7 +322,7 @@ func (m *EndCondition) Reset()         { *m = EndCondition{} }
 func (m *EndCondition) String() string { return proto.CompactTextString(m) }
 func (*EndCondition) ProtoMessage()    {}
 func (*EndCondition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7913f3704a8d250c, []int{2}
+	return fileDescriptor_resources_a4c042e63b7976fe, []int{2}
 }
 func (m *EndCondition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndCondition.Unmarshal(m, b)
@@ -332,8 +330,8 @@ func (m *EndCondition) XXX_Unmarshal(b []byte) error {
 func (m *EndCondition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EndCondition.Marshal(b, m, deterministic)
 }
-func (m *EndCondition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EndCondition.Merge(m, src)
+func (dst *EndCondition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EndCondition.Merge(dst, src)
 }
 func (m *EndCondition) XXX_Size() int {
 	return xxx_messageInfo_EndCondition.Size(m)
@@ -452,7 +450,7 @@ func (m *EndCondition_Cardinality) Reset()         { *m = EndCondition_Cardinali
 func (m *EndCondition_Cardinality) String() string { return proto.CompactTextString(m) }
 func (*EndCondition_Cardinality) ProtoMessage()    {}
 func (*EndCondition_Cardinality) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7913f3704a8d250c, []int{2, 0}
+	return fileDescriptor_resources_a4c042e63b7976fe, []int{2, 0}
 }
 func (m *EndCondition_Cardinality) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EndCondition_Cardinality.Unmarshal(m, b)
@@ -460,8 +458,8 @@ func (m *EndCondition_Cardinality) XXX_Unmarshal(b []byte) error {
 func (m *EndCondition_Cardinality) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EndCondition_Cardinality.Marshal(b, m, deterministic)
 }
-func (m *EndCondition_Cardinality) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EndCondition_Cardinality.Merge(m, src)
+func (dst *EndCondition_Cardinality) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EndCondition_Cardinality.Merge(dst, src)
 }
 func (m *EndCondition_Cardinality) XXX_Size() int {
 	return xxx_messageInfo_EndCondition_Cardinality.Size(m)
@@ -551,7 +549,7 @@ func (m *Waiter) Reset()         { *m = Waiter{} }
 func (m *Waiter) String() string { return proto.CompactTextString(m) }
 func (*Waiter) ProtoMessage()    {}
 func (*Waiter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7913f3704a8d250c, []int{3}
+	return fileDescriptor_resources_a4c042e63b7976fe, []int{3}
 }
 func (m *Waiter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Waiter.Unmarshal(m, b)
@@ -559,8 +557,8 @@ func (m *Waiter) XXX_Unmarshal(b []byte) error {
 func (m *Waiter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Waiter.Marshal(b, m, deterministic)
 }
-func (m *Waiter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Waiter.Merge(m, src)
+func (dst *Waiter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Waiter.Merge(dst, src)
 }
 func (m *Waiter) XXX_Size() int {
 	return xxx_messageInfo_Waiter.Size(m)
@@ -630,10 +628,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/runtimeconfig/v1beta1/resources.proto", fileDescriptor_7913f3704a8d250c)
+	proto.RegisterFile("google/cloud/runtimeconfig/v1beta1/resources.proto", fileDescriptor_resources_a4c042e63b7976fe)
 }
 
-var fileDescriptor_7913f3704a8d250c = []byte{
+var fileDescriptor_resources_a4c042e63b7976fe = []byte{
 	// 628 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xdd, 0x6e, 0xd3, 0x30,
 	0x14, 0xc7, 0x9b, 0xd2, 0x8f, 0xed, 0x64, 0x43, 0x93, 0x85, 0x46, 0xa8, 0xd0, 0xa8, 0x7a, 0x81,

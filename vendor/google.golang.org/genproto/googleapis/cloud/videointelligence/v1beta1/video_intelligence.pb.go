@@ -50,7 +50,6 @@ var Feature_name = map[int32]string{
 	3: "SHOT_CHANGE_DETECTION",
 	4: "SAFE_SEARCH_DETECTION",
 }
-
 var Feature_value = map[string]int32{
 	"FEATURE_UNSPECIFIED":   0,
 	"LABEL_DETECTION":       1,
@@ -62,9 +61,8 @@ var Feature_value = map[string]int32{
 func (x Feature) String() string {
 	return proto.EnumName(Feature_name, int32(x))
 }
-
 func (Feature) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{0}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{0}
 }
 
 // Label level (scope).
@@ -91,7 +89,6 @@ var LabelLevel_name = map[int32]string{
 	3: "SHOT_LEVEL",
 	4: "FRAME_LEVEL",
 }
-
 var LabelLevel_value = map[string]int32{
 	"LABEL_LEVEL_UNSPECIFIED": 0,
 	"VIDEO_LEVEL":             1,
@@ -103,9 +100,8 @@ var LabelLevel_value = map[string]int32{
 func (x LabelLevel) String() string {
 	return proto.EnumName(LabelLevel_name, int32(x))
 }
-
 func (LabelLevel) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{1}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{1}
 }
 
 // Label detection mode.
@@ -128,7 +124,6 @@ var LabelDetectionMode_name = map[int32]string{
 	2: "FRAME_MODE",
 	3: "SHOT_AND_FRAME_MODE",
 }
-
 var LabelDetectionMode_value = map[string]int32{
 	"LABEL_DETECTION_MODE_UNSPECIFIED": 0,
 	"SHOT_MODE":                        1,
@@ -139,9 +134,8 @@ var LabelDetectionMode_value = map[string]int32{
 func (x LabelDetectionMode) String() string {
 	return proto.EnumName(LabelDetectionMode_name, int32(x))
 }
-
 func (LabelDetectionMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{2}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{2}
 }
 
 // Bucketized representation of likelihood.
@@ -170,7 +164,6 @@ var Likelihood_name = map[int32]string{
 	4: "LIKELY",
 	5: "VERY_LIKELY",
 }
-
 var Likelihood_value = map[string]int32{
 	"UNKNOWN":       0,
 	"VERY_UNLIKELY": 1,
@@ -183,9 +176,8 @@ var Likelihood_value = map[string]int32{
 func (x Likelihood) String() string {
 	return proto.EnumName(Likelihood_name, int32(x))
 }
-
 func (Likelihood) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{3}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{3}
 }
 
 // Video annotation request.
@@ -228,7 +220,7 @@ func (m *AnnotateVideoRequest) Reset()         { *m = AnnotateVideoRequest{} }
 func (m *AnnotateVideoRequest) String() string { return proto.CompactTextString(m) }
 func (*AnnotateVideoRequest) ProtoMessage()    {}
 func (*AnnotateVideoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{0}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{0}
 }
 func (m *AnnotateVideoRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateVideoRequest.Unmarshal(m, b)
@@ -236,8 +228,8 @@ func (m *AnnotateVideoRequest) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateVideoRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateVideoRequest.Marshal(b, m, deterministic)
 }
-func (m *AnnotateVideoRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateVideoRequest.Merge(m, src)
+func (dst *AnnotateVideoRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateVideoRequest.Merge(dst, src)
 }
 func (m *AnnotateVideoRequest) XXX_Size() int {
 	return xxx_messageInfo_AnnotateVideoRequest.Size(m)
@@ -324,7 +316,7 @@ func (m *VideoContext) Reset()         { *m = VideoContext{} }
 func (m *VideoContext) String() string { return proto.CompactTextString(m) }
 func (*VideoContext) ProtoMessage()    {}
 func (*VideoContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{1}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{1}
 }
 func (m *VideoContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoContext.Unmarshal(m, b)
@@ -332,8 +324,8 @@ func (m *VideoContext) XXX_Unmarshal(b []byte) error {
 func (m *VideoContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VideoContext.Marshal(b, m, deterministic)
 }
-func (m *VideoContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VideoContext.Merge(m, src)
+func (dst *VideoContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VideoContext.Merge(dst, src)
 }
 func (m *VideoContext) XXX_Size() int {
 	return xxx_messageInfo_VideoContext.Size(m)
@@ -408,7 +400,7 @@ func (m *VideoSegment) Reset()         { *m = VideoSegment{} }
 func (m *VideoSegment) String() string { return proto.CompactTextString(m) }
 func (*VideoSegment) ProtoMessage()    {}
 func (*VideoSegment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{2}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{2}
 }
 func (m *VideoSegment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoSegment.Unmarshal(m, b)
@@ -416,8 +408,8 @@ func (m *VideoSegment) XXX_Unmarshal(b []byte) error {
 func (m *VideoSegment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VideoSegment.Marshal(b, m, deterministic)
 }
-func (m *VideoSegment) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VideoSegment.Merge(m, src)
+func (dst *VideoSegment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VideoSegment.Merge(dst, src)
 }
 func (m *VideoSegment) XXX_Size() int {
 	return xxx_messageInfo_VideoSegment.Size(m)
@@ -462,7 +454,7 @@ func (m *LabelLocation) Reset()         { *m = LabelLocation{} }
 func (m *LabelLocation) String() string { return proto.CompactTextString(m) }
 func (*LabelLocation) ProtoMessage()    {}
 func (*LabelLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{3}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{3}
 }
 func (m *LabelLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelLocation.Unmarshal(m, b)
@@ -470,8 +462,8 @@ func (m *LabelLocation) XXX_Unmarshal(b []byte) error {
 func (m *LabelLocation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LabelLocation.Marshal(b, m, deterministic)
 }
-func (m *LabelLocation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LabelLocation.Merge(m, src)
+func (dst *LabelLocation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LabelLocation.Merge(dst, src)
 }
 func (m *LabelLocation) XXX_Size() int {
 	return xxx_messageInfo_LabelLocation.Size(m)
@@ -520,7 +512,7 @@ func (m *LabelAnnotation) Reset()         { *m = LabelAnnotation{} }
 func (m *LabelAnnotation) String() string { return proto.CompactTextString(m) }
 func (*LabelAnnotation) ProtoMessage()    {}
 func (*LabelAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{4}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{4}
 }
 func (m *LabelAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelAnnotation.Unmarshal(m, b)
@@ -528,8 +520,8 @@ func (m *LabelAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *LabelAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LabelAnnotation.Marshal(b, m, deterministic)
 }
-func (m *LabelAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LabelAnnotation.Merge(m, src)
+func (dst *LabelAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LabelAnnotation.Merge(dst, src)
 }
 func (m *LabelAnnotation) XXX_Size() int {
 	return xxx_messageInfo_LabelAnnotation.Size(m)
@@ -589,7 +581,7 @@ func (m *SafeSearchAnnotation) Reset()         { *m = SafeSearchAnnotation{} }
 func (m *SafeSearchAnnotation) String() string { return proto.CompactTextString(m) }
 func (*SafeSearchAnnotation) ProtoMessage()    {}
 func (*SafeSearchAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{5}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{5}
 }
 func (m *SafeSearchAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SafeSearchAnnotation.Unmarshal(m, b)
@@ -597,8 +589,8 @@ func (m *SafeSearchAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *SafeSearchAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SafeSearchAnnotation.Marshal(b, m, deterministic)
 }
-func (m *SafeSearchAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SafeSearchAnnotation.Merge(m, src)
+func (dst *SafeSearchAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SafeSearchAnnotation.Merge(dst, src)
 }
 func (m *SafeSearchAnnotation) XXX_Size() int {
 	return xxx_messageInfo_SafeSearchAnnotation.Size(m)
@@ -670,7 +662,7 @@ func (m *BoundingBox) Reset()         { *m = BoundingBox{} }
 func (m *BoundingBox) String() string { return proto.CompactTextString(m) }
 func (*BoundingBox) ProtoMessage()    {}
 func (*BoundingBox) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{6}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{6}
 }
 func (m *BoundingBox) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BoundingBox.Unmarshal(m, b)
@@ -678,8 +670,8 @@ func (m *BoundingBox) XXX_Unmarshal(b []byte) error {
 func (m *BoundingBox) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BoundingBox.Marshal(b, m, deterministic)
 }
-func (m *BoundingBox) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BoundingBox.Merge(m, src)
+func (dst *BoundingBox) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BoundingBox.Merge(dst, src)
 }
 func (m *BoundingBox) XXX_Size() int {
 	return xxx_messageInfo_BoundingBox.Size(m)
@@ -733,7 +725,7 @@ func (m *FaceLocation) Reset()         { *m = FaceLocation{} }
 func (m *FaceLocation) String() string { return proto.CompactTextString(m) }
 func (*FaceLocation) ProtoMessage()    {}
 func (*FaceLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{7}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{7}
 }
 func (m *FaceLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceLocation.Unmarshal(m, b)
@@ -741,8 +733,8 @@ func (m *FaceLocation) XXX_Unmarshal(b []byte) error {
 func (m *FaceLocation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FaceLocation.Marshal(b, m, deterministic)
 }
-func (m *FaceLocation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FaceLocation.Merge(m, src)
+func (dst *FaceLocation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FaceLocation.Merge(dst, src)
 }
 func (m *FaceLocation) XXX_Size() int {
 	return xxx_messageInfo_FaceLocation.Size(m)
@@ -786,7 +778,7 @@ func (m *FaceAnnotation) Reset()         { *m = FaceAnnotation{} }
 func (m *FaceAnnotation) String() string { return proto.CompactTextString(m) }
 func (*FaceAnnotation) ProtoMessage()    {}
 func (*FaceAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{8}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{8}
 }
 func (m *FaceAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceAnnotation.Unmarshal(m, b)
@@ -794,8 +786,8 @@ func (m *FaceAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *FaceAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FaceAnnotation.Marshal(b, m, deterministic)
 }
-func (m *FaceAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FaceAnnotation.Merge(m, src)
+func (dst *FaceAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FaceAnnotation.Merge(dst, src)
 }
 func (m *FaceAnnotation) XXX_Size() int {
 	return xxx_messageInfo_FaceAnnotation.Size(m)
@@ -852,7 +844,7 @@ func (m *VideoAnnotationResults) Reset()         { *m = VideoAnnotationResults{}
 func (m *VideoAnnotationResults) String() string { return proto.CompactTextString(m) }
 func (*VideoAnnotationResults) ProtoMessage()    {}
 func (*VideoAnnotationResults) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{9}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{9}
 }
 func (m *VideoAnnotationResults) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoAnnotationResults.Unmarshal(m, b)
@@ -860,8 +852,8 @@ func (m *VideoAnnotationResults) XXX_Unmarshal(b []byte) error {
 func (m *VideoAnnotationResults) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VideoAnnotationResults.Marshal(b, m, deterministic)
 }
-func (m *VideoAnnotationResults) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VideoAnnotationResults.Merge(m, src)
+func (dst *VideoAnnotationResults) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VideoAnnotationResults.Merge(dst, src)
 }
 func (m *VideoAnnotationResults) XXX_Size() int {
 	return xxx_messageInfo_VideoAnnotationResults.Size(m)
@@ -929,7 +921,7 @@ func (m *AnnotateVideoResponse) Reset()         { *m = AnnotateVideoResponse{} }
 func (m *AnnotateVideoResponse) String() string { return proto.CompactTextString(m) }
 func (*AnnotateVideoResponse) ProtoMessage()    {}
 func (*AnnotateVideoResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{10}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{10}
 }
 func (m *AnnotateVideoResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateVideoResponse.Unmarshal(m, b)
@@ -937,8 +929,8 @@ func (m *AnnotateVideoResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateVideoResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateVideoResponse.Marshal(b, m, deterministic)
 }
-func (m *AnnotateVideoResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateVideoResponse.Merge(m, src)
+func (dst *AnnotateVideoResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateVideoResponse.Merge(dst, src)
 }
 func (m *AnnotateVideoResponse) XXX_Size() int {
 	return xxx_messageInfo_AnnotateVideoResponse.Size(m)
@@ -977,7 +969,7 @@ func (m *VideoAnnotationProgress) Reset()         { *m = VideoAnnotationProgress
 func (m *VideoAnnotationProgress) String() string { return proto.CompactTextString(m) }
 func (*VideoAnnotationProgress) ProtoMessage()    {}
 func (*VideoAnnotationProgress) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{11}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{11}
 }
 func (m *VideoAnnotationProgress) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoAnnotationProgress.Unmarshal(m, b)
@@ -985,8 +977,8 @@ func (m *VideoAnnotationProgress) XXX_Unmarshal(b []byte) error {
 func (m *VideoAnnotationProgress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VideoAnnotationProgress.Marshal(b, m, deterministic)
 }
-func (m *VideoAnnotationProgress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VideoAnnotationProgress.Merge(m, src)
+func (dst *VideoAnnotationProgress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VideoAnnotationProgress.Merge(dst, src)
 }
 func (m *VideoAnnotationProgress) XXX_Size() int {
 	return xxx_messageInfo_VideoAnnotationProgress.Size(m)
@@ -1040,7 +1032,7 @@ func (m *AnnotateVideoProgress) Reset()         { *m = AnnotateVideoProgress{} }
 func (m *AnnotateVideoProgress) String() string { return proto.CompactTextString(m) }
 func (*AnnotateVideoProgress) ProtoMessage()    {}
 func (*AnnotateVideoProgress) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bda050609d2e9d85, []int{12}
+	return fileDescriptor_video_intelligence_2adacfc9be54b175, []int{12}
 }
 func (m *AnnotateVideoProgress) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateVideoProgress.Unmarshal(m, b)
@@ -1048,8 +1040,8 @@ func (m *AnnotateVideoProgress) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateVideoProgress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateVideoProgress.Marshal(b, m, deterministic)
 }
-func (m *AnnotateVideoProgress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateVideoProgress.Merge(m, src)
+func (dst *AnnotateVideoProgress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateVideoProgress.Merge(dst, src)
 }
 func (m *AnnotateVideoProgress) XXX_Size() int {
 	return xxx_messageInfo_AnnotateVideoProgress.Size(m)
@@ -1168,10 +1160,10 @@ var _VideoIntelligenceService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/videointelligence/v1beta1/video_intelligence.proto", fileDescriptor_bda050609d2e9d85)
+	proto.RegisterFile("google/cloud/videointelligence/v1beta1/video_intelligence.proto", fileDescriptor_video_intelligence_2adacfc9be54b175)
 }
 
-var fileDescriptor_bda050609d2e9d85 = []byte{
+var fileDescriptor_video_intelligence_2adacfc9be54b175 = []byte{
 	// 1520 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0xcb, 0x6f, 0x1b, 0xd5,
 	0x1a, 0xef, 0xf8, 0x91, 0xc4, 0x9f, 0x93, 0xd8, 0x39, 0x49, 0x1a, 0xdf, 0xb4, 0xb9, 0x8d, 0xdc,

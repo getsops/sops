@@ -1489,6 +1489,10 @@
     }, 
     "SpekeKeyProvider": {
       "members": {
+        "CertificateArn": {
+          "locationName": "certificateArn", 
+          "shape": "__string"
+        }, 
         "ResourceId": {
           "locationName": "resourceId", 
           "shape": "__string"

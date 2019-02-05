@@ -20,6 +20,7 @@ package loadtest
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"log"
 	"runtime"
@@ -28,13 +29,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"golang.org/x/net/context"
-	"golang.org/x/time/rate"
-
-	"github.com/golang/protobuf/ptypes"
-
 	"cloud.google.com/go/pubsub"
 	pb "cloud.google.com/go/pubsub/loadtest/pb"
+	"github.com/golang/protobuf/ptypes"
+	"golang.org/x/time/rate"
 )
 
 type pubServerConfig struct {
@@ -43,6 +41,7 @@ type pubServerConfig struct {
 	batchSize int32
 }
 
+// PubServer is a dummy Pub/Sub server for load testing.
 type PubServer struct {
 	ID string
 
@@ -50,6 +49,7 @@ type PubServer struct {
 	seqNum int32
 }
 
+// Start starts the server.
 func (l *PubServer) Start(ctx context.Context, req *pb.StartRequest) (*pb.StartResponse, error) {
 	log.Println("received start")
 	c, err := pubsub.NewClient(ctx, req.Project)
@@ -80,6 +80,7 @@ func (l *PubServer) init(c *pubsub.Client, topicName string, msgSize, batchSize 
 	})
 }
 
+// Execute executes a request.
 func (l *PubServer) Execute(ctx context.Context, _ *pb.ExecuteRequest) (*pb.ExecuteResponse, error) {
 	latencies, err := l.publishBatch()
 	if err != nil {
@@ -131,7 +132,9 @@ func (l *PubServer) publishBatch() ([]int64, error) {
 	return latencies, nil
 }
 
+// SubServer is a dummy Pub/Sub server for load testing.
 type SubServer struct {
+	// TODO(deklerk) what is this actually for?
 	lim *rate.Limiter
 
 	mu        sync.Mutex
@@ -139,6 +142,7 @@ type SubServer struct {
 	latencies []int64
 }
 
+// Start starts the server.
 func (s *SubServer) Start(ctx context.Context, req *pb.StartRequest) (*pb.StartResponse, error) {
 	log.Println("received start")
 	s.lim = rate.NewLimiter(rate.Every(time.Second), 1)
@@ -195,6 +199,7 @@ func (s *SubServer) callback(_ context.Context, m *pubsub.Message) {
 	m.Ack()
 }
 
+// Execute executes the request.
 func (s *SubServer) Execute(ctx context.Context, _ *pb.ExecuteRequest) (*pb.ExecuteResponse, error) {
 	// Throttle so the load tester doesn't spam us and consume all our CPU.
 	if err := s.lim.Wait(ctx); err != nil {

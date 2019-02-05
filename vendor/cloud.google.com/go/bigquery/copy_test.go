@@ -17,10 +17,8 @@ package bigquery
 import (
 	"testing"
 
-	"github.com/google/go-cmp/cmp/cmpopts"
-
 	"cloud.google.com/go/internal/testutil"
-
+	"github.com/google/go-cmp/cmp/cmpopts"
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -88,7 +86,7 @@ func TestCopy(t *testing.T) {
 				CreateDisposition:           CreateNever,
 				WriteDisposition:            WriteTruncate,
 				DestinationEncryptionConfig: &EncryptionConfig{KMSKeyName: "keyName"},
-				Labels: map[string]string{"a": "b"},
+				Labels:                      map[string]string{"a": "b"},
 			},
 			want: func() *bq.Job {
 				j := defaultCopyJob()

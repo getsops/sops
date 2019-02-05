@@ -44,7 +44,7 @@ func (m *KnowledgeBase) Reset()         { *m = KnowledgeBase{} }
 func (m *KnowledgeBase) String() string { return proto.CompactTextString(m) }
 func (*KnowledgeBase) ProtoMessage()    {}
 func (*KnowledgeBase) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9cdbbb049e0ce16a, []int{0}
+	return fileDescriptor_knowledge_base_5078794a2722dd36, []int{0}
 }
 func (m *KnowledgeBase) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KnowledgeBase.Unmarshal(m, b)
@@ -52,8 +52,8 @@ func (m *KnowledgeBase) XXX_Unmarshal(b []byte) error {
 func (m *KnowledgeBase) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_KnowledgeBase.Marshal(b, m, deterministic)
 }
-func (m *KnowledgeBase) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_KnowledgeBase.Merge(m, src)
+func (dst *KnowledgeBase) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KnowledgeBase.Merge(dst, src)
 }
 func (m *KnowledgeBase) XXX_Size() int {
 	return xxx_messageInfo_KnowledgeBase.Size(m)
@@ -97,7 +97,7 @@ func (m *ListKnowledgeBasesRequest) Reset()         { *m = ListKnowledgeBasesReq
 func (m *ListKnowledgeBasesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListKnowledgeBasesRequest) ProtoMessage()    {}
 func (*ListKnowledgeBasesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9cdbbb049e0ce16a, []int{1}
+	return fileDescriptor_knowledge_base_5078794a2722dd36, []int{1}
 }
 func (m *ListKnowledgeBasesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListKnowledgeBasesRequest.Unmarshal(m, b)
@@ -105,8 +105,8 @@ func (m *ListKnowledgeBasesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListKnowledgeBasesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListKnowledgeBasesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListKnowledgeBasesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListKnowledgeBasesRequest.Merge(m, src)
+func (dst *ListKnowledgeBasesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListKnowledgeBasesRequest.Merge(dst, src)
 }
 func (m *ListKnowledgeBasesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListKnowledgeBasesRequest.Size(m)
@@ -154,7 +154,7 @@ func (m *ListKnowledgeBasesResponse) Reset()         { *m = ListKnowledgeBasesRe
 func (m *ListKnowledgeBasesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListKnowledgeBasesResponse) ProtoMessage()    {}
 func (*ListKnowledgeBasesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9cdbbb049e0ce16a, []int{2}
+	return fileDescriptor_knowledge_base_5078794a2722dd36, []int{2}
 }
 func (m *ListKnowledgeBasesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListKnowledgeBasesResponse.Unmarshal(m, b)
@@ -162,8 +162,8 @@ func (m *ListKnowledgeBasesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListKnowledgeBasesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListKnowledgeBasesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListKnowledgeBasesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListKnowledgeBasesResponse.Merge(m, src)
+func (dst *ListKnowledgeBasesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListKnowledgeBasesResponse.Merge(dst, src)
 }
 func (m *ListKnowledgeBasesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListKnowledgeBasesResponse.Size(m)
@@ -202,7 +202,7 @@ func (m *GetKnowledgeBaseRequest) Reset()         { *m = GetKnowledgeBaseRequest
 func (m *GetKnowledgeBaseRequest) String() string { return proto.CompactTextString(m) }
 func (*GetKnowledgeBaseRequest) ProtoMessage()    {}
 func (*GetKnowledgeBaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9cdbbb049e0ce16a, []int{3}
+	return fileDescriptor_knowledge_base_5078794a2722dd36, []int{3}
 }
 func (m *GetKnowledgeBaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetKnowledgeBaseRequest.Unmarshal(m, b)
@@ -210,8 +210,8 @@ func (m *GetKnowledgeBaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetKnowledgeBaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetKnowledgeBaseRequest.Marshal(b, m, deterministic)
 }
-func (m *GetKnowledgeBaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetKnowledgeBaseRequest.Merge(m, src)
+func (dst *GetKnowledgeBaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetKnowledgeBaseRequest.Merge(dst, src)
 }
 func (m *GetKnowledgeBaseRequest) XXX_Size() int {
 	return xxx_messageInfo_GetKnowledgeBaseRequest.Size(m)
@@ -245,7 +245,7 @@ func (m *CreateKnowledgeBaseRequest) Reset()         { *m = CreateKnowledgeBaseR
 func (m *CreateKnowledgeBaseRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateKnowledgeBaseRequest) ProtoMessage()    {}
 func (*CreateKnowledgeBaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9cdbbb049e0ce16a, []int{4}
+	return fileDescriptor_knowledge_base_5078794a2722dd36, []int{4}
 }
 func (m *CreateKnowledgeBaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateKnowledgeBaseRequest.Unmarshal(m, b)
@@ -253,8 +253,8 @@ func (m *CreateKnowledgeBaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateKnowledgeBaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateKnowledgeBaseRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateKnowledgeBaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateKnowledgeBaseRequest.Merge(m, src)
+func (dst *CreateKnowledgeBaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateKnowledgeBaseRequest.Merge(dst, src)
 }
 func (m *CreateKnowledgeBaseRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateKnowledgeBaseRequest.Size(m)
@@ -296,7 +296,7 @@ func (m *DeleteKnowledgeBaseRequest) Reset()         { *m = DeleteKnowledgeBaseR
 func (m *DeleteKnowledgeBaseRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteKnowledgeBaseRequest) ProtoMessage()    {}
 func (*DeleteKnowledgeBaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9cdbbb049e0ce16a, []int{5}
+	return fileDescriptor_knowledge_base_5078794a2722dd36, []int{5}
 }
 func (m *DeleteKnowledgeBaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteKnowledgeBaseRequest.Unmarshal(m, b)
@@ -304,8 +304,8 @@ func (m *DeleteKnowledgeBaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteKnowledgeBaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteKnowledgeBaseRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteKnowledgeBaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteKnowledgeBaseRequest.Merge(m, src)
+func (dst *DeleteKnowledgeBaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteKnowledgeBaseRequest.Merge(dst, src)
 }
 func (m *DeleteKnowledgeBaseRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteKnowledgeBaseRequest.Size(m)
@@ -519,10 +519,10 @@ var _KnowledgeBases_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dialogflow/v2beta1/knowledge_base.proto", fileDescriptor_9cdbbb049e0ce16a)
+	proto.RegisterFile("google/cloud/dialogflow/v2beta1/knowledge_base.proto", fileDescriptor_knowledge_base_5078794a2722dd36)
 }
 
-var fileDescriptor_9cdbbb049e0ce16a = []byte{
+var fileDescriptor_knowledge_base_5078794a2722dd36 = []byte{
 	// 639 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x4f, 0xd4, 0x40,
 	0x14, 0xce, 0x2c, 0x82, 0x30, 0x08, 0x98, 0xc1, 0x20, 0x16, 0x0d, 0x58, 0x13, 0x43, 0xd6, 0xd8,

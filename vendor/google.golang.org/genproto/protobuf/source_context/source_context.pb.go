@@ -33,7 +33,7 @@ func (m *SourceContext) Reset()         { *m = SourceContext{} }
 func (m *SourceContext) String() string { return proto.CompactTextString(m) }
 func (*SourceContext) ProtoMessage()    {}
 func (*SourceContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b686cdb126d509db, []int{0}
+	return fileDescriptor_source_context_4ade4e806de19b22, []int{0}
 }
 func (m *SourceContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SourceContext.Unmarshal(m, b)
@@ -41,8 +41,8 @@ func (m *SourceContext) XXX_Unmarshal(b []byte) error {
 func (m *SourceContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SourceContext.Marshal(b, m, deterministic)
 }
-func (m *SourceContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceContext.Merge(m, src)
+func (dst *SourceContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SourceContext.Merge(dst, src)
 }
 func (m *SourceContext) XXX_Size() int {
 	return xxx_messageInfo_SourceContext.Size(m)
@@ -65,10 +65,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/protobuf/source_context.proto", fileDescriptor_b686cdb126d509db)
+	proto.RegisterFile("google/protobuf/source_context.proto", fileDescriptor_source_context_4ade4e806de19b22)
 }
 
-var fileDescriptor_b686cdb126d509db = []byte{
+var fileDescriptor_source_context_4ade4e806de19b22 = []byte{
 	// 184 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x49, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x2f, 0x28, 0xca, 0x2f, 0xc9, 0x4f, 0x2a, 0x4d, 0xd3, 0x2f, 0xce, 0x2f, 0x2d,

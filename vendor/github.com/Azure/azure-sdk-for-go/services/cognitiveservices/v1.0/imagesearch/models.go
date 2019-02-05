@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/imagesearch"
+
 // Currency enumerates the values for currency.
 type Currency string
 
@@ -2010,8 +2013,8 @@ type BasicCreativeWork interface {
 	AsCreativeWork() (*CreativeWork, bool)
 }
 
-// CreativeWork the most generic kind of creative work, including books, movies, photographs, software programs,
-// etc.
+// CreativeWork the most generic kind of creative work, including books, movies, photographs, software
+// programs, etc.
 type CreativeWork struct {
 	// ThumbnailURL - The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
@@ -3574,10 +3577,11 @@ func (ig *ImageGallery) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageInsights the top-level object that the response includes when an image insights request succeeds. For
-// information about requesting image insights, see the
+// ImageInsights the top-level object that the response includes when an image insights request succeeds.
+// For information about requesting image insights, see the
 // [insightsToken](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference#insightstoken)
-// query parameter. The modules query parameter affects the fields that Bing includes in the response. If you set
+// query parameter. The modules query parameter affects the fields that Bing includes in the response. If
+// you set
 // [modules](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference#modulesrequested)
 // to only Caption, then this object includes only the imageCaption field.
 type ImageInsights struct {
@@ -3882,7 +3886,7 @@ type ImageObject struct {
 	Thumbnail *ImageObject `json:"thumbnail,omitempty"`
 	// ImageInsightsToken - The token that you use in a subsequent call to the Image Search API to get additional information about the image. For information about using this token, see the insightsToken query parameter.
 	ImageInsightsToken *string `json:"imageInsightsToken,omitempty"`
-	// InsightsMetadata - A count of the number of websites where you can shop or perform other actions related to the image. For example, if the image is of an apple pie, this object includes a count of the number of websites where you can buy an apple pie. To indicate the number of offers in your UX, include badging such as a shopping cart icon that contains the count. When the user clicks on the icon, use imageInisghtsToken to get the list of websites.
+	// InsightsMetadata - A count of the number of websites where you can shop or perform other actions related to the image. For example, if the image is of an apple pie, this object includes a count of the number of websites where you can buy an apple pie. To indicate the number of offers in your UX, include badging such as a shopping cart icon that contains the count. When the user clicks on the icon, use imageInsightsToken to get the list of websites.
 	InsightsMetadata *ImagesImageMetadata `json:"insightsMetadata,omitempty"`
 	// ImageID - Unique Id for the image
 	ImageID *string `json:"imageId,omitempty"`
@@ -4731,8 +4735,8 @@ func (i Images) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &i, true
 }
 
-// ImagesImageMetadata defines a count of the number of websites where you can shop or perform other actions
-// related to the image.
+// ImagesImageMetadata defines a count of the number of websites where you can shop or perform other
+// actions related to the image.
 type ImagesImageMetadata struct {
 	// ShoppingSourcesCount - The number of websites that offer goods of the products seen in the image.
 	ShoppingSourcesCount *int32 `json:"shoppingSourcesCount,omitempty"`
@@ -4769,8 +4773,8 @@ type BasicIntangible interface {
 	AsIntangible() (*Intangible, bool)
 }
 
-// Intangible a utility class that serves as the umbrella for a number of 'intangible' things such as quantities,
-// structured values, etc.
+// Intangible a utility class that serves as the umbrella for a number of 'intangible' things such as
+// quantities, structured values, etc.
 type Intangible struct {
 	// Name - The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
@@ -5624,9 +5628,9 @@ func (mo *MediaObject) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// NormalizedRectangle defines a region of an image. The region is defined by the coordinates of the top, left
-// corner and bottom, right corner of the region. The coordinates are fractional values of the original image's
-// width and height in the range 0.0 through 1.0.
+// NormalizedRectangle defines a region of an image. The region is defined by the coordinates of the top,
+// left corner and bottom, right corner of the region. The coordinates are fractional values of the
+// original image's width and height in the range 0.0 through 1.0.
 type NormalizedRectangle struct {
 	// Left - The left coordinate.
 	Left *float64 `json:"left,omitempty"`
@@ -7749,8 +7753,8 @@ type RecognizedEntityGroup struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// RecognizedEntityRegion defines a region of the image where an entity was found and a list of entities that might
-// match it.
+// RecognizedEntityRegion defines a region of the image where an entity was found and a list of entities
+// that might match it.
 type RecognizedEntityRegion struct {
 	// Region - A region of the image that contains an entity. The values of the rectangle are relative to the width and height of the original image and are in the range 0.0 through 1.0. For example, if the image is 300x200 and the region's top, left corner is at point (10, 20) and the bottom, right corner is at point (290, 150), then the normalized rectangle is: Left = 0.0333333333333333, Top = 0.1, Right = 0.9666666666666667, Bottom = 0.75. For people, the region represents the person's face.
 	Region *NormalizedRectangle `json:"region,omitempty"`
@@ -8037,8 +8041,8 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that could be returned at the root of a response should inherit from
-// this
+// Response defines a response. All schemas that could be returned at the root of a response should inherit
+// from this
 type Response struct {
 	// ReadLink - The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`

@@ -50,7 +50,7 @@ func (m *CreateAlertPolicyRequest) Reset()         { *m = CreateAlertPolicyReque
 func (m *CreateAlertPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateAlertPolicyRequest) ProtoMessage()    {}
 func (*CreateAlertPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c45362b2a456d1bf, []int{0}
+	return fileDescriptor_alert_service_4a748eee76dab644, []int{0}
 }
 func (m *CreateAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateAlertPolicyRequest.Unmarshal(m, b)
@@ -58,8 +58,8 @@ func (m *CreateAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateAlertPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateAlertPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateAlertPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateAlertPolicyRequest.Merge(m, src)
+func (dst *CreateAlertPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateAlertPolicyRequest.Merge(dst, src)
 }
 func (m *CreateAlertPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateAlertPolicyRequest.Size(m)
@@ -99,7 +99,7 @@ func (m *GetAlertPolicyRequest) Reset()         { *m = GetAlertPolicyRequest{} }
 func (m *GetAlertPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetAlertPolicyRequest) ProtoMessage()    {}
 func (*GetAlertPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c45362b2a456d1bf, []int{1}
+	return fileDescriptor_alert_service_4a748eee76dab644, []int{1}
 }
 func (m *GetAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetAlertPolicyRequest.Unmarshal(m, b)
@@ -107,8 +107,8 @@ func (m *GetAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetAlertPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetAlertPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetAlertPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAlertPolicyRequest.Merge(m, src)
+func (dst *GetAlertPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetAlertPolicyRequest.Merge(dst, src)
 }
 func (m *GetAlertPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetAlertPolicyRequest.Size(m)
@@ -166,7 +166,7 @@ func (m *ListAlertPoliciesRequest) Reset()         { *m = ListAlertPoliciesReque
 func (m *ListAlertPoliciesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListAlertPoliciesRequest) ProtoMessage()    {}
 func (*ListAlertPoliciesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c45362b2a456d1bf, []int{2}
+	return fileDescriptor_alert_service_4a748eee76dab644, []int{2}
 }
 func (m *ListAlertPoliciesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListAlertPoliciesRequest.Unmarshal(m, b)
@@ -174,8 +174,8 @@ func (m *ListAlertPoliciesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListAlertPoliciesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListAlertPoliciesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListAlertPoliciesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAlertPoliciesRequest.Merge(m, src)
+func (dst *ListAlertPoliciesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAlertPoliciesRequest.Merge(dst, src)
 }
 func (m *ListAlertPoliciesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListAlertPoliciesRequest.Size(m)
@@ -238,7 +238,7 @@ func (m *ListAlertPoliciesResponse) Reset()         { *m = ListAlertPoliciesResp
 func (m *ListAlertPoliciesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListAlertPoliciesResponse) ProtoMessage()    {}
 func (*ListAlertPoliciesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c45362b2a456d1bf, []int{3}
+	return fileDescriptor_alert_service_4a748eee76dab644, []int{3}
 }
 func (m *ListAlertPoliciesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListAlertPoliciesResponse.Unmarshal(m, b)
@@ -246,8 +246,8 @@ func (m *ListAlertPoliciesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListAlertPoliciesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListAlertPoliciesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListAlertPoliciesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAlertPoliciesResponse.Merge(m, src)
+func (dst *ListAlertPoliciesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAlertPoliciesResponse.Merge(dst, src)
 }
 func (m *ListAlertPoliciesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListAlertPoliciesResponse.Size(m)
@@ -310,7 +310,7 @@ func (m *UpdateAlertPolicyRequest) Reset()         { *m = UpdateAlertPolicyReque
 func (m *UpdateAlertPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateAlertPolicyRequest) ProtoMessage()    {}
 func (*UpdateAlertPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c45362b2a456d1bf, []int{4}
+	return fileDescriptor_alert_service_4a748eee76dab644, []int{4}
 }
 func (m *UpdateAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateAlertPolicyRequest.Unmarshal(m, b)
@@ -318,8 +318,8 @@ func (m *UpdateAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateAlertPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateAlertPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateAlertPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateAlertPolicyRequest.Merge(m, src)
+func (dst *UpdateAlertPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateAlertPolicyRequest.Merge(dst, src)
 }
 func (m *UpdateAlertPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateAlertPolicyRequest.Size(m)
@@ -361,7 +361,7 @@ func (m *DeleteAlertPolicyRequest) Reset()         { *m = DeleteAlertPolicyReque
 func (m *DeleteAlertPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteAlertPolicyRequest) ProtoMessage()    {}
 func (*DeleteAlertPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c45362b2a456d1bf, []int{5}
+	return fileDescriptor_alert_service_4a748eee76dab644, []int{5}
 }
 func (m *DeleteAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteAlertPolicyRequest.Unmarshal(m, b)
@@ -369,8 +369,8 @@ func (m *DeleteAlertPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteAlertPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteAlertPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteAlertPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteAlertPolicyRequest.Merge(m, src)
+func (dst *DeleteAlertPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteAlertPolicyRequest.Merge(dst, src)
 }
 func (m *DeleteAlertPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteAlertPolicyRequest.Size(m)
@@ -618,10 +618,10 @@ var _AlertPolicyService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/monitoring/v3/alert_service.proto", fileDescriptor_c45362b2a456d1bf)
+	proto.RegisterFile("google/monitoring/v3/alert_service.proto", fileDescriptor_alert_service_4a748eee76dab644)
 }
 
-var fileDescriptor_c45362b2a456d1bf = []byte{
+var fileDescriptor_alert_service_4a748eee76dab644 = []byte{
 	// 656 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0x41, 0x6f, 0xd3, 0x4c,
 	0x10, 0x95, 0x93, 0x36, 0x5f, 0xbb, 0xfd, 0x5a, 0x94, 0x15, 0x54, 0xae, 0x0b, 0x52, 0x30, 0x2a,

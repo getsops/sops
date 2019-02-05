@@ -71,7 +71,7 @@ func (m *LatLng) Reset()         { *m = LatLng{} }
 func (m *LatLng) String() string { return proto.CompactTextString(m) }
 func (*LatLng) ProtoMessage()    {}
 func (*LatLng) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a087c9a103c281a9, []int{0}
+	return fileDescriptor_latlng_c1d6506011cbaf0c, []int{0}
 }
 func (m *LatLng) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LatLng.Unmarshal(m, b)
@@ -79,8 +79,8 @@ func (m *LatLng) XXX_Unmarshal(b []byte) error {
 func (m *LatLng) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LatLng.Marshal(b, m, deterministic)
 }
-func (m *LatLng) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LatLng.Merge(m, src)
+func (dst *LatLng) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LatLng.Merge(dst, src)
 }
 func (m *LatLng) XXX_Size() int {
 	return xxx_messageInfo_LatLng.Size(m)
@@ -109,9 +109,9 @@ func init() {
 	proto.RegisterType((*LatLng)(nil), "google.type.LatLng")
 }
 
-func init() { proto.RegisterFile("google/type/latlng.proto", fileDescriptor_a087c9a103c281a9) }
+func init() { proto.RegisterFile("google/type/latlng.proto", fileDescriptor_latlng_c1d6506011cbaf0c) }
 
-var fileDescriptor_a087c9a103c281a9 = []byte{
+var fileDescriptor_latlng_c1d6506011cbaf0c = []byte{
 	// 165 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x48, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x2f, 0xa9, 0x2c, 0x48, 0xd5, 0xcf, 0x49, 0x2c, 0xc9, 0xc9, 0x4b, 0xd7, 0x2b,

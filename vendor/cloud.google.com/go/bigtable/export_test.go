@@ -17,6 +17,7 @@ limitations under the License.
 package bigtable
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -24,7 +25,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/bigtable/bttest"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 )
@@ -85,9 +85,8 @@ func NewIntegrationEnv() (IntegrationEnv, error) {
 
 	if integrationConfig.UseProd {
 		return NewProdEnv(c)
-	} else {
-		return NewEmulatedEnv(c)
 	}
+	return NewEmulatedEnv(c)
 }
 
 // EmulatedEnv encapsulates the state of an emulator

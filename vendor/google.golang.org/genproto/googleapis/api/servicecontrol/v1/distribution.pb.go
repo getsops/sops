@@ -91,7 +91,7 @@ func (m *Distribution) Reset()         { *m = Distribution{} }
 func (m *Distribution) String() string { return proto.CompactTextString(m) }
 func (*Distribution) ProtoMessage()    {}
 func (*Distribution) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b3f590f4dffbeb4c, []int{0}
+	return fileDescriptor_distribution_dac88fdcde0e4047, []int{0}
 }
 func (m *Distribution) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Distribution.Unmarshal(m, b)
@@ -99,8 +99,8 @@ func (m *Distribution) XXX_Unmarshal(b []byte) error {
 func (m *Distribution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Distribution.Marshal(b, m, deterministic)
 }
-func (m *Distribution) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Distribution.Merge(m, src)
+func (dst *Distribution) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Distribution.Merge(dst, src)
 }
 func (m *Distribution) XXX_Size() int {
 	return xxx_messageInfo_Distribution.Size(m)
@@ -320,7 +320,7 @@ func (m *Distribution_LinearBuckets) Reset()         { *m = Distribution_LinearB
 func (m *Distribution_LinearBuckets) String() string { return proto.CompactTextString(m) }
 func (*Distribution_LinearBuckets) ProtoMessage()    {}
 func (*Distribution_LinearBuckets) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b3f590f4dffbeb4c, []int{0, 0}
+	return fileDescriptor_distribution_dac88fdcde0e4047, []int{0, 0}
 }
 func (m *Distribution_LinearBuckets) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Distribution_LinearBuckets.Unmarshal(m, b)
@@ -328,8 +328,8 @@ func (m *Distribution_LinearBuckets) XXX_Unmarshal(b []byte) error {
 func (m *Distribution_LinearBuckets) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Distribution_LinearBuckets.Marshal(b, m, deterministic)
 }
-func (m *Distribution_LinearBuckets) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Distribution_LinearBuckets.Merge(m, src)
+func (dst *Distribution_LinearBuckets) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Distribution_LinearBuckets.Merge(dst, src)
 }
 func (m *Distribution_LinearBuckets) XXX_Size() int {
 	return xxx_messageInfo_Distribution_LinearBuckets.Size(m)
@@ -386,7 +386,7 @@ func (m *Distribution_ExponentialBuckets) Reset()         { *m = Distribution_Ex
 func (m *Distribution_ExponentialBuckets) String() string { return proto.CompactTextString(m) }
 func (*Distribution_ExponentialBuckets) ProtoMessage()    {}
 func (*Distribution_ExponentialBuckets) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b3f590f4dffbeb4c, []int{0, 1}
+	return fileDescriptor_distribution_dac88fdcde0e4047, []int{0, 1}
 }
 func (m *Distribution_ExponentialBuckets) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Distribution_ExponentialBuckets.Unmarshal(m, b)
@@ -394,8 +394,8 @@ func (m *Distribution_ExponentialBuckets) XXX_Unmarshal(b []byte) error {
 func (m *Distribution_ExponentialBuckets) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Distribution_ExponentialBuckets.Marshal(b, m, deterministic)
 }
-func (m *Distribution_ExponentialBuckets) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Distribution_ExponentialBuckets.Merge(m, src)
+func (dst *Distribution_ExponentialBuckets) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Distribution_ExponentialBuckets.Merge(dst, src)
 }
 func (m *Distribution_ExponentialBuckets) XXX_Size() int {
 	return xxx_messageInfo_Distribution_ExponentialBuckets.Size(m)
@@ -454,7 +454,7 @@ func (m *Distribution_ExplicitBuckets) Reset()         { *m = Distribution_Expli
 func (m *Distribution_ExplicitBuckets) String() string { return proto.CompactTextString(m) }
 func (*Distribution_ExplicitBuckets) ProtoMessage()    {}
 func (*Distribution_ExplicitBuckets) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b3f590f4dffbeb4c, []int{0, 2}
+	return fileDescriptor_distribution_dac88fdcde0e4047, []int{0, 2}
 }
 func (m *Distribution_ExplicitBuckets) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Distribution_ExplicitBuckets.Unmarshal(m, b)
@@ -462,8 +462,8 @@ func (m *Distribution_ExplicitBuckets) XXX_Unmarshal(b []byte) error {
 func (m *Distribution_ExplicitBuckets) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Distribution_ExplicitBuckets.Marshal(b, m, deterministic)
 }
-func (m *Distribution_ExplicitBuckets) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Distribution_ExplicitBuckets.Merge(m, src)
+func (dst *Distribution_ExplicitBuckets) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Distribution_ExplicitBuckets.Merge(dst, src)
 }
 func (m *Distribution_ExplicitBuckets) XXX_Size() int {
 	return xxx_messageInfo_Distribution_ExplicitBuckets.Size(m)
@@ -489,10 +489,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/api/servicecontrol/v1/distribution.proto", fileDescriptor_b3f590f4dffbeb4c)
+	proto.RegisterFile("google/api/servicecontrol/v1/distribution.proto", fileDescriptor_distribution_dac88fdcde0e4047)
 }
 
-var fileDescriptor_b3f590f4dffbeb4c = []byte{
+var fileDescriptor_distribution_dac88fdcde0e4047 = []byte{
 	// 486 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0x4d, 0x6f, 0xd3, 0x40,
 	0x10, 0x86, 0x31, 0x6e, 0x52, 0x18, 0x12, 0x52, 0x96, 0x82, 0xac, 0x88, 0x83, 0x45, 0x2f, 0x41,

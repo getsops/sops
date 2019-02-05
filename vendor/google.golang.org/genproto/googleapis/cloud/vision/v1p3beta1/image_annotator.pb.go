@@ -56,7 +56,6 @@ var Likelihood_name = map[int32]string{
 	4: "LIKELY",
 	5: "VERY_LIKELY",
 }
-
 var Likelihood_value = map[string]int32{
 	"UNKNOWN":       0,
 	"VERY_UNLIKELY": 1,
@@ -69,9 +68,8 @@ var Likelihood_value = map[string]int32{
 func (x Likelihood) String() string {
 	return proto.EnumName(Likelihood_name, int32(x))
 }
-
 func (Likelihood) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{0}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{0}
 }
 
 // Type of Google Cloud Vision API feature to be extracted.
@@ -126,7 +124,6 @@ var Feature_Type_name = map[int32]string{
 	12: "PRODUCT_SEARCH",
 	19: "OBJECT_LOCALIZATION",
 }
-
 var Feature_Type_value = map[string]int32{
 	"TYPE_UNSPECIFIED":        0,
 	"FACE_DETECTION":          1,
@@ -146,9 +143,8 @@ var Feature_Type_value = map[string]int32{
 func (x Feature_Type) String() string {
 	return proto.EnumName(Feature_Type_name, int32(x))
 }
-
 func (Feature_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{0, 0}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{0, 0}
 }
 
 // Face landmark (feature) type.
@@ -267,7 +263,6 @@ var FaceAnnotation_Landmark_Type_name = map[int32]string{
 	33: "CHIN_LEFT_GONION",
 	34: "CHIN_RIGHT_GONION",
 }
-
 var FaceAnnotation_Landmark_Type_value = map[string]int32{
 	"UNKNOWN_LANDMARK":             0,
 	"LEFT_EYE":                     1,
@@ -309,9 +304,8 @@ var FaceAnnotation_Landmark_Type_value = map[string]int32{
 func (x FaceAnnotation_Landmark_Type) String() string {
 	return proto.EnumName(FaceAnnotation_Landmark_Type_name, int32(x))
 }
-
 func (FaceAnnotation_Landmark_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{3, 0, 0}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{3, 0, 0}
 }
 
 // Batch operation states.
@@ -337,7 +331,6 @@ var OperationMetadata_State_name = map[int32]string{
 	3: "DONE",
 	4: "CANCELLED",
 }
-
 var OperationMetadata_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"CREATED":           1,
@@ -349,9 +342,8 @@ var OperationMetadata_State_value = map[string]int32{
 func (x OperationMetadata_State) String() string {
 	return proto.EnumName(OperationMetadata_State_name, int32(x))
 }
-
 func (OperationMetadata_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{32, 0}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{32, 0}
 }
 
 // The type of Google Cloud Vision API detection to perform, and the maximum
@@ -376,7 +368,7 @@ func (m *Feature) Reset()         { *m = Feature{} }
 func (m *Feature) String() string { return proto.CompactTextString(m) }
 func (*Feature) ProtoMessage()    {}
 func (*Feature) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{0}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{0}
 }
 func (m *Feature) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Feature.Unmarshal(m, b)
@@ -384,8 +376,8 @@ func (m *Feature) XXX_Unmarshal(b []byte) error {
 func (m *Feature) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Feature.Marshal(b, m, deterministic)
 }
-func (m *Feature) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Feature.Merge(m, src)
+func (dst *Feature) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Feature.Merge(dst, src)
 }
 func (m *Feature) XXX_Size() int {
 	return xxx_messageInfo_Feature.Size(m)
@@ -453,7 +445,7 @@ func (m *ImageSource) Reset()         { *m = ImageSource{} }
 func (m *ImageSource) String() string { return proto.CompactTextString(m) }
 func (*ImageSource) ProtoMessage()    {}
 func (*ImageSource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{1}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{1}
 }
 func (m *ImageSource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImageSource.Unmarshal(m, b)
@@ -461,8 +453,8 @@ func (m *ImageSource) XXX_Unmarshal(b []byte) error {
 func (m *ImageSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImageSource.Marshal(b, m, deterministic)
 }
-func (m *ImageSource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageSource.Merge(m, src)
+func (dst *ImageSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageSource.Merge(dst, src)
 }
 func (m *ImageSource) XXX_Size() int {
 	return xxx_messageInfo_ImageSource.Size(m)
@@ -506,7 +498,7 @@ func (m *Image) Reset()         { *m = Image{} }
 func (m *Image) String() string { return proto.CompactTextString(m) }
 func (*Image) ProtoMessage()    {}
 func (*Image) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{2}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{2}
 }
 func (m *Image) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Image.Unmarshal(m, b)
@@ -514,8 +506,8 @@ func (m *Image) XXX_Unmarshal(b []byte) error {
 func (m *Image) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Image.Marshal(b, m, deterministic)
 }
-func (m *Image) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Image.Merge(m, src)
+func (dst *Image) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Image.Merge(dst, src)
 }
 func (m *Image) XXX_Size() int {
 	return xxx_messageInfo_Image.Size(m)
@@ -597,7 +589,7 @@ func (m *FaceAnnotation) Reset()         { *m = FaceAnnotation{} }
 func (m *FaceAnnotation) String() string { return proto.CompactTextString(m) }
 func (*FaceAnnotation) ProtoMessage()    {}
 func (*FaceAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{3}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{3}
 }
 func (m *FaceAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceAnnotation.Unmarshal(m, b)
@@ -605,8 +597,8 @@ func (m *FaceAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *FaceAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FaceAnnotation.Marshal(b, m, deterministic)
 }
-func (m *FaceAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FaceAnnotation.Merge(m, src)
+func (dst *FaceAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FaceAnnotation.Merge(dst, src)
 }
 func (m *FaceAnnotation) XXX_Size() int {
 	return xxx_messageInfo_FaceAnnotation.Size(m)
@@ -737,7 +729,7 @@ func (m *FaceAnnotation_Landmark) Reset()         { *m = FaceAnnotation_Landmark
 func (m *FaceAnnotation_Landmark) String() string { return proto.CompactTextString(m) }
 func (*FaceAnnotation_Landmark) ProtoMessage()    {}
 func (*FaceAnnotation_Landmark) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{3, 0}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{3, 0}
 }
 func (m *FaceAnnotation_Landmark) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceAnnotation_Landmark.Unmarshal(m, b)
@@ -745,8 +737,8 @@ func (m *FaceAnnotation_Landmark) XXX_Unmarshal(b []byte) error {
 func (m *FaceAnnotation_Landmark) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FaceAnnotation_Landmark.Marshal(b, m, deterministic)
 }
-func (m *FaceAnnotation_Landmark) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FaceAnnotation_Landmark.Merge(m, src)
+func (dst *FaceAnnotation_Landmark) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FaceAnnotation_Landmark.Merge(dst, src)
 }
 func (m *FaceAnnotation_Landmark) XXX_Size() int {
 	return xxx_messageInfo_FaceAnnotation_Landmark.Size(m)
@@ -784,7 +776,7 @@ func (m *LocationInfo) Reset()         { *m = LocationInfo{} }
 func (m *LocationInfo) String() string { return proto.CompactTextString(m) }
 func (*LocationInfo) ProtoMessage()    {}
 func (*LocationInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{4}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{4}
 }
 func (m *LocationInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LocationInfo.Unmarshal(m, b)
@@ -792,8 +784,8 @@ func (m *LocationInfo) XXX_Unmarshal(b []byte) error {
 func (m *LocationInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LocationInfo.Marshal(b, m, deterministic)
 }
-func (m *LocationInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LocationInfo.Merge(m, src)
+func (dst *LocationInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocationInfo.Merge(dst, src)
 }
 func (m *LocationInfo) XXX_Size() int {
 	return xxx_messageInfo_LocationInfo.Size(m)
@@ -828,7 +820,7 @@ func (m *Property) Reset()         { *m = Property{} }
 func (m *Property) String() string { return proto.CompactTextString(m) }
 func (*Property) ProtoMessage()    {}
 func (*Property) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{5}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{5}
 }
 func (m *Property) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Property.Unmarshal(m, b)
@@ -836,8 +828,8 @@ func (m *Property) XXX_Unmarshal(b []byte) error {
 func (m *Property) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Property.Marshal(b, m, deterministic)
 }
-func (m *Property) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Property.Merge(m, src)
+func (dst *Property) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Property.Merge(dst, src)
 }
 func (m *Property) XXX_Size() int {
 	return xxx_messageInfo_Property.Size(m)
@@ -915,7 +907,7 @@ func (m *EntityAnnotation) Reset()         { *m = EntityAnnotation{} }
 func (m *EntityAnnotation) String() string { return proto.CompactTextString(m) }
 func (*EntityAnnotation) ProtoMessage()    {}
 func (*EntityAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{6}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{6}
 }
 func (m *EntityAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityAnnotation.Unmarshal(m, b)
@@ -923,8 +915,8 @@ func (m *EntityAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *EntityAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EntityAnnotation.Marshal(b, m, deterministic)
 }
-func (m *EntityAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EntityAnnotation.Merge(m, src)
+func (dst *EntityAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EntityAnnotation.Merge(dst, src)
 }
 func (m *EntityAnnotation) XXX_Size() int {
 	return xxx_messageInfo_EntityAnnotation.Size(m)
@@ -1021,7 +1013,7 @@ func (m *LocalizedObjectAnnotation) Reset()         { *m = LocalizedObjectAnnota
 func (m *LocalizedObjectAnnotation) String() string { return proto.CompactTextString(m) }
 func (*LocalizedObjectAnnotation) ProtoMessage()    {}
 func (*LocalizedObjectAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{7}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{7}
 }
 func (m *LocalizedObjectAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LocalizedObjectAnnotation.Unmarshal(m, b)
@@ -1029,8 +1021,8 @@ func (m *LocalizedObjectAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *LocalizedObjectAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LocalizedObjectAnnotation.Marshal(b, m, deterministic)
 }
-func (m *LocalizedObjectAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LocalizedObjectAnnotation.Merge(m, src)
+func (dst *LocalizedObjectAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocalizedObjectAnnotation.Merge(dst, src)
 }
 func (m *LocalizedObjectAnnotation) XXX_Size() int {
 	return xxx_messageInfo_LocalizedObjectAnnotation.Size(m)
@@ -1106,7 +1098,7 @@ func (m *SafeSearchAnnotation) Reset()         { *m = SafeSearchAnnotation{} }
 func (m *SafeSearchAnnotation) String() string { return proto.CompactTextString(m) }
 func (*SafeSearchAnnotation) ProtoMessage()    {}
 func (*SafeSearchAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{8}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{8}
 }
 func (m *SafeSearchAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SafeSearchAnnotation.Unmarshal(m, b)
@@ -1114,8 +1106,8 @@ func (m *SafeSearchAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *SafeSearchAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SafeSearchAnnotation.Marshal(b, m, deterministic)
 }
-func (m *SafeSearchAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SafeSearchAnnotation.Merge(m, src)
+func (dst *SafeSearchAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SafeSearchAnnotation.Merge(dst, src)
 }
 func (m *SafeSearchAnnotation) XXX_Size() int {
 	return xxx_messageInfo_SafeSearchAnnotation.Size(m)
@@ -1176,7 +1168,7 @@ func (m *LatLongRect) Reset()         { *m = LatLongRect{} }
 func (m *LatLongRect) String() string { return proto.CompactTextString(m) }
 func (*LatLongRect) ProtoMessage()    {}
 func (*LatLongRect) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{9}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{9}
 }
 func (m *LatLongRect) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LatLongRect.Unmarshal(m, b)
@@ -1184,8 +1176,8 @@ func (m *LatLongRect) XXX_Unmarshal(b []byte) error {
 func (m *LatLongRect) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LatLongRect.Marshal(b, m, deterministic)
 }
-func (m *LatLongRect) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LatLongRect.Merge(m, src)
+func (dst *LatLongRect) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LatLongRect.Merge(dst, src)
 }
 func (m *LatLongRect) XXX_Size() int {
 	return xxx_messageInfo_LatLongRect.Size(m)
@@ -1229,7 +1221,7 @@ func (m *ColorInfo) Reset()         { *m = ColorInfo{} }
 func (m *ColorInfo) String() string { return proto.CompactTextString(m) }
 func (*ColorInfo) ProtoMessage()    {}
 func (*ColorInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{10}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{10}
 }
 func (m *ColorInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ColorInfo.Unmarshal(m, b)
@@ -1237,8 +1229,8 @@ func (m *ColorInfo) XXX_Unmarshal(b []byte) error {
 func (m *ColorInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ColorInfo.Marshal(b, m, deterministic)
 }
-func (m *ColorInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ColorInfo.Merge(m, src)
+func (dst *ColorInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ColorInfo.Merge(dst, src)
 }
 func (m *ColorInfo) XXX_Size() int {
 	return xxx_messageInfo_ColorInfo.Size(m)
@@ -1283,7 +1275,7 @@ func (m *DominantColorsAnnotation) Reset()         { *m = DominantColorsAnnotati
 func (m *DominantColorsAnnotation) String() string { return proto.CompactTextString(m) }
 func (*DominantColorsAnnotation) ProtoMessage()    {}
 func (*DominantColorsAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{11}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{11}
 }
 func (m *DominantColorsAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DominantColorsAnnotation.Unmarshal(m, b)
@@ -1291,8 +1283,8 @@ func (m *DominantColorsAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *DominantColorsAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DominantColorsAnnotation.Marshal(b, m, deterministic)
 }
-func (m *DominantColorsAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DominantColorsAnnotation.Merge(m, src)
+func (dst *DominantColorsAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DominantColorsAnnotation.Merge(dst, src)
 }
 func (m *DominantColorsAnnotation) XXX_Size() int {
 	return xxx_messageInfo_DominantColorsAnnotation.Size(m)
@@ -1323,7 +1315,7 @@ func (m *ImageProperties) Reset()         { *m = ImageProperties{} }
 func (m *ImageProperties) String() string { return proto.CompactTextString(m) }
 func (*ImageProperties) ProtoMessage()    {}
 func (*ImageProperties) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{12}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{12}
 }
 func (m *ImageProperties) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImageProperties.Unmarshal(m, b)
@@ -1331,8 +1323,8 @@ func (m *ImageProperties) XXX_Unmarshal(b []byte) error {
 func (m *ImageProperties) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImageProperties.Marshal(b, m, deterministic)
 }
-func (m *ImageProperties) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageProperties.Merge(m, src)
+func (dst *ImageProperties) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageProperties.Merge(dst, src)
 }
 func (m *ImageProperties) XXX_Size() int {
 	return xxx_messageInfo_ImageProperties.Size(m)
@@ -1369,7 +1361,7 @@ func (m *CropHint) Reset()         { *m = CropHint{} }
 func (m *CropHint) String() string { return proto.CompactTextString(m) }
 func (*CropHint) ProtoMessage()    {}
 func (*CropHint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{13}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{13}
 }
 func (m *CropHint) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CropHint.Unmarshal(m, b)
@@ -1377,8 +1369,8 @@ func (m *CropHint) XXX_Unmarshal(b []byte) error {
 func (m *CropHint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CropHint.Marshal(b, m, deterministic)
 }
-func (m *CropHint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CropHint.Merge(m, src)
+func (dst *CropHint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CropHint.Merge(dst, src)
 }
 func (m *CropHint) XXX_Size() int {
 	return xxx_messageInfo_CropHint.Size(m)
@@ -1423,7 +1415,7 @@ func (m *CropHintsAnnotation) Reset()         { *m = CropHintsAnnotation{} }
 func (m *CropHintsAnnotation) String() string { return proto.CompactTextString(m) }
 func (*CropHintsAnnotation) ProtoMessage()    {}
 func (*CropHintsAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{14}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{14}
 }
 func (m *CropHintsAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CropHintsAnnotation.Unmarshal(m, b)
@@ -1431,8 +1423,8 @@ func (m *CropHintsAnnotation) XXX_Unmarshal(b []byte) error {
 func (m *CropHintsAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CropHintsAnnotation.Marshal(b, m, deterministic)
 }
-func (m *CropHintsAnnotation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CropHintsAnnotation.Merge(m, src)
+func (dst *CropHintsAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CropHintsAnnotation.Merge(dst, src)
 }
 func (m *CropHintsAnnotation) XXX_Size() int {
 	return xxx_messageInfo_CropHintsAnnotation.Size(m)
@@ -1468,7 +1460,7 @@ func (m *CropHintsParams) Reset()         { *m = CropHintsParams{} }
 func (m *CropHintsParams) String() string { return proto.CompactTextString(m) }
 func (*CropHintsParams) ProtoMessage()    {}
 func (*CropHintsParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{15}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{15}
 }
 func (m *CropHintsParams) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CropHintsParams.Unmarshal(m, b)
@@ -1476,8 +1468,8 @@ func (m *CropHintsParams) XXX_Unmarshal(b []byte) error {
 func (m *CropHintsParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CropHintsParams.Marshal(b, m, deterministic)
 }
-func (m *CropHintsParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CropHintsParams.Merge(m, src)
+func (dst *CropHintsParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CropHintsParams.Merge(dst, src)
 }
 func (m *CropHintsParams) XXX_Size() int {
 	return xxx_messageInfo_CropHintsParams.Size(m)
@@ -1508,7 +1500,7 @@ func (m *WebDetectionParams) Reset()         { *m = WebDetectionParams{} }
 func (m *WebDetectionParams) String() string { return proto.CompactTextString(m) }
 func (*WebDetectionParams) ProtoMessage()    {}
 func (*WebDetectionParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{16}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{16}
 }
 func (m *WebDetectionParams) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WebDetectionParams.Unmarshal(m, b)
@@ -1516,8 +1508,8 @@ func (m *WebDetectionParams) XXX_Unmarshal(b []byte) error {
 func (m *WebDetectionParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WebDetectionParams.Marshal(b, m, deterministic)
 }
-func (m *WebDetectionParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WebDetectionParams.Merge(m, src)
+func (dst *WebDetectionParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WebDetectionParams.Merge(dst, src)
 }
 func (m *WebDetectionParams) XXX_Size() int {
 	return xxx_messageInfo_WebDetectionParams.Size(m)
@@ -1563,7 +1555,7 @@ func (m *ImageContext) Reset()         { *m = ImageContext{} }
 func (m *ImageContext) String() string { return proto.CompactTextString(m) }
 func (*ImageContext) ProtoMessage()    {}
 func (*ImageContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{17}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{17}
 }
 func (m *ImageContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImageContext.Unmarshal(m, b)
@@ -1571,8 +1563,8 @@ func (m *ImageContext) XXX_Unmarshal(b []byte) error {
 func (m *ImageContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImageContext.Marshal(b, m, deterministic)
 }
-func (m *ImageContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageContext.Merge(m, src)
+func (dst *ImageContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageContext.Merge(dst, src)
 }
 func (m *ImageContext) XXX_Size() int {
 	return xxx_messageInfo_ImageContext.Size(m)
@@ -1636,7 +1628,7 @@ func (m *AnnotateImageRequest) Reset()         { *m = AnnotateImageRequest{} }
 func (m *AnnotateImageRequest) String() string { return proto.CompactTextString(m) }
 func (*AnnotateImageRequest) ProtoMessage()    {}
 func (*AnnotateImageRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{18}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{18}
 }
 func (m *AnnotateImageRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateImageRequest.Unmarshal(m, b)
@@ -1644,8 +1636,8 @@ func (m *AnnotateImageRequest) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateImageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateImageRequest.Marshal(b, m, deterministic)
 }
-func (m *AnnotateImageRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateImageRequest.Merge(m, src)
+func (dst *AnnotateImageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateImageRequest.Merge(dst, src)
 }
 func (m *AnnotateImageRequest) XXX_Size() int {
 	return xxx_messageInfo_AnnotateImageRequest.Size(m)
@@ -1694,7 +1686,7 @@ func (m *ImageAnnotationContext) Reset()         { *m = ImageAnnotationContext{}
 func (m *ImageAnnotationContext) String() string { return proto.CompactTextString(m) }
 func (*ImageAnnotationContext) ProtoMessage()    {}
 func (*ImageAnnotationContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{19}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{19}
 }
 func (m *ImageAnnotationContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImageAnnotationContext.Unmarshal(m, b)
@@ -1702,8 +1694,8 @@ func (m *ImageAnnotationContext) XXX_Unmarshal(b []byte) error {
 func (m *ImageAnnotationContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImageAnnotationContext.Marshal(b, m, deterministic)
 }
-func (m *ImageAnnotationContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageAnnotationContext.Merge(m, src)
+func (dst *ImageAnnotationContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImageAnnotationContext.Merge(dst, src)
 }
 func (m *ImageAnnotationContext) XXX_Size() int {
 	return xxx_messageInfo_ImageAnnotationContext.Size(m)
@@ -1774,7 +1766,7 @@ func (m *AnnotateImageResponse) Reset()         { *m = AnnotateImageResponse{} }
 func (m *AnnotateImageResponse) String() string { return proto.CompactTextString(m) }
 func (*AnnotateImageResponse) ProtoMessage()    {}
 func (*AnnotateImageResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{20}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{20}
 }
 func (m *AnnotateImageResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateImageResponse.Unmarshal(m, b)
@@ -1782,8 +1774,8 @@ func (m *AnnotateImageResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateImageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateImageResponse.Marshal(b, m, deterministic)
 }
-func (m *AnnotateImageResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateImageResponse.Merge(m, src)
+func (dst *AnnotateImageResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateImageResponse.Merge(dst, src)
 }
 func (m *AnnotateImageResponse) XXX_Size() int {
 	return xxx_messageInfo_AnnotateImageResponse.Size(m)
@@ -1908,7 +1900,7 @@ func (m *AnnotateFileResponse) Reset()         { *m = AnnotateFileResponse{} }
 func (m *AnnotateFileResponse) String() string { return proto.CompactTextString(m) }
 func (*AnnotateFileResponse) ProtoMessage()    {}
 func (*AnnotateFileResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{21}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{21}
 }
 func (m *AnnotateFileResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateFileResponse.Unmarshal(m, b)
@@ -1916,8 +1908,8 @@ func (m *AnnotateFileResponse) XXX_Unmarshal(b []byte) error {
 func (m *AnnotateFileResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AnnotateFileResponse.Marshal(b, m, deterministic)
 }
-func (m *AnnotateFileResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnnotateFileResponse.Merge(m, src)
+func (dst *AnnotateFileResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnnotateFileResponse.Merge(dst, src)
 }
 func (m *AnnotateFileResponse) XXX_Size() int {
 	return xxx_messageInfo_AnnotateFileResponse.Size(m)
@@ -1955,7 +1947,7 @@ func (m *BatchAnnotateImagesRequest) Reset()         { *m = BatchAnnotateImagesR
 func (m *BatchAnnotateImagesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchAnnotateImagesRequest) ProtoMessage()    {}
 func (*BatchAnnotateImagesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{22}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{22}
 }
 func (m *BatchAnnotateImagesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchAnnotateImagesRequest.Unmarshal(m, b)
@@ -1963,8 +1955,8 @@ func (m *BatchAnnotateImagesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchAnnotateImagesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchAnnotateImagesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchAnnotateImagesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchAnnotateImagesRequest.Merge(m, src)
+func (dst *BatchAnnotateImagesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchAnnotateImagesRequest.Merge(dst, src)
 }
 func (m *BatchAnnotateImagesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchAnnotateImagesRequest.Size(m)
@@ -1995,7 +1987,7 @@ func (m *BatchAnnotateImagesResponse) Reset()         { *m = BatchAnnotateImages
 func (m *BatchAnnotateImagesResponse) String() string { return proto.CompactTextString(m) }
 func (*BatchAnnotateImagesResponse) ProtoMessage()    {}
 func (*BatchAnnotateImagesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{23}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{23}
 }
 func (m *BatchAnnotateImagesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchAnnotateImagesResponse.Unmarshal(m, b)
@@ -2003,8 +1995,8 @@ func (m *BatchAnnotateImagesResponse) XXX_Unmarshal(b []byte) error {
 func (m *BatchAnnotateImagesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchAnnotateImagesResponse.Marshal(b, m, deterministic)
 }
-func (m *BatchAnnotateImagesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchAnnotateImagesResponse.Merge(m, src)
+func (dst *BatchAnnotateImagesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchAnnotateImagesResponse.Merge(dst, src)
 }
 func (m *BatchAnnotateImagesResponse) XXX_Size() int {
 	return xxx_messageInfo_BatchAnnotateImagesResponse.Size(m)
@@ -2041,7 +2033,7 @@ func (m *AsyncAnnotateFileRequest) Reset()         { *m = AsyncAnnotateFileReque
 func (m *AsyncAnnotateFileRequest) String() string { return proto.CompactTextString(m) }
 func (*AsyncAnnotateFileRequest) ProtoMessage()    {}
 func (*AsyncAnnotateFileRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{24}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{24}
 }
 func (m *AsyncAnnotateFileRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsyncAnnotateFileRequest.Unmarshal(m, b)
@@ -2049,8 +2041,8 @@ func (m *AsyncAnnotateFileRequest) XXX_Unmarshal(b []byte) error {
 func (m *AsyncAnnotateFileRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsyncAnnotateFileRequest.Marshal(b, m, deterministic)
 }
-func (m *AsyncAnnotateFileRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsyncAnnotateFileRequest.Merge(m, src)
+func (dst *AsyncAnnotateFileRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsyncAnnotateFileRequest.Merge(dst, src)
 }
 func (m *AsyncAnnotateFileRequest) XXX_Size() int {
 	return xxx_messageInfo_AsyncAnnotateFileRequest.Size(m)
@@ -2102,7 +2094,7 @@ func (m *AsyncAnnotateFileResponse) Reset()         { *m = AsyncAnnotateFileResp
 func (m *AsyncAnnotateFileResponse) String() string { return proto.CompactTextString(m) }
 func (*AsyncAnnotateFileResponse) ProtoMessage()    {}
 func (*AsyncAnnotateFileResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{25}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{25}
 }
 func (m *AsyncAnnotateFileResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsyncAnnotateFileResponse.Unmarshal(m, b)
@@ -2110,8 +2102,8 @@ func (m *AsyncAnnotateFileResponse) XXX_Unmarshal(b []byte) error {
 func (m *AsyncAnnotateFileResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsyncAnnotateFileResponse.Marshal(b, m, deterministic)
 }
-func (m *AsyncAnnotateFileResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsyncAnnotateFileResponse.Merge(m, src)
+func (dst *AsyncAnnotateFileResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsyncAnnotateFileResponse.Merge(dst, src)
 }
 func (m *AsyncAnnotateFileResponse) XXX_Size() int {
 	return xxx_messageInfo_AsyncAnnotateFileResponse.Size(m)
@@ -2143,7 +2135,7 @@ func (m *AsyncBatchAnnotateFilesRequest) Reset()         { *m = AsyncBatchAnnota
 func (m *AsyncBatchAnnotateFilesRequest) String() string { return proto.CompactTextString(m) }
 func (*AsyncBatchAnnotateFilesRequest) ProtoMessage()    {}
 func (*AsyncBatchAnnotateFilesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{26}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{26}
 }
 func (m *AsyncBatchAnnotateFilesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsyncBatchAnnotateFilesRequest.Unmarshal(m, b)
@@ -2151,8 +2143,8 @@ func (m *AsyncBatchAnnotateFilesRequest) XXX_Unmarshal(b []byte) error {
 func (m *AsyncBatchAnnotateFilesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsyncBatchAnnotateFilesRequest.Marshal(b, m, deterministic)
 }
-func (m *AsyncBatchAnnotateFilesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsyncBatchAnnotateFilesRequest.Merge(m, src)
+func (dst *AsyncBatchAnnotateFilesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsyncBatchAnnotateFilesRequest.Merge(dst, src)
 }
 func (m *AsyncBatchAnnotateFilesRequest) XXX_Size() int {
 	return xxx_messageInfo_AsyncBatchAnnotateFilesRequest.Size(m)
@@ -2184,7 +2176,7 @@ func (m *AsyncBatchAnnotateFilesResponse) Reset()         { *m = AsyncBatchAnnot
 func (m *AsyncBatchAnnotateFilesResponse) String() string { return proto.CompactTextString(m) }
 func (*AsyncBatchAnnotateFilesResponse) ProtoMessage()    {}
 func (*AsyncBatchAnnotateFilesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{27}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{27}
 }
 func (m *AsyncBatchAnnotateFilesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsyncBatchAnnotateFilesResponse.Unmarshal(m, b)
@@ -2192,8 +2184,8 @@ func (m *AsyncBatchAnnotateFilesResponse) XXX_Unmarshal(b []byte) error {
 func (m *AsyncBatchAnnotateFilesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsyncBatchAnnotateFilesResponse.Marshal(b, m, deterministic)
 }
-func (m *AsyncBatchAnnotateFilesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsyncBatchAnnotateFilesResponse.Merge(m, src)
+func (dst *AsyncBatchAnnotateFilesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsyncBatchAnnotateFilesResponse.Merge(dst, src)
 }
 func (m *AsyncBatchAnnotateFilesResponse) XXX_Size() int {
 	return xxx_messageInfo_AsyncBatchAnnotateFilesResponse.Size(m)
@@ -2227,7 +2219,7 @@ func (m *InputConfig) Reset()         { *m = InputConfig{} }
 func (m *InputConfig) String() string { return proto.CompactTextString(m) }
 func (*InputConfig) ProtoMessage()    {}
 func (*InputConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{28}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{28}
 }
 func (m *InputConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InputConfig.Unmarshal(m, b)
@@ -2235,8 +2227,8 @@ func (m *InputConfig) XXX_Unmarshal(b []byte) error {
 func (m *InputConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_InputConfig.Marshal(b, m, deterministic)
 }
-func (m *InputConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InputConfig.Merge(m, src)
+func (dst *InputConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InputConfig.Merge(dst, src)
 }
 func (m *InputConfig) XXX_Size() int {
 	return xxx_messageInfo_InputConfig.Size(m)
@@ -2286,7 +2278,7 @@ func (m *OutputConfig) Reset()         { *m = OutputConfig{} }
 func (m *OutputConfig) String() string { return proto.CompactTextString(m) }
 func (*OutputConfig) ProtoMessage()    {}
 func (*OutputConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{29}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{29}
 }
 func (m *OutputConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OutputConfig.Unmarshal(m, b)
@@ -2294,8 +2286,8 @@ func (m *OutputConfig) XXX_Unmarshal(b []byte) error {
 func (m *OutputConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OutputConfig.Marshal(b, m, deterministic)
 }
-func (m *OutputConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OutputConfig.Merge(m, src)
+func (dst *OutputConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OutputConfig.Merge(dst, src)
 }
 func (m *OutputConfig) XXX_Size() int {
 	return xxx_messageInfo_OutputConfig.Size(m)
@@ -2334,7 +2326,7 @@ func (m *GcsSource) Reset()         { *m = GcsSource{} }
 func (m *GcsSource) String() string { return proto.CompactTextString(m) }
 func (*GcsSource) ProtoMessage()    {}
 func (*GcsSource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{30}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{30}
 }
 func (m *GcsSource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcsSource.Unmarshal(m, b)
@@ -2342,8 +2334,8 @@ func (m *GcsSource) XXX_Unmarshal(b []byte) error {
 func (m *GcsSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcsSource.Marshal(b, m, deterministic)
 }
-func (m *GcsSource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcsSource.Merge(m, src)
+func (dst *GcsSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcsSource.Merge(dst, src)
 }
 func (m *GcsSource) XXX_Size() int {
 	return xxx_messageInfo_GcsSource.Size(m)
@@ -2388,7 +2380,7 @@ func (m *GcsDestination) Reset()         { *m = GcsDestination{} }
 func (m *GcsDestination) String() string { return proto.CompactTextString(m) }
 func (*GcsDestination) ProtoMessage()    {}
 func (*GcsDestination) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{31}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{31}
 }
 func (m *GcsDestination) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcsDestination.Unmarshal(m, b)
@@ -2396,8 +2388,8 @@ func (m *GcsDestination) XXX_Unmarshal(b []byte) error {
 func (m *GcsDestination) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcsDestination.Marshal(b, m, deterministic)
 }
-func (m *GcsDestination) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcsDestination.Merge(m, src)
+func (dst *GcsDestination) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcsDestination.Merge(dst, src)
 }
 func (m *GcsDestination) XXX_Size() int {
 	return xxx_messageInfo_GcsDestination.Size(m)
@@ -2432,7 +2424,7 @@ func (m *OperationMetadata) Reset()         { *m = OperationMetadata{} }
 func (m *OperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*OperationMetadata) ProtoMessage()    {}
 func (*OperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2b863578148790db, []int{32}
+	return fileDescriptor_image_annotator_a0c5dd8c15adca67, []int{32}
 }
 func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationMetadata.Unmarshal(m, b)
@@ -2440,8 +2432,8 @@ func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *OperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *OperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationMetadata.Merge(m, src)
+func (dst *OperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationMetadata.Merge(dst, src)
 }
 func (m *OperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_OperationMetadata.Size(m)
@@ -2634,10 +2626,10 @@ var _ImageAnnotator_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/vision/v1p3beta1/image_annotator.proto", fileDescriptor_2b863578148790db)
+	proto.RegisterFile("google/cloud/vision/v1p3beta1/image_annotator.proto", fileDescriptor_image_annotator_a0c5dd8c15adca67)
 }
 
-var fileDescriptor_2b863578148790db = []byte{
+var fileDescriptor_image_annotator_a0c5dd8c15adca67 = []byte{
 	// 3065 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x5a, 0xcf, 0x73, 0xdb, 0xc6,
 	0xf5, 0x0f, 0xa9, 0x5f, 0xe4, 0x23, 0x25, 0x41, 0xab, 0x1f, 0xa6, 0x65, 0x2b, 0x56, 0x90, 0x6f,

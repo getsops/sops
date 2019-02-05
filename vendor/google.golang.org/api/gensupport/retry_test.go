@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
 package gensupport
 
 import (
+	"context"
 	"errors"
 	"io"
 	"net"
 	"net/http"
 	"testing"
-	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestRetry(t *testing.T) {
@@ -73,7 +71,7 @@ func TestRetry(t *testing.T) {
 			Strategy: NoPauseStrategy,
 		}
 
-		resp, err := Retry(nil, f, backoff)
+		resp, err := Retry(context.Background(), f, backoff)
 		if err != nil {
 			t.Errorf("%s: Retry returned err %v", tt.desc, err)
 		}
@@ -109,7 +107,7 @@ func TestRetryClosesBody(t *testing.T) {
 		return resp, nil
 	}
 
-	resp, err := Retry(nil, f, NoPauseStrategy)
+	resp, err := Retry(context.Background(), f, NoPauseStrategy)
 	if err != nil {
 		t.Fatalf("Retry returned error: %v", err)
 	}
@@ -122,30 +120,6 @@ func TestRetryClosesBody(t *testing.T) {
 		if got != want {
 			t.Errorf("response[%d].Body closed = %t, want %t", i, got, want)
 		}
-	}
-}
-
-func RetryReturnsOnContextCancel(t *testing.T) {
-	f := func() (*http.Response, error) {
-		return nil, io.ErrUnexpectedEOF
-	}
-	backoff := UniformPauseStrategy(time.Hour)
-	ctx, cancel := context.WithCancel(context.Background())
-
-	errc := make(chan error, 1)
-	go func() {
-		_, err := Retry(ctx, f, backoff)
-		errc <- err
-	}()
-
-	cancel()
-	select {
-	case err := <-errc:
-		if err != ctx.Err() {
-			t.Errorf("Retry returned err: %v, want %v", err, ctx.Err())
-		}
-	case <-time.After(5 * time.Second):
-		t.Errorf("Timed out waiting for Retry to return")
 	}
 }
 

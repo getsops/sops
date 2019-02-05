@@ -15,6 +15,7 @@
 package datastore
 
 import (
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -25,7 +26,6 @@ import (
 
 	"cloud.google.com/go/internal/trace"
 	wrapperspb "github.com/golang/protobuf/ptypes/wrappers"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 	pb "google.golang.org/genproto/googleapis/datastore/v1"
 )
@@ -768,7 +768,7 @@ func (c Cursor) String() string {
 	return strings.TrimRight(base64.URLEncoding.EncodeToString(c.cc), "=")
 }
 
-// Decode decodes a cursor from its base-64 string representation.
+// DecodeCursor decodes a cursor from its base-64 string representation.
 func DecodeCursor(s string) (Cursor, error) {
 	if s == "" {
 		return Cursor{}, nil

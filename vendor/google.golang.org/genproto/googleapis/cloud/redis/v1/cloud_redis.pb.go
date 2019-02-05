@@ -59,7 +59,6 @@ var Instance_State_name = map[int32]string{
 	5: "REPAIRING",
 	6: "MAINTENANCE",
 }
-
 var Instance_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"CREATING":          1,
@@ -73,9 +72,8 @@ var Instance_State_value = map[string]int32{
 func (x Instance_State) String() string {
 	return proto.EnumName(Instance_State_name, int32(x))
 }
-
 func (Instance_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{0, 0}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{0, 0}
 }
 
 // Available service tiers to choose from
@@ -95,7 +93,6 @@ var Instance_Tier_name = map[int32]string{
 	1: "BASIC",
 	3: "STANDARD_HA",
 }
-
 var Instance_Tier_value = map[string]int32{
 	"TIER_UNSPECIFIED": 0,
 	"BASIC":            1,
@@ -105,9 +102,8 @@ var Instance_Tier_value = map[string]int32{
 func (x Instance_Tier) String() string {
 	return proto.EnumName(Instance_Tier_name, int32(x))
 }
-
 func (Instance_Tier) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{0, 1}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{0, 1}
 }
 
 // A Google Cloud Redis instance.
@@ -189,7 +185,7 @@ func (m *Instance) Reset()         { *m = Instance{} }
 func (m *Instance) String() string { return proto.CompactTextString(m) }
 func (*Instance) ProtoMessage()    {}
 func (*Instance) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{0}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{0}
 }
 func (m *Instance) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Instance.Unmarshal(m, b)
@@ -197,8 +193,8 @@ func (m *Instance) XXX_Unmarshal(b []byte) error {
 func (m *Instance) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Instance.Marshal(b, m, deterministic)
 }
-func (m *Instance) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Instance.Merge(m, src)
+func (dst *Instance) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Instance.Merge(dst, src)
 }
 func (m *Instance) XXX_Size() int {
 	return xxx_messageInfo_Instance.Size(m)
@@ -354,7 +350,7 @@ func (m *ListInstancesRequest) Reset()         { *m = ListInstancesRequest{} }
 func (m *ListInstancesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListInstancesRequest) ProtoMessage()    {}
 func (*ListInstancesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{1}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{1}
 }
 func (m *ListInstancesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListInstancesRequest.Unmarshal(m, b)
@@ -362,8 +358,8 @@ func (m *ListInstancesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListInstancesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListInstancesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListInstancesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListInstancesRequest.Merge(m, src)
+func (dst *ListInstancesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListInstancesRequest.Merge(dst, src)
 }
 func (m *ListInstancesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListInstancesRequest.Size(m)
@@ -420,7 +416,7 @@ func (m *ListInstancesResponse) Reset()         { *m = ListInstancesResponse{} }
 func (m *ListInstancesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListInstancesResponse) ProtoMessage()    {}
 func (*ListInstancesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{2}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{2}
 }
 func (m *ListInstancesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListInstancesResponse.Unmarshal(m, b)
@@ -428,8 +424,8 @@ func (m *ListInstancesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListInstancesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListInstancesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListInstancesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListInstancesResponse.Merge(m, src)
+func (dst *ListInstancesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListInstancesResponse.Merge(dst, src)
 }
 func (m *ListInstancesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListInstancesResponse.Size(m)
@@ -469,7 +465,7 @@ func (m *GetInstanceRequest) Reset()         { *m = GetInstanceRequest{} }
 func (m *GetInstanceRequest) String() string { return proto.CompactTextString(m) }
 func (*GetInstanceRequest) ProtoMessage()    {}
 func (*GetInstanceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{3}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{3}
 }
 func (m *GetInstanceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetInstanceRequest.Unmarshal(m, b)
@@ -477,8 +473,8 @@ func (m *GetInstanceRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetInstanceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetInstanceRequest.Marshal(b, m, deterministic)
 }
-func (m *GetInstanceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetInstanceRequest.Merge(m, src)
+func (dst *GetInstanceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetInstanceRequest.Merge(dst, src)
 }
 func (m *GetInstanceRequest) XXX_Size() int {
 	return xxx_messageInfo_GetInstanceRequest.Size(m)
@@ -522,7 +518,7 @@ func (m *CreateInstanceRequest) Reset()         { *m = CreateInstanceRequest{} }
 func (m *CreateInstanceRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateInstanceRequest) ProtoMessage()    {}
 func (*CreateInstanceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{4}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{4}
 }
 func (m *CreateInstanceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateInstanceRequest.Unmarshal(m, b)
@@ -530,8 +526,8 @@ func (m *CreateInstanceRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateInstanceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateInstanceRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateInstanceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateInstanceRequest.Merge(m, src)
+func (dst *CreateInstanceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateInstanceRequest.Merge(dst, src)
 }
 func (m *CreateInstanceRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateInstanceRequest.Size(m)
@@ -586,7 +582,7 @@ func (m *UpdateInstanceRequest) Reset()         { *m = UpdateInstanceRequest{} }
 func (m *UpdateInstanceRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateInstanceRequest) ProtoMessage()    {}
 func (*UpdateInstanceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{5}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{5}
 }
 func (m *UpdateInstanceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateInstanceRequest.Unmarshal(m, b)
@@ -594,8 +590,8 @@ func (m *UpdateInstanceRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateInstanceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateInstanceRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateInstanceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateInstanceRequest.Merge(m, src)
+func (dst *UpdateInstanceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateInstanceRequest.Merge(dst, src)
 }
 func (m *UpdateInstanceRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateInstanceRequest.Size(m)
@@ -635,7 +631,7 @@ func (m *DeleteInstanceRequest) Reset()         { *m = DeleteInstanceRequest{} }
 func (m *DeleteInstanceRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteInstanceRequest) ProtoMessage()    {}
 func (*DeleteInstanceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{6}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{6}
 }
 func (m *DeleteInstanceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteInstanceRequest.Unmarshal(m, b)
@@ -643,8 +639,8 @@ func (m *DeleteInstanceRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteInstanceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteInstanceRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteInstanceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteInstanceRequest.Merge(m, src)
+func (dst *DeleteInstanceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteInstanceRequest.Merge(dst, src)
 }
 func (m *DeleteInstanceRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteInstanceRequest.Size(m)
@@ -674,7 +670,7 @@ type OperationMetadata struct {
 	Verb string `protobuf:"bytes,4,opt,name=verb,proto3" json:"verb,omitempty"`
 	// Operation status details.
 	StatusDetail string `protobuf:"bytes,5,opt,name=status_detail,json=statusDetail,proto3" json:"status_detail,omitempty"`
-	// Specifies if cancellation was requested for the operaiton.
+	// Specifies if cancellation was requested for the operation.
 	CancelRequested bool `protobuf:"varint,6,opt,name=cancel_requested,json=cancelRequested,proto3" json:"cancel_requested,omitempty"`
 	// API version.
 	ApiVersion           string   `protobuf:"bytes,7,opt,name=api_version,json=apiVersion,proto3" json:"api_version,omitempty"`
@@ -687,7 +683,7 @@ func (m *OperationMetadata) Reset()         { *m = OperationMetadata{} }
 func (m *OperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*OperationMetadata) ProtoMessage()    {}
 func (*OperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{7}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{7}
 }
 func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationMetadata.Unmarshal(m, b)
@@ -695,8 +691,8 @@ func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *OperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *OperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationMetadata.Merge(m, src)
+func (dst *OperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationMetadata.Merge(dst, src)
 }
 func (m *OperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_OperationMetadata.Size(m)
@@ -775,7 +771,7 @@ func (m *LocationMetadata) Reset()         { *m = LocationMetadata{} }
 func (m *LocationMetadata) String() string { return proto.CompactTextString(m) }
 func (*LocationMetadata) ProtoMessage()    {}
 func (*LocationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{8}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{8}
 }
 func (m *LocationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LocationMetadata.Unmarshal(m, b)
@@ -783,8 +779,8 @@ func (m *LocationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *LocationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LocationMetadata.Marshal(b, m, deterministic)
 }
-func (m *LocationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LocationMetadata.Merge(m, src)
+func (dst *LocationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocationMetadata.Merge(dst, src)
 }
 func (m *LocationMetadata) XXX_Size() int {
 	return xxx_messageInfo_LocationMetadata.Size(m)
@@ -814,7 +810,7 @@ func (m *ZoneMetadata) Reset()         { *m = ZoneMetadata{} }
 func (m *ZoneMetadata) String() string { return proto.CompactTextString(m) }
 func (*ZoneMetadata) ProtoMessage()    {}
 func (*ZoneMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a99cb3206a9deca4, []int{9}
+	return fileDescriptor_cloud_redis_1d5a49b3aa4aa71c, []int{9}
 }
 func (m *ZoneMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ZoneMetadata.Unmarshal(m, b)
@@ -822,8 +818,8 @@ func (m *ZoneMetadata) XXX_Unmarshal(b []byte) error {
 func (m *ZoneMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ZoneMetadata.Marshal(b, m, deterministic)
 }
-func (m *ZoneMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ZoneMetadata.Merge(m, src)
+func (dst *ZoneMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ZoneMetadata.Merge(dst, src)
 }
 func (m *ZoneMetadata) XXX_Size() int {
 	return xxx_messageInfo_ZoneMetadata.Size(m)
@@ -1113,10 +1109,10 @@ var _CloudRedis_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/redis/v1/cloud_redis.proto", fileDescriptor_a99cb3206a9deca4)
+	proto.RegisterFile("google/cloud/redis/v1/cloud_redis.proto", fileDescriptor_cloud_redis_1d5a49b3aa4aa71c)
 }
 
-var fileDescriptor_a99cb3206a9deca4 = []byte{
+var fileDescriptor_cloud_redis_1d5a49b3aa4aa71c = []byte{
 	// 1317 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x57, 0xd1, 0x6e, 0x1a, 0x47,
 	0x17, 0xfe, 0xd7, 0x36, 0x04, 0x0e, 0x18, 0xe3, 0x89, 0xc9, 0xbf, 0xa5, 0x8d, 0x4c, 0x49, 0xd2,

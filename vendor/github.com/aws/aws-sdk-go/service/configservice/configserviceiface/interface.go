@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Config.
 //    func myFunc(svc configserviceiface.ConfigServiceAPI) bool {
-//        // Make svc.BatchGetResourceConfig request
+//        // Make svc.BatchGetAggregateResourceConfig request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockConfigServiceClient struct {
 //        configserviceiface.ConfigServiceAPI
 //    }
-//    func (m *mockConfigServiceClient) BatchGetResourceConfig(input *configservice.BatchGetResourceConfigInput) (*configservice.BatchGetResourceConfigOutput, error) {
+//    func (m *mockConfigServiceClient) BatchGetAggregateResourceConfig(input *configservice.BatchGetAggregateResourceConfigInput) (*configservice.BatchGetAggregateResourceConfigOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type ConfigServiceAPI interface {
+	BatchGetAggregateResourceConfig(*configservice.BatchGetAggregateResourceConfigInput) (*configservice.BatchGetAggregateResourceConfigOutput, error)
+	BatchGetAggregateResourceConfigWithContext(aws.Context, *configservice.BatchGetAggregateResourceConfigInput, ...request.Option) (*configservice.BatchGetAggregateResourceConfigOutput, error)
+	BatchGetAggregateResourceConfigRequest(*configservice.BatchGetAggregateResourceConfigInput) (*request.Request, *configservice.BatchGetAggregateResourceConfigOutput)
+
 	BatchGetResourceConfig(*configservice.BatchGetResourceConfigInput) (*configservice.BatchGetResourceConfigOutput, error)
 	BatchGetResourceConfigWithContext(aws.Context, *configservice.BatchGetResourceConfigInput, ...request.Option) (*configservice.BatchGetResourceConfigOutput, error)
 	BatchGetResourceConfigRequest(*configservice.BatchGetResourceConfigInput) (*request.Request, *configservice.BatchGetResourceConfigOutput)
@@ -164,6 +168,14 @@ type ConfigServiceAPI interface {
 	GetAggregateConfigRuleComplianceSummaryWithContext(aws.Context, *configservice.GetAggregateConfigRuleComplianceSummaryInput, ...request.Option) (*configservice.GetAggregateConfigRuleComplianceSummaryOutput, error)
 	GetAggregateConfigRuleComplianceSummaryRequest(*configservice.GetAggregateConfigRuleComplianceSummaryInput) (*request.Request, *configservice.GetAggregateConfigRuleComplianceSummaryOutput)
 
+	GetAggregateDiscoveredResourceCounts(*configservice.GetAggregateDiscoveredResourceCountsInput) (*configservice.GetAggregateDiscoveredResourceCountsOutput, error)
+	GetAggregateDiscoveredResourceCountsWithContext(aws.Context, *configservice.GetAggregateDiscoveredResourceCountsInput, ...request.Option) (*configservice.GetAggregateDiscoveredResourceCountsOutput, error)
+	GetAggregateDiscoveredResourceCountsRequest(*configservice.GetAggregateDiscoveredResourceCountsInput) (*request.Request, *configservice.GetAggregateDiscoveredResourceCountsOutput)
+
+	GetAggregateResourceConfig(*configservice.GetAggregateResourceConfigInput) (*configservice.GetAggregateResourceConfigOutput, error)
+	GetAggregateResourceConfigWithContext(aws.Context, *configservice.GetAggregateResourceConfigInput, ...request.Option) (*configservice.GetAggregateResourceConfigOutput, error)
+	GetAggregateResourceConfigRequest(*configservice.GetAggregateResourceConfigInput) (*request.Request, *configservice.GetAggregateResourceConfigOutput)
+
 	GetComplianceDetailsByConfigRule(*configservice.GetComplianceDetailsByConfigRuleInput) (*configservice.GetComplianceDetailsByConfigRuleOutput, error)
 	GetComplianceDetailsByConfigRuleWithContext(aws.Context, *configservice.GetComplianceDetailsByConfigRuleInput, ...request.Option) (*configservice.GetComplianceDetailsByConfigRuleOutput, error)
 	GetComplianceDetailsByConfigRuleRequest(*configservice.GetComplianceDetailsByConfigRuleInput) (*request.Request, *configservice.GetComplianceDetailsByConfigRuleOutput)
@@ -190,6 +202,10 @@ type ConfigServiceAPI interface {
 
 	GetResourceConfigHistoryPages(*configservice.GetResourceConfigHistoryInput, func(*configservice.GetResourceConfigHistoryOutput, bool) bool) error
 	GetResourceConfigHistoryPagesWithContext(aws.Context, *configservice.GetResourceConfigHistoryInput, func(*configservice.GetResourceConfigHistoryOutput, bool) bool, ...request.Option) error
+
+	ListAggregateDiscoveredResources(*configservice.ListAggregateDiscoveredResourcesInput) (*configservice.ListAggregateDiscoveredResourcesOutput, error)
+	ListAggregateDiscoveredResourcesWithContext(aws.Context, *configservice.ListAggregateDiscoveredResourcesInput, ...request.Option) (*configservice.ListAggregateDiscoveredResourcesOutput, error)
+	ListAggregateDiscoveredResourcesRequest(*configservice.ListAggregateDiscoveredResourcesInput) (*request.Request, *configservice.ListAggregateDiscoveredResourcesOutput)
 
 	ListDiscoveredResources(*configservice.ListDiscoveredResourcesInput) (*configservice.ListDiscoveredResourcesOutput, error)
 	ListDiscoveredResourcesWithContext(aws.Context, *configservice.ListDiscoveredResourcesInput, ...request.Option) (*configservice.ListDiscoveredResourcesOutput, error)

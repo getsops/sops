@@ -80,6 +80,10 @@ type StorageGatewayAPI interface {
 	AddWorkingStorageWithContext(aws.Context, *storagegateway.AddWorkingStorageInput, ...request.Option) (*storagegateway.AddWorkingStorageOutput, error)
 	AddWorkingStorageRequest(*storagegateway.AddWorkingStorageInput) (*request.Request, *storagegateway.AddWorkingStorageOutput)
 
+	AttachVolume(*storagegateway.AttachVolumeInput) (*storagegateway.AttachVolumeOutput, error)
+	AttachVolumeWithContext(aws.Context, *storagegateway.AttachVolumeInput, ...request.Option) (*storagegateway.AttachVolumeOutput, error)
+	AttachVolumeRequest(*storagegateway.AttachVolumeInput) (*request.Request, *storagegateway.AttachVolumeOutput)
+
 	CancelArchival(*storagegateway.CancelArchivalInput) (*storagegateway.CancelArchivalOutput, error)
 	CancelArchivalWithContext(aws.Context, *storagegateway.CancelArchivalInput, ...request.Option) (*storagegateway.CancelArchivalOutput, error)
 	CancelArchivalRequest(*storagegateway.CancelArchivalInput) (*request.Request, *storagegateway.CancelArchivalOutput)
@@ -231,6 +235,10 @@ type StorageGatewayAPI interface {
 	DescribeWorkingStorage(*storagegateway.DescribeWorkingStorageInput) (*storagegateway.DescribeWorkingStorageOutput, error)
 	DescribeWorkingStorageWithContext(aws.Context, *storagegateway.DescribeWorkingStorageInput, ...request.Option) (*storagegateway.DescribeWorkingStorageOutput, error)
 	DescribeWorkingStorageRequest(*storagegateway.DescribeWorkingStorageInput) (*request.Request, *storagegateway.DescribeWorkingStorageOutput)
+
+	DetachVolume(*storagegateway.DetachVolumeInput) (*storagegateway.DetachVolumeOutput, error)
+	DetachVolumeWithContext(aws.Context, *storagegateway.DetachVolumeInput, ...request.Option) (*storagegateway.DetachVolumeOutput, error)
+	DetachVolumeRequest(*storagegateway.DetachVolumeInput) (*request.Request, *storagegateway.DetachVolumeOutput)
 
 	DisableGateway(*storagegateway.DisableGatewayInput) (*storagegateway.DisableGatewayOutput, error)
 	DisableGatewayWithContext(aws.Context, *storagegateway.DisableGatewayInput, ...request.Option) (*storagegateway.DisableGatewayOutput, error)

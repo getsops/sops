@@ -674,7 +674,7 @@
       }
     }
   },
-  "revision": "20180830",
+  "revision": "20190125",
   "rootUrl": "https://cloudtasks.googleapis.com/",
   "schemas": {
     "AppEngineHttpQueue": {
@@ -689,7 +689,7 @@
       "type": "object"
     },
     "AppEngineHttpRequest": {
-      "description": "App Engine HTTP request.\n\nThe message defines the HTTP request that is sent to an App Engine app when\nthe task is dispatched.\n\nThis proto can only be used for tasks in a queue which has\napp_engine_http_queue set.\n\nUsing AppEngineHttpRequest requires\n[`appengine.applications.get`](https://cloud.google.com/appengine/docs/admin-api/access-control)\nGoogle IAM permission for the project\nand the following scope:\n\n`https://www.googleapis.com/auth/cloud-platform`\n\nThe task will be delivered to the App Engine app which belongs to the same\nproject as the queue. For more information, see\n[How Requests are Routed](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed)\nand how routing is affected by\n[dispatch files](https://cloud.google.com/appengine/docs/python/config/dispatchref).\n\nThe AppEngineRouting used to construct the URL that the task is\ndelivered to can be set at the queue-level or task-level:\n\n* If set,\n   app_engine_routing_override\n   is used for all tasks in the queue, no matter what the setting\n   is for the\n   task-level app_engine_routing.\n\n\nThe `url` that the task will be sent to is:\n\n* `url =` host `+`\n  relative_uri\n\nThe task attempt has succeeded if the app's request handler returns\nan HTTP response code in the range [`200` - `299`]. `503` is\nconsidered an App Engine system error instead of an application\nerror. Requests returning error `503` will be retried regardless of\nretry configuration and not counted against retry counts.\nAny other response code or a failure to receive a response before the\ndeadline is a failed attempt.",
+      "description": "App Engine HTTP request.\n\nThe message defines the HTTP request that is sent to an App Engine app when\nthe task is dispatched.\n\nThis proto can only be used for tasks in a queue which has\napp_engine_http_queue set.\n\nUsing AppEngineHttpRequest requires\n[`appengine.applications.get`](https://cloud.google.com/appengine/docs/admin-api/access-control)\nGoogle IAM permission for the project\nand the following scope:\n\n`https://www.googleapis.com/auth/cloud-platform`\n\nThe task will be delivered to the App Engine app which belongs to the same\nproject as the queue. For more information, see\n[How Requests are Routed](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed)\nand how routing is affected by\n[dispatch files](https://cloud.google.com/appengine/docs/python/config/dispatchref).\nTraffic is encrypted during transport and never leaves Google datacenters.\nBecause this traffic is carried over a communication mechanism internal to\nGoogle, you cannot explicitly set the protocol (for example, HTTP or HTTPS).\nThe request to the handler, however, will appear to have used the HTTP\nprotocol.\n\nThe AppEngineRouting used to construct the URL that the task is\ndelivered to can be set at the queue-level or task-level:\n\n* If set,\n   app_engine_routing_override\n   is used for all tasks in the queue, no matter what the setting\n   is for the\n   task-level app_engine_routing.\n\n\nThe `url` that the task will be sent to is:\n\n* `url =` host `+`\n  relative_uri\n\nTasks can be dispatched to secure app handlers, unsecure app handlers, and\nURIs restricted with\n[`login: admin`](https://cloud.google.com/appengine/docs/standard/python/config/appref).\nBecause tasks are not run as any user, they cannot be dispatched to URIs\nrestricted with\n[`login: required`](https://cloud.google.com/appengine/docs/standard/python/config/appref)\nTask dispatches also do not follow redirects.\n\nThe task attempt has succeeded if the app's request handler returns\nan HTTP response code in the range [`200` - `299`]. `503` is\nconsidered an App Engine system error instead of an application\nerror. Requests returning error `503` will be retried regardless of\nretry configuration and not counted against retry counts.\nAny other response code or a failure to receive a response before the\ndeadline is a failed attempt.",
       "id": "AppEngineHttpRequest",
       "properties": {
         "appEngineRouting": {
@@ -716,7 +716,9 @@
             "GET",
             "HEAD",
             "PUT",
-            "DELETE"
+            "DELETE",
+            "PATCH",
+            "OPTIONS"
           ],
           "enumDescriptions": [
             "HTTP method unspecified",
@@ -724,7 +726,9 @@
             "HTTP GET",
             "HTTP HEAD",
             "HTTP PUT",
-            "HTTP DELETE"
+            "HTTP DELETE",
+            "HTTP PATCH",
+            "HTTP OPTIONS"
           ],
           "type": "string"
         },
@@ -736,7 +740,7 @@
       "type": "object"
     },
     "AppEngineRouting": {
-      "description": "App Engine Routing.\n\nSpecifies the target URI. Since this target type dispatches tasks to secure\napp handlers, unsecure app handlers, and URIs restricted with\n[`login: admin`](https://cloud.google.com/appengine/docs/standard/python/config/appref)\nthe protocol (for example, HTTP or HTTPS) cannot be explictly specified.\nTask dispatches do not follow redirects and cannot target URI paths\nrestricted with\n[`login: required`](https://cloud.google.com/appengine/docs/standard/python/config/appref)\nbecause tasks are not run as any user.\n\nFor more information about services, versions, and instances see\n[An Overview of App Engine](https://cloud.google.com/appengine/docs/python/an-overview-of-app-engine),\n[Microservices Architecture on Google App Engine](https://cloud.google.com/appengine/docs/python/microservices-on-app-engine),\n[App Engine Standard request routing](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed),\nand [App Engine Flex request routing](https://cloud.google.com/appengine/docs/flexible/python/how-requests-are-routed).",
+      "description": "App Engine Routing.\n\nDefines routing characteristics specific to App Engine - service, version,\nand instance.\n\nFor more information about services, versions, and instances see\n[An Overview of App Engine](https://cloud.google.com/appengine/docs/python/an-overview-of-app-engine),\n[Microservices Architecture on Google App Engine](https://cloud.google.com/appengine/docs/python/microservices-on-app-engine),\n[App Engine Standard request routing](https://cloud.google.com/appengine/docs/standard/python/how-requests-are-routed),\nand [App Engine Flex request routing](https://cloud.google.com/appengine/docs/flexible/python/how-requests-are-routed).",
       "id": "AppEngineRouting",
       "properties": {
         "host": {
@@ -769,7 +773,7 @@
         },
         "responseStatus": {
           "$ref": "Status",
-          "description": "Output only. The response from the target for this attempt.\n\nIf `response_time` is unset, then the task has not been attempted or is\ncurrently running and the `response_status` field is meaningless."
+          "description": "Output only. The response from the worker for this attempt.\n\nIf `response_time` is unset, then the task has not been attempted or is\ncurrently running and the `response_status` field is meaningless."
         },
         "responseTime": {
           "description": "Output only. The time that this attempt response was received.\n\n`response_time` will be truncated to the nearest microsecond.",
@@ -996,7 +1000,7 @@
       "properties": {
         "appEngineHttpQueue": {
           "$ref": "AppEngineHttpQueue",
-          "description": "App Engine HTTP queue.\n\nAn App Engine queue is a queue that has an AppEngineHttpQeueue type."
+          "description": "AppEngineHttpQueue settings apply only to\nApp Engine tasks in this queue."
         },
         "name": {
           "description": "Caller-specified and required in CreateQueue,\nafter which it becomes output only.\n\nThe queue name.\n\nThe queue name must have the following format:\n`projects/PROJECT_ID/locations/LOCATION_ID/queues/QUEUE_ID`\n\n* `PROJECT_ID` can contain letters ([A-Za-z]), numbers ([0-9]),\n   hyphens (-), colons (:), or periods (.).\n   For more information, see\n   [Identifying projects](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects)\n* `LOCATION_ID` is the canonical ID for the queue's location.\n   The list of available locations can be obtained by calling\n   ListLocations.\n   For more information, see https://cloud.google.com/about/locations/.\n* `QUEUE_ID` can contain letters ([A-Za-z]), numbers ([0-9]), or\n  hyphens (-). The maximum length is 100 characters.",
@@ -1009,7 +1013,7 @@
         },
         "rateLimits": {
           "$ref": "RateLimits",
-          "description": "Rate limits for task dispatches.\n\nrate_limits and\nretry_config are related because they both\ncontrol task attempts however they control how tasks are\nattempted in different ways:\n\n* rate_limits controls the total rate of\n  dispatches from a queue (i.e. all traffic dispatched from the\n  queue, regardless of whether the dispatch is from a first\n  attempt or a retry).\n* retry_config controls what happens to\n  particular a task after its first attempt fails. That is,\n  retry_config controls task retries (the\n  second attempt, third attempt, etc)."
+          "description": "Rate limits for task dispatches.\n\nrate_limits and retry_config are\nrelated because they both control task attempts. However they control task\nattempts in different ways:\n\n* rate_limits controls the total rate of\n  dispatches from a queue (i.e. all traffic dispatched from the\n  queue, regardless of whether the dispatch is from a first\n  attempt or a retry).\n* retry_config controls what happens to\n  particular a task after its first attempt fails. That is,\n  retry_config controls task retries (the\n  second attempt, third attempt, etc).\n\nThe queue's actual dispatch rate is the result of:\n\n* Number of tasks in the queue\n* User-specified throttling: rate limits\n  retry configuration, and the\n  queue's state.\n* System throttling due to `429` (Too Many Requests) or `503` (Service\n  Unavailable) responses from the worker, high error rates, or to smooth\n  sudden large traffic spikes."
         },
         "retryConfig": {
           "$ref": "RetryConfig",
@@ -1027,7 +1031,7 @@
             "Unspecified state.",
             "The queue is running. Tasks can be dispatched.\n\nIf the queue was created using Cloud Tasks and the queue has\nhad no activity (method calls or task dispatches) for 30 days,\nthe queue may take a few minutes to re-activate. Some method\ncalls may return NOT_FOUND and\ntasks may not be dispatched for a few minutes until the queue\nhas been re-activated.",
             "Tasks are paused by the user. If the queue is paused then Cloud\nTasks will stop delivering tasks from it, but more tasks can\nstill be added to it by the user.",
-            "The queue is disabled.\n\nA queue becomes `DISABLED` when\n[queue.yaml](https://cloud.google.com/appengine/docs/python/config/queueref) or\n[queue.xml](https://cloud.google.com/appengine/docs/standard/java/config/queueref) is uploaded\nwhich does not contain the queue. You cannot directly disable a queue.\n\nWhen a queue is disabled, tasks can still be added to a queue\nbut the tasks are not dispatched.\n\nTo permanently delete this queue and all of its tasks, call\nDeleteQueue."
+            "The queue is disabled.\n\nA queue becomes `DISABLED` when\n[queue.yaml](https://cloud.google.com/appengine/docs/python/config/queueref)\nor\n[queue.xml](https://cloud.google.com/appengine/docs/standard/java/config/queueref)\nis uploaded which does not contain the queue. You cannot directly disable\na queue.\n\nWhen a queue is disabled, tasks can still be added to a queue\nbut the tasks are not dispatched.\n\nTo permanently delete this queue and all of its tasks, call\nDeleteQueue."
           ],
           "type": "string"
         }
@@ -1159,7 +1163,7 @@
       "properties": {
         "appEngineHttpRequest": {
           "$ref": "AppEngineHttpRequest",
-          "description": "App Engine HTTP request that is sent to the task's target. Can\nbe set only if\napp_engine_http_queue is set\non the queue.\n\nAn App Engine task is a task that has AppEngineHttpRequest set."
+          "description": "HTTP request that is sent to the App Engine app handler.\n\nAn App Engine task is a task that has AppEngineHttpRequest set."
         },
         "createTime": {
           "description": "Output only. The time that the task was created.\n\n`create_time` will be truncated to the nearest second.",
@@ -1170,6 +1174,11 @@
           "description": "Output only. The number of attempts dispatched.\n\nThis count includes tasks which have been dispatched but haven't\nreceived a response.",
           "format": "int32",
           "type": "integer"
+        },
+        "dispatchDeadline": {
+          "description": "The deadline for requests sent to the worker. If the worker does not\nrespond by this deadline then the request is cancelled and the attempt\nis marked as a `DEADLINE_EXCEEDED` failure. Cloud Tasks will retry the\ntask according to the RetryConfig.\n\nNote that when the request is cancelled, Cloud Tasks will stop listing for\nthe response, but whether the worker stops processing depends on the\nworker. For example, if the worker is stuck, it may not react to cancelled\nrequests.\n\nThe default and maximum values depend on the type of request:\n\n\n* For App Engine tasks, 0 indicates that the\n  request has the default deadline. The default deadline depends on the\n  [scaling type](https://cloud.google.com/appengine/docs/standard/go/how-instances-are-managed#instance_scaling)\n  of the service: 10 minutes for standard apps with automatic scaling, 24\n  hours for standard apps with manual and basic scaling, and 60 minutes for\n  flex apps. If the request deadline is set, it must be in the interval [15\n  seconds, 24 hours 15 seconds]. Regardless of the task's\n  `dispatch_deadline`, the app handler will not run for longer than than\n  the service's timeout. We recommend setting the `dispatch_deadline` to\n  at most a few seconds more than the app handler's timeout. For more\n  information see\n  [Timeouts](https://cloud.google.com/tasks/docs/creating-appengine-handlers#timeouts).\n\n`dispatch_deadline` will be truncated to the nearest millisecond. The\ndeadline is an approximate deadline.",
+          "format": "google-duration",
+          "type": "string"
         },
         "firstAttempt": {
           "$ref": "Attempt",

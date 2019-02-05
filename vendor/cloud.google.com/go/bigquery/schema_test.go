@@ -24,7 +24,6 @@ import (
 	"cloud.google.com/go/civil"
 	"cloud.google.com/go/internal/pretty"
 	"cloud.google.com/go/internal/testutil"
-
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -349,7 +348,6 @@ func TestSimpleInference(t *testing.T) {
 }
 
 type containsNested struct {
-	hidden    string
 	NotNested int
 	Nested    struct {
 		Inside int
@@ -887,7 +885,6 @@ func TestHasRecursiveType(t *testing.T) {
 		}
 		recUnexported struct {
 			A int
-			b *rec
 		}
 		hasRec struct {
 			A int

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewWorkflowsClientWithBaseURI(baseURI string, subscriptionID string) Workfl
 // workflowName - the workflow name.
 // workflow - the workflow.
 func (client WorkflowsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workflowName string, workflow Workflow) (result Workflow, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, workflowName, workflow)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client WorkflowsClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name.
 // workflowName - the workflow name.
 func (client WorkflowsClient) Delete(ctx context.Context, resourceGroupName string, workflowName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, workflowName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Delete", nil, "Failure preparing request")
@@ -180,6 +201,16 @@ func (client WorkflowsClient) DeleteResponder(resp *http.Response) (result autor
 // resourceGroupName - the resource group name.
 // workflowName - the workflow name.
 func (client WorkflowsClient) Disable(ctx context.Context, resourceGroupName string, workflowName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Disable")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DisablePreparer(ctx, resourceGroupName, workflowName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Disable", nil, "Failure preparing request")
@@ -246,6 +277,16 @@ func (client WorkflowsClient) DisableResponder(resp *http.Response) (result auto
 // resourceGroupName - the resource group name.
 // workflowName - the workflow name.
 func (client WorkflowsClient) Enable(ctx context.Context, resourceGroupName string, workflowName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Enable")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.EnablePreparer(ctx, resourceGroupName, workflowName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Enable", nil, "Failure preparing request")
@@ -313,6 +354,16 @@ func (client WorkflowsClient) EnableResponder(resp *http.Response) (result autor
 // workflowName - the workflow name.
 // parameters - parameters for generating an upgraded definition.
 func (client WorkflowsClient) GenerateUpgradedDefinition(ctx context.Context, resourceGroupName string, workflowName string, parameters GenerateUpgradedDefinitionParameters) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.GenerateUpgradedDefinition")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GenerateUpgradedDefinitionPreparer(ctx, resourceGroupName, workflowName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "GenerateUpgradedDefinition", nil, "Failure preparing request")
@@ -382,6 +433,16 @@ func (client WorkflowsClient) GenerateUpgradedDefinitionResponder(resp *http.Res
 // resourceGroupName - the resource group name.
 // workflowName - the workflow name.
 func (client WorkflowsClient) Get(ctx context.Context, resourceGroupName string, workflowName string) (result Workflow, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workflowName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Get", nil, "Failure preparing request")
@@ -451,6 +512,16 @@ func (client WorkflowsClient) GetResponder(resp *http.Response) (result Workflow
 // filter - the filter to apply on the operation. Options for filters include: State, Trigger, and
 // ReferencedResourceId.
 func (client WorkflowsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, top *int32, filter string) (result WorkflowListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.wlr.Response.Response != nil {
+				sc = result.wlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, top, filter)
 	if err != nil {
@@ -520,8 +591,8 @@ func (client WorkflowsClient) ListByResourceGroupResponder(resp *http.Response) 
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client WorkflowsClient) listByResourceGroupNextResults(lastResults WorkflowListResult) (result WorkflowListResult, err error) {
-	req, err := lastResults.workflowListResultPreparer()
+func (client WorkflowsClient) listByResourceGroupNextResults(ctx context.Context, lastResults WorkflowListResult) (result WorkflowListResult, err error) {
+	req, err := lastResults.workflowListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -542,6 +613,16 @@ func (client WorkflowsClient) listByResourceGroupNextResults(lastResults Workflo
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, top *int32, filter string) (result WorkflowListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, top, filter)
 	return
 }
@@ -552,6 +633,16 @@ func (client WorkflowsClient) ListByResourceGroupComplete(ctx context.Context, r
 // filter - the filter to apply on the operation. Options for filters include: State, Trigger, and
 // ReferencedResourceId.
 func (client WorkflowsClient) ListBySubscription(ctx context.Context, top *int32, filter string) (result WorkflowListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.wlr.Response.Response != nil {
+				sc = result.wlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx, top, filter)
 	if err != nil {
@@ -620,8 +711,8 @@ func (client WorkflowsClient) ListBySubscriptionResponder(resp *http.Response) (
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client WorkflowsClient) listBySubscriptionNextResults(lastResults WorkflowListResult) (result WorkflowListResult, err error) {
-	req, err := lastResults.workflowListResultPreparer()
+func (client WorkflowsClient) listBySubscriptionNextResults(ctx context.Context, lastResults WorkflowListResult) (result WorkflowListResult, err error) {
+	req, err := lastResults.workflowListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -642,6 +733,16 @@ func (client WorkflowsClient) listBySubscriptionNextResults(lastResults Workflow
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowsClient) ListBySubscriptionComplete(ctx context.Context, top *int32, filter string) (result WorkflowListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx, top, filter)
 	return
 }
@@ -652,6 +753,16 @@ func (client WorkflowsClient) ListBySubscriptionComplete(ctx context.Context, to
 // workflowName - the workflow name.
 // listCallbackURL - which callback url to list.
 func (client WorkflowsClient) ListCallbackURL(ctx context.Context, resourceGroupName string, workflowName string, listCallbackURL GetCallbackURLParameters) (result WorkflowTriggerCallbackURL, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ListCallbackURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListCallbackURLPreparer(ctx, resourceGroupName, workflowName, listCallbackURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "ListCallbackURL", nil, "Failure preparing request")
@@ -721,6 +832,16 @@ func (client WorkflowsClient) ListCallbackURLResponder(resp *http.Response) (res
 // resourceGroupName - the resource group name.
 // workflowName - the workflow name.
 func (client WorkflowsClient) ListSwagger(ctx context.Context, resourceGroupName string, workflowName string) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ListSwagger")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListSwaggerPreparer(ctx, resourceGroupName, workflowName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "ListSwagger", nil, "Failure preparing request")
@@ -789,6 +910,16 @@ func (client WorkflowsClient) ListSwaggerResponder(resp *http.Response) (result 
 // workflowName - the workflow name.
 // move - the workflow to move.
 func (client WorkflowsClient) Move(ctx context.Context, resourceGroupName string, workflowName string, move Workflow) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Move")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.MovePreparer(ctx, resourceGroupName, workflowName, move)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Move", nil, "Failure preparing request")
@@ -858,6 +989,16 @@ func (client WorkflowsClient) MoveResponder(resp *http.Response) (result autores
 // workflowName - the workflow name.
 // keyType - the access key type.
 func (client WorkflowsClient) RegenerateAccessKey(ctx context.Context, resourceGroupName string, workflowName string, keyType RegenerateActionParameter) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.RegenerateAccessKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateAccessKeyPreparer(ctx, resourceGroupName, workflowName, keyType)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "RegenerateAccessKey", nil, "Failure preparing request")
@@ -927,6 +1068,16 @@ func (client WorkflowsClient) RegenerateAccessKeyResponder(resp *http.Response) 
 // workflowName - the workflow name.
 // workflow - the workflow.
 func (client WorkflowsClient) Update(ctx context.Context, resourceGroupName string, workflowName string, workflow Workflow) (result Workflow, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, workflowName, workflow)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Update", nil, "Failure preparing request")
@@ -998,6 +1149,16 @@ func (client WorkflowsClient) UpdateResponder(resp *http.Response) (result Workf
 // workflowName - the workflow name.
 // workflow - the workflow definition.
 func (client WorkflowsClient) Validate(ctx context.Context, resourceGroupName string, location string, workflowName string, workflow Workflow) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.Validate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ValidatePreparer(ctx, resourceGroupName, location, workflowName, workflow)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "Validate", nil, "Failure preparing request")
@@ -1068,6 +1229,16 @@ func (client WorkflowsClient) ValidateResponder(resp *http.Response) (result aut
 // workflowName - the workflow name.
 // validate - the workflow.
 func (client WorkflowsClient) ValidateWorkflow(ctx context.Context, resourceGroupName string, workflowName string, validate Workflow) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowsClient.ValidateWorkflow")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ValidateWorkflowPreparer(ctx, resourceGroupName, workflowName, validate)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowsClient", "ValidateWorkflow", nil, "Failure preparing request")

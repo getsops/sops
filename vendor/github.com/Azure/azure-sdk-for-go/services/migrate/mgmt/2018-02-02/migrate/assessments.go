@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,8 +42,8 @@ func NewAssessmentsClientWithBaseURI(baseURI string, subscriptionID string, acce
 }
 
 // Create create a new assessment with the given name and the specified settings. Since name of an assessment in a
-// project is a unique identiefier, if an assessment with the name provided already exists, then the existing
-// assessment is updated.
+// project is a unique identifier, if an assessment with the name provided already exists, then the existing assessment
+// is updated.
 //
 // Any PUT operation, resulting in either create or update on an assessment, will cause the assessment to go in a
 // "InProgress" state. This will be indicated by the field 'computationState' on the Assessment object. During this
@@ -58,6 +59,16 @@ func NewAssessmentsClientWithBaseURI(baseURI string, subscriptionID string, acce
 // assessmentName - unique name of an assessment within a project.
 // assessment - new or Updated Assessment object.
 func (client AssessmentsClient) Create(ctx context.Context, resourceGroupName string, projectName string, groupName string, assessmentName string, assessment *Assessment) (result Assessment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: assessment,
 			Constraints: []validation.Constraint{{Target: "assessment", Name: validation.Null, Rule: false,
@@ -153,6 +164,16 @@ func (client AssessmentsClient) CreateResponder(resp *http.Response) (result Ass
 // groupName - unique name of a group within a project.
 // assessmentName - unique name of an assessment within a project.
 func (client AssessmentsClient) Delete(ctx context.Context, resourceGroupName string, projectName string, groupName string, assessmentName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, projectName, groupName, assessmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessmentsClient", "Delete", nil, "Failure preparing request")
@@ -228,6 +249,16 @@ func (client AssessmentsClient) DeleteResponder(resp *http.Response) (result aut
 // groupName - unique name of a group within a project.
 // assessmentName - unique name of an assessment within a project.
 func (client AssessmentsClient) Get(ctx context.Context, resourceGroupName string, projectName string, groupName string, assessmentName string) (result Assessment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, projectName, groupName, assessmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessmentsClient", "Get", nil, "Failure preparing request")
@@ -303,6 +334,16 @@ func (client AssessmentsClient) GetResponder(resp *http.Response) (result Assess
 // groupName - unique name of a group within a project.
 // assessmentName - unique name of an assessment within a project.
 func (client AssessmentsClient) GetReportDownloadURL(ctx context.Context, resourceGroupName string, projectName string, groupName string, assessmentName string) (result DownloadURL, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentsClient.GetReportDownloadURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetReportDownloadURLPreparer(ctx, resourceGroupName, projectName, groupName, assessmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessmentsClient", "GetReportDownloadURL", nil, "Failure preparing request")
@@ -379,6 +420,16 @@ func (client AssessmentsClient) GetReportDownloadURLResponder(resp *http.Respons
 // projectName - name of the Azure Migrate project.
 // groupName - unique name of a group within a project.
 func (client AssessmentsClient) ListByGroup(ctx context.Context, resourceGroupName string, projectName string, groupName string) (result AssessmentResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentsClient.ListByGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByGroupPreparer(ctx, resourceGroupName, projectName, groupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessmentsClient", "ListByGroup", nil, "Failure preparing request")
@@ -453,6 +504,16 @@ func (client AssessmentsClient) ListByGroupResponder(resp *http.Response) (resul
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 // projectName - name of the Azure Migrate project.
 func (client AssessmentsClient) ListByProject(ctx context.Context, resourceGroupName string, projectName string) (result AssessmentResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentsClient.ListByProject")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByProjectPreparer(ctx, resourceGroupName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessmentsClient", "ListByProject", nil, "Failure preparing request")

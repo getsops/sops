@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewWorkflowAccessKeysClientWithBaseURI(baseURI string, subscriptionID strin
 // accessKeyName - the workflow access key name.
 // workflowAccesskey - the workflow access key.
 func (client WorkflowAccessKeysClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workflowName string, accessKeyName string, workflowAccesskey WorkflowAccessKey) (result WorkflowAccessKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, workflowName, accessKeyName, workflowAccesskey)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowAccessKeysClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client WorkflowAccessKeysClient) CreateOrUpdateResponder(resp *http.Respon
 // workflowName - the workflow name.
 // accessKeyName - the workflow access key name.
 func (client WorkflowAccessKeysClient) Delete(ctx context.Context, resourceGroupName string, workflowName string, accessKeyName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, workflowName, accessKeyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowAccessKeysClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client WorkflowAccessKeysClient) DeleteResponder(resp *http.Response) (res
 // workflowName - the workflow name.
 // accessKeyName - the workflow access key name.
 func (client WorkflowAccessKeysClient) Get(ctx context.Context, resourceGroupName string, workflowName string, accessKeyName string) (result WorkflowAccessKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workflowName, accessKeyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowAccessKeysClient", "Get", nil, "Failure preparing request")
@@ -254,6 +285,16 @@ func (client WorkflowAccessKeysClient) GetResponder(resp *http.Response) (result
 // workflowName - the workflow name.
 // top - the number of items to be included in the result.
 func (client WorkflowAccessKeysClient) List(ctx context.Context, resourceGroupName string, workflowName string, top *int32) (result WorkflowAccessKeyListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.List")
+		defer func() {
+			sc := -1
+			if result.waklr.Response.Response != nil {
+				sc = result.waklr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, workflowName, top)
 	if err != nil {
@@ -321,8 +362,8 @@ func (client WorkflowAccessKeysClient) ListResponder(resp *http.Response) (resul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkflowAccessKeysClient) listNextResults(lastResults WorkflowAccessKeyListResult) (result WorkflowAccessKeyListResult, err error) {
-	req, err := lastResults.workflowAccessKeyListResultPreparer()
+func (client WorkflowAccessKeysClient) listNextResults(ctx context.Context, lastResults WorkflowAccessKeyListResult) (result WorkflowAccessKeyListResult, err error) {
+	req, err := lastResults.workflowAccessKeyListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowAccessKeysClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -343,6 +384,16 @@ func (client WorkflowAccessKeysClient) listNextResults(lastResults WorkflowAcces
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowAccessKeysClient) ListComplete(ctx context.Context, resourceGroupName string, workflowName string, top *int32) (result WorkflowAccessKeyListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, workflowName, top)
 	return
 }
@@ -353,6 +404,16 @@ func (client WorkflowAccessKeysClient) ListComplete(ctx context.Context, resourc
 // workflowName - the workflow name.
 // accessKeyName - the workflow access key name.
 func (client WorkflowAccessKeysClient) ListSecretKeys(ctx context.Context, resourceGroupName string, workflowName string, accessKeyName string) (result WorkflowSecretKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.ListSecretKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListSecretKeysPreparer(ctx, resourceGroupName, workflowName, accessKeyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowAccessKeysClient", "ListSecretKeys", nil, "Failure preparing request")
@@ -423,6 +484,16 @@ func (client WorkflowAccessKeysClient) ListSecretKeysResponder(resp *http.Respon
 // accessKeyName - the workflow access key name.
 // parameters - the parameters.
 func (client WorkflowAccessKeysClient) RegenerateSecretKey(ctx context.Context, resourceGroupName string, workflowName string, accessKeyName string, parameters RegenerateSecretKeyParameters) (result WorkflowSecretKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowAccessKeysClient.RegenerateSecretKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateSecretKeyPreparer(ctx, resourceGroupName, workflowName, accessKeyName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowAccessKeysClient", "RegenerateSecretKey", nil, "Failure preparing request")

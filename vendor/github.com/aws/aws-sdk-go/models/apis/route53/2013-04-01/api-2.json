@@ -1110,6 +1110,7 @@
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-northeast-3",
+        "eu-north-1",
         "sa-east-1"
       ],
       "max":64,
@@ -1586,6 +1587,7 @@
       },
       "max":10
     },
+    "Disabled":{"type":"boolean"},
     "DisassociateVPCComment":{"type":"string"},
     "DisassociateVPCFromHostedZoneRequest":{
       "type":"structure",
@@ -2056,6 +2058,7 @@
         "FailureThreshold":{"shape":"FailureThreshold"},
         "MeasureLatency":{"shape":"MeasureLatency"},
         "Inverted":{"shape":"Inverted"},
+        "Disabled":{"shape":"Disabled"},
         "HealthThreshold":{"shape":"HealthThreshold"},
         "ChildHealthChecks":{"shape":"ChildHealthCheckList"},
         "EnableSNI":{"shape":"EnableSNI"},
@@ -3187,6 +3190,7 @@
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-northeast-3",
+        "eu-north-1",
         "sa-east-1",
         "cn-north-1",
         "cn-northwest-1",
@@ -3610,6 +3614,7 @@
         "SearchString":{"shape":"SearchString"},
         "FailureThreshold":{"shape":"FailureThreshold"},
         "Inverted":{"shape":"Inverted"},
+        "Disabled":{"shape":"Disabled"},
         "HealthThreshold":{"shape":"HealthThreshold"},
         "ChildHealthChecks":{"shape":"ChildHealthCheckList"},
         "EnableSNI":{"shape":"EnableSNI"},
@@ -3747,6 +3752,7 @@
         "ap-northeast-1",
         "ap-northeast-2",
         "ap-northeast-3",
+        "eu-north-1",
         "sa-east-1",
         "ca-central-1",
         "cn-north-1"

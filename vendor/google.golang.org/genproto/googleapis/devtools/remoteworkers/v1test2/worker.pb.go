@@ -91,7 +91,7 @@ func (m *Worker) Reset()         { *m = Worker{} }
 func (m *Worker) String() string { return proto.CompactTextString(m) }
 func (*Worker) ProtoMessage()    {}
 func (*Worker) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a7edeeca1cd65a1, []int{0}
+	return fileDescriptor_worker_52520c784d3d1f3d, []int{0}
 }
 func (m *Worker) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Worker.Unmarshal(m, b)
@@ -99,8 +99,8 @@ func (m *Worker) XXX_Unmarshal(b []byte) error {
 func (m *Worker) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Worker.Marshal(b, m, deterministic)
 }
-func (m *Worker) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Worker.Merge(m, src)
+func (dst *Worker) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Worker.Merge(dst, src)
 }
 func (m *Worker) XXX_Size() int {
 	return xxx_messageInfo_Worker.Size(m)
@@ -156,7 +156,7 @@ func (m *Worker_Property) Reset()         { *m = Worker_Property{} }
 func (m *Worker_Property) String() string { return proto.CompactTextString(m) }
 func (*Worker_Property) ProtoMessage()    {}
 func (*Worker_Property) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a7edeeca1cd65a1, []int{0, 0}
+	return fileDescriptor_worker_52520c784d3d1f3d, []int{0, 0}
 }
 func (m *Worker_Property) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Worker_Property.Unmarshal(m, b)
@@ -164,8 +164,8 @@ func (m *Worker_Property) XXX_Unmarshal(b []byte) error {
 func (m *Worker_Property) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Worker_Property.Marshal(b, m, deterministic)
 }
-func (m *Worker_Property) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Worker_Property.Merge(m, src)
+func (dst *Worker_Property) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Worker_Property.Merge(dst, src)
 }
 func (m *Worker_Property) XXX_Size() int {
 	return xxx_messageInfo_Worker_Property.Size(m)
@@ -214,7 +214,7 @@ func (m *Worker_Config) Reset()         { *m = Worker_Config{} }
 func (m *Worker_Config) String() string { return proto.CompactTextString(m) }
 func (*Worker_Config) ProtoMessage()    {}
 func (*Worker_Config) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a7edeeca1cd65a1, []int{0, 1}
+	return fileDescriptor_worker_52520c784d3d1f3d, []int{0, 1}
 }
 func (m *Worker_Config) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Worker_Config.Unmarshal(m, b)
@@ -222,8 +222,8 @@ func (m *Worker_Config) XXX_Unmarshal(b []byte) error {
 func (m *Worker_Config) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Worker_Config.Marshal(b, m, deterministic)
 }
-func (m *Worker_Config) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Worker_Config.Merge(m, src)
+func (dst *Worker_Config) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Worker_Config.Merge(dst, src)
 }
 func (m *Worker_Config) XXX_Size() int {
 	return xxx_messageInfo_Worker_Config.Size(m)
@@ -281,7 +281,7 @@ func (m *Device) Reset()         { *m = Device{} }
 func (m *Device) String() string { return proto.CompactTextString(m) }
 func (*Device) ProtoMessage()    {}
 func (*Device) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a7edeeca1cd65a1, []int{1}
+	return fileDescriptor_worker_52520c784d3d1f3d, []int{1}
 }
 func (m *Device) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Device.Unmarshal(m, b)
@@ -289,8 +289,8 @@ func (m *Device) XXX_Unmarshal(b []byte) error {
 func (m *Device) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Device.Marshal(b, m, deterministic)
 }
-func (m *Device) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Device.Merge(m, src)
+func (dst *Device) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Device.Merge(dst, src)
 }
 func (m *Device) XXX_Size() int {
 	return xxx_messageInfo_Device.Size(m)
@@ -340,7 +340,7 @@ func (m *Device_Property) Reset()         { *m = Device_Property{} }
 func (m *Device_Property) String() string { return proto.CompactTextString(m) }
 func (*Device_Property) ProtoMessage()    {}
 func (*Device_Property) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1a7edeeca1cd65a1, []int{1, 0}
+	return fileDescriptor_worker_52520c784d3d1f3d, []int{1, 0}
 }
 func (m *Device_Property) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Device_Property.Unmarshal(m, b)
@@ -348,8 +348,8 @@ func (m *Device_Property) XXX_Unmarshal(b []byte) error {
 func (m *Device_Property) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Device_Property.Marshal(b, m, deterministic)
 }
-func (m *Device_Property) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Device_Property.Merge(m, src)
+func (dst *Device_Property) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Device_Property.Merge(dst, src)
 }
 func (m *Device_Property) XXX_Size() int {
 	return xxx_messageInfo_Device_Property.Size(m)
@@ -383,10 +383,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/remoteworkers/v1test2/worker.proto", fileDescriptor_1a7edeeca1cd65a1)
+	proto.RegisterFile("google/devtools/remoteworkers/v1test2/worker.proto", fileDescriptor_worker_52520c784d3d1f3d)
 }
 
-var fileDescriptor_1a7edeeca1cd65a1 = []byte{
+var fileDescriptor_worker_52520c784d3d1f3d = []byte{
 	// 332 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x92, 0xc1, 0x4a, 0xf3, 0x40,
 	0x10, 0xc7, 0x49, 0xca, 0x97, 0x7e, 0x8e, 0x17, 0x59, 0x45, 0x42, 0x4f, 0xa5, 0x50, 0xa8, 0x07,

@@ -123,7 +123,7 @@ func (m *PostalAddress) Reset()         { *m = PostalAddress{} }
 func (m *PostalAddress) String() string { return proto.CompactTextString(m) }
 func (*PostalAddress) ProtoMessage()    {}
 func (*PostalAddress) Descriptor() ([]byte, []int) {
-	return fileDescriptor_17c0e9bca935790c, []int{0}
+	return fileDescriptor_postal_address_dc3389450c08c04a, []int{0}
 }
 func (m *PostalAddress) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PostalAddress.Unmarshal(m, b)
@@ -131,8 +131,8 @@ func (m *PostalAddress) XXX_Unmarshal(b []byte) error {
 func (m *PostalAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PostalAddress.Marshal(b, m, deterministic)
 }
-func (m *PostalAddress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PostalAddress.Merge(m, src)
+func (dst *PostalAddress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostalAddress.Merge(dst, src)
 }
 func (m *PostalAddress) XXX_Size() int {
 	return xxx_messageInfo_PostalAddress.Size(m)
@@ -224,9 +224,11 @@ func init() {
 	proto.RegisterType((*PostalAddress)(nil), "google.type.PostalAddress")
 }
 
-func init() { proto.RegisterFile("google/type/postal_address.proto", fileDescriptor_17c0e9bca935790c) }
+func init() {
+	proto.RegisterFile("google/type/postal_address.proto", fileDescriptor_postal_address_dc3389450c08c04a)
+}
 
-var fileDescriptor_17c0e9bca935790c = []byte{
+var fileDescriptor_postal_address_dc3389450c08c04a = []byte{
 	// 338 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x92, 0x31, 0x6f, 0xea, 0x30,
 	0x10, 0xc7, 0x15, 0xf2, 0xe0, 0xc1, 0x05, 0xf4, 0x24, 0xbf, 0x25, 0xea, 0x50, 0x52, 0xba, 0x30,

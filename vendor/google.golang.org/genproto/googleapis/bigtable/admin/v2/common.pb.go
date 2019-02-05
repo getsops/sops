@@ -37,7 +37,6 @@ var StorageType_name = map[int32]string{
 	1: "SSD",
 	2: "HDD",
 }
-
 var StorageType_value = map[string]int32{
 	"STORAGE_TYPE_UNSPECIFIED": 0,
 	"SSD":                      1,
@@ -47,9 +46,8 @@ var StorageType_value = map[string]int32{
 func (x StorageType) String() string {
 	return proto.EnumName(StorageType_name, int32(x))
 }
-
 func (StorageType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_79ab584e3c858108, []int{0}
+	return fileDescriptor_common_3f175ab0025db664, []int{0}
 }
 
 func init() {
@@ -57,10 +55,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/bigtable/admin/v2/common.proto", fileDescriptor_79ab584e3c858108)
+	proto.RegisterFile("google/bigtable/admin/v2/common.proto", fileDescriptor_common_3f175ab0025db664)
 }
 
-var fileDescriptor_79ab584e3c858108 = []byte{
+var fileDescriptor_common_3f175ab0025db664 = []byte{
 	// 270 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0xd0, 0xcf, 0x4b, 0xc3, 0x30,
 	0x14, 0x07, 0x70, 0x3b, 0x41, 0x21, 0xbb, 0x94, 0x9e, 0xc6, 0x28, 0x7a, 0xf2, 0xe2, 0x21, 0x81,

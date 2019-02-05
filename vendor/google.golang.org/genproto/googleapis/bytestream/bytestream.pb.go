@@ -52,7 +52,7 @@ func (m *ReadRequest) Reset()         { *m = ReadRequest{} }
 func (m *ReadRequest) String() string { return proto.CompactTextString(m) }
 func (*ReadRequest) ProtoMessage()    {}
 func (*ReadRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_657cab877f44cd08, []int{0}
+	return fileDescriptor_bytestream_414b76681ba3f568, []int{0}
 }
 func (m *ReadRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadRequest.Unmarshal(m, b)
@@ -60,8 +60,8 @@ func (m *ReadRequest) XXX_Unmarshal(b []byte) error {
 func (m *ReadRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReadRequest.Marshal(b, m, deterministic)
 }
-func (m *ReadRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReadRequest.Merge(m, src)
+func (dst *ReadRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadRequest.Merge(dst, src)
 }
 func (m *ReadRequest) XXX_Size() int {
 	return xxx_messageInfo_ReadRequest.Size(m)
@@ -109,7 +109,7 @@ func (m *ReadResponse) Reset()         { *m = ReadResponse{} }
 func (m *ReadResponse) String() string { return proto.CompactTextString(m) }
 func (*ReadResponse) ProtoMessage()    {}
 func (*ReadResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_657cab877f44cd08, []int{1}
+	return fileDescriptor_bytestream_414b76681ba3f568, []int{1}
 }
 func (m *ReadResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadResponse.Unmarshal(m, b)
@@ -117,8 +117,8 @@ func (m *ReadResponse) XXX_Unmarshal(b []byte) error {
 func (m *ReadResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReadResponse.Marshal(b, m, deterministic)
 }
-func (m *ReadResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReadResponse.Merge(m, src)
+func (dst *ReadResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadResponse.Merge(dst, src)
 }
 func (m *ReadResponse) XXX_Size() int {
 	return xxx_messageInfo_ReadResponse.Size(m)
@@ -173,7 +173,7 @@ func (m *WriteRequest) Reset()         { *m = WriteRequest{} }
 func (m *WriteRequest) String() string { return proto.CompactTextString(m) }
 func (*WriteRequest) ProtoMessage()    {}
 func (*WriteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_657cab877f44cd08, []int{2}
+	return fileDescriptor_bytestream_414b76681ba3f568, []int{2}
 }
 func (m *WriteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WriteRequest.Unmarshal(m, b)
@@ -181,8 +181,8 @@ func (m *WriteRequest) XXX_Unmarshal(b []byte) error {
 func (m *WriteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WriteRequest.Marshal(b, m, deterministic)
 }
-func (m *WriteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WriteRequest.Merge(m, src)
+func (dst *WriteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WriteRequest.Merge(dst, src)
 }
 func (m *WriteRequest) XXX_Size() int {
 	return xxx_messageInfo_WriteRequest.Size(m)
@@ -234,7 +234,7 @@ func (m *WriteResponse) Reset()         { *m = WriteResponse{} }
 func (m *WriteResponse) String() string { return proto.CompactTextString(m) }
 func (*WriteResponse) ProtoMessage()    {}
 func (*WriteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_657cab877f44cd08, []int{3}
+	return fileDescriptor_bytestream_414b76681ba3f568, []int{3}
 }
 func (m *WriteResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WriteResponse.Unmarshal(m, b)
@@ -242,8 +242,8 @@ func (m *WriteResponse) XXX_Unmarshal(b []byte) error {
 func (m *WriteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WriteResponse.Marshal(b, m, deterministic)
 }
-func (m *WriteResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WriteResponse.Merge(m, src)
+func (dst *WriteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WriteResponse.Merge(dst, src)
 }
 func (m *WriteResponse) XXX_Size() int {
 	return xxx_messageInfo_WriteResponse.Size(m)
@@ -274,7 +274,7 @@ func (m *QueryWriteStatusRequest) Reset()         { *m = QueryWriteStatusRequest
 func (m *QueryWriteStatusRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryWriteStatusRequest) ProtoMessage()    {}
 func (*QueryWriteStatusRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_657cab877f44cd08, []int{4}
+	return fileDescriptor_bytestream_414b76681ba3f568, []int{4}
 }
 func (m *QueryWriteStatusRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryWriteStatusRequest.Unmarshal(m, b)
@@ -282,8 +282,8 @@ func (m *QueryWriteStatusRequest) XXX_Unmarshal(b []byte) error {
 func (m *QueryWriteStatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryWriteStatusRequest.Marshal(b, m, deterministic)
 }
-func (m *QueryWriteStatusRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWriteStatusRequest.Merge(m, src)
+func (dst *QueryWriteStatusRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryWriteStatusRequest.Merge(dst, src)
 }
 func (m *QueryWriteStatusRequest) XXX_Size() int {
 	return xxx_messageInfo_QueryWriteStatusRequest.Size(m)
@@ -317,7 +317,7 @@ func (m *QueryWriteStatusResponse) Reset()         { *m = QueryWriteStatusRespon
 func (m *QueryWriteStatusResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryWriteStatusResponse) ProtoMessage()    {}
 func (*QueryWriteStatusResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_657cab877f44cd08, []int{5}
+	return fileDescriptor_bytestream_414b76681ba3f568, []int{5}
 }
 func (m *QueryWriteStatusResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryWriteStatusResponse.Unmarshal(m, b)
@@ -325,8 +325,8 @@ func (m *QueryWriteStatusResponse) XXX_Unmarshal(b []byte) error {
 func (m *QueryWriteStatusResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryWriteStatusResponse.Marshal(b, m, deterministic)
 }
-func (m *QueryWriteStatusResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryWriteStatusResponse.Merge(m, src)
+func (dst *QueryWriteStatusResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryWriteStatusResponse.Merge(dst, src)
 }
 func (m *QueryWriteStatusResponse) XXX_Size() int {
 	return xxx_messageInfo_QueryWriteStatusResponse.Size(m)
@@ -638,9 +638,11 @@ var _ByteStream_serviceDesc = grpc.ServiceDesc{
 	Metadata: "google/bytestream/bytestream.proto",
 }
 
-func init() { proto.RegisterFile("google/bytestream/bytestream.proto", fileDescriptor_657cab877f44cd08) }
+func init() {
+	proto.RegisterFile("google/bytestream/bytestream.proto", fileDescriptor_bytestream_414b76681ba3f568)
+}
 
-var fileDescriptor_657cab877f44cd08 = []byte{
+var fileDescriptor_bytestream_414b76681ba3f568 = []byte{
 	// 446 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x5b, 0x8b, 0x13, 0x31,
 	0x14, 0x66, 0xb6, 0xab, 0x74, 0x4f, 0xa7, 0x5e, 0x02, 0xe2, 0x30, 0xe8, 0x6e, 0x77, 0x44, 0x28,

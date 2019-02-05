@@ -22,7 +22,6 @@ import (
 
 	pbd "github.com/golang/protobuf/ptypes/duration"
 	pbt "github.com/golang/protobuf/ptypes/timestamp"
-
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 )
 

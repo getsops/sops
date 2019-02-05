@@ -19,11 +19,11 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/grpclog"
 	metricspb "google.golang.org/grpc/stress/grpc_testing"

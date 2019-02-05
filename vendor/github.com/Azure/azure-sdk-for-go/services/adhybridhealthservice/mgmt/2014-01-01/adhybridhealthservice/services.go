@@ -22,10 +22,11 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// ServicesClient is the REST APIs for Azure Active Drectory Connect Health
+// ServicesClient is the REST APIs for Azure Active Directory Connect Health
 type ServicesClient struct {
 	BaseClient
 }
@@ -44,6 +45,16 @@ func NewServicesClientWithBaseURI(baseURI string) ServicesClient {
 // Parameters:
 // service - the service object.
 func (client ServicesClient) Add(ctx context.Context, service ServiceProperties) (result ServiceProperties, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddPreparer(ctx, service)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "Add", nil, "Failure preparing request")
@@ -107,6 +118,16 @@ func (client ServicesClient) AddResponder(resp *http.Response) (result ServicePr
 // serviceName - the name of the service.
 // alertFeedback - the alert feedback.
 func (client ServicesClient) AddAlertFeedback(ctx context.Context, serviceName string, alertFeedback AlertFeedback) (result AlertFeedback, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.AddAlertFeedback")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddAlertFeedbackPreparer(ctx, serviceName, alertFeedback)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "AddAlertFeedback", nil, "Failure preparing request")
@@ -176,6 +197,16 @@ func (client ServicesClient) AddAlertFeedbackResponder(resp *http.Response) (res
 // will be permanently deleted and False indicates that the service will be marked disabled and then deleted
 // after 30 days, if it is not re-registered.
 func (client ServicesClient) Delete(ctx context.Context, serviceName string, confirm *bool) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, serviceName, confirm)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "Delete", nil, "Failure preparing request")
@@ -243,6 +274,16 @@ func (client ServicesClient) DeleteResponder(resp *http.Response) (result autore
 // Parameters:
 // serviceName - the name of the service.
 func (client ServicesClient) Get(ctx context.Context, serviceName string) (result ServiceProperties, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "Get", nil, "Failure preparing request")
@@ -308,6 +349,16 @@ func (client ServicesClient) GetResponder(resp *http.Response) (result ServicePr
 // serviceName - the name of the service.
 // featureName - the name of the feature.
 func (client ServicesClient) GetFeatureAvailibility(ctx context.Context, serviceName string, featureName string) (result Result, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.GetFeatureAvailibility")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetFeatureAvailibilityPreparer(ctx, serviceName, featureName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "GetFeatureAvailibility", nil, "Failure preparing request")
@@ -374,6 +425,16 @@ func (client ServicesClient) GetFeatureAvailibilityResponder(resp *http.Response
 // serviceName - the name of the service.
 // metricName - the metric name
 func (client ServicesClient) GetMetricMetadata(ctx context.Context, serviceName string, metricName string) (result MetricMetadata, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.GetMetricMetadata")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetMetricMetadataPreparer(ctx, serviceName, metricName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "GetMetricMetadata", nil, "Failure preparing request")
@@ -444,6 +505,16 @@ func (client ServicesClient) GetMetricMetadataResponder(resp *http.Response) (re
 // fromDate - the start date.
 // toDate - the end date.
 func (client ServicesClient) GetMetricMetadataForGroup(ctx context.Context, serviceName string, metricName string, groupName string, groupKey string, fromDate *date.Time, toDate *date.Time) (result MetricSets, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.GetMetricMetadataForGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetMetricMetadataForGroupPreparer(ctx, serviceName, metricName, groupName, groupKey, fromDate, toDate)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "GetMetricMetadataForGroup", nil, "Failure preparing request")
@@ -520,6 +591,16 @@ func (client ServicesClient) GetMetricMetadataForGroupResponder(resp *http.Respo
 // serviceName - the name of the service.
 // featureName - the name of the feature.
 func (client ServicesClient) GetTenantWhitelisting(ctx context.Context, serviceName string, featureName string) (result Result, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.GetTenantWhitelisting")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetTenantWhitelistingPreparer(ctx, serviceName, featureName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "GetTenantWhitelisting", nil, "Failure preparing request")
@@ -591,6 +672,16 @@ func (client ServicesClient) GetTenantWhitelistingResponder(resp *http.Response)
 // then return the remaining elements.
 // takeCount - the take count , which specifies the number of elements that can be returned from a sequence.
 func (client ServicesClient) List(ctx context.Context, filter string, serviceType string, skipCount *int32, takeCount *int32) (result ServicesPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.s.Response.Response != nil {
+				sc = result.s.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter, serviceType, skipCount, takeCount)
 	if err != nil {
@@ -661,8 +752,8 @@ func (client ServicesClient) ListResponder(resp *http.Response) (result Services
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listNextResults(lastResults Services) (result Services, err error) {
-	req, err := lastResults.servicesPreparer()
+func (client ServicesClient) listNextResults(ctx context.Context, lastResults Services) (result Services, err error) {
+	req, err := lastResults.servicesPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -683,6 +774,16 @@ func (client ServicesClient) listNextResults(lastResults Services) (result Servi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListComplete(ctx context.Context, filter string, serviceType string, skipCount *int32, takeCount *int32) (result ServicesIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter, serviceType, skipCount, takeCount)
 	return
 }
@@ -692,6 +793,16 @@ func (client ServicesClient) ListComplete(ctx context.Context, filter string, se
 // serviceName - the name of the service.
 // shortName - the name of the alert.
 func (client ServicesClient) ListAlertFeedback(ctx context.Context, serviceName string, shortName string) (result AlertFeedbacks, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListAlertFeedback")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListAlertFeedbackPreparer(ctx, serviceName, shortName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "ListAlertFeedback", nil, "Failure preparing request")
@@ -761,6 +872,16 @@ func (client ServicesClient) ListAlertFeedbackResponder(resp *http.Response) (re
 // from - the start date to query for.
 // toParameter - the end date till when to query for.
 func (client ServicesClient) ListAlerts(ctx context.Context, serviceName string, filter string, state string, from *date.Time, toParameter *date.Time) (result AlertsPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListAlerts")
+		defer func() {
+			sc := -1
+			if result.a.Response.Response != nil {
+				sc = result.a.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAlertsNextResults
 	req, err := client.ListAlertsPreparer(ctx, serviceName, filter, state, from, toParameter)
 	if err != nil {
@@ -835,8 +956,8 @@ func (client ServicesClient) ListAlertsResponder(resp *http.Response) (result Al
 }
 
 // listAlertsNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listAlertsNextResults(lastResults Alerts) (result Alerts, err error) {
-	req, err := lastResults.alertsPreparer()
+func (client ServicesClient) listAlertsNextResults(ctx context.Context, lastResults Alerts) (result Alerts, err error) {
+	req, err := lastResults.alertsPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listAlertsNextResults", nil, "Failure preparing next results request")
 	}
@@ -857,6 +978,16 @@ func (client ServicesClient) listAlertsNextResults(lastResults Alerts) (result A
 
 // ListAlertsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListAlertsComplete(ctx context.Context, serviceName string, filter string, state string, from *date.Time, toParameter *date.Time) (result AlertsIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListAlerts")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAlerts(ctx, serviceName, filter, state, from, toParameter)
 	return
 }
@@ -865,6 +996,16 @@ func (client ServicesClient) ListAlertsComplete(ctx context.Context, serviceName
 // Parameters:
 // serviceName - the name of the service.
 func (client ServicesClient) ListExportErrors(ctx context.Context, serviceName string) (result ErrorCounts, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListExportErrors")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListExportErrorsPreparer(ctx, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "ListExportErrors", nil, "Failure preparing request")
@@ -930,6 +1071,16 @@ func (client ServicesClient) ListExportErrorsResponder(resp *http.Response) (res
 // serviceName - the name of the service.
 // errorBucket - the error category to query for.
 func (client ServicesClient) ListExportErrorsV2(ctx context.Context, serviceName string, errorBucket string) (result MergedExportErrors, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListExportErrorsV2")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListExportErrorsV2Preparer(ctx, serviceName, errorBucket)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "ListExportErrorsV2", nil, "Failure preparing request")
@@ -995,6 +1146,16 @@ func (client ServicesClient) ListExportErrorsV2Responder(resp *http.Response) (r
 // Parameters:
 // serviceName - the name of the service.
 func (client ServicesClient) ListExportStatus(ctx context.Context, serviceName string) (result ExportStatusesPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListExportStatus")
+		defer func() {
+			sc := -1
+			if result.es.Response.Response != nil {
+				sc = result.es.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listExportStatusNextResults
 	req, err := client.ListExportStatusPreparer(ctx, serviceName)
 	if err != nil {
@@ -1057,8 +1218,8 @@ func (client ServicesClient) ListExportStatusResponder(resp *http.Response) (res
 }
 
 // listExportStatusNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listExportStatusNextResults(lastResults ExportStatuses) (result ExportStatuses, err error) {
-	req, err := lastResults.exportStatusesPreparer()
+func (client ServicesClient) listExportStatusNextResults(ctx context.Context, lastResults ExportStatuses) (result ExportStatuses, err error) {
+	req, err := lastResults.exportStatusesPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listExportStatusNextResults", nil, "Failure preparing next results request")
 	}
@@ -1079,6 +1240,16 @@ func (client ServicesClient) listExportStatusNextResults(lastResults ExportStatu
 
 // ListExportStatusComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListExportStatusComplete(ctx context.Context, serviceName string) (result ExportStatusesIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListExportStatus")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListExportStatus(ctx, serviceName)
 	return
 }
@@ -1089,6 +1260,16 @@ func (client ServicesClient) ListExportStatusComplete(ctx context.Context, servi
 // filter - the metric metadata property filter to apply.
 // perfCounter - indicates if only performance counter metrics are requested.
 func (client ServicesClient) ListMetricMetadata(ctx context.Context, serviceName string, filter string, perfCounter *bool) (result MetricMetadataListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMetricMetadata")
+		defer func() {
+			sc := -1
+			if result.mml.Response.Response != nil {
+				sc = result.mml.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listMetricMetadataNextResults
 	req, err := client.ListMetricMetadataPreparer(ctx, serviceName, filter, perfCounter)
 	if err != nil {
@@ -1157,8 +1338,8 @@ func (client ServicesClient) ListMetricMetadataResponder(resp *http.Response) (r
 }
 
 // listMetricMetadataNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listMetricMetadataNextResults(lastResults MetricMetadataList) (result MetricMetadataList, err error) {
-	req, err := lastResults.metricMetadataListPreparer()
+func (client ServicesClient) listMetricMetadataNextResults(ctx context.Context, lastResults MetricMetadataList) (result MetricMetadataList, err error) {
+	req, err := lastResults.metricMetadataListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listMetricMetadataNextResults", nil, "Failure preparing next results request")
 	}
@@ -1179,6 +1360,16 @@ func (client ServicesClient) listMetricMetadataNextResults(lastResults MetricMet
 
 // ListMetricMetadataComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListMetricMetadataComplete(ctx context.Context, serviceName string, filter string, perfCounter *bool) (result MetricMetadataListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMetricMetadata")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListMetricMetadata(ctx, serviceName, filter, perfCounter)
 	return
 }
@@ -1189,6 +1380,16 @@ func (client ServicesClient) ListMetricMetadataComplete(ctx context.Context, ser
 // metricName - the metric name
 // groupName - the group name
 func (client ServicesClient) ListMetricsAverage(ctx context.Context, serviceName string, metricName string, groupName string) (result MetricsPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMetricsAverage")
+		defer func() {
+			sc := -1
+			if result.mVar.Response.Response != nil {
+				sc = result.mVar.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listMetricsAverageNextResults
 	req, err := client.ListMetricsAveragePreparer(ctx, serviceName, metricName, groupName)
 	if err != nil {
@@ -1253,8 +1454,8 @@ func (client ServicesClient) ListMetricsAverageResponder(resp *http.Response) (r
 }
 
 // listMetricsAverageNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listMetricsAverageNextResults(lastResults Metrics) (result Metrics, err error) {
-	req, err := lastResults.metricsPreparer()
+func (client ServicesClient) listMetricsAverageNextResults(ctx context.Context, lastResults Metrics) (result Metrics, err error) {
+	req, err := lastResults.metricsPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listMetricsAverageNextResults", nil, "Failure preparing next results request")
 	}
@@ -1275,6 +1476,16 @@ func (client ServicesClient) listMetricsAverageNextResults(lastResults Metrics) 
 
 // ListMetricsAverageComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListMetricsAverageComplete(ctx context.Context, serviceName string, metricName string, groupName string) (result MetricsIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMetricsAverage")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListMetricsAverage(ctx, serviceName, metricName, groupName)
 	return
 }
@@ -1285,6 +1496,16 @@ func (client ServicesClient) ListMetricsAverageComplete(ctx context.Context, ser
 // metricName - the metric name
 // groupName - the group name
 func (client ServicesClient) ListMetricsSum(ctx context.Context, serviceName string, metricName string, groupName string) (result MetricsPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMetricsSum")
+		defer func() {
+			sc := -1
+			if result.mVar.Response.Response != nil {
+				sc = result.mVar.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listMetricsSumNextResults
 	req, err := client.ListMetricsSumPreparer(ctx, serviceName, metricName, groupName)
 	if err != nil {
@@ -1349,8 +1570,8 @@ func (client ServicesClient) ListMetricsSumResponder(resp *http.Response) (resul
 }
 
 // listMetricsSumNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listMetricsSumNextResults(lastResults Metrics) (result Metrics, err error) {
-	req, err := lastResults.metricsPreparer()
+func (client ServicesClient) listMetricsSumNextResults(ctx context.Context, lastResults Metrics) (result Metrics, err error) {
+	req, err := lastResults.metricsPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listMetricsSumNextResults", nil, "Failure preparing next results request")
 	}
@@ -1371,6 +1592,16 @@ func (client ServicesClient) listMetricsSumNextResults(lastResults Metrics) (res
 
 // ListMetricsSumComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListMetricsSumComplete(ctx context.Context, serviceName string, metricName string, groupName string) (result MetricsIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMetricsSum")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListMetricsSum(ctx, serviceName, metricName, groupName)
 	return
 }
@@ -1379,6 +1610,16 @@ func (client ServicesClient) ListMetricsSumComplete(ctx context.Context, service
 // Parameters:
 // serviceName - the name of the service.
 func (client ServicesClient) ListMonitoringConfigurations(ctx context.Context, serviceName string) (result Items, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListMonitoringConfigurations")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListMonitoringConfigurationsPreparer(ctx, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "ListMonitoringConfigurations", nil, "Failure preparing request")
@@ -1450,6 +1691,16 @@ func (client ServicesClient) ListMonitoringConfigurationsResponder(resp *http.Re
 // then return the remaining elements.
 // takeCount - the take count , which specifies the number of elements that can be returned from a sequence.
 func (client ServicesClient) ListPremium(ctx context.Context, filter string, serviceType string, skipCount *int32, takeCount *int32) (result ServicesPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListPremium")
+		defer func() {
+			sc := -1
+			if result.s.Response.Response != nil {
+				sc = result.s.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listPremiumNextResults
 	req, err := client.ListPremiumPreparer(ctx, filter, serviceType, skipCount, takeCount)
 	if err != nil {
@@ -1520,8 +1771,8 @@ func (client ServicesClient) ListPremiumResponder(resp *http.Response) (result S
 }
 
 // listPremiumNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listPremiumNextResults(lastResults Services) (result Services, err error) {
-	req, err := lastResults.servicesPreparer()
+func (client ServicesClient) listPremiumNextResults(ctx context.Context, lastResults Services) (result Services, err error) {
+	req, err := lastResults.servicesPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "listPremiumNextResults", nil, "Failure preparing next results request")
 	}
@@ -1542,6 +1793,16 @@ func (client ServicesClient) listPremiumNextResults(lastResults Services) (resul
 
 // ListPremiumComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListPremiumComplete(ctx context.Context, filter string, serviceType string, skipCount *int32, takeCount *int32) (result ServicesIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListPremium")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListPremium(ctx, filter, serviceType, skipCount, takeCount)
 	return
 }
@@ -1551,6 +1812,16 @@ func (client ServicesClient) ListPremiumComplete(ctx context.Context, filter str
 // serviceName - the name of the service.
 // dataSource - the source of data, if its test data or customer data.
 func (client ServicesClient) ListUserBadPasswordReport(ctx context.Context, serviceName string, dataSource string) (result ErrorReportUsersEntries, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListUserBadPasswordReport")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListUserBadPasswordReportPreparer(ctx, serviceName, dataSource)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "ListUserBadPasswordReport", nil, "Failure preparing request")
@@ -1619,6 +1890,16 @@ func (client ServicesClient) ListUserBadPasswordReportResponder(resp *http.Respo
 // serviceName - the name of the service which needs to be deleted.
 // service - the service object.
 func (client ServicesClient) Update(ctx context.Context, serviceName string, service ServiceProperties) (result ServiceProperties, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, serviceName, service)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "Update", nil, "Failure preparing request")
@@ -1686,6 +1967,16 @@ func (client ServicesClient) UpdateResponder(resp *http.Response) (result Servic
 // serviceName - the name of the service.
 // configurationSetting - the monitoring configuration to update
 func (client ServicesClient) UpdateMonitoringConfiguration(ctx context.Context, serviceName string, configurationSetting Item) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.UpdateMonitoringConfiguration")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateMonitoringConfigurationPreparer(ctx, serviceName, configurationSetting)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServicesClient", "UpdateMonitoringConfiguration", nil, "Failure preparing request")

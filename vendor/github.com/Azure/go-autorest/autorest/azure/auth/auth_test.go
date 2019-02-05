@@ -39,10 +39,19 @@ var (
 )
 
 func TestNewAuthorizerFromFile(t *testing.T) {
-	os.Setenv("AZURE_AUTH_LOCATION", filepath.Join(getCredsPath(), "credsutf16le.json"))
+	os.Setenv("AZURE_AUTH_LOCATION", "./testdata/credsutf16le.json")
 	authorizer, err := NewAuthorizerFromFile("https://management.azure.com")
 	if err != nil || authorizer == nil {
 		t.Logf("NewAuthorizerFromFile failed, got error %v", err)
+		t.Fail()
+	}
+}
+
+func TestNewAuthorizerFromFileWithResource(t *testing.T) {
+	os.Setenv("AZURE_AUTH_LOCATION", "./testdata/credsutf16le.json")
+	authorizer, err := NewAuthorizerFromFileWithResource("https://my.vault.azure.net")
+	if err != nil || authorizer == nil {
+		t.Logf("NewAuthorizerFromFileWithResource failed, got error %v", err)
 		t.Fail()
 	}
 }
@@ -54,7 +63,19 @@ func TestNewAuthorizerFromEnvironment(t *testing.T) {
 	authorizer, err := NewAuthorizerFromEnvironment()
 
 	if err != nil || authorizer == nil {
-		t.Logf("NewAuthorizerFromFile failed, got error %v", err)
+		t.Logf("NewAuthorizerFromEnvironment failed, got error %v", err)
+		t.Fail()
+	}
+}
+
+func TestNewAuthorizerFromEnvironmentWithResource(t *testing.T) {
+	os.Setenv("AZURE_TENANT_ID", expectedFile.TenantID)
+	os.Setenv("AZURE_CLIENT_ID", expectedFile.ClientID)
+	os.Setenv("AZURE_CLIENT_SECRET", expectedFile.ClientSecret)
+	authorizer, err := NewAuthorizerFromEnvironmentWithResource("https://my.vault.azure.net")
+
+	if err != nil || authorizer == nil {
+		t.Logf("NewAuthorizerFromEnvironmentWithResource failed, got error %v", err)
 		t.Fail()
 	}
 }
@@ -65,9 +86,8 @@ func TestDecodeAndUnmarshal(t *testing.T) {
 		"credsutf16le.json",
 		"credsutf16be.json",
 	}
-	creds := getCredsPath()
 	for _, test := range tests {
-		b, err := ioutil.ReadFile(filepath.Join(creds, test))
+		b, err := ioutil.ReadFile(filepath.Join("./testdata/", test))
 		if err != nil {
 			t.Logf("error reading file '%s': %s", test, err)
 			t.Fail()
@@ -88,11 +108,6 @@ func TestDecodeAndUnmarshal(t *testing.T) {
 			t.Fail()
 		}
 	}
-}
-
-func getCredsPath() string {
-	gopath := os.Getenv("GOPATH")
-	return filepath.Join(gopath, "src", "github.com", "Azure", "go-autorest", "testdata")
 }
 
 func areMapsEqual(a, b map[string]string) bool {

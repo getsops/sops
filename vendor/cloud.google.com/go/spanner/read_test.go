@@ -17,6 +17,7 @@ limitations under the License.
 package spanner
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -24,17 +25,15 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
-	"google.golang.org/grpc/status"
-
+	"cloud.google.com/go/spanner/internal/backoff"
+	"cloud.google.com/go/spanner/internal/testutil"
 	"github.com/golang/protobuf/proto"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
-
-	"cloud.google.com/go/spanner/internal/testutil"
 	"google.golang.org/api/iterator"
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var (
@@ -1076,7 +1075,10 @@ func TestRsdBlockingStates(t *testing.T) {
 			test.rpc,
 		)
 		// Override backoff to make the test run faster.
-		r.backoff = exponentialBackoff{1 * time.Nanosecond, 1 * time.Nanosecond}
+		r.backoff = backoff.ExponentialBackoff{
+			Min: 1 * time.Nanosecond,
+			Max: 1 * time.Nanosecond,
+		}
 		// st is the set of observed state transitions.
 		st := []resumableStreamDecoderState{}
 		// q is the content of the decoder's partial result queue when expected number of state transitions are done.

@@ -52,7 +52,6 @@ var PipelineResources_Disk_Type_name = map[int32]string{
 	2: "PERSISTENT_SSD",
 	3: "LOCAL_SSD",
 }
-
 var PipelineResources_Disk_Type_value = map[string]int32{
 	"TYPE_UNSPECIFIED": 0,
 	"PERSISTENT_HDD":   1,
@@ -63,9 +62,8 @@ var PipelineResources_Disk_Type_value = map[string]int32{
 func (x PipelineResources_Disk_Type) String() string {
 	return proto.EnumName(PipelineResources_Disk_Type_name, int32(x))
 }
-
 func (PipelineResources_Disk_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{16, 0, 0}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{16, 0, 0}
 }
 
 // Describes a Compute Engine resource that is being managed by a running
@@ -88,7 +86,7 @@ func (m *ComputeEngine) Reset()         { *m = ComputeEngine{} }
 func (m *ComputeEngine) String() string { return proto.CompactTextString(m) }
 func (*ComputeEngine) ProtoMessage()    {}
 func (*ComputeEngine) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{0}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{0}
 }
 func (m *ComputeEngine) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ComputeEngine.Unmarshal(m, b)
@@ -96,8 +94,8 @@ func (m *ComputeEngine) XXX_Unmarshal(b []byte) error {
 func (m *ComputeEngine) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ComputeEngine.Marshal(b, m, deterministic)
 }
-func (m *ComputeEngine) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ComputeEngine.Merge(m, src)
+func (dst *ComputeEngine) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ComputeEngine.Merge(dst, src)
 }
 func (m *ComputeEngine) XXX_Size() int {
 	return xxx_messageInfo_ComputeEngine.Size(m)
@@ -151,7 +149,7 @@ func (m *RuntimeMetadata) Reset()         { *m = RuntimeMetadata{} }
 func (m *RuntimeMetadata) String() string { return proto.CompactTextString(m) }
 func (*RuntimeMetadata) ProtoMessage()    {}
 func (*RuntimeMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{1}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{1}
 }
 func (m *RuntimeMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RuntimeMetadata.Unmarshal(m, b)
@@ -159,8 +157,8 @@ func (m *RuntimeMetadata) XXX_Unmarshal(b []byte) error {
 func (m *RuntimeMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RuntimeMetadata.Marshal(b, m, deterministic)
 }
-func (m *RuntimeMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RuntimeMetadata.Merge(m, src)
+func (dst *RuntimeMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RuntimeMetadata.Merge(dst, src)
 }
 func (m *RuntimeMetadata) XXX_Size() int {
 	return xxx_messageInfo_RuntimeMetadata.Size(m)
@@ -226,7 +224,7 @@ func (m *Pipeline) Reset()         { *m = Pipeline{} }
 func (m *Pipeline) String() string { return proto.CompactTextString(m) }
 func (*Pipeline) ProtoMessage()    {}
 func (*Pipeline) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{2}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{2}
 }
 func (m *Pipeline) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Pipeline.Unmarshal(m, b)
@@ -234,8 +232,8 @@ func (m *Pipeline) XXX_Unmarshal(b []byte) error {
 func (m *Pipeline) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Pipeline.Marshal(b, m, deterministic)
 }
-func (m *Pipeline) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Pipeline.Merge(m, src)
+func (dst *Pipeline) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Pipeline.Merge(dst, src)
 }
 func (m *Pipeline) XXX_Size() int {
 	return xxx_messageInfo_Pipeline.Size(m)
@@ -388,7 +386,7 @@ func (m *CreatePipelineRequest) Reset()         { *m = CreatePipelineRequest{} }
 func (m *CreatePipelineRequest) String() string { return proto.CompactTextString(m) }
 func (*CreatePipelineRequest) ProtoMessage()    {}
 func (*CreatePipelineRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{3}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{3}
 }
 func (m *CreatePipelineRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreatePipelineRequest.Unmarshal(m, b)
@@ -396,8 +394,8 @@ func (m *CreatePipelineRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreatePipelineRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreatePipelineRequest.Marshal(b, m, deterministic)
 }
-func (m *CreatePipelineRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreatePipelineRequest.Merge(m, src)
+func (dst *CreatePipelineRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreatePipelineRequest.Merge(dst, src)
 }
 func (m *CreatePipelineRequest) XXX_Size() int {
 	return xxx_messageInfo_CreatePipelineRequest.Size(m)
@@ -469,7 +467,7 @@ func (m *RunPipelineArgs) Reset()         { *m = RunPipelineArgs{} }
 func (m *RunPipelineArgs) String() string { return proto.CompactTextString(m) }
 func (*RunPipelineArgs) ProtoMessage()    {}
 func (*RunPipelineArgs) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{4}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{4}
 }
 func (m *RunPipelineArgs) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RunPipelineArgs.Unmarshal(m, b)
@@ -477,8 +475,8 @@ func (m *RunPipelineArgs) XXX_Unmarshal(b []byte) error {
 func (m *RunPipelineArgs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RunPipelineArgs.Marshal(b, m, deterministic)
 }
-func (m *RunPipelineArgs) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RunPipelineArgs.Merge(m, src)
+func (dst *RunPipelineArgs) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RunPipelineArgs.Merge(dst, src)
 }
 func (m *RunPipelineArgs) XXX_Size() int {
 	return xxx_messageInfo_RunPipelineArgs.Size(m)
@@ -575,7 +573,7 @@ func (m *RunPipelineRequest) Reset()         { *m = RunPipelineRequest{} }
 func (m *RunPipelineRequest) String() string { return proto.CompactTextString(m) }
 func (*RunPipelineRequest) ProtoMessage()    {}
 func (*RunPipelineRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{5}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{5}
 }
 func (m *RunPipelineRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RunPipelineRequest.Unmarshal(m, b)
@@ -583,8 +581,8 @@ func (m *RunPipelineRequest) XXX_Unmarshal(b []byte) error {
 func (m *RunPipelineRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RunPipelineRequest.Marshal(b, m, deterministic)
 }
-func (m *RunPipelineRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RunPipelineRequest.Merge(m, src)
+func (dst *RunPipelineRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RunPipelineRequest.Merge(dst, src)
 }
 func (m *RunPipelineRequest) XXX_Size() int {
 	return xxx_messageInfo_RunPipelineRequest.Size(m)
@@ -723,7 +721,7 @@ func (m *GetPipelineRequest) Reset()         { *m = GetPipelineRequest{} }
 func (m *GetPipelineRequest) String() string { return proto.CompactTextString(m) }
 func (*GetPipelineRequest) ProtoMessage()    {}
 func (*GetPipelineRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{6}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{6}
 }
 func (m *GetPipelineRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPipelineRequest.Unmarshal(m, b)
@@ -731,8 +729,8 @@ func (m *GetPipelineRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetPipelineRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetPipelineRequest.Marshal(b, m, deterministic)
 }
-func (m *GetPipelineRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetPipelineRequest.Merge(m, src)
+func (dst *GetPipelineRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPipelineRequest.Merge(dst, src)
 }
 func (m *GetPipelineRequest) XXX_Size() int {
 	return xxx_messageInfo_GetPipelineRequest.Size(m)
@@ -779,7 +777,7 @@ func (m *ListPipelinesRequest) Reset()         { *m = ListPipelinesRequest{} }
 func (m *ListPipelinesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListPipelinesRequest) ProtoMessage()    {}
 func (*ListPipelinesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{7}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{7}
 }
 func (m *ListPipelinesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListPipelinesRequest.Unmarshal(m, b)
@@ -787,8 +785,8 @@ func (m *ListPipelinesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListPipelinesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListPipelinesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListPipelinesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListPipelinesRequest.Merge(m, src)
+func (dst *ListPipelinesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListPipelinesRequest.Merge(dst, src)
 }
 func (m *ListPipelinesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListPipelinesRequest.Size(m)
@@ -846,7 +844,7 @@ func (m *ListPipelinesResponse) Reset()         { *m = ListPipelinesResponse{} }
 func (m *ListPipelinesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListPipelinesResponse) ProtoMessage()    {}
 func (*ListPipelinesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{8}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{8}
 }
 func (m *ListPipelinesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListPipelinesResponse.Unmarshal(m, b)
@@ -854,8 +852,8 @@ func (m *ListPipelinesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListPipelinesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListPipelinesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListPipelinesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListPipelinesResponse.Merge(m, src)
+func (dst *ListPipelinesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListPipelinesResponse.Merge(dst, src)
 }
 func (m *ListPipelinesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListPipelinesResponse.Size(m)
@@ -894,7 +892,7 @@ func (m *DeletePipelineRequest) Reset()         { *m = DeletePipelineRequest{} }
 func (m *DeletePipelineRequest) String() string { return proto.CompactTextString(m) }
 func (*DeletePipelineRequest) ProtoMessage()    {}
 func (*DeletePipelineRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{9}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{9}
 }
 func (m *DeletePipelineRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeletePipelineRequest.Unmarshal(m, b)
@@ -902,8 +900,8 @@ func (m *DeletePipelineRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeletePipelineRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeletePipelineRequest.Marshal(b, m, deterministic)
 }
-func (m *DeletePipelineRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeletePipelineRequest.Merge(m, src)
+func (dst *DeletePipelineRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeletePipelineRequest.Merge(dst, src)
 }
 func (m *DeletePipelineRequest) XXX_Size() int {
 	return xxx_messageInfo_DeletePipelineRequest.Size(m)
@@ -936,7 +934,7 @@ func (m *GetControllerConfigRequest) Reset()         { *m = GetControllerConfigR
 func (m *GetControllerConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*GetControllerConfigRequest) ProtoMessage()    {}
 func (*GetControllerConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{10}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{10}
 }
 func (m *GetControllerConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetControllerConfigRequest.Unmarshal(m, b)
@@ -944,8 +942,8 @@ func (m *GetControllerConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetControllerConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetControllerConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *GetControllerConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetControllerConfigRequest.Merge(m, src)
+func (dst *GetControllerConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetControllerConfigRequest.Merge(dst, src)
 }
 func (m *GetControllerConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_GetControllerConfigRequest.Size(m)
@@ -991,7 +989,7 @@ func (m *ControllerConfig) Reset()         { *m = ControllerConfig{} }
 func (m *ControllerConfig) String() string { return proto.CompactTextString(m) }
 func (*ControllerConfig) ProtoMessage()    {}
 func (*ControllerConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{11}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{11}
 }
 func (m *ControllerConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerConfig.Unmarshal(m, b)
@@ -999,8 +997,8 @@ func (m *ControllerConfig) XXX_Unmarshal(b []byte) error {
 func (m *ControllerConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ControllerConfig.Marshal(b, m, deterministic)
 }
-func (m *ControllerConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ControllerConfig.Merge(m, src)
+func (dst *ControllerConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControllerConfig.Merge(dst, src)
 }
 func (m *ControllerConfig) XXX_Size() int {
 	return xxx_messageInfo_ControllerConfig.Size(m)
@@ -1078,7 +1076,7 @@ func (m *ControllerConfig_RepeatedString) Reset()         { *m = ControllerConfi
 func (m *ControllerConfig_RepeatedString) String() string { return proto.CompactTextString(m) }
 func (*ControllerConfig_RepeatedString) ProtoMessage()    {}
 func (*ControllerConfig_RepeatedString) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{11, 0}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{11, 0}
 }
 func (m *ControllerConfig_RepeatedString) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ControllerConfig_RepeatedString.Unmarshal(m, b)
@@ -1086,8 +1084,8 @@ func (m *ControllerConfig_RepeatedString) XXX_Unmarshal(b []byte) error {
 func (m *ControllerConfig_RepeatedString) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ControllerConfig_RepeatedString.Marshal(b, m, deterministic)
 }
-func (m *ControllerConfig_RepeatedString) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ControllerConfig_RepeatedString.Merge(m, src)
+func (dst *ControllerConfig_RepeatedString) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ControllerConfig_RepeatedString.Merge(dst, src)
 }
 func (m *ControllerConfig_RepeatedString) XXX_Size() int {
 	return xxx_messageInfo_ControllerConfig_RepeatedString.Size(m)
@@ -1121,7 +1119,7 @@ func (m *TimestampEvent) Reset()         { *m = TimestampEvent{} }
 func (m *TimestampEvent) String() string { return proto.CompactTextString(m) }
 func (*TimestampEvent) ProtoMessage()    {}
 func (*TimestampEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{12}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{12}
 }
 func (m *TimestampEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TimestampEvent.Unmarshal(m, b)
@@ -1129,8 +1127,8 @@ func (m *TimestampEvent) XXX_Unmarshal(b []byte) error {
 func (m *TimestampEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TimestampEvent.Marshal(b, m, deterministic)
 }
-func (m *TimestampEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TimestampEvent.Merge(m, src)
+func (dst *TimestampEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TimestampEvent.Merge(dst, src)
 }
 func (m *TimestampEvent) XXX_Size() int {
 	return xxx_messageInfo_TimestampEvent.Size(m)
@@ -1172,7 +1170,7 @@ func (m *SetOperationStatusRequest) Reset()         { *m = SetOperationStatusReq
 func (m *SetOperationStatusRequest) String() string { return proto.CompactTextString(m) }
 func (*SetOperationStatusRequest) ProtoMessage()    {}
 func (*SetOperationStatusRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{13}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{13}
 }
 func (m *SetOperationStatusRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetOperationStatusRequest.Unmarshal(m, b)
@@ -1180,8 +1178,8 @@ func (m *SetOperationStatusRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetOperationStatusRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetOperationStatusRequest.Marshal(b, m, deterministic)
 }
-func (m *SetOperationStatusRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetOperationStatusRequest.Merge(m, src)
+func (dst *SetOperationStatusRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetOperationStatusRequest.Merge(dst, src)
 }
 func (m *SetOperationStatusRequest) XXX_Size() int {
 	return xxx_messageInfo_SetOperationStatusRequest.Size(m)
@@ -1250,7 +1248,7 @@ func (m *ServiceAccount) Reset()         { *m = ServiceAccount{} }
 func (m *ServiceAccount) String() string { return proto.CompactTextString(m) }
 func (*ServiceAccount) ProtoMessage()    {}
 func (*ServiceAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{14}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{14}
 }
 func (m *ServiceAccount) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServiceAccount.Unmarshal(m, b)
@@ -1258,8 +1256,8 @@ func (m *ServiceAccount) XXX_Unmarshal(b []byte) error {
 func (m *ServiceAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ServiceAccount.Marshal(b, m, deterministic)
 }
-func (m *ServiceAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceAccount.Merge(m, src)
+func (dst *ServiceAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceAccount.Merge(dst, src)
 }
 func (m *ServiceAccount) XXX_Size() int {
 	return xxx_messageInfo_ServiceAccount.Size(m)
@@ -1304,7 +1302,7 @@ func (m *LoggingOptions) Reset()         { *m = LoggingOptions{} }
 func (m *LoggingOptions) String() string { return proto.CompactTextString(m) }
 func (*LoggingOptions) ProtoMessage()    {}
 func (*LoggingOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{15}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{15}
 }
 func (m *LoggingOptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LoggingOptions.Unmarshal(m, b)
@@ -1312,8 +1310,8 @@ func (m *LoggingOptions) XXX_Unmarshal(b []byte) error {
 func (m *LoggingOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LoggingOptions.Marshal(b, m, deterministic)
 }
-func (m *LoggingOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LoggingOptions.Merge(m, src)
+func (dst *LoggingOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LoggingOptions.Merge(dst, src)
 }
 func (m *LoggingOptions) XXX_Size() int {
 	return xxx_messageInfo_LoggingOptions.Size(m)
@@ -1369,7 +1367,7 @@ func (m *PipelineResources) Reset()         { *m = PipelineResources{} }
 func (m *PipelineResources) String() string { return proto.CompactTextString(m) }
 func (*PipelineResources) ProtoMessage()    {}
 func (*PipelineResources) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{16}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{16}
 }
 func (m *PipelineResources) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PipelineResources.Unmarshal(m, b)
@@ -1377,8 +1375,8 @@ func (m *PipelineResources) XXX_Unmarshal(b []byte) error {
 func (m *PipelineResources) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PipelineResources.Marshal(b, m, deterministic)
 }
-func (m *PipelineResources) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PipelineResources.Merge(m, src)
+func (dst *PipelineResources) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PipelineResources.Merge(dst, src)
 }
 func (m *PipelineResources) XXX_Size() int {
 	return xxx_messageInfo_PipelineResources.Size(m)
@@ -1474,7 +1472,7 @@ func (m *PipelineResources_Disk) Reset()         { *m = PipelineResources_Disk{}
 func (m *PipelineResources_Disk) String() string { return proto.CompactTextString(m) }
 func (*PipelineResources_Disk) ProtoMessage()    {}
 func (*PipelineResources_Disk) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{16, 0}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{16, 0}
 }
 func (m *PipelineResources_Disk) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PipelineResources_Disk.Unmarshal(m, b)
@@ -1482,8 +1480,8 @@ func (m *PipelineResources_Disk) XXX_Unmarshal(b []byte) error {
 func (m *PipelineResources_Disk) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PipelineResources_Disk.Marshal(b, m, deterministic)
 }
-func (m *PipelineResources_Disk) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PipelineResources_Disk.Merge(m, src)
+func (dst *PipelineResources_Disk) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PipelineResources_Disk.Merge(dst, src)
 }
 func (m *PipelineResources_Disk) XXX_Size() int {
 	return xxx_messageInfo_PipelineResources_Disk.Size(m)
@@ -1651,7 +1649,7 @@ func (m *PipelineParameter) Reset()         { *m = PipelineParameter{} }
 func (m *PipelineParameter) String() string { return proto.CompactTextString(m) }
 func (*PipelineParameter) ProtoMessage()    {}
 func (*PipelineParameter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{17}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{17}
 }
 func (m *PipelineParameter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PipelineParameter.Unmarshal(m, b)
@@ -1659,8 +1657,8 @@ func (m *PipelineParameter) XXX_Unmarshal(b []byte) error {
 func (m *PipelineParameter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PipelineParameter.Marshal(b, m, deterministic)
 }
-func (m *PipelineParameter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PipelineParameter.Merge(m, src)
+func (dst *PipelineParameter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PipelineParameter.Merge(dst, src)
 }
 func (m *PipelineParameter) XXX_Size() int {
 	return xxx_messageInfo_PipelineParameter.Size(m)
@@ -1719,7 +1717,7 @@ func (m *PipelineParameter_LocalCopy) Reset()         { *m = PipelineParameter_L
 func (m *PipelineParameter_LocalCopy) String() string { return proto.CompactTextString(m) }
 func (*PipelineParameter_LocalCopy) ProtoMessage()    {}
 func (*PipelineParameter_LocalCopy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{17, 0}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{17, 0}
 }
 func (m *PipelineParameter_LocalCopy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PipelineParameter_LocalCopy.Unmarshal(m, b)
@@ -1727,8 +1725,8 @@ func (m *PipelineParameter_LocalCopy) XXX_Unmarshal(b []byte) error {
 func (m *PipelineParameter_LocalCopy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PipelineParameter_LocalCopy.Marshal(b, m, deterministic)
 }
-func (m *PipelineParameter_LocalCopy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PipelineParameter_LocalCopy.Merge(m, src)
+func (dst *PipelineParameter_LocalCopy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PipelineParameter_LocalCopy.Merge(dst, src)
 }
 func (m *PipelineParameter_LocalCopy) XXX_Size() int {
 	return xxx_messageInfo_PipelineParameter_LocalCopy.Size(m)
@@ -1776,7 +1774,7 @@ func (m *DockerExecutor) Reset()         { *m = DockerExecutor{} }
 func (m *DockerExecutor) String() string { return proto.CompactTextString(m) }
 func (*DockerExecutor) ProtoMessage()    {}
 func (*DockerExecutor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_72a0789107b705b0, []int{18}
+	return fileDescriptor_pipelines_55609b41fbfd863e, []int{18}
 }
 func (m *DockerExecutor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DockerExecutor.Unmarshal(m, b)
@@ -1784,8 +1782,8 @@ func (m *DockerExecutor) XXX_Unmarshal(b []byte) error {
 func (m *DockerExecutor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DockerExecutor.Marshal(b, m, deterministic)
 }
-func (m *DockerExecutor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DockerExecutor.Merge(m, src)
+func (dst *DockerExecutor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DockerExecutor.Merge(dst, src)
 }
 func (m *DockerExecutor) XXX_Size() int {
 	return xxx_messageInfo_DockerExecutor.Size(m)
@@ -2168,10 +2166,10 @@ var _PipelinesV1Alpha2_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/genomics/v1alpha2/pipelines.proto", fileDescriptor_72a0789107b705b0)
+	proto.RegisterFile("google/genomics/v1alpha2/pipelines.proto", fileDescriptor_pipelines_55609b41fbfd863e)
 }
 
-var fileDescriptor_72a0789107b705b0 = []byte{
+var fileDescriptor_pipelines_55609b41fbfd863e = []byte{
 	// 2065 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0x4d, 0x73, 0xdb, 0xc8,
 	0xd1, 0x36, 0x28, 0x4a, 0x22, 0x9a, 0x12, 0x45, 0xcf, 0xda, 0x6b, 0x9a, 0xf6, 0xbe, 0xb6, 0xe1,

@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opAssociateCreatedArtifact = "AssociateCreatedArtifact"
@@ -16,7 +18,7 @@ const opAssociateCreatedArtifact = "AssociateCreatedArtifact"
 // AssociateCreatedArtifactRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateCreatedArtifact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -50,6 +52,7 @@ func (c *MigrationHub) AssociateCreatedArtifactRequest(input *AssociateCreatedAr
 
 	output = &AssociateCreatedArtifactOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -132,7 +135,7 @@ const opAssociateDiscoveredResource = "AssociateDiscoveredResource"
 // AssociateDiscoveredResourceRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateDiscoveredResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -166,6 +169,7 @@ func (c *MigrationHub) AssociateDiscoveredResourceRequest(input *AssociateDiscov
 
 	output = &AssociateDiscoveredResourceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -242,7 +246,7 @@ const opCreateProgressUpdateStream = "CreateProgressUpdateStream"
 // CreateProgressUpdateStreamRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProgressUpdateStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -276,6 +280,7 @@ func (c *MigrationHub) CreateProgressUpdateStreamRequest(input *CreateProgressUp
 
 	output = &CreateProgressUpdateStreamOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -345,7 +350,7 @@ const opDeleteProgressUpdateStream = "DeleteProgressUpdateStream"
 // DeleteProgressUpdateStreamRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProgressUpdateStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -379,6 +384,7 @@ func (c *MigrationHub) DeleteProgressUpdateStreamRequest(input *DeleteProgressUp
 
 	output = &DeleteProgressUpdateStreamOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -471,7 +477,7 @@ const opDescribeApplicationState = "DescribeApplicationState"
 // DescribeApplicationStateRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeApplicationState operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -572,7 +578,7 @@ const opDescribeMigrationTask = "DescribeMigrationTask"
 // DescribeMigrationTaskRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMigrationTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -668,7 +674,7 @@ const opDisassociateCreatedArtifact = "DisassociateCreatedArtifact"
 // DisassociateCreatedArtifactRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateCreatedArtifact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -702,6 +708,7 @@ func (c *MigrationHub) DisassociateCreatedArtifactRequest(input *DisassociateCre
 
 	output = &DisassociateCreatedArtifactOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -784,7 +791,7 @@ const opDisassociateDiscoveredResource = "DisassociateDiscoveredResource"
 // DisassociateDiscoveredResourceRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateDiscoveredResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -818,6 +825,7 @@ func (c *MigrationHub) DisassociateDiscoveredResourceRequest(input *Disassociate
 
 	output = &DisassociateDiscoveredResourceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -889,7 +897,7 @@ const opImportMigrationTask = "ImportMigrationTask"
 // ImportMigrationTaskRequest generates a "aws/request.Request" representing the
 // client's request for the ImportMigrationTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -923,6 +931,7 @@ func (c *MigrationHub) ImportMigrationTaskRequest(input *ImportMigrationTaskInpu
 
 	output = &ImportMigrationTaskOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -998,7 +1007,7 @@ const opListCreatedArtifacts = "ListCreatedArtifacts"
 // ListCreatedArtifactsRequest generates a "aws/request.Request" representing the
 // client's request for the ListCreatedArtifacts operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1102,7 +1111,7 @@ const opListDiscoveredResources = "ListDiscoveredResources"
 // ListDiscoveredResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the ListDiscoveredResources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1198,7 +1207,7 @@ const opListMigrationTasks = "ListMigrationTasks"
 // ListMigrationTasksRequest generates a "aws/request.Request" representing the
 // client's request for the ListMigrationTasks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1307,7 +1316,7 @@ const opListProgressUpdateStreams = "ListProgressUpdateStreams"
 // ListProgressUpdateStreamsRequest generates a "aws/request.Request" representing the
 // client's request for the ListProgressUpdateStreams operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1399,7 +1408,7 @@ const opNotifyApplicationState = "NotifyApplicationState"
 // NotifyApplicationStateRequest generates a "aws/request.Request" representing the
 // client's request for the NotifyApplicationState operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1433,6 +1442,7 @@ func (c *MigrationHub) NotifyApplicationStateRequest(input *NotifyApplicationSta
 
 	output = &NotifyApplicationStateOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1510,7 +1520,7 @@ const opNotifyMigrationTaskState = "NotifyMigrationTaskState"
 // NotifyMigrationTaskStateRequest generates a "aws/request.Request" representing the
 // client's request for the NotifyMigrationTaskState operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1544,6 +1554,7 @@ func (c *MigrationHub) NotifyMigrationTaskStateRequest(input *NotifyMigrationTas
 
 	output = &NotifyMigrationTaskStateOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1623,7 +1634,7 @@ const opPutResourceAttributes = "PutResourceAttributes"
 // PutResourceAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the PutResourceAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1657,6 +1668,7 @@ func (c *MigrationHub) PutResourceAttributesRequest(input *PutResourceAttributes
 
 	output = &PutResourceAttributesOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 

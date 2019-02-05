@@ -18,11 +18,17 @@ package hanaonazure
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
+	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/hanaonazure/mgmt/2017-11-03-preview/hanaonazure"
 
 // HanaHardwareTypeNamesEnum enumerates the values for hana hardware type names enum.
 type HanaHardwareTypeNamesEnum string
@@ -98,13 +104,15 @@ const (
 	S768m HanaInstanceSizeNamesEnum = "S768m"
 	// S768xm ...
 	S768xm HanaInstanceSizeNamesEnum = "S768xm"
+	// S96 ...
+	S96 HanaInstanceSizeNamesEnum = "S96"
 	// S960m ...
 	S960m HanaInstanceSizeNamesEnum = "S960m"
 )
 
 // PossibleHanaInstanceSizeNamesEnumValues returns an array of possible values for the HanaInstanceSizeNamesEnum const type.
 func PossibleHanaInstanceSizeNamesEnumValues() []HanaInstanceSizeNamesEnum {
-	return []HanaInstanceSizeNamesEnum{S144, S144m, S192, S192m, S192xm, S384, S384m, S384xm, S384xxm, S576m, S576xm, S72, S72m, S768, S768m, S768xm, S960m}
+	return []HanaInstanceSizeNamesEnum{S144, S144m, S192, S192m, S192xm, S384, S384m, S384xm, S384xxm, S576m, S576xm, S72, S72m, S768, S768m, S768xm, S96, S960m}
 }
 
 // Disk specifies the disk information fo the HANA instance
@@ -263,6 +271,8 @@ type HanaInstanceProperties struct {
 	HanaInstanceID *string `json:"hanaInstanceId,omitempty"`
 	// PowerState - Resource power state. Possible values include: 'Starting', 'Started', 'Stopping', 'Stopped', 'Restarting', 'Unknown'
 	PowerState HanaInstancePowerStateEnum `json:"powerState,omitempty"`
+	// ProximityPlacementGroup - Resource proximity placement group
+	ProximityPlacementGroup *string `json:"proximityPlacementGroup,omitempty"`
 }
 
 // HanaInstancesListResult the response from the List HANA Instances operation.
@@ -280,20 +290,37 @@ type HanaInstancesListResultIterator struct {
 	page HanaInstancesListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *HanaInstancesListResultIterator) Next() error {
+func (iter *HanaInstancesListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *HanaInstancesListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -315,6 +342,11 @@ func (iter HanaInstancesListResultIterator) Value() HanaInstance {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the HanaInstancesListResultIterator type.
+func NewHanaInstancesListResultIterator(page HanaInstancesListResultPage) HanaInstancesListResultIterator {
+	return HanaInstancesListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (hilr HanaInstancesListResult) IsEmpty() bool {
 	return hilr.Value == nil || len(*hilr.Value) == 0
@@ -322,11 +354,11 @@ func (hilr HanaInstancesListResult) IsEmpty() bool {
 
 // hanaInstancesListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (hilr HanaInstancesListResult) hanaInstancesListResultPreparer() (*http.Request, error) {
+func (hilr HanaInstancesListResult) hanaInstancesListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if hilr.NextLink == nil || len(to.String(hilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(hilr.NextLink)))
@@ -334,19 +366,36 @@ func (hilr HanaInstancesListResult) hanaInstancesListResultPreparer() (*http.Req
 
 // HanaInstancesListResultPage contains a page of HanaInstance values.
 type HanaInstancesListResultPage struct {
-	fn   func(HanaInstancesListResult) (HanaInstancesListResult, error)
+	fn   func(context.Context, HanaInstancesListResult) (HanaInstancesListResult, error)
 	hilr HanaInstancesListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *HanaInstancesListResultPage) Next() error {
-	next, err := page.fn(page.hilr)
+func (page *HanaInstancesListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.hilr)
 	if err != nil {
 		return err
 	}
 	page.hilr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *HanaInstancesListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -367,15 +416,43 @@ func (page HanaInstancesListResultPage) Values() []HanaInstance {
 	return *page.hilr.Value
 }
 
+// Creates a new instance of the HanaInstancesListResultPage type.
+func NewHanaInstancesListResultPage(getNextPage func(context.Context, HanaInstancesListResult) (HanaInstancesListResult, error)) HanaInstancesListResultPage {
+	return HanaInstancesListResultPage{fn: getNextPage}
+}
+
+// HanaInstancesRestartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type HanaInstancesRestartFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *HanaInstancesRestartFuture) Result(client HanaInstancesClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.Done(client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesRestartFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("hanaonazure.HanaInstancesRestartFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
 // HardwareProfile specifies the hardware settings for the HANA instance.
 type HardwareProfile struct {
 	// HardwareType - Name of the hardware type (vendor and/or their product name). Possible values include: 'CiscoUCS', 'HPE'
 	HardwareType HanaHardwareTypeNamesEnum `json:"hardwareType,omitempty"`
-	// HanaInstanceSize - Specifies the HANA instance SKU. Possible values include: 'S72m', 'S144m', 'S72', 'S144', 'S192', 'S192m', 'S192xm', 'S384', 'S384m', 'S384xm', 'S384xxm', 'S576m', 'S576xm', 'S768', 'S768m', 'S768xm', 'S960m'
+	// HanaInstanceSize - Specifies the HANA instance SKU. Possible values include: 'S72m', 'S144m', 'S72', 'S144', 'S192', 'S192m', 'S192xm', 'S96', 'S384', 'S384m', 'S384xm', 'S384xxm', 'S576m', 'S576xm', 'S768', 'S768m', 'S768xm', 'S960m'
 	HanaInstanceSize HanaInstanceSizeNamesEnum `json:"hanaInstanceSize,omitempty"`
 }
 
-// IPAddress specifies the IP address of the network interaface.
+// IPAddress specifies the IP address of the network interface.
 type IPAddress struct {
 	// IPAddress - Specifies the IP address of the network interface.
 	IPAddress *string `json:"ipAddress,omitempty"`
@@ -455,4 +532,19 @@ type StorageProfile struct {
 	NfsIPAddress *string `json:"nfsIpAddress,omitempty"`
 	// OsDisks - Specifies information about the operating system disk used by the hana instance.
 	OsDisks *[]Disk `json:"osDisks,omitempty"`
+}
+
+// Tags tags field of the HANA instance.
+type Tags struct {
+	// Tags - Tags field of the HANA instance.
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Tags.
+func (t Tags) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if t.Tags != nil {
+		objectMap["tags"] = t.Tags
+	}
+	return json.Marshal(objectMap)
 }

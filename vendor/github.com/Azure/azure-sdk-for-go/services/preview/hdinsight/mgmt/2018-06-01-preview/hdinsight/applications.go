@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewApplicationsClientWithBaseURI(baseURI string, subscriptionID string) App
 // applicationName - the constant value for the application name.
 // parameters - the application create request.
 func (client ApplicationsClient) Create(ctx context.Context, resourceGroupName string, clusterName string, applicationName string, parameters Application) (result ApplicationsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, clusterName, applicationName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.ApplicationsClient", "Create", nil, "Failure preparing request")
@@ -94,10 +105,6 @@ func (client ApplicationsClient) CreateSender(req *http.Request) (future Applica
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -121,6 +128,16 @@ func (client ApplicationsClient) CreateResponder(resp *http.Response) (result Ap
 // clusterName - the name of the cluster.
 // applicationName - the constant value for the application name.
 func (client ApplicationsClient) Delete(ctx context.Context, resourceGroupName string, clusterName string, applicationName string) (result ApplicationsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, clusterName, applicationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.ApplicationsClient", "Delete", nil, "Failure preparing request")
@@ -167,10 +184,6 @@ func (client ApplicationsClient) DeleteSender(req *http.Request) (future Applica
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -193,6 +206,16 @@ func (client ApplicationsClient) DeleteResponder(resp *http.Response) (result au
 // clusterName - the name of the cluster.
 // applicationName - the constant value for the application name.
 func (client ApplicationsClient) Get(ctx context.Context, resourceGroupName string, clusterName string, applicationName string) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, clusterName, applicationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.ApplicationsClient", "Get", nil, "Failure preparing request")
@@ -261,6 +284,16 @@ func (client ApplicationsClient) GetResponder(resp *http.Response) (result Appli
 // resourceGroupName - the name of the resource group.
 // clusterName - the name of the cluster.
 func (client ApplicationsClient) ListByCluster(ctx context.Context, resourceGroupName string, clusterName string) (result ApplicationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.ListByCluster")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByClusterNextResults
 	req, err := client.ListByClusterPreparer(ctx, resourceGroupName, clusterName)
 	if err != nil {
@@ -325,8 +358,8 @@ func (client ApplicationsClient) ListByClusterResponder(resp *http.Response) (re
 }
 
 // listByClusterNextResults retrieves the next set of results, if any.
-func (client ApplicationsClient) listByClusterNextResults(lastResults ApplicationListResult) (result ApplicationListResult, err error) {
-	req, err := lastResults.applicationListResultPreparer()
+func (client ApplicationsClient) listByClusterNextResults(ctx context.Context, lastResults ApplicationListResult) (result ApplicationListResult, err error) {
+	req, err := lastResults.applicationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "hdinsight.ApplicationsClient", "listByClusterNextResults", nil, "Failure preparing next results request")
 	}
@@ -347,6 +380,16 @@ func (client ApplicationsClient) listByClusterNextResults(lastResults Applicatio
 
 // ListByClusterComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ApplicationsClient) ListByClusterComplete(ctx context.Context, resourceGroupName string, clusterName string) (result ApplicationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.ListByCluster")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByCluster(ctx, resourceGroupName, clusterName)
 	return
 }

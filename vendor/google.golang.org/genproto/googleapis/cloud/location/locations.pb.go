@@ -44,7 +44,7 @@ func (m *ListLocationsRequest) Reset()         { *m = ListLocationsRequest{} }
 func (m *ListLocationsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListLocationsRequest) ProtoMessage()    {}
 func (*ListLocationsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3903434ffd69ff4c, []int{0}
+	return fileDescriptor_locations_7a7af132c8d24683, []int{0}
 }
 func (m *ListLocationsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListLocationsRequest.Unmarshal(m, b)
@@ -52,8 +52,8 @@ func (m *ListLocationsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListLocationsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListLocationsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListLocationsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListLocationsRequest.Merge(m, src)
+func (dst *ListLocationsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListLocationsRequest.Merge(dst, src)
 }
 func (m *ListLocationsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListLocationsRequest.Size(m)
@@ -107,7 +107,7 @@ func (m *ListLocationsResponse) Reset()         { *m = ListLocationsResponse{} }
 func (m *ListLocationsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListLocationsResponse) ProtoMessage()    {}
 func (*ListLocationsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3903434ffd69ff4c, []int{1}
+	return fileDescriptor_locations_7a7af132c8d24683, []int{1}
 }
 func (m *ListLocationsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListLocationsResponse.Unmarshal(m, b)
@@ -115,8 +115,8 @@ func (m *ListLocationsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListLocationsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListLocationsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListLocationsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListLocationsResponse.Merge(m, src)
+func (dst *ListLocationsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListLocationsResponse.Merge(dst, src)
 }
 func (m *ListLocationsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListLocationsResponse.Size(m)
@@ -154,7 +154,7 @@ func (m *GetLocationRequest) Reset()         { *m = GetLocationRequest{} }
 func (m *GetLocationRequest) String() string { return proto.CompactTextString(m) }
 func (*GetLocationRequest) ProtoMessage()    {}
 func (*GetLocationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3903434ffd69ff4c, []int{2}
+	return fileDescriptor_locations_7a7af132c8d24683, []int{2}
 }
 func (m *GetLocationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetLocationRequest.Unmarshal(m, b)
@@ -162,8 +162,8 @@ func (m *GetLocationRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetLocationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetLocationRequest.Marshal(b, m, deterministic)
 }
-func (m *GetLocationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLocationRequest.Merge(m, src)
+func (dst *GetLocationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetLocationRequest.Merge(dst, src)
 }
 func (m *GetLocationRequest) XXX_Size() int {
 	return xxx_messageInfo_GetLocationRequest.Size(m)
@@ -207,7 +207,7 @@ func (m *Location) Reset()         { *m = Location{} }
 func (m *Location) String() string { return proto.CompactTextString(m) }
 func (*Location) ProtoMessage()    {}
 func (*Location) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3903434ffd69ff4c, []int{3}
+	return fileDescriptor_locations_7a7af132c8d24683, []int{3}
 }
 func (m *Location) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Location.Unmarshal(m, b)
@@ -215,8 +215,8 @@ func (m *Location) XXX_Unmarshal(b []byte) error {
 func (m *Location) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Location.Marshal(b, m, deterministic)
 }
-func (m *Location) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Location.Merge(m, src)
+func (dst *Location) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Location.Merge(dst, src)
 }
 func (m *Location) XXX_Size() int {
 	return xxx_messageInfo_Location.Size(m)
@@ -380,10 +380,10 @@ var _Locations_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/location/locations.proto", fileDescriptor_3903434ffd69ff4c)
+	proto.RegisterFile("google/cloud/location/locations.proto", fileDescriptor_locations_7a7af132c8d24683)
 }
 
-var fileDescriptor_3903434ffd69ff4c = []byte{
+var fileDescriptor_locations_7a7af132c8d24683 = []byte{
 	// 527 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
 	0x10, 0xd6, 0x3a, 0x4d, 0x94, 0x8c, 0x29, 0xa0, 0x55, 0x8a, 0xdc, 0x00, 0x4a, 0x62, 0x04, 0xa4,

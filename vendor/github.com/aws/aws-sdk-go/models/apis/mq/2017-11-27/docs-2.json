@@ -4,8 +4,10 @@
   "operations" : {
     "CreateBroker" : "Creates a broker. Note: This API is asynchronous.",
     "CreateConfiguration" : "Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).",
+    "CreateTags": "Add a tag to a resource.",
     "CreateUser" : "Creates an ActiveMQ user.",
     "DeleteBroker" : "Deletes a broker. Note: This API is asynchronous.",
+    "DeleteTags": "Remove a tag from a resource.",
     "DeleteUser" : "Deletes an ActiveMQ user.",
     "DescribeBroker" : "Returns information about the specified broker.",
     "DescribeConfiguration" : "Returns information about the specified configuration.",
@@ -14,6 +16,7 @@
     "ListBrokers" : "Returns a list of all brokers.",
     "ListConfigurationRevisions" : "Returns a list of all revisions for the specified configuration.",
     "ListConfigurations" : "Returns a list of all configurations.",
+    "ListTags": "Lists tags for a resource.",
     "ListUsers" : "Returns a list of all ActiveMQ users.",
     "RebootBroker" : "Reboots a broker. Note: This API is asynchronous.",
     "UpdateBroker" : "Adds a pending configuration change to a broker.",
@@ -126,7 +129,7 @@
       }
     },
     "DescribeBrokerOutput" : {
-      "base" : "The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.",
+      "base": "The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
       "refs" : { }
     },
     "DescribeConfigurationRevisionOutput" : {
@@ -206,9 +209,13 @@
     },
     "SanitizationWarningReason" : {
       "base" : "The reason for which the XML elements or attributes were sanitized.",
-      "refs" : {
-        "SanitizationWarning$Reason" : "Required. The reason for which the XML elements or attributes were sanitized."
+      "refs": {
+        "SanitizationWarning$Reason": "Required. The reason for which the XML elements or attributes were sanitized."
       }
+    },
+    "Tags": {
+      "base": "A map of the key-value pairs for the resource tag.",
+      "refs": {}
     },
     "UnauthorizedException" : {
       "base" : "Returns information about an error.",
@@ -274,6 +281,8 @@
         "LogsSummary$General" : "Enables general logging.",
         "PendingLogs$Audit" : "Enables audit logging. Every user management action made using JMX or the ActiveMQ Web Console is logged.",
         "PendingLogs$General" : "Enables general logging.",
+        "UpdateBrokerInput$AutoMinorVersionUpgrade" : "Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.",
+        "UpdateBrokerOutput$AutoMinorVersionUpgrade" : "The new value of automatic upgrades to new minor version for brokers.",
         "UpdateUserInput$ConsoleAccess" : "Enables access to the the ActiveMQ Web Console for the ActiveMQ user.",
         "User$ConsoleAccess" : "Enables access to the the ActiveMQ Web Console for the ActiveMQ user.",
         "UserPendingChanges$ConsoleAccess" : "Enables access to the the ActiveMQ Web Console for the ActiveMQ user."
@@ -358,29 +367,39 @@
         "UserPendingChanges$Groups" : "The list of groups (20 maximum) to which the ActiveMQ user belongs. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long."
       }
     },
+    "__mapOf__string": {
+      "base": null,
+      "refs": {
+        "Configuration$Tags": "The list of all tags associated with this configuration.",
+        "CreateBrokerInput$Tags": "Create tags when creating the broker.",
+        "CreateConfigurationInput$Tags": "Create tags when creating the configuration.",
+        "DescribeBrokerOutput$Tags": "The list of all tags associated with this broker.",
+        "Tags$Tags": "The key-value pair for the resource tag."
+      }
+    },
     "__string" : {
       "base" : null,
       "refs" : {
         "BrokerInstance$ConsoleURL" : "The URL of the broker's ActiveMQ Web Console.",
-        "BrokerInstance$IpAddress" : "The IP address of the ENI attached to the broker.",
+        "BrokerInstance$IpAddress" : "The IP address of the Elastic Network Interface (ENI) attached to the broker.",
         "BrokerSummary$BrokerArn" : "The Amazon Resource Name (ARN) of the broker.",
         "BrokerSummary$BrokerId" : "The unique ID that Amazon MQ generates for the broker.",
         "BrokerSummary$BrokerName" : "The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.",
         "BrokerSummary$HostInstanceType" : "The broker's instance type.",
         "Configuration$Arn" : "Required. The ARN of the configuration.",
         "Configuration$Description" : "Required. The description of the configuration.",
-        "Configuration$EngineVersion" : "Required. The version of the broker engine.",
+        "Configuration$EngineVersion": "Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "Configuration$Id" : "Required. The unique ID that Amazon MQ generates for the configuration.",
         "Configuration$Name" : "Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.",
         "ConfigurationId$Id" : "Required. The unique ID that Amazon MQ generates for the configuration.",
         "ConfigurationRevision$Description" : "The description of the configuration revision.",
         "CreateBrokerInput$BrokerName" : "Required. The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.",
         "CreateBrokerInput$CreatorRequestId" : "The unique ID that the requester receives for the created broker. Amazon MQ passes your ID with the API action. Note: We recommend using a Universally Unique Identifier (UUID) for the creatorRequestId. You may omit the creatorRequestId if your application doesn't require idempotency.",
-        "CreateBrokerInput$EngineVersion" : "Required. The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.",
+        "CreateBrokerInput$EngineVersion": "Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "CreateBrokerInput$HostInstanceType" : "Required. The broker's instance type.",
         "CreateBrokerOutput$BrokerArn" : "The Amazon Resource Name (ARN) of the broker.",
         "CreateBrokerOutput$BrokerId" : "The unique ID that Amazon MQ generates for the broker.",
-        "CreateConfigurationInput$EngineVersion" : "Required. The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.",
+        "CreateConfigurationInput$EngineVersion": "Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "CreateConfigurationInput$Name" : "Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.",
         "CreateConfigurationOutput$Arn" : "Required. The Amazon Resource Name (ARN) of the configuration.",
         "CreateConfigurationOutput$Id" : "Required. The unique ID that Amazon MQ generates for the configuration.",
@@ -390,8 +409,9 @@
         "DescribeBrokerOutput$BrokerArn" : "The Amazon Resource Name (ARN) of the broker.",
         "DescribeBrokerOutput$BrokerId" : "The unique ID that Amazon MQ generates for the broker.",
         "DescribeBrokerOutput$BrokerName" : "The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.",
-        "DescribeBrokerOutput$EngineVersion" : "The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.",
+        "DescribeBrokerOutput$EngineVersion": "The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "DescribeBrokerOutput$HostInstanceType" : "The broker's instance type.",
+        "DescribeBrokerOutput$PendingEngineVersion": "The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "DescribeConfigurationRevisionOutput$ConfigurationId" : "Required. The unique ID that Amazon MQ generates for the configuration.",
         "DescribeConfigurationRevisionOutput$Data" : "Required. The base64-encoded XML configuration.",
         "DescribeConfigurationRevisionOutput$Description" : "The description of the configuration.",
@@ -405,11 +425,13 @@
         "ListConfigurationsOutput$NextToken" : "The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.",
         "ListUsersOutput$BrokerId" : "Required. The unique ID that Amazon MQ generates for the broker.",
         "ListUsersOutput$NextToken" : "The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.",
-        "LogsSummary$AuditLogGroup" : "Location of CloudWatch Log group where audit logs will be sent.",
-        "LogsSummary$GeneralLogGroup" : "Location of CloudWatch Log group where general logs will be sent.",
+        "LogsSummary$AuditLogGroup" : "The location of the CloudWatch Logs log group where audit logs are sent.",
+        "LogsSummary$GeneralLogGroup" : "The location of the CloudWatch Logs log group where general logs are sent.",
         "SanitizationWarning$AttributeName" : "The name of the XML attribute that has been sanitized.",
         "SanitizationWarning$ElementName" : "The name of the XML element that has been sanitized.",
+        "UpdateBrokerInput$EngineVersion": "The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "UpdateBrokerOutput$BrokerId" : "Required. The unique ID that Amazon MQ generates for the broker.",
+        "UpdateBrokerOutput$EngineVersion": "The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html",
         "UpdateConfigurationInput$Data" : "Required. The base64-encoded XML configuration.",
         "UpdateConfigurationInput$Description" : "The description of the configuration.",
         "UpdateConfigurationOutput$Arn" : "Required. The Amazon Resource Name (ARN) of the configuration.",
@@ -421,7 +443,8 @@
         "UserSummary$Username" : "Required. The username of the ActiveMQ user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.",
         "WeeklyStartTime$TimeOfDay" : "Required. The time, in 24-hour format.",
         "WeeklyStartTime$TimeZone" : "The time zone, UTC by default, in either the Country/City format, or the UTC offset format.",
-        "__listOf__string$member" : null
+        "__listOf__string$member": null,
+        "__mapOf__string$member": null
       }
     },
     "__timestampIso8601" : {

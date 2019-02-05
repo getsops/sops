@@ -24,6 +24,7 @@
       "errors":[
         {"shape":"InvalidArgsException"},
         {"shape":"InvalidPolicyException"},
+        {"shape":"InvalidTagException"},
         {"shape":"LimitExceededException"}
       ],
       "idempotent":true
@@ -218,6 +219,7 @@
         {"shape":"ConcurrentModificationException"},
         {"shape":"InvalidArnException"},
         {"shape":"InvalidStateException"},
+        {"shape":"LimitExceededException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"RequestAlreadyProcessedException"},
         {"shape":"RequestInProgressException"},
@@ -428,7 +430,8 @@
         "CertificateAuthorityConfiguration":{"shape":"CertificateAuthorityConfiguration"},
         "RevocationConfiguration":{"shape":"RevocationConfiguration"},
         "CertificateAuthorityType":{"shape":"CertificateAuthorityType"},
-        "IdempotencyToken":{"shape":"IdempotencyToken"}
+        "IdempotencyToken":{"shape":"IdempotencyToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateCertificateAuthorityResponse":{
@@ -869,7 +872,7 @@
       "type":"string",
       "max":128,
       "min":1,
-      "pattern":"[\\p{L}\\p{Z}\\p{N}_.:\\/=+\\-@]*"
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "TagList":{
       "type":"list",
@@ -881,7 +884,7 @@
       "type":"string",
       "max":256,
       "min":0,
-      "pattern":"[\\p{L}\\p{Z}\\p{N}_.:\\/=+\\-@]*"
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "TooManyTagsException":{
       "type":"structure",

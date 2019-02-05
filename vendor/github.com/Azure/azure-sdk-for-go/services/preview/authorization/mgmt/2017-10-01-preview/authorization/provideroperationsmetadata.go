@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewProviderOperationsMetadataClientWithBaseURI(baseURI string, subscription
 // resourceProviderNamespace - the namespace of the resource provider.
 // expand - specifies whether to expand the values.
 func (client ProviderOperationsMetadataClient) Get(ctx context.Context, resourceProviderNamespace string, expand string) (result ProviderOperationsMetadata, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationsMetadataClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceProviderNamespace, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authorization.ProviderOperationsMetadataClient", "Get", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client ProviderOperationsMetadataClient) GetResponder(resp *http.Response)
 // Parameters:
 // expand - specifies whether to expand the values.
 func (client ProviderOperationsMetadataClient) List(ctx context.Context, expand string) (result ProviderOperationsMetadataListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationsMetadataClient.List")
+		defer func() {
+			sc := -1
+			if result.pomlr.Response.Response != nil {
+				sc = result.pomlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, expand)
 	if err != nil {
@@ -179,8 +200,8 @@ func (client ProviderOperationsMetadataClient) ListResponder(resp *http.Response
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ProviderOperationsMetadataClient) listNextResults(lastResults ProviderOperationsMetadataListResult) (result ProviderOperationsMetadataListResult, err error) {
-	req, err := lastResults.providerOperationsMetadataListResultPreparer()
+func (client ProviderOperationsMetadataClient) listNextResults(ctx context.Context, lastResults ProviderOperationsMetadataListResult) (result ProviderOperationsMetadataListResult, err error) {
+	req, err := lastResults.providerOperationsMetadataListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "authorization.ProviderOperationsMetadataClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -201,6 +222,16 @@ func (client ProviderOperationsMetadataClient) listNextResults(lastResults Provi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProviderOperationsMetadataClient) ListComplete(ctx context.Context, expand string) (result ProviderOperationsMetadataListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationsMetadataClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, expand)
 	return
 }

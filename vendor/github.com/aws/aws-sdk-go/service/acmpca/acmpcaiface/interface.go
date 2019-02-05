@@ -104,6 +104,9 @@ type ACMPCAAPI interface {
 	ListCertificateAuthoritiesWithContext(aws.Context, *acmpca.ListCertificateAuthoritiesInput, ...request.Option) (*acmpca.ListCertificateAuthoritiesOutput, error)
 	ListCertificateAuthoritiesRequest(*acmpca.ListCertificateAuthoritiesInput) (*request.Request, *acmpca.ListCertificateAuthoritiesOutput)
 
+	ListCertificateAuthoritiesPages(*acmpca.ListCertificateAuthoritiesInput, func(*acmpca.ListCertificateAuthoritiesOutput, bool) bool) error
+	ListCertificateAuthoritiesPagesWithContext(aws.Context, *acmpca.ListCertificateAuthoritiesInput, func(*acmpca.ListCertificateAuthoritiesOutput, bool) bool, ...request.Option) error
+
 	ListTags(*acmpca.ListTagsInput) (*acmpca.ListTagsOutput, error)
 	ListTagsWithContext(aws.Context, *acmpca.ListTagsInput, ...request.Option) (*acmpca.ListTagsOutput, error)
 	ListTagsRequest(*acmpca.ListTagsInput) (*request.Request, *acmpca.ListTagsOutput)
@@ -127,6 +130,15 @@ type ACMPCAAPI interface {
 	UpdateCertificateAuthority(*acmpca.UpdateCertificateAuthorityInput) (*acmpca.UpdateCertificateAuthorityOutput, error)
 	UpdateCertificateAuthorityWithContext(aws.Context, *acmpca.UpdateCertificateAuthorityInput, ...request.Option) (*acmpca.UpdateCertificateAuthorityOutput, error)
 	UpdateCertificateAuthorityRequest(*acmpca.UpdateCertificateAuthorityInput) (*request.Request, *acmpca.UpdateCertificateAuthorityOutput)
+
+	WaitUntilAuditReportCreated(*acmpca.DescribeCertificateAuthorityAuditReportInput) error
+	WaitUntilAuditReportCreatedWithContext(aws.Context, *acmpca.DescribeCertificateAuthorityAuditReportInput, ...request.WaiterOption) error
+
+	WaitUntilCertificateAuthorityCSRCreated(*acmpca.GetCertificateAuthorityCsrInput) error
+	WaitUntilCertificateAuthorityCSRCreatedWithContext(aws.Context, *acmpca.GetCertificateAuthorityCsrInput, ...request.WaiterOption) error
+
+	WaitUntilCertificateIssued(*acmpca.GetCertificateInput) error
+	WaitUntilCertificateIssuedWithContext(aws.Context, *acmpca.GetCertificateInput, ...request.WaiterOption) error
 }
 
 var _ ACMPCAAPI = (*acmpca.ACMPCA)(nil)

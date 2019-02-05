@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<fullname>Amazon WorkSpaces Service</fullname> <p>Amazon WorkSpaces enables you to provision virtual, cloud-based Microsoft Windows desktops for your users.</p>",
+  "service": "<fullname>Amazon WorkSpaces Service</fullname> <p>Amazon WorkSpaces enables you to provision virtual, cloud-based Microsoft Windows and Amazon Linux desktops for your users.</p>",
   "operations": {
     "AssociateIpGroups": "<p>Associates the specified IP access control group with the specified directory.</p>",
     "AuthorizeIpRules": "<p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>",
@@ -9,13 +9,22 @@
     "CreateWorkspaces": "<p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>",
     "DeleteIpGroup": "<p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>",
     "DeleteTags": "<p>Deletes the specified tags from the specified WorkSpace.</p>",
+    "DeleteWorkspaceImage": "<p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>",
+    "DescribeAccount": "<p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>",
+    "DescribeAccountModifications": "<p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>",
+    "DescribeClientProperties": "<p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>",
     "DescribeIpGroups": "<p>Describes one or more of your IP access control groups.</p>",
     "DescribeTags": "<p>Describes the specified tags for the specified WorkSpace.</p>",
-    "DescribeWorkspaceBundles": "<p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>",
+    "DescribeWorkspaceBundles": "<p>Retrieves a list that describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>",
     "DescribeWorkspaceDirectories": "<p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>",
-    "DescribeWorkspaces": "<p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>",
+    "DescribeWorkspaceImages": "<p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>",
+    "DescribeWorkspaces": "<p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>",
     "DescribeWorkspacesConnectionStatus": "<p>Describes the connection status of the specified WorkSpaces.</p>",
     "DisassociateIpGroups": "<p>Disassociates the specified IP access control group from the specified directory.</p>",
+    "ImportWorkspaceImage": "<p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>",
+    "ListAvailableManagementCidrRanges": "<p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>",
+    "ModifyAccount": "<p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>",
+    "ModifyClientProperties": "<p>Modifies the properties of the specified Amazon WorkSpaces client.</p>",
     "ModifyWorkspaceProperties": "<p>Modifies the specified WorkSpace properties.</p>",
     "ModifyWorkspaceState": "<p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>",
     "RebootWorkspaces": "<p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>",
@@ -36,6 +45,18 @@
     "AccessDeniedException": {
       "base": "<p>The user is not authorized to access a resource.</p>",
       "refs": {
+      }
+    },
+    "AccountModification": {
+      "base": "<p>Describes a modification to the configuration of bring your own license (BYOL) for the specified account. </p>",
+      "refs": {
+        "AccountModificationList$member": null
+      }
+    },
+    "AccountModificationList": {
+      "base": null,
+      "refs": {
+        "DescribeAccountModificationsResult$AccountModifications": "<p>The list of modifications to the configuration of BYOL.</p>"
       }
     },
     "Alias": {
@@ -67,9 +88,9 @@
     "BooleanObject": {
       "base": null,
       "refs": {
-        "DefaultWorkspaceCreationProperties$EnableWorkDocs": "<p>Indicates whether the directory is enabled for Amazon WorkDocs.</p>",
+        "DefaultWorkspaceCreationProperties$EnableWorkDocs": "<p>Specifies whether the directory is enabled for Amazon WorkDocs.</p>",
         "DefaultWorkspaceCreationProperties$EnableInternetAccess": "<p>The public IP address to attach to all WorkSpaces that are created or rebuilt.</p>",
-        "DefaultWorkspaceCreationProperties$UserEnabledAsLocalAdministrator": "<p>Indicates whether the WorkSpace user is an administrator on the WorkSpace.</p>",
+        "DefaultWorkspaceCreationProperties$UserEnabledAsLocalAdministrator": "<p>Specifies whether the WorkSpace user is an administrator on the WorkSpace.</p>",
         "Workspace$UserVolumeEncryptionEnabled": "<p>Indicates whether the data stored on the user volume is encrypted.</p>",
         "Workspace$RootVolumeEncryptionEnabled": "<p>Indicates whether the data stored on the root volume is encrypted.</p>",
         "WorkspaceRequest$UserVolumeEncryptionEnabled": "<p>Indicates whether the data stored on the user volume is encrypted.</p>",
@@ -80,7 +101,7 @@
       "base": null,
       "refs": {
         "BundleIdList$member": null,
-        "DescribeWorkspacesRequest$BundleId": "<p>The ID of the bundle. All WorkSpaces that are created from this bundle are retrieved. This parameter cannot be combined with any other filter.</p>",
+        "DescribeWorkspacesRequest$BundleId": "<p>The identifier of the bundle. All WorkSpaces that are created from this bundle are retrieved. You cannot combine this parameter with any other filter.</p>",
         "Workspace$BundleId": "<p>The identifier of the bundle used to create the WorkSpace.</p>",
         "WorkspaceBundle$BundleId": "<p>The bundle identifier.</p>",
         "WorkspaceRequest$BundleId": "<p>The identifier of the bundle for the WorkSpace. You can use <a>DescribeWorkspaceBundles</a> to list the available bundles.</p>"
@@ -89,7 +110,7 @@
     "BundleIdList": {
       "base": null,
       "refs": {
-        "DescribeWorkspaceBundlesRequest$BundleIds": "<p>The IDs of the bundles. This parameter cannot be combined with any other filter.</p>"
+        "DescribeWorkspaceBundlesRequest$BundleIds": "<p>The identifiers of the bundles. You cannot combine this parameter with any other filter.</p>"
       }
     },
     "BundleList": {
@@ -101,8 +122,27 @@
     "BundleOwner": {
       "base": null,
       "refs": {
-        "DescribeWorkspaceBundlesRequest$Owner": "<p>The owner of the bundles. This parameter cannot be combined with any other filter.</p> <p>Specify <code>AMAZON</code> to describe the bundles provided by AWS or null to describe the bundles that belong to your account.</p>",
+        "DescribeWorkspaceBundlesRequest$Owner": "<p>The owner of the bundles. You cannot combine this parameter with any other filter.</p> <p>Specify <code>AMAZON</code> to describe the bundles provided by AWS or null to describe the bundles that belong to your account.</p>",
         "WorkspaceBundle$Owner": "<p>The owner of the bundle. This is the account identifier of the owner, or <code>AMAZON</code> if the bundle is provided by AWS.</p>"
+      }
+    },
+    "ClientProperties": {
+      "base": "<p>Describes an Amazon WorkSpaces client.</p>",
+      "refs": {
+        "ClientPropertiesResult$ClientProperties": "<p>Information about the Amazon WorkSpaces client.</p>",
+        "ModifyClientPropertiesRequest$ClientProperties": "<p>Information about the Amazon WorkSpaces client.</p>"
+      }
+    },
+    "ClientPropertiesList": {
+      "base": null,
+      "refs": {
+        "DescribeClientPropertiesResult$ClientPropertiesList": "<p>Information about the specified Amazon WorkSpaces clients.</p>"
+      }
+    },
+    "ClientPropertiesResult": {
+      "base": "<p>Information about the Amazon WorkSpaces client.</p>",
+      "refs": {
+        "ClientPropertiesList$member": null
       }
     },
     "Compute": {
@@ -113,7 +153,7 @@
       }
     },
     "ComputeType": {
-      "base": "<p>Information about the compute type.</p>",
+      "base": "<p>Describes the compute type.</p>",
       "refs": {
         "WorkspaceBundle$ComputeType": "<p>The compute type. For more information, see <a href=\"http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles\">Amazon WorkSpaces Bundles</a>.</p>"
       }
@@ -160,6 +200,40 @@
       "refs": {
       }
     },
+    "DedicatedTenancyCidrRangeList": {
+      "base": null,
+      "refs": {
+        "ListAvailableManagementCidrRangesResult$ManagementCidrRanges": "<p>The list of available IP address ranges, specified as IPv4 CIDR blocks.</p>"
+      }
+    },
+    "DedicatedTenancyManagementCidrRange": {
+      "base": null,
+      "refs": {
+        "AccountModification$DedicatedTenancyManagementCidrRange": "<p>The IP address range, specified as an IPv4 CIDR block, for the management network interface used for the account.</p>",
+        "DedicatedTenancyCidrRangeList$member": null,
+        "DescribeAccountResult$DedicatedTenancyManagementCidrRange": "<p>The IP address range, specified as an IPv4 CIDR block, used for the management network interface.</p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>",
+        "ModifyAccountRequest$DedicatedTenancyManagementCidrRange": "<p>The IP address range, specified as an IPv4 CIDR block, for the management network interface. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block). The CIDR block size must be /16 (for example, 203.0.113.25/16). It must also be specified as available by the <code>ListAvailableManagementCidrRanges</code> operation.</p>"
+      }
+    },
+    "DedicatedTenancyModificationStateEnum": {
+      "base": null,
+      "refs": {
+        "AccountModification$ModificationState": "<p>The state of the modification to the configuration of BYOL.</p>"
+      }
+    },
+    "DedicatedTenancySupportEnum": {
+      "base": null,
+      "refs": {
+        "ModifyAccountRequest$DedicatedTenancySupport": "<p>The status of BYOL.</p>"
+      }
+    },
+    "DedicatedTenancySupportResultEnum": {
+      "base": null,
+      "refs": {
+        "AccountModification$DedicatedTenancySupport": "<p>The status of BYOL (whether BYOL is being enabled or disabled).</p>",
+        "DescribeAccountResult$DedicatedTenancySupport": "<p>The status of BYOL (whether BYOL is enabled or disabled).</p>"
+      }
+    },
     "DefaultOu": {
       "base": null,
       "refs": {
@@ -167,7 +241,7 @@
       }
     },
     "DefaultWorkspaceCreationProperties": {
-      "base": "<p>Information about defaults used to create a WorkSpace.</p>",
+      "base": "<p>Describes the default values used to create a WorkSpace.</p>",
       "refs": {
         "WorkspaceDirectory$WorkspaceCreationProperties": "<p>The default creation properties for all WorkSpaces in the directory.</p>"
       }
@@ -188,6 +262,46 @@
       }
     },
     "DeleteTagsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteWorkspaceImageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteWorkspaceImageResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAccountModificationsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAccountModificationsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAccountRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeAccountResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeClientPropertiesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeClientPropertiesResult": {
       "base": null,
       "refs": {
       }
@@ -232,6 +346,16 @@
       "refs": {
       }
     },
+    "DescribeWorkspaceImagesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeWorkspaceImagesResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeWorkspacesConnectionStatusRequest": {
       "base": null,
       "refs": {
@@ -255,19 +379,21 @@
     "Description": {
       "base": null,
       "refs": {
-        "FailedCreateWorkspaceRequest$ErrorMessage": "<p>The textual error message.</p>",
-        "FailedWorkspaceChangeRequest$ErrorMessage": "<p>The textual error message.</p>",
-        "Workspace$ErrorMessage": "<p>If the WorkSpace could not be created, contains a textual error message that describes the failure.</p>",
-        "WorkspaceBundle$Description": "<p>A description.</p>"
+        "AccountModification$ErrorMessage": "<p>The text of the error message that is returned if the configuration of BYOL cannot be modified.</p>",
+        "FailedCreateWorkspaceRequest$ErrorMessage": "<p>The text of the error message that is returned if the WorkSpace cannot be created.</p>",
+        "FailedWorkspaceChangeRequest$ErrorMessage": "<p>The text of the error message that is returned if the WorkSpace cannot be rebooted.</p>",
+        "Workspace$ErrorMessage": "<p>The text of the error message that is returned if the WorkSpace cannot be created.</p>",
+        "WorkspaceBundle$Description": "<p>A description.</p>",
+        "WorkspaceImage$ErrorMessage": "<p>The text of the error message that is returned for the image.</p>"
       }
     },
     "DirectoryId": {
       "base": null,
       "refs": {
-        "AssociateIpGroupsRequest$DirectoryId": "<p>The ID of the directory.</p>",
-        "DescribeWorkspacesRequest$DirectoryId": "<p>The ID of the directory. In addition, you can optionally specify a specific directory user (see <code>UserName</code>). This parameter cannot be combined with any other filter.</p>",
+        "AssociateIpGroupsRequest$DirectoryId": "<p>The identifier of the directory.</p>",
+        "DescribeWorkspacesRequest$DirectoryId": "<p>The identifier of the directory. In addition, you can optionally specify a specific directory user (see <code>UserName</code>). You cannot combine this parameter with any other filter.</p>",
         "DirectoryIdList$member": null,
-        "DisassociateIpGroupsRequest$DirectoryId": "<p>The ID of the directory.</p>",
+        "DisassociateIpGroupsRequest$DirectoryId": "<p>The identifier of the directory.</p>",
         "Workspace$DirectoryId": "<p>The identifier of the AWS Directory Service directory for the WorkSpace.</p>",
         "WorkspaceDirectory$DirectoryId": "<p>The directory identifier.</p>",
         "WorkspaceRequest$DirectoryId": "<p>The identifier of the AWS Directory Service directory for the WorkSpace. You can use <a>DescribeWorkspaceDirectories</a> to list the available directories.</p>"
@@ -307,11 +433,17 @@
         "WorkspaceDirectory$DnsIpAddresses": "<p>The IP addresses of the DNS servers for the directory.</p>"
       }
     },
+    "Ec2ImageId": {
+      "base": null,
+      "refs": {
+        "ImportWorkspaceImageRequest$Ec2ImageId": "<p>The identifier of the EC2 image.</p>"
+      }
+    },
     "ErrorType": {
       "base": null,
       "refs": {
-        "FailedCreateWorkspaceRequest$ErrorCode": "<p>The error code.</p>",
-        "FailedWorkspaceChangeRequest$ErrorCode": "<p>The error code.</p>"
+        "FailedCreateWorkspaceRequest$ErrorCode": "<p>The error code that is returned if the WorkSpace cannot be created.</p>",
+        "FailedWorkspaceChangeRequest$ErrorCode": "<p>The error code that is returned if the WorkSpace cannot be rebooted.</p>"
       }
     },
     "ExceptionMessage": {
@@ -332,7 +464,7 @@
       }
     },
     "FailedCreateWorkspaceRequest": {
-      "base": "<p>Information about a WorkSpace that could not be created.</p>",
+      "base": "<p>Describes a WorkSpace that cannot be created.</p>",
       "refs": {
         "FailedCreateWorkspaceRequests$member": null
       }
@@ -352,7 +484,7 @@
     "FailedRebuildWorkspaceRequests": {
       "base": null,
       "refs": {
-        "RebuildWorkspacesResult$FailedRequests": "<p>Information about the WorkSpace if it could not be rebuilt.</p>"
+        "RebuildWorkspacesResult$FailedRequests": "<p>Information about the WorkSpace that could not be rebuilt.</p>"
       }
     },
     "FailedStartWorkspaceRequests": {
@@ -374,13 +506,23 @@
       }
     },
     "FailedWorkspaceChangeRequest": {
-      "base": "<p>Information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>",
+      "base": "<p>Describes a WorkSpace that could not be rebooted. (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>",
       "refs": {
         "FailedRebootWorkspaceRequests$member": null,
         "FailedRebuildWorkspaceRequests$member": null,
         "FailedStartWorkspaceRequests$member": null,
         "FailedStopWorkspaceRequests$member": null,
         "FailedTerminateWorkspaceRequests$member": null
+      }
+    },
+    "ImportWorkspaceImageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ImportWorkspaceImageResult": {
+      "base": null,
+      "refs": {
       }
     },
     "InvalidParameterValuesException": {
@@ -410,21 +552,21 @@
     "IpGroupId": {
       "base": null,
       "refs": {
-        "AuthorizeIpRulesRequest$GroupId": "<p>The ID of the group.</p>",
-        "CreateIpGroupResult$GroupId": "<p>The ID of the group.</p>",
-        "DeleteIpGroupRequest$GroupId": "<p>The ID of the IP access control group.</p>",
+        "AuthorizeIpRulesRequest$GroupId": "<p>The identifier of the group.</p>",
+        "CreateIpGroupResult$GroupId": "<p>The identifier of the group.</p>",
+        "DeleteIpGroupRequest$GroupId": "<p>The identifier of the IP access control group.</p>",
         "IpGroupIdList$member": null,
-        "RevokeIpRulesRequest$GroupId": "<p>The ID of the group.</p>",
-        "UpdateRulesOfIpGroupRequest$GroupId": "<p>The ID of the group.</p>",
-        "WorkspacesIpGroup$groupId": "<p>The ID of the group.</p>"
+        "RevokeIpRulesRequest$GroupId": "<p>The identifier of the group.</p>",
+        "UpdateRulesOfIpGroupRequest$GroupId": "<p>The identifier of the group.</p>",
+        "WorkspacesIpGroup$groupId": "<p>The identifier of the group.</p>"
       }
     },
     "IpGroupIdList": {
       "base": null,
       "refs": {
-        "AssociateIpGroupsRequest$GroupIds": "<p>The IDs of one or more IP access control groups.</p>",
-        "DescribeIpGroupsRequest$GroupIds": "<p>The IDs of one or more IP access control groups.</p>",
-        "DisassociateIpGroupsRequest$GroupIds": "<p>The IDs of one or more IP access control groups.</p>",
+        "AssociateIpGroupsRequest$GroupIds": "<p>The identifiers of one or more IP access control groups.</p>",
+        "DescribeIpGroupsRequest$GroupIds": "<p>The identifiers of one or more IP access control groups.</p>",
+        "DisassociateIpGroupsRequest$GroupIds": "<p>The identifiers of one or more IP access control groups.</p>",
         "WorkspaceDirectory$ipGroupIds": "<p>The identifiers of the IP access control groups associated with the directory.</p>"
       }
     },
@@ -455,7 +597,7 @@
       }
     },
     "IpRuleItem": {
-      "base": "<p>Information about a rule for an IP access control group.</p>",
+      "base": "<p>Describes a rule for an IP access control group.</p>",
       "refs": {
         "IpRuleList$member": null
       }
@@ -473,7 +615,30 @@
       "base": null,
       "refs": {
         "DescribeIpGroupsRequest$MaxResults": "<p>The maximum number of items to return.</p>",
+        "DescribeWorkspaceImagesRequest$MaxResults": "<p>The maximum number of items to return.</p>",
         "DescribeWorkspacesRequest$Limit": "<p>The maximum number of items to return.</p>"
+      }
+    },
+    "ListAvailableManagementCidrRangesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAvailableManagementCidrRangesResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ManagementCidrRangeConstraint": {
+      "base": null,
+      "refs": {
+        "ListAvailableManagementCidrRangesRequest$ManagementCidrRangeConstraint": "<p>The IP address range to search. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block).</p>"
+      }
+    },
+    "ManagementCidrRangeMaxResults": {
+      "base": null,
+      "refs": {
+        "ListAvailableManagementCidrRangesRequest$MaxResults": "<p>The maximum number of items to return.</p>"
       }
     },
     "ModificationResourceEnum": {
@@ -483,7 +648,7 @@
       }
     },
     "ModificationState": {
-      "base": "<p>Information about a WorkSpace modification.</p>",
+      "base": "<p>Describes a WorkSpace modification.</p>",
       "refs": {
         "ModificationStateList$member": null
       }
@@ -498,6 +663,26 @@
       "base": null,
       "refs": {
         "Workspace$ModificationStates": "<p>The modification states of the WorkSpace.</p>"
+      }
+    },
+    "ModifyAccountRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ModifyAccountResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ModifyClientPropertiesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ModifyClientPropertiesResult": {
+      "base": null,
+      "refs": {
       }
     },
     "ModifyWorkspacePropertiesRequest": {
@@ -523,15 +708,30 @@
     "NonEmptyString": {
       "base": null,
       "refs": {
-        "CreateTagsRequest$ResourceId": "<p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>",
-        "DeleteTagsRequest$ResourceId": "<p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>",
-        "DescribeTagsRequest$ResourceId": "<p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>",
+        "ClientPropertiesResult$ResourceId": "<p>The resource identifier, in the form of a directory ID.</p>",
+        "CreateTagsRequest$ResourceId": "<p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>",
+        "DeleteTagsRequest$ResourceId": "<p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>",
+        "DescribeTagsRequest$ResourceId": "<p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>",
+        "ModifyClientPropertiesRequest$ResourceId": "<p>The resource identifiers, in the form of directory IDs.</p>",
+        "ResourceIdList$member": null,
         "ResourceNotFoundException$ResourceId": "<p>The ID of the resource that could not be found.</p>",
         "ResourceUnavailableException$ResourceId": "<p>The identifier of the resource that is not available.</p>",
         "RootStorage$Capacity": "<p>The size of the root volume.</p>",
         "TagKeyList$member": null,
         "UserStorage$Capacity": "<p>The size of the user storage.</p>",
         "WorkspaceBundle$Name": "<p>The name of the bundle.</p>"
+      }
+    },
+    "OperatingSystem": {
+      "base": "<p>The operating system that the image is running.</p>",
+      "refs": {
+        "WorkspaceImage$OperatingSystem": "<p>The operating system that the image is running. </p>"
+      }
+    },
+    "OperatingSystemType": {
+      "base": null,
+      "refs": {
+        "OperatingSystem$Type": "<p>The operating system.</p>"
       }
     },
     "OperationInProgressException": {
@@ -547,20 +747,26 @@
     "PaginationToken": {
       "base": null,
       "refs": {
-        "DescribeIpGroupsRequest$NextToken": "<p>The token for the next set of results. (You received this token from a previous call.)</p>",
-        "DescribeIpGroupsResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>",
+        "DescribeAccountModificationsRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "DescribeAccountModificationsResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>",
+        "DescribeIpGroupsRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "DescribeIpGroupsResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>",
         "DescribeWorkspaceBundlesRequest$NextToken": "<p>The token for the next set of results. (You received this token from a previous call.)</p>",
         "DescribeWorkspaceBundlesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>",
-        "DescribeWorkspaceDirectoriesRequest$NextToken": "<p>The token for the next set of results. (You received this token from a previous call.)</p>",
-        "DescribeWorkspaceDirectoriesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>",
-        "DescribeWorkspacesConnectionStatusRequest$NextToken": "<p>The token for the next set of results. (You received this token from a previous call.)</p>",
-        "DescribeWorkspacesConnectionStatusResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if there are no more results available.</p>",
-        "DescribeWorkspacesRequest$NextToken": "<p>The token for the next set of results. (You received this token from a previous call.)</p>",
-        "DescribeWorkspacesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>"
+        "DescribeWorkspaceDirectoriesRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "DescribeWorkspaceDirectoriesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>",
+        "DescribeWorkspaceImagesRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "DescribeWorkspaceImagesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>",
+        "DescribeWorkspacesConnectionStatusRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "DescribeWorkspacesConnectionStatusResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>",
+        "DescribeWorkspacesRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "DescribeWorkspacesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>",
+        "ListAvailableManagementCidrRangesRequest$NextToken": "<p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>",
+        "ListAvailableManagementCidrRangesResult$NextToken": "<p>The token to use to retrieve the next set of results, or null if no more results are available.</p>"
       }
     },
     "RebootRequest": {
-      "base": "<p>Information used to reboot a WorkSpace.</p>",
+      "base": "<p>Describes the information used to reboot a WorkSpace.</p>",
       "refs": {
         "RebootWorkspaceRequests$member": null
       }
@@ -582,7 +788,7 @@
       }
     },
     "RebuildRequest": {
-      "base": "<p>Information used to rebuild a WorkSpace.</p>",
+      "base": "<p>Describes the information used to rebuild a WorkSpace.</p>",
       "refs": {
         "RebuildWorkspaceRequests$member": null
       }
@@ -601,6 +807,12 @@
     "RebuildWorkspacesResult": {
       "base": null,
       "refs": {
+      }
+    },
+    "ReconnectEnum": {
+      "base": null,
+      "refs": {
+        "ClientProperties$ReconnectEnabled": "<p>Specifies whether users can cache their credentials on the Amazon WorkSpaces client. When enabled, users can choose to reconnect to their WorkSpaces without re-entering their credentials. </p>"
       }
     },
     "RegistrationCode": {
@@ -622,6 +834,12 @@
     "ResourceCreationFailedException": {
       "base": "<p>The resource could not be created.</p>",
       "refs": {
+      }
+    },
+    "ResourceIdList": {
+      "base": null,
+      "refs": {
+        "DescribeClientPropertiesRequest$ResourceIds": "<p>The resource identifiers, in the form of directory IDs.</p>"
       }
     },
     "ResourceLimitExceededException": {
@@ -650,7 +868,7 @@
       }
     },
     "RootStorage": {
-      "base": "<p>Information about the root volume for a WorkSpace bundle.</p>",
+      "base": "<p>Describes the root volume for a WorkSpace bundle.</p>",
       "refs": {
         "WorkspaceBundle$RootStorage": "<p>The size of the root volume.</p>"
       }
@@ -703,7 +921,7 @@
       }
     },
     "StopRequest": {
-      "base": "<p>Information used to stop a WorkSpace.</p>",
+      "base": "<p>Describes the information used to stop a WorkSpace.</p>",
       "refs": {
         "StopWorkspaceRequests$member": null
       }
@@ -738,7 +956,7 @@
       }
     },
     "Tag": {
-      "base": "<p>Information about a tag.</p>",
+      "base": "<p>Describes a tag.</p>",
       "refs": {
         "TagList$member": null
       }
@@ -776,7 +994,7 @@
       }
     },
     "TerminateRequest": {
-      "base": "<p>Information used to terminate a WorkSpace.</p>",
+      "base": "<p>Describes the information used to terminate a WorkSpace.</p>",
       "refs": {
         "TerminateWorkspaceRequests$member": null
       }
@@ -800,7 +1018,8 @@
     "Timestamp": {
       "base": null,
       "refs": {
-        "WorkspaceConnectionStatus$ConnectionStateCheckTimestamp": "<p>The timestamp of the connection state check.</p>",
+        "AccountModification$StartTime": "<p>The timestamp when the modification of the BYOL configuration was started.</p>",
+        "WorkspaceConnectionStatus$ConnectionStateCheckTimestamp": "<p>The timestamp of the connection status check.</p>",
         "WorkspaceConnectionStatus$LastKnownUserConnectionTimestamp": "<p>The timestamp of the last known user connection.</p>"
       }
     },
@@ -829,7 +1048,7 @@
       }
     },
     "UserStorage": {
-      "base": "<p>Information about the user storage for a WorkSpace bundle.</p>",
+      "base": "<p>Describes the user storage for a WorkSpace bundle.</p>",
       "refs": {
         "WorkspaceBundle$UserStorage": "<p>The size of the user storage.</p>"
       }
@@ -848,13 +1067,13 @@
       }
     },
     "Workspace": {
-      "base": "<p>Information about a WorkSpace.</p>",
+      "base": "<p>Describes a WorkSpace.</p>",
       "refs": {
         "WorkspaceList$member": null
       }
     },
     "WorkspaceBundle": {
-      "base": "<p>Information about a WorkSpace bundle.</p>",
+      "base": "<p>Describes a WorkSpace bundle.</p>",
       "refs": {
         "BundleList$member": null
       }
@@ -872,7 +1091,7 @@
       }
     },
     "WorkspaceDirectory": {
-      "base": "<p>Information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>",
+      "base": "<p>Describes an AWS Directory Service directory that is used with Amazon WorkSpaces.</p>",
       "refs": {
         "DirectoryList$member": null
       }
@@ -892,22 +1111,23 @@
     "WorkspaceErrorCode": {
       "base": null,
       "refs": {
-        "Workspace$ErrorCode": "<p>If the WorkSpace could not be created, contains the error code.</p>"
+        "AccountModification$ErrorCode": "<p>The error code that is returned if the configuration of BYOL cannot be modified.</p>",
+        "Workspace$ErrorCode": "<p>The error code that is returned if the WorkSpace cannot be created.</p>"
       }
     },
     "WorkspaceId": {
       "base": null,
       "refs": {
         "FailedWorkspaceChangeRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
-        "ModifyWorkspacePropertiesRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
-        "ModifyWorkspaceStateRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
-        "RebootRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
-        "RebuildRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
-        "StartRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
-        "StopRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
-        "TerminateRequest$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
+        "ModifyWorkspacePropertiesRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
+        "ModifyWorkspaceStateRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
+        "RebootRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
+        "RebuildRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
+        "StartRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
+        "StopRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
+        "TerminateRequest$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
         "Workspace$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
-        "WorkspaceConnectionStatus$WorkspaceId": "<p>The ID of the WorkSpace.</p>",
+        "WorkspaceConnectionStatus$WorkspaceId": "<p>The identifier of the WorkSpace.</p>",
         "WorkspaceIdList$member": null
       }
     },
@@ -915,7 +1135,72 @@
       "base": null,
       "refs": {
         "DescribeWorkspacesConnectionStatusRequest$WorkspaceIds": "<p>The identifiers of the WorkSpaces. You can specify up to 25 WorkSpaces.</p>",
-        "DescribeWorkspacesRequest$WorkspaceIds": "<p>The IDs of the WorkSpaces. This parameter cannot be combined with any other filter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>"
+        "DescribeWorkspacesRequest$WorkspaceIds": "<p>The identifiers of the WorkSpaces. You cannot combine this parameter with any other filter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>"
+      }
+    },
+    "WorkspaceImage": {
+      "base": "<p>Describes a WorkSpace image.</p>",
+      "refs": {
+        "WorkspaceImageList$member": null
+      }
+    },
+    "WorkspaceImageDescription": {
+      "base": null,
+      "refs": {
+        "ImportWorkspaceImageRequest$ImageDescription": "<p>The description of the WorkSpace image.</p>",
+        "WorkspaceImage$Description": "<p>The description of the image.</p>"
+      }
+    },
+    "WorkspaceImageErrorCode": {
+      "base": null,
+      "refs": {
+        "WorkspaceImage$ErrorCode": "<p>The error code that is returned for the image.</p>"
+      }
+    },
+    "WorkspaceImageId": {
+      "base": null,
+      "refs": {
+        "DeleteWorkspaceImageRequest$ImageId": "<p>The identifier of the image.</p>",
+        "ImportWorkspaceImageResult$ImageId": "<p>The identifier of the WorkSpace image.</p>",
+        "WorkspaceImage$ImageId": "<p>The identifier of the image.</p>",
+        "WorkspaceImageIdList$member": null
+      }
+    },
+    "WorkspaceImageIdList": {
+      "base": null,
+      "refs": {
+        "DescribeWorkspaceImagesRequest$ImageIds": "<p>The identifier of the image.</p>"
+      }
+    },
+    "WorkspaceImageIngestionProcess": {
+      "base": null,
+      "refs": {
+        "ImportWorkspaceImageRequest$IngestionProcess": "<p>The ingestion process to be used when importing the image.</p>"
+      }
+    },
+    "WorkspaceImageList": {
+      "base": null,
+      "refs": {
+        "DescribeWorkspaceImagesResult$Images": "<p>Information about the images.</p>"
+      }
+    },
+    "WorkspaceImageName": {
+      "base": null,
+      "refs": {
+        "ImportWorkspaceImageRequest$ImageName": "<p>The name of the WorkSpace image.</p>",
+        "WorkspaceImage$Name": "<p>The name of the image.</p>"
+      }
+    },
+    "WorkspaceImageRequiredTenancy": {
+      "base": null,
+      "refs": {
+        "WorkspaceImage$RequiredTenancy": "<p>Specifies whether the image is running on dedicated hardware. When bring your own license (BYOL) is enabled, this value is set to DEDICATED. </p>"
+      }
+    },
+    "WorkspaceImageState": {
+      "base": null,
+      "refs": {
+        "WorkspaceImage$State": "<p>The status of the image.</p>"
       }
     },
     "WorkspaceList": {
@@ -926,7 +1211,7 @@
       }
     },
     "WorkspaceProperties": {
-      "base": "<p>Information about a WorkSpace.</p>",
+      "base": "<p>Describes a WorkSpace.</p>",
       "refs": {
         "ModifyWorkspacePropertiesRequest$WorkspaceProperties": "<p>The properties of the WorkSpace.</p>",
         "Workspace$WorkspaceProperties": "<p>The properties of the WorkSpace.</p>",
@@ -934,7 +1219,7 @@
       }
     },
     "WorkspaceRequest": {
-      "base": "<p>Information used to create a WorkSpace.</p>",
+      "base": "<p>Describes the information used to create a WorkSpace.</p>",
       "refs": {
         "FailedCreateWorkspaceRequest$WorkspaceRequest": "<p>Information about the WorkSpace.</p>",
         "WorkspaceRequestList$member": null
@@ -953,7 +1238,7 @@
       }
     },
     "WorkspacesIpGroup": {
-      "base": "<p>Information about an IP access control group.</p>",
+      "base": "<p>Describes an IP access control group.</p>",
       "refs": {
         "WorkspacesIpGroupsList$member": null
       }

@@ -76,6 +76,10 @@ type AutoScalingPlansAPI interface {
 	DescribeScalingPlansWithContext(aws.Context, *autoscalingplans.DescribeScalingPlansInput, ...request.Option) (*autoscalingplans.DescribeScalingPlansOutput, error)
 	DescribeScalingPlansRequest(*autoscalingplans.DescribeScalingPlansInput) (*request.Request, *autoscalingplans.DescribeScalingPlansOutput)
 
+	GetScalingPlanResourceForecastData(*autoscalingplans.GetScalingPlanResourceForecastDataInput) (*autoscalingplans.GetScalingPlanResourceForecastDataOutput, error)
+	GetScalingPlanResourceForecastDataWithContext(aws.Context, *autoscalingplans.GetScalingPlanResourceForecastDataInput, ...request.Option) (*autoscalingplans.GetScalingPlanResourceForecastDataOutput, error)
+	GetScalingPlanResourceForecastDataRequest(*autoscalingplans.GetScalingPlanResourceForecastDataInput) (*request.Request, *autoscalingplans.GetScalingPlanResourceForecastDataOutput)
+
 	UpdateScalingPlan(*autoscalingplans.UpdateScalingPlanInput) (*autoscalingplans.UpdateScalingPlanOutput, error)
 	UpdateScalingPlanWithContext(aws.Context, *autoscalingplans.UpdateScalingPlanInput, ...request.Option) (*autoscalingplans.UpdateScalingPlanOutput, error)
 	UpdateScalingPlanRequest(*autoscalingplans.UpdateScalingPlanInput) (*request.Request, *autoscalingplans.UpdateScalingPlanOutput)

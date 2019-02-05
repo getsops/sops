@@ -46,7 +46,6 @@ var TransferJob_Status_name = map[int32]string{
 	2: "DISABLED",
 	3: "DELETED",
 }
-
 var TransferJob_Status_value = map[string]int32{
 	"STATUS_UNSPECIFIED": 0,
 	"ENABLED":            1,
@@ -57,9 +56,8 @@ var TransferJob_Status_value = map[string]int32{
 func (x TransferJob_Status) String() string {
 	return proto.EnumName(TransferJob_Status_name, int32(x))
 }
-
 func (TransferJob_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{9, 0}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{9, 0}
 }
 
 // The status of a TransferOperation.
@@ -88,7 +86,6 @@ var TransferOperation_Status_name = map[int32]string{
 	4: "FAILED",
 	5: "ABORTED",
 }
-
 var TransferOperation_Status_value = map[string]int32{
 	"STATUS_UNSPECIFIED": 0,
 	"IN_PROGRESS":        1,
@@ -101,9 +98,8 @@ var TransferOperation_Status_value = map[string]int32{
 func (x TransferOperation_Status) String() string {
 	return proto.EnumName(TransferOperation_Status_name, int32(x))
 }
-
 func (TransferOperation_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{13, 0}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{13, 0}
 }
 
 // Google service account
@@ -119,7 +115,7 @@ func (m *GoogleServiceAccount) Reset()         { *m = GoogleServiceAccount{} }
 func (m *GoogleServiceAccount) String() string { return proto.CompactTextString(m) }
 func (*GoogleServiceAccount) ProtoMessage()    {}
 func (*GoogleServiceAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{0}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{0}
 }
 func (m *GoogleServiceAccount) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GoogleServiceAccount.Unmarshal(m, b)
@@ -127,8 +123,8 @@ func (m *GoogleServiceAccount) XXX_Unmarshal(b []byte) error {
 func (m *GoogleServiceAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GoogleServiceAccount.Marshal(b, m, deterministic)
 }
-func (m *GoogleServiceAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GoogleServiceAccount.Merge(m, src)
+func (dst *GoogleServiceAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GoogleServiceAccount.Merge(dst, src)
 }
 func (m *GoogleServiceAccount) XXX_Size() int {
 	return xxx_messageInfo_GoogleServiceAccount.Size(m)
@@ -164,7 +160,7 @@ func (m *AwsAccessKey) Reset()         { *m = AwsAccessKey{} }
 func (m *AwsAccessKey) String() string { return proto.CompactTextString(m) }
 func (*AwsAccessKey) ProtoMessage()    {}
 func (*AwsAccessKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{1}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{1}
 }
 func (m *AwsAccessKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AwsAccessKey.Unmarshal(m, b)
@@ -172,8 +168,8 @@ func (m *AwsAccessKey) XXX_Unmarshal(b []byte) error {
 func (m *AwsAccessKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AwsAccessKey.Marshal(b, m, deterministic)
 }
-func (m *AwsAccessKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AwsAccessKey.Merge(m, src)
+func (dst *AwsAccessKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AwsAccessKey.Merge(dst, src)
 }
 func (m *AwsAccessKey) XXX_Size() int {
 	return xxx_messageInfo_AwsAccessKey.Size(m)
@@ -259,7 +255,7 @@ func (m *ObjectConditions) Reset()         { *m = ObjectConditions{} }
 func (m *ObjectConditions) String() string { return proto.CompactTextString(m) }
 func (*ObjectConditions) ProtoMessage()    {}
 func (*ObjectConditions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{2}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{2}
 }
 func (m *ObjectConditions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ObjectConditions.Unmarshal(m, b)
@@ -267,8 +263,8 @@ func (m *ObjectConditions) XXX_Unmarshal(b []byte) error {
 func (m *ObjectConditions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ObjectConditions.Marshal(b, m, deterministic)
 }
-func (m *ObjectConditions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ObjectConditions.Merge(m, src)
+func (dst *ObjectConditions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectConditions.Merge(dst, src)
 }
 func (m *ObjectConditions) XXX_Size() int {
 	return xxx_messageInfo_ObjectConditions.Size(m)
@@ -324,7 +320,7 @@ func (m *GcsData) Reset()         { *m = GcsData{} }
 func (m *GcsData) String() string { return proto.CompactTextString(m) }
 func (*GcsData) ProtoMessage()    {}
 func (*GcsData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{3}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{3}
 }
 func (m *GcsData) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcsData.Unmarshal(m, b)
@@ -332,8 +328,8 @@ func (m *GcsData) XXX_Unmarshal(b []byte) error {
 func (m *GcsData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcsData.Marshal(b, m, deterministic)
 }
-func (m *GcsData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcsData.Merge(m, src)
+func (dst *GcsData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcsData.Merge(dst, src)
 }
 func (m *GcsData) XXX_Size() int {
 	return xxx_messageInfo_GcsData.Size(m)
@@ -372,7 +368,7 @@ func (m *AwsS3Data) Reset()         { *m = AwsS3Data{} }
 func (m *AwsS3Data) String() string { return proto.CompactTextString(m) }
 func (*AwsS3Data) ProtoMessage()    {}
 func (*AwsS3Data) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{4}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{4}
 }
 func (m *AwsS3Data) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AwsS3Data.Unmarshal(m, b)
@@ -380,8 +376,8 @@ func (m *AwsS3Data) XXX_Unmarshal(b []byte) error {
 func (m *AwsS3Data) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AwsS3Data.Marshal(b, m, deterministic)
 }
-func (m *AwsS3Data) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AwsS3Data.Merge(m, src)
+func (dst *AwsS3Data) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AwsS3Data.Merge(dst, src)
 }
 func (m *AwsS3Data) XXX_Size() int {
 	return xxx_messageInfo_AwsS3Data.Size(m)
@@ -462,7 +458,7 @@ func (m *HttpData) Reset()         { *m = HttpData{} }
 func (m *HttpData) String() string { return proto.CompactTextString(m) }
 func (*HttpData) ProtoMessage()    {}
 func (*HttpData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{5}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{5}
 }
 func (m *HttpData) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HttpData.Unmarshal(m, b)
@@ -470,8 +466,8 @@ func (m *HttpData) XXX_Unmarshal(b []byte) error {
 func (m *HttpData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HttpData.Marshal(b, m, deterministic)
 }
-func (m *HttpData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HttpData.Merge(m, src)
+func (dst *HttpData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpData.Merge(dst, src)
 }
 func (m *HttpData) XXX_Size() int {
 	return xxx_messageInfo_HttpData.Size(m)
@@ -511,7 +507,7 @@ func (m *TransferOptions) Reset()         { *m = TransferOptions{} }
 func (m *TransferOptions) String() string { return proto.CompactTextString(m) }
 func (*TransferOptions) ProtoMessage()    {}
 func (*TransferOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{6}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{6}
 }
 func (m *TransferOptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransferOptions.Unmarshal(m, b)
@@ -519,8 +515,8 @@ func (m *TransferOptions) XXX_Unmarshal(b []byte) error {
 func (m *TransferOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransferOptions.Marshal(b, m, deterministic)
 }
-func (m *TransferOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransferOptions.Merge(m, src)
+func (dst *TransferOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransferOptions.Merge(dst, src)
 }
 func (m *TransferOptions) XXX_Size() int {
 	return xxx_messageInfo_TransferOptions.Size(m)
@@ -583,7 +579,7 @@ func (m *TransferSpec) Reset()         { *m = TransferSpec{} }
 func (m *TransferSpec) String() string { return proto.CompactTextString(m) }
 func (*TransferSpec) ProtoMessage()    {}
 func (*TransferSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{7}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{7}
 }
 func (m *TransferSpec) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransferSpec.Unmarshal(m, b)
@@ -591,8 +587,8 @@ func (m *TransferSpec) XXX_Unmarshal(b []byte) error {
 func (m *TransferSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransferSpec.Marshal(b, m, deterministic)
 }
-func (m *TransferSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransferSpec.Merge(m, src)
+func (dst *TransferSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransferSpec.Merge(dst, src)
 }
 func (m *TransferSpec) XXX_Size() int {
 	return xxx_messageInfo_TransferSpec.Size(m)
@@ -843,7 +839,7 @@ func (m *Schedule) Reset()         { *m = Schedule{} }
 func (m *Schedule) String() string { return proto.CompactTextString(m) }
 func (*Schedule) ProtoMessage()    {}
 func (*Schedule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{8}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{8}
 }
 func (m *Schedule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Schedule.Unmarshal(m, b)
@@ -851,8 +847,8 @@ func (m *Schedule) XXX_Unmarshal(b []byte) error {
 func (m *Schedule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Schedule.Marshal(b, m, deterministic)
 }
-func (m *Schedule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Schedule.Merge(m, src)
+func (dst *Schedule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Schedule.Merge(dst, src)
 }
 func (m *Schedule) XXX_Size() int {
 	return xxx_messageInfo_Schedule.Size(m)
@@ -924,7 +920,7 @@ func (m *TransferJob) Reset()         { *m = TransferJob{} }
 func (m *TransferJob) String() string { return proto.CompactTextString(m) }
 func (*TransferJob) ProtoMessage()    {}
 func (*TransferJob) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{9}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{9}
 }
 func (m *TransferJob) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransferJob.Unmarshal(m, b)
@@ -932,8 +928,8 @@ func (m *TransferJob) XXX_Unmarshal(b []byte) error {
 func (m *TransferJob) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransferJob.Marshal(b, m, deterministic)
 }
-func (m *TransferJob) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransferJob.Merge(m, src)
+func (dst *TransferJob) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransferJob.Merge(dst, src)
 }
 func (m *TransferJob) XXX_Size() int {
 	return xxx_messageInfo_TransferJob.Size(m)
@@ -1024,7 +1020,7 @@ func (m *ErrorLogEntry) Reset()         { *m = ErrorLogEntry{} }
 func (m *ErrorLogEntry) String() string { return proto.CompactTextString(m) }
 func (*ErrorLogEntry) ProtoMessage()    {}
 func (*ErrorLogEntry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{10}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{10}
 }
 func (m *ErrorLogEntry) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ErrorLogEntry.Unmarshal(m, b)
@@ -1032,8 +1028,8 @@ func (m *ErrorLogEntry) XXX_Unmarshal(b []byte) error {
 func (m *ErrorLogEntry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ErrorLogEntry.Marshal(b, m, deterministic)
 }
-func (m *ErrorLogEntry) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ErrorLogEntry.Merge(m, src)
+func (dst *ErrorLogEntry) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ErrorLogEntry.Merge(dst, src)
 }
 func (m *ErrorLogEntry) XXX_Size() int {
 	return xxx_messageInfo_ErrorLogEntry.Size(m)
@@ -1077,7 +1073,7 @@ func (m *ErrorSummary) Reset()         { *m = ErrorSummary{} }
 func (m *ErrorSummary) String() string { return proto.CompactTextString(m) }
 func (*ErrorSummary) ProtoMessage()    {}
 func (*ErrorSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{11}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{11}
 }
 func (m *ErrorSummary) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ErrorSummary.Unmarshal(m, b)
@@ -1085,8 +1081,8 @@ func (m *ErrorSummary) XXX_Unmarshal(b []byte) error {
 func (m *ErrorSummary) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ErrorSummary.Marshal(b, m, deterministic)
 }
-func (m *ErrorSummary) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ErrorSummary.Merge(m, src)
+func (dst *ErrorSummary) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ErrorSummary.Merge(dst, src)
 }
 func (m *ErrorSummary) XXX_Size() int {
 	return xxx_messageInfo_ErrorSummary.Size(m)
@@ -1167,7 +1163,7 @@ func (m *TransferCounters) Reset()         { *m = TransferCounters{} }
 func (m *TransferCounters) String() string { return proto.CompactTextString(m) }
 func (*TransferCounters) ProtoMessage()    {}
 func (*TransferCounters) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{12}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{12}
 }
 func (m *TransferCounters) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransferCounters.Unmarshal(m, b)
@@ -1175,8 +1171,8 @@ func (m *TransferCounters) XXX_Unmarshal(b []byte) error {
 func (m *TransferCounters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransferCounters.Marshal(b, m, deterministic)
 }
-func (m *TransferCounters) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransferCounters.Merge(m, src)
+func (dst *TransferCounters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransferCounters.Merge(dst, src)
 }
 func (m *TransferCounters) XXX_Size() int {
 	return xxx_messageInfo_TransferCounters.Size(m)
@@ -1330,7 +1326,7 @@ func (m *TransferOperation) Reset()         { *m = TransferOperation{} }
 func (m *TransferOperation) String() string { return proto.CompactTextString(m) }
 func (*TransferOperation) ProtoMessage()    {}
 func (*TransferOperation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_291a6d3205b12034, []int{13}
+	return fileDescriptor_transfer_types_86dab7ad4ac5c425, []int{13}
 }
 func (m *TransferOperation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransferOperation.Unmarshal(m, b)
@@ -1338,8 +1334,8 @@ func (m *TransferOperation) XXX_Unmarshal(b []byte) error {
 func (m *TransferOperation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TransferOperation.Marshal(b, m, deterministic)
 }
-func (m *TransferOperation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransferOperation.Merge(m, src)
+func (dst *TransferOperation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransferOperation.Merge(dst, src)
 }
 func (m *TransferOperation) XXX_Size() int {
 	return xxx_messageInfo_TransferOperation.Size(m)
@@ -1433,10 +1429,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/storagetransfer/v1/transfer_types.proto", fileDescriptor_291a6d3205b12034)
+	proto.RegisterFile("google/storagetransfer/v1/transfer_types.proto", fileDescriptor_transfer_types_86dab7ad4ac5c425)
 }
 
-var fileDescriptor_291a6d3205b12034 = []byte{
+var fileDescriptor_transfer_types_86dab7ad4ac5c425 = []byte{
 	// 1767 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x58, 0xdd, 0x6e, 0xdb, 0xc8,
 	0x15, 0x8e, 0x24, 0xc7, 0x96, 0x8e, 0x24, 0x4b, 0x9e, 0xcd, 0x7a, 0x65, 0x27, 0xd9, 0xa4, 0xf4,

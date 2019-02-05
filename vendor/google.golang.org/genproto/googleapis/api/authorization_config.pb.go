@@ -41,7 +41,7 @@ func (m *AuthorizationConfig) Reset()         { *m = AuthorizationConfig{} }
 func (m *AuthorizationConfig) String() string { return proto.CompactTextString(m) }
 func (*AuthorizationConfig) ProtoMessage()    {}
 func (*AuthorizationConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9a079278ac7754f2, []int{0}
+	return fileDescriptor_authorization_config_614be9a94a98ec26, []int{0}
 }
 func (m *AuthorizationConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuthorizationConfig.Unmarshal(m, b)
@@ -49,8 +49,8 @@ func (m *AuthorizationConfig) XXX_Unmarshal(b []byte) error {
 func (m *AuthorizationConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuthorizationConfig.Marshal(b, m, deterministic)
 }
-func (m *AuthorizationConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthorizationConfig.Merge(m, src)
+func (dst *AuthorizationConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthorizationConfig.Merge(dst, src)
 }
 func (m *AuthorizationConfig) XXX_Size() int {
 	return xxx_messageInfo_AuthorizationConfig.Size(m)
@@ -73,10 +73,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/api/experimental/authorization_config.proto", fileDescriptor_9a079278ac7754f2)
+	proto.RegisterFile("google/api/experimental/authorization_config.proto", fileDescriptor_authorization_config_614be9a94a98ec26)
 }
 
-var fileDescriptor_9a079278ac7754f2 = []byte{
+var fileDescriptor_authorization_config_614be9a94a98ec26 = []byte{
 	// 180 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x32, 0x4a, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x4f, 0x2c, 0xc8, 0xd4, 0x4f, 0xad, 0x28, 0x48, 0x2d, 0xca, 0xcc, 0x4d, 0xcd,

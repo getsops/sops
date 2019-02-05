@@ -43,7 +43,7 @@ func (m *Date) Reset()         { *m = Date{} }
 func (m *Date) String() string { return proto.CompactTextString(m) }
 func (*Date) ProtoMessage()    {}
 func (*Date) Descriptor() ([]byte, []int) {
-	return fileDescriptor_92c30699df886e3f, []int{0}
+	return fileDescriptor_date_7d25862cee0f408d, []int{0}
 }
 func (m *Date) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Date.Unmarshal(m, b)
@@ -51,8 +51,8 @@ func (m *Date) XXX_Unmarshal(b []byte) error {
 func (m *Date) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Date.Marshal(b, m, deterministic)
 }
-func (m *Date) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Date.Merge(m, src)
+func (dst *Date) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Date.Merge(dst, src)
 }
 func (m *Date) XXX_Size() int {
 	return xxx_messageInfo_Date.Size(m)
@@ -88,9 +88,9 @@ func init() {
 	proto.RegisterType((*Date)(nil), "google.type.Date")
 }
 
-func init() { proto.RegisterFile("google/type/date.proto", fileDescriptor_92c30699df886e3f) }
+func init() { proto.RegisterFile("google/type/date.proto", fileDescriptor_date_7d25862cee0f408d) }
 
-var fileDescriptor_92c30699df886e3f = []byte{
+var fileDescriptor_date_7d25862cee0f408d = []byte{
 	// 172 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x4b, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x2f, 0xa9, 0x2c, 0x48, 0xd5, 0x4f, 0x49, 0x2c, 0x49, 0xd5, 0x2b, 0x28, 0xca,

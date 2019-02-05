@@ -29,7 +29,6 @@ var (
 	typeOfTime      = reflect.TypeOf(time.Time{})
 	typeOfGeoPoint  = reflect.TypeOf(GeoPoint{})
 	typeOfKeyPtr    = reflect.TypeOf(&Key{})
-	typeOfEntityPtr = reflect.TypeOf(&Entity{})
 )
 
 // typeMismatchReason returns a string explaining why the property p could not

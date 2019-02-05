@@ -233,14 +233,15 @@ func updateEventPayloadRef(parent *Shape) {
 
 func renderEventStreamAPIShape(w io.Writer, s *Shape) error {
 	// Imports needed by the EventStream APIs.
-	s.API.imports["fmt"] = true
-	s.API.imports["bytes"] = true
-	s.API.imports["io"] = true
-	s.API.imports["sync"] = true
-	s.API.imports["sync/atomic"] = true
-	s.API.imports["github.com/aws/aws-sdk-go/aws/awserr"] = true
-	s.API.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream"] = true
-	s.API.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi"] = true
+	s.API.AddImport("fmt")
+	s.API.AddImport("bytes")
+	s.API.AddImport("io")
+	s.API.AddImport("sync")
+	s.API.AddImport("sync/atomic")
+	s.API.AddSDKImport("aws")
+	s.API.AddSDKImport("aws/awserr")
+	s.API.AddSDKImport("private/protocol/eventstream")
+	s.API.AddSDKImport("private/protocol/eventstream/eventstreamapi")
 
 	return eventStreamAPIShapeTmpl.Execute(w, s)
 }
@@ -391,7 +392,7 @@ type {{ $.ShapeName }}Reader interface {
 	// HTTP this will also close the HTTP connection.
 	Close() error
 
-	// Returns any error that has occured while reading from the event stream.
+	// Returns any error that has occurred while reading from the event stream.
 	Err() error
 }
 
@@ -705,21 +706,22 @@ func (a *API) APIEventStreamTestGoCode() string {
 	var buf bytes.Buffer
 
 	a.resetImports()
-	a.imports["bytes"] = true
-	a.imports["io/ioutil"] = true
-	a.imports["net/http"] = true
-	a.imports["reflect"] = true
-	a.imports["testing"] = true
-	a.imports["time"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/corehandlers"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/request"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/awserr"] = true
-	a.imports["github.com/aws/aws-sdk-go/awstesting/unit"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/"+a.ProtocolPackage()] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamtest"] = true
+	a.AddImport("bytes")
+	a.AddImport("io/ioutil")
+	a.AddImport("net/http")
+	a.AddImport("reflect")
+	a.AddImport("testing")
+	a.AddImport("time")
+	a.AddSDKImport("aws")
+	a.AddSDKImport("aws/corehandlers")
+	a.AddSDKImport("aws/request")
+	a.AddSDKImport("aws/awserr")
+	a.AddSDKImport("awstesting/unit")
+	a.AddSDKImport("private/protocol")
+	a.AddSDKImport("private/protocol/", a.ProtocolPackage())
+	a.AddSDKImport("private/protocol/eventstream")
+	a.AddSDKImport("private/protocol/eventstream/eventstreamapi")
+	a.AddSDKImport("private/protocol/eventstream/eventstreamtest")
 
 	unused := `
 	var _ time.Time
@@ -843,7 +845,7 @@ var eventStreamTestTmpl = template.Must(
 		"ValueForType":               valueForType,
 		"HasNonBlobPayloadMembers":   eventHasNonBlobPayloadMembers,
 		"SetEventHeaderValueForType": setEventHeaderValueForType,
-		"Map": templateMap,
+		"Map":                        templateMap,
 		"OptionalAddInt": func(do bool, a, b int) int {
 			if !do {
 				return a

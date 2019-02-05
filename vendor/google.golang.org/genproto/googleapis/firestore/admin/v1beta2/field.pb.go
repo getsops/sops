@@ -65,7 +65,7 @@ func (m *Field) Reset()         { *m = Field{} }
 func (m *Field) String() string { return proto.CompactTextString(m) }
 func (*Field) ProtoMessage()    {}
 func (*Field) Descriptor() ([]byte, []int) {
-	return fileDescriptor_967ea3483ba729a5, []int{0}
+	return fileDescriptor_field_6bc9249960293f54, []int{0}
 }
 func (m *Field) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Field.Unmarshal(m, b)
@@ -73,8 +73,8 @@ func (m *Field) XXX_Unmarshal(b []byte) error {
 func (m *Field) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Field.Marshal(b, m, deterministic)
 }
-func (m *Field) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Field.Merge(m, src)
+func (dst *Field) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Field.Merge(dst, src)
 }
 func (m *Field) XXX_Size() int {
 	return xxx_messageInfo_Field.Size(m)
@@ -129,7 +129,7 @@ func (m *Field_IndexConfig) Reset()         { *m = Field_IndexConfig{} }
 func (m *Field_IndexConfig) String() string { return proto.CompactTextString(m) }
 func (*Field_IndexConfig) ProtoMessage()    {}
 func (*Field_IndexConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_967ea3483ba729a5, []int{0, 0}
+	return fileDescriptor_field_6bc9249960293f54, []int{0, 0}
 }
 func (m *Field_IndexConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Field_IndexConfig.Unmarshal(m, b)
@@ -137,8 +137,8 @@ func (m *Field_IndexConfig) XXX_Unmarshal(b []byte) error {
 func (m *Field_IndexConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Field_IndexConfig.Marshal(b, m, deterministic)
 }
-func (m *Field_IndexConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Field_IndexConfig.Merge(m, src)
+func (dst *Field_IndexConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Field_IndexConfig.Merge(dst, src)
 }
 func (m *Field_IndexConfig) XXX_Size() int {
 	return xxx_messageInfo_Field_IndexConfig.Size(m)
@@ -183,10 +183,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/firestore/admin/v1beta2/field.proto", fileDescriptor_967ea3483ba729a5)
+	proto.RegisterFile("google/firestore/admin/v1beta2/field.proto", fileDescriptor_field_6bc9249960293f54)
 }
 
-var fileDescriptor_967ea3483ba729a5 = []byte{
+var fileDescriptor_field_6bc9249960293f54 = []byte{
 	// 346 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x91, 0xcf, 0x4a, 0xf3, 0x40,
 	0x14, 0xc5, 0x99, 0xb4, 0xdf, 0xa7, 0x9d, 0xa8, 0x8b, 0xc1, 0x45, 0x28, 0x45, 0x4a, 0xb1, 0x50,

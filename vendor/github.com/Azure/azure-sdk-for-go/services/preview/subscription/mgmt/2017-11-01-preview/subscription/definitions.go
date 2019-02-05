@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -46,6 +47,16 @@ func NewDefinitionsClientWithBaseURI(baseURI string) DefinitionsClient {
 // subscriptionDefinitionName - the name of the Azure subscription definition.
 // body - the subscription definition creation.
 func (client DefinitionsClient) Create(ctx context.Context, subscriptionDefinitionName string, body Definition) (result DefinitionsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, subscriptionDefinitionName, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "subscription.DefinitionsClient", "Create", nil, "Failure preparing request")
@@ -91,10 +102,6 @@ func (client DefinitionsClient) CreateSender(req *http.Request) (future Definiti
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -116,6 +123,16 @@ func (client DefinitionsClient) CreateResponder(resp *http.Response) (result Def
 // Parameters:
 // subscriptionDefinitionName - the name of the Azure subscription definition.
 func (client DefinitionsClient) Get(ctx context.Context, subscriptionDefinitionName string) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, subscriptionDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "subscription.DefinitionsClient", "Get", nil, "Failure preparing request")
@@ -182,6 +199,16 @@ func (client DefinitionsClient) GetResponder(resp *http.Response) (result Defini
 // operationID - the operation ID, which can be found from the Location field in the generate recommendation
 // response header.
 func (client DefinitionsClient) GetOperationStatus(ctx context.Context, operationID uuid.UUID) (result Definition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.GetOperationStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetOperationStatusPreparer(ctx, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "subscription.DefinitionsClient", "GetOperationStatus", nil, "Failure preparing request")
@@ -244,6 +271,16 @@ func (client DefinitionsClient) GetOperationStatusResponder(resp *http.Response)
 
 // List list an Azure subscription definition by subscriptionId.
 func (client DefinitionsClient) List(ctx context.Context) (result DefinitionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.List")
+		defer func() {
+			sc := -1
+			if result.dl.Response.Response != nil {
+				sc = result.dl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -302,8 +339,8 @@ func (client DefinitionsClient) ListResponder(resp *http.Response) (result Defin
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client DefinitionsClient) listNextResults(lastResults DefinitionList) (result DefinitionList, err error) {
-	req, err := lastResults.definitionListPreparer()
+func (client DefinitionsClient) listNextResults(ctx context.Context, lastResults DefinitionList) (result DefinitionList, err error) {
+	req, err := lastResults.definitionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "subscription.DefinitionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -324,6 +361,16 @@ func (client DefinitionsClient) listNextResults(lastResults DefinitionList) (res
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DefinitionsClient) ListComplete(ctx context.Context) (result DefinitionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

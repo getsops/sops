@@ -17,6 +17,7 @@ limitations under the License.
 package bigtable
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -25,9 +26,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
+	"github.com/google/go-cmp/cmp"
 	"google.golang.org/api/option"
+	btpb "google.golang.org/genproto/googleapis/bigtable/v2"
 	"google.golang.org/grpc"
 )
 
@@ -77,6 +78,84 @@ func TestApplyErrors(t *testing.T) {
 	if err := table.Apply(ctx, "x", cm); err == nil {
 		t.Error("got nil, want error")
 	}
+}
+
+func TestGroupEntries(t *testing.T) {
+	tests := []struct {
+		desc string
+		in   []*entryErr
+		size int
+		want [][]*entryErr
+	}{
+		{
+			desc: "one entry less than max size is one group",
+			in:   []*entryErr{buildEntry(5)},
+			size: 10,
+			want: [][]*entryErr{{buildEntry(5)}},
+		},
+		{
+			desc: "one entry equal to max size is one group",
+			in:   []*entryErr{buildEntry(10)},
+			size: 10,
+			want: [][]*entryErr{{buildEntry(10)}},
+		},
+		{
+			desc: "one entry greater than max size is one group",
+			in:   []*entryErr{buildEntry(15)},
+			size: 10,
+			want: [][]*entryErr{{buildEntry(15)}},
+		},
+		{
+			desc: "all entries fitting within max size are one group",
+			in:   []*entryErr{buildEntry(10), buildEntry(10)},
+			size: 20,
+			want: [][]*entryErr{{buildEntry(10), buildEntry(10)}},
+		},
+		{
+			desc: "entries each under max size and together over max size are grouped separately",
+			in:   []*entryErr{buildEntry(10), buildEntry(10)},
+			size: 15,
+			want: [][]*entryErr{{buildEntry(10)}, {buildEntry(10)}},
+		},
+		{
+			desc: "entries together over max size are grouped by max size",
+			in:   []*entryErr{buildEntry(5), buildEntry(5), buildEntry(5)},
+			size: 10,
+			want: [][]*entryErr{{buildEntry(5), buildEntry(5)}, {buildEntry(5)}},
+		},
+		{
+			desc: "one entry over max size and one entry under max size are two groups",
+			in:   []*entryErr{buildEntry(15), buildEntry(5)},
+			size: 10,
+			want: [][]*entryErr{{buildEntry(15)}, {buildEntry(5)}},
+		},
+	}
+
+	for _, test := range tests {
+		if got, want := groupEntries(test.in, test.size), test.want; !cmp.Equal(mutationCounts(got), mutationCounts(want)) {
+			t.Errorf("[%s] want = %v, got = %v", test.desc, mutationCounts(want), mutationCounts(got))
+		}
+	}
+}
+
+func buildEntry(numMutations int) *entryErr {
+	var muts []*btpb.Mutation
+	for i := 0; i < numMutations; i++ {
+		muts = append(muts, &btpb.Mutation{})
+	}
+	return &entryErr{Entry: &btpb.MutateRowsRequest_Entry{Mutations: muts}}
+}
+
+func mutationCounts(batched [][]*entryErr) []int {
+	var res []int
+	for _, entries := range batched {
+		var count int
+		for _, e := range entries {
+			count += len(e.Entry.Mutations)
+		}
+		res = append(res, count)
+	}
+	return res
 }
 
 func TestClientIntegration(t *testing.T) {
@@ -727,7 +806,7 @@ func TestClientIntegration(t *testing.T) {
 		},
 	}
 	if !testutil.Equal(r, wantRow) {
-		t.Errorf("Column family was deleted unexpectly.\n got %v\n want %v", r, wantRow)
+		t.Errorf("Column family was deleted unexpectedly.\n got %v\n want %v", r, wantRow)
 	}
 	checkpoint("tested family delete")
 

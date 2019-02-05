@@ -21,9 +21,10 @@
   "baseUrl": "https://sourcerepo.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud Source Repositories",
-  "description": "Access source code repositories hosted by Google.",
+  "description": "Accesses source code repositories hosted by Google.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/source-repositories/docs/apis",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -414,7 +415,7 @@
       }
     }
   },
-  "revision": "20180718",
+  "revision": "20181106",
   "rootUrl": "https://sourcerepo.googleapis.com/",
   "schemas": {
     "AuditConfig": {

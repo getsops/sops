@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,44 +21,41 @@ package visualstudio
 
 import original "github.com/Azure/azure-sdk-for-go/services/preview/visualstudio/mgmt/2014-04-01-preview/visualstudio"
 
-type AccountsClient = original.AccountsClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ExtensionsClient = original.ExtensionsClient
 type AccountResource = original.AccountResource
 type AccountResourceListResult = original.AccountResourceListResult
 type AccountResourceRequest = original.AccountResourceRequest
+type AccountTagRequest = original.AccountTagRequest
+type AccountsClient = original.AccountsClient
+type BaseClient = original.BaseClient
 type CheckNameAvailabilityParameter = original.CheckNameAvailabilityParameter
 type CheckNameAvailabilityResult = original.CheckNameAvailabilityResult
 type ExtensionResource = original.ExtensionResource
 type ExtensionResourceListResult = original.ExtensionResourceListResult
 type ExtensionResourcePlan = original.ExtensionResourcePlan
 type ExtensionResourceRequest = original.ExtensionResourceRequest
+type ExtensionsClient = original.ExtensionsClient
 type Operation = original.Operation
 type OperationListResult = original.OperationListResult
 type OperationProperties = original.OperationProperties
+type OperationsClient = original.OperationsClient
 type ProjectResource = original.ProjectResource
 type ProjectResourceListResult = original.ProjectResourceListResult
+type ProjectsClient = original.ProjectsClient
 type ProjectsCreateFuture = original.ProjectsCreateFuture
 type Resource = original.Resource
-type OperationsClient = original.OperationsClient
-type ProjectsClient = original.ProjectsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAccountsClient(subscriptionID string) AccountsClient {
 	return original.NewAccountsClient(subscriptionID)
 }
 func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) AccountsClient {
 	return original.NewAccountsClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewExtensionsClient(subscriptionID string) ExtensionsClient {
 	return original.NewExtensionsClient(subscriptionID)
@@ -77,6 +74,9 @@ func NewProjectsClient(subscriptionID string) ProjectsClient {
 }
 func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string) ProjectsClient {
 	return original.NewProjectsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

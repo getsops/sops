@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package proxy
 
 import (
@@ -28,39 +26,6 @@ import (
 	"github.com/google/martian"
 )
 
-func TestRedactHeaders(t *testing.T) {
-	clone := func(h http.Header) http.Header {
-		h2 := http.Header{}
-		for k, v := range h {
-			h2[k] = v
-		}
-		return h2
-	}
-
-	in := http.Header{
-		"Content-Type":                      {"text/plain"},
-		"Authorization":                     {"oauth2-token"},
-		"X-Goog-Encryption-Key":             {"a-secret-key"},
-		"X-Goog-Copy-Source-Encryption-Key": {"another-secret-key"},
-	}
-	orig := clone(in)
-	got := redactHeaders(in)
-	// Logged headers should be redacted.
-	want := http.Header{
-		"Content-Type":                      {"text/plain"},
-		"Authorization":                     {"REDACTED"},
-		"X-Goog-Encryption-Key":             {"REDACTED"},
-		"X-Goog-Copy-Source-Encryption-Key": {"REDACTED"},
-	}
-	if !testutil.Equal(got, want) {
-		t.Errorf("got  %+v\nwant %+v", got, want)
-	}
-	// The original headers should be the same.
-	if got, want := in, orig; !testutil.Equal(got, want) {
-		t.Errorf("got  %+v\nwant %+v", got, want)
-	}
-}
-
 func TestLogger(t *testing.T) {
 	req := &http.Request{
 		Method: "POST",
@@ -69,7 +34,7 @@ func TestLogger(t *testing.T) {
 			Host:   "example.com",
 			Path:   "a/b/c",
 		},
-		Header:  http.Header{"H1": {"v1", "v2"}},
+		Header:  http.Header{"H1": {"v1", "v2"}, "Content-Type": {"text/plain"}},
 		Body:    ioutil.NopCloser(strings.NewReader("hello")),
 		Trailer: http.Header{"T1": {"v3", "v4"}},
 	}
@@ -80,7 +45,7 @@ func TestLogger(t *testing.T) {
 		Header:     http.Header{"H2": {"v5"}},
 		Trailer:    http.Header{"T2": {"v6", "v7"}},
 	}
-	l := NewLogger()
+	l := newLogger()
 	_, remove, err := martian.TestContext(req, nil, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -97,11 +62,12 @@ func TestLogger(t *testing.T) {
 		{
 			ID: lg.Entries[0].ID,
 			Request: &Request{
-				Method:  "POST",
-				URL:     "https://example.com/a/b/c",
-				Header:  http.Header{"H1": {"v1", "v2"}},
-				Body:    []byte("hello"),
-				Trailer: http.Header{"T1": {"v3", "v4"}},
+				Method:    "POST",
+				URL:       "https://example.com/a/b/c",
+				Header:    http.Header{"H1": {"v1", "v2"}},
+				MediaType: "text/plain",
+				BodyParts: [][]byte{[]byte("hello")},
+				Trailer:   http.Header{"T1": {"v3", "v4"}},
 			},
 			Response: &Response{
 				StatusCode: 204,

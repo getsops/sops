@@ -18,12 +18,17 @@ package catalog
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datalake/analytics/2015-10-01-preview/catalog"
 
 // FileType enumerates the values for file type.
 type FileType string
@@ -40,7 +45,8 @@ func PossibleFileTypeValues() []FileType {
 	return []FileType{Assembly, Resource}
 }
 
-// DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters dataLakeAnalytics DataLakeAnalyticsAccount information.
+// DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters dataLakeAnalytics DataLakeAnalyticsAccount
+// information.
 type DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters struct {
 	// Password - the password for the secret to pass in
 	Password *string `json:"password,omitempty"`
@@ -170,20 +176,37 @@ type USQLAssemblyListIterator struct {
 	page USQLAssemblyListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLAssemblyListIterator) Next() error {
+func (iter *USQLAssemblyListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLAssemblyListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLAssemblyListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -205,6 +228,11 @@ func (iter USQLAssemblyListIterator) Value() USQLAssemblyClr {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLAssemblyListIterator type.
+func NewUSQLAssemblyListIterator(page USQLAssemblyListPage) USQLAssemblyListIterator {
+	return USQLAssemblyListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (usal USQLAssemblyList) IsEmpty() bool {
 	return usal.Value == nil || len(*usal.Value) == 0
@@ -212,11 +240,11 @@ func (usal USQLAssemblyList) IsEmpty() bool {
 
 // uSQLAssemblyListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (usal USQLAssemblyList) uSQLAssemblyListPreparer() (*http.Request, error) {
+func (usal USQLAssemblyList) uSQLAssemblyListPreparer(ctx context.Context) (*http.Request, error) {
 	if usal.NextLink == nil || len(to.String(usal.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(usal.NextLink)))
@@ -224,19 +252,36 @@ func (usal USQLAssemblyList) uSQLAssemblyListPreparer() (*http.Request, error) {
 
 // USQLAssemblyListPage contains a page of USQLAssemblyClr values.
 type USQLAssemblyListPage struct {
-	fn  func(USQLAssemblyList) (USQLAssemblyList, error)
+	fn  func(context.Context, USQLAssemblyList) (USQLAssemblyList, error)
 	ual USQLAssemblyList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLAssemblyListPage) Next() error {
-	next, err := page.fn(page.ual)
+func (page *USQLAssemblyListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLAssemblyListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ual)
 	if err != nil {
 		return err
 	}
 	page.ual = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLAssemblyListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -255,6 +300,11 @@ func (page USQLAssemblyListPage) Values() []USQLAssemblyClr {
 		return nil
 	}
 	return *page.ual.Value
+}
+
+// Creates a new instance of the USQLAssemblyListPage type.
+func NewUSQLAssemblyListPage(getNextPage func(context.Context, USQLAssemblyList) (USQLAssemblyList, error)) USQLAssemblyListPage {
+	return USQLAssemblyListPage{fn: getNextPage}
 }
 
 // USQLCredential a Data Lake Analytics catalog U-SQL credential item.
@@ -291,20 +341,37 @@ type USQLCredentialListIterator struct {
 	page USQLCredentialListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLCredentialListIterator) Next() error {
+func (iter *USQLCredentialListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLCredentialListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLCredentialListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -326,6 +393,11 @@ func (iter USQLCredentialListIterator) Value() USQLCredential {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLCredentialListIterator type.
+func NewUSQLCredentialListIterator(page USQLCredentialListPage) USQLCredentialListIterator {
+	return USQLCredentialListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (uscl USQLCredentialList) IsEmpty() bool {
 	return uscl.Value == nil || len(*uscl.Value) == 0
@@ -333,11 +405,11 @@ func (uscl USQLCredentialList) IsEmpty() bool {
 
 // uSQLCredentialListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (uscl USQLCredentialList) uSQLCredentialListPreparer() (*http.Request, error) {
+func (uscl USQLCredentialList) uSQLCredentialListPreparer(ctx context.Context) (*http.Request, error) {
 	if uscl.NextLink == nil || len(to.String(uscl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(uscl.NextLink)))
@@ -345,19 +417,36 @@ func (uscl USQLCredentialList) uSQLCredentialListPreparer() (*http.Request, erro
 
 // USQLCredentialListPage contains a page of USQLCredential values.
 type USQLCredentialListPage struct {
-	fn  func(USQLCredentialList) (USQLCredentialList, error)
+	fn  func(context.Context, USQLCredentialList) (USQLCredentialList, error)
 	ucl USQLCredentialList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLCredentialListPage) Next() error {
-	next, err := page.fn(page.ucl)
+func (page *USQLCredentialListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLCredentialListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ucl)
 	if err != nil {
 		return err
 	}
 	page.ucl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLCredentialListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -376,6 +465,11 @@ func (page USQLCredentialListPage) Values() []USQLCredential {
 		return nil
 	}
 	return *page.ucl.Value
+}
+
+// Creates a new instance of the USQLCredentialListPage type.
+func NewUSQLCredentialListPage(getNextPage func(context.Context, USQLCredentialList) (USQLCredentialList, error)) USQLCredentialListPage {
+	return USQLCredentialListPage{fn: getNextPage}
 }
 
 // USQLDatabase a Data Lake Analytics catalog U-SQL database item.
@@ -406,20 +500,37 @@ type USQLDatabaseListIterator struct {
 	page USQLDatabaseListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLDatabaseListIterator) Next() error {
+func (iter *USQLDatabaseListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLDatabaseListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLDatabaseListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -441,6 +552,11 @@ func (iter USQLDatabaseListIterator) Value() USQLDatabase {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLDatabaseListIterator type.
+func NewUSQLDatabaseListIterator(page USQLDatabaseListPage) USQLDatabaseListIterator {
+	return USQLDatabaseListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (usdl USQLDatabaseList) IsEmpty() bool {
 	return usdl.Value == nil || len(*usdl.Value) == 0
@@ -448,11 +564,11 @@ func (usdl USQLDatabaseList) IsEmpty() bool {
 
 // uSQLDatabaseListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (usdl USQLDatabaseList) uSQLDatabaseListPreparer() (*http.Request, error) {
+func (usdl USQLDatabaseList) uSQLDatabaseListPreparer(ctx context.Context) (*http.Request, error) {
 	if usdl.NextLink == nil || len(to.String(usdl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(usdl.NextLink)))
@@ -460,19 +576,36 @@ func (usdl USQLDatabaseList) uSQLDatabaseListPreparer() (*http.Request, error) {
 
 // USQLDatabaseListPage contains a page of USQLDatabase values.
 type USQLDatabaseListPage struct {
-	fn  func(USQLDatabaseList) (USQLDatabaseList, error)
+	fn  func(context.Context, USQLDatabaseList) (USQLDatabaseList, error)
 	udl USQLDatabaseList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLDatabaseListPage) Next() error {
-	next, err := page.fn(page.udl)
+func (page *USQLDatabaseListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLDatabaseListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.udl)
 	if err != nil {
 		return err
 	}
 	page.udl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLDatabaseListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -491,6 +624,11 @@ func (page USQLDatabaseListPage) Values() []USQLDatabase {
 		return nil
 	}
 	return *page.udl.Value
+}
+
+// Creates a new instance of the USQLDatabaseListPage type.
+func NewUSQLDatabaseListPage(getNextPage func(context.Context, USQLDatabaseList) (USQLDatabaseList, error)) USQLDatabaseListPage {
+	return USQLDatabaseListPage{fn: getNextPage}
 }
 
 // USQLDirectedColumn a Data Lake Analytics catalog U-SQL directed column item.
@@ -543,26 +681,44 @@ type USQLExternalDataSourceList struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// USQLExternalDataSourceListIterator provides access to a complete listing of USQLExternalDataSource values.
+// USQLExternalDataSourceListIterator provides access to a complete listing of USQLExternalDataSource
+// values.
 type USQLExternalDataSourceListIterator struct {
 	i    int
 	page USQLExternalDataSourceListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLExternalDataSourceListIterator) Next() error {
+func (iter *USQLExternalDataSourceListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLExternalDataSourceListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLExternalDataSourceListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -584,6 +740,11 @@ func (iter USQLExternalDataSourceListIterator) Value() USQLExternalDataSource {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLExternalDataSourceListIterator type.
+func NewUSQLExternalDataSourceListIterator(page USQLExternalDataSourceListPage) USQLExternalDataSourceListIterator {
+	return USQLExternalDataSourceListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (usedsl USQLExternalDataSourceList) IsEmpty() bool {
 	return usedsl.Value == nil || len(*usedsl.Value) == 0
@@ -591,11 +752,11 @@ func (usedsl USQLExternalDataSourceList) IsEmpty() bool {
 
 // uSQLExternalDataSourceListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (usedsl USQLExternalDataSourceList) uSQLExternalDataSourceListPreparer() (*http.Request, error) {
+func (usedsl USQLExternalDataSourceList) uSQLExternalDataSourceListPreparer(ctx context.Context) (*http.Request, error) {
 	if usedsl.NextLink == nil || len(to.String(usedsl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(usedsl.NextLink)))
@@ -603,19 +764,36 @@ func (usedsl USQLExternalDataSourceList) uSQLExternalDataSourceListPreparer() (*
 
 // USQLExternalDataSourceListPage contains a page of USQLExternalDataSource values.
 type USQLExternalDataSourceListPage struct {
-	fn    func(USQLExternalDataSourceList) (USQLExternalDataSourceList, error)
+	fn    func(context.Context, USQLExternalDataSourceList) (USQLExternalDataSourceList, error)
 	uedsl USQLExternalDataSourceList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLExternalDataSourceListPage) Next() error {
-	next, err := page.fn(page.uedsl)
+func (page *USQLExternalDataSourceListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLExternalDataSourceListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.uedsl)
 	if err != nil {
 		return err
 	}
 	page.uedsl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLExternalDataSourceListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -636,6 +814,11 @@ func (page USQLExternalDataSourceListPage) Values() []USQLExternalDataSource {
 	return *page.uedsl.Value
 }
 
+// Creates a new instance of the USQLExternalDataSourceListPage type.
+func NewUSQLExternalDataSourceListPage(getNextPage func(context.Context, USQLExternalDataSourceList) (USQLExternalDataSourceList, error)) USQLExternalDataSourceListPage {
+	return USQLExternalDataSourceListPage{fn: getNextPage}
+}
+
 // USQLIndex a Data Lake Analytics catalog U-SQL table index item.
 type USQLIndex struct {
 	// Name - the name of the index in the table.
@@ -648,7 +831,7 @@ type USQLIndex struct {
 	DistributionInfo *USQLDistributionInfo `json:"distributionInfo,omitempty"`
 	// PartitionFunction - partition function ID for the index.
 	PartitionFunction *uuid.UUID `json:"partitionFunction,omitempty"`
-	// PartitionKeyList - the list of partion keys in the index
+	// PartitionKeyList - the list of partition keys in the index
 	PartitionKeyList *[]string `json:"partitionKeyList,omitempty"`
 	// StreamNames - the list of full paths to the streams that contain this index in the DataLake account.
 	StreamNames *[]string `json:"streamNames,omitempty"`
@@ -694,20 +877,37 @@ type USQLProcedureListIterator struct {
 	page USQLProcedureListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLProcedureListIterator) Next() error {
+func (iter *USQLProcedureListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLProcedureListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLProcedureListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -729,6 +929,11 @@ func (iter USQLProcedureListIterator) Value() USQLProcedure {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLProcedureListIterator type.
+func NewUSQLProcedureListIterator(page USQLProcedureListPage) USQLProcedureListIterator {
+	return USQLProcedureListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (uspl USQLProcedureList) IsEmpty() bool {
 	return uspl.Value == nil || len(*uspl.Value) == 0
@@ -736,11 +941,11 @@ func (uspl USQLProcedureList) IsEmpty() bool {
 
 // uSQLProcedureListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (uspl USQLProcedureList) uSQLProcedureListPreparer() (*http.Request, error) {
+func (uspl USQLProcedureList) uSQLProcedureListPreparer(ctx context.Context) (*http.Request, error) {
 	if uspl.NextLink == nil || len(to.String(uspl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(uspl.NextLink)))
@@ -748,19 +953,36 @@ func (uspl USQLProcedureList) uSQLProcedureListPreparer() (*http.Request, error)
 
 // USQLProcedureListPage contains a page of USQLProcedure values.
 type USQLProcedureListPage struct {
-	fn  func(USQLProcedureList) (USQLProcedureList, error)
+	fn  func(context.Context, USQLProcedureList) (USQLProcedureList, error)
 	upl USQLProcedureList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLProcedureListPage) Next() error {
-	next, err := page.fn(page.upl)
+func (page *USQLProcedureListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLProcedureListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.upl)
 	if err != nil {
 		return err
 	}
 	page.upl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLProcedureListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -779,6 +1001,11 @@ func (page USQLProcedureListPage) Values() []USQLProcedure {
 		return nil
 	}
 	return *page.upl.Value
+}
+
+// Creates a new instance of the USQLProcedureListPage type.
+func NewUSQLProcedureListPage(getNextPage func(context.Context, USQLProcedureList) (USQLProcedureList, error)) USQLProcedureListPage {
+	return USQLProcedureListPage{fn: getNextPage}
 }
 
 // USQLSchema a Data Lake Analytics catalog U-SQL schema item.
@@ -811,20 +1038,37 @@ type USQLSchemaListIterator struct {
 	page USQLSchemaListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLSchemaListIterator) Next() error {
+func (iter *USQLSchemaListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLSchemaListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLSchemaListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -846,6 +1090,11 @@ func (iter USQLSchemaListIterator) Value() USQLSchema {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLSchemaListIterator type.
+func NewUSQLSchemaListIterator(page USQLSchemaListPage) USQLSchemaListIterator {
+	return USQLSchemaListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ussl USQLSchemaList) IsEmpty() bool {
 	return ussl.Value == nil || len(*ussl.Value) == 0
@@ -853,11 +1102,11 @@ func (ussl USQLSchemaList) IsEmpty() bool {
 
 // uSQLSchemaListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ussl USQLSchemaList) uSQLSchemaListPreparer() (*http.Request, error) {
+func (ussl USQLSchemaList) uSQLSchemaListPreparer(ctx context.Context) (*http.Request, error) {
 	if ussl.NextLink == nil || len(to.String(ussl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ussl.NextLink)))
@@ -865,19 +1114,36 @@ func (ussl USQLSchemaList) uSQLSchemaListPreparer() (*http.Request, error) {
 
 // USQLSchemaListPage contains a page of USQLSchema values.
 type USQLSchemaListPage struct {
-	fn  func(USQLSchemaList) (USQLSchemaList, error)
+	fn  func(context.Context, USQLSchemaList) (USQLSchemaList, error)
 	usl USQLSchemaList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLSchemaListPage) Next() error {
-	next, err := page.fn(page.usl)
+func (page *USQLSchemaListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLSchemaListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.usl)
 	if err != nil {
 		return err
 	}
 	page.usl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLSchemaListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -896,6 +1162,11 @@ func (page USQLSchemaListPage) Values() []USQLSchema {
 		return nil
 	}
 	return *page.usl.Value
+}
+
+// Creates a new instance of the USQLSchemaListPage type.
+func NewUSQLSchemaListPage(getNextPage func(context.Context, USQLSchemaList) (USQLSchemaList, error)) USQLSchemaListPage {
+	return USQLSchemaListPage{fn: getNextPage}
 }
 
 // USQLSecret a Data Lake Analytics catalog U-SQL secret item.
@@ -967,20 +1238,37 @@ type USQLTableListIterator struct {
 	page USQLTableListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLTableListIterator) Next() error {
+func (iter *USQLTableListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLTableListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1002,6 +1290,11 @@ func (iter USQLTableListIterator) Value() USQLTable {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLTableListIterator type.
+func NewUSQLTableListIterator(page USQLTableListPage) USQLTableListIterator {
+	return USQLTableListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ustl USQLTableList) IsEmpty() bool {
 	return ustl.Value == nil || len(*ustl.Value) == 0
@@ -1009,11 +1302,11 @@ func (ustl USQLTableList) IsEmpty() bool {
 
 // uSQLTableListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ustl USQLTableList) uSQLTableListPreparer() (*http.Request, error) {
+func (ustl USQLTableList) uSQLTableListPreparer(ctx context.Context) (*http.Request, error) {
 	if ustl.NextLink == nil || len(to.String(ustl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ustl.NextLink)))
@@ -1021,19 +1314,36 @@ func (ustl USQLTableList) uSQLTableListPreparer() (*http.Request, error) {
 
 // USQLTableListPage contains a page of USQLTable values.
 type USQLTableListPage struct {
-	fn  func(USQLTableList) (USQLTableList, error)
+	fn  func(context.Context, USQLTableList) (USQLTableList, error)
 	utl USQLTableList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLTableListPage) Next() error {
-	next, err := page.fn(page.utl)
+func (page *USQLTableListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.utl)
 	if err != nil {
 		return err
 	}
 	page.utl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLTableListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1052,6 +1362,11 @@ func (page USQLTableListPage) Values() []USQLTable {
 		return nil
 	}
 	return *page.utl.Value
+}
+
+// Creates a new instance of the USQLTableListPage type.
+func NewUSQLTableListPage(getNextPage func(context.Context, USQLTableList) (USQLTableList, error)) USQLTableListPage {
+	return USQLTableListPage{fn: getNextPage}
 }
 
 // USQLTablePartition a Data Lake Analytics catalog U-SQL table partition item.
@@ -1094,20 +1409,37 @@ type USQLTablePartitionListIterator struct {
 	page USQLTablePartitionListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLTablePartitionListIterator) Next() error {
+func (iter *USQLTablePartitionListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTablePartitionListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLTablePartitionListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1129,6 +1461,11 @@ func (iter USQLTablePartitionListIterator) Value() USQLTablePartition {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLTablePartitionListIterator type.
+func NewUSQLTablePartitionListIterator(page USQLTablePartitionListPage) USQLTablePartitionListIterator {
+	return USQLTablePartitionListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ustpl USQLTablePartitionList) IsEmpty() bool {
 	return ustpl.Value == nil || len(*ustpl.Value) == 0
@@ -1136,11 +1473,11 @@ func (ustpl USQLTablePartitionList) IsEmpty() bool {
 
 // uSQLTablePartitionListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ustpl USQLTablePartitionList) uSQLTablePartitionListPreparer() (*http.Request, error) {
+func (ustpl USQLTablePartitionList) uSQLTablePartitionListPreparer(ctx context.Context) (*http.Request, error) {
 	if ustpl.NextLink == nil || len(to.String(ustpl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ustpl.NextLink)))
@@ -1148,19 +1485,36 @@ func (ustpl USQLTablePartitionList) uSQLTablePartitionListPreparer() (*http.Requ
 
 // USQLTablePartitionListPage contains a page of USQLTablePartition values.
 type USQLTablePartitionListPage struct {
-	fn   func(USQLTablePartitionList) (USQLTablePartitionList, error)
+	fn   func(context.Context, USQLTablePartitionList) (USQLTablePartitionList, error)
 	utpl USQLTablePartitionList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLTablePartitionListPage) Next() error {
-	next, err := page.fn(page.utpl)
+func (page *USQLTablePartitionListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTablePartitionListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.utpl)
 	if err != nil {
 		return err
 	}
 	page.utpl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLTablePartitionListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1179,6 +1533,11 @@ func (page USQLTablePartitionListPage) Values() []USQLTablePartition {
 		return nil
 	}
 	return *page.utpl.Value
+}
+
+// Creates a new instance of the USQLTablePartitionListPage type.
+func NewUSQLTablePartitionListPage(getNextPage func(context.Context, USQLTablePartitionList) (USQLTablePartitionList, error)) USQLTablePartitionListPage {
+	return USQLTablePartitionListPage{fn: getNextPage}
 }
 
 // USQLTableStatistics a Data Lake Analytics catalog U-SQL table statistics item.
@@ -1233,20 +1592,37 @@ type USQLTableStatisticsListIterator struct {
 	page USQLTableStatisticsListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLTableStatisticsListIterator) Next() error {
+func (iter *USQLTableStatisticsListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableStatisticsListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLTableStatisticsListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1268,6 +1644,11 @@ func (iter USQLTableStatisticsListIterator) Value() USQLTableStatistics {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLTableStatisticsListIterator type.
+func NewUSQLTableStatisticsListIterator(page USQLTableStatisticsListPage) USQLTableStatisticsListIterator {
+	return USQLTableStatisticsListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ustsl USQLTableStatisticsList) IsEmpty() bool {
 	return ustsl.Value == nil || len(*ustsl.Value) == 0
@@ -1275,11 +1656,11 @@ func (ustsl USQLTableStatisticsList) IsEmpty() bool {
 
 // uSQLTableStatisticsListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ustsl USQLTableStatisticsList) uSQLTableStatisticsListPreparer() (*http.Request, error) {
+func (ustsl USQLTableStatisticsList) uSQLTableStatisticsListPreparer(ctx context.Context) (*http.Request, error) {
 	if ustsl.NextLink == nil || len(to.String(ustsl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ustsl.NextLink)))
@@ -1287,19 +1668,36 @@ func (ustsl USQLTableStatisticsList) uSQLTableStatisticsListPreparer() (*http.Re
 
 // USQLTableStatisticsListPage contains a page of USQLTableStatistics values.
 type USQLTableStatisticsListPage struct {
-	fn   func(USQLTableStatisticsList) (USQLTableStatisticsList, error)
+	fn   func(context.Context, USQLTableStatisticsList) (USQLTableStatisticsList, error)
 	utsl USQLTableStatisticsList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLTableStatisticsListPage) Next() error {
-	next, err := page.fn(page.utsl)
+func (page *USQLTableStatisticsListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableStatisticsListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.utsl)
 	if err != nil {
 		return err
 	}
 	page.utsl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLTableStatisticsListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1318,6 +1716,11 @@ func (page USQLTableStatisticsListPage) Values() []USQLTableStatistics {
 		return nil
 	}
 	return *page.utsl.Value
+}
+
+// Creates a new instance of the USQLTableStatisticsListPage type.
+func NewUSQLTableStatisticsListPage(getNextPage func(context.Context, USQLTableStatisticsList) (USQLTableStatisticsList, error)) USQLTableStatisticsListPage {
+	return USQLTableStatisticsListPage{fn: getNextPage}
 }
 
 // USQLTableType a Data Lake Analytics catalog U-SQL table type item.
@@ -1378,20 +1781,37 @@ type USQLTableTypeListIterator struct {
 	page USQLTableTypeListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLTableTypeListIterator) Next() error {
+func (iter *USQLTableTypeListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableTypeListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLTableTypeListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1413,6 +1833,11 @@ func (iter USQLTableTypeListIterator) Value() USQLTableType {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLTableTypeListIterator type.
+func NewUSQLTableTypeListIterator(page USQLTableTypeListPage) USQLTableTypeListIterator {
+	return USQLTableTypeListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (usttl USQLTableTypeList) IsEmpty() bool {
 	return usttl.Value == nil || len(*usttl.Value) == 0
@@ -1420,11 +1845,11 @@ func (usttl USQLTableTypeList) IsEmpty() bool {
 
 // uSQLTableTypeListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (usttl USQLTableTypeList) uSQLTableTypeListPreparer() (*http.Request, error) {
+func (usttl USQLTableTypeList) uSQLTableTypeListPreparer(ctx context.Context) (*http.Request, error) {
 	if usttl.NextLink == nil || len(to.String(usttl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(usttl.NextLink)))
@@ -1432,19 +1857,36 @@ func (usttl USQLTableTypeList) uSQLTableTypeListPreparer() (*http.Request, error
 
 // USQLTableTypeListPage contains a page of USQLTableType values.
 type USQLTableTypeListPage struct {
-	fn   func(USQLTableTypeList) (USQLTableTypeList, error)
+	fn   func(context.Context, USQLTableTypeList) (USQLTableTypeList, error)
 	uttl USQLTableTypeList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLTableTypeListPage) Next() error {
-	next, err := page.fn(page.uttl)
+func (page *USQLTableTypeListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableTypeListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.uttl)
 	if err != nil {
 		return err
 	}
 	page.uttl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLTableTypeListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1463,6 +1905,11 @@ func (page USQLTableTypeListPage) Values() []USQLTableType {
 		return nil
 	}
 	return *page.uttl.Value
+}
+
+// Creates a new instance of the USQLTableTypeListPage type.
+func NewUSQLTableTypeListPage(getNextPage func(context.Context, USQLTableTypeList) (USQLTableTypeList, error)) USQLTableTypeListPage {
+	return USQLTableTypeListPage{fn: getNextPage}
 }
 
 // USQLTableValuedFunction a Data Lake Analytics catalog U-SQL table valued function item.
@@ -1493,26 +1940,44 @@ type USQLTableValuedFunctionList struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// USQLTableValuedFunctionListIterator provides access to a complete listing of USQLTableValuedFunction values.
+// USQLTableValuedFunctionListIterator provides access to a complete listing of USQLTableValuedFunction
+// values.
 type USQLTableValuedFunctionListIterator struct {
 	i    int
 	page USQLTableValuedFunctionListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLTableValuedFunctionListIterator) Next() error {
+func (iter *USQLTableValuedFunctionListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableValuedFunctionListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLTableValuedFunctionListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1534,6 +1999,11 @@ func (iter USQLTableValuedFunctionListIterator) Value() USQLTableValuedFunction 
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLTableValuedFunctionListIterator type.
+func NewUSQLTableValuedFunctionListIterator(page USQLTableValuedFunctionListPage) USQLTableValuedFunctionListIterator {
+	return USQLTableValuedFunctionListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ustvfl USQLTableValuedFunctionList) IsEmpty() bool {
 	return ustvfl.Value == nil || len(*ustvfl.Value) == 0
@@ -1541,11 +2011,11 @@ func (ustvfl USQLTableValuedFunctionList) IsEmpty() bool {
 
 // uSQLTableValuedFunctionListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ustvfl USQLTableValuedFunctionList) uSQLTableValuedFunctionListPreparer() (*http.Request, error) {
+func (ustvfl USQLTableValuedFunctionList) uSQLTableValuedFunctionListPreparer(ctx context.Context) (*http.Request, error) {
 	if ustvfl.NextLink == nil || len(to.String(ustvfl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ustvfl.NextLink)))
@@ -1553,19 +2023,36 @@ func (ustvfl USQLTableValuedFunctionList) uSQLTableValuedFunctionListPreparer() 
 
 // USQLTableValuedFunctionListPage contains a page of USQLTableValuedFunction values.
 type USQLTableValuedFunctionListPage struct {
-	fn    func(USQLTableValuedFunctionList) (USQLTableValuedFunctionList, error)
+	fn    func(context.Context, USQLTableValuedFunctionList) (USQLTableValuedFunctionList, error)
 	utvfl USQLTableValuedFunctionList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLTableValuedFunctionListPage) Next() error {
-	next, err := page.fn(page.utvfl)
+func (page *USQLTableValuedFunctionListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTableValuedFunctionListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.utvfl)
 	if err != nil {
 		return err
 	}
 	page.utvfl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLTableValuedFunctionListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1584,6 +2071,11 @@ func (page USQLTableValuedFunctionListPage) Values() []USQLTableValuedFunction {
 		return nil
 	}
 	return *page.utvfl.Value
+}
+
+// Creates a new instance of the USQLTableValuedFunctionListPage type.
+func NewUSQLTableValuedFunctionListPage(getNextPage func(context.Context, USQLTableValuedFunctionList) (USQLTableValuedFunctionList, error)) USQLTableValuedFunctionListPage {
+	return USQLTableValuedFunctionListPage{fn: getNextPage}
 }
 
 // USQLType a Data Lake Analytics catalog U-SQL type item.
@@ -1641,20 +2133,37 @@ type USQLTypeListIterator struct {
 	page USQLTypeListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLTypeListIterator) Next() error {
+func (iter *USQLTypeListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTypeListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLTypeListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1676,6 +2185,11 @@ func (iter USQLTypeListIterator) Value() USQLType {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLTypeListIterator type.
+func NewUSQLTypeListIterator(page USQLTypeListPage) USQLTypeListIterator {
+	return USQLTypeListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ustl USQLTypeList) IsEmpty() bool {
 	return ustl.Value == nil || len(*ustl.Value) == 0
@@ -1683,11 +2197,11 @@ func (ustl USQLTypeList) IsEmpty() bool {
 
 // uSQLTypeListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ustl USQLTypeList) uSQLTypeListPreparer() (*http.Request, error) {
+func (ustl USQLTypeList) uSQLTypeListPreparer(ctx context.Context) (*http.Request, error) {
 	if ustl.NextLink == nil || len(to.String(ustl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ustl.NextLink)))
@@ -1695,19 +2209,36 @@ func (ustl USQLTypeList) uSQLTypeListPreparer() (*http.Request, error) {
 
 // USQLTypeListPage contains a page of USQLType values.
 type USQLTypeListPage struct {
-	fn  func(USQLTypeList) (USQLTypeList, error)
+	fn  func(context.Context, USQLTypeList) (USQLTypeList, error)
 	utl USQLTypeList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLTypeListPage) Next() error {
-	next, err := page.fn(page.utl)
+func (page *USQLTypeListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLTypeListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.utl)
 	if err != nil {
 		return err
 	}
 	page.utl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLTypeListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1726,6 +2257,11 @@ func (page USQLTypeListPage) Values() []USQLType {
 		return nil
 	}
 	return *page.utl.Value
+}
+
+// Creates a new instance of the USQLTypeListPage type.
+func NewUSQLTypeListPage(getNextPage func(context.Context, USQLTypeList) (USQLTypeList, error)) USQLTypeListPage {
+	return USQLTypeListPage{fn: getNextPage}
 }
 
 // USQLView a Data Lake Analytics catalog U-SQL view item.
@@ -1762,20 +2298,37 @@ type USQLViewListIterator struct {
 	page USQLViewListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *USQLViewListIterator) Next() error {
+func (iter *USQLViewListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLViewListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *USQLViewListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1797,6 +2350,11 @@ func (iter USQLViewListIterator) Value() USQLView {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the USQLViewListIterator type.
+func NewUSQLViewListIterator(page USQLViewListPage) USQLViewListIterator {
+	return USQLViewListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (usvl USQLViewList) IsEmpty() bool {
 	return usvl.Value == nil || len(*usvl.Value) == 0
@@ -1804,11 +2362,11 @@ func (usvl USQLViewList) IsEmpty() bool {
 
 // uSQLViewListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (usvl USQLViewList) uSQLViewListPreparer() (*http.Request, error) {
+func (usvl USQLViewList) uSQLViewListPreparer(ctx context.Context) (*http.Request, error) {
 	if usvl.NextLink == nil || len(to.String(usvl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(usvl.NextLink)))
@@ -1816,19 +2374,36 @@ func (usvl USQLViewList) uSQLViewListPreparer() (*http.Request, error) {
 
 // USQLViewListPage contains a page of USQLView values.
 type USQLViewListPage struct {
-	fn  func(USQLViewList) (USQLViewList, error)
+	fn  func(context.Context, USQLViewList) (USQLViewList, error)
 	uvl USQLViewList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *USQLViewListPage) Next() error {
-	next, err := page.fn(page.uvl)
+func (page *USQLViewListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/USQLViewListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.uvl)
 	if err != nil {
 		return err
 	}
 	page.uvl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *USQLViewListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1847,4 +2422,9 @@ func (page USQLViewListPage) Values() []USQLView {
 		return nil
 	}
 	return *page.uvl.Value
+}
+
+// Creates a new instance of the USQLViewListPage type.
+func NewUSQLViewListPage(getNextPage func(context.Context, USQLViewList) (USQLViewList, error)) USQLViewListPage {
+	return USQLViewListPage{fn: getNextPage}
 }

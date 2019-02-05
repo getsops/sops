@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewAssignmentsClientWithBaseURI(baseURI string, subscriptionID string) Assi
 // policyAssignmentName - the name of the policy assignment.
 // parameters - parameters for the policy assignment.
 func (client AssignmentsClient) Create(ctx context.Context, scope string, policyAssignmentName string, parameters Assignment) (result Assignment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, scope, policyAssignmentName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.AssignmentsClient", "Create", nil, "Failure preparing request")
@@ -112,7 +123,7 @@ func (client AssignmentsClient) CreateResponder(resp *http.Response) (result Ass
 }
 
 // CreateByID policy assignments are inherited by child resources. For example, when you apply a policy to a resource
-// group that policy is assigned to all resources in the group. When providing a scope for the assigment, use
+// group that policy is assigned to all resources in the group. When providing a scope for the assignment, use
 // '/subscriptions/{subscription-id}/' for subscriptions,
 // '/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}' for resource groups, and
 // '/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/{resource-provider-namespace}/{resource-type}/{resource-name}'
@@ -122,6 +133,16 @@ func (client AssignmentsClient) CreateResponder(resp *http.Response) (result Ass
 // '/{scope}/providers/Microsoft.Authorization/policyAssignments/{policy-assignment-name}'.
 // parameters - parameters for policy assignment.
 func (client AssignmentsClient) CreateByID(ctx context.Context, policyAssignmentID string, parameters Assignment) (result Assignment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.CreateByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateByIDPreparer(ctx, policyAssignmentID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.AssignmentsClient", "CreateByID", nil, "Failure preparing request")
@@ -189,6 +210,16 @@ func (client AssignmentsClient) CreateByIDResponder(resp *http.Response) (result
 // scope - the scope of the policy assignment.
 // policyAssignmentName - the name of the policy assignment to delete.
 func (client AssignmentsClient) Delete(ctx context.Context, scope string, policyAssignmentName string) (result Assignment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, scope, policyAssignmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.AssignmentsClient", "Delete", nil, "Failure preparing request")
@@ -250,7 +281,7 @@ func (client AssignmentsClient) DeleteResponder(resp *http.Response) (result Ass
 	return
 }
 
-// DeleteByID when providing a scope for the assigment, use '/subscriptions/{subscription-id}/' for subscriptions,
+// DeleteByID when providing a scope for the assignment, use '/subscriptions/{subscription-id}/' for subscriptions,
 // '/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}' for resource groups, and
 // '/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/{resource-provider-namespace}/{resource-type}/{resource-name}'
 // for resources.
@@ -258,6 +289,16 @@ func (client AssignmentsClient) DeleteResponder(resp *http.Response) (result Ass
 // policyAssignmentID - the ID of the policy assignment to delete. Use the format
 // '/{scope}/providers/Microsoft.Authorization/policyAssignments/{policy-assignment-name}'.
 func (client AssignmentsClient) DeleteByID(ctx context.Context, policyAssignmentID string) (result Assignment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.DeleteByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteByIDPreparer(ctx, policyAssignmentID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.AssignmentsClient", "DeleteByID", nil, "Failure preparing request")
@@ -323,6 +364,16 @@ func (client AssignmentsClient) DeleteByIDResponder(resp *http.Response) (result
 // scope - the scope of the policy assignment.
 // policyAssignmentName - the name of the policy assignment to get.
 func (client AssignmentsClient) Get(ctx context.Context, scope string, policyAssignmentName string) (result Assignment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, scope, policyAssignmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.AssignmentsClient", "Get", nil, "Failure preparing request")
@@ -384,7 +435,7 @@ func (client AssignmentsClient) GetResponder(resp *http.Response) (result Assign
 	return
 }
 
-// GetByID when providing a scope for the assigment, use '/subscriptions/{subscription-id}/' for subscriptions,
+// GetByID when providing a scope for the assignment, use '/subscriptions/{subscription-id}/' for subscriptions,
 // '/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}' for resource groups, and
 // '/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/{resource-provider-namespace}/{resource-type}/{resource-name}'
 // for resources.
@@ -392,6 +443,16 @@ func (client AssignmentsClient) GetResponder(resp *http.Response) (result Assign
 // policyAssignmentID - the ID of the policy assignment to get. Use the format
 // '/{scope}/providers/Microsoft.Authorization/policyAssignments/{policy-assignment-name}'.
 func (client AssignmentsClient) GetByID(ctx context.Context, policyAssignmentID string) (result Assignment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.GetByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByIDPreparer(ctx, policyAssignmentID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "policy.AssignmentsClient", "GetByID", nil, "Failure preparing request")
@@ -456,6 +517,16 @@ func (client AssignmentsClient) GetByIDResponder(resp *http.Response) (result As
 // Parameters:
 // filter - the filter to apply on the operation.
 func (client AssignmentsClient) List(ctx context.Context, filter string) (result AssignmentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.List")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter)
 	if err != nil {
@@ -521,8 +592,8 @@ func (client AssignmentsClient) ListResponder(resp *http.Response) (result Assig
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AssignmentsClient) listNextResults(lastResults AssignmentListResult) (result AssignmentListResult, err error) {
-	req, err := lastResults.assignmentListResultPreparer()
+func (client AssignmentsClient) listNextResults(ctx context.Context, lastResults AssignmentListResult) (result AssignmentListResult, err error) {
+	req, err := lastResults.assignmentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.AssignmentsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -543,6 +614,16 @@ func (client AssignmentsClient) listNextResults(lastResults AssignmentListResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AssignmentsClient) ListComplete(ctx context.Context, filter string) (result AssignmentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter)
 	return
 }
@@ -556,11 +637,21 @@ func (client AssignmentsClient) ListComplete(ctx context.Context, filter string)
 // resourceName - the name of the resource with policy assignments.
 // filter - the filter to apply on the operation.
 func (client AssignmentsClient) ListForResource(ctx context.Context, resourceGroupName string, resourceProviderNamespace string, parentResourcePath string, resourceType string, resourceName string, filter string) (result AssignmentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.ListForResource")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("policy.AssignmentsClient", "ListForResource", err.Error())
 	}
 
@@ -634,8 +725,8 @@ func (client AssignmentsClient) ListForResourceResponder(resp *http.Response) (r
 }
 
 // listForResourceNextResults retrieves the next set of results, if any.
-func (client AssignmentsClient) listForResourceNextResults(lastResults AssignmentListResult) (result AssignmentListResult, err error) {
-	req, err := lastResults.assignmentListResultPreparer()
+func (client AssignmentsClient) listForResourceNextResults(ctx context.Context, lastResults AssignmentListResult) (result AssignmentListResult, err error) {
+	req, err := lastResults.assignmentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.AssignmentsClient", "listForResourceNextResults", nil, "Failure preparing next results request")
 	}
@@ -656,6 +747,16 @@ func (client AssignmentsClient) listForResourceNextResults(lastResults Assignmen
 
 // ListForResourceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AssignmentsClient) ListForResourceComplete(ctx context.Context, resourceGroupName string, resourceProviderNamespace string, parentResourcePath string, resourceType string, resourceName string, filter string) (result AssignmentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.ListForResource")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListForResource(ctx, resourceGroupName, resourceProviderNamespace, parentResourcePath, resourceType, resourceName, filter)
 	return
 }
@@ -665,11 +766,21 @@ func (client AssignmentsClient) ListForResourceComplete(ctx context.Context, res
 // resourceGroupName - the name of the resource group that contains policy assignments.
 // filter - the filter to apply on the operation.
 func (client AssignmentsClient) ListForResourceGroup(ctx context.Context, resourceGroupName string, filter string) (result AssignmentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.ListForResourceGroup")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("policy.AssignmentsClient", "ListForResourceGroup", err.Error())
 	}
 
@@ -739,8 +850,8 @@ func (client AssignmentsClient) ListForResourceGroupResponder(resp *http.Respons
 }
 
 // listForResourceGroupNextResults retrieves the next set of results, if any.
-func (client AssignmentsClient) listForResourceGroupNextResults(lastResults AssignmentListResult) (result AssignmentListResult, err error) {
-	req, err := lastResults.assignmentListResultPreparer()
+func (client AssignmentsClient) listForResourceGroupNextResults(ctx context.Context, lastResults AssignmentListResult) (result AssignmentListResult, err error) {
+	req, err := lastResults.assignmentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "policy.AssignmentsClient", "listForResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -761,6 +872,16 @@ func (client AssignmentsClient) listForResourceGroupNextResults(lastResults Assi
 
 // ListForResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AssignmentsClient) ListForResourceGroupComplete(ctx context.Context, resourceGroupName string, filter string) (result AssignmentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentsClient.ListForResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListForResourceGroup(ctx, resourceGroupName, filter)
 	return
 }

@@ -15,16 +15,14 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 	"strconv"
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
+	"github.com/google/go-cmp/cmp"
 	bq "google.golang.org/api/bigquery/v2"
 	itest "google.golang.org/api/iterator/testing"
 )
@@ -271,8 +269,8 @@ func TestBQToDatasetMetadata(t *testing.T) {
 
 func TestDatasetMetadataToUpdateToBQ(t *testing.T) {
 	dm := DatasetMetadataToUpdate{
-		Description: "desc",
-		Name:        "name",
+		Description:            "desc",
+		Name:                   "name",
 		DefaultTableExpiration: time.Hour,
 	}
 	dm.SetLabel("label", "value")
@@ -286,9 +284,9 @@ func TestDatasetMetadataToUpdateToBQ(t *testing.T) {
 		Description:              "desc",
 		FriendlyName:             "name",
 		DefaultTableExpirationMs: 60 * 60 * 1000,
-		Labels:          map[string]string{"label": "value"},
-		ForceSendFields: []string{"Description", "FriendlyName"},
-		NullFields:      []string{"Labels.del"},
+		Labels:                   map[string]string{"label": "value"},
+		ForceSendFields:          []string{"Description", "FriendlyName"},
+		NullFields:               []string{"Labels.del"},
 	}
 	if diff := testutil.Diff(got, want); diff != "" {
 		t.Errorf("-got, +want:\n%s", diff)

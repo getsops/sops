@@ -24,6 +24,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/analysisservices/mgmt/2016-05-16/analysisservices"
+
 // ProvisioningState enumerates the values for provisioning state.
 type ProvisioningState string
 
@@ -119,7 +122,7 @@ type CheckServerNameAvailabilityParameters struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// CheckServerNameAvailabilityResult the checking result of server name availibility.
+// CheckServerNameAvailabilityResult the checking result of server name availability.
 type CheckServerNameAvailabilityResult struct {
 	autorest.Response `json:"-"`
 	// NameAvailable - Indicator of available of the server name.
@@ -333,7 +336,8 @@ type ServerAdministrators struct {
 	Members *[]string `json:"members,omitempty"`
 }
 
-// ServerMutableProperties an object that represents a set of mutable Analysis Services resource properties.
+// ServerMutableProperties an object that represents a set of mutable Analysis Services resource
+// properties.
 type ServerMutableProperties struct {
 	// AsAdministrators - A collection of AS server administrators
 	AsAdministrators *ServerAdministrators `json:"asAdministrators,omitempty"`
@@ -362,7 +366,8 @@ type Servers struct {
 	Value *[]Server `json:"value,omitempty"`
 }
 
-// ServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersCreateFuture struct {
 	azure.Future
 }
@@ -390,7 +395,8 @@ func (future *ServersCreateFuture) Result(client ServersClient) (s Server, err e
 	return
 }
 
-// ServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersDeleteFuture struct {
 	azure.Future
 }
@@ -412,7 +418,8 @@ func (future *ServersDeleteFuture) Result(client ServersClient) (ar autorest.Res
 	return
 }
 
-// ServersResumeFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersResumeFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersResumeFuture struct {
 	azure.Future
 }
@@ -434,7 +441,8 @@ func (future *ServersResumeFuture) Result(client ServersClient) (ar autorest.Res
 	return
 }
 
-// ServersSuspendFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersSuspendFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersSuspendFuture struct {
 	azure.Future
 }
@@ -456,7 +464,8 @@ func (future *ServersSuspendFuture) Result(client ServersClient) (ar autorest.Re
 	return
 }
 
-// ServersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersUpdateFuture struct {
 	azure.Future
 }
@@ -557,7 +566,8 @@ type SkuDetailsForExistingResource struct {
 	Sku *ResourceSku `json:"sku,omitempty"`
 }
 
-// SkuEnumerationForExistingResourceResult an object that represents enumerating SKUs for existing resources
+// SkuEnumerationForExistingResourceResult an object that represents enumerating SKUs for existing
+// resources
 type SkuEnumerationForExistingResourceResult struct {
 	autorest.Response `json:"-"`
 	// Value - The collection of available SKUs for existing resources

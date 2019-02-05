@@ -6,6 +6,7 @@
     "protocol":"query",
     "serviceAbbreviation":"CloudWatch",
     "serviceFullName":"Amazon CloudWatch",
+    "serviceId":"CloudWatch",
     "signatureVersion":"v4",
     "uid":"monitoring-2010-08-01",
     "xmlNamespace":"http://monitoring.amazonaws.com/doc/2010-08-01/"
@@ -146,6 +147,18 @@
         {"shape":"InvalidParameterCombinationException"},
         {"shape":"InternalServiceFault"}
       ]
+    },
+    "GetMetricWidgetImage":{
+      "name":"GetMetricWidgetImage",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetMetricWidgetImageInput"},
+      "output":{
+        "shape":"GetMetricWidgetImageOutput",
+        "resultWrapper":"GetMetricWidgetImageResult"
+      }
     },
     "ListDashboards":{
       "name":"ListDashboards",
@@ -288,6 +301,10 @@
         "LessThanThreshold",
         "LessThanOrEqualToThreshold"
       ]
+    },
+    "Counts":{
+      "type":"list",
+      "member":{"shape":"DatapointValue"}
     },
     "DashboardArn":{"type":"string"},
     "DashboardBody":{"type":"string"},
@@ -615,6 +632,20 @@
         "Datapoints":{"shape":"Datapoints"}
       }
     },
+    "GetMetricWidgetImageInput":{
+      "type":"structure",
+      "required":["MetricWidget"],
+      "members":{
+        "MetricWidget":{"shape":"MetricWidget"},
+        "OutputFormat":{"shape":"OutputFormat"}
+      }
+    },
+    "GetMetricWidgetImageOutput":{
+      "type":"structure",
+      "members":{
+        "MetricWidgetImage":{"shape":"MetricWidgetImage"}
+      }
+    },
     "HistoryData":{
       "type":"string",
       "max":4095,
@@ -679,7 +710,8 @@
         "httpStatusCode":400,
         "senderFault":true
       },
-      "exception":true
+      "exception":true,
+      "synthetic":true
     },
     "InvalidParameterValueException":{
       "type":"structure",
@@ -691,7 +723,8 @@
         "httpStatusCode":400,
         "senderFault":true
       },
-      "exception":true
+      "exception":true,
+      "synthetic":true
     },
     "LastModified":{"type":"timestamp"},
     "LimitExceededFault":{
@@ -795,7 +828,8 @@
         "Threshold":{"shape":"Threshold"},
         "ComparisonOperator":{"shape":"ComparisonOperator"},
         "TreatMissingData":{"shape":"TreatMissingData"},
-        "EvaluateLowSampleCountPercentile":{"shape":"EvaluateLowSampleCountPercentile"}
+        "EvaluateLowSampleCountPercentile":{"shape":"EvaluateLowSampleCountPercentile"},
+        "Metrics":{"shape":"MetricDataQueries"}
       },
       "xmlOrder":[
         "AlarmName",
@@ -822,7 +856,8 @@
         "ExtendedStatistic",
         "TreatMissingData",
         "EvaluateLowSampleCountPercentile",
-        "DatapointsToAlarm"
+        "DatapointsToAlarm",
+        "Metrics"
       ]
     },
     "MetricAlarms":{
@@ -876,6 +911,8 @@
         "Timestamp":{"shape":"Timestamp"},
         "Value":{"shape":"DatapointValue"},
         "StatisticValues":{"shape":"StatisticSet"},
+        "Values":{"shape":"Values"},
+        "Counts":{"shape":"Counts"},
         "Unit":{"shape":"StandardUnit"},
         "StorageResolution":{"shape":"StorageResolution"}
       }
@@ -910,6 +947,8 @@
         "Unit":{"shape":"StandardUnit"}
       }
     },
+    "MetricWidget":{"type":"string"},
+    "MetricWidgetImage":{"type":"blob"},
     "Metrics":{
       "type":"list",
       "member":{"shape":"Metric"}
@@ -924,7 +963,8 @@
         "httpStatusCode":400,
         "senderFault":true
       },
-      "exception":true
+      "exception":true,
+      "synthetic":true
     },
     "Namespace":{
       "type":"string",
@@ -937,6 +977,7 @@
       "max":1024,
       "min":0
     },
+    "OutputFormat":{"type":"string"},
     "Period":{
       "type":"integer",
       "min":1
@@ -962,9 +1003,6 @@
       "type":"structure",
       "required":[
         "AlarmName",
-        "MetricName",
-        "Namespace",
-        "Period",
         "EvaluationPeriods",
         "Threshold",
         "ComparisonOperator"
@@ -988,7 +1026,8 @@
         "Threshold":{"shape":"Threshold"},
         "ComparisonOperator":{"shape":"ComparisonOperator"},
         "TreatMissingData":{"shape":"TreatMissingData"},
-        "EvaluateLowSampleCountPercentile":{"shape":"EvaluateLowSampleCountPercentile"}
+        "EvaluateLowSampleCountPercentile":{"shape":"EvaluateLowSampleCountPercentile"},
+        "Metrics":{"shape":"MetricDataQueries"}
       }
     },
     "PutMetricDataInput":{
@@ -1151,6 +1190,10 @@
       "type":"string",
       "max":255,
       "min":1
+    },
+    "Values":{
+      "type":"list",
+      "member":{"shape":"DatapointValue"}
     }
   }
 }

@@ -3,16 +3,16 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/drive": {
-          "description": "View and manage the files in your Google Drive"
+          "description": "See, edit, create, and delete all of your Google Drive files"
         },
         "https://www.googleapis.com/auth/drive.file": {
           "description": "View and manage Google Drive files and folders that you have opened or created with this app"
         },
         "https://www.googleapis.com/auth/drive.readonly": {
-          "description": "View the files in your Google Drive"
+          "description": "See and download all your Google Drive files"
         },
         "https://www.googleapis.com/auth/spreadsheets": {
-          "description": "View and manage your spreadsheets in Google Drive"
+          "description": "See, edit, create, and delete your spreadsheets in Google Drive"
         },
         "https://www.googleapis.com/auth/spreadsheets.readonly": {
           "description": "View your Google Spreadsheets"
@@ -808,7 +808,7 @@
       }
     }
   },
-  "revision": "20180727",
+  "revision": "20190109",
   "rootUrl": "https://sheets.googleapis.com/",
   "schemas": {
     "AddBandingRequest": {
@@ -1235,9 +1235,9 @@
             "A \u003ca href=\"/chart/interactive/docs/gallery/linechart\"\u003eline chart\u003c/a\u003e.",
             "An \u003ca href=\"/chart/interactive/docs/gallery/areachart\"\u003earea chart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/columnchart\"\u003ecolumn chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter chart\u003c/a\u003e.",
+            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter\nchart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/combochart\"\u003ecombo chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area chart\u003c/a\u003e."
+            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area\nchart\u003c/a\u003e."
           ],
           "type": "string"
         }
@@ -1273,9 +1273,9 @@
             "A \u003ca href=\"/chart/interactive/docs/gallery/linechart\"\u003eline chart\u003c/a\u003e.",
             "An \u003ca href=\"/chart/interactive/docs/gallery/areachart\"\u003earea chart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/columnchart\"\u003ecolumn chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter chart\u003c/a\u003e.",
+            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter\nchart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/combochart\"\u003ecombo chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area chart\u003c/a\u003e."
+            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area\nchart\u003c/a\u003e."
           ],
           "type": "string"
         },
@@ -2018,7 +2018,7 @@
       "type": "object"
     },
     "CandlestickChartSpec": {
-      "description": "A \u003ca href=\"/chart/interactive/docs/gallery/candlestickchart\"\u003ecandlestick chart\u003c/a\u003e.",
+      "description": "A \u003ca href=\"/chart/interactive/docs/gallery/candlestickchart\"\u003ecandlestick\nchart\u003c/a\u003e.",
       "id": "CandlestickChartSpec",
       "properties": {
         "data": {

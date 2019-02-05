@@ -35,155 +35,133 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 
-	"github.com/marstr/collection"
-	goalias "github.com/marstr/goalias/model"
 	"golang.org/x/tools/imports"
 )
 
-type Alias struct {
-	*goalias.AliasPackage
-	TargetPath string
+// ListDefinition represents a JSON file that contains a list of packages to include
+type ListDefinition struct {
+	Include      []string          `json:"include"`
+	PathOverride map[string]string `json:"pathOverride"`
 }
 
-const armPathModifier = "mgmt"
+const (
+	armPathModifier = "mgmt"
+	aliasFileName   = "models.go"
+)
 
-var packageName = regexp.MustCompile(`services[/\\](?P<provider>[\w\-\.\d_\\/]+)[/\\](?:(?P<arm>` + armPathModifier + `)[/\\])?(?P<version>v?\d{4}-\d{2}-\d{2}[\w\d\.\-]*|v?\d+\.\d+[\.\d\w\-]*)[/\\](?P<group>[/\\\w\d\-\._]+)`)
+var packageName = regexp.MustCompile(`services[/\\](?P<provider>[\w\-\.\d_\\/]+)[/\\](?:(?P<arm>` + armPathModifier + `)[/\\])?(?P<version>v?\d{4}-\d{2}-\d{2}[\w\d\.\-]*|v?\d+[\.\d+\.\d\w\-]*)[/\\](?P<group>[/\\\w\d\-\._]+)`)
 
 // BuildProfile takes a list of packages and creates a profile
-func BuildProfile(packageList collection.Enumerable, name, outputLocation string, outputLog, errLog *log.Logger) {
-	var packages collection.Enumerator
-
-	// Find the names of all of the packages for inclusion in this profile.
-	packages = packageList.Enumerate(nil).Select(func(x interface{}) interface{} {
-		if cast, ok := x.(string); ok {
-			return cast
-		}
-		return nil
-	})
-
-	// Parse the packages that were selected for inclusion in this profile.
-	packages = packages.SelectMany(func(x interface{}) collection.Enumerator {
-		results := make(chan interface{})
-
-		go func() {
-			defer close(results)
-
-			cast, ok := x.(string)
-			if !ok {
-				return
-			}
-			files := token.NewFileSet()
-			parsed, err := parser.ParseDir(files, cast, nil, 0)
+func BuildProfile(packageList ListDefinition, name, outputLocation string, outputLog, errLog *log.Logger) {
+	wg := &sync.WaitGroup{}
+	wg.Add(len(packageList.Include))
+	for _, pkgDir := range packageList.Include {
+		if !filepath.IsAbs(pkgDir) {
+			abs, err := filepath.Abs(pkgDir)
 			if err != nil {
-				errLog.Printf("Couldn't open %q because: %v", cast, err)
-				return
+				errLog.Fatalf("failed to convert to absolute path: %v", err)
 			}
-
-			for _, entry := range parsed {
-				results <- entry
-			}
-		}()
-
-		return results
-	})
-
-	packages = GenerateAliasPackages(packages, name, outputLog, errLog)
-	products := packages.ParallelSelect(GetAliasWriter(outputLocation, outputLog, errLog))
-
-	generated := 0
-
-	// Write each aliased package that was found
-	for entry := range products {
-		if entry.(bool) {
-			generated++
+			pkgDir = abs
 		}
+		go func(pd string) {
+			fs := token.NewFileSet()
+			packages, err := parser.ParseDir(fs, pd, func(f os.FileInfo) bool {
+				// exclude test files
+				return !strings.HasSuffix(f.Name(), "_test.go")
+			}, 0)
+			if err != nil {
+				errLog.Fatalf("failed to parse '%s': %v", pd, err)
+			}
+			if len(packages) < 1 {
+				errLog.Fatalf("didn't find any packages in '%s'", pd)
+			}
+			if len(packages) > 1 {
+				errLog.Fatalf("found more than one package in '%s'", pd)
+			}
+			for pn := range packages {
+				p := packages[pn]
+				// trim any non-exported nodes
+				if exp := ast.PackageExports(p); !exp {
+					errLog.Fatalf("package '%s' doesn't contain any exports", pn)
+				}
+				// construct the import path from the outputLocation
+				// e.g. D:\work\src\github.com\Azure\azure-sdk-for-go\profiles\2017-03-09\compute\mgmt\compute
+				// becomes github.com/Azure/azure-sdk-for-go/profiles/2017-03-09/compute/mgmt/compute
+				i := strings.Index(pd, "github.com")
+				if i == -1 {
+					errLog.Fatalf("didn't find 'github.com' in '%s'", pd)
+				}
+				importPath := strings.Replace(pd[i:], "\\", "/", -1)
+				ap, err := NewAliasPackage(p, importPath)
+				if err != nil {
+					errLog.Fatalf("failed to create alias package: %v", err)
+				}
+				updateAliasPackageUserAgent(ap, name)
+				// build the profile output directory, if there's an override path use that
+				var aliasPath string
+				var ok bool
+				if aliasPath, ok = packageList.PathOverride[importPath]; !ok {
+					var err error
+					aliasPath, err = getAliasPath(pd)
+					if err != nil {
+						errLog.Fatalf("failed to calculate alias directory: %v", err)
+					}
+				}
+				aliasPath = filepath.Join(outputLocation, aliasPath)
+				if _, err := os.Stat(aliasPath); os.IsNotExist(err) {
+					err = os.MkdirAll(aliasPath, os.ModeDir)
+					if err != nil {
+						errLog.Fatalf("failed to create alias directory: %v", err)
+					}
+				}
+				writeAliasPackage(ap, aliasPath, outputLog, errLog)
+			}
+			wg.Done()
+		}(pkgDir)
 	}
-	outputLog.Print(generated, " packages generated.")
+	wg.Wait()
+	outputLog.Print(len(packageList.Include), " packages generated.")
 }
 
-// GetAliasPath takes an existing API Version path and a package name, and converts the path
-// to a path which uses the new profile layout.
-func GetAliasPath(subject, profile string) (transformed string, err error) {
-	subject = strings.TrimSuffix(subject, "/")
-	subject = TrimGoPath(subject)
-
-	matches := packageName.FindAllStringSubmatch(subject, -1)
+// getAliasPath takes an existing API Version path and converts the path to a path which uses the new profile layout.
+func getAliasPath(packageDir string) (string, error) {
+	// we want to transform this:
+	//  .../services/compute/mgmt/2016-03-30/compute
+	// into this:
+	//  compute/mgmt/compute
+	// i.e. remove everything to the left of /services along with the API version
+	packageDir = strings.TrimSuffix(packageDir, string(filepath.Separator))
+	matches := packageName.FindAllStringSubmatch(packageDir, -1)
 	if matches == nil {
-		err = fmt.Errorf("path '%s' does not resemble a known package path", subject)
-		return
+		return "", fmt.Errorf("path '%s' does not resemble a known package path", packageDir)
 	}
 
 	output := []string{
-		profile,
 		matches[0][1],
 	}
 
 	if matches[0][2] == armPathModifier {
 		output = append(output, armPathModifier)
 	}
-
 	output = append(output, matches[0][4])
 
-	transformed = strings.Join(output, "/")
-	return
+	return filepath.Join(output...), nil
 }
 
-// TrimGoPath removes the prefix defined in the environment variabe GOPATH if it is present in the string provided.
-func TrimGoPath(subject string) string {
-	splitGo := strings.Split(os.Getenv("GOPATH"), string(os.PathSeparator))
-	splitGo = append(splitGo, "src")
-	splitPath := strings.Split(subject, string(os.PathSeparator))
-	for i, dir := range splitGo {
-		if splitPath[i] != dir {
-			return subject
+// updateAliasPackageUserAgent updates the "UserAgent" function in the generated profile, if it is present.
+func updateAliasPackageUserAgent(ap *AliasPackage, profileName string) {
+	var userAgent *ast.FuncDecl
+	for _, decl := range ap.Files[aliasFileName].Decls {
+		if fd, ok := decl.(*ast.FuncDecl); ok && fd.Name.Name == "UserAgent" {
+			userAgent = fd
+			break
 		}
 	}
-	packageIdentifier := splitPath[len(splitGo):]
-	return path.Join(packageIdentifier...)
-}
-
-// GenerateAliasPackages creates an enumerator, which when called, will create Alias packages ready to be
-// written to disk.
-func GenerateAliasPackages(packages collection.Enumerator, profileName string, outputLog, errLog *log.Logger) collection.Enumerator {
-	packages = packages.ParallelSelect(GetAliasMaker(profileName, outputLog, errLog))
-	packages = packages.Select(GetUserAgentUpdater(profileName))
-	return packages
-}
-
-// GetUserAgentUpdater creates a lambda which will transform alias packages into
-// professing the Profile that the package is a part of.
-func GetUserAgentUpdater(profileName string) collection.Transform {
-	return func(x interface{}) interface{} {
-		return updateAliasPackageUserAgent(x, profileName)
-	}
-}
-
-//updateAliasPackageUserAgent updates the "UserAgent" function in the generated profile, if it is present.
-func updateAliasPackageUserAgent(x interface{}, profileName string) interface{} {
-	cast, ok := x.(*Alias)
-
-	if !ok {
-		return nil
-	}
-
-	var userAgent *ast.FuncDecl
-
-	// Grab all functions in the alias package named "UserAgent"
-	userAgentCandidates := collection.Where(collection.AsEnumerable(cast.Files["models.go"].Decls), func(x interface{}) bool {
-		cast, ok := x.(*ast.FuncDecl)
-		return ok && cast.Name.Name == "UserAgent"
-	})
-
-	// There should really only be one of them, otherwise bailout because we don't understand the world anymore.
-	candidate, err := collection.Single(userAgentCandidates)
-	if err != nil {
-		return x
-	}
-	userAgent, ok = candidate.(*ast.FuncDecl)
-	if !ok {
-		return x
+	if userAgent == nil {
+		return
 	}
 
 	// Grab the expression being returned.
@@ -197,78 +175,22 @@ func updateAliasPackageUserAgent(x interface{}, profileName string) interface{} 
 			Value: fmt.Sprintf(`" profiles/%s"`, profileName),
 		},
 	}
-
 	*retResults = updated
-	return x
-}
-
-// GetAliasMaker creates a lambda which fetches Alias packages when given a pointer to
-// an existing
-func GetAliasMaker(profileName string, outputLog, errLog *log.Logger) collection.Transform {
-	return func(x interface{}) interface{} {
-		return generateIntermediateAliasPackage(x, profileName, outputLog, errLog)
-	}
-}
-
-// generateIntermediateAliasPackage generates the alias package from the originally parsed one.
-func generateIntermediateAliasPackage(x interface{}, profileName string, outputLog, errLog *log.Logger) interface{} {
-	var err error
-	var subject *goalias.AliasPackage
-	cast, ok := x.(*ast.Package)
-	if !ok {
-		return nil
-	}
-
-	var bundle Alias
-	for filename := range cast.Files {
-		bundle.TargetPath = filepath.Dir(filename)
-		bundle.TargetPath = TrimGoPath(bundle.TargetPath)
-		subject, err = goalias.NewAliasPackage(cast, bundle.TargetPath)
-		if err != nil {
-			errLog.Print(err)
-			return nil
-		}
-		bundle.TargetPath, err = GetAliasPath(bundle.TargetPath, profileName)
-		if err != nil {
-			errLog.Print(err)
-			return nil
-		}
-		break
-	}
-
-	bundle.AliasPackage = subject
-	return &bundle
-}
-
-// GetAliasWriter gets a `collection.Transform` which writes a package to
-// disk at the specified location.
-func GetAliasWriter(outputLocation string, outputLog, errLog *log.Logger) collection.Transform {
-	return func(x interface{}) interface{} {
-		return writeAliasPackage(x, outputLocation, outputLog, errLog)
-	}
 }
 
 // writeAliasPackage adds the MSFT Copyright Header, then writes the alias package to disk.
-func writeAliasPackage(x interface{}, outputLocation string, outputLog, errLog *log.Logger) interface{} {
-	cast, ok := x.(*Alias)
-	if !ok {
-		return false
-	}
-
+func writeAliasPackage(ap *AliasPackage, outputPath string, outputLog, errLog *log.Logger) {
 	files := token.NewFileSet()
 
-	outputPath := filepath.Join(outputLocation, cast.TargetPath, "models.go")
-	outputPath = strings.Replace(outputPath, `\`, `/`, -1)
 	err := os.MkdirAll(path.Dir(outputPath), os.ModePerm|os.ModeDir)
 	if err != nil {
-		errLog.Print("error creating directory:", err)
-		return false
+		errLog.Fatalf("error creating directory: %v", err)
 	}
 
-	outputFile, err := os.Create(outputPath)
+	aliasFile := filepath.Join(outputPath, aliasFileName)
+	outputFile, err := os.Create(aliasFile)
 	if err != nil {
-		errLog.Print("error creating file: ", err)
-		return false
+		errLog.Fatalf("error creating file: %v", err)
 	}
 
 	// TODO: This should really be added by the `goalias` package itself. Doing it here is a work around
@@ -301,20 +223,22 @@ func writeAliasPackage(x interface{}, outputLocation string, outputLog, errLog *
 	fmt.Fprintln(generatorStampBuilder)
 	fmt.Fprint(outputFile, generatorStampBuilder.String())
 
-	outputLog.Printf("Writing File: %s", outputPath)
+	outputLog.Printf("Writing File: %s", aliasFile)
 
-	file := cast.ModelFile()
+	file := ap.ModelFile()
 
 	var b bytes.Buffer
 	printer.Fprint(&b, files, file)
-	res, _ := imports.Process(outputPath, b.Bytes(), nil)
+	res, err := imports.Process(aliasFile, b.Bytes(), nil)
+	if err != nil {
+		errLog.Fatalf("failed to process imports: %v", err)
+	}
 	fmt.Fprintf(outputFile, "%s", res)
 	outputFile.Close()
 
-	if err := exec.Command("gofmt", "-w", outputPath).Run(); err == nil {
-		outputLog.Print("Success formatting profile.")
-	} else {
-		errLog.Print("Trouble formatting profile: ", err)
+	// be sure to specify the file for formatting not the directory; this is to
+	// avoid race conditions when formatting parent/child directories (foo and foo/fooapi)
+	if err := exec.Command("gofmt", "-w", aliasFile).Run(); err != nil {
+		errLog.Fatalf("error formatting profile '%s': %v", aliasFile, err)
 	}
-	return true
 }

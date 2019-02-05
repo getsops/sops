@@ -44,7 +44,7 @@ func (m *CreateScanConfigRequest) Reset()         { *m = CreateScanConfigRequest
 func (m *CreateScanConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateScanConfigRequest) ProtoMessage()    {}
 func (*CreateScanConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{0}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{0}
 }
 func (m *CreateScanConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateScanConfigRequest.Unmarshal(m, b)
@@ -52,8 +52,8 @@ func (m *CreateScanConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateScanConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateScanConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateScanConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateScanConfigRequest.Merge(m, src)
+func (dst *CreateScanConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateScanConfigRequest.Merge(dst, src)
 }
 func (m *CreateScanConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateScanConfigRequest.Size(m)
@@ -93,7 +93,7 @@ func (m *DeleteScanConfigRequest) Reset()         { *m = DeleteScanConfigRequest
 func (m *DeleteScanConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteScanConfigRequest) ProtoMessage()    {}
 func (*DeleteScanConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{1}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{1}
 }
 func (m *DeleteScanConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteScanConfigRequest.Unmarshal(m, b)
@@ -101,8 +101,8 @@ func (m *DeleteScanConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteScanConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteScanConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteScanConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteScanConfigRequest.Merge(m, src)
+func (dst *DeleteScanConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteScanConfigRequest.Merge(dst, src)
 }
 func (m *DeleteScanConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteScanConfigRequest.Size(m)
@@ -135,7 +135,7 @@ func (m *GetScanConfigRequest) Reset()         { *m = GetScanConfigRequest{} }
 func (m *GetScanConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*GetScanConfigRequest) ProtoMessage()    {}
 func (*GetScanConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{2}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{2}
 }
 func (m *GetScanConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetScanConfigRequest.Unmarshal(m, b)
@@ -143,8 +143,8 @@ func (m *GetScanConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetScanConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetScanConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *GetScanConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetScanConfigRequest.Merge(m, src)
+func (dst *GetScanConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetScanConfigRequest.Merge(dst, src)
 }
 func (m *GetScanConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_GetScanConfigRequest.Size(m)
@@ -185,7 +185,7 @@ func (m *ListScanConfigsRequest) Reset()         { *m = ListScanConfigsRequest{}
 func (m *ListScanConfigsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListScanConfigsRequest) ProtoMessage()    {}
 func (*ListScanConfigsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{3}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{3}
 }
 func (m *ListScanConfigsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListScanConfigsRequest.Unmarshal(m, b)
@@ -193,8 +193,8 @@ func (m *ListScanConfigsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListScanConfigsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListScanConfigsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListScanConfigsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListScanConfigsRequest.Merge(m, src)
+func (dst *ListScanConfigsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListScanConfigsRequest.Merge(dst, src)
 }
 func (m *ListScanConfigsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListScanConfigsRequest.Size(m)
@@ -247,7 +247,7 @@ func (m *UpdateScanConfigRequest) Reset()         { *m = UpdateScanConfigRequest
 func (m *UpdateScanConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateScanConfigRequest) ProtoMessage()    {}
 func (*UpdateScanConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{4}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{4}
 }
 func (m *UpdateScanConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateScanConfigRequest.Unmarshal(m, b)
@@ -255,8 +255,8 @@ func (m *UpdateScanConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateScanConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateScanConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateScanConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateScanConfigRequest.Merge(m, src)
+func (dst *UpdateScanConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateScanConfigRequest.Merge(dst, src)
 }
 func (m *UpdateScanConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateScanConfigRequest.Size(m)
@@ -297,7 +297,7 @@ func (m *ListScanConfigsResponse) Reset()         { *m = ListScanConfigsResponse
 func (m *ListScanConfigsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListScanConfigsResponse) ProtoMessage()    {}
 func (*ListScanConfigsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{5}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{5}
 }
 func (m *ListScanConfigsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListScanConfigsResponse.Unmarshal(m, b)
@@ -305,8 +305,8 @@ func (m *ListScanConfigsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListScanConfigsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListScanConfigsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListScanConfigsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListScanConfigsResponse.Merge(m, src)
+func (dst *ListScanConfigsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListScanConfigsResponse.Merge(dst, src)
 }
 func (m *ListScanConfigsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListScanConfigsResponse.Size(m)
@@ -346,7 +346,7 @@ func (m *StartScanRunRequest) Reset()         { *m = StartScanRunRequest{} }
 func (m *StartScanRunRequest) String() string { return proto.CompactTextString(m) }
 func (*StartScanRunRequest) ProtoMessage()    {}
 func (*StartScanRunRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{6}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{6}
 }
 func (m *StartScanRunRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StartScanRunRequest.Unmarshal(m, b)
@@ -354,8 +354,8 @@ func (m *StartScanRunRequest) XXX_Unmarshal(b []byte) error {
 func (m *StartScanRunRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StartScanRunRequest.Marshal(b, m, deterministic)
 }
-func (m *StartScanRunRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StartScanRunRequest.Merge(m, src)
+func (dst *StartScanRunRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StartScanRunRequest.Merge(dst, src)
 }
 func (m *StartScanRunRequest) XXX_Size() int {
 	return xxx_messageInfo_StartScanRunRequest.Size(m)
@@ -389,7 +389,7 @@ func (m *GetScanRunRequest) Reset()         { *m = GetScanRunRequest{} }
 func (m *GetScanRunRequest) String() string { return proto.CompactTextString(m) }
 func (*GetScanRunRequest) ProtoMessage()    {}
 func (*GetScanRunRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{7}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{7}
 }
 func (m *GetScanRunRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetScanRunRequest.Unmarshal(m, b)
@@ -397,8 +397,8 @@ func (m *GetScanRunRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetScanRunRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetScanRunRequest.Marshal(b, m, deterministic)
 }
-func (m *GetScanRunRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetScanRunRequest.Merge(m, src)
+func (dst *GetScanRunRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetScanRunRequest.Merge(dst, src)
 }
 func (m *GetScanRunRequest) XXX_Size() int {
 	return xxx_messageInfo_GetScanRunRequest.Size(m)
@@ -439,7 +439,7 @@ func (m *ListScanRunsRequest) Reset()         { *m = ListScanRunsRequest{} }
 func (m *ListScanRunsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListScanRunsRequest) ProtoMessage()    {}
 func (*ListScanRunsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{8}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{8}
 }
 func (m *ListScanRunsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListScanRunsRequest.Unmarshal(m, b)
@@ -447,8 +447,8 @@ func (m *ListScanRunsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListScanRunsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListScanRunsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListScanRunsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListScanRunsRequest.Merge(m, src)
+func (dst *ListScanRunsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListScanRunsRequest.Merge(dst, src)
 }
 func (m *ListScanRunsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListScanRunsRequest.Size(m)
@@ -496,7 +496,7 @@ func (m *ListScanRunsResponse) Reset()         { *m = ListScanRunsResponse{} }
 func (m *ListScanRunsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListScanRunsResponse) ProtoMessage()    {}
 func (*ListScanRunsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{9}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{9}
 }
 func (m *ListScanRunsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListScanRunsResponse.Unmarshal(m, b)
@@ -504,8 +504,8 @@ func (m *ListScanRunsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListScanRunsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListScanRunsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListScanRunsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListScanRunsResponse.Merge(m, src)
+func (dst *ListScanRunsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListScanRunsResponse.Merge(dst, src)
 }
 func (m *ListScanRunsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListScanRunsResponse.Size(m)
@@ -546,7 +546,7 @@ func (m *StopScanRunRequest) Reset()         { *m = StopScanRunRequest{} }
 func (m *StopScanRunRequest) String() string { return proto.CompactTextString(m) }
 func (*StopScanRunRequest) ProtoMessage()    {}
 func (*StopScanRunRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{10}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{10}
 }
 func (m *StopScanRunRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StopScanRunRequest.Unmarshal(m, b)
@@ -554,8 +554,8 @@ func (m *StopScanRunRequest) XXX_Unmarshal(b []byte) error {
 func (m *StopScanRunRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StopScanRunRequest.Marshal(b, m, deterministic)
 }
-func (m *StopScanRunRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StopScanRunRequest.Merge(m, src)
+func (dst *StopScanRunRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StopScanRunRequest.Merge(dst, src)
 }
 func (m *StopScanRunRequest) XXX_Size() int {
 	return xxx_messageInfo_StopScanRunRequest.Size(m)
@@ -597,7 +597,7 @@ func (m *ListCrawledUrlsRequest) Reset()         { *m = ListCrawledUrlsRequest{}
 func (m *ListCrawledUrlsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCrawledUrlsRequest) ProtoMessage()    {}
 func (*ListCrawledUrlsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{11}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{11}
 }
 func (m *ListCrawledUrlsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCrawledUrlsRequest.Unmarshal(m, b)
@@ -605,8 +605,8 @@ func (m *ListCrawledUrlsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListCrawledUrlsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCrawledUrlsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListCrawledUrlsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCrawledUrlsRequest.Merge(m, src)
+func (dst *ListCrawledUrlsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCrawledUrlsRequest.Merge(dst, src)
 }
 func (m *ListCrawledUrlsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListCrawledUrlsRequest.Size(m)
@@ -654,7 +654,7 @@ func (m *ListCrawledUrlsResponse) Reset()         { *m = ListCrawledUrlsResponse
 func (m *ListCrawledUrlsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCrawledUrlsResponse) ProtoMessage()    {}
 func (*ListCrawledUrlsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{12}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{12}
 }
 func (m *ListCrawledUrlsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCrawledUrlsResponse.Unmarshal(m, b)
@@ -662,8 +662,8 @@ func (m *ListCrawledUrlsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListCrawledUrlsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCrawledUrlsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListCrawledUrlsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCrawledUrlsResponse.Merge(m, src)
+func (dst *ListCrawledUrlsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCrawledUrlsResponse.Merge(dst, src)
 }
 func (m *ListCrawledUrlsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListCrawledUrlsResponse.Size(m)
@@ -704,7 +704,7 @@ func (m *GetFindingRequest) Reset()         { *m = GetFindingRequest{} }
 func (m *GetFindingRequest) String() string { return proto.CompactTextString(m) }
 func (*GetFindingRequest) ProtoMessage()    {}
 func (*GetFindingRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{13}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{13}
 }
 func (m *GetFindingRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetFindingRequest.Unmarshal(m, b)
@@ -712,8 +712,8 @@ func (m *GetFindingRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetFindingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetFindingRequest.Marshal(b, m, deterministic)
 }
-func (m *GetFindingRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFindingRequest.Merge(m, src)
+func (dst *GetFindingRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFindingRequest.Merge(dst, src)
 }
 func (m *GetFindingRequest) XXX_Size() int {
 	return xxx_messageInfo_GetFindingRequest.Size(m)
@@ -760,7 +760,7 @@ func (m *ListFindingsRequest) Reset()         { *m = ListFindingsRequest{} }
 func (m *ListFindingsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListFindingsRequest) ProtoMessage()    {}
 func (*ListFindingsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{14}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{14}
 }
 func (m *ListFindingsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListFindingsRequest.Unmarshal(m, b)
@@ -768,8 +768,8 @@ func (m *ListFindingsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListFindingsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListFindingsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListFindingsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFindingsRequest.Merge(m, src)
+func (dst *ListFindingsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListFindingsRequest.Merge(dst, src)
 }
 func (m *ListFindingsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListFindingsRequest.Size(m)
@@ -824,7 +824,7 @@ func (m *ListFindingsResponse) Reset()         { *m = ListFindingsResponse{} }
 func (m *ListFindingsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListFindingsResponse) ProtoMessage()    {}
 func (*ListFindingsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{15}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{15}
 }
 func (m *ListFindingsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListFindingsResponse.Unmarshal(m, b)
@@ -832,8 +832,8 @@ func (m *ListFindingsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListFindingsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListFindingsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListFindingsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFindingsResponse.Merge(m, src)
+func (dst *ListFindingsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListFindingsResponse.Merge(dst, src)
 }
 func (m *ListFindingsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListFindingsResponse.Size(m)
@@ -874,7 +874,7 @@ func (m *ListFindingTypeStatsRequest) Reset()         { *m = ListFindingTypeStat
 func (m *ListFindingTypeStatsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListFindingTypeStatsRequest) ProtoMessage()    {}
 func (*ListFindingTypeStatsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{16}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{16}
 }
 func (m *ListFindingTypeStatsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListFindingTypeStatsRequest.Unmarshal(m, b)
@@ -882,8 +882,8 @@ func (m *ListFindingTypeStatsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListFindingTypeStatsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListFindingTypeStatsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListFindingTypeStatsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFindingTypeStatsRequest.Merge(m, src)
+func (dst *ListFindingTypeStatsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListFindingTypeStatsRequest.Merge(dst, src)
 }
 func (m *ListFindingTypeStatsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListFindingTypeStatsRequest.Size(m)
@@ -914,7 +914,7 @@ func (m *ListFindingTypeStatsResponse) Reset()         { *m = ListFindingTypeSta
 func (m *ListFindingTypeStatsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListFindingTypeStatsResponse) ProtoMessage()    {}
 func (*ListFindingTypeStatsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_23d01882da6eef5f, []int{17}
+	return fileDescriptor_web_security_scanner_f0a8594a85d56336, []int{17}
 }
 func (m *ListFindingTypeStatsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListFindingTypeStatsResponse.Unmarshal(m, b)
@@ -922,8 +922,8 @@ func (m *ListFindingTypeStatsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListFindingTypeStatsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListFindingTypeStatsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListFindingTypeStatsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFindingTypeStatsResponse.Merge(m, src)
+func (dst *ListFindingTypeStatsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListFindingTypeStatsResponse.Merge(dst, src)
 }
 func (m *ListFindingTypeStatsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListFindingTypeStatsResponse.Size(m)
@@ -1459,10 +1459,10 @@ var _WebSecurityScanner_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/web_security_scanner.proto", fileDescriptor_23d01882da6eef5f)
+	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/web_security_scanner.proto", fileDescriptor_web_security_scanner_f0a8594a85d56336)
 }
 
-var fileDescriptor_23d01882da6eef5f = []byte{
+var fileDescriptor_web_security_scanner_f0a8594a85d56336 = []byte{
 	// 1115 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0xcf, 0x6f, 0x1b, 0x45,
 	0x14, 0xd6, 0xb4, 0x25, 0x4a, 0x9e, 0x53, 0x35, 0x4c, 0xa3, 0x38, 0xda, 0x14, 0xc9, 0xda, 0x03,

@@ -1231,3 +1231,20 @@ GITHUB = U;n;k;n;w;o;n
 		})
 	})
 }
+
+func Test_KeyValueDelimiters(t *testing.T) {
+	Convey("Custom key-value delimiters", t, func() {
+		f, err := ini.LoadSources(ini.LoadOptions{
+			KeyValueDelimiters: "?!",
+		}, []byte(`
+[section]
+key1?value1
+key2!value2
+`))
+		So(err, ShouldBeNil)
+		So(f, ShouldNotBeNil)
+
+		So(f.Section("section").Key("key1").String(), ShouldEqual, "value1")
+		So(f.Section("section").Key("key2").String(), ShouldEqual, "value2")
+	})
+}

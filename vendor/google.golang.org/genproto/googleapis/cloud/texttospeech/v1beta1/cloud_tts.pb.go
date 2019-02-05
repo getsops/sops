@@ -49,7 +49,6 @@ var SsmlVoiceGender_name = map[int32]string{
 	2: "FEMALE",
 	3: "NEUTRAL",
 }
-
 var SsmlVoiceGender_value = map[string]int32{
 	"SSML_VOICE_GENDER_UNSPECIFIED": 0,
 	"MALE":                          1,
@@ -60,9 +59,8 @@ var SsmlVoiceGender_value = map[string]int32{
 func (x SsmlVoiceGender) String() string {
 	return proto.EnumName(SsmlVoiceGender_name, int32(x))
 }
-
 func (SsmlVoiceGender) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{0}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{0}
 }
 
 // Configuration to set up audio encoder. The encoding determines the output
@@ -90,7 +88,6 @@ var AudioEncoding_name = map[int32]string{
 	2: "MP3",
 	3: "OGG_OPUS",
 }
-
 var AudioEncoding_value = map[string]int32{
 	"AUDIO_ENCODING_UNSPECIFIED": 0,
 	"LINEAR16":                   1,
@@ -101,9 +98,8 @@ var AudioEncoding_value = map[string]int32{
 func (x AudioEncoding) String() string {
 	return proto.EnumName(AudioEncoding_name, int32(x))
 }
-
 func (AudioEncoding) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{1}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{1}
 }
 
 // The top-level message sent by the client for the `ListVoices` method.
@@ -126,7 +122,7 @@ func (m *ListVoicesRequest) Reset()         { *m = ListVoicesRequest{} }
 func (m *ListVoicesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListVoicesRequest) ProtoMessage()    {}
 func (*ListVoicesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{0}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{0}
 }
 func (m *ListVoicesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListVoicesRequest.Unmarshal(m, b)
@@ -134,8 +130,8 @@ func (m *ListVoicesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListVoicesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListVoicesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListVoicesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListVoicesRequest.Merge(m, src)
+func (dst *ListVoicesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListVoicesRequest.Merge(dst, src)
 }
 func (m *ListVoicesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListVoicesRequest.Size(m)
@@ -166,7 +162,7 @@ func (m *ListVoicesResponse) Reset()         { *m = ListVoicesResponse{} }
 func (m *ListVoicesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListVoicesResponse) ProtoMessage()    {}
 func (*ListVoicesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{1}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{1}
 }
 func (m *ListVoicesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListVoicesResponse.Unmarshal(m, b)
@@ -174,8 +170,8 @@ func (m *ListVoicesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListVoicesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListVoicesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListVoicesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListVoicesResponse.Merge(m, src)
+func (dst *ListVoicesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListVoicesResponse.Merge(dst, src)
 }
 func (m *ListVoicesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListVoicesResponse.Size(m)
@@ -214,7 +210,7 @@ func (m *Voice) Reset()         { *m = Voice{} }
 func (m *Voice) String() string { return proto.CompactTextString(m) }
 func (*Voice) ProtoMessage()    {}
 func (*Voice) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{2}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{2}
 }
 func (m *Voice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Voice.Unmarshal(m, b)
@@ -222,8 +218,8 @@ func (m *Voice) XXX_Unmarshal(b []byte) error {
 func (m *Voice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Voice.Marshal(b, m, deterministic)
 }
-func (m *Voice) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Voice.Merge(m, src)
+func (dst *Voice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Voice.Merge(dst, src)
 }
 func (m *Voice) XXX_Size() int {
 	return xxx_messageInfo_Voice.Size(m)
@@ -279,7 +275,7 @@ func (m *SynthesizeSpeechRequest) Reset()         { *m = SynthesizeSpeechRequest
 func (m *SynthesizeSpeechRequest) String() string { return proto.CompactTextString(m) }
 func (*SynthesizeSpeechRequest) ProtoMessage()    {}
 func (*SynthesizeSpeechRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{3}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{3}
 }
 func (m *SynthesizeSpeechRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SynthesizeSpeechRequest.Unmarshal(m, b)
@@ -287,8 +283,8 @@ func (m *SynthesizeSpeechRequest) XXX_Unmarshal(b []byte) error {
 func (m *SynthesizeSpeechRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SynthesizeSpeechRequest.Marshal(b, m, deterministic)
 }
-func (m *SynthesizeSpeechRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SynthesizeSpeechRequest.Merge(m, src)
+func (dst *SynthesizeSpeechRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SynthesizeSpeechRequest.Merge(dst, src)
 }
 func (m *SynthesizeSpeechRequest) XXX_Size() int {
 	return xxx_messageInfo_SynthesizeSpeechRequest.Size(m)
@@ -340,7 +336,7 @@ func (m *SynthesisInput) Reset()         { *m = SynthesisInput{} }
 func (m *SynthesisInput) String() string { return proto.CompactTextString(m) }
 func (*SynthesisInput) ProtoMessage()    {}
 func (*SynthesisInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{4}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{4}
 }
 func (m *SynthesisInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SynthesisInput.Unmarshal(m, b)
@@ -348,8 +344,8 @@ func (m *SynthesisInput) XXX_Unmarshal(b []byte) error {
 func (m *SynthesisInput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SynthesisInput.Marshal(b, m, deterministic)
 }
-func (m *SynthesisInput) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SynthesisInput.Merge(m, src)
+func (dst *SynthesisInput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SynthesisInput.Merge(dst, src)
 }
 func (m *SynthesisInput) XXX_Size() int {
 	return xxx_messageInfo_SynthesisInput.Size(m)
@@ -495,7 +491,7 @@ func (m *VoiceSelectionParams) Reset()         { *m = VoiceSelectionParams{} }
 func (m *VoiceSelectionParams) String() string { return proto.CompactTextString(m) }
 func (*VoiceSelectionParams) ProtoMessage()    {}
 func (*VoiceSelectionParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{5}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{5}
 }
 func (m *VoiceSelectionParams) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VoiceSelectionParams.Unmarshal(m, b)
@@ -503,8 +499,8 @@ func (m *VoiceSelectionParams) XXX_Unmarshal(b []byte) error {
 func (m *VoiceSelectionParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_VoiceSelectionParams.Marshal(b, m, deterministic)
 }
-func (m *VoiceSelectionParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VoiceSelectionParams.Merge(m, src)
+func (dst *VoiceSelectionParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VoiceSelectionParams.Merge(dst, src)
 }
 func (m *VoiceSelectionParams) XXX_Size() int {
 	return xxx_messageInfo_VoiceSelectionParams.Size(m)
@@ -578,7 +574,7 @@ func (m *AudioConfig) Reset()         { *m = AudioConfig{} }
 func (m *AudioConfig) String() string { return proto.CompactTextString(m) }
 func (*AudioConfig) ProtoMessage()    {}
 func (*AudioConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{6}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{6}
 }
 func (m *AudioConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AudioConfig.Unmarshal(m, b)
@@ -586,8 +582,8 @@ func (m *AudioConfig) XXX_Unmarshal(b []byte) error {
 func (m *AudioConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AudioConfig.Marshal(b, m, deterministic)
 }
-func (m *AudioConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AudioConfig.Merge(m, src)
+func (dst *AudioConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AudioConfig.Merge(dst, src)
 }
 func (m *AudioConfig) XXX_Size() int {
 	return xxx_messageInfo_AudioConfig.Size(m)
@@ -656,7 +652,7 @@ func (m *SynthesizeSpeechResponse) Reset()         { *m = SynthesizeSpeechRespon
 func (m *SynthesizeSpeechResponse) String() string { return proto.CompactTextString(m) }
 func (*SynthesizeSpeechResponse) ProtoMessage()    {}
 func (*SynthesizeSpeechResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dfc2f1f47f5721c8, []int{7}
+	return fileDescriptor_cloud_tts_9d0ebd338dfb28bd, []int{7}
 }
 func (m *SynthesizeSpeechResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SynthesizeSpeechResponse.Unmarshal(m, b)
@@ -664,8 +660,8 @@ func (m *SynthesizeSpeechResponse) XXX_Unmarshal(b []byte) error {
 func (m *SynthesizeSpeechResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SynthesizeSpeechResponse.Marshal(b, m, deterministic)
 }
-func (m *SynthesizeSpeechResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SynthesizeSpeechResponse.Merge(m, src)
+func (dst *SynthesizeSpeechResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SynthesizeSpeechResponse.Merge(dst, src)
 }
 func (m *SynthesizeSpeechResponse) XXX_Size() int {
 	return xxx_messageInfo_SynthesizeSpeechResponse.Size(m)
@@ -810,10 +806,10 @@ var _TextToSpeech_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/texttospeech/v1beta1/cloud_tts.proto", fileDescriptor_dfc2f1f47f5721c8)
+	proto.RegisterFile("google/cloud/texttospeech/v1beta1/cloud_tts.proto", fileDescriptor_cloud_tts_9d0ebd338dfb28bd)
 }
 
-var fileDescriptor_dfc2f1f47f5721c8 = []byte{
+var fileDescriptor_cloud_tts_9d0ebd338dfb28bd = []byte{
 	// 875 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0xdd, 0x6e, 0x1b, 0x45,
 	0x14, 0xee, 0xd8, 0x71, 0xda, 0x1e, 0xaf, 0x1d, 0x67, 0x14, 0x51, 0x13, 0x51, 0x94, 0x6e, 0xa8,

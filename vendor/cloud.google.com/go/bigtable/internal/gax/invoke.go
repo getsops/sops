@@ -14,24 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This is ia snapshot from github.com/googleapis/gax-go with minor modifications.
+// Package gax is a snapshot from github.com/googleapis/gax-go/v2 with minor modifications.
 package gax
 
 import (
+	"context"
+	"log"
 	"math/rand"
+	"os"
 	"time"
 
-	"log"
-	"os"
-
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 )
 
-var Logger *log.Logger = log.New(os.Stderr, "", log.LstdFlags)
+// Logger is a logger that logs to stderr.
+var Logger = log.New(os.Stderr, "", log.LstdFlags)
 
-// A user defined call stub.
+// APICall is a user defined call stub.
 type APICall func(context.Context) error
 
 // scaleDuration returns the product of a and mult.

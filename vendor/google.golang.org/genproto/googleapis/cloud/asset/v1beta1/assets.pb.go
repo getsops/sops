@@ -41,7 +41,7 @@ func (m *TemporalAsset) Reset()         { *m = TemporalAsset{} }
 func (m *TemporalAsset) String() string { return proto.CompactTextString(m) }
 func (*TemporalAsset) ProtoMessage()    {}
 func (*TemporalAsset) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e0a79b6d8a101c1, []int{0}
+	return fileDescriptor_assets_7befa3ac987ee657, []int{0}
 }
 func (m *TemporalAsset) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TemporalAsset.Unmarshal(m, b)
@@ -49,8 +49,8 @@ func (m *TemporalAsset) XXX_Unmarshal(b []byte) error {
 func (m *TemporalAsset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TemporalAsset.Marshal(b, m, deterministic)
 }
-func (m *TemporalAsset) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TemporalAsset.Merge(m, src)
+func (dst *TemporalAsset) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TemporalAsset.Merge(dst, src)
 }
 func (m *TemporalAsset) XXX_Size() int {
 	return xxx_messageInfo_TemporalAsset.Size(m)
@@ -82,11 +82,11 @@ func (m *TemporalAsset) GetAsset() *Asset {
 	return nil
 }
 
-// A time window of [start_time, end_time).
+// A time window of (start_time, end_time].
 type TimeWindow struct {
-	// Start time of the time window (inclusive).
+	// Start time of the time window (exclusive).
 	StartTime *timestamp.Timestamp `protobuf:"bytes,1,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	// End time of the time window (exclusive).
+	// End time of the time window (inclusive).
 	// Current timestamp if not specified.
 	EndTime              *timestamp.Timestamp `protobuf:"bytes,2,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
@@ -98,7 +98,7 @@ func (m *TimeWindow) Reset()         { *m = TimeWindow{} }
 func (m *TimeWindow) String() string { return proto.CompactTextString(m) }
 func (*TimeWindow) ProtoMessage()    {}
 func (*TimeWindow) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e0a79b6d8a101c1, []int{1}
+	return fileDescriptor_assets_7befa3ac987ee657, []int{1}
 }
 func (m *TimeWindow) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TimeWindow.Unmarshal(m, b)
@@ -106,8 +106,8 @@ func (m *TimeWindow) XXX_Unmarshal(b []byte) error {
 func (m *TimeWindow) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TimeWindow.Marshal(b, m, deterministic)
 }
-func (m *TimeWindow) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TimeWindow.Merge(m, src)
+func (dst *TimeWindow) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TimeWindow.Merge(dst, src)
 }
 func (m *TimeWindow) XXX_Size() int {
 	return xxx_messageInfo_TimeWindow.Size(m)
@@ -132,20 +132,19 @@ func (m *TimeWindow) GetEndTime() *timestamp.Timestamp {
 	return nil
 }
 
-// Cloud asset. This include all Google Cloud Platform resources, as well as
-// IAM policies and other non-GCP assets.
+// Cloud asset. This includes all Google Cloud Platform resources,
+// Cloud IAM policies, and other non-GCP assets.
 type Asset struct {
-	// The full name of the asset. See:
-	// https://cloud.google.com/apis/design/resource_names#full_resource_name
-	// Example:
-	// "//compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1".
+	// The full name of the asset. For example: `//compute.googleapis.com/projects/my_project_123/zones/zone1/instances/instance1`.
+	// See [Resource Names](https://cloud.google.com/apis/design/resource_names#full_resource_name)
+	// for more information.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Type of the asset. Example: "google.compute.disk".
+	// Type of the asset. Example: "google.compute.Disk".
 	AssetType string `protobuf:"bytes,2,opt,name=asset_type,json=assetType,proto3" json:"asset_type,omitempty"`
 	// Representation of the resource.
 	Resource *Resource `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
-	// Representation of the actual IAM policy set on a cloud resource. For each
-	// resource, there must be at most one IAM policy set on it.
+	// Representation of the actual Cloud IAM policy set on a cloud resource. For each
+	// resource, there must be at most one Cloud IAM policy set on it.
 	IamPolicy            *v1.Policy `protobuf:"bytes,4,opt,name=iam_policy,json=iamPolicy,proto3" json:"iam_policy,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
@@ -156,7 +155,7 @@ func (m *Asset) Reset()         { *m = Asset{} }
 func (m *Asset) String() string { return proto.CompactTextString(m) }
 func (*Asset) ProtoMessage()    {}
 func (*Asset) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e0a79b6d8a101c1, []int{2}
+	return fileDescriptor_assets_7befa3ac987ee657, []int{2}
 }
 func (m *Asset) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Asset.Unmarshal(m, b)
@@ -164,8 +163,8 @@ func (m *Asset) XXX_Unmarshal(b []byte) error {
 func (m *Asset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Asset.Marshal(b, m, deterministic)
 }
-func (m *Asset) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Asset.Merge(m, src)
+func (dst *Asset) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Asset.Merge(dst, src)
 }
 func (m *Asset) XXX_Size() int {
 	return xxx_messageInfo_Asset.Size(m)
@@ -209,8 +208,8 @@ type Resource struct {
 	// The API version. Example: "v1".
 	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
 	// The URL of the discovery document containing the resource's JSON schema.
-	// Example:
-	// "https://www.googleapis.com/discovery/v1/apis/compute/v1/rest".
+	// For example:
+	// `"https://www.googleapis.com/discovery/v1/apis/compute/v1/rest"`.
 	// It will be left unspecified for resources without a discovery-based API,
 	// such as Cloud Bigtable.
 	DiscoveryDocumentUri string `protobuf:"bytes,2,opt,name=discovery_document_uri,json=discoveryDocumentUri,proto3" json:"discovery_document_uri,omitempty"`
@@ -224,12 +223,13 @@ type Resource struct {
 	// `https://cloudresourcemanager.googleapis.com/v1/projects/my-project-123`.
 	// It will be left unspecified for resources without a REST API.
 	ResourceUrl string `protobuf:"bytes,4,opt,name=resource_url,json=resourceUrl,proto3" json:"resource_url,omitempty"`
-	// The full name of the immediate parent of this resource. See:
-	// https://cloud.google.com/apis/design/resource_names#full_resource_name
+	// The full name of the immediate parent of this resource. See
+	// [Resource Names](https://cloud.google.com/apis/design/resource_names#full_resource_name)
+	// for more information.
 	//
-	// For GCP assets, it is the parent resource defined in the IAM policy
-	// hierarchy: https://cloud.google.com/iam/docs/overview#policy_hierarchy.
-	// Example: "//cloudresourcemanager.googleapis.com/projects/my_project_123".
+	// For GCP assets, it is the parent resource defined in the [Cloud IAM policy
+	// hierarchy](https://cloud.google.com/iam/docs/overview#policy_hierarchy).
+	// For example: `"//cloudresourcemanager.googleapis.com/projects/my_project_123"`.
 	//
 	// For third-party assets, it is up to the users to define.
 	Parent string `protobuf:"bytes,5,opt,name=parent,proto3" json:"parent,omitempty"`
@@ -245,7 +245,7 @@ func (m *Resource) Reset()         { *m = Resource{} }
 func (m *Resource) String() string { return proto.CompactTextString(m) }
 func (*Resource) ProtoMessage()    {}
 func (*Resource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e0a79b6d8a101c1, []int{3}
+	return fileDescriptor_assets_7befa3ac987ee657, []int{3}
 }
 func (m *Resource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Resource.Unmarshal(m, b)
@@ -253,8 +253,8 @@ func (m *Resource) XXX_Unmarshal(b []byte) error {
 func (m *Resource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Resource.Marshal(b, m, deterministic)
 }
-func (m *Resource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Resource.Merge(m, src)
+func (dst *Resource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Resource.Merge(dst, src)
 }
 func (m *Resource) XXX_Size() int {
 	return xxx_messageInfo_Resource.Size(m)
@@ -315,10 +315,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/asset/v1beta1/assets.proto", fileDescriptor_2e0a79b6d8a101c1)
+	proto.RegisterFile("google/cloud/asset/v1beta1/assets.proto", fileDescriptor_assets_7befa3ac987ee657)
 }
 
-var fileDescriptor_2e0a79b6d8a101c1 = []byte{
+var fileDescriptor_assets_7befa3ac987ee657 = []byte{
 	// 551 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0xdb, 0x6a, 0xd4, 0x40,
 	0x18, 0x26, 0xed, 0xee, 0x76, 0xf3, 0xd7, 0x7a, 0x31, 0x68, 0x8d, 0x4b, 0xd5, 0x76, 0xf1, 0x50,

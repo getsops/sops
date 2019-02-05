@@ -55,7 +55,6 @@ var OperationMetadata_Status_name = map[int32]string{
 	4: "FAILED",
 	5: "CANCELLED",
 }
-
 var OperationMetadata_Status_value = map[string]int32{
 	"STATUS_UNSPECIFIED": 0,
 	"DONE":               1,
@@ -68,9 +67,8 @@ var OperationMetadata_Status_value = map[string]int32{
 func (x OperationMetadata_Status) String() string {
 	return proto.EnumName(OperationMetadata_Status_name, int32(x))
 }
-
 func (OperationMetadata_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{1, 0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{1, 0}
 }
 
 // The kind of diagnostic information possible.
@@ -87,7 +85,6 @@ var Diagnostic_Kind_name = map[int32]string{
 	0: "WARNING",
 	1: "ERROR",
 }
-
 var Diagnostic_Kind_value = map[string]int32{
 	"WARNING": 0,
 	"ERROR":   1,
@@ -96,9 +93,8 @@ var Diagnostic_Kind_value = map[string]int32{
 func (x Diagnostic_Kind) String() string {
 	return proto.EnumName(Diagnostic_Kind_name, int32(x))
 }
-
 func (Diagnostic_Kind) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{2, 0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{2, 0}
 }
 
 type ConfigFile_FileType int32
@@ -136,7 +132,6 @@ var ConfigFile_FileType_name = map[int32]string{
 	4: "FILE_DESCRIPTOR_SET_PROTO",
 	6: "PROTO_FILE",
 }
-
 var ConfigFile_FileType_value = map[string]int32{
 	"FILE_TYPE_UNSPECIFIED":     0,
 	"SERVICE_CONFIG_YAML":       1,
@@ -149,9 +144,8 @@ var ConfigFile_FileType_value = map[string]int32{
 func (x ConfigFile_FileType) String() string {
 	return proto.EnumName(ConfigFile_FileType_name, int32(x))
 }
-
 func (ConfigFile_FileType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{4, 0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{4, 0}
 }
 
 // Status of a Rollout.
@@ -185,7 +179,6 @@ var Rollout_RolloutStatus_name = map[int32]string{
 	5: "PENDING",
 	6: "FAILED_ROLLED_BACK",
 }
-
 var Rollout_RolloutStatus_value = map[string]int32{
 	"ROLLOUT_STATUS_UNSPECIFIED": 0,
 	"IN_PROGRESS":                1,
@@ -199,9 +192,8 @@ var Rollout_RolloutStatus_value = map[string]int32{
 func (x Rollout_RolloutStatus) String() string {
 	return proto.EnumName(Rollout_RolloutStatus_name, int32(x))
 }
-
 func (Rollout_RolloutStatus) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{7, 0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{7, 0}
 }
 
 // The full representation of a Service that is managed by
@@ -221,7 +213,7 @@ func (m *ManagedService) Reset()         { *m = ManagedService{} }
 func (m *ManagedService) String() string { return proto.CompactTextString(m) }
 func (*ManagedService) ProtoMessage()    {}
 func (*ManagedService) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{0}
 }
 func (m *ManagedService) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ManagedService.Unmarshal(m, b)
@@ -229,8 +221,8 @@ func (m *ManagedService) XXX_Unmarshal(b []byte) error {
 func (m *ManagedService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ManagedService.Marshal(b, m, deterministic)
 }
-func (m *ManagedService) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ManagedService.Merge(m, src)
+func (dst *ManagedService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ManagedService.Merge(dst, src)
 }
 func (m *ManagedService) XXX_Size() int {
 	return xxx_messageInfo_ManagedService.Size(m)
@@ -275,7 +267,7 @@ func (m *OperationMetadata) Reset()         { *m = OperationMetadata{} }
 func (m *OperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*OperationMetadata) ProtoMessage()    {}
 func (*OperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{1}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{1}
 }
 func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationMetadata.Unmarshal(m, b)
@@ -283,8 +275,8 @@ func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *OperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *OperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationMetadata.Merge(m, src)
+func (dst *OperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationMetadata.Merge(dst, src)
 }
 func (m *OperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_OperationMetadata.Size(m)
@@ -338,7 +330,7 @@ func (m *OperationMetadata_Step) Reset()         { *m = OperationMetadata_Step{}
 func (m *OperationMetadata_Step) String() string { return proto.CompactTextString(m) }
 func (*OperationMetadata_Step) ProtoMessage()    {}
 func (*OperationMetadata_Step) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{1, 0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{1, 0}
 }
 func (m *OperationMetadata_Step) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationMetadata_Step.Unmarshal(m, b)
@@ -346,8 +338,8 @@ func (m *OperationMetadata_Step) XXX_Unmarshal(b []byte) error {
 func (m *OperationMetadata_Step) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationMetadata_Step.Marshal(b, m, deterministic)
 }
-func (m *OperationMetadata_Step) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationMetadata_Step.Merge(m, src)
+func (dst *OperationMetadata_Step) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationMetadata_Step.Merge(dst, src)
 }
 func (m *OperationMetadata_Step) XXX_Size() int {
 	return xxx_messageInfo_OperationMetadata_Step.Size(m)
@@ -389,7 +381,7 @@ func (m *Diagnostic) Reset()         { *m = Diagnostic{} }
 func (m *Diagnostic) String() string { return proto.CompactTextString(m) }
 func (*Diagnostic) ProtoMessage()    {}
 func (*Diagnostic) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{2}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{2}
 }
 func (m *Diagnostic) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Diagnostic.Unmarshal(m, b)
@@ -397,8 +389,8 @@ func (m *Diagnostic) XXX_Unmarshal(b []byte) error {
 func (m *Diagnostic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Diagnostic.Marshal(b, m, deterministic)
 }
-func (m *Diagnostic) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Diagnostic.Merge(m, src)
+func (dst *Diagnostic) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Diagnostic.Merge(dst, src)
 }
 func (m *Diagnostic) XXX_Size() int {
 	return xxx_messageInfo_Diagnostic.Size(m)
@@ -449,7 +441,7 @@ func (m *ConfigSource) Reset()         { *m = ConfigSource{} }
 func (m *ConfigSource) String() string { return proto.CompactTextString(m) }
 func (*ConfigSource) ProtoMessage()    {}
 func (*ConfigSource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{3}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{3}
 }
 func (m *ConfigSource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ConfigSource.Unmarshal(m, b)
@@ -457,8 +449,8 @@ func (m *ConfigSource) XXX_Unmarshal(b []byte) error {
 func (m *ConfigSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ConfigSource.Marshal(b, m, deterministic)
 }
-func (m *ConfigSource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigSource.Merge(m, src)
+func (dst *ConfigSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigSource.Merge(dst, src)
 }
 func (m *ConfigSource) XXX_Size() int {
 	return xxx_messageInfo_ConfigSource.Size(m)
@@ -500,7 +492,7 @@ func (m *ConfigFile) Reset()         { *m = ConfigFile{} }
 func (m *ConfigFile) String() string { return proto.CompactTextString(m) }
 func (*ConfigFile) ProtoMessage()    {}
 func (*ConfigFile) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{4}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{4}
 }
 func (m *ConfigFile) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ConfigFile.Unmarshal(m, b)
@@ -508,8 +500,8 @@ func (m *ConfigFile) XXX_Unmarshal(b []byte) error {
 func (m *ConfigFile) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ConfigFile.Marshal(b, m, deterministic)
 }
-func (m *ConfigFile) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigFile.Merge(m, src)
+func (dst *ConfigFile) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigFile.Merge(dst, src)
 }
 func (m *ConfigFile) XXX_Size() int {
 	return xxx_messageInfo_ConfigFile.Size(m)
@@ -555,7 +547,7 @@ func (m *ConfigRef) Reset()         { *m = ConfigRef{} }
 func (m *ConfigRef) String() string { return proto.CompactTextString(m) }
 func (*ConfigRef) ProtoMessage()    {}
 func (*ConfigRef) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{5}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{5}
 }
 func (m *ConfigRef) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ConfigRef.Unmarshal(m, b)
@@ -563,8 +555,8 @@ func (m *ConfigRef) XXX_Unmarshal(b []byte) error {
 func (m *ConfigRef) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ConfigRef.Marshal(b, m, deterministic)
 }
-func (m *ConfigRef) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigRef.Merge(m, src)
+func (dst *ConfigRef) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigRef.Merge(dst, src)
 }
 func (m *ConfigRef) XXX_Size() int {
 	return xxx_messageInfo_ConfigRef.Size(m)
@@ -602,7 +594,7 @@ func (m *ChangeReport) Reset()         { *m = ChangeReport{} }
 func (m *ChangeReport) String() string { return proto.CompactTextString(m) }
 func (*ChangeReport) ProtoMessage()    {}
 func (*ChangeReport) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{6}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{6}
 }
 func (m *ChangeReport) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ChangeReport.Unmarshal(m, b)
@@ -610,8 +602,8 @@ func (m *ChangeReport) XXX_Unmarshal(b []byte) error {
 func (m *ChangeReport) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ChangeReport.Marshal(b, m, deterministic)
 }
-func (m *ChangeReport) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ChangeReport.Merge(m, src)
+func (dst *ChangeReport) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ChangeReport.Merge(dst, src)
 }
 func (m *ChangeReport) XXX_Size() int {
 	return xxx_messageInfo_ChangeReport.Size(m)
@@ -669,7 +661,7 @@ func (m *Rollout) Reset()         { *m = Rollout{} }
 func (m *Rollout) String() string { return proto.CompactTextString(m) }
 func (*Rollout) ProtoMessage()    {}
 func (*Rollout) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{7}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{7}
 }
 func (m *Rollout) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Rollout.Unmarshal(m, b)
@@ -677,8 +669,8 @@ func (m *Rollout) XXX_Unmarshal(b []byte) error {
 func (m *Rollout) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Rollout.Marshal(b, m, deterministic)
 }
-func (m *Rollout) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Rollout.Merge(m, src)
+func (dst *Rollout) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Rollout.Merge(dst, src)
 }
 func (m *Rollout) XXX_Size() int {
 	return xxx_messageInfo_Rollout.Size(m)
@@ -879,7 +871,7 @@ func (m *Rollout_TrafficPercentStrategy) Reset()         { *m = Rollout_TrafficP
 func (m *Rollout_TrafficPercentStrategy) String() string { return proto.CompactTextString(m) }
 func (*Rollout_TrafficPercentStrategy) ProtoMessage()    {}
 func (*Rollout_TrafficPercentStrategy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{7, 0}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{7, 0}
 }
 func (m *Rollout_TrafficPercentStrategy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Rollout_TrafficPercentStrategy.Unmarshal(m, b)
@@ -887,8 +879,8 @@ func (m *Rollout_TrafficPercentStrategy) XXX_Unmarshal(b []byte) error {
 func (m *Rollout_TrafficPercentStrategy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Rollout_TrafficPercentStrategy.Marshal(b, m, deterministic)
 }
-func (m *Rollout_TrafficPercentStrategy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Rollout_TrafficPercentStrategy.Merge(m, src)
+func (dst *Rollout_TrafficPercentStrategy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Rollout_TrafficPercentStrategy.Merge(dst, src)
 }
 func (m *Rollout_TrafficPercentStrategy) XXX_Size() int {
 	return xxx_messageInfo_Rollout_TrafficPercentStrategy.Size(m)
@@ -918,7 +910,7 @@ func (m *Rollout_DeleteServiceStrategy) Reset()         { *m = Rollout_DeleteSer
 func (m *Rollout_DeleteServiceStrategy) String() string { return proto.CompactTextString(m) }
 func (*Rollout_DeleteServiceStrategy) ProtoMessage()    {}
 func (*Rollout_DeleteServiceStrategy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_16a1de86d13c4f21, []int{7, 1}
+	return fileDescriptor_resources_3e116fd147dc632b, []int{7, 1}
 }
 func (m *Rollout_DeleteServiceStrategy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Rollout_DeleteServiceStrategy.Unmarshal(m, b)
@@ -926,8 +918,8 @@ func (m *Rollout_DeleteServiceStrategy) XXX_Unmarshal(b []byte) error {
 func (m *Rollout_DeleteServiceStrategy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Rollout_DeleteServiceStrategy.Marshal(b, m, deterministic)
 }
-func (m *Rollout_DeleteServiceStrategy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Rollout_DeleteServiceStrategy.Merge(m, src)
+func (dst *Rollout_DeleteServiceStrategy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Rollout_DeleteServiceStrategy.Merge(dst, src)
 }
 func (m *Rollout_DeleteServiceStrategy) XXX_Size() int {
 	return xxx_messageInfo_Rollout_DeleteServiceStrategy.Size(m)
@@ -958,10 +950,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/api/servicemanagement/v1/resources.proto", fileDescriptor_16a1de86d13c4f21)
+	proto.RegisterFile("google/api/servicemanagement/v1/resources.proto", fileDescriptor_resources_3e116fd147dc632b)
 }
 
-var fileDescriptor_16a1de86d13c4f21 = []byte{
+var fileDescriptor_resources_3e116fd147dc632b = []byte{
 	// 1234 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x56, 0xef, 0x8e, 0xdb, 0x44,
 	0x10, 0xaf, 0xf3, 0xef, 0x2e, 0x93, 0xbb, 0xe0, 0x6e, 0x69, 0x2f, 0x0d, 0xfd, 0x73, 0x4d, 0x85,

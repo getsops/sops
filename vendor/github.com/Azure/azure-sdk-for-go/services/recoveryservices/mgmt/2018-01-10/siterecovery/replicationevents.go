@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewReplicationEventsClientWithBaseURI(baseURI string, subscriptionID string
 // Parameters:
 // eventName - the name of the Azure Site Recovery event.
 func (client ReplicationEventsClient) Get(ctx context.Context, eventName string) (result Event, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationEventsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, eventName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationEventsClient", "Get", nil, "Failure preparing request")
@@ -110,6 +121,16 @@ func (client ReplicationEventsClient) GetResponder(resp *http.Response) (result 
 // Parameters:
 // filter - oData filter options.
 func (client ReplicationEventsClient) List(ctx context.Context, filter string) (result EventCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationEventsClient.List")
+		defer func() {
+			sc := -1
+			if result.ec.Response.Response != nil {
+				sc = result.ec.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter)
 	if err != nil {
@@ -177,8 +198,8 @@ func (client ReplicationEventsClient) ListResponder(resp *http.Response) (result
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationEventsClient) listNextResults(lastResults EventCollection) (result EventCollection, err error) {
-	req, err := lastResults.eventCollectionPreparer()
+func (client ReplicationEventsClient) listNextResults(ctx context.Context, lastResults EventCollection) (result EventCollection, err error) {
+	req, err := lastResults.eventCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationEventsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -199,6 +220,16 @@ func (client ReplicationEventsClient) listNextResults(lastResults EventCollectio
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationEventsClient) ListComplete(ctx context.Context, filter string) (result EventCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationEventsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter)
 	return
 }

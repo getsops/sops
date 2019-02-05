@@ -14,7 +14,7 @@
   "basePath": "",
   "baseUrl": "https://genomics.googleapis.com/",
   "batchPath": "batch",
-  "description": "Upload, process, query, and search Genomics data in the cloud.",
+  "description": "Uploads, processes, queries, and searches Genomics data in the cloud.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/genomics",
   "fullyEncodeReservedExpansion": true,
@@ -109,7 +109,7 @@
     "pipelines": {
       "methods": {
         "run": {
-          "description": "Runs a pipeline.\n\n**Note:** Before you can use this method, the Genomics Service Agent\nmust have access to your project. This is done automatically when the\nCloud Genomics API is first enabled, but if you delete this permission,\nor if you enabled the Cloud Genomics API before the v2alpha1 API\nlaunch, you must disable and re-enable the API to grant the Genomics\nService Agent the required permissions.\n\n[1]: /genomics/gsa",
+          "description": "Runs a pipeline.\n\n**Note:** Before you can use this method, the Genomics Service Agent\nmust have access to your project. This is done automatically when the\nCloud Genomics API is first enabled, but if you delete this permission,\nor if you enabled the Cloud Genomics API before the v2alpha1 API\nlaunch, you must disable and re-enable the API to grant the Genomics\nService Agent the required permissions.\nAuthorization requires the following [Google\nIAM](https://cloud.google.com/iam/) permission:\n\n* `genomics.operations.create`\n\n[1]: /genomics/gsa",
           "flatPath": "v2alpha1/pipelines:run",
           "httpMethod": "POST",
           "id": "genomics.pipelines.run",
@@ -134,7 +134,7 @@
         "operations": {
           "methods": {
             "cancel": {
-              "description": "Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. Clients may use Operations.GetOperation or Operations.ListOperations to check whether the cancellation succeeded or the operation completed despite cancellation.",
+              "description": "Starts asynchronous cancellation on a long-running operation.\nThe server makes a best effort to cancel the operation, but success is not\nguaranteed. Clients may use Operations.GetOperation\nor Operations.ListOperations\nto check whether the cancellation succeeded or the operation completed\ndespite cancellation.\nAuthorization requires the following [Google IAM](https://cloud.google.com/iam) permission\u0026#58;\n\n* `genomics.operations.cancel`",
               "flatPath": "v2alpha1/projects/{projectsId}/operations/{operationsId}:cancel",
               "httpMethod": "POST",
               "id": "genomics.projects.operations.cancel",
@@ -163,7 +163,7 @@
               ]
             },
             "get": {
-              "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
+              "description": "Gets the latest state of a long-running operation.\nClients can use this method to poll the operation result at intervals as\nrecommended by the API service.\nAuthorization requires the following [Google IAM](https://cloud.google.com/iam) permission\u0026#58;\n\n* `genomics.operations.get`",
               "flatPath": "v2alpha1/projects/{projectsId}/operations/{operationsId}",
               "httpMethod": "GET",
               "id": "genomics.projects.operations.get",
@@ -189,7 +189,7 @@
               ]
             },
             "list": {
-              "description": "Lists operations that match the specified filter in the request.",
+              "description": "Lists operations that match the specified filter in the request.\nAuthorization requires the following [Google IAM](https://cloud.google.com/iam) permission\u0026#58;\n\n* `genomics.operations.list`",
               "flatPath": "v2alpha1/projects/{projectsId}/operations",
               "httpMethod": "GET",
               "id": "genomics.projects.operations.list",
@@ -267,7 +267,7 @@
       }
     }
   },
-  "revision": "20180905",
+  "revision": "20181127",
   "rootUrl": "https://genomics.googleapis.com/",
   "schemas": {
     "Accelerator": {
@@ -1131,7 +1131,7 @@
           "type": "object"
         },
         "machineType": {
-          "description": "The machine type of the virtual machine to create. Must be the short name\nof a standard machine type (such as \"n1-standard-1\") or a custom machine\ntype (such as \"custom-1-4096\").",
+          "description": "The machine type of the virtual machine to create. Must be the short name\nof a standard machine type (such as \"n1-standard-1\") or a custom machine\ntype (such as \"custom-1-4096\", where \"1\" indicates the number of vCPUs and\n\"4096\" indicates the memory in MB). See\n[Creating an instance with a custom machine\ntype](https://cloud.google.com/compute/docs/instances/creating-instance-with-custom-machine-type#create)\nfor more specifications on creating a custom machine type.",
           "type": "string"
         },
         "network": {

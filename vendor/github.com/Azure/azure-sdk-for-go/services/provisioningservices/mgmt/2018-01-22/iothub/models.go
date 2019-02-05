@@ -18,13 +18,18 @@ package iothub
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/provisioningservices/mgmt/2018-01-22/iothub"
 
 // AccessRightsDescription enumerates the values for access rights description.
 type AccessRightsDescription string
@@ -233,14 +238,14 @@ type ErrorMesssage struct {
 	Details *string `json:"details,omitempty"`
 }
 
-// IotDpsPropertiesDescription the service specific properties of a provisoning service, including keys, linked iot
-// hubs, current state, and system generated properties such as hostname and idScope
+// IotDpsPropertiesDescription the service specific properties of a provisioning service, including keys,
+// linked iot hubs, current state, and system generated properties such as hostname and idScope
 type IotDpsPropertiesDescription struct {
 	// State - Current state of the provisioning service. Possible values include: 'Activating', 'Active', 'Deleting', 'Deleted', 'ActivationFailed', 'DeletionFailed', 'Transitioning', 'Suspending', 'Suspended', 'Resuming', 'FailingOver', 'FailoverFailed'
 	State State `json:"state,omitempty"`
 	// ProvisioningState - The ARM provisioning state of the provisioning service.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
-	// IotHubs - List of IoT hubs assosciated with this provisioning service.
+	// IotHubs - List of IoT hubs associated with this provisioning service.
 	IotHubs *[]DefinitionDescription `json:"iotHubs,omitempty"`
 	// AllocationPolicy - Allocation policy to be used by this provisioning service. Possible values include: 'Hashed', 'GeoLatency', 'Static'
 	AllocationPolicy AllocationPolicy `json:"allocationPolicy,omitempty"`
@@ -254,8 +259,8 @@ type IotDpsPropertiesDescription struct {
 	AuthorizationPolicies *[]SharedAccessSignatureAuthorizationRuleAccessRightsDescription `json:"authorizationPolicies,omitempty"`
 }
 
-// IotDpsResourceCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// IotDpsResourceCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type IotDpsResourceCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -283,7 +288,8 @@ func (future *IotDpsResourceCreateOrUpdateFuture) Result(client IotDpsResourceCl
 	return
 }
 
-// IotDpsResourceDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// IotDpsResourceDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type IotDpsResourceDeleteFuture struct {
 	azure.Future
 }
@@ -305,7 +311,8 @@ func (future *IotDpsResourceDeleteFuture) Result(client IotDpsResourceClient) (a
 	return
 }
 
-// IotDpsResourceUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// IotDpsResourceUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type IotDpsResourceUpdateFuture struct {
 	azure.Future
 }
@@ -333,7 +340,7 @@ func (future *IotDpsResourceUpdateFuture) Result(client IotDpsResourceClient) (p
 	return
 }
 
-// IotDpsSkuDefinition available Sku's of tier and units.
+// IotDpsSkuDefinition available SKUs of tier and units.
 type IotDpsSkuDefinition struct {
 	// Name - Sku name. Possible values include: 'S1'
 	Name IotDpsSku `json:"name,omitempty"`
@@ -342,32 +349,50 @@ type IotDpsSkuDefinition struct {
 // IotDpsSkuDefinitionListResult list of available SKUs.
 type IotDpsSkuDefinitionListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The list of SKU's
+	// Value - The list of SKUs
 	Value *[]IotDpsSkuDefinition `json:"value,omitempty"`
 	// NextLink - The next link.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// IotDpsSkuDefinitionListResultIterator provides access to a complete listing of IotDpsSkuDefinition values.
+// IotDpsSkuDefinitionListResultIterator provides access to a complete listing of IotDpsSkuDefinition
+// values.
 type IotDpsSkuDefinitionListResultIterator struct {
 	i    int
 	page IotDpsSkuDefinitionListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IotDpsSkuDefinitionListResultIterator) Next() error {
+func (iter *IotDpsSkuDefinitionListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotDpsSkuDefinitionListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *IotDpsSkuDefinitionListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -389,6 +414,11 @@ func (iter IotDpsSkuDefinitionListResultIterator) Value() IotDpsSkuDefinition {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the IotDpsSkuDefinitionListResultIterator type.
+func NewIotDpsSkuDefinitionListResultIterator(page IotDpsSkuDefinitionListResultPage) IotDpsSkuDefinitionListResultIterator {
+	return IotDpsSkuDefinitionListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (idsdlr IotDpsSkuDefinitionListResult) IsEmpty() bool {
 	return idsdlr.Value == nil || len(*idsdlr.Value) == 0
@@ -396,11 +426,11 @@ func (idsdlr IotDpsSkuDefinitionListResult) IsEmpty() bool {
 
 // iotDpsSkuDefinitionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (idsdlr IotDpsSkuDefinitionListResult) iotDpsSkuDefinitionListResultPreparer() (*http.Request, error) {
+func (idsdlr IotDpsSkuDefinitionListResult) iotDpsSkuDefinitionListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if idsdlr.NextLink == nil || len(to.String(idsdlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(idsdlr.NextLink)))
@@ -408,19 +438,36 @@ func (idsdlr IotDpsSkuDefinitionListResult) iotDpsSkuDefinitionListResultPrepare
 
 // IotDpsSkuDefinitionListResultPage contains a page of IotDpsSkuDefinition values.
 type IotDpsSkuDefinitionListResultPage struct {
-	fn     func(IotDpsSkuDefinitionListResult) (IotDpsSkuDefinitionListResult, error)
+	fn     func(context.Context, IotDpsSkuDefinitionListResult) (IotDpsSkuDefinitionListResult, error)
 	idsdlr IotDpsSkuDefinitionListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IotDpsSkuDefinitionListResultPage) Next() error {
-	next, err := page.fn(page.idsdlr)
+func (page *IotDpsSkuDefinitionListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotDpsSkuDefinitionListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.idsdlr)
 	if err != nil {
 		return err
 	}
 	page.idsdlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *IotDpsSkuDefinitionListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -441,7 +488,12 @@ func (page IotDpsSkuDefinitionListResultPage) Values() []IotDpsSkuDefinition {
 	return *page.idsdlr.Value
 }
 
-// IotDpsSkuInfo list of possible provisoning service SKUs.
+// Creates a new instance of the IotDpsSkuDefinitionListResultPage type.
+func NewIotDpsSkuDefinitionListResultPage(getNextPage func(context.Context, IotDpsSkuDefinitionListResult) (IotDpsSkuDefinitionListResult, error)) IotDpsSkuDefinitionListResultPage {
+	return IotDpsSkuDefinitionListResultPage{fn: getNextPage}
+}
+
+// IotDpsSkuInfo list of possible provisioning service SKUs.
 type IotDpsSkuInfo struct {
 	// Name - Sku name. Possible values include: 'S1'
 	Name IotDpsSku `json:"name,omitempty"`
@@ -458,7 +510,7 @@ type NameAvailabilityInfo struct {
 	NameAvailable *bool `json:"nameAvailable,omitempty"`
 	// Reason - specifies the reason a name is unavailable. Possible values include: 'Invalid', 'AlreadyExists'
 	Reason NameUnavailabilityReason `json:"reason,omitempty"`
-	// Message - message containing a etailed reason name is unavailable
+	// Message - message containing a detailed reason name is unavailable
 	Message *string `json:"message,omitempty"`
 }
 
@@ -486,8 +538,8 @@ type OperationInputs struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// OperationListResult result of the request to list IoT Hub operations. It contains a list of operations and a URL
-// link to get the next set of results.
+// OperationListResult result of the request to list IoT Hub operations. It contains a list of operations
+// and a URL link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of IoT Hub operations supported by the Microsoft.Devices resource provider.
@@ -502,20 +554,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -537,6 +606,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -544,11 +618,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -556,19 +630,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -587,6 +678,11 @@ func (page OperationListResultPage) Values() []Operation {
 		return nil
 	}
 	return *page.olr.Value
+}
+
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
 }
 
 // ProvisioningServiceDescription the description of the provisioning service.
@@ -656,20 +752,37 @@ type ProvisioningServiceDescriptionListResultIterator struct {
 	page ProvisioningServiceDescriptionListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProvisioningServiceDescriptionListResultIterator) Next() error {
+func (iter *ProvisioningServiceDescriptionListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProvisioningServiceDescriptionListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProvisioningServiceDescriptionListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -691,6 +804,11 @@ func (iter ProvisioningServiceDescriptionListResultIterator) Value() Provisionin
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProvisioningServiceDescriptionListResultIterator type.
+func NewProvisioningServiceDescriptionListResultIterator(page ProvisioningServiceDescriptionListResultPage) ProvisioningServiceDescriptionListResultIterator {
+	return ProvisioningServiceDescriptionListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (psdlr ProvisioningServiceDescriptionListResult) IsEmpty() bool {
 	return psdlr.Value == nil || len(*psdlr.Value) == 0
@@ -698,11 +816,11 @@ func (psdlr ProvisioningServiceDescriptionListResult) IsEmpty() bool {
 
 // provisioningServiceDescriptionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (psdlr ProvisioningServiceDescriptionListResult) provisioningServiceDescriptionListResultPreparer() (*http.Request, error) {
+func (psdlr ProvisioningServiceDescriptionListResult) provisioningServiceDescriptionListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if psdlr.NextLink == nil || len(to.String(psdlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(psdlr.NextLink)))
@@ -710,19 +828,36 @@ func (psdlr ProvisioningServiceDescriptionListResult) provisioningServiceDescrip
 
 // ProvisioningServiceDescriptionListResultPage contains a page of ProvisioningServiceDescription values.
 type ProvisioningServiceDescriptionListResultPage struct {
-	fn    func(ProvisioningServiceDescriptionListResult) (ProvisioningServiceDescriptionListResult, error)
+	fn    func(context.Context, ProvisioningServiceDescriptionListResult) (ProvisioningServiceDescriptionListResult, error)
 	psdlr ProvisioningServiceDescriptionListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProvisioningServiceDescriptionListResultPage) Next() error {
-	next, err := page.fn(page.psdlr)
+func (page *ProvisioningServiceDescriptionListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProvisioningServiceDescriptionListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.psdlr)
 	if err != nil {
 		return err
 	}
 	page.psdlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProvisioningServiceDescriptionListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -741,6 +876,11 @@ func (page ProvisioningServiceDescriptionListResultPage) Values() []Provisioning
 		return nil
 	}
 	return *page.psdlr.Value
+}
+
+// Creates a new instance of the ProvisioningServiceDescriptionListResultPage type.
+func NewProvisioningServiceDescriptionListResultPage(getNextPage func(context.Context, ProvisioningServiceDescriptionListResult) (ProvisioningServiceDescriptionListResult, error)) ProvisioningServiceDescriptionListResultPage {
+	return ProvisioningServiceDescriptionListResultPage{fn: getNextPage}
 }
 
 // Resource the common properties of an Azure resource.
@@ -807,20 +947,37 @@ type SharedAccessSignatureAuthorizationRuleListResultIterator struct {
 	page SharedAccessSignatureAuthorizationRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *SharedAccessSignatureAuthorizationRuleListResultIterator) Next() error {
+func (iter *SharedAccessSignatureAuthorizationRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SharedAccessSignatureAuthorizationRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *SharedAccessSignatureAuthorizationRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -842,6 +999,11 @@ func (iter SharedAccessSignatureAuthorizationRuleListResultIterator) Value() Sha
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the SharedAccessSignatureAuthorizationRuleListResultIterator type.
+func NewSharedAccessSignatureAuthorizationRuleListResultIterator(page SharedAccessSignatureAuthorizationRuleListResultPage) SharedAccessSignatureAuthorizationRuleListResultIterator {
+	return SharedAccessSignatureAuthorizationRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (sasarlr SharedAccessSignatureAuthorizationRuleListResult) IsEmpty() bool {
 	return sasarlr.Value == nil || len(*sasarlr.Value) == 0
@@ -849,11 +1011,11 @@ func (sasarlr SharedAccessSignatureAuthorizationRuleListResult) IsEmpty() bool {
 
 // sharedAccessSignatureAuthorizationRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sasarlr SharedAccessSignatureAuthorizationRuleListResult) sharedAccessSignatureAuthorizationRuleListResultPreparer() (*http.Request, error) {
+func (sasarlr SharedAccessSignatureAuthorizationRuleListResult) sharedAccessSignatureAuthorizationRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if sasarlr.NextLink == nil || len(to.String(sasarlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sasarlr.NextLink)))
@@ -862,19 +1024,36 @@ func (sasarlr SharedAccessSignatureAuthorizationRuleListResult) sharedAccessSign
 // SharedAccessSignatureAuthorizationRuleListResultPage contains a page of
 // SharedAccessSignatureAuthorizationRuleAccessRightsDescription values.
 type SharedAccessSignatureAuthorizationRuleListResultPage struct {
-	fn      func(SharedAccessSignatureAuthorizationRuleListResult) (SharedAccessSignatureAuthorizationRuleListResult, error)
+	fn      func(context.Context, SharedAccessSignatureAuthorizationRuleListResult) (SharedAccessSignatureAuthorizationRuleListResult, error)
 	sasarlr SharedAccessSignatureAuthorizationRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *SharedAccessSignatureAuthorizationRuleListResultPage) Next() error {
-	next, err := page.fn(page.sasarlr)
+func (page *SharedAccessSignatureAuthorizationRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SharedAccessSignatureAuthorizationRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sasarlr)
 	if err != nil {
 		return err
 	}
 	page.sasarlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *SharedAccessSignatureAuthorizationRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -893,6 +1072,11 @@ func (page SharedAccessSignatureAuthorizationRuleListResultPage) Values() []Shar
 		return nil
 	}
 	return *page.sasarlr.Value
+}
+
+// Creates a new instance of the SharedAccessSignatureAuthorizationRuleListResultPage type.
+func NewSharedAccessSignatureAuthorizationRuleListResultPage(getNextPage func(context.Context, SharedAccessSignatureAuthorizationRuleListResult) (SharedAccessSignatureAuthorizationRuleListResult, error)) SharedAccessSignatureAuthorizationRuleListResultPage {
+	return SharedAccessSignatureAuthorizationRuleListResultPage{fn: getNextPage}
 }
 
 // TagsResource a container holding only the Tags for a resource, allowing the user to update the tags on a

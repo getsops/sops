@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/maps/mgmt/2018-05-01/maps"
+
 // KeyType enumerates the values for key type.
 type KeyType string
 
@@ -46,6 +49,8 @@ type Account struct {
 	Tags map[string]*string `json:"tags"`
 	// Sku - The SKU of this account.
 	Sku *Sku `json:"sku,omitempty"`
+	// Properties - The map account properties.
+	Properties *AccountProperties `json:"properties,omitempty"`
 	// ID - The fully qualified Maps Account resource identifier.
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the Maps Account, which is unique within a Resource Group.
@@ -65,6 +70,9 @@ func (a Account) MarshalJSON() ([]byte, error) {
 	}
 	if a.Sku != nil {
 		objectMap["sku"] = a.Sku
+	}
+	if a.Properties != nil {
+		objectMap["properties"] = a.Properties
 	}
 	if a.ID != nil {
 		objectMap["id"] = a.ID
@@ -103,8 +111,8 @@ func (acp AccountCreateParameters) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// AccountKeys the set of keys which can be used to access the Maps REST APIs. Two keys are provided for key
-// rotation without interruption.
+// AccountKeys the set of keys which can be used to access the Maps REST APIs. Two keys are provided for
+// key rotation without interruption.
 type AccountKeys struct {
 	autorest.Response `json:"-"`
 	// ID - The full Azure resource identifier of the Maps Account.
@@ -113,6 +121,12 @@ type AccountKeys struct {
 	PrimaryKey *string `json:"primaryKey,omitempty"`
 	// SecondaryKey - The secondary key for accessing the Maps REST APIs.
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
+}
+
+// AccountProperties additional Map account properties
+type AccountProperties struct {
+	// XMsClientID - A unique identifier for the maps account
+	XMsClientID *string `json:"x-ms-client-id,omitempty"`
 }
 
 // Accounts a list of Maps Accounts.

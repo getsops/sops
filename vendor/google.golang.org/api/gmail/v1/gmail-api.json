@@ -3,7 +3,7 @@
     "oauth2": {
       "scopes": {
         "https://mail.google.com/": {
-          "description": "Read, send, delete, and manage your email"
+          "description": "Read, compose, send, and permanently delete all your email from Gmail"
         },
         "https://www.googleapis.com/auth/gmail.compose": {
           "description": "Manage drafts and send emails"
@@ -41,7 +41,7 @@
   "description": "Access Gmail mailboxes including sending user email.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/gmail/api/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/6MVOLkrACdE8trspKIAVVfI4jS8\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/C1Dpv0M-a8gZVEWjLT9bswOOUHY\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/googlemail-16.png",
     "x32": "https://www.google.com/images/icons/product/googlemail-32.png"
@@ -2502,7 +2502,7 @@
       }
     }
   },
-  "revision": "20180821",
+  "revision": "20190120",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AutoForwarding": {
@@ -2579,7 +2579,7 @@
       "type": "object"
     },
     "Delegate": {
-      "description": "Settings for a delegate. Delegates can read, send, and delete messages, as well as manage contacts, for the delegator's account. See \"Set up mail delegation\" for more information about delegates.",
+      "description": "Settings for a delegate. Delegates can read, send, and delete messages, as well as view and add contacts, for the delegator's account. See \"Set up mail delegation\" for more information about delegates.",
       "id": "Delegate",
       "properties": {
         "delegateEmail": {
@@ -3100,7 +3100,7 @@
       "id": "ListMessagesResponse",
       "properties": {
         "messages": {
-          "description": "List of messages.",
+          "description": "List of messages. Note that each message resource contains only an id and a threadId. Additional message details can be fetched using the messages.get method.",
           "items": {
             "$ref": "Message"
           },
@@ -3158,7 +3158,7 @@
           "type": "integer"
         },
         "threads": {
-          "description": "List of threads.",
+          "description": "List of threads. Note that each thread resource does not contain a list of messages. The list of messages for a given thread can be fetched using the threads.get method.",
           "items": {
             "$ref": "Thread"
           },

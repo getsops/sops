@@ -41,7 +41,6 @@ var ScanRun_ExecutionState_name = map[int32]string{
 	2: "SCANNING",
 	3: "FINISHED",
 }
-
 var ScanRun_ExecutionState_value = map[string]int32{
 	"EXECUTION_STATE_UNSPECIFIED": 0,
 	"QUEUED":                      1,
@@ -52,9 +51,8 @@ var ScanRun_ExecutionState_value = map[string]int32{
 func (x ScanRun_ExecutionState) String() string {
 	return proto.EnumName(ScanRun_ExecutionState_name, int32(x))
 }
-
 func (ScanRun_ExecutionState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_d1e91fc2897e59cf, []int{0, 0}
+	return fileDescriptor_scan_run_8ce9e7c54bb44c79, []int{0, 0}
 }
 
 // Types of ScanRun result state.
@@ -78,7 +76,6 @@ var ScanRun_ResultState_name = map[int32]string{
 	2: "ERROR",
 	3: "KILLED",
 }
-
 var ScanRun_ResultState_value = map[string]int32{
 	"RESULT_STATE_UNSPECIFIED": 0,
 	"SUCCESS":                  1,
@@ -89,9 +86,8 @@ var ScanRun_ResultState_value = map[string]int32{
 func (x ScanRun_ResultState) String() string {
 	return proto.EnumName(ScanRun_ResultState_name, int32(x))
 }
-
 func (ScanRun_ResultState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_d1e91fc2897e59cf, []int{0, 1}
+	return fileDescriptor_scan_run_8ce9e7c54bb44c79, []int{0, 1}
 }
 
 // A ScanRun is a output-only resource representing an actual run of the scan.
@@ -143,7 +139,7 @@ func (m *ScanRun) Reset()         { *m = ScanRun{} }
 func (m *ScanRun) String() string { return proto.CompactTextString(m) }
 func (*ScanRun) ProtoMessage()    {}
 func (*ScanRun) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d1e91fc2897e59cf, []int{0}
+	return fileDescriptor_scan_run_8ce9e7c54bb44c79, []int{0}
 }
 func (m *ScanRun) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ScanRun.Unmarshal(m, b)
@@ -151,8 +147,8 @@ func (m *ScanRun) XXX_Unmarshal(b []byte) error {
 func (m *ScanRun) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ScanRun.Marshal(b, m, deterministic)
 }
-func (m *ScanRun) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ScanRun.Merge(m, src)
+func (dst *ScanRun) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ScanRun.Merge(dst, src)
 }
 func (m *ScanRun) XXX_Size() int {
 	return xxx_messageInfo_ScanRun.Size(m)
@@ -233,10 +229,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/scan_run.proto", fileDescriptor_d1e91fc2897e59cf)
+	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/scan_run.proto", fileDescriptor_scan_run_8ce9e7c54bb44c79)
 }
 
-var fileDescriptor_d1e91fc2897e59cf = []byte{
+var fileDescriptor_scan_run_8ce9e7c54bb44c79 = []byte{
 	// 547 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0xdd, 0x6e, 0xd3, 0x3c,
 	0x18, 0xfe, 0xb2, 0xad, 0x6b, 0xeb, 0x4e, 0x5b, 0x3e, 0x73, 0x12, 0x8d, 0x49, 0x8b, 0x76, 0x42,

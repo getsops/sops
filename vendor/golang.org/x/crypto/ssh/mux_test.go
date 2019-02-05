@@ -20,7 +20,7 @@ func muxPair() (*mux, *mux) {
 	return s, c
 }
 
-// Returns both ends of a channel, and the mux for the the 2nd
+// Returns both ends of a channel, and the mux for the 2nd
 // channel.
 func channelPair(t *testing.T) (*channel, *channel, *mux) {
 	c, s := muxPair()

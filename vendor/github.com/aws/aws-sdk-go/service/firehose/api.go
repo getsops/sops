@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opCreateDeliveryStream = "CreateDeliveryStream"
@@ -16,7 +18,7 @@ const opCreateDeliveryStream = "CreateDeliveryStream"
 // CreateDeliveryStreamRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDeliveryStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -154,7 +156,7 @@ const opDeleteDeliveryStream = "DeleteDeliveryStream"
 // DeleteDeliveryStreamRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDeliveryStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -188,6 +190,7 @@ func (c *Firehose) DeleteDeliveryStreamRequest(input *DeleteDeliveryStreamInput)
 
 	output = &DeleteDeliveryStreamOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -247,7 +250,7 @@ const opDescribeDeliveryStream = "DescribeDeliveryStream"
 // DescribeDeliveryStreamRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDeliveryStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -329,7 +332,7 @@ const opListDeliveryStreams = "ListDeliveryStreams"
 // ListDeliveryStreamsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeliveryStreams operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -368,15 +371,15 @@ func (c *Firehose) ListDeliveryStreamsRequest(input *ListDeliveryStreamsInput) (
 
 // ListDeliveryStreams API operation for Amazon Kinesis Firehose.
 //
-// Lists your delivery streams.
+// Lists your delivery streams in alphabetical order of their names.
 //
 // The number of delivery streams might be too large to return using a single
 // call to ListDeliveryStreams. You can limit the number of delivery streams
 // returned, using the Limit parameter. To determine whether there are more
 // delivery streams to list, check the value of HasMoreDeliveryStreams in the
 // output. If there are more delivery streams to list, you can request them
-// by specifying the name of the last delivery stream returned in the call in
-// the ExclusiveStartDeliveryStreamName parameter of a subsequent call.
+// by calling this operation again and setting the ExclusiveStartDeliveryStreamName
+// parameter to the name of the last delivery stream returned in the last call.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -411,7 +414,7 @@ const opListTagsForDeliveryStream = "ListTagsForDeliveryStream"
 // ListTagsForDeliveryStreamRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForDeliveryStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -497,7 +500,7 @@ const opPutRecord = "PutRecord"
 // PutRecordRequest generates a "aws/request.Request" representing the
 // client's request for the PutRecord operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -571,6 +574,9 @@ func (c *Firehose) PutRecordRequest(input *PutRecordInput) (req *request.Request
 // to the destination. If the destination is unreachable for more than 24 hours,
 // the data is no longer available.
 //
+// Don't concatenate two or more base64 strings to form the data fields of your
+// records. Instead, concatenate the raw data, then perform base64 encoding.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -618,7 +624,7 @@ const opPutRecordBatch = "PutRecordBatch"
 // PutRecordBatchRequest generates a "aws/request.Request" representing the
 // client's request for the PutRecordBatch operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -685,19 +691,21 @@ func (c *Firehose) PutRecordBatchRequest(input *PutRecordBatchInput) (req *reque
 // data items when reading the data from the destination.
 //
 // The PutRecordBatch response includes a count of failed records, FailedPutCount,
-// and an array of responses, RequestResponses. Each entry in the RequestResponses
-// array provides additional information about the processed record. It directly
-// correlates with a record in the request array using the same ordering, from
-// the top to the bottom. The response array always includes the same number
-// of records as the request array. RequestResponses includes both successfully
-// and unsuccessfully processed records. Kinesis Data Firehose tries to process
-// all records in each PutRecordBatch request. A single record failure does
-// not stop the processing of subsequent records.
+// and an array of responses, RequestResponses. Even if the PutRecordBatch call
+// succeeds, the value of FailedPutCount may be greater than 0, indicating that
+// there are records for which the operation didn't succeed. Each entry in the
+// RequestResponses array provides additional information about the processed
+// record. It directly correlates with a record in the request array using the
+// same ordering, from the top to the bottom. The response array always includes
+// the same number of records as the request array. RequestResponses includes
+// both successfully and unsuccessfully processed records. Kinesis Data Firehose
+// tries to process all records in each PutRecordBatch request. A single record
+// failure does not stop the processing of subsequent records.
 //
 // A successfully processed record includes a RecordId value, which is unique
 // for the record. An unsuccessfully processed record includes ErrorCode and
 // ErrorMessage values. ErrorCode reflects the type of error, and is one of
-// the following values: ServiceUnavailable or InternalFailure. ErrorMessage
+// the following values: ServiceUnavailableException or InternalFailure. ErrorMessage
 // provides more detailed information about the error.
 //
 // If there is an internal server error or a timeout, the write might have completed
@@ -715,6 +723,9 @@ func (c *Firehose) PutRecordBatchRequest(input *PutRecordBatchInput) (req *reque
 // time they are added to a delivery stream as it attempts to send the records
 // to the destination. If the destination is unreachable for more than 24 hours,
 // the data is no longer available.
+//
+// Don't concatenate two or more base64 strings to form the data fields of your
+// records. Instead, concatenate the raw data, then perform base64 encoding.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -758,12 +769,227 @@ func (c *Firehose) PutRecordBatchWithContext(ctx aws.Context, input *PutRecordBa
 	return out, req.Send()
 }
 
+const opStartDeliveryStreamEncryption = "StartDeliveryStreamEncryption"
+
+// StartDeliveryStreamEncryptionRequest generates a "aws/request.Request" representing the
+// client's request for the StartDeliveryStreamEncryption operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartDeliveryStreamEncryption for more information on using the StartDeliveryStreamEncryption
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartDeliveryStreamEncryptionRequest method.
+//    req, resp := client.StartDeliveryStreamEncryptionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/firehose-2015-08-04/StartDeliveryStreamEncryption
+func (c *Firehose) StartDeliveryStreamEncryptionRequest(input *StartDeliveryStreamEncryptionInput) (req *request.Request, output *StartDeliveryStreamEncryptionOutput) {
+	op := &request.Operation{
+		Name:       opStartDeliveryStreamEncryption,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartDeliveryStreamEncryptionInput{}
+	}
+
+	output = &StartDeliveryStreamEncryptionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartDeliveryStreamEncryption API operation for Amazon Kinesis Firehose.
+//
+// Enables server-side encryption (SSE) for the delivery stream.
+//
+// This operation is asynchronous. It returns immediately. When you invoke it,
+// Kinesis Data Firehose first sets the status of the stream to ENABLING, and
+// then to ENABLED. You can continue to read and write data to your stream while
+// its status is ENABLING, but the data is not encrypted. It can take up to
+// 5 seconds after the encryption status changes to ENABLED before all records
+// written to the delivery stream are encrypted. To find out whether a record
+// or a batch of records was encrypted, check the response elements PutRecordOutput$Encrypted
+// and PutRecordBatchOutput$Encrypted, respectively.
+//
+// To check the encryption state of a delivery stream, use DescribeDeliveryStream.
+//
+// You can only enable SSE for a delivery stream that uses DirectPut as its
+// source.
+//
+// The StartDeliveryStreamEncryption and StopDeliveryStreamEncryption operations
+// have a combined limit of 25 calls per delivery stream per 24 hours. For example,
+// you reach the limit if you call StartDeliveryStreamEncryption 13 times and
+// StopDeliveryStreamEncryption 12 times for the same delivery stream in a 24-hour
+// period.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Kinesis Firehose's
+// API operation StartDeliveryStreamEncryption for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource could not be found.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The resource is already in use and not available for this operation.
+//
+//   * ErrCodeInvalidArgumentException "InvalidArgumentException"
+//   The specified input parameter has a value that is not valid.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You have already reached the limit for a requested resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/firehose-2015-08-04/StartDeliveryStreamEncryption
+func (c *Firehose) StartDeliveryStreamEncryption(input *StartDeliveryStreamEncryptionInput) (*StartDeliveryStreamEncryptionOutput, error) {
+	req, out := c.StartDeliveryStreamEncryptionRequest(input)
+	return out, req.Send()
+}
+
+// StartDeliveryStreamEncryptionWithContext is the same as StartDeliveryStreamEncryption with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartDeliveryStreamEncryption for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Firehose) StartDeliveryStreamEncryptionWithContext(ctx aws.Context, input *StartDeliveryStreamEncryptionInput, opts ...request.Option) (*StartDeliveryStreamEncryptionOutput, error) {
+	req, out := c.StartDeliveryStreamEncryptionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopDeliveryStreamEncryption = "StopDeliveryStreamEncryption"
+
+// StopDeliveryStreamEncryptionRequest generates a "aws/request.Request" representing the
+// client's request for the StopDeliveryStreamEncryption operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopDeliveryStreamEncryption for more information on using the StopDeliveryStreamEncryption
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopDeliveryStreamEncryptionRequest method.
+//    req, resp := client.StopDeliveryStreamEncryptionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/firehose-2015-08-04/StopDeliveryStreamEncryption
+func (c *Firehose) StopDeliveryStreamEncryptionRequest(input *StopDeliveryStreamEncryptionInput) (req *request.Request, output *StopDeliveryStreamEncryptionOutput) {
+	op := &request.Operation{
+		Name:       opStopDeliveryStreamEncryption,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopDeliveryStreamEncryptionInput{}
+	}
+
+	output = &StopDeliveryStreamEncryptionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StopDeliveryStreamEncryption API operation for Amazon Kinesis Firehose.
+//
+// Disables server-side encryption (SSE) for the delivery stream.
+//
+// This operation is asynchronous. It returns immediately. When you invoke it,
+// Kinesis Data Firehose first sets the status of the stream to DISABLING, and
+// then to DISABLED. You can continue to read and write data to your stream
+// while its status is DISABLING. It can take up to 5 seconds after the encryption
+// status changes to DISABLED before all records written to the delivery stream
+// are no longer subject to encryption. To find out whether a record or a batch
+// of records was encrypted, check the response elements PutRecordOutput$Encrypted
+// and PutRecordBatchOutput$Encrypted, respectively.
+//
+// To check the encryption state of a delivery stream, use DescribeDeliveryStream.
+//
+// The StartDeliveryStreamEncryption and StopDeliveryStreamEncryption operations
+// have a combined limit of 25 calls per delivery stream per 24 hours. For example,
+// you reach the limit if you call StartDeliveryStreamEncryption 13 times and
+// StopDeliveryStreamEncryption 12 times for the same delivery stream in a 24-hour
+// period.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Kinesis Firehose's
+// API operation StopDeliveryStreamEncryption for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource could not be found.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The resource is already in use and not available for this operation.
+//
+//   * ErrCodeInvalidArgumentException "InvalidArgumentException"
+//   The specified input parameter has a value that is not valid.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You have already reached the limit for a requested resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/firehose-2015-08-04/StopDeliveryStreamEncryption
+func (c *Firehose) StopDeliveryStreamEncryption(input *StopDeliveryStreamEncryptionInput) (*StopDeliveryStreamEncryptionOutput, error) {
+	req, out := c.StopDeliveryStreamEncryptionRequest(input)
+	return out, req.Send()
+}
+
+// StopDeliveryStreamEncryptionWithContext is the same as StopDeliveryStreamEncryption with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopDeliveryStreamEncryption for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Firehose) StopDeliveryStreamEncryptionWithContext(ctx aws.Context, input *StopDeliveryStreamEncryptionInput, opts ...request.Option) (*StopDeliveryStreamEncryptionOutput, error) {
+	req, out := c.StopDeliveryStreamEncryptionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagDeliveryStream = "TagDeliveryStream"
 
 // TagDeliveryStreamRequest generates a "aws/request.Request" representing the
 // client's request for the TagDeliveryStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -797,18 +1023,19 @@ func (c *Firehose) TagDeliveryStreamRequest(input *TagDeliveryStreamInput) (req 
 
 	output = &TagDeliveryStreamOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // TagDeliveryStream API operation for Amazon Kinesis Firehose.
 //
 // Adds or updates tags for the specified delivery stream. A tag is a key-value
-// pair (the value is optional) that you can define and assign to AWS resources.
-// If you specify a tag that already exists, the tag value is replaced with
-// the value that you specify in the request. Tags are metadata. For example,
-// you can add friendly names and descriptions or other types of information
-// that can help you distinguish the delivery stream. For more information about
-// tags, see Using Cost Allocation Tags (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html)
+// pair that you can define and assign to AWS resources. If you specify a tag
+// that already exists, the tag value is replaced with the value that you specify
+// in the request. Tags are metadata. For example, you can add friendly names
+// and descriptions or other types of information that can help you distinguish
+// the delivery stream. For more information about tags, see Using Cost Allocation
+// Tags (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html)
 // in the AWS Billing and Cost Management User Guide.
 //
 // Each delivery stream can have up to 50 tags.
@@ -862,7 +1089,7 @@ const opUntagDeliveryStream = "UntagDeliveryStream"
 // UntagDeliveryStreamRequest generates a "aws/request.Request" representing the
 // client's request for the UntagDeliveryStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -896,6 +1123,7 @@ func (c *Firehose) UntagDeliveryStreamRequest(input *UntagDeliveryStreamInput) (
 
 	output = &UntagDeliveryStreamOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -955,7 +1183,7 @@ const opUpdateDestination = "UpdateDestination"
 // UpdateDestinationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDestination operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -989,6 +1217,7 @@ func (c *Firehose) UpdateDestinationRequest(input *UpdateDestinationInput) (req 
 
 	output = &UpdateDestinationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1288,6 +1517,16 @@ type CreateDeliveryStreamInput struct {
 
 	// The destination in Splunk. You can specify only one destination.
 	SplunkDestinationConfiguration *SplunkDestinationConfiguration `type:"structure"`
+
+	// A set of tags to assign to the delivery stream. A tag is a key-value pair
+	// that you can define and assign to AWS resources. Tags are metadata. For example,
+	// you can add friendly names and descriptions or other types of information
+	// that can help you distinguish the delivery stream. For more information about
+	// tags, see Using Cost Allocation Tags (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html)
+	// in the AWS Billing and Cost Management User Guide.
+	//
+	// You can specify up to 50 tags when creating a delivery stream.
+	Tags []*Tag `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -1308,6 +1547,9 @@ func (s *CreateDeliveryStreamInput) Validate() error {
 	}
 	if s.DeliveryStreamName != nil && len(*s.DeliveryStreamName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("DeliveryStreamName", 1))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
 	}
 	if s.ElasticsearchDestinationConfiguration != nil {
 		if err := s.ElasticsearchDestinationConfiguration.Validate(); err != nil {
@@ -1337,6 +1579,16 @@ func (s *CreateDeliveryStreamInput) Validate() error {
 	if s.SplunkDestinationConfiguration != nil {
 		if err := s.SplunkDestinationConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("SplunkDestinationConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -1391,6 +1643,12 @@ func (s *CreateDeliveryStreamInput) SetS3DestinationConfiguration(v *S3Destinati
 // SetSplunkDestinationConfiguration sets the SplunkDestinationConfiguration field's value.
 func (s *CreateDeliveryStreamInput) SetSplunkDestinationConfiguration(v *SplunkDestinationConfiguration) *CreateDeliveryStreamInput {
 	s.SplunkDestinationConfiguration = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateDeliveryStreamInput) SetTags(v []*Tag) *CreateDeliveryStreamInput {
+	s.Tags = v
 	return s
 }
 
@@ -1559,6 +1817,9 @@ type DeliveryStreamDescription struct {
 	// DeliveryStreamARN is a required field
 	DeliveryStreamARN *string `min:"1" type:"string" required:"true"`
 
+	// Indicates the server-side encryption (SSE) status for the delivery stream.
+	DeliveryStreamEncryptionConfiguration *DeliveryStreamEncryptionConfiguration `type:"structure"`
+
 	// The name of the delivery stream.
 	//
 	// DeliveryStreamName is a required field
@@ -1627,6 +1888,12 @@ func (s *DeliveryStreamDescription) SetDeliveryStreamARN(v string) *DeliveryStre
 	return s
 }
 
+// SetDeliveryStreamEncryptionConfiguration sets the DeliveryStreamEncryptionConfiguration field's value.
+func (s *DeliveryStreamDescription) SetDeliveryStreamEncryptionConfiguration(v *DeliveryStreamEncryptionConfiguration) *DeliveryStreamDescription {
+	s.DeliveryStreamEncryptionConfiguration = v
+	return s
+}
+
 // SetDeliveryStreamName sets the DeliveryStreamName field's value.
 func (s *DeliveryStreamDescription) SetDeliveryStreamName(v string) *DeliveryStreamDescription {
 	s.DeliveryStreamName = &v
@@ -1672,6 +1939,31 @@ func (s *DeliveryStreamDescription) SetSource(v *SourceDescription) *DeliveryStr
 // SetVersionId sets the VersionId field's value.
 func (s *DeliveryStreamDescription) SetVersionId(v string) *DeliveryStreamDescription {
 	s.VersionId = &v
+	return s
+}
+
+// Indicates the server-side encryption (SSE) status for the delivery stream.
+type DeliveryStreamEncryptionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// For a full description of the different values of this status, see StartDeliveryStreamEncryption
+	// and StopDeliveryStreamEncryption.
+	Status *string `type:"string" enum:"DeliveryStreamEncryptionStatus"`
+}
+
+// String returns the string representation
+func (s DeliveryStreamEncryptionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeliveryStreamEncryptionConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeliveryStreamEncryptionConfiguration) SetStatus(v string) *DeliveryStreamEncryptionConfiguration {
+	s.Status = &v
 	return s
 }
 
@@ -1963,7 +2255,7 @@ type ElasticsearchDestinationConfiguration struct {
 	// IndexName is a required field
 	IndexName *string `min:"1" type:"string" required:"true"`
 
-	// The Elasticsearch index rotation period. Index rotation appends a time stamp
+	// The Elasticsearch index rotation period. Index rotation appends a timestamp
 	// to the IndexName to facilitate the expiration of old data. For more information,
 	// see Index Rotation for the Amazon ES Destination (http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation).
 	// The default value is OneDay.
@@ -2273,7 +2565,7 @@ type ElasticsearchDestinationUpdate struct {
 	// The Elasticsearch index name.
 	IndexName *string `min:"1" type:"string"`
 
-	// The Elasticsearch index rotation period. Index rotation appends a time stamp
+	// The Elasticsearch index rotation period. Index rotation appends a timestamp
 	// to IndexName to facilitate the expiration of old data. For more information,
 	// see Index Rotation for the Amazon ES Destination (http://docs.aws.amazon.com/firehose/latest/dev/basic-deliver.html#es-index-rotation).
 	// Default value is OneDay.
@@ -2514,6 +2806,11 @@ type ExtendedS3DestinationConfiguration struct {
 	// encryption.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
 
+	// A prefix that Kinesis Data Firehose evaluates and adds to failed records
+	// before writing them to S3. This prefix appears immediately following the
+	// bucket name.
+	ErrorOutputPrefix *string `type:"string"`
+
 	// The "YYYY/MM/DD/HH" time format prefix is automatically used for delivered
 	// Amazon S3 files. You can specify an extra prefix to be added in front of
 	// the time format prefix. If the prefix ends with a slash, it appears as a
@@ -2631,6 +2928,12 @@ func (s *ExtendedS3DestinationConfiguration) SetEncryptionConfiguration(v *Encry
 	return s
 }
 
+// SetErrorOutputPrefix sets the ErrorOutputPrefix field's value.
+func (s *ExtendedS3DestinationConfiguration) SetErrorOutputPrefix(v string) *ExtendedS3DestinationConfiguration {
+	s.ErrorOutputPrefix = &v
+	return s
+}
+
 // SetPrefix sets the Prefix field's value.
 func (s *ExtendedS3DestinationConfiguration) SetPrefix(v string) *ExtendedS3DestinationConfiguration {
 	s.Prefix = &v
@@ -2693,6 +2996,11 @@ type ExtendedS3DestinationDescription struct {
 	//
 	// EncryptionConfiguration is a required field
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure" required:"true"`
+
+	// A prefix that Kinesis Data Firehose evaluates and adds to failed records
+	// before writing them to S3. This prefix appears immediately following the
+	// bucket name.
+	ErrorOutputPrefix *string `type:"string"`
 
 	// The "YYYY/MM/DD/HH" time format prefix is automatically used for delivered
 	// Amazon S3 files. You can specify an extra prefix to be added in front of
@@ -2764,6 +3072,12 @@ func (s *ExtendedS3DestinationDescription) SetEncryptionConfiguration(v *Encrypt
 	return s
 }
 
+// SetErrorOutputPrefix sets the ErrorOutputPrefix field's value.
+func (s *ExtendedS3DestinationDescription) SetErrorOutputPrefix(v string) *ExtendedS3DestinationDescription {
+	s.ErrorOutputPrefix = &v
+	return s
+}
+
 // SetPrefix sets the Prefix field's value.
 func (s *ExtendedS3DestinationDescription) SetPrefix(v string) *ExtendedS3DestinationDescription {
 	s.Prefix = &v
@@ -2818,6 +3132,11 @@ type ExtendedS3DestinationUpdate struct {
 	// The encryption configuration. If no value is specified, the default is no
 	// encryption.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
+
+	// A prefix that Kinesis Data Firehose evaluates and adds to failed records
+	// before writing them to S3. This prefix appears immediately following the
+	// bucket name.
+	ErrorOutputPrefix *string `type:"string"`
 
 	// The "YYYY/MM/DD/HH" time format prefix is automatically used for delivered
 	// Amazon S3 files. You can specify an extra prefix to be added in front of
@@ -2928,6 +3247,12 @@ func (s *ExtendedS3DestinationUpdate) SetEncryptionConfiguration(v *EncryptionCo
 	return s
 }
 
+// SetErrorOutputPrefix sets the ErrorOutputPrefix field's value.
+func (s *ExtendedS3DestinationUpdate) SetErrorOutputPrefix(v string) *ExtendedS3DestinationUpdate {
+	s.ErrorOutputPrefix = &v
+	return s
+}
+
 // SetPrefix sets the Prefix field's value.
 func (s *ExtendedS3DestinationUpdate) SetPrefix(v string) *ExtendedS3DestinationUpdate {
 	s.Prefix = &v
@@ -2966,11 +3291,11 @@ func (s *ExtendedS3DestinationUpdate) SetS3BackupUpdate(v *S3DestinationUpdate) 
 type HiveJsonSerDe struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates how you want Kinesis Data Firehose to parse the date and time stamps
+	// Indicates how you want Kinesis Data Firehose to parse the date and timestamps
 	// that may be present in your input data JSON. To specify these format strings,
 	// follow the pattern syntax of JodaTime's DateTimeFormat format strings. For
 	// more information, see Class DateTimeFormat (https://www.joda.org/joda-time/apidocs/org/joda/time/format/DateTimeFormat.html).
-	// You can also use the special value millis to parse time stamps in epoch milliseconds.
+	// You can also use the special value millis to parse timestamps in epoch milliseconds.
 	// If you don't specify a format, Kinesis Data Firehose uses java.sql.Timestamp::valueOf
 	// by default.
 	TimestampFormats []*string `type:"list"`
@@ -3132,7 +3457,7 @@ type KinesisStreamSourceDescription struct {
 	_ struct{} `type:"structure"`
 
 	// Kinesis Data Firehose starts retrieving records from the Kinesis data stream
-	// starting with this time stamp.
+	// starting with this timestamp.
 	DeliveryStartTimestamp *time.Time `type:"timestamp"`
 
 	// The Amazon Resource Name (ARN) of the source Kinesis data stream. For more
@@ -3186,7 +3511,9 @@ type ListDeliveryStreamsInput struct {
 	// of all types are returned.
 	DeliveryStreamType *string `type:"string" enum:"DeliveryStreamType"`
 
-	// The name of the delivery stream to start the list with.
+	// The list of delivery streams returned by this call to ListDeliveryStreams
+	// will start with the delivery stream whose name comes alphabetically immediately
+	// after the name you specify in ExclusiveStartDeliveryStreamName.
 	ExclusiveStartDeliveryStreamName *string `min:"1" type:"string"`
 
 	// The maximum number of delivery streams to list. The default value is 10.
@@ -3962,7 +4289,12 @@ func (s *PutRecordBatchInput) SetRecords(v []*Record) *PutRecordBatchInput {
 type PutRecordBatchOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The number of records that might have failed processing.
+	// Indicates whether server-side encryption (SSE) was enabled during this operation.
+	Encrypted *bool `type:"boolean"`
+
+	// The number of records that might have failed processing. This number might
+	// be greater than 0 even if the PutRecordBatch call succeeds. Check FailedPutCount
+	// to determine whether there are records that you need to resend.
 	//
 	// FailedPutCount is a required field
 	FailedPutCount *int64 `type:"integer" required:"true"`
@@ -3982,6 +4314,12 @@ func (s PutRecordBatchOutput) String() string {
 // GoString returns the string representation
 func (s PutRecordBatchOutput) GoString() string {
 	return s.String()
+}
+
+// SetEncrypted sets the Encrypted field's value.
+func (s *PutRecordBatchOutput) SetEncrypted(v bool) *PutRecordBatchOutput {
+	s.Encrypted = &v
+	return s
 }
 
 // SetFailedPutCount sets the FailedPutCount field's value.
@@ -4104,6 +4442,9 @@ func (s *PutRecordInput) SetRecord(v *Record) *PutRecordInput {
 type PutRecordOutput struct {
 	_ struct{} `type:"structure"`
 
+	// Indicates whether server-side encryption (SSE) was enabled during this operation.
+	Encrypted *bool `type:"boolean"`
+
 	// The ID of the record.
 	//
 	// RecordId is a required field
@@ -4120,6 +4461,12 @@ func (s PutRecordOutput) GoString() string {
 	return s.String()
 }
 
+// SetEncrypted sets the Encrypted field's value.
+func (s *PutRecordOutput) SetEncrypted(v bool) *PutRecordOutput {
+	s.Encrypted = &v
+	return s
+}
+
 // SetRecordId sets the RecordId field's value.
 func (s *PutRecordOutput) SetRecordId(v string) *PutRecordOutput {
 	s.RecordId = &v
@@ -4131,7 +4478,7 @@ type Record struct {
 	_ struct{} `type:"structure"`
 
 	// The data blob, which is base64-encoded when the blob is serialized. The maximum
-	// size of the data blob, before base64-encoding, is 1,000 KB.
+	// size of the data blob, before base64-encoding, is 1,000 KiB.
 	//
 	// Data is automatically base64 encoded/decoded by the SDK.
 	//
@@ -4188,7 +4535,7 @@ type RedshiftDestinationConfiguration struct {
 	// The user password.
 	//
 	// Password is a required field
-	Password *string `min:"6" type:"string" required:"true"`
+	Password *string `min:"6" type:"string" required:"true" sensitive:"true"`
 
 	// The data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `type:"structure"`
@@ -4222,7 +4569,7 @@ type RedshiftDestinationConfiguration struct {
 	// The name of the user.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4405,7 +4752,7 @@ type RedshiftDestinationDescription struct {
 	// The name of the user.
 	//
 	// Username is a required field
-	Username *string `min:"1" type:"string" required:"true"`
+	Username *string `min:"1" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4492,7 +4839,7 @@ type RedshiftDestinationUpdate struct {
 	CopyCommand *CopyCommand `type:"structure"`
 
 	// The user password.
-	Password *string `min:"6" type:"string"`
+	Password *string `min:"6" type:"string" sensitive:"true"`
 
 	// The data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `type:"structure"`
@@ -4519,7 +4866,7 @@ type RedshiftDestinationUpdate struct {
 	S3Update *S3DestinationUpdate `type:"structure"`
 
 	// The name of the user.
-	Username *string `min:"1" type:"string"`
+	Username *string `min:"1" type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4697,6 +5044,11 @@ type S3DestinationConfiguration struct {
 	// encryption.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
 
+	// A prefix that Kinesis Data Firehose evaluates and adds to failed records
+	// before writing them to S3. This prefix appears immediately following the
+	// bucket name.
+	ErrorOutputPrefix *string `type:"string"`
+
 	// The "YYYY/MM/DD/HH" time format prefix is automatically used for delivered
 	// Amazon S3 files. You can specify an extra prefix to be added in front of
 	// the time format prefix. If the prefix ends with a slash, it appears as a
@@ -4784,6 +5136,12 @@ func (s *S3DestinationConfiguration) SetEncryptionConfiguration(v *EncryptionCon
 	return s
 }
 
+// SetErrorOutputPrefix sets the ErrorOutputPrefix field's value.
+func (s *S3DestinationConfiguration) SetErrorOutputPrefix(v string) *S3DestinationConfiguration {
+	s.ErrorOutputPrefix = &v
+	return s
+}
+
 // SetPrefix sets the Prefix field's value.
 func (s *S3DestinationConfiguration) SetPrefix(v string) *S3DestinationConfiguration {
 	s.Prefix = &v
@@ -4825,6 +5183,11 @@ type S3DestinationDescription struct {
 	//
 	// EncryptionConfiguration is a required field
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure" required:"true"`
+
+	// A prefix that Kinesis Data Firehose evaluates and adds to failed records
+	// before writing them to S3. This prefix appears immediately following the
+	// bucket name.
+	ErrorOutputPrefix *string `type:"string"`
 
 	// The "YYYY/MM/DD/HH" time format prefix is automatically used for delivered
 	// Amazon S3 files. You can specify an extra prefix to be added in front of
@@ -4881,6 +5244,12 @@ func (s *S3DestinationDescription) SetEncryptionConfiguration(v *EncryptionConfi
 	return s
 }
 
+// SetErrorOutputPrefix sets the ErrorOutputPrefix field's value.
+func (s *S3DestinationDescription) SetErrorOutputPrefix(v string) *S3DestinationDescription {
+	s.ErrorOutputPrefix = &v
+	return s
+}
+
 // SetPrefix sets the Prefix field's value.
 func (s *S3DestinationDescription) SetPrefix(v string) *S3DestinationDescription {
 	s.Prefix = &v
@@ -4918,6 +5287,11 @@ type S3DestinationUpdate struct {
 	// The encryption configuration. If no value is specified, the default is no
 	// encryption.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
+
+	// A prefix that Kinesis Data Firehose evaluates and adds to failed records
+	// before writing them to S3. This prefix appears immediately following the
+	// bucket name.
+	ErrorOutputPrefix *string `type:"string"`
 
 	// The "YYYY/MM/DD/HH" time format prefix is automatically used for delivered
 	// Amazon S3 files. You can specify an extra prefix to be added in front of
@@ -4995,6 +5369,12 @@ func (s *S3DestinationUpdate) SetCompressionFormat(v string) *S3DestinationUpdat
 // SetEncryptionConfiguration sets the EncryptionConfiguration field's value.
 func (s *S3DestinationUpdate) SetEncryptionConfiguration(v *EncryptionConfiguration) *S3DestinationUpdate {
 	s.EncryptionConfiguration = v
+	return s
+}
+
+// SetErrorOutputPrefix sets the ErrorOutputPrefix field's value.
+func (s *S3DestinationUpdate) SetErrorOutputPrefix(v string) *S3DestinationUpdate {
+	s.ErrorOutputPrefix = &v
 	return s
 }
 
@@ -5582,6 +5962,118 @@ func (s *SplunkRetryOptions) SetDurationInSeconds(v int64) *SplunkRetryOptions {
 	return s
 }
 
+type StartDeliveryStreamEncryptionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the delivery stream for which you want to enable server-side
+	// encryption (SSE).
+	//
+	// DeliveryStreamName is a required field
+	DeliveryStreamName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartDeliveryStreamEncryptionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDeliveryStreamEncryptionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDeliveryStreamEncryptionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartDeliveryStreamEncryptionInput"}
+	if s.DeliveryStreamName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeliveryStreamName"))
+	}
+	if s.DeliveryStreamName != nil && len(*s.DeliveryStreamName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeliveryStreamName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeliveryStreamName sets the DeliveryStreamName field's value.
+func (s *StartDeliveryStreamEncryptionInput) SetDeliveryStreamName(v string) *StartDeliveryStreamEncryptionInput {
+	s.DeliveryStreamName = &v
+	return s
+}
+
+type StartDeliveryStreamEncryptionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartDeliveryStreamEncryptionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDeliveryStreamEncryptionOutput) GoString() string {
+	return s.String()
+}
+
+type StopDeliveryStreamEncryptionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the delivery stream for which you want to disable server-side
+	// encryption (SSE).
+	//
+	// DeliveryStreamName is a required field
+	DeliveryStreamName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopDeliveryStreamEncryptionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDeliveryStreamEncryptionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopDeliveryStreamEncryptionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopDeliveryStreamEncryptionInput"}
+	if s.DeliveryStreamName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeliveryStreamName"))
+	}
+	if s.DeliveryStreamName != nil && len(*s.DeliveryStreamName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeliveryStreamName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeliveryStreamName sets the DeliveryStreamName field's value.
+func (s *StopDeliveryStreamEncryptionInput) SetDeliveryStreamName(v string) *StopDeliveryStreamEncryptionInput {
+	s.DeliveryStreamName = &v
+	return s
+}
+
+type StopDeliveryStreamEncryptionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopDeliveryStreamEncryptionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDeliveryStreamEncryptionOutput) GoString() string {
+	return s.String()
+}
+
 // Metadata that you can assign to a delivery stream, consisting of a key-value
 // pair.
 type Tag struct {
@@ -5969,6 +6461,20 @@ const (
 
 	// CompressionFormatSnappy is a CompressionFormat enum value
 	CompressionFormatSnappy = "Snappy"
+)
+
+const (
+	// DeliveryStreamEncryptionStatusEnabled is a DeliveryStreamEncryptionStatus enum value
+	DeliveryStreamEncryptionStatusEnabled = "ENABLED"
+
+	// DeliveryStreamEncryptionStatusEnabling is a DeliveryStreamEncryptionStatus enum value
+	DeliveryStreamEncryptionStatusEnabling = "ENABLING"
+
+	// DeliveryStreamEncryptionStatusDisabled is a DeliveryStreamEncryptionStatus enum value
+	DeliveryStreamEncryptionStatusDisabled = "DISABLED"
+
+	// DeliveryStreamEncryptionStatusDisabling is a DeliveryStreamEncryptionStatus enum value
+	DeliveryStreamEncryptionStatusDisabling = "DISABLING"
 )
 
 const (

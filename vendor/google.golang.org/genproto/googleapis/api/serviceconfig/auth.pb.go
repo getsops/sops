@@ -49,7 +49,7 @@ func (m *Authentication) Reset()         { *m = Authentication{} }
 func (m *Authentication) String() string { return proto.CompactTextString(m) }
 func (*Authentication) ProtoMessage()    {}
 func (*Authentication) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6570d3c90e2b8ac, []int{0}
+	return fileDescriptor_auth_88c4f5ae0863ae9c, []int{0}
 }
 func (m *Authentication) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Authentication.Unmarshal(m, b)
@@ -57,8 +57,8 @@ func (m *Authentication) XXX_Unmarshal(b []byte) error {
 func (m *Authentication) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Authentication.Marshal(b, m, deterministic)
 }
-func (m *Authentication) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Authentication.Merge(m, src)
+func (dst *Authentication) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Authentication.Merge(dst, src)
 }
 func (m *Authentication) XXX_Size() int {
 	return xxx_messageInfo_Authentication.Size(m)
@@ -112,7 +112,7 @@ func (m *AuthenticationRule) Reset()         { *m = AuthenticationRule{} }
 func (m *AuthenticationRule) String() string { return proto.CompactTextString(m) }
 func (*AuthenticationRule) ProtoMessage()    {}
 func (*AuthenticationRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6570d3c90e2b8ac, []int{1}
+	return fileDescriptor_auth_88c4f5ae0863ae9c, []int{1}
 }
 func (m *AuthenticationRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuthenticationRule.Unmarshal(m, b)
@@ -120,8 +120,8 @@ func (m *AuthenticationRule) XXX_Unmarshal(b []byte) error {
 func (m *AuthenticationRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuthenticationRule.Marshal(b, m, deterministic)
 }
-func (m *AuthenticationRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthenticationRule.Merge(m, src)
+func (dst *AuthenticationRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthenticationRule.Merge(dst, src)
 }
 func (m *AuthenticationRule) XXX_Size() int {
 	return xxx_messageInfo_AuthenticationRule.Size(m)
@@ -211,7 +211,7 @@ func (m *AuthProvider) Reset()         { *m = AuthProvider{} }
 func (m *AuthProvider) String() string { return proto.CompactTextString(m) }
 func (*AuthProvider) ProtoMessage()    {}
 func (*AuthProvider) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6570d3c90e2b8ac, []int{2}
+	return fileDescriptor_auth_88c4f5ae0863ae9c, []int{2}
 }
 func (m *AuthProvider) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuthProvider.Unmarshal(m, b)
@@ -219,8 +219,8 @@ func (m *AuthProvider) XXX_Unmarshal(b []byte) error {
 func (m *AuthProvider) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuthProvider.Marshal(b, m, deterministic)
 }
-func (m *AuthProvider) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthProvider.Merge(m, src)
+func (dst *AuthProvider) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthProvider.Merge(dst, src)
 }
 func (m *AuthProvider) XXX_Size() int {
 	return xxx_messageInfo_AuthProvider.Size(m)
@@ -302,7 +302,7 @@ func (m *OAuthRequirements) Reset()         { *m = OAuthRequirements{} }
 func (m *OAuthRequirements) String() string { return proto.CompactTextString(m) }
 func (*OAuthRequirements) ProtoMessage()    {}
 func (*OAuthRequirements) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6570d3c90e2b8ac, []int{3}
+	return fileDescriptor_auth_88c4f5ae0863ae9c, []int{3}
 }
 func (m *OAuthRequirements) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OAuthRequirements.Unmarshal(m, b)
@@ -310,8 +310,8 @@ func (m *OAuthRequirements) XXX_Unmarshal(b []byte) error {
 func (m *OAuthRequirements) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OAuthRequirements.Marshal(b, m, deterministic)
 }
-func (m *OAuthRequirements) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OAuthRequirements.Merge(m, src)
+func (dst *OAuthRequirements) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OAuthRequirements.Merge(dst, src)
 }
 func (m *OAuthRequirements) XXX_Size() int {
 	return xxx_messageInfo_OAuthRequirements.Size(m)
@@ -364,7 +364,7 @@ func (m *AuthRequirement) Reset()         { *m = AuthRequirement{} }
 func (m *AuthRequirement) String() string { return proto.CompactTextString(m) }
 func (*AuthRequirement) ProtoMessage()    {}
 func (*AuthRequirement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6570d3c90e2b8ac, []int{4}
+	return fileDescriptor_auth_88c4f5ae0863ae9c, []int{4}
 }
 func (m *AuthRequirement) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuthRequirement.Unmarshal(m, b)
@@ -372,8 +372,8 @@ func (m *AuthRequirement) XXX_Unmarshal(b []byte) error {
 func (m *AuthRequirement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuthRequirement.Marshal(b, m, deterministic)
 }
-func (m *AuthRequirement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthRequirement.Merge(m, src)
+func (dst *AuthRequirement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuthRequirement.Merge(dst, src)
 }
 func (m *AuthRequirement) XXX_Size() int {
 	return xxx_messageInfo_AuthRequirement.Size(m)
@@ -406,9 +406,9 @@ func init() {
 	proto.RegisterType((*AuthRequirement)(nil), "google.api.AuthRequirement")
 }
 
-func init() { proto.RegisterFile("google/api/auth.proto", fileDescriptor_d6570d3c90e2b8ac) }
+func init() { proto.RegisterFile("google/api/auth.proto", fileDescriptor_auth_88c4f5ae0863ae9c) }
 
-var fileDescriptor_d6570d3c90e2b8ac = []byte{
+var fileDescriptor_auth_88c4f5ae0863ae9c = []byte{
 	// 465 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x52, 0x5f, 0x6b, 0x13, 0x4f,
 	0x14, 0x65, 0x93, 0xa6, 0xcd, 0xde, 0x94, 0xb4, 0x1d, 0xf8, 0x95, 0xfd, 0xd5, 0xaa, 0x21, 0x4f,

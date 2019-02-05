@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,30 +21,11 @@ package computervision
 
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/computervision"
 
-type BaseClient = original.BaseClient
 type Details = original.Details
 
 const (
 	Celebrities Details = original.Celebrities
 	Landmarks   Details = original.Landmarks
-)
-
-type ErrorCodes = original.ErrorCodes
-
-const (
-	BadArgument               ErrorCodes = original.BadArgument
-	FailedToProcess           ErrorCodes = original.FailedToProcess
-	InternalServerError       ErrorCodes = original.InternalServerError
-	InvalidDetails            ErrorCodes = original.InvalidDetails
-	InvalidImageFormat        ErrorCodes = original.InvalidImageFormat
-	InvalidImageSize          ErrorCodes = original.InvalidImageSize
-	InvalidImageURL           ErrorCodes = original.InvalidImageURL
-	NotSupportedImage         ErrorCodes = original.NotSupportedImage
-	NotSupportedLanguage      ErrorCodes = original.NotSupportedLanguage
-	NotSupportedVisualFeature ErrorCodes = original.NotSupportedVisualFeature
-	StorageException          ErrorCodes = original.StorageException
-	Timeout                   ErrorCodes = original.Timeout
-	Unspecified               ErrorCodes = original.Unspecified
 )
 
 type Gender = original.Gender
@@ -111,15 +92,21 @@ const (
 	VisualFeatureTypesDescription VisualFeatureTypes = original.VisualFeatureTypesDescription
 	VisualFeatureTypesFaces       VisualFeatureTypes = original.VisualFeatureTypesFaces
 	VisualFeatureTypesImageType   VisualFeatureTypes = original.VisualFeatureTypesImageType
+	VisualFeatureTypesObjects     VisualFeatureTypes = original.VisualFeatureTypesObjects
 	VisualFeatureTypesTags        VisualFeatureTypes = original.VisualFeatureTypesTags
 )
 
 type AdultInfo = original.AdultInfo
+type AreaOfInterestResult = original.AreaOfInterestResult
+type BaseClient = original.BaseClient
+type BoundingRect = original.BoundingRect
 type Category = original.Category
 type CategoryDetail = original.CategoryDetail
 type CelebritiesModel = original.CelebritiesModel
 type CelebrityResults = original.CelebrityResults
 type ColorInfo = original.ColorInfo
+type DetectResult = original.DetectResult
+type DetectedObject = original.DetectedObject
 type DomainModelResults = original.DomainModelResults
 type Error = original.Error
 type FaceDescription = original.FaceDescription
@@ -137,6 +124,7 @@ type LandmarksModel = original.LandmarksModel
 type Line = original.Line
 type ListModelsResult = original.ListModelsResult
 type ModelDescription = original.ModelDescription
+type ObjectHierarchy = original.ObjectHierarchy
 type OcrLine = original.OcrLine
 type OcrRegion = original.OcrRegion
 type OcrResult = original.OcrResult
@@ -155,9 +143,6 @@ func NewWithoutDefaults(endpoint string) BaseClient {
 }
 func PossibleDetailsValues() []Details {
 	return original.PossibleDetailsValues()
-}
-func PossibleErrorCodesValues() []ErrorCodes {
-	return original.PossibleErrorCodesValues()
 }
 func PossibleGenderValues() []Gender {
 	return original.PossibleGenderValues()

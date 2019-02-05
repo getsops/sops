@@ -1130,7 +1130,7 @@ func ExampleEC2_CreateNetworkAclEntry_shared00() {
 			From: aws.Int64(53),
 			To:   aws.Int64(53),
 		},
-		Protocol:   aws.String("udp"),
+		Protocol:   aws.String("17"),
 		RuleAction: aws.String("allow"),
 		RuleNumber: aws.Int64(100),
 	}
@@ -4788,7 +4788,7 @@ func ExampleEC2_ReplaceNetworkAclEntry_shared00() {
 			From: aws.Int64(53),
 			To:   aws.Int64(53),
 		},
-		Protocol:   aws.String("udp"),
+		Protocol:   aws.String("17"),
 		RuleAction: aws.String("allow"),
 		RuleNumber: aws.Int64(100),
 	}

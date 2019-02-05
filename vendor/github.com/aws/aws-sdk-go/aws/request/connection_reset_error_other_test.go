@@ -6,4 +6,7 @@ import (
 	"errors"
 )
 
-var stubConnectionResetError = errors.New("connection reset")
+var (
+	errAcceptConnectionResetStub = errors.New("accept: connection reset")
+	errReadConnectionResetStub   = errors.New("read: connection reset")
+)

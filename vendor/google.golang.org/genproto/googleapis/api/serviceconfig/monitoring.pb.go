@@ -76,7 +76,7 @@ func (m *Monitoring) Reset()         { *m = Monitoring{} }
 func (m *Monitoring) String() string { return proto.CompactTextString(m) }
 func (*Monitoring) ProtoMessage()    {}
 func (*Monitoring) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6e2076230a37a7e3, []int{0}
+	return fileDescriptor_monitoring_96ebaeded677bc82, []int{0}
 }
 func (m *Monitoring) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Monitoring.Unmarshal(m, b)
@@ -84,8 +84,8 @@ func (m *Monitoring) XXX_Unmarshal(b []byte) error {
 func (m *Monitoring) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Monitoring.Marshal(b, m, deterministic)
 }
-func (m *Monitoring) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Monitoring.Merge(m, src)
+func (dst *Monitoring) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Monitoring.Merge(dst, src)
 }
 func (m *Monitoring) XXX_Size() int {
 	return xxx_messageInfo_Monitoring.Size(m)
@@ -128,7 +128,7 @@ func (m *Monitoring_MonitoringDestination) Reset()         { *m = Monitoring_Mon
 func (m *Monitoring_MonitoringDestination) String() string { return proto.CompactTextString(m) }
 func (*Monitoring_MonitoringDestination) ProtoMessage()    {}
 func (*Monitoring_MonitoringDestination) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6e2076230a37a7e3, []int{0, 0}
+	return fileDescriptor_monitoring_96ebaeded677bc82, []int{0, 0}
 }
 func (m *Monitoring_MonitoringDestination) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Monitoring_MonitoringDestination.Unmarshal(m, b)
@@ -136,8 +136,8 @@ func (m *Monitoring_MonitoringDestination) XXX_Unmarshal(b []byte) error {
 func (m *Monitoring_MonitoringDestination) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Monitoring_MonitoringDestination.Marshal(b, m, deterministic)
 }
-func (m *Monitoring_MonitoringDestination) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Monitoring_MonitoringDestination.Merge(m, src)
+func (dst *Monitoring_MonitoringDestination) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Monitoring_MonitoringDestination.Merge(dst, src)
 }
 func (m *Monitoring_MonitoringDestination) XXX_Size() int {
 	return xxx_messageInfo_Monitoring_MonitoringDestination.Size(m)
@@ -167,9 +167,11 @@ func init() {
 	proto.RegisterType((*Monitoring_MonitoringDestination)(nil), "google.api.Monitoring.MonitoringDestination")
 }
 
-func init() { proto.RegisterFile("google/api/monitoring.proto", fileDescriptor_6e2076230a37a7e3) }
+func init() {
+	proto.RegisterFile("google/api/monitoring.proto", fileDescriptor_monitoring_96ebaeded677bc82)
+}
 
-var fileDescriptor_6e2076230a37a7e3 = []byte{
+var fileDescriptor_monitoring_96ebaeded677bc82 = []byte{
 	// 271 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x51, 0xcd, 0x4a, 0xc4, 0x30,
 	0x10, 0xa6, 0x55, 0x94, 0x8d, 0xa0, 0x58, 0x5c, 0x28, 0xab, 0x87, 0xc5, 0xd3, 0x1e, 0xb4, 0x05,

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ func TestAPIs(t *testing.T) {
 		"blogger-3",
 		"floats",
 		"getwithoutbody",
+		"json-body",
 		"mapofany",
 		"mapofarrayofobjects",
 		"mapofint64strings",

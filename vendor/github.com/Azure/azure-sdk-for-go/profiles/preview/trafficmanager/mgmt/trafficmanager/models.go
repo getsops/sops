@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,10 +25,6 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type EndpointsClient = original.EndpointsClient
-type GeographicHierarchiesClient = original.GeographicHierarchiesClient
-type HeatMapClient = original.HeatMapClient
 type EndpointMonitorStatus = original.EndpointMonitorStatus
 
 const (
@@ -88,16 +84,20 @@ const (
 	TrafficViewEnrollmentStatusEnabled  TrafficViewEnrollmentStatus = original.TrafficViewEnrollmentStatusEnabled
 )
 
+type BaseClient = original.BaseClient
 type CheckTrafficManagerRelativeDNSNameAvailabilityParameters = original.CheckTrafficManagerRelativeDNSNameAvailabilityParameters
 type CloudError = original.CloudError
 type CloudErrorBody = original.CloudErrorBody
-type DeleteOperationResult = original.DeleteOperationResult
 type DNSConfig = original.DNSConfig
+type DeleteOperationResult = original.DeleteOperationResult
 type Endpoint = original.Endpoint
 type EndpointProperties = original.EndpointProperties
 type EndpointPropertiesCustomHeadersItem = original.EndpointPropertiesCustomHeadersItem
+type EndpointsClient = original.EndpointsClient
+type GeographicHierarchiesClient = original.GeographicHierarchiesClient
 type GeographicHierarchy = original.GeographicHierarchy
 type GeographicHierarchyProperties = original.GeographicHierarchyProperties
+type HeatMapClient = original.HeatMapClient
 type HeatMapEndpoint = original.HeatMapEndpoint
 type HeatMapModel = original.HeatMapModel
 type HeatMapProperties = original.HeatMapProperties
@@ -108,19 +108,16 @@ type NameAvailability = original.NameAvailability
 type Profile = original.Profile
 type ProfileListResult = original.ProfileListResult
 type ProfileProperties = original.ProfileProperties
+type ProfilesClient = original.ProfilesClient
 type ProxyResource = original.ProxyResource
 type QueryExperience = original.QueryExperience
 type Region = original.Region
 type Resource = original.Resource
 type TrackedResource = original.TrackedResource
 type TrafficFlow = original.TrafficFlow
-type ProfilesClient = original.ProfilesClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewEndpointsClient(subscriptionID string) EndpointsClient {
 	return original.NewEndpointsClient(subscriptionID)
@@ -139,6 +136,15 @@ func NewHeatMapClient(subscriptionID string) HeatMapClient {
 }
 func NewHeatMapClientWithBaseURI(baseURI string, subscriptionID string) HeatMapClient {
 	return original.NewHeatMapClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProfilesClient(subscriptionID string) ProfilesClient {
+	return original.NewProfilesClient(subscriptionID)
+}
+func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
+	return original.NewProfilesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleEndpointMonitorStatusValues() []EndpointMonitorStatus {
 	return original.PossibleEndpointMonitorStatusValues()
@@ -160,12 +166,6 @@ func PossibleTrafficRoutingMethodValues() []TrafficRoutingMethod {
 }
 func PossibleTrafficViewEnrollmentStatusValues() []TrafficViewEnrollmentStatus {
 	return original.PossibleTrafficViewEnrollmentStatusValues()
-}
-func NewProfilesClient(subscriptionID string) ProfilesClient {
-	return original.NewProfilesClient(subscriptionID)
-}
-func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
-	return original.NewProfilesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

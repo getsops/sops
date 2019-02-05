@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,11 +47,21 @@ func NewDeploymentOperationsClientWithBaseURI(baseURI string, subscriptionID str
 // deploymentName - the name of the deployment.
 // operationID - the ID of the operation to get.
 func (client DeploymentOperationsClient) Get(ctx context.Context, resourceGroupName string, deploymentName string, operationID string) (result DeploymentOperation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeploymentOperationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: deploymentName,
 			Constraints: []validation.Constraint{{Target: "deploymentName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "deploymentName", Name: validation.MinLength, Rule: 1, Chain: nil},
@@ -126,6 +137,16 @@ func (client DeploymentOperationsClient) GetResponder(resp *http.Response) (resu
 // deploymentName - the name of the deployment.
 // operationID - the ID of the operation to get.
 func (client DeploymentOperationsClient) GetAtSubscriptionScope(ctx context.Context, deploymentName string, operationID string) (result DeploymentOperation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeploymentOperationsClient.GetAtSubscriptionScope")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: deploymentName,
 			Constraints: []validation.Constraint{{Target: "deploymentName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -202,11 +223,21 @@ func (client DeploymentOperationsClient) GetAtSubscriptionScopeResponder(resp *h
 // deploymentName - the name of the deployment with the operation to get.
 // top - the number of results to return.
 func (client DeploymentOperationsClient) List(ctx context.Context, resourceGroupName string, deploymentName string, top *int32) (result DeploymentOperationsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeploymentOperationsClient.List")
+		defer func() {
+			sc := -1
+			if result.dolr.Response.Response != nil {
+				sc = result.dolr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: deploymentName,
 			Constraints: []validation.Constraint{{Target: "deploymentName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "deploymentName", Name: validation.MinLength, Rule: 1, Chain: nil},
@@ -281,8 +312,8 @@ func (client DeploymentOperationsClient) ListResponder(resp *http.Response) (res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client DeploymentOperationsClient) listNextResults(lastResults DeploymentOperationsListResult) (result DeploymentOperationsListResult, err error) {
-	req, err := lastResults.deploymentOperationsListResultPreparer()
+func (client DeploymentOperationsClient) listNextResults(ctx context.Context, lastResults DeploymentOperationsListResult) (result DeploymentOperationsListResult, err error) {
+	req, err := lastResults.deploymentOperationsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "resources.DeploymentOperationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -303,6 +334,16 @@ func (client DeploymentOperationsClient) listNextResults(lastResults DeploymentO
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DeploymentOperationsClient) ListComplete(ctx context.Context, resourceGroupName string, deploymentName string, top *int32) (result DeploymentOperationsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeploymentOperationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, deploymentName, top)
 	return
 }
@@ -312,6 +353,16 @@ func (client DeploymentOperationsClient) ListComplete(ctx context.Context, resou
 // deploymentName - the name of the deployment with the operation to get.
 // top - the number of results to return.
 func (client DeploymentOperationsClient) ListAtSubscriptionScope(ctx context.Context, deploymentName string, top *int32) (result DeploymentOperationsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeploymentOperationsClient.ListAtSubscriptionScope")
+		defer func() {
+			sc := -1
+			if result.dolr.Response.Response != nil {
+				sc = result.dolr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: deploymentName,
 			Constraints: []validation.Constraint{{Target: "deploymentName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -386,8 +437,8 @@ func (client DeploymentOperationsClient) ListAtSubscriptionScopeResponder(resp *
 }
 
 // listAtSubscriptionScopeNextResults retrieves the next set of results, if any.
-func (client DeploymentOperationsClient) listAtSubscriptionScopeNextResults(lastResults DeploymentOperationsListResult) (result DeploymentOperationsListResult, err error) {
-	req, err := lastResults.deploymentOperationsListResultPreparer()
+func (client DeploymentOperationsClient) listAtSubscriptionScopeNextResults(ctx context.Context, lastResults DeploymentOperationsListResult) (result DeploymentOperationsListResult, err error) {
+	req, err := lastResults.deploymentOperationsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "resources.DeploymentOperationsClient", "listAtSubscriptionScopeNextResults", nil, "Failure preparing next results request")
 	}
@@ -408,6 +459,16 @@ func (client DeploymentOperationsClient) listAtSubscriptionScopeNextResults(last
 
 // ListAtSubscriptionScopeComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DeploymentOperationsClient) ListAtSubscriptionScopeComplete(ctx context.Context, deploymentName string, top *int32) (result DeploymentOperationsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeploymentOperationsClient.ListAtSubscriptionScope")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAtSubscriptionScope(ctx, deploymentName, top)
 	return
 }

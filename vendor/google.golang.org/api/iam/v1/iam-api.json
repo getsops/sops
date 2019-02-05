@@ -713,6 +713,34 @@
                 "https://www.googleapis.com/auth/cloud-platform"
               ]
             },
+            "patch": {
+              "description": "Patches a ServiceAccount.\n\nCurrently, only the following fields are updatable:\n`display_name` and `description`.\n\nOnly fields specified in the request are garaunteed to be returned in\nthe response. Other fields in the response may be empty.\n\nNote: The field mask is required.",
+              "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}",
+              "httpMethod": "PATCH",
+              "id": "iam.projects.serviceAccounts.patch",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "The resource name of the service account in the following format:\n`projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`.\n\nRequests using `-` as a wildcard for the `PROJECT_ID` will infer the\nproject from the `account` and the `ACCOUNT` value can be the `email`\naddress or the `unique_id` of the service account.\n\nIn responses the resource name will always be in the format\n`projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/serviceAccounts/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+name}",
+              "request": {
+                "$ref": "PatchServiceAccountRequest"
+              },
+              "response": {
+                "$ref": "ServiceAccount"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
+            },
             "setIamPolicy": {
               "description": "Sets the IAM access control policy for a\nServiceAccount.",
               "flatPath": "v1/projects/{projectsId}/serviceAccounts/{serviceAccountsId}:setIamPolicy",
@@ -1081,7 +1109,7 @@
       }
     }
   },
-  "revision": "20180830",
+  "revision": "20190111",
   "rootUrl": "https://iam.googleapis.com/",
   "schemas": {
     "AuditConfig": {
@@ -1463,6 +1491,20 @@
       },
       "type": "object"
     },
+    "PatchServiceAccountRequest": {
+      "description": "The patch service account request.",
+      "id": "PatchServiceAccountRequest",
+      "properties": {
+        "serviceAccount": {
+          "$ref": "ServiceAccount"
+        },
+        "updateMask": {
+          "format": "google-fieldmask",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Permission": {
       "description": "A permission which can be included by a role.",
       "id": "Permission",
@@ -1706,7 +1748,7 @@
           "type": "string"
         },
         "stage": {
-          "description": "The current launch stage of the role.",
+          "description": "The current launch stage of the role. If the `ALPHA` launch stage has been\nselected for a role, the `stage` field will not be included in the\nreturned definition for the role.",
           "enum": [
             "ALPHA",
             "BETA",
@@ -1716,12 +1758,12 @@
             "EAP"
           ],
           "enumDescriptions": [
-            "The user has indicated this role is currently in an alpha phase.",
-            "The user has indicated this role is currently in a beta phase.",
+            "The user has indicated this role is currently in an Alpha phase. If this\nlaunch stage is selected, the `stage` field will not be included when\nrequesting the definition for a given role.",
+            "The user has indicated this role is currently in a Beta phase.",
             "The user has indicated this role is generally available.",
             "The user has indicated this role is being deprecated.",
             "This role is disabled and will not contribute permissions to any members\nit is granted to in policies.",
-            "The user has indicated this role is currently in an eap phase."
+            "The user has indicated this role is currently in an EAP phase."
           ],
           "type": "string"
         },
@@ -1737,7 +1779,7 @@
       "id": "ServiceAccount",
       "properties": {
         "displayName": {
-          "description": "Optional. A user-specified description of the service account.  Must be\nfewer than 100 UTF-8 bytes.",
+          "description": "Optional. A user-specified name for the service account.\nMust be less than or equal to 100 UTF-8 bytes.",
           "type": "string"
         },
         "email": {
@@ -1745,7 +1787,7 @@
           "type": "string"
         },
         "etag": {
-          "description": "Used to perform a consistent read-modify-write.",
+          "description": "Optional. Note: `etag` is an inoperable legacy field that is only returned\nfor backwards compatibility.",
           "format": "byte",
           "type": "string"
         },

@@ -31,6 +31,7 @@ package bttest // import "cloud.google.com/go/bigtable/bttest"
 
 import (
 	"bytes"
+	"context"
 	"encoding/binary"
 	"fmt"
 	"log"
@@ -45,9 +46,9 @@ import (
 	emptypb "github.com/golang/protobuf/ptypes/empty"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/google/btree"
-	"golang.org/x/net/context"
 	btapb "google.golang.org/genproto/googleapis/bigtable/admin/v2"
 	btpb "google.golang.org/genproto/googleapis/bigtable/v2"
+	"google.golang.org/genproto/googleapis/longrunning"
 	statpb "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -60,6 +61,10 @@ const (
 
 	// MilliSeconds field of the max valid Timestamp.
 	maxValidMilliSeconds = int64(time.Millisecond) * 253402300800
+)
+
+var (
+	validLabelTransformer = regexp.MustCompile(`[a-z0-9\-]{1,15}`)
 )
 
 // Server is an in-memory Cloud Bigtable fake.
@@ -134,6 +139,10 @@ func (s *server) CreateTable(ctx context.Context, req *btapb.CreateTableRequest)
 	s.mu.Unlock()
 
 	return &btapb.Table{Name: tbl}, nil
+}
+
+func (s *server) CreateTableFromSnapshot(context.Context, *btapb.CreateTableFromSnapshotRequest) (*longrunning.Operation, error) {
+	return nil, status.Errorf(codes.Unimplemented, "the emulator does not currently support snapshots")
 }
 
 func (s *server) ListTables(ctx context.Context, req *btapb.ListTablesRequest) (*btapb.ListTablesResponse, error) {
@@ -254,9 +263,8 @@ func (s *server) DropRowRange(ctx context.Context, req *btapb.DropRowRangeReques
 			if strings.HasPrefix(r.key, prefix) {
 				rowsToDelete = append(rowsToDelete, r)
 				return true
-			} else {
-				return false // stop iteration
 			}
+			return false // stop iteration
 		})
 		for _, r := range rowsToDelete {
 			tbl.rows.Delete(r)
@@ -293,6 +301,20 @@ func (s *server) CheckConsistency(ctx context.Context, req *btapb.CheckConsisten
 	return &btapb.CheckConsistencyResponse{
 		Consistent: true,
 	}, nil
+}
+
+func (s *server) SnapshotTable(context.Context, *btapb.SnapshotTableRequest) (*longrunning.Operation, error) {
+	return nil, status.Errorf(codes.Unimplemented, "the emulator does not currently support snapshots")
+}
+
+func (s *server) GetSnapshot(context.Context, *btapb.GetSnapshotRequest) (*btapb.Snapshot, error) {
+	return nil, status.Errorf(codes.Unimplemented, "the emulator does not currently support snapshots")
+}
+func (s *server) ListSnapshots(context.Context, *btapb.ListSnapshotsRequest) (*btapb.ListSnapshotsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "the emulator does not currently support snapshots")
+}
+func (s *server) DeleteSnapshot(context.Context, *btapb.DeleteSnapshotRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "the emulator does not currently support snapshots")
 }
 
 func (s *server) ReadRows(req *btpb.ReadRowsRequest, stream btpb.Bigtable_ReadRowsServer) error {
@@ -358,7 +380,13 @@ func (s *server) ReadRows(req *btpb.ReadRowsRequest, stream btpb.Bigtable_ReadRo
 
 	rows := make([]*row, 0, len(rowSet))
 	for _, r := range rowSet {
-		rows = append(rows, r)
+		r.mu.Lock()
+		fams := len(r.families)
+		r.mu.Unlock()
+
+		if fams != 0 {
+			rows = append(rows, r)
+		}
 	}
 	sort.Sort(byRowKey(rows))
 
@@ -387,7 +415,11 @@ func streamRow(stream btpb.Bigtable_ReadRowsServer, r *row, f *btpb.RowFilter) (
 	r.mu.Unlock()
 	r = nr
 
-	if !filterRow(f, r) {
+	match, err := filterRow(f, r)
+	if err != nil {
+		return false, err
+	}
+	if !match {
 		return false, nil
 	}
 
@@ -399,7 +431,6 @@ func streamRow(stream btpb.Bigtable_ReadRowsServer, r *row, f *btpb.RowFilter) (
 			if len(cells) == 0 {
 				continue
 			}
-			// TODO(dsymonds): Apply transformers.
 			for _, cell := range cells {
 				rrr.Chunks = append(rrr.Chunks, &btpb.ReadRowsResponse_CellChunk{
 					RowKey:          []byte(r.key),
@@ -407,6 +438,7 @@ func streamRow(stream btpb.Bigtable_ReadRowsServer, r *row, f *btpb.RowFilter) (
 					Qualifier:       &wrappers.BytesValue{Value: []byte(colName)},
 					TimestampMicros: cell.ts,
 					Value:           cell.value,
+					Labels:          cell.labels,
 				})
 			}
 		}
@@ -421,24 +453,28 @@ func streamRow(stream btpb.Bigtable_ReadRowsServer, r *row, f *btpb.RowFilter) (
 }
 
 // filterRow modifies a row with the given filter. Returns true if at least one cell from the row matches,
-// false otherwise.
-func filterRow(f *btpb.RowFilter, r *row) bool {
+// false otherwise. If a filter is invalid, filterRow returns false and an error.
+func filterRow(f *btpb.RowFilter, r *row) (bool, error) {
 	if f == nil {
-		return true
+		return true, nil
 	}
 	// Handle filters that apply beyond just including/excluding cells.
 	switch f := f.Filter.(type) {
 	case *btpb.RowFilter_BlockAllFilter:
-		return !f.BlockAllFilter
+		return !f.BlockAllFilter, nil
 	case *btpb.RowFilter_PassAllFilter:
-		return f.PassAllFilter
+		return f.PassAllFilter, nil
 	case *btpb.RowFilter_Chain_:
 		for _, sub := range f.Chain.Filters {
-			if !filterRow(sub, r) {
-				return false
+			match, err := filterRow(sub, r)
+			if err != nil {
+				return false, err
+			}
+			if !match {
+				return false, nil
 			}
 		}
-		return true
+		return true, nil
 	case *btpb.RowFilter_Interleave_:
 		srs := make([]*row, 0, len(f.Interleave.Filters))
 		for _, sub := range f.Interleave.Filters {
@@ -464,7 +500,7 @@ func filterRow(f *btpb.RowFilter, r *row) bool {
 				count += len(cs)
 			}
 		}
-		return count > 0
+		return count > 0, nil
 	case *btpb.RowFilter_CellsPerColumnLimitFilter:
 		lim := int(f.CellsPerColumnLimitFilter)
 		for _, fam := range r.families {
@@ -474,27 +510,29 @@ func filterRow(f *btpb.RowFilter, r *row) bool {
 				}
 			}
 		}
-		return true
+		return true, nil
 	case *btpb.RowFilter_Condition_:
-		if filterRow(f.Condition.PredicateFilter, r.copy()) {
+		match, err := filterRow(f.Condition.PredicateFilter, r.copy())
+		if err != nil {
+			return false, err
+		}
+		if match {
 			if f.Condition.TrueFilter == nil {
-				return false
+				return false, nil
 			}
 			return filterRow(f.Condition.TrueFilter, r)
 		}
 		if f.Condition.FalseFilter == nil {
-			return false
+			return false, nil
 		}
 		return filterRow(f.Condition.FalseFilter, r)
 	case *btpb.RowFilter_RowKeyRegexFilter:
-		pat := string(f.RowKeyRegexFilter)
-		rx, err := newRegexp(pat)
+		rx, err := newRegexp(f.RowKeyRegexFilter)
 		if err != nil {
-			log.Printf("Bad rowkey_regex_filter pattern %q: %v", pat, err)
-			return false
+			return false, status.Errorf(codes.InvalidArgument, "Error in field 'rowkey_regex_filter' : %v", err)
 		}
 		if !rx.MatchString(r.key) {
-			return false
+			return false, nil
 		}
 	case *btpb.RowFilter_CellsPerRowLimitFilter:
 		// Grab the first n cells in the row.
@@ -510,7 +548,7 @@ func filterRow(f *btpb.RowFilter, r *row) bool {
 				}
 			}
 		}
-		return true
+		return true, nil
 	case *btpb.RowFilter_CellsPerRowOffsetFilter:
 		// Skip the first n cells in the row.
 		offset := int(f.CellsPerRowOffsetFilter)
@@ -520,96 +558,122 @@ func filterRow(f *btpb.RowFilter, r *row) bool {
 				if len(cs) > offset {
 					fam.cells[col] = cs[offset:]
 					offset = 0
-					return true
-				} else {
-					fam.cells[col] = cs[:0]
-					offset -= len(cs)
+					return true, nil
 				}
+				fam.cells[col] = cs[:0]
+				offset -= len(cs)
 			}
 		}
-		return true
+		return true, nil
+	case *btpb.RowFilter_RowSampleFilter:
+		// The row sample filter "matches all cells from a row with probability
+		// p, and matches no cells from the row with probability 1-p."
+		// See https://github.com/googleapis/googleapis/blob/master/google/bigtable/v2/data.proto
+		if f.RowSampleFilter <= 0.0 || f.RowSampleFilter >= 1.0 {
+			return false, status.Error(codes.InvalidArgument, "row_sample_filter argument must be between 0.0 and 1.0")
+		}
+		return randFloat() < f.RowSampleFilter, nil
 	}
 
 	// Any other case, operate on a per-cell basis.
 	cellCount := 0
 	for _, fam := range r.families {
 		for colName, cs := range fam.cells {
-			fam.cells[colName] = filterCells(f, fam.name, colName, cs)
+			filtered, err := filterCells(f, fam.name, colName, cs)
+			if err != nil {
+				return false, err
+			}
+			fam.cells[colName] = filtered
 			cellCount += len(fam.cells[colName])
 		}
 	}
-	return cellCount > 0
+	return cellCount > 0, nil
 }
 
-func filterCells(f *btpb.RowFilter, fam, col string, cs []cell) []cell {
+var randFloat = rand.Float64
+
+func filterCells(f *btpb.RowFilter, fam, col string, cs []cell) ([]cell, error) {
 	var ret []cell
 	for _, cell := range cs {
-		if includeCell(f, fam, col, cell) {
-			cell = modifyCell(f, cell)
+		include, err := includeCell(f, fam, col, cell)
+		if err != nil {
+			return nil, err
+		}
+		if include {
+			cell, err = modifyCell(f, cell)
+			if err != nil {
+				return nil, err
+			}
 			ret = append(ret, cell)
 		}
 	}
-	return ret
+	return ret, nil
 }
 
-func modifyCell(f *btpb.RowFilter, c cell) cell {
+func modifyCell(f *btpb.RowFilter, c cell) (cell, error) {
 	if f == nil {
-		return c
+		return c, nil
 	}
 	// Consider filters that may modify the cell contents
-	switch f.Filter.(type) {
+	switch filter := f.Filter.(type) {
 	case *btpb.RowFilter_StripValueTransformer:
-		return cell{ts: c.ts}
+		return cell{ts: c.ts}, nil
+	case *btpb.RowFilter_ApplyLabelTransformer:
+		if !validLabelTransformer.MatchString(filter.ApplyLabelTransformer) {
+			return cell{}, status.Errorf(
+				codes.InvalidArgument,
+				`apply_label_transformer must match RE2([a-z0-9\-]+), but found %v`,
+				filter.ApplyLabelTransformer,
+			)
+		}
+		return cell{ts: c.ts, value: c.value, labels: []string{filter.ApplyLabelTransformer}}, nil
 	default:
-		return c
+		return c, nil
 	}
 }
 
-func includeCell(f *btpb.RowFilter, fam, col string, cell cell) bool {
+func includeCell(f *btpb.RowFilter, fam, col string, cell cell) (bool, error) {
 	if f == nil {
-		return true
+		return true, nil
 	}
 	// TODO(dsymonds): Implement many more filters.
 	switch f := f.Filter.(type) {
 	case *btpb.RowFilter_CellsPerColumnLimitFilter:
 		// Don't log, row-level filter
-		return true
+		return true, nil
 	case *btpb.RowFilter_RowKeyRegexFilter:
 		// Don't log, row-level filter
-		return true
+		return true, nil
 	case *btpb.RowFilter_StripValueTransformer:
 		// Don't log, cell-modifying filter
-		return true
+		return true, nil
+	case *btpb.RowFilter_ApplyLabelTransformer:
+		// Don't log, cell-modifying filter
+		return true, nil
 	default:
 		log.Printf("WARNING: don't know how to handle filter of type %T (ignoring it)", f)
-		return true
+		return true, nil
 	case *btpb.RowFilter_FamilyNameRegexFilter:
-		pat := f.FamilyNameRegexFilter
-		rx, err := newRegexp(pat)
+		rx, err := newRegexp([]byte(f.FamilyNameRegexFilter))
 		if err != nil {
-			log.Printf("Bad family_name_regex_filter pattern %q: %v", pat, err)
-			return false
+			return false, status.Errorf(codes.InvalidArgument, "Error in field 'family_name_regex_filter' : %v", err)
 		}
-		return rx.MatchString(fam)
+		return rx.MatchString(fam), nil
 	case *btpb.RowFilter_ColumnQualifierRegexFilter:
-		pat := string(f.ColumnQualifierRegexFilter)
-		rx, err := newRegexp(pat)
+		rx, err := newRegexp(f.ColumnQualifierRegexFilter)
 		if err != nil {
-			log.Printf("Bad column_qualifier_regex_filter pattern %q: %v", pat, err)
-			return false
+			return false, status.Errorf(codes.InvalidArgument, "Error in field 'column_qualifier_regex_filter' : %v", err)
 		}
-		return rx.MatchString(col)
+		return rx.MatchString(toUTF8([]byte(col))), nil
 	case *btpb.RowFilter_ValueRegexFilter:
-		pat := string(f.ValueRegexFilter)
-		rx, err := newRegexp(pat)
+		rx, err := newRegexp(f.ValueRegexFilter)
 		if err != nil {
-			log.Printf("Bad value_regex_filter pattern %q: %v", pat, err)
-			return false
+			return false, status.Errorf(codes.InvalidArgument, "Error in field 'value_regex_filter' : %v", err)
 		}
-		return rx.Match(cell.value)
+		return rx.Match(cell.value), nil
 	case *btpb.RowFilter_ColumnRangeFilter:
 		if fam != f.ColumnRangeFilter.FamilyName {
-			return false
+			return false, nil
 		}
 		// Start qualifier defaults to empty string closed
 		inRangeStart := func() bool { return col >= "" }
@@ -627,11 +691,11 @@ func includeCell(f *btpb.RowFilter, fam, col string, cell cell) bool {
 		case *btpb.ColumnRange_EndQualifierOpen:
 			inRangeEnd = func() bool { return col < string(eq.EndQualifierOpen) }
 		}
-		return inRangeStart() && inRangeEnd()
+		return inRangeStart() && inRangeEnd(), nil
 	case *btpb.RowFilter_TimestampRangeFilter:
 		// Lower bound is inclusive and defaults to 0, upper bound is exclusive and defaults to infinity.
 		return cell.ts >= f.TimestampRangeFilter.StartTimestampMicros &&
-			(f.TimestampRangeFilter.EndTimestampMicros == 0 || cell.ts < f.TimestampRangeFilter.EndTimestampMicros)
+			(f.TimestampRangeFilter.EndTimestampMicros == 0 || cell.ts < f.TimestampRangeFilter.EndTimestampMicros), nil
 	case *btpb.RowFilter_ValueRangeFilter:
 		v := cell.value
 		// Start value defaults to empty string closed
@@ -650,11 +714,20 @@ func includeCell(f *btpb.RowFilter, fam, col string, cell cell) bool {
 		case *btpb.ValueRange_EndValueOpen:
 			inRangeEnd = func() bool { return bytes.Compare(v, ev.EndValueOpen) < 0 }
 		}
-		return inRangeStart() && inRangeEnd()
+		return inRangeStart() && inRangeEnd(), nil
 	}
 }
 
-func newRegexp(pat string) (*regexp.Regexp, error) {
+func toUTF8(bs []byte) string {
+	var rs []rune
+	for _, b := range bs {
+		rs = append(rs, rune(b))
+	}
+	return string(rs)
+}
+
+func newRegexp(patBytes []byte) (*regexp.Regexp, error) {
+	pat := toUTF8(patBytes)
 	re, err := regexp.Compile("^" + pat + "$") // match entire target
 	if err != nil {
 		log.Printf("Bad pattern %q: %v", pat, err)
@@ -1301,8 +1374,9 @@ func (f *family) cellsByColumn(name string) []cell {
 }
 
 type cell struct {
-	ts    int64
-	value []byte
+	ts     int64
+	value  []byte
+	labels []string
 }
 
 type byDescTS []cell

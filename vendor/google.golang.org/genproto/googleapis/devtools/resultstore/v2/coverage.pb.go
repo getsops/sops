@@ -49,7 +49,7 @@ func (m *LineCoverage) Reset()         { *m = LineCoverage{} }
 func (m *LineCoverage) String() string { return proto.CompactTextString(m) }
 func (*LineCoverage) ProtoMessage()    {}
 func (*LineCoverage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_823b424facf00e45, []int{0}
+	return fileDescriptor_coverage_e65089ff68acaa04, []int{0}
 }
 func (m *LineCoverage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LineCoverage.Unmarshal(m, b)
@@ -57,8 +57,8 @@ func (m *LineCoverage) XXX_Unmarshal(b []byte) error {
 func (m *LineCoverage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LineCoverage.Marshal(b, m, deterministic)
 }
-func (m *LineCoverage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LineCoverage.Merge(m, src)
+func (dst *LineCoverage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LineCoverage.Merge(dst, src)
 }
 func (m *LineCoverage) XXX_Size() int {
 	return xxx_messageInfo_LineCoverage.Size(m)
@@ -123,7 +123,7 @@ func (m *BranchCoverage) Reset()         { *m = BranchCoverage{} }
 func (m *BranchCoverage) String() string { return proto.CompactTextString(m) }
 func (*BranchCoverage) ProtoMessage()    {}
 func (*BranchCoverage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_823b424facf00e45, []int{1}
+	return fileDescriptor_coverage_e65089ff68acaa04, []int{1}
 }
 func (m *BranchCoverage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BranchCoverage.Unmarshal(m, b)
@@ -131,8 +131,8 @@ func (m *BranchCoverage) XXX_Unmarshal(b []byte) error {
 func (m *BranchCoverage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BranchCoverage.Marshal(b, m, deterministic)
 }
-func (m *BranchCoverage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BranchCoverage.Merge(m, src)
+func (dst *BranchCoverage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BranchCoverage.Merge(dst, src)
 }
 func (m *BranchCoverage) XXX_Size() int {
 	return xxx_messageInfo_BranchCoverage.Size(m)
@@ -188,7 +188,7 @@ func (m *FileCoverage) Reset()         { *m = FileCoverage{} }
 func (m *FileCoverage) String() string { return proto.CompactTextString(m) }
 func (*FileCoverage) ProtoMessage()    {}
 func (*FileCoverage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_823b424facf00e45, []int{2}
+	return fileDescriptor_coverage_e65089ff68acaa04, []int{2}
 }
 func (m *FileCoverage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FileCoverage.Unmarshal(m, b)
@@ -196,8 +196,8 @@ func (m *FileCoverage) XXX_Unmarshal(b []byte) error {
 func (m *FileCoverage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FileCoverage.Marshal(b, m, deterministic)
 }
-func (m *FileCoverage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FileCoverage.Merge(m, src)
+func (dst *FileCoverage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FileCoverage.Merge(dst, src)
 }
 func (m *FileCoverage) XXX_Size() int {
 	return xxx_messageInfo_FileCoverage.Size(m)
@@ -243,7 +243,7 @@ func (m *ActionCoverage) Reset()         { *m = ActionCoverage{} }
 func (m *ActionCoverage) String() string { return proto.CompactTextString(m) }
 func (*ActionCoverage) ProtoMessage()    {}
 func (*ActionCoverage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_823b424facf00e45, []int{3}
+	return fileDescriptor_coverage_e65089ff68acaa04, []int{3}
 }
 func (m *ActionCoverage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ActionCoverage.Unmarshal(m, b)
@@ -251,8 +251,8 @@ func (m *ActionCoverage) XXX_Unmarshal(b []byte) error {
 func (m *ActionCoverage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ActionCoverage.Marshal(b, m, deterministic)
 }
-func (m *ActionCoverage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ActionCoverage.Merge(m, src)
+func (dst *ActionCoverage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ActionCoverage.Merge(dst, src)
 }
 func (m *ActionCoverage) XXX_Size() int {
 	return xxx_messageInfo_ActionCoverage.Size(m)
@@ -278,10 +278,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/resultstore/v2/coverage.proto", fileDescriptor_823b424facf00e45)
+	proto.RegisterFile("google/devtools/resultstore/v2/coverage.proto", fileDescriptor_coverage_e65089ff68acaa04)
 }
 
-var fileDescriptor_823b424facf00e45 = []byte{
+var fileDescriptor_coverage_e65089ff68acaa04 = []byte{
 	// 372 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x52, 0x4d, 0x6b, 0xe3, 0x30,
 	0x10, 0xc5, 0xf9, 0x58, 0x76, 0x67, 0x6d, 0xef, 0xae, 0xd8, 0x83, 0xd9, 0xc3, 0x12, 0x0c, 0x81,

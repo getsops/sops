@@ -48,7 +48,7 @@ func NewCodeWriter() *CodeWriter {
 }
 
 // WriteGoFile appends the buffer with the total size of all created structures
-// and writes it as a Go file to the the given file with the given package name.
+// and writes it as a Go file to the given file with the given package name.
 func (w *CodeWriter) WriteGoFile(filename, pkg string) {
 	f, err := os.Create(filename)
 	if err != nil {
@@ -61,7 +61,7 @@ func (w *CodeWriter) WriteGoFile(filename, pkg string) {
 }
 
 // WriteVersionedGoFile appends the buffer with the total size of all created
-// structures and writes it as a Go file to the the given file with the given
+// structures and writes it as a Go file to the given file with the given
 // package name and build tags for the current Unicode version,
 func (w *CodeWriter) WriteVersionedGoFile(filename, pkg string) {
 	tags := buildTags()
@@ -79,7 +79,7 @@ func (w *CodeWriter) WriteVersionedGoFile(filename, pkg string) {
 }
 
 // WriteGo appends the buffer with the total size of all created structures and
-// writes it as a Go file to the the given writer with the given package name.
+// writes it as a Go file to the given writer with the given package name.
 func (w *CodeWriter) WriteGo(out io.Writer, pkg, tags string) (n int, err error) {
 	sz := w.Size
 	w.WriteComment("Total table size %d bytes (%dKiB); checksum: %X\n", sz, sz/1024, w.Hash.Sum32())

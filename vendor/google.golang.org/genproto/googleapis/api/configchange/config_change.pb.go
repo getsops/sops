@@ -42,7 +42,6 @@ var ChangeType_name = map[int32]string{
 	2: "REMOVED",
 	3: "MODIFIED",
 }
-
 var ChangeType_value = map[string]int32{
 	"CHANGE_TYPE_UNSPECIFIED": 0,
 	"ADDED":                   1,
@@ -53,9 +52,8 @@ var ChangeType_value = map[string]int32{
 func (x ChangeType) String() string {
 	return proto.EnumName(ChangeType_name, int32(x))
 }
-
 func (ChangeType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_5c5c17e3f260da51, []int{0}
+	return fileDescriptor_config_change_575fa64fb42e14af, []int{0}
 }
 
 // Output generated from semantically comparing two versions of a service
@@ -95,7 +93,7 @@ func (m *ConfigChange) Reset()         { *m = ConfigChange{} }
 func (m *ConfigChange) String() string { return proto.CompactTextString(m) }
 func (*ConfigChange) ProtoMessage()    {}
 func (*ConfigChange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5c5c17e3f260da51, []int{0}
+	return fileDescriptor_config_change_575fa64fb42e14af, []int{0}
 }
 func (m *ConfigChange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ConfigChange.Unmarshal(m, b)
@@ -103,8 +101,8 @@ func (m *ConfigChange) XXX_Unmarshal(b []byte) error {
 func (m *ConfigChange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ConfigChange.Marshal(b, m, deterministic)
 }
-func (m *ConfigChange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigChange.Merge(m, src)
+func (dst *ConfigChange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigChange.Merge(dst, src)
 }
 func (m *ConfigChange) XXX_Size() int {
 	return xxx_messageInfo_ConfigChange.Size(m)
@@ -165,7 +163,7 @@ func (m *Advice) Reset()         { *m = Advice{} }
 func (m *Advice) String() string { return proto.CompactTextString(m) }
 func (*Advice) ProtoMessage()    {}
 func (*Advice) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5c5c17e3f260da51, []int{1}
+	return fileDescriptor_config_change_575fa64fb42e14af, []int{1}
 }
 func (m *Advice) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Advice.Unmarshal(m, b)
@@ -173,8 +171,8 @@ func (m *Advice) XXX_Unmarshal(b []byte) error {
 func (m *Advice) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Advice.Marshal(b, m, deterministic)
 }
-func (m *Advice) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Advice.Merge(m, src)
+func (dst *Advice) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Advice.Merge(dst, src)
 }
 func (m *Advice) XXX_Size() int {
 	return xxx_messageInfo_Advice.Size(m)
@@ -198,9 +196,11 @@ func init() {
 	proto.RegisterEnum("google.api.ChangeType", ChangeType_name, ChangeType_value)
 }
 
-func init() { proto.RegisterFile("google/api/config_change.proto", fileDescriptor_5c5c17e3f260da51) }
+func init() {
+	proto.RegisterFile("google/api/config_change.proto", fileDescriptor_config_change_575fa64fb42e14af)
+}
 
-var fileDescriptor_5c5c17e3f260da51 = []byte{
+var fileDescriptor_config_change_575fa64fb42e14af = []byte{
 	// 338 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x4c, 0x91, 0xcd, 0x4e, 0xc2, 0x40,
 	0x14, 0x85, 0x2d, 0xff, 0xdc, 0x12, 0x82, 0xb3, 0xd0, 0x26, 0x24, 0xa6, 0x61, 0x45, 0x88, 0x69,

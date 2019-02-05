@@ -33,7 +33,7 @@ func (m *LineCoverageSummary) Reset()         { *m = LineCoverageSummary{} }
 func (m *LineCoverageSummary) String() string { return proto.CompactTextString(m) }
 func (*LineCoverageSummary) ProtoMessage()    {}
 func (*LineCoverageSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a504af212dd04847, []int{0}
+	return fileDescriptor_coverage_summary_8697a0fedb5da971, []int{0}
 }
 func (m *LineCoverageSummary) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LineCoverageSummary.Unmarshal(m, b)
@@ -41,8 +41,8 @@ func (m *LineCoverageSummary) XXX_Unmarshal(b []byte) error {
 func (m *LineCoverageSummary) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LineCoverageSummary.Marshal(b, m, deterministic)
 }
-func (m *LineCoverageSummary) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LineCoverageSummary.Merge(m, src)
+func (dst *LineCoverageSummary) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LineCoverageSummary.Merge(dst, src)
 }
 func (m *LineCoverageSummary) XXX_Size() int {
 	return xxx_messageInfo_LineCoverageSummary.Size(m)
@@ -92,7 +92,7 @@ func (m *BranchCoverageSummary) Reset()         { *m = BranchCoverageSummary{} }
 func (m *BranchCoverageSummary) String() string { return proto.CompactTextString(m) }
 func (*BranchCoverageSummary) ProtoMessage()    {}
 func (*BranchCoverageSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a504af212dd04847, []int{1}
+	return fileDescriptor_coverage_summary_8697a0fedb5da971, []int{1}
 }
 func (m *BranchCoverageSummary) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BranchCoverageSummary.Unmarshal(m, b)
@@ -100,8 +100,8 @@ func (m *BranchCoverageSummary) XXX_Unmarshal(b []byte) error {
 func (m *BranchCoverageSummary) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BranchCoverageSummary.Marshal(b, m, deterministic)
 }
-func (m *BranchCoverageSummary) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BranchCoverageSummary.Merge(m, src)
+func (dst *BranchCoverageSummary) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BranchCoverageSummary.Merge(dst, src)
 }
 func (m *BranchCoverageSummary) XXX_Size() int {
 	return xxx_messageInfo_BranchCoverageSummary.Size(m)
@@ -150,7 +150,7 @@ func (m *LanguageCoverageSummary) Reset()         { *m = LanguageCoverageSummary
 func (m *LanguageCoverageSummary) String() string { return proto.CompactTextString(m) }
 func (*LanguageCoverageSummary) ProtoMessage()    {}
 func (*LanguageCoverageSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a504af212dd04847, []int{2}
+	return fileDescriptor_coverage_summary_8697a0fedb5da971, []int{2}
 }
 func (m *LanguageCoverageSummary) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LanguageCoverageSummary.Unmarshal(m, b)
@@ -158,8 +158,8 @@ func (m *LanguageCoverageSummary) XXX_Unmarshal(b []byte) error {
 func (m *LanguageCoverageSummary) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LanguageCoverageSummary.Marshal(b, m, deterministic)
 }
-func (m *LanguageCoverageSummary) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LanguageCoverageSummary.Merge(m, src)
+func (dst *LanguageCoverageSummary) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LanguageCoverageSummary.Merge(dst, src)
 }
 func (m *LanguageCoverageSummary) XXX_Size() int {
 	return xxx_messageInfo_LanguageCoverageSummary.Size(m)
@@ -198,10 +198,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/resultstore/v2/coverage_summary.proto", fileDescriptor_a504af212dd04847)
+	proto.RegisterFile("google/devtools/resultstore/v2/coverage_summary.proto", fileDescriptor_coverage_summary_8697a0fedb5da971)
 }
 
-var fileDescriptor_a504af212dd04847 = []byte{
+var fileDescriptor_coverage_summary_8697a0fedb5da971 = []byte{
 	// 358 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x41, 0x4b, 0xeb, 0x40,
 	0x14, 0x85, 0x49, 0xcb, 0x7b, 0x3c, 0xa6, 0xef, 0x95, 0x67, 0x4a, 0xa9, 0xb8, 0x10, 0xc9, 0xaa,

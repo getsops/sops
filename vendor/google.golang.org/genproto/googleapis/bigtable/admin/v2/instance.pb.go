@@ -38,7 +38,6 @@ var Instance_State_name = map[int32]string{
 	1: "READY",
 	2: "CREATING",
 }
-
 var Instance_State_value = map[string]int32{
 	"STATE_NOT_KNOWN": 0,
 	"READY":           1,
@@ -48,9 +47,8 @@ var Instance_State_value = map[string]int32{
 func (x Instance_State) String() string {
 	return proto.EnumName(Instance_State_name, int32(x))
 }
-
 func (Instance_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{0, 0}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{0, 0}
 }
 
 // The type of the instance.
@@ -79,7 +77,6 @@ var Instance_Type_name = map[int32]string{
 	1: "PRODUCTION",
 	2: "DEVELOPMENT",
 }
-
 var Instance_Type_value = map[string]int32{
 	"TYPE_UNSPECIFIED": 0,
 	"PRODUCTION":       1,
@@ -89,9 +86,8 @@ var Instance_Type_value = map[string]int32{
 func (x Instance_Type) String() string {
 	return proto.EnumName(Instance_Type_name, int32(x))
 }
-
 func (Instance_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{0, 1}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{0, 1}
 }
 
 // Possible states of a cluster.
@@ -124,7 +120,6 @@ var Cluster_State_name = map[int32]string{
 	3: "RESIZING",
 	4: "DISABLED",
 }
-
 var Cluster_State_value = map[string]int32{
 	"STATE_NOT_KNOWN": 0,
 	"READY":           1,
@@ -136,9 +131,8 @@ var Cluster_State_value = map[string]int32{
 func (x Cluster_State) String() string {
 	return proto.EnumName(Cluster_State_name, int32(x))
 }
-
 func (Cluster_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{1, 0}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{1, 0}
 }
 
 // A collection of Bigtable [Tables][google.bigtable.admin.v2.Table] and
@@ -180,7 +174,7 @@ func (m *Instance) Reset()         { *m = Instance{} }
 func (m *Instance) String() string { return proto.CompactTextString(m) }
 func (*Instance) ProtoMessage()    {}
 func (*Instance) Descriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{0}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{0}
 }
 func (m *Instance) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Instance.Unmarshal(m, b)
@@ -188,8 +182,8 @@ func (m *Instance) XXX_Unmarshal(b []byte) error {
 func (m *Instance) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Instance.Marshal(b, m, deterministic)
 }
-func (m *Instance) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Instance.Merge(m, src)
+func (dst *Instance) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Instance.Merge(dst, src)
 }
 func (m *Instance) XXX_Size() int {
 	return xxx_messageInfo_Instance.Size(m)
@@ -268,7 +262,7 @@ func (m *Cluster) Reset()         { *m = Cluster{} }
 func (m *Cluster) String() string { return proto.CompactTextString(m) }
 func (*Cluster) ProtoMessage()    {}
 func (*Cluster) Descriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{1}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{1}
 }
 func (m *Cluster) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Cluster.Unmarshal(m, b)
@@ -276,8 +270,8 @@ func (m *Cluster) XXX_Unmarshal(b []byte) error {
 func (m *Cluster) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Cluster.Marshal(b, m, deterministic)
 }
-func (m *Cluster) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Cluster.Merge(m, src)
+func (dst *Cluster) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Cluster.Merge(dst, src)
 }
 func (m *Cluster) XXX_Size() int {
 	return xxx_messageInfo_Cluster.Size(m)
@@ -357,7 +351,7 @@ func (m *AppProfile) Reset()         { *m = AppProfile{} }
 func (m *AppProfile) String() string { return proto.CompactTextString(m) }
 func (*AppProfile) ProtoMessage()    {}
 func (*AppProfile) Descriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{2}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{2}
 }
 func (m *AppProfile) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AppProfile.Unmarshal(m, b)
@@ -365,8 +359,8 @@ func (m *AppProfile) XXX_Unmarshal(b []byte) error {
 func (m *AppProfile) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AppProfile.Marshal(b, m, deterministic)
 }
-func (m *AppProfile) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppProfile.Merge(m, src)
+func (dst *AppProfile) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AppProfile.Merge(dst, src)
 }
 func (m *AppProfile) XXX_Size() int {
 	return xxx_messageInfo_AppProfile.Size(m)
@@ -523,7 +517,7 @@ func (m *AppProfile_MultiClusterRoutingUseAny) Reset()         { *m = AppProfile
 func (m *AppProfile_MultiClusterRoutingUseAny) String() string { return proto.CompactTextString(m) }
 func (*AppProfile_MultiClusterRoutingUseAny) ProtoMessage()    {}
 func (*AppProfile_MultiClusterRoutingUseAny) Descriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{2, 0}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{2, 0}
 }
 func (m *AppProfile_MultiClusterRoutingUseAny) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AppProfile_MultiClusterRoutingUseAny.Unmarshal(m, b)
@@ -531,8 +525,8 @@ func (m *AppProfile_MultiClusterRoutingUseAny) XXX_Unmarshal(b []byte) error {
 func (m *AppProfile_MultiClusterRoutingUseAny) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AppProfile_MultiClusterRoutingUseAny.Marshal(b, m, deterministic)
 }
-func (m *AppProfile_MultiClusterRoutingUseAny) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppProfile_MultiClusterRoutingUseAny.Merge(m, src)
+func (dst *AppProfile_MultiClusterRoutingUseAny) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AppProfile_MultiClusterRoutingUseAny.Merge(dst, src)
 }
 func (m *AppProfile_MultiClusterRoutingUseAny) XXX_Size() int {
 	return xxx_messageInfo_AppProfile_MultiClusterRoutingUseAny.Size(m)
@@ -562,7 +556,7 @@ func (m *AppProfile_SingleClusterRouting) Reset()         { *m = AppProfile_Sing
 func (m *AppProfile_SingleClusterRouting) String() string { return proto.CompactTextString(m) }
 func (*AppProfile_SingleClusterRouting) ProtoMessage()    {}
 func (*AppProfile_SingleClusterRouting) Descriptor() ([]byte, []int) {
-	return fileDescriptor_712127d2a900984d, []int{2, 1}
+	return fileDescriptor_instance_f4854c7156f8ce96, []int{2, 1}
 }
 func (m *AppProfile_SingleClusterRouting) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AppProfile_SingleClusterRouting.Unmarshal(m, b)
@@ -570,8 +564,8 @@ func (m *AppProfile_SingleClusterRouting) XXX_Unmarshal(b []byte) error {
 func (m *AppProfile_SingleClusterRouting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AppProfile_SingleClusterRouting.Marshal(b, m, deterministic)
 }
-func (m *AppProfile_SingleClusterRouting) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppProfile_SingleClusterRouting.Merge(m, src)
+func (dst *AppProfile_SingleClusterRouting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AppProfile_SingleClusterRouting.Merge(dst, src)
 }
 func (m *AppProfile_SingleClusterRouting) XXX_Size() int {
 	return xxx_messageInfo_AppProfile_SingleClusterRouting.Size(m)
@@ -609,10 +603,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/bigtable/admin/v2/instance.proto", fileDescriptor_712127d2a900984d)
+	proto.RegisterFile("google/bigtable/admin/v2/instance.proto", fileDescriptor_instance_f4854c7156f8ce96)
 }
 
-var fileDescriptor_712127d2a900984d = []byte{
+var fileDescriptor_instance_f4854c7156f8ce96 = []byte{
 	// 765 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0xdd, 0x8e, 0xdb, 0x44,
 	0x14, 0x8e, 0xf3, 0xb3, 0x64, 0x4f, 0xca, 0xd6, 0x1a, 0x22, 0x94, 0x86, 0x16, 0x42, 0xa4, 0xaa,

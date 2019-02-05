@@ -40,7 +40,7 @@ To query existing tables, create a Query and call its Read method:
 
     q := client.Query(`
         SELECT year, SUM(number) as num
-        FROM [bigquery-public-data:usa_names.usa_1910_2013]
+        FROM ` + "`bigquery-public-data.usa_names.usa_1910_2013`" + `
         WHERE name = "William"
         GROUP BY year
         ORDER BY year

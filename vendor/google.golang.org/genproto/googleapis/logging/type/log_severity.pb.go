@@ -69,7 +69,6 @@ var LogSeverity_name = map[int32]string{
 	700: "ALERT",
 	800: "EMERGENCY",
 }
-
 var LogSeverity_value = map[string]int32{
 	"DEFAULT":   0,
 	"DEBUG":     100,
@@ -85,9 +84,8 @@ var LogSeverity_value = map[string]int32{
 func (x LogSeverity) String() string {
 	return proto.EnumName(LogSeverity_name, int32(x))
 }
-
 func (LogSeverity) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_80f950dcc0b66556, []int{0}
+	return fileDescriptor_log_severity_690c3c95c38315a0, []int{0}
 }
 
 func init() {
@@ -95,10 +93,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/logging/type/log_severity.proto", fileDescriptor_80f950dcc0b66556)
+	proto.RegisterFile("google/logging/type/log_severity.proto", fileDescriptor_log_severity_690c3c95c38315a0)
 }
 
-var fileDescriptor_80f950dcc0b66556 = []byte{
+var fileDescriptor_log_severity_690c3c95c38315a0 = []byte{
 	// 309 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x4b, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0xcf, 0xc9, 0x4f, 0x4f, 0xcf, 0xcc, 0x4b, 0xd7, 0x2f, 0xa9, 0x2c, 0x00, 0x73,

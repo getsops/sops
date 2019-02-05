@@ -23,6 +23,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -53,6 +54,16 @@ func NewPortsClientWithBaseURI(baseURI string, subscriptionID string) PortsClien
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client PortsClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, machineName string, portName string, startTime *date.Time, endTime *date.Time) (result Port, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PortsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -152,6 +163,16 @@ func (client PortsClient) GetResponder(resp *http.Response) (result Port, err er
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client PortsClient) GetLiveness(ctx context.Context, resourceGroupName string, workspaceName string, machineName string, portName string, startTime *date.Time, endTime *date.Time) (result Liveness, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PortsClient.GetLiveness")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -251,6 +272,16 @@ func (client PortsClient) GetLivenessResponder(resp *http.Response) (result Live
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client PortsClient) ListAcceptingProcesses(ctx context.Context, resourceGroupName string, workspaceName string, machineName string, portName string, startTime *date.Time, endTime *date.Time) (result ProcessCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PortsClient.ListAcceptingProcesses")
+		defer func() {
+			sc := -1
+			if result.pc.Response.Response != nil {
+				sc = result.pc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -341,8 +372,8 @@ func (client PortsClient) ListAcceptingProcessesResponder(resp *http.Response) (
 }
 
 // listAcceptingProcessesNextResults retrieves the next set of results, if any.
-func (client PortsClient) listAcceptingProcessesNextResults(lastResults ProcessCollection) (result ProcessCollection, err error) {
-	req, err := lastResults.processCollectionPreparer()
+func (client PortsClient) listAcceptingProcessesNextResults(ctx context.Context, lastResults ProcessCollection) (result ProcessCollection, err error) {
+	req, err := lastResults.processCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicemap.PortsClient", "listAcceptingProcessesNextResults", nil, "Failure preparing next results request")
 	}
@@ -363,6 +394,16 @@ func (client PortsClient) listAcceptingProcessesNextResults(lastResults ProcessC
 
 // ListAcceptingProcessesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PortsClient) ListAcceptingProcessesComplete(ctx context.Context, resourceGroupName string, workspaceName string, machineName string, portName string, startTime *date.Time, endTime *date.Time) (result ProcessCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PortsClient.ListAcceptingProcesses")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAcceptingProcesses(ctx, resourceGroupName, workspaceName, machineName, portName, startTime, endTime)
 	return
 }
@@ -378,6 +419,16 @@ func (client PortsClient) ListAcceptingProcessesComplete(ctx context.Context, re
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client PortsClient) ListConnections(ctx context.Context, resourceGroupName string, workspaceName string, machineName string, portName string, startTime *date.Time, endTime *date.Time) (result ConnectionCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PortsClient.ListConnections")
+		defer func() {
+			sc := -1
+			if result.cc.Response.Response != nil {
+				sc = result.cc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -468,8 +519,8 @@ func (client PortsClient) ListConnectionsResponder(resp *http.Response) (result 
 }
 
 // listConnectionsNextResults retrieves the next set of results, if any.
-func (client PortsClient) listConnectionsNextResults(lastResults ConnectionCollection) (result ConnectionCollection, err error) {
-	req, err := lastResults.connectionCollectionPreparer()
+func (client PortsClient) listConnectionsNextResults(ctx context.Context, lastResults ConnectionCollection) (result ConnectionCollection, err error) {
+	req, err := lastResults.connectionCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicemap.PortsClient", "listConnectionsNextResults", nil, "Failure preparing next results request")
 	}
@@ -490,6 +541,16 @@ func (client PortsClient) listConnectionsNextResults(lastResults ConnectionColle
 
 // ListConnectionsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PortsClient) ListConnectionsComplete(ctx context.Context, resourceGroupName string, workspaceName string, machineName string, portName string, startTime *date.Time, endTime *date.Time) (result ConnectionCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PortsClient.ListConnections")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListConnections(ctx, resourceGroupName, workspaceName, machineName, portName, startTime, endTime)
 	return
 }

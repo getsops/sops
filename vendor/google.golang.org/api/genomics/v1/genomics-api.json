@@ -23,7 +23,7 @@
   "basePath": "",
   "baseUrl": "https://genomics.googleapis.com/",
   "batchPath": "batch",
-  "description": "Upload, process, query, and search Genomics data in the cloud.",
+  "description": "Uploads, processes, queries, and searches Genomics data in the cloud.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/genomics",
   "fullyEncodeReservedExpansion": true,
@@ -778,7 +778,7 @@
     "operations": {
       "methods": {
         "cancel": {
-          "description": "Starts asynchronous cancellation on a long-running operation. The server makes a best effort to cancel the operation, but success is not guaranteed. Clients may use Operations.GetOperation or Operations.ListOperations to check whether the cancellation succeeded or the operation completed despite cancellation.",
+          "description": "Starts asynchronous cancellation on a long-running operation.\nThe server makes a best effort to cancel the operation, but success is not\nguaranteed. Clients may use Operations.GetOperation\nor Operations.ListOperations\nto check whether the cancellation succeeded or the operation completed\ndespite cancellation.\nAuthorization requires the following [Google IAM](https://cloud.google.com/iam) permission\u0026#58;\n\n* `genomics.operations.cancel`",
           "flatPath": "v1/operations/{operationsId}:cancel",
           "httpMethod": "POST",
           "id": "genomics.operations.cancel",
@@ -807,7 +807,7 @@
           ]
         },
         "get": {
-          "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
+          "description": "Gets the latest state of a long-running operation.\nClients can use this method to poll the operation result at intervals as\nrecommended by the API service.\nAuthorization requires the following [Google IAM](https://cloud.google.com/iam) permission\u0026#58;\n\n* `genomics.operations.get`",
           "flatPath": "v1/operations/{operationsId}",
           "httpMethod": "GET",
           "id": "genomics.operations.get",
@@ -833,7 +833,7 @@
           ]
         },
         "list": {
-          "description": "Lists operations that match the specified filter in the request.",
+          "description": "Lists operations that match the specified filter in the request.\nAuthorization requires the following [Google IAM](https://cloud.google.com/iam) permission\u0026#58;\n\n* `genomics.operations.list`",
           "flatPath": "v1/operations",
           "httpMethod": "GET",
           "id": "genomics.operations.list",
@@ -1604,7 +1604,7 @@
       }
     }
   },
-  "revision": "20180905",
+  "revision": "20181017",
   "rootUrl": "https://genomics.googleapis.com/",
   "schemas": {
     "Annotation": {

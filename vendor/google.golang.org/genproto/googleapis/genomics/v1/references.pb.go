@@ -59,7 +59,7 @@ func (m *Reference) Reset()         { *m = Reference{} }
 func (m *Reference) String() string { return proto.CompactTextString(m) }
 func (*Reference) ProtoMessage()    {}
 func (*Reference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{0}
+	return fileDescriptor_references_4f3354422baff2a6, []int{0}
 }
 func (m *Reference) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Reference.Unmarshal(m, b)
@@ -67,8 +67,8 @@ func (m *Reference) XXX_Unmarshal(b []byte) error {
 func (m *Reference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Reference.Marshal(b, m, deterministic)
 }
-func (m *Reference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Reference.Merge(m, src)
+func (dst *Reference) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Reference.Merge(dst, src)
 }
 func (m *Reference) XXX_Size() int {
 	return xxx_messageInfo_Reference.Size(m)
@@ -172,7 +172,7 @@ func (m *ReferenceSet) Reset()         { *m = ReferenceSet{} }
 func (m *ReferenceSet) String() string { return proto.CompactTextString(m) }
 func (*ReferenceSet) ProtoMessage()    {}
 func (*ReferenceSet) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{1}
+	return fileDescriptor_references_4f3354422baff2a6, []int{1}
 }
 func (m *ReferenceSet) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReferenceSet.Unmarshal(m, b)
@@ -180,8 +180,8 @@ func (m *ReferenceSet) XXX_Unmarshal(b []byte) error {
 func (m *ReferenceSet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReferenceSet.Marshal(b, m, deterministic)
 }
-func (m *ReferenceSet) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReferenceSet.Merge(m, src)
+func (dst *ReferenceSet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReferenceSet.Merge(dst, src)
 }
 func (m *ReferenceSet) XXX_Size() int {
 	return xxx_messageInfo_ReferenceSet.Size(m)
@@ -276,7 +276,7 @@ func (m *SearchReferenceSetsRequest) Reset()         { *m = SearchReferenceSetsR
 func (m *SearchReferenceSetsRequest) String() string { return proto.CompactTextString(m) }
 func (*SearchReferenceSetsRequest) ProtoMessage()    {}
 func (*SearchReferenceSetsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{2}
+	return fileDescriptor_references_4f3354422baff2a6, []int{2}
 }
 func (m *SearchReferenceSetsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SearchReferenceSetsRequest.Unmarshal(m, b)
@@ -284,8 +284,8 @@ func (m *SearchReferenceSetsRequest) XXX_Unmarshal(b []byte) error {
 func (m *SearchReferenceSetsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SearchReferenceSetsRequest.Marshal(b, m, deterministic)
 }
-func (m *SearchReferenceSetsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SearchReferenceSetsRequest.Merge(m, src)
+func (dst *SearchReferenceSetsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchReferenceSetsRequest.Merge(dst, src)
 }
 func (m *SearchReferenceSetsRequest) XXX_Size() int {
 	return xxx_messageInfo_SearchReferenceSetsRequest.Size(m)
@@ -347,7 +347,7 @@ func (m *SearchReferenceSetsResponse) Reset()         { *m = SearchReferenceSets
 func (m *SearchReferenceSetsResponse) String() string { return proto.CompactTextString(m) }
 func (*SearchReferenceSetsResponse) ProtoMessage()    {}
 func (*SearchReferenceSetsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{3}
+	return fileDescriptor_references_4f3354422baff2a6, []int{3}
 }
 func (m *SearchReferenceSetsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SearchReferenceSetsResponse.Unmarshal(m, b)
@@ -355,8 +355,8 @@ func (m *SearchReferenceSetsResponse) XXX_Unmarshal(b []byte) error {
 func (m *SearchReferenceSetsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SearchReferenceSetsResponse.Marshal(b, m, deterministic)
 }
-func (m *SearchReferenceSetsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SearchReferenceSetsResponse.Merge(m, src)
+func (dst *SearchReferenceSetsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchReferenceSetsResponse.Merge(dst, src)
 }
 func (m *SearchReferenceSetsResponse) XXX_Size() int {
 	return xxx_messageInfo_SearchReferenceSetsResponse.Size(m)
@@ -393,7 +393,7 @@ func (m *GetReferenceSetRequest) Reset()         { *m = GetReferenceSetRequest{}
 func (m *GetReferenceSetRequest) String() string { return proto.CompactTextString(m) }
 func (*GetReferenceSetRequest) ProtoMessage()    {}
 func (*GetReferenceSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{4}
+	return fileDescriptor_references_4f3354422baff2a6, []int{4}
 }
 func (m *GetReferenceSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetReferenceSetRequest.Unmarshal(m, b)
@@ -401,8 +401,8 @@ func (m *GetReferenceSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetReferenceSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetReferenceSetRequest.Marshal(b, m, deterministic)
 }
-func (m *GetReferenceSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetReferenceSetRequest.Merge(m, src)
+func (dst *GetReferenceSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetReferenceSetRequest.Merge(dst, src)
 }
 func (m *GetReferenceSetRequest) XXX_Size() int {
 	return xxx_messageInfo_GetReferenceSetRequest.Size(m)
@@ -447,7 +447,7 @@ func (m *SearchReferencesRequest) Reset()         { *m = SearchReferencesRequest
 func (m *SearchReferencesRequest) String() string { return proto.CompactTextString(m) }
 func (*SearchReferencesRequest) ProtoMessage()    {}
 func (*SearchReferencesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{5}
+	return fileDescriptor_references_4f3354422baff2a6, []int{5}
 }
 func (m *SearchReferencesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SearchReferencesRequest.Unmarshal(m, b)
@@ -455,8 +455,8 @@ func (m *SearchReferencesRequest) XXX_Unmarshal(b []byte) error {
 func (m *SearchReferencesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SearchReferencesRequest.Marshal(b, m, deterministic)
 }
-func (m *SearchReferencesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SearchReferencesRequest.Merge(m, src)
+func (dst *SearchReferencesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchReferencesRequest.Merge(dst, src)
 }
 func (m *SearchReferencesRequest) XXX_Size() int {
 	return xxx_messageInfo_SearchReferencesRequest.Size(m)
@@ -518,7 +518,7 @@ func (m *SearchReferencesResponse) Reset()         { *m = SearchReferencesRespon
 func (m *SearchReferencesResponse) String() string { return proto.CompactTextString(m) }
 func (*SearchReferencesResponse) ProtoMessage()    {}
 func (*SearchReferencesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{6}
+	return fileDescriptor_references_4f3354422baff2a6, []int{6}
 }
 func (m *SearchReferencesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SearchReferencesResponse.Unmarshal(m, b)
@@ -526,8 +526,8 @@ func (m *SearchReferencesResponse) XXX_Unmarshal(b []byte) error {
 func (m *SearchReferencesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SearchReferencesResponse.Marshal(b, m, deterministic)
 }
-func (m *SearchReferencesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SearchReferencesResponse.Merge(m, src)
+func (dst *SearchReferencesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchReferencesResponse.Merge(dst, src)
 }
 func (m *SearchReferencesResponse) XXX_Size() int {
 	return xxx_messageInfo_SearchReferencesResponse.Size(m)
@@ -564,7 +564,7 @@ func (m *GetReferenceRequest) Reset()         { *m = GetReferenceRequest{} }
 func (m *GetReferenceRequest) String() string { return proto.CompactTextString(m) }
 func (*GetReferenceRequest) ProtoMessage()    {}
 func (*GetReferenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{7}
+	return fileDescriptor_references_4f3354422baff2a6, []int{7}
 }
 func (m *GetReferenceRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetReferenceRequest.Unmarshal(m, b)
@@ -572,8 +572,8 @@ func (m *GetReferenceRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetReferenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetReferenceRequest.Marshal(b, m, deterministic)
 }
-func (m *GetReferenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetReferenceRequest.Merge(m, src)
+func (dst *GetReferenceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetReferenceRequest.Merge(dst, src)
 }
 func (m *GetReferenceRequest) XXX_Size() int {
 	return xxx_messageInfo_GetReferenceRequest.Size(m)
@@ -616,7 +616,7 @@ func (m *ListBasesRequest) Reset()         { *m = ListBasesRequest{} }
 func (m *ListBasesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListBasesRequest) ProtoMessage()    {}
 func (*ListBasesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{8}
+	return fileDescriptor_references_4f3354422baff2a6, []int{8}
 }
 func (m *ListBasesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListBasesRequest.Unmarshal(m, b)
@@ -624,8 +624,8 @@ func (m *ListBasesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListBasesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListBasesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListBasesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListBasesRequest.Merge(m, src)
+func (dst *ListBasesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBasesRequest.Merge(dst, src)
 }
 func (m *ListBasesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListBasesRequest.Size(m)
@@ -691,7 +691,7 @@ func (m *ListBasesResponse) Reset()         { *m = ListBasesResponse{} }
 func (m *ListBasesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListBasesResponse) ProtoMessage()    {}
 func (*ListBasesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_008bb4c9c386df7c, []int{9}
+	return fileDescriptor_references_4f3354422baff2a6, []int{9}
 }
 func (m *ListBasesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListBasesResponse.Unmarshal(m, b)
@@ -699,8 +699,8 @@ func (m *ListBasesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListBasesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListBasesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListBasesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListBasesResponse.Merge(m, src)
+func (dst *ListBasesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBasesResponse.Merge(dst, src)
 }
 func (m *ListBasesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListBasesResponse.Size(m)
@@ -1030,10 +1030,10 @@ var _ReferenceServiceV1_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/genomics/v1/references.proto", fileDescriptor_008bb4c9c386df7c)
+	proto.RegisterFile("google/genomics/v1/references.proto", fileDescriptor_references_4f3354422baff2a6)
 }
 
-var fileDescriptor_008bb4c9c386df7c = []byte{
+var fileDescriptor_references_4f3354422baff2a6 = []byte{
 	// 851 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x41, 0x6f, 0x1b, 0x45,
 	0x14, 0xd6, 0x78, 0x63, 0x37, 0x7e, 0x76, 0x12, 0xf7, 0x15, 0xc2, 0xca, 0x25, 0xd4, 0x6c, 0x9a,

@@ -22,20 +22,18 @@
 package longrunning // import "cloud.google.com/go/longrunning"
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 
+	autogen "cloud.google.com/go/longrunning/autogen"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/googleapis/gax-go"
-	"google.golang.org/grpc/status"
-
-	"golang.org/x/net/context"
-
-	autogen "cloud.google.com/go/longrunning/autogen"
+	gax "github.com/googleapis/gax-go/v2"
 	pb "google.golang.org/genproto/googleapis/longrunning"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // ErrNoMetadata is the error returned by Metadata if the operation contains no metadata.

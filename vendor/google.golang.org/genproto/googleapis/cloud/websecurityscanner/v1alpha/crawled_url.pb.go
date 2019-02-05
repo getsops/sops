@@ -42,7 +42,7 @@ func (m *CrawledUrl) Reset()         { *m = CrawledUrl{} }
 func (m *CrawledUrl) String() string { return proto.CompactTextString(m) }
 func (*CrawledUrl) ProtoMessage()    {}
 func (*CrawledUrl) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a45f0d639c4b8a44, []int{0}
+	return fileDescriptor_crawled_url_b553fc5280c7b49d, []int{0}
 }
 func (m *CrawledUrl) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CrawledUrl.Unmarshal(m, b)
@@ -50,8 +50,8 @@ func (m *CrawledUrl) XXX_Unmarshal(b []byte) error {
 func (m *CrawledUrl) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CrawledUrl.Marshal(b, m, deterministic)
 }
-func (m *CrawledUrl) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CrawledUrl.Merge(m, src)
+func (dst *CrawledUrl) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CrawledUrl.Merge(dst, src)
 }
 func (m *CrawledUrl) XXX_Size() int {
 	return xxx_messageInfo_CrawledUrl.Size(m)
@@ -88,10 +88,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/crawled_url.proto", fileDescriptor_a45f0d639c4b8a44)
+	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/crawled_url.proto", fileDescriptor_crawled_url_b553fc5280c7b49d)
 }
 
-var fileDescriptor_a45f0d639c4b8a44 = []byte{
+var fileDescriptor_crawled_url_b553fc5280c7b49d = []byte{
 	// 235 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x90, 0x31, 0x4b, 0x04, 0x31,
 	0x10, 0x85, 0x59, 0x4f, 0x04, 0xc7, 0x42, 0x49, 0xb5, 0x88, 0xa0, 0xd8, 0x28, 0x08, 0x09, 0x62,

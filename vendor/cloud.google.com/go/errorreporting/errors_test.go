@@ -15,16 +15,14 @@
 package errorreporting
 
 import (
+	"context"
 	"errors"
 	"strings"
 	"testing"
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
-
-	gax "github.com/googleapis/gax-go"
-
-	"golang.org/x/net/context"
+	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	pb "google.golang.org/genproto/googleapis/devtools/clouderrorreporting/v1beta1"
 )

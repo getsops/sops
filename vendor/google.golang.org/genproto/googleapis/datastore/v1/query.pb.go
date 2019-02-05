@@ -45,7 +45,6 @@ var EntityResult_ResultType_name = map[int32]string{
 	2: "PROJECTION",
 	3: "KEY_ONLY",
 }
-
 var EntityResult_ResultType_value = map[string]int32{
 	"RESULT_TYPE_UNSPECIFIED": 0,
 	"FULL":                    1,
@@ -56,9 +55,8 @@ var EntityResult_ResultType_value = map[string]int32{
 func (x EntityResult_ResultType) String() string {
 	return proto.EnumName(EntityResult_ResultType_name, int32(x))
 }
-
 func (EntityResult_ResultType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{0, 0}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{0, 0}
 }
 
 // The sort direction.
@@ -78,7 +76,6 @@ var PropertyOrder_Direction_name = map[int32]string{
 	1: "ASCENDING",
 	2: "DESCENDING",
 }
-
 var PropertyOrder_Direction_value = map[string]int32{
 	"DIRECTION_UNSPECIFIED": 0,
 	"ASCENDING":             1,
@@ -88,9 +85,8 @@ var PropertyOrder_Direction_value = map[string]int32{
 func (x PropertyOrder_Direction) String() string {
 	return proto.EnumName(PropertyOrder_Direction_name, int32(x))
 }
-
 func (PropertyOrder_Direction) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{5, 0}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{5, 0}
 }
 
 // A composite filter operator.
@@ -107,7 +103,6 @@ var CompositeFilter_Operator_name = map[int32]string{
 	0: "OPERATOR_UNSPECIFIED",
 	1: "AND",
 }
-
 var CompositeFilter_Operator_value = map[string]int32{
 	"OPERATOR_UNSPECIFIED": 0,
 	"AND":                  1,
@@ -116,9 +111,8 @@ var CompositeFilter_Operator_value = map[string]int32{
 func (x CompositeFilter_Operator) String() string {
 	return proto.EnumName(CompositeFilter_Operator_name, int32(x))
 }
-
 func (CompositeFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{7, 0}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{7, 0}
 }
 
 // A property filter operator.
@@ -150,7 +144,6 @@ var PropertyFilter_Operator_name = map[int32]string{
 	5:  "EQUAL",
 	11: "HAS_ANCESTOR",
 }
-
 var PropertyFilter_Operator_value = map[string]int32{
 	"OPERATOR_UNSPECIFIED":  0,
 	"LESS_THAN":             1,
@@ -164,9 +157,8 @@ var PropertyFilter_Operator_value = map[string]int32{
 func (x PropertyFilter_Operator) String() string {
 	return proto.EnumName(PropertyFilter_Operator_name, int32(x))
 }
-
 func (PropertyFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{8, 0}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{8, 0}
 }
 
 // The possible values for the `more_results` field.
@@ -193,7 +185,6 @@ var QueryResultBatch_MoreResultsType_name = map[int32]string{
 	4: "MORE_RESULTS_AFTER_CURSOR",
 	3: "NO_MORE_RESULTS",
 }
-
 var QueryResultBatch_MoreResultsType_value = map[string]int32{
 	"MORE_RESULTS_TYPE_UNSPECIFIED": 0,
 	"NOT_FINISHED":                  1,
@@ -205,9 +196,8 @@ var QueryResultBatch_MoreResultsType_value = map[string]int32{
 func (x QueryResultBatch_MoreResultsType) String() string {
 	return proto.EnumName(QueryResultBatch_MoreResultsType_name, int32(x))
 }
-
 func (QueryResultBatch_MoreResultsType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{11, 0}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{11, 0}
 }
 
 // The result of fetching an entity from Datastore.
@@ -236,7 +226,7 @@ func (m *EntityResult) Reset()         { *m = EntityResult{} }
 func (m *EntityResult) String() string { return proto.CompactTextString(m) }
 func (*EntityResult) ProtoMessage()    {}
 func (*EntityResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{0}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{0}
 }
 func (m *EntityResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityResult.Unmarshal(m, b)
@@ -244,8 +234,8 @@ func (m *EntityResult) XXX_Unmarshal(b []byte) error {
 func (m *EntityResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EntityResult.Marshal(b, m, deterministic)
 }
-func (m *EntityResult) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EntityResult.Merge(m, src)
+func (dst *EntityResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EntityResult.Merge(dst, src)
 }
 func (m *EntityResult) XXX_Size() int {
 	return xxx_messageInfo_EntityResult.Size(m)
@@ -317,7 +307,7 @@ func (m *Query) Reset()         { *m = Query{} }
 func (m *Query) String() string { return proto.CompactTextString(m) }
 func (*Query) ProtoMessage()    {}
 func (*Query) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{1}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{1}
 }
 func (m *Query) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Query.Unmarshal(m, b)
@@ -325,8 +315,8 @@ func (m *Query) XXX_Unmarshal(b []byte) error {
 func (m *Query) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Query.Marshal(b, m, deterministic)
 }
-func (m *Query) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Query.Merge(m, src)
+func (dst *Query) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Query.Merge(dst, src)
 }
 func (m *Query) XXX_Size() int {
 	return xxx_messageInfo_Query.Size(m)
@@ -413,7 +403,7 @@ func (m *KindExpression) Reset()         { *m = KindExpression{} }
 func (m *KindExpression) String() string { return proto.CompactTextString(m) }
 func (*KindExpression) ProtoMessage()    {}
 func (*KindExpression) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{2}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{2}
 }
 func (m *KindExpression) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KindExpression.Unmarshal(m, b)
@@ -421,8 +411,8 @@ func (m *KindExpression) XXX_Unmarshal(b []byte) error {
 func (m *KindExpression) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_KindExpression.Marshal(b, m, deterministic)
 }
-func (m *KindExpression) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_KindExpression.Merge(m, src)
+func (dst *KindExpression) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KindExpression.Merge(dst, src)
 }
 func (m *KindExpression) XXX_Size() int {
 	return xxx_messageInfo_KindExpression.Size(m)
@@ -454,7 +444,7 @@ func (m *PropertyReference) Reset()         { *m = PropertyReference{} }
 func (m *PropertyReference) String() string { return proto.CompactTextString(m) }
 func (*PropertyReference) ProtoMessage()    {}
 func (*PropertyReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{3}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{3}
 }
 func (m *PropertyReference) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PropertyReference.Unmarshal(m, b)
@@ -462,8 +452,8 @@ func (m *PropertyReference) XXX_Unmarshal(b []byte) error {
 func (m *PropertyReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PropertyReference.Marshal(b, m, deterministic)
 }
-func (m *PropertyReference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PropertyReference.Merge(m, src)
+func (dst *PropertyReference) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PropertyReference.Merge(dst, src)
 }
 func (m *PropertyReference) XXX_Size() int {
 	return xxx_messageInfo_PropertyReference.Size(m)
@@ -494,7 +484,7 @@ func (m *Projection) Reset()         { *m = Projection{} }
 func (m *Projection) String() string { return proto.CompactTextString(m) }
 func (*Projection) ProtoMessage()    {}
 func (*Projection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{4}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{4}
 }
 func (m *Projection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Projection.Unmarshal(m, b)
@@ -502,8 +492,8 @@ func (m *Projection) XXX_Unmarshal(b []byte) error {
 func (m *Projection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Projection.Marshal(b, m, deterministic)
 }
-func (m *Projection) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Projection.Merge(m, src)
+func (dst *Projection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Projection.Merge(dst, src)
 }
 func (m *Projection) XXX_Size() int {
 	return xxx_messageInfo_Projection.Size(m)
@@ -536,7 +526,7 @@ func (m *PropertyOrder) Reset()         { *m = PropertyOrder{} }
 func (m *PropertyOrder) String() string { return proto.CompactTextString(m) }
 func (*PropertyOrder) ProtoMessage()    {}
 func (*PropertyOrder) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{5}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{5}
 }
 func (m *PropertyOrder) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PropertyOrder.Unmarshal(m, b)
@@ -544,8 +534,8 @@ func (m *PropertyOrder) XXX_Unmarshal(b []byte) error {
 func (m *PropertyOrder) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PropertyOrder.Marshal(b, m, deterministic)
 }
-func (m *PropertyOrder) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PropertyOrder.Merge(m, src)
+func (dst *PropertyOrder) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PropertyOrder.Merge(dst, src)
 }
 func (m *PropertyOrder) XXX_Size() int {
 	return xxx_messageInfo_PropertyOrder.Size(m)
@@ -587,7 +577,7 @@ func (m *Filter) Reset()         { *m = Filter{} }
 func (m *Filter) String() string { return proto.CompactTextString(m) }
 func (*Filter) ProtoMessage()    {}
 func (*Filter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{6}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{6}
 }
 func (m *Filter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Filter.Unmarshal(m, b)
@@ -595,8 +585,8 @@ func (m *Filter) XXX_Unmarshal(b []byte) error {
 func (m *Filter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Filter.Marshal(b, m, deterministic)
 }
-func (m *Filter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Filter.Merge(m, src)
+func (dst *Filter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Filter.Merge(dst, src)
 }
 func (m *Filter) XXX_Size() int {
 	return xxx_messageInfo_Filter.Size(m)
@@ -734,7 +724,7 @@ func (m *CompositeFilter) Reset()         { *m = CompositeFilter{} }
 func (m *CompositeFilter) String() string { return proto.CompactTextString(m) }
 func (*CompositeFilter) ProtoMessage()    {}
 func (*CompositeFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{7}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{7}
 }
 func (m *CompositeFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CompositeFilter.Unmarshal(m, b)
@@ -742,8 +732,8 @@ func (m *CompositeFilter) XXX_Unmarshal(b []byte) error {
 func (m *CompositeFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CompositeFilter.Marshal(b, m, deterministic)
 }
-func (m *CompositeFilter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CompositeFilter.Merge(m, src)
+func (dst *CompositeFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CompositeFilter.Merge(dst, src)
 }
 func (m *CompositeFilter) XXX_Size() int {
 	return xxx_messageInfo_CompositeFilter.Size(m)
@@ -785,7 +775,7 @@ func (m *PropertyFilter) Reset()         { *m = PropertyFilter{} }
 func (m *PropertyFilter) String() string { return proto.CompactTextString(m) }
 func (*PropertyFilter) ProtoMessage()    {}
 func (*PropertyFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{8}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{8}
 }
 func (m *PropertyFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PropertyFilter.Unmarshal(m, b)
@@ -793,8 +783,8 @@ func (m *PropertyFilter) XXX_Unmarshal(b []byte) error {
 func (m *PropertyFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PropertyFilter.Marshal(b, m, deterministic)
 }
-func (m *PropertyFilter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PropertyFilter.Merge(m, src)
+func (dst *PropertyFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PropertyFilter.Merge(dst, src)
 }
 func (m *PropertyFilter) XXX_Size() int {
 	return xxx_messageInfo_PropertyFilter.Size(m)
@@ -857,7 +847,7 @@ func (m *GqlQuery) Reset()         { *m = GqlQuery{} }
 func (m *GqlQuery) String() string { return proto.CompactTextString(m) }
 func (*GqlQuery) ProtoMessage()    {}
 func (*GqlQuery) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{9}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{9}
 }
 func (m *GqlQuery) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GqlQuery.Unmarshal(m, b)
@@ -865,8 +855,8 @@ func (m *GqlQuery) XXX_Unmarshal(b []byte) error {
 func (m *GqlQuery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GqlQuery.Marshal(b, m, deterministic)
 }
-func (m *GqlQuery) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GqlQuery.Merge(m, src)
+func (dst *GqlQuery) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GqlQuery.Merge(dst, src)
 }
 func (m *GqlQuery) XXX_Size() int {
 	return xxx_messageInfo_GqlQuery.Size(m)
@@ -922,7 +912,7 @@ func (m *GqlQueryParameter) Reset()         { *m = GqlQueryParameter{} }
 func (m *GqlQueryParameter) String() string { return proto.CompactTextString(m) }
 func (*GqlQueryParameter) ProtoMessage()    {}
 func (*GqlQueryParameter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{10}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{10}
 }
 func (m *GqlQueryParameter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GqlQueryParameter.Unmarshal(m, b)
@@ -930,8 +920,8 @@ func (m *GqlQueryParameter) XXX_Unmarshal(b []byte) error {
 func (m *GqlQueryParameter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GqlQueryParameter.Marshal(b, m, deterministic)
 }
-func (m *GqlQueryParameter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GqlQueryParameter.Merge(m, src)
+func (dst *GqlQueryParameter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GqlQueryParameter.Merge(dst, src)
 }
 func (m *GqlQueryParameter) XXX_Size() int {
 	return xxx_messageInfo_GqlQueryParameter.Size(m)
@@ -1083,7 +1073,7 @@ func (m *QueryResultBatch) Reset()         { *m = QueryResultBatch{} }
 func (m *QueryResultBatch) String() string { return proto.CompactTextString(m) }
 func (*QueryResultBatch) ProtoMessage()    {}
 func (*QueryResultBatch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_927b394a72d2bc0d, []int{11}
+	return fileDescriptor_query_2312a1dfc5fd06f2, []int{11}
 }
 func (m *QueryResultBatch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryResultBatch.Unmarshal(m, b)
@@ -1091,8 +1081,8 @@ func (m *QueryResultBatch) XXX_Unmarshal(b []byte) error {
 func (m *QueryResultBatch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QueryResultBatch.Marshal(b, m, deterministic)
 }
-func (m *QueryResultBatch) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryResultBatch.Merge(m, src)
+func (dst *QueryResultBatch) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryResultBatch.Merge(dst, src)
 }
 func (m *QueryResultBatch) XXX_Size() int {
 	return xxx_messageInfo_QueryResultBatch.Size(m)
@@ -1173,9 +1163,11 @@ func init() {
 	proto.RegisterEnum("google.datastore.v1.QueryResultBatch_MoreResultsType", QueryResultBatch_MoreResultsType_name, QueryResultBatch_MoreResultsType_value)
 }
 
-func init() { proto.RegisterFile("google/datastore/v1/query.proto", fileDescriptor_927b394a72d2bc0d) }
+func init() {
+	proto.RegisterFile("google/datastore/v1/query.proto", fileDescriptor_query_2312a1dfc5fd06f2)
+}
 
-var fileDescriptor_927b394a72d2bc0d = []byte{
+var fileDescriptor_query_2312a1dfc5fd06f2 = []byte{
 	// 1313 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xdd, 0x72, 0xd3, 0x46,
 	0x14, 0x8e, 0x64, 0x3b, 0x89, 0x8f, 0xff, 0xc4, 0xd2, 0x82, 0x08, 0x50, 0x12, 0x41, 0x4b, 0x3a,

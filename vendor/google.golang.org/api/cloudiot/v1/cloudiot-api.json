@@ -113,6 +113,35 @@
           "resources": {
             "registries": {
               "methods": {
+                "bindDeviceToGateway": {
+                  "description": "Associates the device with the gateway.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}:bindDeviceToGateway",
+                  "httpMethod": "POST",
+                  "id": "cloudiot.projects.locations.registries.bindDeviceToGateway",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The name of the registry. For example,\n`projects/example-project/locations/us-central1/registries/my-registry`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}:bindDeviceToGateway",
+                  "request": {
+                    "$ref": "BindDeviceToGatewayRequest"
+                  },
+                  "response": {
+                    "$ref": "BindDeviceToGatewayResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudiot"
+                  ]
+                },
                 "create": {
                   "description": "Creates a device registry that contains devices.",
                   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries",
@@ -352,6 +381,35 @@
                     "https://www.googleapis.com/auth/cloud-platform",
                     "https://www.googleapis.com/auth/cloudiot"
                   ]
+                },
+                "unbindDeviceFromGateway": {
+                  "description": "Deletes the association between the device and the gateway.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}:unbindDeviceFromGateway",
+                  "httpMethod": "POST",
+                  "id": "cloudiot.projects.locations.registries.unbindDeviceFromGateway",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The name of the registry. For example,\n`projects/example-project/locations/us-central1/registries/my-registry`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}:unbindDeviceFromGateway",
+                  "request": {
+                    "$ref": "UnbindDeviceFromGatewayRequest"
+                  },
+                  "response": {
+                    "$ref": "UnbindDeviceFromGatewayResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudiot"
+                  ]
                 }
               },
               "resources": {
@@ -472,6 +530,26 @@
                           "location": "query",
                           "type": "string"
                         },
+                        "gatewayListOptions.associationsDeviceId": {
+                          "description": "If set, returns only the gateways with which the specified device is\nassociated. The device ID can be numeric (`num_id`) or the user-defined\nstring (`id`). For example, if `456` is specified, returns only the\ngateways to which the device with `num_id` 456 is bound.",
+                          "location": "query",
+                          "type": "string"
+                        },
+                        "gatewayListOptions.associationsGatewayId": {
+                          "description": "If set, only devices associated with the specified gateway are returned.\nThe gateway ID can be numeric (`num_id`) or the user-defined string\n(`id`). For example, if `123` is specified, only devices bound to the\ngateway with `num_id` 123 are returned.",
+                          "location": "query",
+                          "type": "string"
+                        },
+                        "gatewayListOptions.gatewayType": {
+                          "description": "If `GATEWAY` is specified, only gateways are returned. If `NON_GATEWAY`\nis specified, only non-gateway devices are returned. If\n`GATEWAY_TYPE_UNSPECIFIED` is specified, all devices are returned.",
+                          "enum": [
+                            "GATEWAY_TYPE_UNSPECIFIED",
+                            "GATEWAY",
+                            "NON_GATEWAY"
+                          ],
+                          "location": "query",
+                          "type": "string"
+                        },
                         "pageSize": {
                           "description": "The maximum number of devices to return in the response. If this value\nis zero, the service will select a default size. A call may return fewer\nobjects than requested. A non-empty `next_page_token` in the response\nindicates that more data is available.",
                           "format": "int32",
@@ -563,6 +641,35 @@
                         "https://www.googleapis.com/auth/cloud-platform",
                         "https://www.googleapis.com/auth/cloudiot"
                       ]
+                    },
+                    "sendCommandToDevice": {
+                      "description": "Sends a command to the specified device. In order for a device to be able\nto receive commands, it must:\n1) be connected to Cloud IoT Core using the MQTT protocol, and\n2) be subscribed to the group of MQTT topics specified by\n   /devices/{device-id}/commands/#. This subscription will receive commands\n   at the top-level topic /devices/{device-id}/commands as well as commands\n   for subfolders, like /devices/{device-id}/commands/subfolder.\n   Note that subscribing to specific subfolders is not supported.\nIf the command could not be delivered to the device, this method will\nreturn an error; in particular, if the device is not subscribed, this\nmethod will return FAILED_PRECONDITION. Otherwise, this method will\nreturn OK. If the subscription is QoS 1, at least once delivery will be\nguaranteed; for QoS 0, no acknowledgment will be expected from the device.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/devices/{devicesId}:sendCommandToDevice",
+                      "httpMethod": "POST",
+                      "id": "cloudiot.projects.locations.registries.devices.sendCommandToDevice",
+                      "parameterOrder": [
+                        "name"
+                      ],
+                      "parameters": {
+                        "name": {
+                          "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/devices/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+name}:sendCommandToDevice",
+                      "request": {
+                        "$ref": "SendCommandToDeviceRequest"
+                      },
+                      "response": {
+                        "$ref": "SendCommandToDeviceResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudiot"
+                      ]
                     }
                   },
                   "resources": {
@@ -642,6 +749,35 @@
                 },
                 "groups": {
                   "methods": {
+                    "bindDeviceToGateway": {
+                      "description": "Associates the device with the gateway.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}:bindDeviceToGateway",
+                      "httpMethod": "POST",
+                      "id": "cloudiot.projects.locations.registries.groups.bindDeviceToGateway",
+                      "parameterOrder": [
+                        "parent"
+                      ],
+                      "parameters": {
+                        "parent": {
+                          "description": "The name of the registry. For example,\n`projects/example-project/locations/us-central1/registries/my-registry`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+parent}:bindDeviceToGateway",
+                      "request": {
+                        "$ref": "BindDeviceToGatewayRequest"
+                      },
+                      "response": {
+                        "$ref": "BindDeviceToGatewayResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudiot"
+                      ]
+                    },
                     "getIamPolicy": {
                       "description": "Gets the access control policy for a resource.\nReturns an empty policy if the resource exists and does not have a policy\nset.",
                       "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}:getIamPolicy",
@@ -728,6 +864,35 @@
                         "https://www.googleapis.com/auth/cloud-platform",
                         "https://www.googleapis.com/auth/cloudiot"
                       ]
+                    },
+                    "unbindDeviceFromGateway": {
+                      "description": "Deletes the association between the device and the gateway.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}:unbindDeviceFromGateway",
+                      "httpMethod": "POST",
+                      "id": "cloudiot.projects.locations.registries.groups.unbindDeviceFromGateway",
+                      "parameterOrder": [
+                        "parent"
+                      ],
+                      "parameters": {
+                        "parent": {
+                          "description": "The name of the registry. For example,\n`projects/example-project/locations/us-central1/registries/my-registry`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+parent}:unbindDeviceFromGateway",
+                      "request": {
+                        "$ref": "UnbindDeviceFromGatewayRequest"
+                      },
+                      "response": {
+                        "$ref": "UnbindDeviceFromGatewayResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudiot"
+                      ]
                     }
                   },
                   "resources": {
@@ -790,6 +955,26 @@
                             "fieldMask": {
                               "description": "The fields of the `Device` resource to be returned in the response. The\nfields `id` and `num_id` are always returned, along with any\nother fields specified.",
                               "format": "google-fieldmask",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "gatewayListOptions.associationsDeviceId": {
+                              "description": "If set, returns only the gateways with which the specified device is\nassociated. The device ID can be numeric (`num_id`) or the user-defined\nstring (`id`). For example, if `456` is specified, returns only the\ngateways to which the device with `num_id` 456 is bound.",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "gatewayListOptions.associationsGatewayId": {
+                              "description": "If set, only devices associated with the specified gateway are returned.\nThe gateway ID can be numeric (`num_id`) or the user-defined string\n(`id`). For example, if `123` is specified, only devices bound to the\ngateway with `num_id` 123 are returned.",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "gatewayListOptions.gatewayType": {
+                              "description": "If `GATEWAY` is specified, only gateways are returned. If `NON_GATEWAY`\nis specified, only non-gateway devices are returned. If\n`GATEWAY_TYPE_UNSPECIFIED` is specified, all devices are returned.",
+                              "enum": [
+                                "GATEWAY_TYPE_UNSPECIFIED",
+                                "GATEWAY",
+                                "NON_GATEWAY"
+                              ],
                               "location": "query",
                               "type": "string"
                             },
@@ -884,6 +1069,35 @@
                             "https://www.googleapis.com/auth/cloud-platform",
                             "https://www.googleapis.com/auth/cloudiot"
                           ]
+                        },
+                        "sendCommandToDevice": {
+                          "description": "Sends a command to the specified device. In order for a device to be able\nto receive commands, it must:\n1) be connected to Cloud IoT Core using the MQTT protocol, and\n2) be subscribed to the group of MQTT topics specified by\n   /devices/{device-id}/commands/#. This subscription will receive commands\n   at the top-level topic /devices/{device-id}/commands as well as commands\n   for subfolders, like /devices/{device-id}/commands/subfolder.\n   Note that subscribing to specific subfolders is not supported.\nIf the command could not be delivered to the device, this method will\nreturn an error; in particular, if the device is not subscribed, this\nmethod will return FAILED_PRECONDITION. Otherwise, this method will\nreturn OK. If the subscription is QoS 1, at least once delivery will be\nguaranteed; for QoS 0, no acknowledgment will be expected from the device.",
+                          "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices/{devicesId}:sendCommandToDevice",
+                          "httpMethod": "POST",
+                          "id": "cloudiot.projects.locations.registries.groups.devices.sendCommandToDevice",
+                          "parameterOrder": [
+                            "name"
+                          ],
+                          "parameters": {
+                            "name": {
+                              "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
+                              "location": "path",
+                              "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+/devices/[^/]+$",
+                              "required": true,
+                              "type": "string"
+                            }
+                          },
+                          "path": "v1/{+name}:sendCommandToDevice",
+                          "request": {
+                            "$ref": "SendCommandToDeviceRequest"
+                          },
+                          "response": {
+                            "$ref": "SendCommandToDeviceResponse"
+                          },
+                          "scopes": [
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudiot"
+                          ]
                         }
                       },
                       "resources": {
@@ -970,9 +1184,30 @@
       }
     }
   },
-  "revision": "20180822",
+  "revision": "20181120",
   "rootUrl": "https://cloudiot.googleapis.com/",
   "schemas": {
+    "BindDeviceToGatewayRequest": {
+      "description": "Request for `BindDeviceToGateway`.",
+      "id": "BindDeviceToGatewayRequest",
+      "properties": {
+        "deviceId": {
+          "description": "The device to associate with the specified gateway. The value of\n`device_id` can be either the device numeric ID or the user-defined device\nidentifier.",
+          "type": "string"
+        },
+        "gatewayId": {
+          "description": "The value of `gateway_id` can be either the device numeric ID or the\nuser-defined device identifier.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BindDeviceToGatewayResponse": {
+      "description": "Response for `BindDeviceToGateway`.",
+      "id": "BindDeviceToGatewayResponse",
+      "properties": {},
+      "type": "object"
+    },
     "Binding": {
       "description": "Associates `members` with a `role`.",
       "id": "Binding",
@@ -1014,6 +1249,10 @@
           },
           "type": "array"
         },
+        "gatewayConfig": {
+          "$ref": "GatewayConfig",
+          "description": "Gateway-related configuration and state."
+        },
         "id": {
           "description": "The user-defined device identifier. The device ID must be unique\nwithin a device registry.",
           "type": "string"
@@ -1050,6 +1289,24 @@
         "lastStateTime": {
           "description": "[Output only] The last time a state event was received. Timestamps are\nperiodically collected and written to storage; they may be stale by a few\nminutes.",
           "format": "google-datetime",
+          "type": "string"
+        },
+        "logLevel": {
+          "description": "**Beta Feature**\n\nThe logging verbosity for device activity. If unspecified,\nDeviceRegistry.log_level will be used.",
+          "enum": [
+            "LOG_LEVEL_UNSPECIFIED",
+            "NONE",
+            "ERROR",
+            "INFO",
+            "DEBUG"
+          ],
+          "enumDescriptions": [
+            "No logging specified. If not specified, logging will be disabled.",
+            "Disables logging.",
+            "Error events will be logged.",
+            "Informational events will be logged, such as connections and\ndisconnections.",
+            "All events will be logged."
+          ],
           "type": "string"
         },
         "metadata": {
@@ -1144,6 +1401,24 @@
           "description": "The identifier of this device registry. For example, `myRegistry`.",
           "type": "string"
         },
+        "logLevel": {
+          "description": "**Beta Feature**\n\nThe default logging verbosity for activity from devices in this registry.\nThe verbosity level can be overridden by Device.log_level.",
+          "enum": [
+            "LOG_LEVEL_UNSPECIFIED",
+            "NONE",
+            "ERROR",
+            "INFO",
+            "DEBUG"
+          ],
+          "enumDescriptions": [
+            "No logging specified. If not specified, logging will be disabled.",
+            "Disables logging.",
+            "Error events will be logged.",
+            "Informational events will be logged, such as connections and\ndisconnections.",
+            "All events will be logged."
+          ],
+          "type": "string"
+        },
         "mqttConfig": {
           "$ref": "MqttConfig",
           "description": "The MQTT configuration for this device registry."
@@ -1215,6 +1490,52 @@
         },
         "title": {
           "description": "An optional title for the expression, i.e. a short string describing\nits purpose. This can be used e.g. in UIs which allow to enter the\nexpression.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GatewayConfig": {
+      "description": "Gateway-related configuration and state.",
+      "id": "GatewayConfig",
+      "properties": {
+        "gatewayAuthMethod": {
+          "description": "Indicates how to authorize and/or authenticate devices to access the\ngateway.",
+          "enum": [
+            "GATEWAY_AUTH_METHOD_UNSPECIFIED",
+            "ASSOCIATION_ONLY",
+            "DEVICE_AUTH_TOKEN_ONLY",
+            "ASSOCIATION_AND_DEVICE_AUTH_TOKEN"
+          ],
+          "enumDescriptions": [
+            "No authentication/authorization method specified. No devices are allowed to\naccess the gateway.",
+            "The device is authenticated through the gateway association only. Device\ncredentials are ignored even if provided.",
+            "The device is authenticated through its own credentials. Gateway\nassociation is not checked.",
+            "The device is authenticated through both device credentials and gateway\nassociation. The device must be bound to the gateway and must provide its\nown credentials."
+          ],
+          "type": "string"
+        },
+        "gatewayType": {
+          "description": "Indicates whether the device is a gateway.",
+          "enum": [
+            "GATEWAY_TYPE_UNSPECIFIED",
+            "GATEWAY",
+            "NON_GATEWAY"
+          ],
+          "enumDescriptions": [
+            "If unspecified, the device is considered a non-gateway device.",
+            "The device is a gateway.",
+            "The device is not a gateway."
+          ],
+          "type": "string"
+        },
+        "lastAccessedGatewayId": {
+          "description": "[Output only] The ID of the gateway the device accessed most recently.",
+          "type": "string"
+        },
+        "lastAccessedGatewayTime": {
+          "description": "[Output only] The most recent time at which the device accessed the gateway\nspecified in `last_accessed_gateway`.",
+          "format": "google-datetime",
           "type": "string"
         }
       },
@@ -1440,6 +1761,28 @@
       },
       "type": "object"
     },
+    "SendCommandToDeviceRequest": {
+      "description": "Request for `SendCommandToDevice`.",
+      "id": "SendCommandToDeviceRequest",
+      "properties": {
+        "binaryData": {
+          "description": "The command data to send to the device.",
+          "format": "byte",
+          "type": "string"
+        },
+        "subfolder": {
+          "description": "Optional subfolder for the command. If empty, the command will be delivered\nto the /devices/{device-id}/commands topic, otherwise it will be delivered\nto the /devices/{device-id}/commands/{subfolder} topic. Multi-level\nsubfolders are allowed. This field must not have more than 256 characters,\nand must not contain any MQTT wildcards (\"+\" or \"#\") or null characters.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SendCommandToDeviceResponse": {
+      "description": "Response for `SendCommandToDevice`.",
+      "id": "SendCommandToDeviceResponse",
+      "properties": {},
+      "type": "object"
+    },
     "SetIamPolicyRequest": {
       "description": "Request message for `SetIamPolicy` method.",
       "id": "SetIamPolicyRequest",
@@ -1515,6 +1858,27 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "UnbindDeviceFromGatewayRequest": {
+      "description": "Request for `UnbindDeviceFromGateway`.",
+      "id": "UnbindDeviceFromGatewayRequest",
+      "properties": {
+        "deviceId": {
+          "description": "The device to disassociate from the specified gateway. The value of\n`device_id` can be either the device numeric ID or the user-defined device\nidentifier.",
+          "type": "string"
+        },
+        "gatewayId": {
+          "description": "The value of `gateway_id` can be either the device numeric ID or the\nuser-defined device identifier.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UnbindDeviceFromGatewayResponse": {
+      "description": "Response for `UnbindDeviceFromGateway`.",
+      "id": "UnbindDeviceFromGatewayResponse",
+      "properties": {},
       "type": "object"
     },
     "X509CertificateDetails": {

@@ -21,6 +21,7 @@
 package interop
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -28,7 +29,6 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/grpc"
@@ -390,6 +390,25 @@ func DoPerRPCCreds(tc testpb.TestServiceClient, serviceAccountKeyFile, oauthScop
 	}
 	if !strings.Contains(oauthScope, scope) {
 		grpclog.Fatalf("Got OAuth scope %q which is NOT a substring of %q.", scope, oauthScope)
+	}
+}
+
+// DoGoogleDefaultCredentials performs a unary RPC with google default credentials
+func DoGoogleDefaultCredentials(tc testpb.TestServiceClient, defaultServiceAccount string) {
+	pl := ClientNewPayload(testpb.PayloadType_COMPRESSABLE, largeReqSize)
+	req := &testpb.SimpleRequest{
+		ResponseType:   testpb.PayloadType_COMPRESSABLE,
+		ResponseSize:   int32(largeRespSize),
+		Payload:        pl,
+		FillUsername:   true,
+		FillOauthScope: true,
+	}
+	reply, err := tc.UnaryCall(context.Background(), req)
+	if err != nil {
+		grpclog.Fatal("/TestService/UnaryCall RPC failed: ", err)
+	}
+	if reply.GetUsername() != defaultServiceAccount {
+		grpclog.Fatalf("Got user name %q; wanted %q. ", reply.GetUsername(), defaultServiceAccount)
 	}
 }
 

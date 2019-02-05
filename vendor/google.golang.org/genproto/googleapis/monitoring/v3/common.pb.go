@@ -52,7 +52,6 @@ var ComparisonType_name = map[int32]string{
 	5: "COMPARISON_EQ",
 	6: "COMPARISON_NE",
 }
-
 var ComparisonType_value = map[string]int32{
 	"COMPARISON_UNSPECIFIED": 0,
 	"COMPARISON_GT":          1,
@@ -66,13 +65,12 @@ var ComparisonType_value = map[string]int32{
 func (x ComparisonType) String() string {
 	return proto.EnumName(ComparisonType_name, int32(x))
 }
-
 func (ComparisonType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{0}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{0}
 }
 
-// The tier of service for a Stackdriver account. Please see the
-// [service tiers documentation](https://cloud.google.com/monitoring/accounts/tiers)
+// The tier of service for a Workspace. Please see the
+// [service tiers documentation](https://cloud.google.com/monitoring/workspaces/tiers)
 // for more details.
 type ServiceTier int32 // Deprecated: Do not use.
 const (
@@ -82,12 +80,12 @@ const (
 	// The Stackdriver Basic tier, a free tier of service that provides basic
 	// features, a moderate allotment of logs, and access to built-in metrics.
 	// A number of features are not available in this tier. For more details,
-	// see [the service tiers documentation](https://cloud.google.com/monitoring/accounts/tiers).
+	// see [the service tiers documentation](https://cloud.google.com/monitoring/workspaces/tiers).
 	ServiceTier_SERVICE_TIER_BASIC ServiceTier = 1
 	// The Stackdriver Premium tier, a higher, more expensive tier of service
 	// that provides access to all Stackdriver features, lets you use Stackdriver
 	// with AWS accounts, and has a larger allotments for logs and metrics. For
-	// more details, see [the service tiers documentation](https://cloud.google.com/monitoring/accounts/tiers).
+	// more details, see [the service tiers documentation](https://cloud.google.com/monitoring/workspaces/tiers).
 	ServiceTier_SERVICE_TIER_PREMIUM ServiceTier = 2
 )
 
@@ -96,7 +94,6 @@ var ServiceTier_name = map[int32]string{
 	1: "SERVICE_TIER_BASIC",
 	2: "SERVICE_TIER_PREMIUM",
 }
-
 var ServiceTier_value = map[string]int32{
 	"SERVICE_TIER_UNSPECIFIED": 0,
 	"SERVICE_TIER_BASIC":       1,
@@ -106,9 +103,8 @@ var ServiceTier_value = map[string]int32{
 func (x ServiceTier) String() string {
 	return proto.EnumName(ServiceTier_name, int32(x))
 }
-
 func (ServiceTier) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{1}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{1}
 }
 
 // The Aligner describes how to bring the data points in a single
@@ -269,7 +265,6 @@ var Aggregation_Aligner_name = map[int32]string{
 	21: "ALIGN_PERCENTILE_05",
 	23: "ALIGN_PERCENT_CHANGE",
 }
-
 var Aggregation_Aligner_value = map[string]int32{
 	"ALIGN_NONE":           0,
 	"ALIGN_DELTA":          1,
@@ -295,9 +290,8 @@ var Aggregation_Aligner_value = map[string]int32{
 func (x Aggregation_Aligner) String() string {
 	return proto.EnumName(Aggregation_Aligner_name, int32(x))
 }
-
 func (Aggregation_Aligner) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{2, 0}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{2, 0}
 }
 
 // A Reducer describes how to aggregate data points from multiple
@@ -393,7 +387,6 @@ var Aggregation_Reducer_name = map[int32]string{
 	11: "REDUCE_PERCENTILE_50",
 	12: "REDUCE_PERCENTILE_05",
 }
-
 var Aggregation_Reducer_value = map[string]int32{
 	"REDUCE_NONE":          0,
 	"REDUCE_MEAN":          1,
@@ -414,9 +407,8 @@ var Aggregation_Reducer_value = map[string]int32{
 func (x Aggregation_Reducer) String() string {
 	return proto.EnumName(Aggregation_Reducer_name, int32(x))
 }
-
 func (Aggregation_Reducer) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{2, 1}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{2, 1}
 }
 
 // A single strongly-typed value.
@@ -439,7 +431,7 @@ func (m *TypedValue) Reset()         { *m = TypedValue{} }
 func (m *TypedValue) String() string { return proto.CompactTextString(m) }
 func (*TypedValue) ProtoMessage()    {}
 func (*TypedValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{0}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{0}
 }
 func (m *TypedValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TypedValue.Unmarshal(m, b)
@@ -447,8 +439,8 @@ func (m *TypedValue) XXX_Unmarshal(b []byte) error {
 func (m *TypedValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TypedValue.Marshal(b, m, deterministic)
 }
-func (m *TypedValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TypedValue.Merge(m, src)
+func (dst *TypedValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TypedValue.Merge(dst, src)
 }
 func (m *TypedValue) XXX_Size() int {
 	return xxx_messageInfo_TypedValue.Size(m)
@@ -670,7 +662,7 @@ func (m *TimeInterval) Reset()         { *m = TimeInterval{} }
 func (m *TimeInterval) String() string { return proto.CompactTextString(m) }
 func (*TimeInterval) ProtoMessage()    {}
 func (*TimeInterval) Descriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{1}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{1}
 }
 func (m *TimeInterval) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TimeInterval.Unmarshal(m, b)
@@ -678,8 +670,8 @@ func (m *TimeInterval) XXX_Unmarshal(b []byte) error {
 func (m *TimeInterval) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TimeInterval.Marshal(b, m, deterministic)
 }
-func (m *TimeInterval) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TimeInterval.Merge(m, src)
+func (dst *TimeInterval) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TimeInterval.Merge(dst, src)
 }
 func (m *TimeInterval) XXX_Size() int {
 	return xxx_messageInfo_TimeInterval.Size(m)
@@ -768,7 +760,7 @@ func (m *Aggregation) Reset()         { *m = Aggregation{} }
 func (m *Aggregation) String() string { return proto.CompactTextString(m) }
 func (*Aggregation) ProtoMessage()    {}
 func (*Aggregation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_013c57c1dcbb8d65, []int{2}
+	return fileDescriptor_common_8becd78c7e1e8452, []int{2}
 }
 func (m *Aggregation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Aggregation.Unmarshal(m, b)
@@ -776,8 +768,8 @@ func (m *Aggregation) XXX_Unmarshal(b []byte) error {
 func (m *Aggregation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Aggregation.Marshal(b, m, deterministic)
 }
-func (m *Aggregation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Aggregation.Merge(m, src)
+func (dst *Aggregation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Aggregation.Merge(dst, src)
 }
 func (m *Aggregation) XXX_Size() int {
 	return xxx_messageInfo_Aggregation.Size(m)
@@ -826,9 +818,11 @@ func init() {
 	proto.RegisterEnum("google.monitoring.v3.Aggregation_Reducer", Aggregation_Reducer_name, Aggregation_Reducer_value)
 }
 
-func init() { proto.RegisterFile("google/monitoring/v3/common.proto", fileDescriptor_013c57c1dcbb8d65) }
+func init() {
+	proto.RegisterFile("google/monitoring/v3/common.proto", fileDescriptor_common_8becd78c7e1e8452)
+}
 
-var fileDescriptor_013c57c1dcbb8d65 = []byte{
+var fileDescriptor_common_8becd78c7e1e8452 = []byte{
 	// 957 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x95, 0xc1, 0x6e, 0xe3, 0x44,
 	0x18, 0xc7, 0xe3, 0x64, 0xdb, 0x34, 0x9f, 0xdb, 0x66, 0x3a, 0xdb, 0xed, 0x86, 0x68, 0x61, 0xb3,

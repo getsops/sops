@@ -2,6 +2,7 @@
   "version": "2.0",
   "service": "<fullname>AWS Config</fullname> <p>AWS Config provides a way to keep track of the configurations of all the AWS resources associated with your AWS account. You can use AWS Config to get the current and historical configurations of each AWS resource and also to get information about the relationship between the resources. An AWS resource can be an Amazon Compute Cloud (Amazon EC2) instance, an Elastic Block Store (EBS) volume, an elastic network Interface (ENI), or a security group. For a complete list of resources currently supported by AWS Config, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources\">Supported AWS Resources</a>.</p> <p>You can access and manage AWS Config through the AWS Management Console, the AWS Command Line Interface (AWS CLI), the AWS Config API, or the AWS SDKs for AWS Config. This reference guide contains documentation for the AWS Config API and the AWS CLI commands that you can use to manage AWS Config. The AWS Config API uses the Signature Version 4 protocol for signing requests. For more information about how to sign a request with this protocol, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html\">Signature Version 4 Signing Process</a>. For detailed information about AWS Config features and their associated actions or commands, as well as how to work with AWS Management Console, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html\">What Is AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>",
   "operations": {
+    "BatchGetAggregateResourceConfig": "<p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note>",
     "BatchGetResourceConfig": "<p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note>",
     "DeleteAggregationAuthorization": "<p>Deletes the authorization granted to the specified configuration aggregator account in a specified region.</p>",
     "DeleteConfigRule": "<p>Deletes the specified AWS Config rule and all of its evaluation results.</p> <p>AWS Config sets the state of a rule to <code>DELETING</code> until the deletion is complete. You cannot update a rule while it is in this state. If you make a <code>PutConfigRule</code> or <code>DeleteConfigRule</code> request for the rule, you will receive a <code>ResourceInUseException</code>.</p> <p>You can check the state of a rule by using the <code>DescribeConfigRules</code> request.</p>",
@@ -28,12 +29,15 @@
     "DescribeRetentionConfigurations": "<p>Returns the details of one or more retention configurations. If the retention configuration name is not specified, this action returns the details for all the retention configurations for that account.</p> <note> <p>Currently, AWS Config supports only one retention configuration per region in your account.</p> </note>",
     "GetAggregateComplianceDetailsByConfigRule": "<p>Returns the evaluation results for the specified AWS Config rule for a specific resource in a rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule. </p> <note> <p>The results can return an empty result page. But if you have a nextToken, the results are displayed on the next page.</p> </note>",
     "GetAggregateConfigRuleComplianceSummary": "<p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note>",
+    "GetAggregateDiscoveredResourceCounts": "<p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>",
+    "GetAggregateResourceConfig": "<p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>",
     "GetComplianceDetailsByConfigRule": "<p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>",
     "GetComplianceDetailsByResource": "<p>Returns the evaluation results for the specified AWS resource. The results indicate which AWS Config rules were used to evaluate the resource, when each rule was last used, and whether the resource complies with each rule.</p>",
     "GetComplianceSummaryByConfigRule": "<p>Returns the number of AWS Config rules that are compliant and noncompliant, up to a maximum of 25 for each.</p>",
     "GetComplianceSummaryByResourceType": "<p>Returns the number of resources that are compliant and the number that are noncompliant. You can specify one or more resource types to get these numbers for each resource type. The maximum number returned is 100.</p>",
     "GetDiscoveredResourceCounts": "<p>Returns the resource types, the number of each resource type, and the total number of resources that AWS Config is recording in this region for your AWS account. </p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify that you want all resource types. </p> </li> <li> <p>AWS Config returns the following:</p> <ul> <li> <p>The resource types (EC2 instances, IAM users, and S3 buckets).</p> </li> <li> <p>The number of each resource type (25, 20, and 15).</p> </li> <li> <p>The total number of all resources (60).</p> </li> </ul> </li> </ol> <p>The response is paginated. By default, AWS Config lists 100 <a>ResourceCount</a> objects on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>If you make a call to the <a>GetDiscoveredResourceCounts</a> action, you might not immediately receive resource counts in the following situations:</p> <ul> <li> <p>You are a new AWS Config customer.</p> </li> <li> <p>You just enabled resource recording.</p> </li> </ul> <p>It might take a few minutes for AWS Config to record and count your resources. Wait a few minutes and then retry the <a>GetDiscoveredResourceCounts</a> action. </p> </note>",
     "GetResourceConfigHistory": "<p>Returns a list of configuration items for the specified resource. The list contains details about each state of the resource during the specified time interval. If you specified a retention period to retain your <code>ConfigurationItems</code> between a minimum of 30 days and a maximum of 7 years (2557 days), AWS Config returns the <code>ConfigurationItems</code> for the specified retention period. </p> <p>The response is paginated. By default, AWS Config returns a limit of 10 configuration items per page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p> <note> <p>Each call to the API is limited to span a duration of seven days. It is likely that the number of records returned is smaller than the specified <code>limit</code>. In such cases, you can make another call, using the <code>nextToken</code>.</p> </note>",
+    "ListAggregateDiscoveredResources": "<p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>",
     "ListDiscoveredResources": "<p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>",
     "PutAggregationAuthorization": "<p>Authorizes the aggregator account and region to collect data from the source account and region. </p>",
     "PutConfigRule": "<p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For information about requesting a rule limit increase, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config\">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html\">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>",
@@ -79,8 +83,9 @@
         "AccountAggregationSourceAccountList$member": null,
         "AggregateComplianceByConfigRule$AccountId": "<p>The 12-digit account ID of the source account.</p>",
         "AggregateEvaluationResult$AccountId": "<p>The 12-digit account ID of the source account.</p>",
+        "AggregateResourceIdentifier$SourceAccountId": "<p>The 12-digit account ID of the source account.</p>",
         "AggregationAuthorization$AuthorizedAccountId": "<p>The 12-digit account ID of the account authorized to aggregate data.</p>",
-        "BaseConfigurationItem$accountId": "<p>The 12 digit AWS account ID associated with the resource.</p>",
+        "BaseConfigurationItem$accountId": "<p>The 12-digit AWS account ID associated with the resource.</p>",
         "ConfigRuleComplianceFilters$AccountId": "<p>The 12-digit account ID of the source account. </p>",
         "ConfigRuleComplianceSummaryFilters$AccountId": "<p>The 12-digit account ID of the source account.</p>",
         "ConfigurationItem$accountId": "<p>The 12-digit AWS account ID associated with the resource.</p>",
@@ -88,7 +93,9 @@
         "DeletePendingAggregationRequestRequest$RequesterAccountId": "<p>The 12-digit account ID of the account requesting to aggregate data.</p>",
         "GetAggregateComplianceDetailsByConfigRuleRequest$AccountId": "<p>The 12-digit account ID of the source account.</p>",
         "PendingAggregationRequest$RequesterAccountId": "<p>The 12-digit account ID of the account requesting to aggregate data.</p>",
-        "PutAggregationAuthorizationRequest$AuthorizedAccountId": "<p>The 12-digit account ID of the account authorized to aggregate data.</p>"
+        "PutAggregationAuthorizationRequest$AuthorizedAccountId": "<p>The 12-digit account ID of the account authorized to aggregate data.</p>",
+        "ResourceCountFilters$AccountId": "<p>The 12-digit ID of the account.</p>",
+        "ResourceFilters$AccountId": "<p>The 12-digit source account ID.</p>"
       }
     },
     "AggregateComplianceByConfigRule": {
@@ -125,6 +132,15 @@
       "base": null,
       "refs": {
         "GetAggregateComplianceDetailsByConfigRuleResponse$AggregateEvaluationResults": "<p>Returns an AggregateEvaluationResults object.</p>"
+      }
+    },
+    "AggregateResourceIdentifier": {
+      "base": "<p>The details that identify a resource that is collected by AWS Config aggregator, including the resource type, ID, (if available) the custom resource name, the source account, and source region.</p>",
+      "refs": {
+        "DiscoveredResourceIdentifierList$member": null,
+        "GetAggregateResourceConfigRequest$ResourceIdentifier": "<p>An object that identifies aggregate resource.</p>",
+        "ResourceIdentifiersList$member": null,
+        "UnprocessedResourceIdentifierList$member": null
       }
     },
     "AggregatedSourceStatus": {
@@ -196,6 +212,7 @@
       "refs": {
         "AggregateComplianceByConfigRule$AwsRegion": "<p>The source region from where the data is aggregated.</p>",
         "AggregateEvaluationResult$AwsRegion": "<p>The source region from where the data is aggregated.</p>",
+        "AggregateResourceIdentifier$SourceRegion": "<p>The source region where data is aggregated.</p>",
         "AggregatedSourceStatus$AwsRegion": "<p>The region authorized to collect aggregated data.</p>",
         "AggregationAuthorization$AuthorizedAwsRegion": "<p>The region authorized to collect aggregated data.</p>",
         "BaseConfigurationItem$awsRegion": "<p>The region where the resource resides.</p>",
@@ -206,7 +223,9 @@
         "DeletePendingAggregationRequestRequest$RequesterAwsRegion": "<p>The region requesting to aggregate data.</p>",
         "GetAggregateComplianceDetailsByConfigRuleRequest$AwsRegion": "<p>The source region from where the data is aggregated.</p>",
         "PendingAggregationRequest$RequesterAwsRegion": "<p>The region requesting to aggregate data. </p>",
-        "PutAggregationAuthorizationRequest$AuthorizedAwsRegion": "<p>The region authorized to collect aggregated data.</p>"
+        "PutAggregationAuthorizationRequest$AuthorizedAwsRegion": "<p>The region authorized to collect aggregated data.</p>",
+        "ResourceCountFilters$Region": "<p>The region where the account is located.</p>",
+        "ResourceFilters$Region": "<p>The source region.</p>"
       }
     },
     "BaseConfigurationItem": {
@@ -218,6 +237,7 @@
     "BaseConfigurationItems": {
       "base": null,
       "refs": {
+        "BatchGetAggregateResourceConfigResponse$BaseConfigurationItems": "<p>A list that contains the current configuration of one or more resources.</p>",
         "BatchGetResourceConfigResponse$baseConfigurationItems": "<p>A list that contains the current configuration of one or more resources.</p>"
       }
     },
@@ -230,6 +250,16 @@
         "EvaluationResultQualifier$ResourceId": "<p>The ID of the evaluated AWS resource.</p>",
         "GetComplianceDetailsByResourceRequest$ResourceId": "<p>The ID of the AWS resource for which you want compliance information.</p>",
         "Scope$ComplianceResourceId": "<p>The ID of the only AWS resource that you want to trigger an evaluation for the rule. If you specify a resource ID, you must specify one resource type for <code>ComplianceResourceTypes</code>.</p>"
+      }
+    },
+    "BatchGetAggregateResourceConfigRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "BatchGetAggregateResourceConfigResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "BatchGetResourceConfigRequest": {
@@ -469,6 +499,7 @@
     "ConfigurationAggregatorName": {
       "base": null,
       "refs": {
+        "BatchGetAggregateResourceConfigRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
         "ConfigurationAggregator$ConfigurationAggregatorName": "<p>The name of the aggregator.</p>",
         "ConfigurationAggregatorNameList$member": null,
         "DeleteConfigurationAggregatorRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
@@ -476,6 +507,9 @@
         "DescribeConfigurationAggregatorSourcesStatusRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
         "GetAggregateComplianceDetailsByConfigRuleRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
         "GetAggregateConfigRuleComplianceSummaryRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
+        "GetAggregateDiscoveredResourceCountsRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
+        "GetAggregateResourceConfigRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>",
+        "ListAggregateDiscoveredResourcesRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator. </p>",
         "PutConfigurationAggregatorRequest$ConfigurationAggregatorName": "<p>The name of the configuration aggregator.</p>"
       }
     },
@@ -488,7 +522,8 @@
     "ConfigurationItem": {
       "base": "<p>A list that contains detailed configurations of a specified resource.</p>",
       "refs": {
-        "ConfigurationItemList$member": null
+        "ConfigurationItemList$member": null,
+        "GetAggregateResourceConfigResponse$ConfigurationItem": "<p>Returns a <code>ConfigurationItem</code> object.</p>"
       }
     },
     "ConfigurationItemCaptureTime": {
@@ -823,6 +858,12 @@
       "refs": {
       }
     },
+    "DiscoveredResourceIdentifierList": {
+      "base": null,
+      "refs": {
+        "ListAggregateDiscoveredResourcesResponse$ResourceIdentifiers": "<p>Returns a list of <code>ResourceIdentifiers</code> objects.</p>"
+      }
+    },
     "EarlierTime": {
       "base": null,
       "refs": {
@@ -900,6 +941,26 @@
       "refs": {
       }
     },
+    "GetAggregateDiscoveredResourceCountsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetAggregateDiscoveredResourceCountsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetAggregateResourceConfigRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetAggregateResourceConfigResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "GetComplianceDetailsByConfigRuleRequest": {
       "base": "<p/>",
       "refs": {
@@ -959,7 +1020,20 @@
       "base": null,
       "refs": {
         "DescribeAggregateComplianceByConfigRulesRequest$Limit": "<p>The maximum number of evaluation results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>",
-        "GetAggregateConfigRuleComplianceSummaryRequest$Limit": "<p>The maximum number of evaluation results returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>"
+        "GetAggregateConfigRuleComplianceSummaryRequest$Limit": "<p>The maximum number of evaluation results returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>",
+        "GetAggregateDiscoveredResourceCountsRequest$Limit": "<p>The maximum number of <a>GroupedResourceCount</a> objects returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>"
+      }
+    },
+    "GroupedResourceCount": {
+      "base": "<p>The count of resources that are grouped by the group name.</p>",
+      "refs": {
+        "GroupedResourceCountList$member": null
+      }
+    },
+    "GroupedResourceCountList": {
+      "base": null,
+      "refs": {
+        "GetAggregateDiscoveredResourceCountsResponse$GroupedResourceCounts": "<p>Returns a list of GroupedResourceCount objects.</p>"
       }
     },
     "IncludeGlobalResourceTypes": {
@@ -1061,11 +1135,22 @@
         "GetComplianceDetailsByConfigRuleRequest$Limit": "<p>The maximum number of evaluation results returned on each page. The default is 10. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>",
         "GetDiscoveredResourceCountsRequest$limit": "<p>The maximum number of <a>ResourceCount</a> objects returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>",
         "GetResourceConfigHistoryRequest$limit": "<p>The maximum number of configuration items returned on each page. The default is 10. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>",
+        "ListAggregateDiscoveredResourcesRequest$Limit": "<p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>",
         "ListDiscoveredResourcesRequest$limit": "<p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>"
       }
     },
     "LimitExceededException": {
       "base": "<p>For <code>StartConfigRulesEvaluation</code> API, this exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p> <p>For <code>PutConfigurationAggregator</code> API, this exception is thrown if the number of accounts and aggregators exceeds the limit.</p>",
+      "refs": {
+      }
+    },
+    "ListAggregateDiscoveredResourcesRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListAggregateDiscoveredResourcesResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -1082,7 +1167,9 @@
     "Long": {
       "base": null,
       "refs": {
+        "GetAggregateDiscoveredResourceCountsResponse$TotalDiscoveredResources": "<p>The total number of resources that are present in an aggregator with the filters that you provide.</p>",
         "GetDiscoveredResourceCountsResponse$totalDiscoveredResources": "<p>The total number of resources that AWS Config is recording in the region for your account. If you specify resource types in the request, AWS Config returns only the total number of resources for those resource types.</p> <p class=\"title\"> <b>Example</b> </p> <ol> <li> <p>AWS Config is recording three resource types in the US East (Ohio) Region for your account: 25 EC2 instances, 20 IAM users, and 15 S3 buckets, for a total of 60 resources.</p> </li> <li> <p>You make a call to the <code>GetDiscoveredResourceCounts</code> action and specify the resource type, <code>\"AWS::EC2::Instances\"</code>, in the request.</p> </li> <li> <p>AWS Config returns 25 for <code>totalDiscoveredResources</code>.</p> </li> </ol>",
+        "GroupedResourceCount$ResourceCount": "<p>The number of resources in the group.</p>",
         "ResourceCount$count": "<p>The number of resources.</p>"
       }
     },
@@ -1139,12 +1226,16 @@
         "GetAggregateComplianceDetailsByConfigRuleResponse$NextToken": "<p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "GetAggregateConfigRuleComplianceSummaryRequest$NextToken": "<p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "GetAggregateConfigRuleComplianceSummaryResponse$NextToken": "<p>The nextToken string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
+        "GetAggregateDiscoveredResourceCountsRequest$NextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>",
+        "GetAggregateDiscoveredResourceCountsResponse$NextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "GetComplianceDetailsByConfigRuleRequest$NextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "GetComplianceDetailsByConfigRuleResponse$NextToken": "<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>",
         "GetDiscoveredResourceCountsRequest$nextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "GetDiscoveredResourceCountsResponse$nextToken": "<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>",
         "GetResourceConfigHistoryRequest$nextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "GetResourceConfigHistoryResponse$nextToken": "<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>",
+        "ListAggregateDiscoveredResourcesRequest$NextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
+        "ListAggregateDiscoveredResourcesResponse$NextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "ListDiscoveredResourcesRequest$nextToken": "<p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>",
         "ListDiscoveredResourcesResponse$nextToken": "<p>The string that you use in a subsequent request to get the next page of results in a paginated response.</p>"
       }
@@ -1219,6 +1310,11 @@
     },
     "OrganizationAllFeaturesNotEnabledException": {
       "base": "<p>The configuration aggregator cannot be created because organization does not have all features enabled.</p>",
+      "refs": {
+      }
+    },
+    "OversizedConfigurationItemException": {
+      "base": "<p>The configuration item size is outside the allowable range.</p>",
       "refs": {
       }
     },
@@ -1359,6 +1455,18 @@
         "ResourceCounts$member": null
       }
     },
+    "ResourceCountFilters": {
+      "base": "<p>Filters the resource count based on account ID, region, and resource type.</p>",
+      "refs": {
+        "GetAggregateDiscoveredResourceCountsRequest$Filters": "<p>Filters the results based on the <code>ResourceCountFilters</code> object.</p>"
+      }
+    },
+    "ResourceCountGroupKey": {
+      "base": null,
+      "refs": {
+        "GetAggregateDiscoveredResourceCountsRequest$GroupByKey": "<p>The key to group the resource counts.</p>"
+      }
+    },
     "ResourceCounts": {
       "base": null,
       "refs": {
@@ -1378,13 +1486,21 @@
         "ResourceIdentifier$resourceDeletionTime": "<p>The time that the resource was deleted.</p>"
       }
     },
+    "ResourceFilters": {
+      "base": "<p>Filters the results by resource account ID, region, resource ID, and resource name.</p>",
+      "refs": {
+        "ListAggregateDiscoveredResourcesRequest$Filters": "<p>Filters the results based on the <code>ResourceFilters</code> object.</p>"
+      }
+    },
     "ResourceId": {
       "base": null,
       "refs": {
+        "AggregateResourceIdentifier$ResourceId": "<p>The ID of the AWS resource.</p>",
         "BaseConfigurationItem$resourceId": "<p>The ID of the resource (for example., sg-xxxxxx).</p>",
         "ConfigurationItem$resourceId": "<p>The ID of the resource (for example, <code>sg-xxxxxx</code>).</p>",
         "GetResourceConfigHistoryRequest$resourceId": "<p>The ID of the resource (for example., <code>sg-xxxxxx</code>).</p>",
         "Relationship$resourceId": "<p>The ID of the related resource (for example, <code>sg-xxxxxx</code>).</p>",
+        "ResourceFilters$ResourceId": "<p>The ID of the resource.</p>",
         "ResourceIdList$member": null,
         "ResourceIdentifier$resourceId": "<p>The ID of the resource (for example, <code>sg-xxxxxx</code>).</p>",
         "ResourceKey$resourceId": "<p>The ID of the resource (for example., sg-xxxxxx). </p>"
@@ -1408,6 +1524,12 @@
         "ListDiscoveredResourcesResponse$resourceIdentifiers": "<p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>"
       }
     },
+    "ResourceIdentifiersList": {
+      "base": null,
+      "refs": {
+        "BatchGetAggregateResourceConfigRequest$ResourceIdentifiers": "<p>A list of aggregate ResourceIdentifiers objects. </p>"
+      }
+    },
     "ResourceInUseException": {
       "base": "<p>The rule is currently being deleted or the rule is deleting your evaluation results. Try your request again later.</p>",
       "refs": {
@@ -1429,10 +1551,12 @@
     "ResourceName": {
       "base": null,
       "refs": {
+        "AggregateResourceIdentifier$ResourceName": "<p>The name of the AWS resource.</p>",
         "BaseConfigurationItem$resourceName": "<p>The custom name of the resource, if available.</p>",
         "ConfigurationItem$resourceName": "<p>The custom name of the resource, if available.</p>",
         "ListDiscoveredResourcesRequest$resourceName": "<p>The custom name of only those resources that you want AWS Config to list in the response. If you do not specify this parameter, AWS Config lists all resources of the specified type that it has discovered.</p>",
         "Relationship$resourceName": "<p>The custom name of the related resource, if available.</p>",
+        "ResourceFilters$ResourceName": "<p>The name of the resource.</p>",
         "ResourceIdentifier$resourceName": "<p>The custom name of the resource (if available).</p>"
       }
     },
@@ -1444,12 +1568,15 @@
     "ResourceType": {
       "base": null,
       "refs": {
+        "AggregateResourceIdentifier$ResourceType": "<p>The type of the AWS resource.</p>",
         "BaseConfigurationItem$resourceType": "<p>The type of AWS resource.</p>",
         "ConfigurationItem$resourceType": "<p>The type of AWS resource.</p>",
         "GetResourceConfigHistoryRequest$resourceType": "<p>The resource type.</p>",
+        "ListAggregateDiscoveredResourcesRequest$ResourceType": "<p>The type of resources that you want AWS Config to list in the response.</p>",
         "ListDiscoveredResourcesRequest$resourceType": "<p>The type of resources that you want AWS Config to list in the response.</p>",
         "Relationship$resourceType": "<p>The resource type of the related resource.</p>",
         "ResourceCount$resourceType": "<p>The resource type (for example, <code>\"AWS::EC2::Instance\"</code>).</p>",
+        "ResourceCountFilters$ResourceType": "<p>The type of the AWS resource.</p>",
         "ResourceIdentifier$resourceType": "<p>The type of resource.</p>",
         "ResourceKey$resourceType": "<p>The resource type.</p>",
         "ResourceTypeList$member": null
@@ -1627,7 +1754,9 @@
         "EvaluationResult$Annotation": "<p>Supplementary information about how the evaluation determined the compliance.</p>",
         "EvaluationResultQualifier$ResourceType": "<p>The type of AWS resource that was evaluated.</p>",
         "GetAggregateConfigRuleComplianceSummaryResponse$GroupByKey": "<p>Groups the result based on ACCOUNT_ID or AWS_REGION.</p>",
+        "GetAggregateDiscoveredResourceCountsResponse$GroupByKey": "<p>The key passed into the request object. If <code>GroupByKey</code> is not provided, the result will be empty.</p>",
         "GetComplianceDetailsByResourceRequest$ResourceType": "<p>The type of the AWS resource for which you want compliance information.</p>",
+        "GroupedResourceCount$GroupName": "<p>The name of the group that can be region, account ID, or resource type. For example, region1, region2 if the region was chosen as <code>GroupByKey</code>.</p>",
         "ResourceTypes$member": null,
         "Scope$TagValue": "<p>The tag value applied to only those AWS resources that you want to trigger an evaluation for the rule. If you specify a value for <code>TagValue</code>, you must also specify a value for <code>TagKey</code>.</p>",
         "Source$SourceIdentifier": "<p>For AWS Config managed rules, a predefined identifier from a list. For example, <code>IAM_PASSWORD_POLICY</code> is a managed rule. To reference a managed rule, see <a href=\"http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html\">Using AWS Managed Config Rules</a>.</p> <p>For custom rules, the identifier is the Amazon Resource Name (ARN) of the rule's AWS Lambda function, such as <code>arn:aws:lambda:us-east-2:123456789012:function:custom_rule_name</code>.</p>"
@@ -1670,6 +1799,12 @@
       "base": null,
       "refs": {
         "ConfigurationItem$tags": "<p>A mapping of key value tags associated with the resource.</p>"
+      }
+    },
+    "UnprocessedResourceIdentifierList": {
+      "base": null,
+      "refs": {
+        "BatchGetAggregateResourceConfigResponse$UnprocessedResourceIdentifiers": "<p>A list of resource identifiers that were not processed with current scope. The list is empty if all the resources are processed.</p>"
       }
     },
     "ValidationException": {

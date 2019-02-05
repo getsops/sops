@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@
 
 package textanalytics
 
-import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/textanalytics"
+import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.1/textanalytics"
 
 type BaseClient = original.BaseClient
 type BatchInput = original.BatchInput
 type DetectedLanguage = original.DetectedLanguage
-type EntitiesBatchResult = original.EntitiesBatchResult
-type EntitiesBatchResultItem = original.EntitiesBatchResultItem
-type EntityRecord = original.EntityRecord
+type EntitiesBatchResultItemV2dot1 = original.EntitiesBatchResultItemV2dot1
+type EntitiesBatchResultV2dot1 = original.EntitiesBatchResultV2dot1
+type EntityRecordV2dot1 = original.EntityRecordV2dot1
 type ErrorRecord = original.ErrorRecord
 type ErrorResponse = original.ErrorResponse
 type Input = original.Input
@@ -35,7 +35,7 @@ type KeyPhraseBatchResult = original.KeyPhraseBatchResult
 type KeyPhraseBatchResultItem = original.KeyPhraseBatchResultItem
 type LanguageBatchResult = original.LanguageBatchResult
 type LanguageBatchResultItem = original.LanguageBatchResultItem
-type MatchRecord = original.MatchRecord
+type MatchRecordV2dot1 = original.MatchRecordV2dot1
 type MultiLanguageBatchInput = original.MultiLanguageBatchInput
 type MultiLanguageInput = original.MultiLanguageInput
 type SentimentBatchResult = original.SentimentBatchResult

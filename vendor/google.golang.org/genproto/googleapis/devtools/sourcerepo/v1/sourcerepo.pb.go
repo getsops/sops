@@ -50,7 +50,7 @@ func (m *Repo) Reset()         { *m = Repo{} }
 func (m *Repo) String() string { return proto.CompactTextString(m) }
 func (*Repo) ProtoMessage()    {}
 func (*Repo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{0}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{0}
 }
 func (m *Repo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Repo.Unmarshal(m, b)
@@ -58,8 +58,8 @@ func (m *Repo) XXX_Unmarshal(b []byte) error {
 func (m *Repo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Repo.Marshal(b, m, deterministic)
 }
-func (m *Repo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Repo.Merge(m, src)
+func (dst *Repo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Repo.Merge(dst, src)
 }
 func (m *Repo) XXX_Size() int {
 	return xxx_messageInfo_Repo.Size(m)
@@ -121,7 +121,7 @@ func (m *MirrorConfig) Reset()         { *m = MirrorConfig{} }
 func (m *MirrorConfig) String() string { return proto.CompactTextString(m) }
 func (*MirrorConfig) ProtoMessage()    {}
 func (*MirrorConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{1}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{1}
 }
 func (m *MirrorConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MirrorConfig.Unmarshal(m, b)
@@ -129,8 +129,8 @@ func (m *MirrorConfig) XXX_Unmarshal(b []byte) error {
 func (m *MirrorConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MirrorConfig.Marshal(b, m, deterministic)
 }
-func (m *MirrorConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MirrorConfig.Merge(m, src)
+func (dst *MirrorConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MirrorConfig.Merge(dst, src)
 }
 func (m *MirrorConfig) XXX_Size() int {
 	return xxx_messageInfo_MirrorConfig.Size(m)
@@ -176,7 +176,7 @@ func (m *GetRepoRequest) Reset()         { *m = GetRepoRequest{} }
 func (m *GetRepoRequest) String() string { return proto.CompactTextString(m) }
 func (*GetRepoRequest) ProtoMessage()    {}
 func (*GetRepoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{2}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{2}
 }
 func (m *GetRepoRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetRepoRequest.Unmarshal(m, b)
@@ -184,8 +184,8 @@ func (m *GetRepoRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetRepoRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetRepoRequest.Marshal(b, m, deterministic)
 }
-func (m *GetRepoRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetRepoRequest.Merge(m, src)
+func (dst *GetRepoRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRepoRequest.Merge(dst, src)
 }
 func (m *GetRepoRequest) XXX_Size() int {
 	return xxx_messageInfo_GetRepoRequest.Size(m)
@@ -224,7 +224,7 @@ func (m *ListReposRequest) Reset()         { *m = ListReposRequest{} }
 func (m *ListReposRequest) String() string { return proto.CompactTextString(m) }
 func (*ListReposRequest) ProtoMessage()    {}
 func (*ListReposRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{3}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{3}
 }
 func (m *ListReposRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListReposRequest.Unmarshal(m, b)
@@ -232,8 +232,8 @@ func (m *ListReposRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListReposRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListReposRequest.Marshal(b, m, deterministic)
 }
-func (m *ListReposRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListReposRequest.Merge(m, src)
+func (dst *ListReposRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListReposRequest.Merge(dst, src)
 }
 func (m *ListReposRequest) XXX_Size() int {
 	return xxx_messageInfo_ListReposRequest.Size(m)
@@ -282,7 +282,7 @@ func (m *ListReposResponse) Reset()         { *m = ListReposResponse{} }
 func (m *ListReposResponse) String() string { return proto.CompactTextString(m) }
 func (*ListReposResponse) ProtoMessage()    {}
 func (*ListReposResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{4}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{4}
 }
 func (m *ListReposResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListReposResponse.Unmarshal(m, b)
@@ -290,8 +290,8 @@ func (m *ListReposResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListReposResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListReposResponse.Marshal(b, m, deterministic)
 }
-func (m *ListReposResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListReposResponse.Merge(m, src)
+func (dst *ListReposResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListReposResponse.Merge(dst, src)
 }
 func (m *ListReposResponse) XXX_Size() int {
 	return xxx_messageInfo_ListReposResponse.Size(m)
@@ -333,7 +333,7 @@ func (m *CreateRepoRequest) Reset()         { *m = CreateRepoRequest{} }
 func (m *CreateRepoRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateRepoRequest) ProtoMessage()    {}
 func (*CreateRepoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{5}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{5}
 }
 func (m *CreateRepoRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateRepoRequest.Unmarshal(m, b)
@@ -341,8 +341,8 @@ func (m *CreateRepoRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateRepoRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateRepoRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateRepoRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateRepoRequest.Merge(m, src)
+func (dst *CreateRepoRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRepoRequest.Merge(dst, src)
 }
 func (m *CreateRepoRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateRepoRequest.Size(m)
@@ -381,7 +381,7 @@ func (m *DeleteRepoRequest) Reset()         { *m = DeleteRepoRequest{} }
 func (m *DeleteRepoRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteRepoRequest) ProtoMessage()    {}
 func (*DeleteRepoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0e2c2c58455430a2, []int{6}
+	return fileDescriptor_sourcerepo_c3970ced7dbc10e1, []int{6}
 }
 func (m *DeleteRepoRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteRepoRequest.Unmarshal(m, b)
@@ -389,8 +389,8 @@ func (m *DeleteRepoRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteRepoRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteRepoRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteRepoRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteRepoRequest.Merge(m, src)
+func (dst *DeleteRepoRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRepoRequest.Merge(dst, src)
 }
 func (m *DeleteRepoRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteRepoRequest.Size(m)
@@ -721,10 +721,10 @@ var _SourceRepo_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/sourcerepo/v1/sourcerepo.proto", fileDescriptor_0e2c2c58455430a2)
+	proto.RegisterFile("google/devtools/sourcerepo/v1/sourcerepo.proto", fileDescriptor_sourcerepo_c3970ced7dbc10e1)
 }
 
-var fileDescriptor_0e2c2c58455430a2 = []byte{
+var fileDescriptor_sourcerepo_c3970ced7dbc10e1 = []byte{
 	// 743 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x55, 0xd1, 0x6e, 0xd3, 0x4a,
 	0x10, 0xd5, 0x36, 0x69, 0x7b, 0x33, 0x4d, 0x6f, 0xdb, 0x95, 0x6e, 0x15, 0xa5, 0x37, 0x55, 0xae,

@@ -20,8 +20,8 @@ const (
 	// ErrCodeInvalidFilterException for service response error code
 	// "InvalidFilterException".
 	//
-	// The filter specified for the ListTopicDetectionJobs operation is invalid.
-	// Specify a different filter.
+	// The filter specified for the ListDocumentClassificationJobs operation is
+	// invalid. Specify a different filter.
 	ErrCodeInvalidFilterException = "InvalidFilterException"
 
 	// ErrCodeInvalidRequestException for service response error code
@@ -35,6 +35,34 @@ const (
 	//
 	// The specified job was not found. Check the job ID and try again.
 	ErrCodeJobNotFoundException = "JobNotFoundException"
+
+	// ErrCodeResourceInUseException for service response error code
+	// "ResourceInUseException".
+	//
+	// The specified name is already in use. Use a different name and try your request
+	// again.
+	ErrCodeResourceInUseException = "ResourceInUseException"
+
+	// ErrCodeResourceLimitExceededException for service response error code
+	// "ResourceLimitExceededException".
+	//
+	// The maximum number of recognizers per account has been exceeded. Review the
+	// recognizers, perform cleanup, and then try your request again.
+	ErrCodeResourceLimitExceededException = "ResourceLimitExceededException"
+
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// The specified resource ARN was not found. Check the ARN and try your request
+	// again.
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
+
+	// ErrCodeResourceUnavailableException for service response error code
+	// "ResourceUnavailableException".
+	//
+	// The specified resource is not available. Check to see if the resource is
+	// in the TRAINED state and try your request again.
+	ErrCodeResourceUnavailableException = "ResourceUnavailableException"
 
 	// ErrCodeTextSizeLimitExceededException for service response error code
 	// "TextSizeLimitExceededException".
@@ -51,9 +79,9 @@ const (
 	// ErrCodeUnsupportedLanguageException for service response error code
 	// "UnsupportedLanguageException".
 	//
-	// Amazon Comprehend can't process the language of the input text. For all APIs
-	// except DetectDominantLanguage, Amazon Comprehend accepts only English or
-	// Spanish text. For the DetectDominantLanguage API, Amazon Comprehend detects
-	// 100 languages. For a list of languages, see how-languages
+	// Amazon Comprehend can't process the language of the input text. For all custom
+	// entity recognition APIs (such as CreateEntityRecognizer), only English is
+	// accepted. For most other APIs, Amazon Comprehend accepts only English or
+	// Spanish text.
 	ErrCodeUnsupportedLanguageException = "UnsupportedLanguageException"
 )

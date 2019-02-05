@@ -17,7 +17,6 @@ package btree
 
 import (
 	"flag"
-	"fmt"
 	"math/rand"
 	"os"
 	"sort"
@@ -30,7 +29,6 @@ import (
 
 func init() {
 	seed := time.Now().Unix()
-	fmt.Println(seed)
 	rand.Seed(seed)
 }
 
@@ -63,15 +61,6 @@ func all(it *Iterator) []itemWithIndex {
 	var out []itemWithIndex
 	for it.Next() {
 		out = append(out, itemWithIndex{it.Key, it.Value, it.Index})
-	}
-	return out
-}
-
-// rangerev returns a reversed ordered list of Int items in the range [0, n).
-func rangrev(n int) []itemWithIndex {
-	var out []itemWithIndex
-	for i := n - 1; i >= 0; i-- {
-		out = append(out, itemWithIndex{i, i, i})
 	}
 	return out
 }

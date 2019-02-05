@@ -277,6 +277,30 @@ type DatabaseMigrationServiceAPI interface {
 	TestConnection(*databasemigrationservice.TestConnectionInput) (*databasemigrationservice.TestConnectionOutput, error)
 	TestConnectionWithContext(aws.Context, *databasemigrationservice.TestConnectionInput, ...request.Option) (*databasemigrationservice.TestConnectionOutput, error)
 	TestConnectionRequest(*databasemigrationservice.TestConnectionInput) (*request.Request, *databasemigrationservice.TestConnectionOutput)
+
+	WaitUntilEndpointDeleted(*databasemigrationservice.DescribeEndpointsInput) error
+	WaitUntilEndpointDeletedWithContext(aws.Context, *databasemigrationservice.DescribeEndpointsInput, ...request.WaiterOption) error
+
+	WaitUntilReplicationInstanceAvailable(*databasemigrationservice.DescribeReplicationInstancesInput) error
+	WaitUntilReplicationInstanceAvailableWithContext(aws.Context, *databasemigrationservice.DescribeReplicationInstancesInput, ...request.WaiterOption) error
+
+	WaitUntilReplicationInstanceDeleted(*databasemigrationservice.DescribeReplicationInstancesInput) error
+	WaitUntilReplicationInstanceDeletedWithContext(aws.Context, *databasemigrationservice.DescribeReplicationInstancesInput, ...request.WaiterOption) error
+
+	WaitUntilReplicationTaskDeleted(*databasemigrationservice.DescribeReplicationTasksInput) error
+	WaitUntilReplicationTaskDeletedWithContext(aws.Context, *databasemigrationservice.DescribeReplicationTasksInput, ...request.WaiterOption) error
+
+	WaitUntilReplicationTaskReady(*databasemigrationservice.DescribeReplicationTasksInput) error
+	WaitUntilReplicationTaskReadyWithContext(aws.Context, *databasemigrationservice.DescribeReplicationTasksInput, ...request.WaiterOption) error
+
+	WaitUntilReplicationTaskRunning(*databasemigrationservice.DescribeReplicationTasksInput) error
+	WaitUntilReplicationTaskRunningWithContext(aws.Context, *databasemigrationservice.DescribeReplicationTasksInput, ...request.WaiterOption) error
+
+	WaitUntilReplicationTaskStopped(*databasemigrationservice.DescribeReplicationTasksInput) error
+	WaitUntilReplicationTaskStoppedWithContext(aws.Context, *databasemigrationservice.DescribeReplicationTasksInput, ...request.WaiterOption) error
+
+	WaitUntilTestConnectionSucceeds(*databasemigrationservice.DescribeConnectionsInput) error
+	WaitUntilTestConnectionSucceedsWithContext(aws.Context, *databasemigrationservice.DescribeConnectionsInput, ...request.WaiterOption) error
 }
 
 var _ DatabaseMigrationServiceAPI = (*databasemigrationservice.DatabaseMigrationService)(nil)

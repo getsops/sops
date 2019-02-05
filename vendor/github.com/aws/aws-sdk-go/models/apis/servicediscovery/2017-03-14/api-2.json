@@ -6,13 +6,28 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceAbbreviation":"ServiceDiscovery",
-    "serviceFullName":"Amazon Route 53 Auto Naming",
+    "serviceFullName":"AWS Cloud Map",
     "serviceId":"ServiceDiscovery",
     "signatureVersion":"v4",
     "targetPrefix":"Route53AutoNaming_v20170314",
     "uid":"servicediscovery-2017-03-14"
   },
   "operations":{
+    "CreateHttpNamespace":{
+      "name":"CreateHttpNamespace",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateHttpNamespaceRequest"},
+      "output":{"shape":"CreateHttpNamespaceResponse"},
+      "errors":[
+        {"shape":"InvalidInput"},
+        {"shape":"NamespaceAlreadyExists"},
+        {"shape":"ResourceLimitExceeded"},
+        {"shape":"DuplicateRequest"}
+      ]
+    },
     "CreatePrivateDnsNamespace":{
       "name":"CreatePrivateDnsNamespace",
       "http":{
@@ -103,6 +118,21 @@
         {"shape":"ServiceNotFound"}
       ]
     },
+    "DiscoverInstances":{
+      "name":"DiscoverInstances",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DiscoverInstancesRequest"},
+      "output":{"shape":"DiscoverInstancesResponse"},
+      "errors":[
+        {"shape":"ServiceNotFound"},
+        {"shape":"NamespaceNotFound"},
+        {"shape":"InvalidInput"}
+      ],
+      "endpoint":{"hostPrefix":"data-"}
+    },
     "GetInstance":{
       "name":"GetInstance",
       "http":{
@@ -153,6 +183,7 @@
       "input":{"shape":"GetOperationRequest"},
       "output":{"shape":"GetOperationResponse"},
       "errors":[
+        {"shape":"InvalidInput"},
         {"shape":"OperationNotFound"}
       ]
     },
@@ -274,7 +305,7 @@
     },
     "AttrValue":{
       "type":"string",
-      "max":255
+      "max":1024
     },
     "Attributes":{
       "type":"map",
@@ -282,6 +313,24 @@
       "value":{"shape":"AttrValue"}
     },
     "Code":{"type":"string"},
+    "CreateHttpNamespaceRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NamespaceName"},
+        "CreatorRequestId":{
+          "shape":"ResourceId",
+          "idempotencyToken":true
+        },
+        "Description":{"shape":"ResourceDescription"}
+      }
+    },
+    "CreateHttpNamespaceResponse":{
+      "type":"structure",
+      "members":{
+        "OperationId":{"shape":"OperationId"}
+      }
+    },
     "CreatePrivateDnsNamespaceRequest":{
       "type":"structure",
       "required":[
@@ -324,12 +373,10 @@
     },
     "CreateServiceRequest":{
       "type":"structure",
-      "required":[
-        "Name",
-        "DnsConfig"
-      ],
+      "required":["Name"],
       "members":{
         "Name":{"shape":"ServiceName"},
+        "NamespaceId":{"shape":"ResourceId"},
         "CreatorRequestId":{
           "shape":"ResourceId",
           "idempotencyToken":true
@@ -402,14 +449,35 @@
         "OperationId":{"shape":"OperationId"}
       }
     },
-    "DnsConfig":{
+    "DiscoverInstancesRequest":{
       "type":"structure",
       "required":[
-        "NamespaceId",
-        "DnsRecords"
+        "NamespaceName",
+        "ServiceName"
       ],
       "members":{
-        "NamespaceId":{"shape":"ResourceId"},
+        "NamespaceName":{"shape":"NamespaceName"},
+        "ServiceName":{"shape":"ServiceName"},
+        "MaxResults":{"shape":"MaxResults"},
+        "QueryParameters":{"shape":"Attributes"},
+        "HealthStatus":{"shape":"HealthStatusFilter"}
+      }
+    },
+    "DiscoverInstancesResponse":{
+      "type":"structure",
+      "members":{
+        "Instances":{"shape":"HttpInstanceSummaryList"}
+      }
+    },
+    "DnsConfig":{
+      "type":"structure",
+      "required":["DnsRecords"],
+      "members":{
+        "NamespaceId":{
+          "shape":"ResourceId",
+          "deprecated":true,
+          "deprecatedMessage":"Top level attribute in request should be used to reference namespace-id"
+        },
         "RoutingPolicy":{"shape":"RoutingPolicy"},
         "DnsRecords":{"shape":"DnsRecordList"}
       }
@@ -445,7 +513,8 @@
     "DuplicateRequest":{
       "type":"structure",
       "members":{
-        "Message":{"shape":"ErrorMessage"}
+        "Message":{"shape":"ErrorMessage"},
+        "DuplicateOperationId":{"shape":"ResourceId"}
       },
       "exception":true
     },
@@ -547,6 +616,7 @@
     },
     "HealthCheckConfig":{
       "type":"structure",
+      "required":["Type"],
       "members":{
         "Type":{"shape":"HealthCheckType"},
         "ResourcePath":{"shape":"ResourcePath"},
@@ -574,6 +644,34 @@
         "UNHEALTHY",
         "UNKNOWN"
       ]
+    },
+    "HealthStatusFilter":{
+      "type":"string",
+      "enum":[
+        "HEALTHY",
+        "UNHEALTHY",
+        "ALL"
+      ]
+    },
+    "HttpInstanceSummary":{
+      "type":"structure",
+      "members":{
+        "InstanceId":{"shape":"ResourceId"},
+        "NamespaceName":{"shape":"NamespaceName"},
+        "ServiceName":{"shape":"ServiceName"},
+        "HealthStatus":{"shape":"HealthStatus"},
+        "Attributes":{"shape":"Attributes"}
+      }
+    },
+    "HttpInstanceSummaryList":{
+      "type":"list",
+      "member":{"shape":"HttpInstanceSummary"}
+    },
+    "HttpProperties":{
+      "type":"structure",
+      "members":{
+        "HttpName":{"shape":"NamespaceName"}
+      }
     },
     "Instance":{
       "type":"structure",
@@ -743,7 +841,8 @@
     "NamespaceProperties":{
       "type":"structure",
       "members":{
-        "DnsProperties":{"shape":"DnsProperties"}
+        "DnsProperties":{"shape":"DnsProperties"},
+        "HttpProperties":{"shape":"HttpProperties"}
       }
     },
     "NamespaceSummariesList":{
@@ -756,14 +855,19 @@
         "Id":{"shape":"ResourceId"},
         "Arn":{"shape":"Arn"},
         "Name":{"shape":"NamespaceName"},
-        "Type":{"shape":"NamespaceType"}
+        "Type":{"shape":"NamespaceType"},
+        "Description":{"shape":"ResourceDescription"},
+        "ServiceCount":{"shape":"ResourceCount"},
+        "Properties":{"shape":"NamespaceProperties"},
+        "CreateDate":{"shape":"Timestamp"}
       }
     },
     "NamespaceType":{
       "type":"string",
       "enum":[
         "DNS_PUBLIC",
-        "DNS_PRIVATE"
+        "DNS_PRIVATE",
+        "HTTP"
       ]
     },
     "NextToken":{
@@ -940,6 +1044,7 @@
         "Id":{"shape":"ResourceId"},
         "Arn":{"shape":"Arn"},
         "Name":{"shape":"ServiceName"},
+        "NamespaceId":{"shape":"ResourceId"},
         "Description":{"shape":"ResourceDescription"},
         "InstanceCount":{"shape":"ResourceCount"},
         "DnsConfig":{"shape":"DnsConfig"},
@@ -1009,7 +1114,11 @@
         "Arn":{"shape":"Arn"},
         "Name":{"shape":"ServiceName"},
         "Description":{"shape":"ResourceDescription"},
-        "InstanceCount":{"shape":"ResourceCount"}
+        "InstanceCount":{"shape":"ResourceCount"},
+        "DnsConfig":{"shape":"DnsConfig"},
+        "HealthCheckConfig":{"shape":"HealthCheckConfig"},
+        "HealthCheckCustomConfig":{"shape":"HealthCheckCustomConfig"},
+        "CreateDate":{"shape":"Timestamp"}
       }
     },
     "Timestamp":{"type":"timestamp"},

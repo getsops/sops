@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
@@ -48,6 +49,16 @@ func NewLargeFaceListClient(endpoint string) LargeFaceListClient {
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client LargeFaceListClient) AddFaceFromStream(ctx context.Context, largeFaceListID string, imageParameter io.ReadCloser, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.AddFaceFromStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -137,6 +148,16 @@ func (client LargeFaceListClient) AddFaceFromStreamResponder(resp *http.Response
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client LargeFaceListClient) AddFaceFromURL(ctx context.Context, largeFaceListID string, imageURL ImageURL, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.AddFaceFromURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -222,6 +243,16 @@ func (client LargeFaceListClient) AddFaceFromURLResponder(resp *http.Response) (
 // largeFaceListID - id referencing a particular large face list.
 // body - request body for creating a large face list.
 func (client LargeFaceListClient) Create(ctx context.Context, largeFaceListID string, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -298,6 +329,16 @@ func (client LargeFaceListClient) CreateResponder(resp *http.Response) (result a
 // Parameters:
 // largeFaceListID - id referencing a particular large face list.
 func (client LargeFaceListClient) Delete(ctx context.Context, largeFaceListID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -362,12 +403,22 @@ func (client LargeFaceListClient) DeleteResponder(resp *http.Response) (result a
 	return
 }
 
-// DeleteFace delete an existing face from a large face list (given by a persisitedFaceId and a largeFaceListId).
+// DeleteFace delete an existing face from a large face list (given by a persistedFaceId and a largeFaceListId).
 // Persisted image related to the face will also be deleted.
 // Parameters:
 // largeFaceListID - id referencing a particular large face list.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client LargeFaceListClient) DeleteFace(ctx context.Context, largeFaceListID string, persistedFaceID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.DeleteFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -437,6 +488,16 @@ func (client LargeFaceListClient) DeleteFaceResponder(resp *http.Response) (resu
 // Parameters:
 // largeFaceListID - id referencing a particular large face list.
 func (client LargeFaceListClient) Get(ctx context.Context, largeFaceListID string) (result LargeFaceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -508,6 +569,16 @@ func (client LargeFaceListClient) GetResponder(resp *http.Response) (result Larg
 // largeFaceListID - id referencing a particular large face list.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client LargeFaceListClient) GetFace(ctx context.Context, largeFaceListID string, persistedFaceID uuid.UUID) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.GetFace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -578,6 +649,16 @@ func (client LargeFaceListClient) GetFaceResponder(resp *http.Response) (result 
 // Parameters:
 // largeFaceListID - id referencing a particular large face list.
 func (client LargeFaceListClient) GetTrainingStatus(ctx context.Context, largeFaceListID string) (result TrainingStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.GetTrainingStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -646,6 +727,16 @@ func (client LargeFaceListClient) GetTrainingStatusResponder(resp *http.Response
 // List retrieve information about all existing large face lists. Only largeFaceListId, name and userData will be
 // returned.
 func (client LargeFaceListClient) List(ctx context.Context) (result ListLargeFaceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "face.LargeFaceListClient", "List", nil, "Failure preparing request")
@@ -707,6 +798,16 @@ func (client LargeFaceListClient) ListResponder(resp *http.Response) (result Lis
 // start - starting face id to return (used to list a range of faces).
 // top - number of faces to return starting with the face id indicated by the 'start' parameter.
 func (client LargeFaceListClient) ListFaces(ctx context.Context, largeFaceListID string, start string, top *int32) (result ListPersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.ListFaces")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -790,6 +891,16 @@ func (client LargeFaceListClient) ListFacesResponder(resp *http.Response) (resul
 // Parameters:
 // largeFaceListID - id referencing a particular large face list.
 func (client LargeFaceListClient) Train(ctx context.Context, largeFaceListID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.Train")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -859,6 +970,16 @@ func (client LargeFaceListClient) TrainResponder(resp *http.Response) (result au
 // largeFaceListID - id referencing a particular large face list.
 // body - request body for updating a large face list.
 func (client LargeFaceListClient) Update(ctx context.Context, largeFaceListID string, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -931,6 +1052,16 @@ func (client LargeFaceListClient) UpdateResponder(resp *http.Response) (result a
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 // body - request body for updating persisted face.
 func (client LargeFaceListClient) UpdateFace(ctx context.Context, largeFaceListID string, persistedFaceID uuid.UUID, body UpdateFaceRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LargeFaceListClient.UpdateFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: largeFaceListID,
 			Constraints: []validation.Constraint{{Target: "largeFaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},

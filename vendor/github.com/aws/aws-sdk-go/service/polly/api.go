@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opDeleteLexicon = "DeleteLexicon"
@@ -16,7 +18,7 @@ const opDeleteLexicon = "DeleteLexicon"
 // DeleteLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLexicon operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -50,6 +52,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 
 	output = &DeleteLexiconOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -107,7 +110,7 @@ const opDescribeVoices = "DescribeVoices"
 // DescribeVoicesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVoices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -206,7 +209,7 @@ const opGetLexicon = "GetLexicon"
 // GetLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the GetLexicon operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -294,7 +297,7 @@ const opGetSpeechSynthesisTask = "GetSpeechSynthesisTask"
 // GetSpeechSynthesisTaskRequest generates a "aws/request.Request" representing the
 // client's request for the GetSpeechSynthesisTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -383,7 +386,7 @@ const opListLexicons = "ListLexicons"
 // ListLexiconsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLexicons operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -467,7 +470,7 @@ const opListSpeechSynthesisTasks = "ListSpeechSynthesisTasks"
 // ListSpeechSynthesisTasksRequest generates a "aws/request.Request" representing the
 // client's request for the ListSpeechSynthesisTasks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -608,7 +611,7 @@ const opPutLexicon = "PutLexicon"
 // PutLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the PutLexicon operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -642,6 +645,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 
 	output = &PutLexiconOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -713,7 +717,7 @@ const opStartSpeechSynthesisTask = "StartSpeechSynthesisTask"
 // StartSpeechSynthesisTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StartSpeechSynthesisTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -843,7 +847,7 @@ const opSynthesizeSpeech = "SynthesizeSpeech"
 // SynthesizeSpeechRequest generates a "aws/request.Request" representing the
 // client's request for the SynthesizeSpeech operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -960,7 +964,7 @@ type DeleteLexiconInput struct {
 	// The name of the lexicon to delete. Must be an existing lexicon in the region.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -978,6 +982,9 @@ func (s *DeleteLexiconInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteLexiconInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1093,7 +1100,7 @@ type GetLexiconInput struct {
 	// Name of the lexicon.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1111,6 +1118,9 @@ func (s *GetLexiconInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetLexiconInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1234,7 +1244,7 @@ type Lexicon struct {
 	Content *string `type:"string"`
 
 	// Name of the lexicon.
-	Name *string `type:"string"`
+	Name *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1339,7 +1349,7 @@ type LexiconDescription struct {
 	Attributes *LexiconAttributes `type:"structure"`
 
 	// Name of the lexicon.
-	Name *string `type:"string"`
+	Name *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1524,7 +1534,7 @@ type PutLexiconInput struct {
 	// long.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1545,6 +1555,9 @@ func (s *PutLexiconInput) Validate() error {
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1948,6 +1961,9 @@ type SynthesizeSpeechInput struct {
 	// The format in which the returned output will be encoded. For audio stream,
 	// this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json.
 	//
+	// When pcm is used, the content returned is audio/pcm in a signed 16-bit, 1
+	// channel (mono), little-endian format.
+	//
 	// OutputFormat is a required field
 	OutputFormat *string `type:"string" required:"true" enum:"OutputFormat"`
 
@@ -2197,6 +2213,9 @@ const (
 )
 
 const (
+	// LanguageCodeCmnCn is a LanguageCode enum value
+	LanguageCodeCmnCn = "cmn-CN"
+
 	// LanguageCodeCyGb is a LanguageCode enum value
 	LanguageCodeCyGb = "cy-GB"
 
@@ -2223,6 +2242,9 @@ const (
 
 	// LanguageCodeEsEs is a LanguageCode enum value
 	LanguageCodeEsEs = "es-ES"
+
+	// LanguageCodeEsMx is a LanguageCode enum value
+	LanguageCodeEsMx = "es-MX"
 
 	// LanguageCodeEsUs is a LanguageCode enum value
 	LanguageCodeEsUs = "es-US"
@@ -2485,4 +2507,16 @@ const (
 
 	// VoiceIdAditi is a VoiceId enum value
 	VoiceIdAditi = "Aditi"
+
+	// VoiceIdZhiyu is a VoiceId enum value
+	VoiceIdZhiyu = "Zhiyu"
+
+	// VoiceIdBianca is a VoiceId enum value
+	VoiceIdBianca = "Bianca"
+
+	// VoiceIdLucia is a VoiceId enum value
+	VoiceIdLucia = "Lucia"
+
+	// VoiceIdMia is a VoiceId enum value
+	VoiceIdMia = "Mia"
 )

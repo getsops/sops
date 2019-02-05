@@ -33,7 +33,7 @@ func (m *Experimental) Reset()         { *m = Experimental{} }
 func (m *Experimental) String() string { return proto.CompactTextString(m) }
 func (*Experimental) ProtoMessage()    {}
 func (*Experimental) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8ee43d601952ef58, []int{0}
+	return fileDescriptor_experimental_6711a67650a507d9, []int{0}
 }
 func (m *Experimental) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Experimental.Unmarshal(m, b)
@@ -41,8 +41,8 @@ func (m *Experimental) XXX_Unmarshal(b []byte) error {
 func (m *Experimental) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Experimental.Marshal(b, m, deterministic)
 }
-func (m *Experimental) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Experimental.Merge(m, src)
+func (dst *Experimental) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Experimental.Merge(dst, src)
 }
 func (m *Experimental) XXX_Size() int {
 	return xxx_messageInfo_Experimental.Size(m)
@@ -65,10 +65,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/api/experimental/experimental.proto", fileDescriptor_8ee43d601952ef58)
+	proto.RegisterFile("google/api/experimental/experimental.proto", fileDescriptor_experimental_6711a67650a507d9)
 }
 
-var fileDescriptor_8ee43d601952ef58 = []byte{
+var fileDescriptor_experimental_6711a67650a507d9 = []byte{
 	// 204 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x4a, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x4f, 0x2c, 0xc8, 0xd4, 0x4f, 0xad, 0x28, 0x48, 0x2d, 0xca, 0xcc, 0x4d, 0xcd,

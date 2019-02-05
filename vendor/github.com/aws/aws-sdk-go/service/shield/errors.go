@@ -4,6 +4,10 @@ package shield
 
 const (
 
+	// ErrCodeAccessDeniedException for service response error code
+	// "AccessDeniedException".
+	ErrCodeAccessDeniedException = "AccessDeniedException"
+
 	// ErrCodeAccessDeniedForDependencyException for service response error code
 	// "AccessDeniedForDependencyException".
 	//

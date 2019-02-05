@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,10 +41,20 @@ func NewReservationRecommendationsClientWithBaseURI(baseURI string, subscription
 	return ReservationRecommendationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// List list of recomendations for purchasing reserved instances.
+// List list of recommendations for purchasing reserved instances.
 // Parameters:
 // filter - may be used to filter reservationRecommendations by properties/scope and properties/lookBackPeriod.
 func (client ReservationRecommendationsClient) List(ctx context.Context, filter string) (result ReservationRecommendationsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationRecommendationsClient.List")
+		defer func() {
+			sc := -1
+			if result.rrlr.Response.Response != nil {
+				sc = result.rrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter)
 	if err != nil {
@@ -109,8 +120,8 @@ func (client ReservationRecommendationsClient) ListResponder(resp *http.Response
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReservationRecommendationsClient) listNextResults(lastResults ReservationRecommendationsListResult) (result ReservationRecommendationsListResult, err error) {
-	req, err := lastResults.reservationRecommendationsListResultPreparer()
+func (client ReservationRecommendationsClient) listNextResults(ctx context.Context, lastResults ReservationRecommendationsListResult) (result ReservationRecommendationsListResult, err error) {
+	req, err := lastResults.reservationRecommendationsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.ReservationRecommendationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -131,6 +142,16 @@ func (client ReservationRecommendationsClient) listNextResults(lastResults Reser
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReservationRecommendationsClient) ListComplete(ctx context.Context, filter string) (result ReservationRecommendationsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationRecommendationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter)
 	return
 }

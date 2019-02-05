@@ -38,7 +38,6 @@ var Discovered_ContinuousAnalysis_name = map[int32]string{
 	1: "ACTIVE",
 	2: "INACTIVE",
 }
-
 var Discovered_ContinuousAnalysis_value = map[string]int32{
 	"CONTINUOUS_ANALYSIS_UNSPECIFIED": 0,
 	"ACTIVE":                          1,
@@ -48,9 +47,8 @@ var Discovered_ContinuousAnalysis_value = map[string]int32{
 func (x Discovered_ContinuousAnalysis) String() string {
 	return proto.EnumName(Discovered_ContinuousAnalysis_name, int32(x))
 }
-
 func (Discovered_ContinuousAnalysis) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6ec5519deb85e465, []int{2, 0}
+	return fileDescriptor_discovery_35b141f4cbe7efdb, []int{2, 0}
 }
 
 // Analysis status for a resource. Currently for initial analysis only (not
@@ -81,7 +79,6 @@ var Discovered_AnalysisStatus_name = map[int32]string{
 	4: "FINISHED_FAILED",
 	5: "FINISHED_UNSUPPORTED",
 }
-
 var Discovered_AnalysisStatus_value = map[string]int32{
 	"ANALYSIS_STATUS_UNSPECIFIED": 0,
 	"PENDING":                     1,
@@ -94,9 +91,8 @@ var Discovered_AnalysisStatus_value = map[string]int32{
 func (x Discovered_AnalysisStatus) String() string {
 	return proto.EnumName(Discovered_AnalysisStatus_name, int32(x))
 }
-
 func (Discovered_AnalysisStatus) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6ec5519deb85e465, []int{2, 1}
+	return fileDescriptor_discovery_35b141f4cbe7efdb, []int{2, 1}
 }
 
 // A note that indicates a type of analysis a provider would perform. This note
@@ -114,7 +110,7 @@ func (m *Discovery) Reset()         { *m = Discovery{} }
 func (m *Discovery) String() string { return proto.CompactTextString(m) }
 func (*Discovery) ProtoMessage()    {}
 func (*Discovery) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6ec5519deb85e465, []int{0}
+	return fileDescriptor_discovery_35b141f4cbe7efdb, []int{0}
 }
 func (m *Discovery) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Discovery.Unmarshal(m, b)
@@ -122,8 +118,8 @@ func (m *Discovery) XXX_Unmarshal(b []byte) error {
 func (m *Discovery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Discovery.Marshal(b, m, deterministic)
 }
-func (m *Discovery) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Discovery.Merge(m, src)
+func (dst *Discovery) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Discovery.Merge(dst, src)
 }
 func (m *Discovery) XXX_Size() int {
 	return xxx_messageInfo_Discovery.Size(m)
@@ -154,7 +150,7 @@ func (m *Details) Reset()         { *m = Details{} }
 func (m *Details) String() string { return proto.CompactTextString(m) }
 func (*Details) ProtoMessage()    {}
 func (*Details) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6ec5519deb85e465, []int{1}
+	return fileDescriptor_discovery_35b141f4cbe7efdb, []int{1}
 }
 func (m *Details) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Details.Unmarshal(m, b)
@@ -162,8 +158,8 @@ func (m *Details) XXX_Unmarshal(b []byte) error {
 func (m *Details) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Details.Marshal(b, m, deterministic)
 }
-func (m *Details) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Details.Merge(m, src)
+func (dst *Details) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Details.Merge(dst, src)
 }
 func (m *Details) XXX_Size() int {
 	return xxx_messageInfo_Details.Size(m)
@@ -202,7 +198,7 @@ func (m *Discovered) Reset()         { *m = Discovered{} }
 func (m *Discovered) String() string { return proto.CompactTextString(m) }
 func (*Discovered) ProtoMessage()    {}
 func (*Discovered) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6ec5519deb85e465, []int{2}
+	return fileDescriptor_discovery_35b141f4cbe7efdb, []int{2}
 }
 func (m *Discovered) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Discovered.Unmarshal(m, b)
@@ -210,8 +206,8 @@ func (m *Discovered) XXX_Unmarshal(b []byte) error {
 func (m *Discovered) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Discovered.Marshal(b, m, deterministic)
 }
-func (m *Discovered) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Discovered.Merge(m, src)
+func (dst *Discovered) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Discovered.Merge(dst, src)
 }
 func (m *Discovered) XXX_Size() int {
 	return xxx_messageInfo_Discovered.Size(m)
@@ -259,10 +255,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/discovery/discovery.proto", fileDescriptor_6ec5519deb85e465)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/discovery/discovery.proto", fileDescriptor_discovery_35b141f4cbe7efdb)
 }
 
-var fileDescriptor_6ec5519deb85e465 = []byte{
+var fileDescriptor_discovery_35b141f4cbe7efdb = []byte{
 	// 541 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0xdf, 0x6a, 0xdb, 0x4c,
 	0x10, 0xc5, 0x3f, 0x39, 0xf9, 0x92, 0x76, 0x92, 0x3a, 0x62, 0x9d, 0x52, 0xc7, 0x2d, 0xb8, 0xb8,

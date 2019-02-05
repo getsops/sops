@@ -306,7 +306,7 @@
       }
     }
   },
-  "revision": "20180711",
+  "revision": "20180919",
   "rootUrl": "https://datastore.googleapis.com/",
   "schemas": {
     "AllocateIdsRequest": {
@@ -342,7 +342,7 @@
       "id": "ArrayValue",
       "properties": {
         "values": {
-          "description": "Values in the array.\nThe order of this array may not be preserved if it contains a mix of\nindexed and unindexed values.",
+          "description": "Values in the array.\nThe order of values in an array is preserved as long as all values have\nidentical settings for 'exclude_from_indexes'.",
           "items": {
             "$ref": "Value"
           },

@@ -15,7 +15,7 @@ const opAddTagsToResource = "AddTagsToResource"
 // AddTagsToResourceRequest generates a "aws/request.Request" representing the
 // client's request for the AddTagsToResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -111,7 +111,7 @@ const opCreateHapg = "CreateHapg"
 // CreateHapgRequest generates a "aws/request.Request" representing the
 // client's request for the CreateHapg operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -206,7 +206,7 @@ const opCreateHsm = "CreateHsm"
 // CreateHsmRequest generates a "aws/request.Request" representing the
 // client's request for the CreateHsm operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -310,7 +310,7 @@ const opCreateLunaClient = "CreateLunaClient"
 // CreateLunaClientRequest generates a "aws/request.Request" representing the
 // client's request for the CreateLunaClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -404,7 +404,7 @@ const opDeleteHapg = "DeleteHapg"
 // DeleteHapgRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteHapg operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -498,7 +498,7 @@ const opDeleteHsm = "DeleteHsm"
 // DeleteHsmRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteHsm operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -593,7 +593,7 @@ const opDeleteLunaClient = "DeleteLunaClient"
 // DeleteLunaClientRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLunaClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -687,7 +687,7 @@ const opDescribeHapg = "DescribeHapg"
 // DescribeHapgRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeHapg operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -781,7 +781,7 @@ const opDescribeHsm = "DescribeHsm"
 // DescribeHsmRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeHsm operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -876,7 +876,7 @@ const opDescribeLunaClient = "DescribeLunaClient"
 // DescribeLunaClientRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeLunaClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -970,7 +970,7 @@ const opGetConfig = "GetConfig"
 // GetConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1065,7 +1065,7 @@ const opListAvailableZones = "ListAvailableZones"
 // ListAvailableZonesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAvailableZones operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1159,7 +1159,7 @@ const opListHapgs = "ListHapgs"
 // ListHapgsRequest generates a "aws/request.Request" representing the
 // client's request for the ListHapgs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1258,7 +1258,7 @@ const opListHsms = "ListHsms"
 // ListHsmsRequest generates a "aws/request.Request" representing the
 // client's request for the ListHsms operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1358,7 +1358,7 @@ const opListLunaClients = "ListLunaClients"
 // ListLunaClientsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLunaClients operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1457,7 +1457,7 @@ const opListTagsForResource = "ListTagsForResource"
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1551,7 +1551,7 @@ const opModifyHapg = "ModifyHapg"
 // ModifyHapgRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyHapg operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1645,7 +1645,7 @@ const opModifyHsm = "ModifyHsm"
 // ModifyHsmRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyHsm operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1745,7 +1745,7 @@ const opModifyLunaClient = "ModifyLunaClient"
 // ModifyLunaClientRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyLunaClient operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1836,7 +1836,7 @@ const opRemoveTagsFromResource = "RemoveTagsFromResource"
 // RemoveTagsFromResourceRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTagsFromResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.

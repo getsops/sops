@@ -33,7 +33,7 @@ func (m *Backend) Reset()         { *m = Backend{} }
 func (m *Backend) String() string { return proto.CompactTextString(m) }
 func (*Backend) ProtoMessage()    {}
 func (*Backend) Descriptor() ([]byte, []int) {
-	return fileDescriptor_87d0f28daa3f64f0, []int{0}
+	return fileDescriptor_backend_bb737a5d3bcbecd6, []int{0}
 }
 func (m *Backend) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Backend.Unmarshal(m, b)
@@ -41,8 +41,8 @@ func (m *Backend) XXX_Unmarshal(b []byte) error {
 func (m *Backend) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Backend.Marshal(b, m, deterministic)
 }
-func (m *Backend) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Backend.Merge(m, src)
+func (dst *Backend) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Backend.Merge(dst, src)
 }
 func (m *Backend) XXX_Size() int {
 	return xxx_messageInfo_Backend.Size(m)
@@ -83,7 +83,7 @@ func (m *BackendRule) Reset()         { *m = BackendRule{} }
 func (m *BackendRule) String() string { return proto.CompactTextString(m) }
 func (*BackendRule) ProtoMessage()    {}
 func (*BackendRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_87d0f28daa3f64f0, []int{1}
+	return fileDescriptor_backend_bb737a5d3bcbecd6, []int{1}
 }
 func (m *BackendRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BackendRule.Unmarshal(m, b)
@@ -91,8 +91,8 @@ func (m *BackendRule) XXX_Unmarshal(b []byte) error {
 func (m *BackendRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BackendRule.Marshal(b, m, deterministic)
 }
-func (m *BackendRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BackendRule.Merge(m, src)
+func (dst *BackendRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BackendRule.Merge(dst, src)
 }
 func (m *BackendRule) XXX_Size() int {
 	return xxx_messageInfo_BackendRule.Size(m)
@@ -136,9 +136,9 @@ func init() {
 	proto.RegisterType((*BackendRule)(nil), "google.api.BackendRule")
 }
 
-func init() { proto.RegisterFile("google/api/backend.proto", fileDescriptor_87d0f28daa3f64f0) }
+func init() { proto.RegisterFile("google/api/backend.proto", fileDescriptor_backend_bb737a5d3bcbecd6) }
 
-var fileDescriptor_87d0f28daa3f64f0 = []byte{
+var fileDescriptor_backend_bb737a5d3bcbecd6 = []byte{
 	// 246 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x90, 0xb1, 0x4e, 0xc3, 0x30,
 	0x10, 0x86, 0xe5, 0xb6, 0x50, 0xb8, 0x54, 0x0c, 0x59, 0xb0, 0x98, 0x42, 0xa7, 0x2c, 0x38, 0x12,

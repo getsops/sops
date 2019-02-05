@@ -29,7 +29,6 @@ const (
 var Table_TimestampGranularity_name = map[int32]string{
 	0: "MILLIS",
 }
-
 var Table_TimestampGranularity_value = map[string]int32{
 	"MILLIS": 0,
 }
@@ -37,9 +36,8 @@ var Table_TimestampGranularity_value = map[string]int32{
 func (x Table_TimestampGranularity) String() string {
 	return proto.EnumName(Table_TimestampGranularity_name, int32(x))
 }
-
 func (Table_TimestampGranularity) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_b9ed6c4c9bdaf892, []int{0, 0}
+	return fileDescriptor_bigtable_table_data_021ea70d03a8dd36, []int{0, 0}
 }
 
 // A collection of user data indexed by row, column, and timestamp.
@@ -67,7 +65,7 @@ func (m *Table) Reset()         { *m = Table{} }
 func (m *Table) String() string { return proto.CompactTextString(m) }
 func (*Table) ProtoMessage()    {}
 func (*Table) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b9ed6c4c9bdaf892, []int{0}
+	return fileDescriptor_bigtable_table_data_021ea70d03a8dd36, []int{0}
 }
 func (m *Table) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Table.Unmarshal(m, b)
@@ -75,8 +73,8 @@ func (m *Table) XXX_Unmarshal(b []byte) error {
 func (m *Table) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Table.Marshal(b, m, deterministic)
 }
-func (m *Table) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Table.Merge(m, src)
+func (dst *Table) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Table.Merge(dst, src)
 }
 func (m *Table) XXX_Size() int {
 	return xxx_messageInfo_Table.Size(m)
@@ -164,7 +162,7 @@ func (m *ColumnFamily) Reset()         { *m = ColumnFamily{} }
 func (m *ColumnFamily) String() string { return proto.CompactTextString(m) }
 func (*ColumnFamily) ProtoMessage()    {}
 func (*ColumnFamily) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b9ed6c4c9bdaf892, []int{1}
+	return fileDescriptor_bigtable_table_data_021ea70d03a8dd36, []int{1}
 }
 func (m *ColumnFamily) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ColumnFamily.Unmarshal(m, b)
@@ -172,8 +170,8 @@ func (m *ColumnFamily) XXX_Unmarshal(b []byte) error {
 func (m *ColumnFamily) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ColumnFamily.Marshal(b, m, deterministic)
 }
-func (m *ColumnFamily) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ColumnFamily.Merge(m, src)
+func (dst *ColumnFamily) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ColumnFamily.Merge(dst, src)
 }
 func (m *ColumnFamily) XXX_Size() int {
 	return xxx_messageInfo_ColumnFamily.Size(m)
@@ -222,7 +220,7 @@ func (m *GcRule) Reset()         { *m = GcRule{} }
 func (m *GcRule) String() string { return proto.CompactTextString(m) }
 func (*GcRule) ProtoMessage()    {}
 func (*GcRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b9ed6c4c9bdaf892, []int{2}
+	return fileDescriptor_bigtable_table_data_021ea70d03a8dd36, []int{2}
 }
 func (m *GcRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcRule.Unmarshal(m, b)
@@ -230,8 +228,8 @@ func (m *GcRule) XXX_Unmarshal(b []byte) error {
 func (m *GcRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcRule.Marshal(b, m, deterministic)
 }
-func (m *GcRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcRule.Merge(m, src)
+func (dst *GcRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcRule.Merge(dst, src)
 }
 func (m *GcRule) XXX_Size() int {
 	return xxx_messageInfo_GcRule.Size(m)
@@ -425,7 +423,7 @@ func (m *GcRule_Intersection) Reset()         { *m = GcRule_Intersection{} }
 func (m *GcRule_Intersection) String() string { return proto.CompactTextString(m) }
 func (*GcRule_Intersection) ProtoMessage()    {}
 func (*GcRule_Intersection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b9ed6c4c9bdaf892, []int{2, 0}
+	return fileDescriptor_bigtable_table_data_021ea70d03a8dd36, []int{2, 0}
 }
 func (m *GcRule_Intersection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcRule_Intersection.Unmarshal(m, b)
@@ -433,8 +431,8 @@ func (m *GcRule_Intersection) XXX_Unmarshal(b []byte) error {
 func (m *GcRule_Intersection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcRule_Intersection.Marshal(b, m, deterministic)
 }
-func (m *GcRule_Intersection) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcRule_Intersection.Merge(m, src)
+func (dst *GcRule_Intersection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcRule_Intersection.Merge(dst, src)
 }
 func (m *GcRule_Intersection) XXX_Size() int {
 	return xxx_messageInfo_GcRule_Intersection.Size(m)
@@ -465,7 +463,7 @@ func (m *GcRule_Union) Reset()         { *m = GcRule_Union{} }
 func (m *GcRule_Union) String() string { return proto.CompactTextString(m) }
 func (*GcRule_Union) ProtoMessage()    {}
 func (*GcRule_Union) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b9ed6c4c9bdaf892, []int{2, 1}
+	return fileDescriptor_bigtable_table_data_021ea70d03a8dd36, []int{2, 1}
 }
 func (m *GcRule_Union) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcRule_Union.Unmarshal(m, b)
@@ -473,8 +471,8 @@ func (m *GcRule_Union) XXX_Unmarshal(b []byte) error {
 func (m *GcRule_Union) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcRule_Union.Marshal(b, m, deterministic)
 }
-func (m *GcRule_Union) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcRule_Union.Merge(m, src)
+func (dst *GcRule_Union) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcRule_Union.Merge(dst, src)
 }
 func (m *GcRule_Union) XXX_Size() int {
 	return xxx_messageInfo_GcRule_Union.Size(m)
@@ -503,10 +501,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/bigtable/admin/table/v1/bigtable_table_data.proto", fileDescriptor_b9ed6c4c9bdaf892)
+	proto.RegisterFile("google/bigtable/admin/table/v1/bigtable_table_data.proto", fileDescriptor_bigtable_table_data_021ea70d03a8dd36)
 }
 
-var fileDescriptor_b9ed6c4c9bdaf892 = []byte{
+var fileDescriptor_bigtable_table_data_021ea70d03a8dd36 = []byte{
 	// 579 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x94, 0x61, 0x6b, 0xd3, 0x40,
 	0x18, 0xc7, 0x9b, 0xa5, 0xed, 0xd8, 0xb3, 0x3a, 0xeb, 0x29, 0x52, 0x0b, 0x4a, 0xc9, 0x40, 0x8a,

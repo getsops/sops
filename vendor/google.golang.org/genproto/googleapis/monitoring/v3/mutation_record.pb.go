@@ -34,7 +34,7 @@ func (m *MutationRecord) Reset()         { *m = MutationRecord{} }
 func (m *MutationRecord) String() string { return proto.CompactTextString(m) }
 func (*MutationRecord) ProtoMessage()    {}
 func (*MutationRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83c24e690bdb9101, []int{0}
+	return fileDescriptor_mutation_record_c4e4f383b5193b81, []int{0}
 }
 func (m *MutationRecord) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MutationRecord.Unmarshal(m, b)
@@ -42,8 +42,8 @@ func (m *MutationRecord) XXX_Unmarshal(b []byte) error {
 func (m *MutationRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MutationRecord.Marshal(b, m, deterministic)
 }
-func (m *MutationRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MutationRecord.Merge(m, src)
+func (dst *MutationRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MutationRecord.Merge(dst, src)
 }
 func (m *MutationRecord) XXX_Size() int {
 	return xxx_messageInfo_MutationRecord.Size(m)
@@ -73,10 +73,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/monitoring/v3/mutation_record.proto", fileDescriptor_83c24e690bdb9101)
+	proto.RegisterFile("google/monitoring/v3/mutation_record.proto", fileDescriptor_mutation_record_c4e4f383b5193b81)
 }
 
-var fileDescriptor_83c24e690bdb9101 = []byte{
+var fileDescriptor_mutation_record_c4e4f383b5193b81 = []byte{
 	// 251 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x4a, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0xcf, 0xcd, 0xcf, 0xcb, 0x2c, 0xc9, 0x2f, 0xca, 0xcc, 0x4b, 0xd7, 0x2f, 0x33,

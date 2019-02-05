@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,22 @@
 
 package containerregistry
 
-import original "github.com/Azure/azure-sdk-for-go/services/containerregistry/mgmt/2018-09-01/containerregistry"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/containerregistry/mgmt/2018-09-01/containerregistry"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
+type Action = original.Action
+
+const (
+	Allow Action = original.Allow
+)
+
 type Architecture = original.Architecture
 
 const (
@@ -46,6 +55,13 @@ type BaseImageTriggerType = original.BaseImageTriggerType
 const (
 	All     BaseImageTriggerType = original.All
 	Runtime BaseImageTriggerType = original.Runtime
+)
+
+type DefaultAction = original.DefaultAction
+
+const (
+	DefaultActionAllow DefaultAction = original.DefaultActionAllow
+	DefaultActionDeny  DefaultAction = original.DefaultActionDeny
 )
 
 type ImportMode = original.ImportMode
@@ -111,7 +127,15 @@ type RunType = original.RunType
 
 const (
 	AutoBuild  RunType = original.AutoBuild
+	AutoRun    RunType = original.AutoRun
 	QuickBuild RunType = original.QuickBuild
+	QuickRun   RunType = original.QuickRun
+)
+
+type SecretObjectType = original.SecretObjectType
+
+const (
+	Opaque SecretObjectType = original.Opaque
 )
 
 type SkuName = original.SkuName
@@ -139,10 +163,18 @@ const (
 	VisualStudioTeamService SourceControlType = original.VisualStudioTeamService
 )
 
+type SourceRegistryLoginMode = original.SourceRegistryLoginMode
+
+const (
+	Default SourceRegistryLoginMode = original.Default
+	None    SourceRegistryLoginMode = original.None
+)
+
 type SourceTriggerEvent = original.SourceTriggerEvent
 
 const (
-	Commit SourceTriggerEvent = original.Commit
+	Commit      SourceTriggerEvent = original.Commit
+	Pullrequest SourceTriggerEvent = original.Pullrequest
 )
 
 type TaskStatus = original.TaskStatus
@@ -211,9 +243,11 @@ const (
 type WebhookAction = original.WebhookAction
 
 const (
-	Delete     WebhookAction = original.Delete
-	Push       WebhookAction = original.Push
-	Quarantine WebhookAction = original.Quarantine
+	ChartDelete WebhookAction = original.ChartDelete
+	ChartPush   WebhookAction = original.ChartPush
+	Delete      WebhookAction = original.Delete
+	Push        WebhookAction = original.Push
+	Quarantine  WebhookAction = original.Quarantine
 )
 
 type WebhookStatus = original.WebhookStatus
@@ -228,10 +262,16 @@ type AgentProperties = original.AgentProperties
 type Argument = original.Argument
 type AuthInfo = original.AuthInfo
 type AuthInfoUpdateParameters = original.AuthInfoUpdateParameters
+type BaseClient = original.BaseClient
 type BaseImageDependency = original.BaseImageDependency
 type BaseImageTrigger = original.BaseImageTrigger
 type BaseImageTriggerUpdateParameters = original.BaseImageTriggerUpdateParameters
+type BasicRunRequest = original.BasicRunRequest
+type BasicTaskStepProperties = original.BasicTaskStepProperties
+type BasicTaskStepUpdateParameters = original.BasicTaskStepUpdateParameters
 type CallbackConfig = original.CallbackConfig
+type Credentials = original.Credentials
+type CustomRegistryCredentials = original.CustomRegistryCredentials
 type DockerBuildRequest = original.DockerBuildRequest
 type DockerBuildStep = original.DockerBuildStep
 type DockerBuildStepUpdateParameters = original.DockerBuildStepUpdateParameters
@@ -249,10 +289,13 @@ type EventResponseMessage = original.EventResponseMessage
 type FileTaskRunRequest = original.FileTaskRunRequest
 type FileTaskStep = original.FileTaskStep
 type FileTaskStepUpdateParameters = original.FileTaskStepUpdateParameters
+type IPRule = original.IPRule
 type ImageDescriptor = original.ImageDescriptor
 type ImageUpdateTrigger = original.ImageUpdateTrigger
 type ImportImageParameters = original.ImportImageParameters
 type ImportSource = original.ImportSource
+type ImportSourceCredentials = original.ImportSourceCredentials
+type NetworkRuleSet = original.NetworkRuleSet
 type OperationDefinition = original.OperationDefinition
 type OperationDisplayDefinition = original.OperationDisplayDefinition
 type OperationListResult = original.OperationListResult
@@ -261,11 +304,13 @@ type OperationListResultPage = original.OperationListResultPage
 type OperationMetricSpecificationDefinition = original.OperationMetricSpecificationDefinition
 type OperationPropertiesDefinition = original.OperationPropertiesDefinition
 type OperationServiceSpecificationDefinition = original.OperationServiceSpecificationDefinition
+type OperationsClient = original.OperationsClient
 type PlatformProperties = original.PlatformProperties
 type PlatformUpdateParameters = original.PlatformUpdateParameters
 type ProxyResource = original.ProxyResource
 type QuarantinePolicy = original.QuarantinePolicy
 type RegenerateCredentialParameters = original.RegenerateCredentialParameters
+type RegistriesClient = original.RegistriesClient
 type RegistriesCreateFuture = original.RegistriesCreateFuture
 type RegistriesDeleteFuture = original.RegistriesDeleteFuture
 type RegistriesImportImageFuture = original.RegistriesImportImageFuture
@@ -273,6 +318,7 @@ type RegistriesScheduleRunFuture = original.RegistriesScheduleRunFuture
 type RegistriesUpdateFuture = original.RegistriesUpdateFuture
 type RegistriesUpdatePoliciesFuture = original.RegistriesUpdatePoliciesFuture
 type Registry = original.Registry
+type RegistryIdentity = original.RegistryIdentity
 type RegistryListCredentialsResult = original.RegistryListCredentialsResult
 type RegistryListResult = original.RegistryListResult
 type RegistryListResultIterator = original.RegistryListResultIterator
@@ -291,10 +337,11 @@ type ReplicationListResult = original.ReplicationListResult
 type ReplicationListResultIterator = original.ReplicationListResultIterator
 type ReplicationListResultPage = original.ReplicationListResultPage
 type ReplicationProperties = original.ReplicationProperties
+type ReplicationUpdateParameters = original.ReplicationUpdateParameters
+type ReplicationsClient = original.ReplicationsClient
 type ReplicationsCreateFuture = original.ReplicationsCreateFuture
 type ReplicationsDeleteFuture = original.ReplicationsDeleteFuture
 type ReplicationsUpdateFuture = original.ReplicationsUpdateFuture
-type ReplicationUpdateParameters = original.ReplicationUpdateParameters
 type Request = original.Request
 type Resource = original.Resource
 type Run = original.Run
@@ -304,15 +351,17 @@ type RunListResult = original.RunListResult
 type RunListResultIterator = original.RunListResultIterator
 type RunListResultPage = original.RunListResultPage
 type RunProperties = original.RunProperties
-type BasicRunRequest = original.BasicRunRequest
 type RunRequest = original.RunRequest
-type RunsCancelFuture = original.RunsCancelFuture
-type RunsUpdateFuture = original.RunsUpdateFuture
 type RunUpdateParameters = original.RunUpdateParameters
+type RunsCancelFuture = original.RunsCancelFuture
+type RunsClient = original.RunsClient
+type RunsUpdateFuture = original.RunsUpdateFuture
+type SecretObject = original.SecretObject
 type SetValue = original.SetValue
 type Sku = original.Sku
 type Source = original.Source
 type SourceProperties = original.SourceProperties
+type SourceRegistryCredentials = original.SourceRegistryCredentials
 type SourceTrigger = original.SourceTrigger
 type SourceTriggerDescriptor = original.SourceTriggerDescriptor
 type SourceTriggerUpdateParameters = original.SourceTriggerUpdateParameters
@@ -328,17 +377,17 @@ type TaskListResultPage = original.TaskListResultPage
 type TaskProperties = original.TaskProperties
 type TaskPropertiesUpdateParameters = original.TaskPropertiesUpdateParameters
 type TaskRunRequest = original.TaskRunRequest
+type TaskStepProperties = original.TaskStepProperties
+type TaskStepUpdateParameters = original.TaskStepUpdateParameters
+type TaskUpdateParameters = original.TaskUpdateParameters
+type TasksClient = original.TasksClient
 type TasksCreateFuture = original.TasksCreateFuture
 type TasksDeleteFuture = original.TasksDeleteFuture
-type BasicTaskStepProperties = original.BasicTaskStepProperties
-type TaskStepProperties = original.TaskStepProperties
-type BasicTaskStepUpdateParameters = original.BasicTaskStepUpdateParameters
-type TaskStepUpdateParameters = original.TaskStepUpdateParameters
 type TasksUpdateFuture = original.TasksUpdateFuture
-type TaskUpdateParameters = original.TaskUpdateParameters
 type TriggerProperties = original.TriggerProperties
 type TriggerUpdateParameters = original.TriggerUpdateParameters
 type TrustPolicy = original.TrustPolicy
+type VirtualNetworkRule = original.VirtualNetworkRule
 type Webhook = original.Webhook
 type WebhookCreateParameters = original.WebhookCreateParameters
 type WebhookListResult = original.WebhookListResult
@@ -347,22 +396,98 @@ type WebhookListResultPage = original.WebhookListResultPage
 type WebhookProperties = original.WebhookProperties
 type WebhookPropertiesCreateParameters = original.WebhookPropertiesCreateParameters
 type WebhookPropertiesUpdateParameters = original.WebhookPropertiesUpdateParameters
+type WebhookUpdateParameters = original.WebhookUpdateParameters
+type WebhooksClient = original.WebhooksClient
 type WebhooksCreateFuture = original.WebhooksCreateFuture
 type WebhooksDeleteFuture = original.WebhooksDeleteFuture
 type WebhooksUpdateFuture = original.WebhooksUpdateFuture
-type WebhookUpdateParameters = original.WebhookUpdateParameters
-type OperationsClient = original.OperationsClient
-type RegistriesClient = original.RegistriesClient
-type ReplicationsClient = original.ReplicationsClient
-type RunsClient = original.RunsClient
-type TasksClient = original.TasksClient
-type WebhooksClient = original.WebhooksClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
+func NewEventListResultIterator(page EventListResultPage) EventListResultIterator {
+	return original.NewEventListResultIterator(page)
+}
+func NewEventListResultPage(getNextPage func(context.Context, EventListResult) (EventListResult, error)) EventListResultPage {
+	return original.NewEventListResultPage(getNextPage)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRegistriesClient(subscriptionID string) RegistriesClient {
+	return original.NewRegistriesClient(subscriptionID)
+}
+func NewRegistriesClientWithBaseURI(baseURI string, subscriptionID string) RegistriesClient {
+	return original.NewRegistriesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRegistryListResultIterator(page RegistryListResultPage) RegistryListResultIterator {
+	return original.NewRegistryListResultIterator(page)
+}
+func NewRegistryListResultPage(getNextPage func(context.Context, RegistryListResult) (RegistryListResult, error)) RegistryListResultPage {
+	return original.NewRegistryListResultPage(getNextPage)
+}
+func NewReplicationListResultIterator(page ReplicationListResultPage) ReplicationListResultIterator {
+	return original.NewReplicationListResultIterator(page)
+}
+func NewReplicationListResultPage(getNextPage func(context.Context, ReplicationListResult) (ReplicationListResult, error)) ReplicationListResultPage {
+	return original.NewReplicationListResultPage(getNextPage)
+}
+func NewReplicationsClient(subscriptionID string) ReplicationsClient {
+	return original.NewReplicationsClient(subscriptionID)
+}
+func NewReplicationsClientWithBaseURI(baseURI string, subscriptionID string) ReplicationsClient {
+	return original.NewReplicationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRunListResultIterator(page RunListResultPage) RunListResultIterator {
+	return original.NewRunListResultIterator(page)
+}
+func NewRunListResultPage(getNextPage func(context.Context, RunListResult) (RunListResult, error)) RunListResultPage {
+	return original.NewRunListResultPage(getNextPage)
+}
+func NewRunsClient(subscriptionID string) RunsClient {
+	return original.NewRunsClient(subscriptionID)
+}
+func NewRunsClientWithBaseURI(baseURI string, subscriptionID string) RunsClient {
+	return original.NewRunsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewTaskListResultIterator(page TaskListResultPage) TaskListResultIterator {
+	return original.NewTaskListResultIterator(page)
+}
+func NewTaskListResultPage(getNextPage func(context.Context, TaskListResult) (TaskListResult, error)) TaskListResultPage {
+	return original.NewTaskListResultPage(getNextPage)
+}
+func NewTasksClient(subscriptionID string) TasksClient {
+	return original.NewTasksClient(subscriptionID)
+}
+func NewTasksClientWithBaseURI(baseURI string, subscriptionID string) TasksClient {
+	return original.NewTasksClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWebhookListResultIterator(page WebhookListResultPage) WebhookListResultIterator {
+	return original.NewWebhookListResultIterator(page)
+}
+func NewWebhookListResultPage(getNextPage func(context.Context, WebhookListResult) (WebhookListResult, error)) WebhookListResultPage {
+	return original.NewWebhookListResultPage(getNextPage)
+}
+func NewWebhooksClient(subscriptionID string) WebhooksClient {
+	return original.NewWebhooksClient(subscriptionID)
+}
+func NewWebhooksClientWithBaseURI(baseURI string, subscriptionID string) WebhooksClient {
+	return original.NewWebhooksClientWithBaseURI(baseURI, subscriptionID)
+}
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleActionValues() []Action {
+	return original.PossibleActionValues()
 }
 func PossibleArchitectureValues() []Architecture {
 	return original.PossibleArchitectureValues()
@@ -372,6 +497,9 @@ func PossibleBaseImageDependencyTypeValues() []BaseImageDependencyType {
 }
 func PossibleBaseImageTriggerTypeValues() []BaseImageTriggerType {
 	return original.PossibleBaseImageTriggerTypeValues()
+}
+func PossibleDefaultActionValues() []DefaultAction {
+	return original.PossibleDefaultActionValues()
 }
 func PossibleImportModeValues() []ImportMode {
 	return original.PossibleImportModeValues()
@@ -397,6 +525,9 @@ func PossibleRunStatusValues() []RunStatus {
 func PossibleRunTypeValues() []RunType {
 	return original.PossibleRunTypeValues()
 }
+func PossibleSecretObjectTypeValues() []SecretObjectType {
+	return original.PossibleSecretObjectTypeValues()
+}
 func PossibleSkuNameValues() []SkuName {
 	return original.PossibleSkuNameValues()
 }
@@ -405,6 +536,9 @@ func PossibleSkuTierValues() []SkuTier {
 }
 func PossibleSourceControlTypeValues() []SourceControlType {
 	return original.PossibleSourceControlTypeValues()
+}
+func PossibleSourceRegistryLoginModeValues() []SourceRegistryLoginMode {
+	return original.PossibleSourceRegistryLoginModeValues()
 }
 func PossibleSourceTriggerEventValues() []SourceTriggerEvent {
 	return original.PossibleSourceTriggerEventValues()
@@ -421,14 +555,14 @@ func PossibleTriggerStatusValues() []TriggerStatus {
 func PossibleTrustPolicyTypeValues() []TrustPolicyType {
 	return original.PossibleTrustPolicyTypeValues()
 }
-func PossibleTypeValues() []Type {
-	return original.PossibleTypeValues()
-}
 func PossibleTypeBasicTaskStepPropertiesValues() []TypeBasicTaskStepProperties {
 	return original.PossibleTypeBasicTaskStepPropertiesValues()
 }
 func PossibleTypeBasicTaskStepUpdateParametersValues() []TypeBasicTaskStepUpdateParameters {
 	return original.PossibleTypeBasicTaskStepUpdateParametersValues()
+}
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
 }
 func PossibleVariantValues() []Variant {
 	return original.PossibleVariantValues()
@@ -439,45 +573,9 @@ func PossibleWebhookActionValues() []WebhookAction {
 func PossibleWebhookStatusValues() []WebhookStatus {
 	return original.PossibleWebhookStatusValues()
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRegistriesClient(subscriptionID string) RegistriesClient {
-	return original.NewRegistriesClient(subscriptionID)
-}
-func NewRegistriesClientWithBaseURI(baseURI string, subscriptionID string) RegistriesClient {
-	return original.NewRegistriesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewReplicationsClient(subscriptionID string) ReplicationsClient {
-	return original.NewReplicationsClient(subscriptionID)
-}
-func NewReplicationsClientWithBaseURI(baseURI string, subscriptionID string) ReplicationsClient {
-	return original.NewReplicationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRunsClient(subscriptionID string) RunsClient {
-	return original.NewRunsClient(subscriptionID)
-}
-func NewRunsClientWithBaseURI(baseURI string, subscriptionID string) RunsClient {
-	return original.NewRunsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewTasksClient(subscriptionID string) TasksClient {
-	return original.NewTasksClient(subscriptionID)
-}
-func NewTasksClientWithBaseURI(baseURI string, subscriptionID string) TasksClient {
-	return original.NewTasksClientWithBaseURI(baseURI, subscriptionID)
-}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewWebhooksClient(subscriptionID string) WebhooksClient {
-	return original.NewWebhooksClient(subscriptionID)
-}
-func NewWebhooksClientWithBaseURI(baseURI string, subscriptionID string) WebhooksClient {
-	return original.NewWebhooksClientWithBaseURI(baseURI, subscriptionID)
 }

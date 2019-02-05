@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,6 +43,16 @@ func NewEmailTemplateClient() EmailTemplateClient {
 // templateName - email Template Name Identifier.
 // parameters - email Template update parameters.
 func (client EmailTemplateClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, templateName TemplateName, parameters EmailTemplateUpdateParameters) (result EmailTemplateContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Subject", Name: validation.Null, Rule: false,
@@ -127,6 +138,16 @@ func (client EmailTemplateClient) CreateOrUpdateResponder(resp *http.Response) (
 // ifMatch - the entity state (Etag) version of the Email Template to delete. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client EmailTemplateClient) Delete(ctx context.Context, apimBaseURL string, templateName TemplateName, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, apimBaseURL, templateName, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.EmailTemplateClient", "Delete", nil, "Failure preparing request")
@@ -197,6 +218,16 @@ func (client EmailTemplateClient) DeleteResponder(resp *http.Response) (result a
 // https://myapimservice.management.azure-api.net.
 // templateName - email Template Name Identifier.
 func (client EmailTemplateClient) Get(ctx context.Context, apimBaseURL string, templateName TemplateName) (result EmailTemplateContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, apimBaseURL, templateName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.EmailTemplateClient", "Get", nil, "Failure preparing request")
@@ -271,6 +302,16 @@ func (client EmailTemplateClient) GetResponder(resp *http.Response) (result Emai
 // top - number of records to return.
 // skip - number of records to skip.
 func (client EmailTemplateClient) List(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result EmailTemplateCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateClient.List")
+		defer func() {
+			sc := -1
+			if result.etc.Response.Response != nil {
+				sc = result.etc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -352,8 +393,8 @@ func (client EmailTemplateClient) ListResponder(resp *http.Response) (result Ema
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client EmailTemplateClient) listNextResults(lastResults EmailTemplateCollection) (result EmailTemplateCollection, err error) {
-	req, err := lastResults.emailTemplateCollectionPreparer()
+func (client EmailTemplateClient) listNextResults(ctx context.Context, lastResults EmailTemplateCollection) (result EmailTemplateCollection, err error) {
+	req, err := lastResults.emailTemplateCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.EmailTemplateClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -374,6 +415,16 @@ func (client EmailTemplateClient) listNextResults(lastResults EmailTemplateColle
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EmailTemplateClient) ListComplete(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result EmailTemplateCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, apimBaseURL, filter, top, skip)
 	return
 }
@@ -385,6 +436,16 @@ func (client EmailTemplateClient) ListComplete(ctx context.Context, apimBaseURL 
 // templateName - email Template Name Identifier.
 // parameters - update parameters.
 func (client EmailTemplateClient) Update(ctx context.Context, apimBaseURL string, templateName TemplateName, parameters EmailTemplateUpdateParameters) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EmailTemplateClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, apimBaseURL, templateName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.EmailTemplateClient", "Update", nil, "Failure preparing request")

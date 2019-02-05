@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewAPIClientWithBaseURI(baseURI string, subscriptionID string) APIClient {
 // parameters - create or update parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client APIClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, parameters APICreateOrUpdateParameter, ifMatch string) (result APIContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -140,6 +151,16 @@ func (client APIClient) CreateOrUpdateResponder(resp *http.Response) (result API
 // request or it should be * for unconditional update.
 // deleteRevisions - delete all revisions of the Api.
 func (client APIClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, ifMatch string, deleteRevisions *bool) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -225,6 +246,16 @@ func (client APIClient) DeleteResponder(resp *http.Response) (result autorest.Re
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client APIClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result APIContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -307,6 +338,16 @@ func (client APIClient) GetResponder(resp *http.Response) (result APIContract, e
 // apiid - API revision identifier. Must be unique in the current API Management service instance. Non-current
 // revision has ;rev=n as a suffix where n is the revision number.
 func (client APIClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -396,6 +437,16 @@ func (client APIClient) GetEntityTagResponder(resp *http.Response) (result autor
 // skip - number of records to skip.
 // expandAPIVersionSet - include full ApiVersionSet resource in response
 func (client APIClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, expandAPIVersionSet *bool) (result APICollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.ac.Response.Response != nil {
+				sc = result.ac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -488,8 +539,8 @@ func (client APIClient) ListByServiceResponder(resp *http.Response) (result APIC
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIClient) listByServiceNextResults(lastResults APICollection) (result APICollection, err error) {
-	req, err := lastResults.aPICollectionPreparer()
+func (client APIClient) listByServiceNextResults(ctx context.Context, lastResults APICollection) (result APICollection, err error) {
+	req, err := lastResults.aPICollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -510,6 +561,16 @@ func (client APIClient) listByServiceNextResults(lastResults APICollection) (res
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, expandAPIVersionSet *bool) (result APICollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip, expandAPIVersionSet)
 	return
 }
@@ -530,7 +591,18 @@ func (client APIClient) ListByServiceComplete(ctx context.Context, resourceGroup
 // | isCurrent   | eq                     | substringof, contains, startswith, endswith |
 // top - number of records to return.
 // skip - number of records to skip.
-func (client APIClient) ListByTags(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagResourceCollectionPage, err error) {
+// includeNotTaggedApis - include not tagged apis in response
+func (client APIClient) ListByTags(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, includeNotTaggedApis *bool) (result TagResourceCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByTags")
+		defer func() {
+			sc := -1
+			if result.trc.Response.Response != nil {
+				sc = result.trc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -546,7 +618,7 @@ func (client APIClient) ListByTags(ctx context.Context, resourceGroupName string
 	}
 
 	result.fn = client.listByTagsNextResults
-	req, err := client.ListByTagsPreparer(ctx, resourceGroupName, serviceName, filter, top, skip)
+	req, err := client.ListByTagsPreparer(ctx, resourceGroupName, serviceName, filter, top, skip, includeNotTaggedApis)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.APIClient", "ListByTags", nil, "Failure preparing request")
 		return
@@ -568,7 +640,7 @@ func (client APIClient) ListByTags(ctx context.Context, resourceGroupName string
 }
 
 // ListByTagsPreparer prepares the ListByTags request.
-func (client APIClient) ListByTagsPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (*http.Request, error) {
+func (client APIClient) ListByTagsPreparer(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, includeNotTaggedApis *bool) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
@@ -587,6 +659,11 @@ func (client APIClient) ListByTagsPreparer(ctx context.Context, resourceGroupNam
 	}
 	if skip != nil {
 		queryParameters["$skip"] = autorest.Encode("query", *skip)
+	}
+	if includeNotTaggedApis != nil {
+		queryParameters["includeNotTaggedApis"] = autorest.Encode("query", *includeNotTaggedApis)
+	} else {
+		queryParameters["includeNotTaggedApis"] = autorest.Encode("query", false)
 	}
 
 	preparer := autorest.CreatePreparer(
@@ -618,8 +695,8 @@ func (client APIClient) ListByTagsResponder(resp *http.Response) (result TagReso
 }
 
 // listByTagsNextResults retrieves the next set of results, if any.
-func (client APIClient) listByTagsNextResults(lastResults TagResourceCollection) (result TagResourceCollection, err error) {
-	req, err := lastResults.tagResourceCollectionPreparer()
+func (client APIClient) listByTagsNextResults(ctx context.Context, lastResults TagResourceCollection) (result TagResourceCollection, err error) {
+	req, err := lastResults.tagResourceCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIClient", "listByTagsNextResults", nil, "Failure preparing next results request")
 	}
@@ -639,8 +716,18 @@ func (client APIClient) listByTagsNextResults(lastResults TagResourceCollection)
 }
 
 // ListByTagsComplete enumerates all values, automatically crossing page boundaries as required.
-func (client APIClient) ListByTagsComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result TagResourceCollectionIterator, err error) {
-	result.page, err = client.ListByTags(ctx, resourceGroupName, serviceName, filter, top, skip)
+func (client APIClient) ListByTagsComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32, includeNotTaggedApis *bool) (result TagResourceCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.ListByTags")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.page, err = client.ListByTags(ctx, resourceGroupName, serviceName, filter, top, skip, includeNotTaggedApis)
 	return
 }
 
@@ -654,6 +741,16 @@ func (client APIClient) ListByTagsComplete(ctx context.Context, resourceGroupNam
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIClient) Update(ctx context.Context, resourceGroupName string, serviceName string, apiid string, parameters APIUpdateContract, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

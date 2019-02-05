@@ -51,34 +51,35 @@ Changes have been moved to [CHANGES](https://github.com/GoogleCloudPlatform/goog
 
 Google API                                   | Status       | Package
 ---------------------------------------------|--------------|-----------------------------------------------------------
-[BigQuery][cloud-bigquery]                   | stable       | [`godoc.org/cloud.google.com/go/bigquery`][cloud-bigquery-ref]
-[Bigtable][cloud-bigtable]                   | stable       | [`godoc.org/cloud.google.com/go/bigtable`][cloud-bigtable-ref]
-[Container][cloud-container]                 | stable       | [`godoc.org/cloud.google.com/go/container/apiv1`][cloud-container-ref]
-[ContainerAnalysis][cloud-containeranalysis] | beta         | [`godoc.org/cloud.google.com/go/containeranalysis/apiv1beta1`][cloud-containeranalysis-ref]
-[Dataproc][cloud-dataproc]                   | stable       | [`godoc.org/cloud.google.com/go/dataproc/apiv1`][cloud-dataproc-ref]
-[Datastore][cloud-datastore]                 | stable       | [`godoc.org/cloud.google.com/go/datastore`][cloud-datastore-ref]
-[Debugger][cloud-debugger]                   | alpha        | [`godoc.org/cloud.google.com/go/debugger/apiv2`][cloud-debugger-ref]
-[Dialogflow][cloud-dialogflow]               | alpha        | [`godoc.org/cloud.google.com/go/dialogflow/apiv2`][cloud-dialogflow-ref]
-[Data Loss Prevention][cloud-dlp]            | alpha        | [`godoc.org/cloud.google.com/go/dlp/apiv2`][cloud-dlp-ref]
-[ErrorReporting][cloud-errors]               | alpha        | [`godoc.org/cloud.google.com/go/errorreporting`][cloud-errors-ref]
-[Firestore][cloud-firestore]                 | beta         | [`godoc.org/cloud.google.com/go/firestore`][cloud-firestore-ref]
-[IAM][cloud-iam]                             | stable       | [`godoc.org/cloud.google.com/go/iam`][cloud-iam-ref]
-[KMS][cloud-kms]                             | stable       | [`godoc.org/cloud.google.com/go/kms`][cloud-kms-ref]
-[Natural Language][cloud-natural-language]   | stable       | [`godoc.org/cloud.google.com/go/language/apiv1`][cloud-natural-language-ref]
-[Logging][cloud-logging]                     | stable       | [`godoc.org/cloud.google.com/go/logging`][cloud-logging-ref]
-[Monitoring][cloud-monitoring]               | alpha        | [`godoc.org/cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
+[Asset][cloud-asset]                         | alpha        | [`cloud.google.com/go/asset/v1beta`][cloud-asset-ref]
+[BigQuery][cloud-bigquery]                   | stable       | [`cloud.google.com/go/bigquery`][cloud-bigquery-ref]
+[Bigtable][cloud-bigtable]                   | stable       | [`cloud.google.com/go/bigtable`][cloud-bigtable-ref]
+[Cloudtasks][cloud-tasks]                    | beta         | [`cloud.google.com/go/cloudtasks/apiv2beta3`][cloud-tasks-ref]
+[Container][cloud-container]                 | stable       | [`cloud.google.com/go/container/apiv1`][cloud-container-ref]
+[ContainerAnalysis][cloud-containeranalysis] | beta         | [`cloud.google.com/go/containeranalysis/apiv1beta1`][cloud-containeranalysis-ref]
+[Dataproc][cloud-dataproc]                   | stable       | [`cloud.google.com/go/dataproc/apiv1`][cloud-dataproc-ref]
+[Datastore][cloud-datastore]                 | stable       | [`cloud.google.com/go/datastore`][cloud-datastore-ref]
+[Debugger][cloud-debugger]                   | alpha        | [`cloud.google.com/go/debugger/apiv2`][cloud-debugger-ref]
+[Dialogflow][cloud-dialogflow]               | alpha        | [`cloud.google.com/go/dialogflow/apiv2`][cloud-dialogflow-ref]
+[Data Loss Prevention][cloud-dlp]            | alpha        | [`cloud.google.com/go/dlp/apiv2`][cloud-dlp-ref]
+[ErrorReporting][cloud-errors]               | alpha        | [`cloud.google.com/go/errorreporting`][cloud-errors-ref]
+[Firestore][cloud-firestore]                 | beta         | [`cloud.google.com/go/firestore`][cloud-firestore-ref]
+[IAM][cloud-iam]                             | stable       | [`cloud.google.com/go/iam`][cloud-iam-ref]
+[KMS][cloud-kms]                             | stable       | [`cloud.google.com/go/kms`][cloud-kms-ref]
+[Natural Language][cloud-natural-language]   | stable       | [`cloud.google.com/go/language/apiv1`][cloud-natural-language-ref]
+[Logging][cloud-logging]                     | stable       | [`cloud.google.com/go/logging`][cloud-logging-ref]
+[Monitoring][cloud-monitoring]               | alpha        | [`cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
 [OS Login][cloud-oslogin]                    | alpha        | [`cloud.google.com/compute/docs/oslogin/rest`][cloud-oslogin-ref]
-[Pub/Sub][cloud-pubsub]                      | stable       | [`godoc.org/cloud.google.com/go/pubsub`][cloud-pubsub-ref]
-[Memorystore][cloud-memorystore]             | alpha        | [`godoc.org/cloud.google.com/go/redis/apiv1beta1`][cloud-memorystore-ref]
-[Spanner][cloud-spanner]                     | stable       | [`godoc.org/cloud.google.com/go/spanner`][cloud-spanner-ref]
-[Speech][cloud-speech]                       | stable       | [`godoc.org/cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
-[Storage][cloud-storage]                     | stable       | [`godoc.org/cloud.google.com/go/storage`][cloud-storage-ref]
-[Text To Speech][cloud-texttospeech]         | alpha        | [`godoc.org/cloud.google.com/go/texttospeech/apiv1`][cloud-storage-ref]
-[Trace][cloud-trace]                         | alpha        | [`godoc.org/cloud.google.com/go/trace/apiv2`][cloud-translation-ref]
-[Translation][cloud-translation]             | stable       | [`godoc.org/cloud.google.com/go/translate`][cloud-translation-ref]
-[Video Intelligence][cloud-video]            | alpha        | [`godoc.org/cloud.google.com/go/videointelligence/apiv1beta1`][cloud-video-ref]
-[Vision][cloud-vision]                       | stable       | [`godoc.org/cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
-
+[Pub/Sub][cloud-pubsub]                      | stable       | [`cloud.google.com/go/pubsub`][cloud-pubsub-ref]
+[Memorystore][cloud-memorystore]             | stable       | [`cloud.google.com/go/redis/apiv1beta1`][cloud-memorystore-ref]
+[Spanner][cloud-spanner]                     | stable       | [`cloud.google.com/go/spanner`][cloud-spanner-ref]
+[Speech][cloud-speech]                       | stable       | [`cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
+[Storage][cloud-storage]                     | stable       | [`cloud.google.com/go/storage`][cloud-storage-ref]
+[Text To Speech][cloud-texttospeech]         | alpha        | [`cloud.google.com/go/texttospeech/apiv1`][cloud-storage-ref]
+[Trace][cloud-trace]                         | alpha        | [`cloud.google.com/go/trace/apiv2`][cloud-translation-ref]
+[Translation][cloud-translation]             | stable       | [`cloud.google.com/go/translate`][cloud-translation-ref]
+[Video Intelligence][cloud-video]            | alpha        | [`cloud.google.com/go/videointelligence/apiv1beta1`][cloud-video-ref]
+[Vision][cloud-vision]                       | stable       | [`cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
 
 > **Alpha status**: the API is still being actively developed. As a
 > result, it might change in backward-incompatible ways and is not recommended
@@ -101,9 +102,7 @@ for updates on these packages.
 ## Go Versions Supported
 
 We support the two most recent major versions of Go. If Google App Engine uses
-an older version, we support that as well. You can see which versions are
-currently supported by looking at the lines following `go:` in
-[`.travis.yml`](.travis.yml).
+an older version, we support that as well.
 
 ## Authorization
 
@@ -497,3 +496,10 @@ for more information.
 [cloud-containeranalysis]: https://cloud.google.com/container-registry/docs/container-analysis
 [cloud-containeranalysis-docs]: https://cloud.google.com/container-analysis/api/reference/rest/
 [cloud-containeranalysis-ref]: https://godoc.org/cloud.google.com/go/devtools/containeranalysis/apiv1beta1
+
+[cloud-asset]: https://cloud.google.com/security-command-center/docs/how-to-asset-inventory
+[cloud-asset-docs]: https://cloud.google.com/security-command-center/docs/how-to-asset-inventory
+[cloud-asset-ref]: https://godoc.org/cloud.google.com/go/asset/apiv1
+
+[cloud-tasks]: https://cloud.google.com/tasks/
+[cloud-tasks-ref]: https://godoc.org/cloud.google.com/go/cloudtasks/apiv2beta3

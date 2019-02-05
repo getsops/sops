@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewOriginsClientWithBaseURI(baseURI string, subscriptionID string) OriginsC
 // endpointName - name of the endpoint under the profile which is unique globally.
 // originName - name of the origin which is unique within the endpoint.
 func (client OriginsClient) Get(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string) (result Origin, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OriginsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -126,6 +137,16 @@ func (client OriginsClient) GetResponder(resp *http.Response) (result Origin, er
 // profileName - name of the CDN profile which is unique within the resource group.
 // endpointName - name of the endpoint under the profile which is unique globally.
 func (client OriginsClient) ListByEndpoint(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result OriginListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OriginsClient.ListByEndpoint")
+		defer func() {
+			sc := -1
+			if result.olr.Response.Response != nil {
+				sc = result.olr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -199,8 +220,8 @@ func (client OriginsClient) ListByEndpointResponder(resp *http.Response) (result
 }
 
 // listByEndpointNextResults retrieves the next set of results, if any.
-func (client OriginsClient) listByEndpointNextResults(lastResults OriginListResult) (result OriginListResult, err error) {
-	req, err := lastResults.originListResultPreparer()
+func (client OriginsClient) listByEndpointNextResults(ctx context.Context, lastResults OriginListResult) (result OriginListResult, err error) {
+	req, err := lastResults.originListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "cdn.OriginsClient", "listByEndpointNextResults", nil, "Failure preparing next results request")
 	}
@@ -221,6 +242,16 @@ func (client OriginsClient) listByEndpointNextResults(lastResults OriginListResu
 
 // ListByEndpointComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OriginsClient) ListByEndpointComplete(ctx context.Context, resourceGroupName string, profileName string, endpointName string) (result OriginListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OriginsClient.ListByEndpoint")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByEndpoint(ctx, resourceGroupName, profileName, endpointName)
 	return
 }
@@ -233,6 +264,16 @@ func (client OriginsClient) ListByEndpointComplete(ctx context.Context, resource
 // originName - name of the origin which is unique within the endpoint.
 // originUpdateProperties - origin properties
 func (client OriginsClient) Update(ctx context.Context, resourceGroupName string, profileName string, endpointName string, originName string, originUpdateProperties OriginUpdateParameters) (result OriginsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OriginsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -287,10 +328,6 @@ func (client OriginsClient) UpdateSender(req *http.Request) (future OriginsUpdat
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

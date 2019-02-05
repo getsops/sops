@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewVersionClientWithBaseURI(baseURI string) VersionClient {
 // applicationTypeName - the name of the application type name resource
 // version - the application type version.
 func (client VersionClient) Delete(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string, version string) (result VersionDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationTypeName, version)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.VersionClient", "Delete", nil, "Failure preparing request")
@@ -95,10 +106,6 @@ func (client VersionClient) DeleteSender(req *http.Request) (future VersionDelet
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -123,6 +130,16 @@ func (client VersionClient) DeleteResponder(resp *http.Response) (result autores
 // applicationTypeName - the name of the application type name resource
 // version - the application type version.
 func (client VersionClient) Get(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string, version string) (result VersionResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationTypeName, version)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.VersionClient", "Get", nil, "Failure preparing request")
@@ -194,6 +211,16 @@ func (client VersionClient) GetResponder(resp *http.Response) (result VersionRes
 // clusterName - the name of the cluster resource
 // applicationTypeName - the name of the application type name resource
 func (client VersionClient) List(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string) (result VersionResourceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.VersionClient", "List", nil, "Failure preparing request")
@@ -266,6 +293,16 @@ func (client VersionClient) ListResponder(resp *http.Response) (result VersionRe
 // version - the application type version.
 // parameters - the application type version resource.
 func (client VersionClient) Put(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string, version string, parameters VersionResource) (result VersionPutFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VersionClient.Put")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.VersionProperties", Name: validation.Null, Rule: false,
@@ -319,10 +356,6 @@ func (client VersionClient) PutSender(req *http.Request) (future VersionPutFutur
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

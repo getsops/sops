@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewResourceSkusClientWithBaseURI(baseURI string, subscriptionID string) Res
 
 // ListSkus the skus action returns the list of SKUs that DMS supports.
 func (client ResourceSkusClient) ListSkus(ctx context.Context) (result ResourceSkusResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusClient.ListSkus")
+		defer func() {
+			sc := -1
+			if result.rsr.Response.Response != nil {
+				sc = result.rsr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listSkusNextResults
 	req, err := client.ListSkusPreparer(ctx)
 	if err != nil {
@@ -103,8 +114,8 @@ func (client ResourceSkusClient) ListSkusResponder(resp *http.Response) (result 
 }
 
 // listSkusNextResults retrieves the next set of results, if any.
-func (client ResourceSkusClient) listSkusNextResults(lastResults ResourceSkusResult) (result ResourceSkusResult, err error) {
-	req, err := lastResults.resourceSkusResultPreparer()
+func (client ResourceSkusClient) listSkusNextResults(ctx context.Context, lastResults ResourceSkusResult) (result ResourceSkusResult, err error) {
+	req, err := lastResults.resourceSkusResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.ResourceSkusClient", "listSkusNextResults", nil, "Failure preparing next results request")
 	}
@@ -125,6 +136,16 @@ func (client ResourceSkusClient) listSkusNextResults(lastResults ResourceSkusRes
 
 // ListSkusComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ResourceSkusClient) ListSkusComplete(ctx context.Context) (result ResourceSkusResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusClient.ListSkus")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSkus(ctx)
 	return
 }

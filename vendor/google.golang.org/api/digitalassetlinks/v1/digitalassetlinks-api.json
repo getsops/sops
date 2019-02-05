@@ -2,7 +2,7 @@
   "basePath": "",
   "baseUrl": "https://digitalassetlinks.googleapis.com/",
   "batchPath": "batch",
-  "description": "API for discovering relationships between online assets such as web sites or mobile apps.",
+  "description": "Discovers relationships between online assets such as websites or mobile apps.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/digital-asset-links/",
   "icons": {
@@ -183,7 +183,7 @@
       }
     }
   },
-  "revision": "20180606",
+  "revision": "20181103",
   "rootUrl": "https://digitalassetlinks.googleapis.com/",
   "schemas": {
     "AndroidAppAsset": {

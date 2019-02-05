@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/contentmoderator"
+
 // StatusEnum enumerates the values for status enum.
 type StatusEnum string
 
@@ -278,7 +281,7 @@ type Evaluate struct {
 	AdultClassificationScore *float64 `json:"AdultClassificationScore,omitempty"`
 	// IsImageAdultClassified - Indicates if an image is classified as adult.
 	IsImageAdultClassified *bool `json:"IsImageAdultClassified,omitempty"`
-	// RacyClassificationScore - The racy classication score.
+	// RacyClassificationScore - The racy classification score.
 	RacyClassificationScore *float64 `json:"RacyClassificationScore,omitempty"`
 	// IsImageRacyClassified - Indicates if the image is classified as racy.
 	IsImageRacyClassified *bool `json:"IsImageRacyClassified,omitempty"`

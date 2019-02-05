@@ -30,26 +30,20 @@ func shouldEqual(actual, expected interface{}) (message string) {
 		}
 	}()
 
-	if specification := newEqualityMethodSpecification(expected, actual); specification.IsSatisfied() {
-		if specification.AreEqual() {
-			return success
-		} else {
-			message = fmt.Sprintf(shouldHaveBeenEqual, expected, actual)
-			return serializer.serialize(expected, actual, message)
-		}
-	}
-	if matchError := oglematchers.Equals(expected).Matches(actual); matchError != nil {
-		expectedSyntax := fmt.Sprintf("%v", expected)
-		actualSyntax := fmt.Sprintf("%v", actual)
-		if expectedSyntax == actualSyntax && reflect.TypeOf(expected) != reflect.TypeOf(actual) {
-			message = fmt.Sprintf(shouldHaveBeenEqualTypeMismatch, expected, expected, actual, actual)
-		} else {
-			message = fmt.Sprintf(shouldHaveBeenEqual, expected, actual)
-		}
-		return serializer.serialize(expected, actual, message)
+	if spec := newEqualityMethodSpecification(expected, actual); spec.IsSatisfied() && spec.AreEqual() {
+		return success
+	} else if matchError := oglematchers.Equals(expected).Matches(actual); matchError == nil {
+		return success
 	}
 
-	return success
+	return serializer.serialize(expected, actual, composeEqualityMismatchMessage(expected, actual))
+}
+func composeEqualityMismatchMessage(expected, actual interface{}) string {
+	if fmt.Sprintf("%v", expected) == fmt.Sprintf("%v", actual) && reflect.TypeOf(expected) != reflect.TypeOf(actual) {
+		return fmt.Sprintf(shouldHaveBeenEqualTypeMismatch, expected, expected, actual, actual)
+	} else {
+		return fmt.Sprintf(shouldHaveBeenEqual, expected, actual)
+	}
 }
 
 // ShouldNotEqual receives exactly two parameters and does an inequality check.

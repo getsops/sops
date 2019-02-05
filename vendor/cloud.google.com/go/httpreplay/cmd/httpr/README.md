@@ -20,7 +20,7 @@ turning the integration test into a fast and inexpensive unit test.
 First, obtain the `httpr` binary. If you have the Go toolchain, you can run `go
 get -u cloud.google.com/go/httpreplay/cmd/httpr`. Otherwise, precompiled
 binaries for various architectures and operating systems are available from [the
-releases page](https://github.com/GoogleCloudPlatform/google-cloud-go/releases).
+releases page](https://github.com/googleapis/google-cloud-go/releases).
 
 ### Recording
 

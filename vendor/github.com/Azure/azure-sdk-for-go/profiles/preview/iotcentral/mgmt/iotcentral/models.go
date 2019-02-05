@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,20 +19,14 @@
 
 package iotcentral
 
-import original "github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral"
+import (
+	"context"
 
-type AppsClient = original.AppsClient
+	original "github.com/Azure/azure-sdk-for-go/services/iotcentral/mgmt/2018-09-01/iotcentral"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
-)
-
-type BaseClient = original.BaseClient
-type AppNameUnavailabilityReason = original.AppNameUnavailabilityReason
-
-const (
-	AlreadyExists AppNameUnavailabilityReason = original.AlreadyExists
-	Invalid       AppNameUnavailabilityReason = original.Invalid
 )
 
 type AppSku = original.AppSku
@@ -43,49 +37,61 @@ const (
 )
 
 type App = original.App
+type AppAvailabilityInfo = original.AppAvailabilityInfo
 type AppListResult = original.AppListResult
 type AppListResultIterator = original.AppListResultIterator
 type AppListResultPage = original.AppListResultPage
-type AppNameAvailabilityInfo = original.AppNameAvailabilityInfo
 type AppPatch = original.AppPatch
 type AppProperties = original.AppProperties
+type AppSkuInfo = original.AppSkuInfo
+type AppsClient = original.AppsClient
 type AppsCreateOrUpdateFuture = original.AppsCreateOrUpdateFuture
 type AppsDeleteFuture = original.AppsDeleteFuture
-type AppSkuInfo = original.AppSkuInfo
 type AppsUpdateFuture = original.AppsUpdateFuture
+type BaseClient = original.BaseClient
 type ErrorDetails = original.ErrorDetails
+type ErrorResponseBody = original.ErrorResponseBody
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationInputs = original.OperationInputs
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
-type Resource = original.Resource
 type OperationsClient = original.OperationsClient
+type Resource = original.Resource
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewAppListResultIterator(page AppListResultPage) AppListResultIterator {
+	return original.NewAppListResultIterator(page)
+}
+func NewAppListResultPage(getNextPage func(context.Context, AppListResult) (AppListResult, error)) AppListResultPage {
+	return original.NewAppListResultPage(getNextPage)
+}
 func NewAppsClient(subscriptionID string) AppsClient {
 	return original.NewAppsClient(subscriptionID)
 }
 func NewAppsClientWithBaseURI(baseURI string, subscriptionID string) AppsClient {
 	return original.NewAppsClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
-}
-func PossibleAppNameUnavailabilityReasonValues() []AppNameUnavailabilityReason {
-	return original.PossibleAppNameUnavailabilityReasonValues()
-}
-func PossibleAppSkuValues() []AppSku {
-	return original.PossibleAppSkuValues()
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
 }
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
 	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleAppSkuValues() []AppSku {
+	return original.PossibleAppSkuValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

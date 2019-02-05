@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewSourceControlClientWithBaseURI(baseURI string, subscriptionID string) So
 // sourceControlName - the source control name.
 // parameters - the parameters supplied to the create or update source control operation.
 func (client SourceControlClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, parameters SourceControlCreateOrUpdateParameters) (result SourceControl, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -143,6 +154,16 @@ func (client SourceControlClient) CreateOrUpdateResponder(resp *http.Response) (
 // automationAccountName - the name of the automation account.
 // sourceControlName - the name of source control.
 func (client SourceControlClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -219,6 +240,16 @@ func (client SourceControlClient) DeleteResponder(resp *http.Response) (result a
 // automationAccountName - the name of the automation account.
 // sourceControlName - the name of source control.
 func (client SourceControlClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string) (result SourceControl, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -296,6 +327,16 @@ func (client SourceControlClient) GetResponder(resp *http.Response) (result Sour
 // automationAccountName - the name of the automation account.
 // filter - the filter to apply on the operation.
 func (client SourceControlClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result SourceControlListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.sclr.Response.Response != nil {
+				sc = result.sclr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -371,8 +412,8 @@ func (client SourceControlClient) ListByAutomationAccountResponder(resp *http.Re
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client SourceControlClient) listByAutomationAccountNextResults(lastResults SourceControlListResult) (result SourceControlListResult, err error) {
-	req, err := lastResults.sourceControlListResultPreparer()
+func (client SourceControlClient) listByAutomationAccountNextResults(ctx context.Context, lastResults SourceControlListResult) (result SourceControlListResult, err error) {
+	req, err := lastResults.sourceControlListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.SourceControlClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -393,6 +434,16 @@ func (client SourceControlClient) listByAutomationAccountNextResults(lastResults
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SourceControlClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result SourceControlListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName, filter)
 	return
 }
@@ -404,6 +455,16 @@ func (client SourceControlClient) ListByAutomationAccountComplete(ctx context.Co
 // sourceControlName - the source control name.
 // parameters - the parameters supplied to the update source control operation.
 func (client SourceControlClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, sourceControlName string, parameters SourceControlUpdateParameters) (result SourceControl, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SourceControlClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

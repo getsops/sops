@@ -5,14 +5,13 @@
 package internal
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
-
-	"golang.org/x/net/context"
 )
 
 func TestRegisterBrokenAuthHeaderProvider(t *testing.T) {

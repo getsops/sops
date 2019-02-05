@@ -93,7 +93,7 @@
   "description": "Manages enterprise resources such as users and groups, administrative notifications, security features, and more.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/directory/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/Zp5udf3d_MSf3cProroao6vKvEo\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/P-4B11WcMvVB7cxHhUyxObdpF6w\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -3969,6 +3969,7 @@
       }
     }
   },
+  "revision": "20190118",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Alias": {
@@ -4260,10 +4261,20 @@
           "type": "string"
         },
         "resourceId": {
+          "annotations": {
+            "required": [
+              "directory.resources.calendars.insert"
+            ]
+          },
           "description": "The unique ID for the calendar resource.",
           "type": "string"
         },
         "resourceName": {
+          "annotations": {
+            "required": [
+              "directory.resources.calendars.insert"
+            ]
+          },
           "description": "The name of the calendar resource. For example, \"Training Room 1A\".",
           "type": "string"
         },
@@ -4397,6 +4408,45 @@
           "description": "Chromebook boot mode (Read-only)",
           "type": "string"
         },
+        "cpuStatusReports": {
+          "description": "Reports of CPU utilization and temperature (Read-only)",
+          "items": {
+            "properties": {
+              "cpuTemperatureInfo": {
+                "description": "List of CPU temperature samples.",
+                "items": {
+                  "properties": {
+                    "label": {
+                      "description": "CPU label",
+                      "type": "string"
+                    },
+                    "temperature": {
+                      "description": "Temperature in Celsius degrees.",
+                      "format": "int32",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "cpuUtilizationPercentageInfo": {
+                "items": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "reportTime": {
+                "description": "Date and time the report was received.",
+                "format": "date-time",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
         "deviceFiles": {
           "description": "List of device files to download (Read-only)",
           "items": {
@@ -4426,6 +4476,38 @@
         "deviceId": {
           "description": "Unique identifier of Chrome OS Device (Read-only)",
           "type": "string"
+        },
+        "diskVolumeReports": {
+          "description": "Reports of disk space and other info about mounted/connected volumes.",
+          "items": {
+            "properties": {
+              "volumeInfo": {
+                "description": "Disk volumes",
+                "items": {
+                  "properties": {
+                    "storageFree": {
+                      "description": "Free disk space [in bytes]",
+                      "format": "int64",
+                      "type": "string"
+                    },
+                    "storageTotal": {
+                      "description": "Total disk space [in bytes]",
+                      "format": "int64",
+                      "type": "string"
+                    },
+                    "volumeId": {
+                      "description": "Volume id",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
         },
         "etag": {
           "description": "ETag of the resource.",
@@ -4514,6 +4596,32 @@
         "supportEndDate": {
           "description": "Final date the device will be supported (Read-only)",
           "format": "date-time",
+          "type": "string"
+        },
+        "systemRamFreeReports": {
+          "description": "Reports of amounts of available RAM memory (Read-only)",
+          "items": {
+            "properties": {
+              "reportTime": {
+                "description": "Date and time the report was received.",
+                "format": "date-time",
+                "type": "string"
+              },
+              "systemRamFreeInfo": {
+                "items": {
+                  "format": "int64",
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "systemRamTotal": {
+          "description": "Total RAM on the device [in bytes] (Read-only)",
+          "format": "int64",
           "type": "string"
         },
         "tpmVersionInfo": {
@@ -5005,6 +5113,10 @@
       "description": "JSON template for Member resource in Directory API.",
       "id": "Member",
       "properties": {
+        "delivery_settings": {
+          "description": "Delivery settings of member",
+          "type": "string"
+        },
         "email": {
           "description": "Email of member (Read-only)",
           "type": "string"
@@ -5988,7 +6100,7 @@
           "type": "array"
         },
         "archived": {
-          "description": "Indicates if user is archived",
+          "description": "Indicates if user is archived.",
           "type": "boolean"
         },
         "changePasswordAtNextLogin": {
@@ -6148,6 +6260,14 @@
           "description": "username of User",
           "type": "string"
         },
+        "recoveryEmail": {
+          "description": "Recovery email of the user.",
+          "type": "string"
+        },
+        "recoveryPhone": {
+          "description": "Recovery phone of the user.",
+          "type": "string"
+        },
         "relations": {
           "type": "any"
         },
@@ -6155,7 +6275,7 @@
           "type": "any"
         },
         "suspended": {
-          "description": "Indicates if user is suspended",
+          "description": "Indicates if user is suspended.",
           "type": "boolean"
         },
         "suspensionReason": {
@@ -6598,8 +6718,7 @@
       "id": "UserPosixAccount",
       "properties": {
         "accountId": {
-          "description": "A POSIX account field identifier. (Read-only)",
-          "readOnly": true,
+          "description": "A POSIX account field identifier.",
           "type": "string"
         },
         "gecos": {

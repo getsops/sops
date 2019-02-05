@@ -98,7 +98,7 @@
     },
     "ContentType":{
       "type":"string",
-      "pattern":"^[\\w\\-\\/\\.]{1,255}$"
+      "pattern":"^[\\w\\-\\/\\.\\+]{1,255}$"
     },
     "DeleteObjectRequest":{
       "type":"structure",

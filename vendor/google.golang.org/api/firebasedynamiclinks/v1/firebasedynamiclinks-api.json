@@ -169,6 +169,11 @@
               "location": "path",
               "required": true,
               "type": "string"
+            },
+            "sdkVersion": {
+              "description": "Google SDK version. Version takes the form \"$major.$minor.$patch\"",
+              "location": "query",
+              "type": "string"
             }
           },
           "path": "v1/{dynamicLink}/linkStats",
@@ -218,7 +223,7 @@
       }
     }
   },
-  "revision": "20180906",
+  "revision": "20190105",
   "rootUrl": "https://firebasedynamiclinks.googleapis.com/",
   "schemas": {
     "AnalyticsInfo": {
@@ -275,6 +280,10 @@
           "description": "Link name to associate with the link. It's used for marketer to identify\nmanually-created links in the Firebase console\n(https://console.firebase.google.com/).\nLinks must be named to be tracked.",
           "type": "string"
         },
+        "sdkVersion": {
+          "description": "Google SDK version. Version takes the form \"$major.$minor.$patch\"",
+          "type": "string"
+        },
         "suffix": {
           "$ref": "Suffix",
           "description": "Short Dynamic Link suffix. Optional."
@@ -314,6 +323,10 @@
         },
         "longDynamicLink": {
           "description": "Full long Dynamic Link URL with desired query parameters specified.\nFor example,\n\"https://sample.app.goo.gl/?link=http://www.google.com\u0026apn=com.sample\",\n[Learn more](https://firebase.google.com/docs/reference/dynamic-links/link-shortener).",
+          "type": "string"
+        },
+        "sdkVersion": {
+          "description": "Google SDK version. Version takes the form \"$major.$minor.$patch\"",
           "type": "string"
         },
         "suffix": {
@@ -460,11 +473,11 @@
           "description": "Desktop related information. See desktop related parameters in the\n[documentation](https://firebase.google.com/docs/dynamic-links/create-manually)."
         },
         "domainUriPrefix": {
-          "description": "E.g. https://maps.app.goo.gl, https://maps.page.link, https://g.co/maps\nMore examples can be found in description of getNormalizedUriPrefix in\nj/c/g/firebase/dynamiclinks/uri/DdlDomain.java",
+          "description": "E.g. https://maps.app.goo.gl, https://maps.page.link, https://g.co/maps\nMore examples can be found in description of getNormalizedUriPrefix in\nj/c/g/firebase/dynamiclinks/uri/DdlDomain.java\n\nWill fallback to dynamic_link_domain is this field is missing",
           "type": "string"
         },
         "dynamicLinkDomain": {
-          "description": "Dynamic Links domain that the project owns, e.g. abcd.app.goo.gl\n[Learn more](https://firebase.google.com/docs/dynamic-links/android/receive)\non how to set up Dynamic Link domain associated with your Firebase project.\n\nRequired.",
+          "description": "Dynamic Links domain that the project owns, e.g. abcd.app.goo.gl\n[Learn more](https://firebase.google.com/docs/dynamic-links/android/receive)\non how to set up Dynamic Link domain associated with your Firebase project.\n\nRequired if missing domain_uri_prefix.",
           "type": "string"
         },
         "iosInfo": {
@@ -619,7 +632,7 @@
           "type": "string"
         },
         "sdkVersion": {
-          "description": "Google SDK version.",
+          "description": "Google SDK version. Version takes the form \"$major.$minor.$patch\"",
           "type": "string"
         },
         "uniqueMatchLinkToCheck": {
@@ -739,6 +752,10 @@
         "requestedLink": {
           "description": "FDL link to be verified from an app universal link open.\nThe FDL link can be one of:\n1) short FDL.\ne.g. \u003capp_code\u003e.page.link/\u003cddl_id\u003e, or\n2) long FDL.\ne.g. \u003capp_code\u003e.page.link/?{query params}, or\n3) Invite FDL.\ne.g. \u003capp_code\u003e.page.link/i/\u003cinvite_id_or_alias\u003e",
           "type": "string"
+        },
+        "sdkVersion": {
+          "description": "Google SDK version. Version takes the form \"$major.$minor.$patch\"",
+          "type": "string"
         }
       },
       "type": "object"
@@ -753,6 +770,10 @@
         },
         "invitationId": {
           "description": "Optional invitation ID, for only invite typed requested FDL links.",
+          "type": "string"
+        },
+        "iosMinAppVersion": {
+          "description": "FDL input value of the \"\u0026imv=\" parameter, minimum app version to be\nreturned to Google Firebase SDK running on iOS-9.",
           "type": "string"
         },
         "resolvedLink": {
@@ -854,6 +875,10 @@
         },
         "iosIpadFallbackLink": {
           "description": "If specified, this overrides the ios_fallback_link value on iPads.",
+          "type": "string"
+        },
+        "iosMinimumVersion": {
+          "description": "iOS minimum version.",
           "type": "string"
         }
       },

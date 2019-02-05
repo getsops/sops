@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewAnnotationsClientWithBaseURI(baseURI string, subscriptionID string) Anno
 // annotationProperties - properties that need to be specified to create an annotation of a Application
 // Insights component.
 func (client AnnotationsClient) Create(ctx context.Context, resourceGroupName string, resourceName string, annotationProperties Annotation) (result ListAnnotation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnnotationsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, resourceName, annotationProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnnotationsClient", "Create", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client AnnotationsClient) CreateResponder(resp *http.Response) (result Lis
 // resourceName - the name of the Application Insights component resource.
 // annotationID - the unique annotation ID. This is unique within a Application Insights component.
 func (client AnnotationsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, annotationID string) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnnotationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName, annotationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnnotationsClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client AnnotationsClient) DeleteResponder(resp *http.Response) (result Set
 // resourceName - the name of the Application Insights component resource.
 // annotationID - the unique annotation ID. This is unique within a Application Insights component.
 func (client AnnotationsClient) Get(ctx context.Context, resourceGroupName string, resourceName string, annotationID string) (result ListAnnotation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnnotationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName, annotationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnnotationsClient", "Get", nil, "Failure preparing request")
@@ -255,6 +286,16 @@ func (client AnnotationsClient) GetResponder(resp *http.Response) (result ListAn
 // start - the start time to query from for annotations, cannot be older than 90 days from current date.
 // end - the end time to query for annotations.
 func (client AnnotationsClient) List(ctx context.Context, resourceGroupName string, resourceName string, start string, end string) (result AnnotationsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AnnotationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName, start, end)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AnnotationsClient", "List", nil, "Failure preparing request")

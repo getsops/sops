@@ -1749,6 +1749,22 @@
         {"shape":"InternalErrorException"}
       ]
     },
+    "UpdateUserPoolDomain":{
+      "name":"UpdateUserPoolDomain",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateUserPoolDomainRequest"},
+      "output":{"shape":"UpdateUserPoolDomainResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"NotAuthorizedException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
     "VerifySoftwareToken":{
       "name":"VerifySoftwareToken",
       "http":{
@@ -4779,6 +4795,25 @@
       "type":"structure",
       "members":{
         "UserPoolClient":{"shape":"UserPoolClientType"}
+      }
+    },
+    "UpdateUserPoolDomainRequest":{
+      "type":"structure",
+      "required":[
+        "Domain",
+        "UserPoolId",
+        "CustomDomainConfig"
+      ],
+      "members":{
+        "Domain":{"shape":"DomainType"},
+        "UserPoolId":{"shape":"UserPoolIdType"},
+        "CustomDomainConfig":{"shape":"CustomDomainConfigType"}
+      }
+    },
+    "UpdateUserPoolDomainResponse":{
+      "type":"structure",
+      "members":{
+        "CloudFrontDomain":{"shape":"DomainType"}
       }
     },
     "UpdateUserPoolRequest":{

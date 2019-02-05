@@ -16,6 +16,7 @@ package datastore
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/gob"
 	"errors"
@@ -23,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	pb "google.golang.org/genproto/googleapis/datastore/v1"
 )
 

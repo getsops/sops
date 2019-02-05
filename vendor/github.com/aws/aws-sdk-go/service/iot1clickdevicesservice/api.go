@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opClaimDevicesByClaimCode = "ClaimDevicesByClaimCode"
@@ -15,7 +17,7 @@ const opClaimDevicesByClaimCode = "ClaimDevicesByClaimCode"
 // ClaimDevicesByClaimCodeRequest generates a "aws/request.Request" representing the
 // client's request for the ClaimDevicesByClaimCode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -98,7 +100,7 @@ const opDescribeDevice = "DescribeDevice"
 // DescribeDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -181,7 +183,7 @@ const opFinalizeDeviceClaim = "FinalizeDeviceClaim"
 // FinalizeDeviceClaimRequest generates a "aws/request.Request" representing the
 // client's request for the FinalizeDeviceClaim operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -271,7 +273,7 @@ const opGetDeviceMethods = "GetDeviceMethods"
 // GetDeviceMethodsRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeviceMethods operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -353,7 +355,7 @@ const opInitiateDeviceClaim = "InitiateDeviceClaim"
 // InitiateDeviceClaimRequest generates a "aws/request.Request" representing the
 // client's request for the InitiateDeviceClaim operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -441,7 +443,7 @@ const opInvokeDeviceMethod = "InvokeDeviceMethod"
 // InvokeDeviceMethodRequest generates a "aws/request.Request" representing the
 // client's request for the InvokeDeviceMethod operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -530,7 +532,7 @@ const opListDeviceEvents = "ListDeviceEvents"
 // ListDeviceEventsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -615,7 +617,7 @@ const opListDevices = "ListDevices"
 // ListDevicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListDevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -697,7 +699,7 @@ const opUnclaimDevice = "UnclaimDevice"
 // UnclaimDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the UnclaimDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -779,7 +781,7 @@ const opUpdateDeviceState = "UpdateDeviceState"
 // UpdateDeviceStateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDeviceState operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -813,6 +815,7 @@ func (c *IoT1ClickDevicesService) UpdateDeviceStateRequest(input *UpdateDeviceSt
 
 	output = &UpdateDeviceStateOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -894,6 +897,9 @@ func (s *ClaimDevicesByClaimCodeInput) Validate() error {
 	if s.ClaimCode == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClaimCode"))
 	}
+	if s.ClaimCode != nil && len(*s.ClaimCode) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClaimCode", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -962,6 +968,9 @@ func (s *DescribeDeviceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeDeviceInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1188,6 +1197,9 @@ func (s *FinalizeDeviceClaimInput) Validate() error {
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
 	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1245,6 +1257,9 @@ func (s *GetDeviceMethodsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetDeviceMethodsInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1304,6 +1319,9 @@ func (s *InitiateDeviceClaimInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InitiateDeviceClaimInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1368,6 +1386,9 @@ func (s *InvokeDeviceMethodInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InvokeDeviceMethodInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1449,6 +1470,9 @@ func (s *ListDeviceEventsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListDeviceEventsInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 	if s.FromTimeStamp == nil {
 		invalidParams.Add(request.NewErrParamRequired("FromTimeStamp"))
@@ -1632,6 +1656,9 @@ func (s *UnclaimDeviceInput) Validate() error {
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
 	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1692,6 +1719,9 @@ func (s *UpdateDeviceStateInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateDeviceStateInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {

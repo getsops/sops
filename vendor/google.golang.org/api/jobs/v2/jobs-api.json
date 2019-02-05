@@ -14,7 +14,7 @@
   "basePath": "",
   "baseUrl": "https://jobs.googleapis.com/",
   "batchPath": "batch",
-  "canonicalName": "Job Service",
+  "canonicalName": "Cloud Talent Solution",
   "description": "Cloud Talent Solution provides the capability to create, read, update, and delete job postings, as well as search jobs based on keywords and filters.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/talent-solution/job-search/docs/",
@@ -614,7 +614,7 @@
       }
     }
   },
-  "revision": "20180821",
+  "revision": "20190110",
   "rootUrl": "https://jobs.googleapis.com/",
   "schemas": {
     "BatchDeleteJobsRequest": {
@@ -705,7 +705,7 @@
           "type": "string"
         },
         "roadTraffic": {
-          "description": "Optional.\n\nSpecifies the traffic density to use when caculating commute time.\nMust not be present if departure_hour_local is specified.",
+          "description": "Optional.\n\nSpecifies the traffic density to use when calculating commute time.\nMust not be present if departure_hour_local is specified.",
           "enum": [
             "ROAD_TRAFFIC_UNSPECIFIED",
             "TRAFFIC_FREE",
@@ -1110,11 +1110,11 @@
       "properties": {
         "max": {
           "$ref": "Money",
-          "description": "Required.\n\nThe maximum amount of compensation."
+          "description": "Optional.\n\nThe maximum amount of compensation. If left empty, the value is set\nto a maximal compensation value and the currency code is set to\nmatch the currency code of\nmin_compensation."
         },
         "min": {
           "$ref": "Money",
-          "description": "Required.\n\nThe minimum amount of compensation."
+          "description": "Optional.\n\nThe minimum amount of compensation. If left empty, the value is set\nto zero and the currency code is set to match the\ncurrency code of max_compensation."
         }
       },
       "type": "object"
@@ -1196,7 +1196,7 @@
           "type": "boolean"
         },
         "longValue": {
-          "description": "Optional but at least one of string_values or long_value must\nbe specified.\n\nThis field is used to perform number range search.\n(`EQ`, `GT`, `GE`, `LE`, `LT`) over filterable `long_value`. For\n`long_value`, a value between Long.MIN and Long.MIN is allowed.",
+          "description": "Optional but at least one of string_values or long_value must\nbe specified.\n\nThis field is used to perform number range search.\n(`EQ`, `GT`, `GE`, `LE`, `LT`) over filterable `long_value`. For\n`long_value`, a value between Long.MIN and Long.MAX is allowed.",
           "format": "int64",
           "type": "string"
         },
@@ -1294,16 +1294,16 @@
       "type": "object"
     },
     "Date": {
-      "description": "Represents a whole calendar date, e.g. date of birth. The time of day and\ntime zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day may be 0 to\nrepresent a year and month where the day is not significant, e.g. credit card\nexpiration date. The year may be 0 to represent a month and day independent\nof year, e.g. anniversary date. Related types are google.type.TimeOfDay\nand `google.protobuf.Timestamp`.",
+      "description": "Represents a whole or partial calendar date, e.g. a birthday. The time of day\nand time zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. This can represent:\n\n* A full date, with non-zero year, month and day values\n* A month and day value, with a zero year, e.g. an anniversary\n* A year on its own, with zero month and day values\n* A year and month value, with a zero day, e.g. a credit card expiration date\n\nRelated types are google.type.TimeOfDay and `google.protobuf.Timestamp`.",
       "id": "Date",
       "properties": {
         "day": {
-          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year/month where the day is not significant.",
+          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year by itself or a year and month where the day is not\nsignificant.",
           "format": "int32",
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a year without a\nmonth and day.",
           "format": "int32",
           "type": "integer"
         },
@@ -1605,7 +1605,7 @@
         },
         "requestMetadata": {
           "$ref": "RequestMetadata",
-          "description": "Meta information, such as `user_id`, collected from the job searcher or\nother entity conducting the job search, which is used to improve the search\nquality of the service. Users determine identifier values, which must be\nunique and consist."
+          "description": "Meta information, such as `user_id`, collected from the job searcher or\nother entity conducting a job search, is used to improve the service's\nsearch quality. Users determine identifier values, which must be\nunique and consist."
         },
         "searchTypes": {
           "description": "Required.\n\nA list of facets that specify the histogram data to be calculated\nagainst and returned.\n\nHistogram response times can be slow, and counts\ncan be approximations. This call may be temporarily or permanently removed\nprior to the production release of Cloud Talent Solution.",
@@ -2122,7 +2122,7 @@
         },
         "extendedCompensationInfo": {
           "$ref": "ExtendedCompensationInfo",
-          "description": "Deprecated. Always use compensation_info.\n\nOptional.\n\nJob compensation information.\n\nThis field replaces compensation_info."
+          "description": "Deprecated. Always use compensation_info.\n\nOptional.\n\nJob compensation information.\n\nThis field replaces compensation_info. Only\nCompensationInfo.entries or extended_compensation_info can be set,\notherwise an exception is thrown."
         },
         "filterableCustomFields": {
           "additionalProperties": {
@@ -2147,7 +2147,7 @@
           "type": "string"
         },
         "languageCode": {
-          "description": "Optional.\n\nThe language of the posting. This field is distinct from\nany requirements for fluency that are associated with the job.\n\nLanguage codes must be in BCP-47 format, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47){: class=\"external\" target=\"_blank\" }.\n\nThe default value is `en-US`.",
+          "description": "Optional.\n\nThe language of the posting. This field is distinct from\nany requirements for fluency that are associated with the job.\n\nLanguage codes must be in BCP-47 format, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47){:\nclass=\"external\" target=\"_blank\" }.\n\nIf this field is unspecified and Job.description is present, detected\nlanguage code based on Job.description is assigned, otherwise\ndefaults to 'en_US'.",
           "type": "string"
         },
         "level": {
@@ -2357,7 +2357,7 @@
           "description": "Optional.\n\nThis search filter is applied only to\nJob.compensation_info. For example, if the filter is specified\nas \"Hourly job with per-hour compensation \u003e $15\", only jobs that meet\nthis criteria are searched. If a filter is not defined, all open jobs\nare searched."
         },
         "customAttributeFilter": {
-          "description": "Optional.\n\nThis filter specifies a structured syntax to match against the\nJob.custom_attributes that are marked as `filterable`.\n\nThe syntax for this expression is a subset of Google SQL syntax.\n\nSupported operators are: =, !=, \u003c, \u003c=, \u003e, \u003e= where the left of the operator\nis a custom field key and the right of the operator is a number or string\n(surrounded by quotes) value.\n\nSupported functions are LOWER(\u003cfield_name\u003e) to\nperform case insensitive match and EMPTY(\u003cfield_name\u003e) to filter on the\nexistence of a key.\n\nBoolean expressions (AND/OR/NOT) are supported up to 3 levels of\nnesting (For example, \"((A AND B AND C) OR NOT D) AND E\"), and there can\nbe a maximum of 50 comparisons/functions in the expression. The expression\nmust be \u003c 2000 characters in length.\n\nSample Query:\n(key1 = \"TEST\" OR LOWER(key1)=\"test\" OR NOT EMPTY(key1)) AND key2 \u003e 100",
+          "description": "Optional.\n\nThis filter specifies a structured syntax to match against the\nJob.custom_attributes that are marked as `filterable`.\n\nThe syntax for this expression is a subset of Google SQL syntax.\n\nSupported operators are: =, !=, \u003c, \u003c=, \u003e, \u003e= where the left of the operator\nis a custom field key and the right of the operator is a number or string\n(surrounded by quotes) value.\n\nSupported functions are LOWER(\u003cfield_name\u003e) to\nperform case insensitive match and EMPTY(\u003cfield_name\u003e) to filter on the\nexistence of a key.\n\nBoolean expressions (AND/OR/NOT) are supported up to 3 levels of\nnesting (For example, \"((A AND B AND C) OR NOT D) AND E\"), and there can\nbe a maximum of 100 comparisons/functions in the expression. The expression\nmust be \u003c 3000 bytes in length.\n\nSample Query:\n(key1 = \"TEST\" OR LOWER(key1)=\"test\" OR NOT EMPTY(key1)) AND key2 \u003e 100",
           "type": "string"
         },
         "customFieldFilters": {
@@ -2416,7 +2416,7 @@
           "type": "array"
         },
         "locationFilters": {
-          "description": "Optional.\n\nThe location filter specifies geo-regions containing the jobs to\nsearch against. See LocationFilter for more information.\n\nIf a location value is not specified, jobs are be retrieved\nfrom all locations.\n\nIf multiple values are specified, jobs are retrieved from any of the\nspecified locations, and, if different values are specified\nfor the LocationFilter.distance_in_miles parameter, the maximum\nprovided distance is used for all locations.\n\nAt most 5 location filters are allowed.",
+          "description": "Optional.\n\nThe location filter specifies geo-regions containing the jobs to\nsearch against. See LocationFilter for more information.\n\nIf a location value is not specified, jobs are retrieved\nfrom all locations.\n\nIf multiple values are specified, jobs are retrieved from any of the\nspecified locations. If different values are specified for the\nLocationFilter.distance_in_miles parameter, the maximum provided\ndistance is used for all locations.\n\nAt most 5 location filters are allowed.",
           "items": {
             "$ref": "LocationFilter"
           },
@@ -2676,7 +2676,7 @@
           "type": "array"
         },
         "locationFilters": {
-          "description": "Optional.\n\nThe location filter specifies geo-regions containing the jobs to\nsearch against. See LocationFilter for more information.\n\nIf a location value isn't specified, jobs fitting the other search\ncriteria are retrieved regardless of where they're located.\n\nIf multiple values are specified, jobs are retrieved from any of the\nspecified locations, and, if different values are specified\nfor the LocationFilter.distance_in_miles parameter, the maximum\nprovided distance is used for all locations.\n\nAt most 5 location filters are allowed.",
+          "description": "Optional.\n\nThe location filter specifies geo-regions containing the jobs to\nsearch against. See LocationFilter for more information.\n\nIf a location value isn't specified, jobs fitting the other search\ncriteria are retrieved regardless of where they're located.\n\nIf multiple values are specified, jobs are retrieved from any of the\nspecified locations. If different values are specified for the\nLocationFilter.distance_in_miles parameter, the maximum provided\ndistance is used for all locations.\n\nAt most 5 location filters are allowed.",
           "items": {
             "$ref": "LocationFilter"
           },
@@ -3037,7 +3037,7 @@
       "id": "SearchJobsRequest",
       "properties": {
         "disableRelevanceThresholding": {
-          "description": "Deprecated. Any value provided in this field is ignored.\n\nOptional.\n\nControls whether to disable relevance thresholding. Relevance\nthresholding removes jobs that have low relevance in search results,\nfor example, removing \"Assistant to the CEO\" positions from the search\nresults of a search for \"CEO\".\n\nDisabling relevance thresholding improves the accuracy of subsequent\nsearch requests.\n\nDefaults to false.",
+          "description": "Optional.\n\nControls whether to disable relevance thresholding. Relevance\nthresholding removes jobs that have low relevance in search results,\nfor example, removing \"Assistant to the CEO\" positions from the search\nresults of a search for \"CEO\".\n\nDisabling relevance thresholding improves the accuracy of subsequent\nsearch requests.\n\nDefaults to false.",
           "type": "boolean"
         },
         "enableBroadening": {
@@ -3136,7 +3136,7 @@
         },
         "requestMetadata": {
           "$ref": "RequestMetadata",
-          "description": "Required.\n\nThe meta information collected about the job searcher, used to improve the\nsearch quality of the service.. The identifiers, (such as `user_id`) are\nprovided by users, and must be unique and consistent."
+          "description": "Required.\n\nThe meta information collected about the job searcher, used to improve the\nsearch quality of the service. The identifiers, (such as `user_id`) are\nprovided by users, and must be unique and consistent."
         },
         "sortBy": {
           "description": "Optional.\n\nThe criteria determining how search results are sorted.\nDefaults to SortBy.RELEVANCE_DESC if no value is specified.",
@@ -3191,7 +3191,7 @@
         },
         "histogramResults": {
           "$ref": "HistogramResults",
-          "description": "The histogram results that match with specified\nSearchJobsRequest.HistogramFacets."
+          "description": "The histogram results that match specified\nSearchJobsRequest.HistogramFacets."
         },
         "jobView": {
           "description": "Corresponds to SearchJobsRequest.job_view.",

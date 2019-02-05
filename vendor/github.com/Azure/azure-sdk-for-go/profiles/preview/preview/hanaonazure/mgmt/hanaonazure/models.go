@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
 
 package hanaonazure
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/hanaonazure/mgmt/2017-11-03-preview/hanaonazure"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/hanaonazure/mgmt/2017-11-03-preview/hanaonazure"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type HanaInstancesClient = original.HanaInstancesClient
 type HanaHardwareTypeNamesEnum = original.HanaHardwareTypeNamesEnum
 
 const (
@@ -64,38 +66,55 @@ const (
 	S768    HanaInstanceSizeNamesEnum = original.S768
 	S768m   HanaInstanceSizeNamesEnum = original.S768m
 	S768xm  HanaInstanceSizeNamesEnum = original.S768xm
+	S96     HanaInstanceSizeNamesEnum = original.S96
 	S960m   HanaInstanceSizeNamesEnum = original.S960m
 )
 
+type BaseClient = original.BaseClient
 type Disk = original.Disk
 type Display = original.Display
 type ErrorResponse = original.ErrorResponse
 type HanaInstance = original.HanaInstance
 type HanaInstanceProperties = original.HanaInstanceProperties
+type HanaInstancesClient = original.HanaInstancesClient
 type HanaInstancesListResult = original.HanaInstancesListResult
 type HanaInstancesListResultIterator = original.HanaInstancesListResultIterator
 type HanaInstancesListResultPage = original.HanaInstancesListResultPage
+type HanaInstancesRestartFuture = original.HanaInstancesRestartFuture
 type HardwareProfile = original.HardwareProfile
 type IPAddress = original.IPAddress
 type NetworkProfile = original.NetworkProfile
+type OSProfile = original.OSProfile
 type Operation = original.Operation
 type OperationList = original.OperationList
-type OSProfile = original.OSProfile
+type OperationsClient = original.OperationsClient
 type Resource = original.Resource
 type StorageProfile = original.StorageProfile
-type OperationsClient = original.OperationsClient
+type Tags = original.Tags
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewHanaInstancesClient(subscriptionID string) HanaInstancesClient {
 	return original.NewHanaInstancesClient(subscriptionID)
 }
 func NewHanaInstancesClientWithBaseURI(baseURI string, subscriptionID string) HanaInstancesClient {
 	return original.NewHanaInstancesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewHanaInstancesListResultIterator(page HanaInstancesListResultPage) HanaInstancesListResultIterator {
+	return original.NewHanaInstancesListResultIterator(page)
+}
+func NewHanaInstancesListResultPage(getNextPage func(context.Context, HanaInstancesListResult) (HanaInstancesListResult, error)) HanaInstancesListResultPage {
+	return original.NewHanaInstancesListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleHanaHardwareTypeNamesEnumValues() []HanaHardwareTypeNamesEnum {
 	return original.PossibleHanaHardwareTypeNamesEnumValues()
@@ -105,12 +124,6 @@ func PossibleHanaInstancePowerStateEnumValues() []HanaInstancePowerStateEnum {
 }
 func PossibleHanaInstanceSizeNamesEnumValues() []HanaInstanceSizeNamesEnum {
 	return original.PossibleHanaInstanceSizeNamesEnumValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

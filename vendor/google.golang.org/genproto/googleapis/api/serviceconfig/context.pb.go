@@ -49,7 +49,7 @@ func (m *Context) Reset()         { *m = Context{} }
 func (m *Context) String() string { return proto.CompactTextString(m) }
 func (*Context) ProtoMessage()    {}
 func (*Context) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48d8be90143bd46c, []int{0}
+	return fileDescriptor_context_7f48bb214df6c175, []int{0}
 }
 func (m *Context) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Context.Unmarshal(m, b)
@@ -57,8 +57,8 @@ func (m *Context) XXX_Unmarshal(b []byte) error {
 func (m *Context) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Context.Marshal(b, m, deterministic)
 }
-func (m *Context) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Context.Merge(m, src)
+func (dst *Context) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Context.Merge(dst, src)
 }
 func (m *Context) XXX_Size() int {
 	return xxx_messageInfo_Context.Size(m)
@@ -96,7 +96,7 @@ func (m *ContextRule) Reset()         { *m = ContextRule{} }
 func (m *ContextRule) String() string { return proto.CompactTextString(m) }
 func (*ContextRule) ProtoMessage()    {}
 func (*ContextRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_48d8be90143bd46c, []int{1}
+	return fileDescriptor_context_7f48bb214df6c175, []int{1}
 }
 func (m *ContextRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ContextRule.Unmarshal(m, b)
@@ -104,8 +104,8 @@ func (m *ContextRule) XXX_Unmarshal(b []byte) error {
 func (m *ContextRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ContextRule.Marshal(b, m, deterministic)
 }
-func (m *ContextRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ContextRule.Merge(m, src)
+func (dst *ContextRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ContextRule.Merge(dst, src)
 }
 func (m *ContextRule) XXX_Size() int {
 	return xxx_messageInfo_ContextRule.Size(m)
@@ -142,9 +142,9 @@ func init() {
 	proto.RegisterType((*ContextRule)(nil), "google.api.ContextRule")
 }
 
-func init() { proto.RegisterFile("google/api/context.proto", fileDescriptor_48d8be90143bd46c) }
+func init() { proto.RegisterFile("google/api/context.proto", fileDescriptor_context_7f48bb214df6c175) }
 
-var fileDescriptor_48d8be90143bd46c = []byte{
+var fileDescriptor_context_7f48bb214df6c175 = []byte{
 	// 231 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x90, 0x4f, 0x4b, 0xc4, 0x30,
 	0x14, 0xc4, 0xe9, 0xd6, 0x7f, 0x7d, 0x2b, 0x1e, 0x7a, 0x31, 0x88, 0x87, 0xb2, 0xa7, 0x5e, 0x4c,

@@ -39,7 +39,6 @@ var AuthFailAction_name = map[int32]string{
 	1: "AUTH_FAIL_ACTION_REDIRECT",
 	2: "AUTH_FAIL_ACTION_UNAUTHORIZED",
 }
-
 var AuthFailAction_value = map[string]int32{
 	"AUTH_FAIL_ACTION_UNSPECIFIED":  0,
 	"AUTH_FAIL_ACTION_REDIRECT":     1,
@@ -49,9 +48,8 @@ var AuthFailAction_value = map[string]int32{
 func (x AuthFailAction) String() string {
 	return proto.EnumName(AuthFailAction_name, int32(x))
 }
-
 func (AuthFailAction) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{0}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{0}
 }
 
 // Methods to restrict access to a URL based on login status.
@@ -79,7 +77,6 @@ var LoginRequirement_name = map[int32]string{
 	2: "LOGIN_ADMIN",
 	3: "LOGIN_REQUIRED",
 }
-
 var LoginRequirement_value = map[string]int32{
 	"LOGIN_UNSPECIFIED": 0,
 	"LOGIN_OPTIONAL":    1,
@@ -90,9 +87,8 @@ var LoginRequirement_value = map[string]int32{
 func (x LoginRequirement) String() string {
 	return proto.EnumName(LoginRequirement_name, int32(x))
 }
-
 func (LoginRequirement) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{1}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{1}
 }
 
 // Methods to enforce security (HTTPS) on a URL.
@@ -125,7 +121,6 @@ var SecurityLevel_name = map[int32]string{
 	2: "SECURE_OPTIONAL",
 	3: "SECURE_ALWAYS",
 }
-
 var SecurityLevel_value = map[string]int32{
 	"SECURE_UNSPECIFIED": 0,
 	"SECURE_DEFAULT":     0,
@@ -137,9 +132,8 @@ var SecurityLevel_value = map[string]int32{
 func (x SecurityLevel) String() string {
 	return proto.EnumName(SecurityLevel_name, int32(x))
 }
-
 func (SecurityLevel) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{2}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{2}
 }
 
 // Error codes.
@@ -166,7 +160,6 @@ var ErrorHandler_ErrorCode_name = map[int32]string{
 	2: "ERROR_CODE_DOS_API_DENIAL",
 	3: "ERROR_CODE_TIMEOUT",
 }
-
 var ErrorHandler_ErrorCode_value = map[string]int32{
 	"ERROR_CODE_UNSPECIFIED":    0,
 	"ERROR_CODE_DEFAULT":        0,
@@ -178,9 +171,8 @@ var ErrorHandler_ErrorCode_value = map[string]int32{
 func (x ErrorHandler_ErrorCode) String() string {
 	return proto.EnumName(ErrorHandler_ErrorCode_name, int32(x))
 }
-
 func (ErrorHandler_ErrorCode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{1, 0}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{1, 0}
 }
 
 // Redirect codes.
@@ -206,7 +198,6 @@ var UrlMap_RedirectHttpResponseCode_name = map[int32]string{
 	3: "REDIRECT_HTTP_RESPONSE_CODE_303",
 	4: "REDIRECT_HTTP_RESPONSE_CODE_307",
 }
-
 var UrlMap_RedirectHttpResponseCode_value = map[string]int32{
 	"REDIRECT_HTTP_RESPONSE_CODE_UNSPECIFIED": 0,
 	"REDIRECT_HTTP_RESPONSE_CODE_301":         1,
@@ -218,9 +209,8 @@ var UrlMap_RedirectHttpResponseCode_value = map[string]int32{
 func (x UrlMap_RedirectHttpResponseCode) String() string {
 	return proto.EnumName(UrlMap_RedirectHttpResponseCode_name, int32(x))
 }
-
 func (UrlMap_RedirectHttpResponseCode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{2, 0}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{2, 0}
 }
 
 // [Google Cloud Endpoints](https://cloud.google.com/appengine/docs/python/endpoints/)
@@ -247,7 +237,7 @@ func (m *ApiConfigHandler) Reset()         { *m = ApiConfigHandler{} }
 func (m *ApiConfigHandler) String() string { return proto.CompactTextString(m) }
 func (*ApiConfigHandler) ProtoMessage()    {}
 func (*ApiConfigHandler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{0}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{0}
 }
 func (m *ApiConfigHandler) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ApiConfigHandler.Unmarshal(m, b)
@@ -255,8 +245,8 @@ func (m *ApiConfigHandler) XXX_Unmarshal(b []byte) error {
 func (m *ApiConfigHandler) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ApiConfigHandler.Marshal(b, m, deterministic)
 }
-func (m *ApiConfigHandler) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ApiConfigHandler.Merge(m, src)
+func (dst *ApiConfigHandler) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiConfigHandler.Merge(dst, src)
 }
 func (m *ApiConfigHandler) XXX_Size() int {
 	return xxx_messageInfo_ApiConfigHandler.Size(m)
@@ -319,7 +309,7 @@ func (m *ErrorHandler) Reset()         { *m = ErrorHandler{} }
 func (m *ErrorHandler) String() string { return proto.CompactTextString(m) }
 func (*ErrorHandler) ProtoMessage()    {}
 func (*ErrorHandler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{1}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{1}
 }
 func (m *ErrorHandler) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ErrorHandler.Unmarshal(m, b)
@@ -327,8 +317,8 @@ func (m *ErrorHandler) XXX_Unmarshal(b []byte) error {
 func (m *ErrorHandler) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ErrorHandler.Marshal(b, m, deterministic)
 }
-func (m *ErrorHandler) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ErrorHandler.Merge(m, src)
+func (dst *ErrorHandler) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ErrorHandler.Merge(dst, src)
 }
 func (m *ErrorHandler) XXX_Size() int {
 	return xxx_messageInfo_ErrorHandler.Size(m)
@@ -395,7 +385,7 @@ func (m *UrlMap) Reset()         { *m = UrlMap{} }
 func (m *UrlMap) String() string { return proto.CompactTextString(m) }
 func (*UrlMap) ProtoMessage()    {}
 func (*UrlMap) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{2}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{2}
 }
 func (m *UrlMap) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UrlMap.Unmarshal(m, b)
@@ -403,8 +393,8 @@ func (m *UrlMap) XXX_Unmarshal(b []byte) error {
 func (m *UrlMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UrlMap.Marshal(b, m, deterministic)
 }
-func (m *UrlMap) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UrlMap.Merge(m, src)
+func (dst *UrlMap) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UrlMap.Merge(dst, src)
 }
 func (m *UrlMap) XXX_Size() int {
 	return xxx_messageInfo_UrlMap.Size(m)
@@ -633,7 +623,7 @@ func (m *StaticFilesHandler) Reset()         { *m = StaticFilesHandler{} }
 func (m *StaticFilesHandler) String() string { return proto.CompactTextString(m) }
 func (*StaticFilesHandler) ProtoMessage()    {}
 func (*StaticFilesHandler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{3}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{3}
 }
 func (m *StaticFilesHandler) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StaticFilesHandler.Unmarshal(m, b)
@@ -641,8 +631,8 @@ func (m *StaticFilesHandler) XXX_Unmarshal(b []byte) error {
 func (m *StaticFilesHandler) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StaticFilesHandler.Marshal(b, m, deterministic)
 }
-func (m *StaticFilesHandler) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StaticFilesHandler.Merge(m, src)
+func (dst *StaticFilesHandler) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StaticFilesHandler.Merge(dst, src)
 }
 func (m *StaticFilesHandler) XXX_Size() int {
 	return xxx_messageInfo_StaticFilesHandler.Size(m)
@@ -715,7 +705,7 @@ func (m *ScriptHandler) Reset()         { *m = ScriptHandler{} }
 func (m *ScriptHandler) String() string { return proto.CompactTextString(m) }
 func (*ScriptHandler) ProtoMessage()    {}
 func (*ScriptHandler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{4}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{4}
 }
 func (m *ScriptHandler) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ScriptHandler.Unmarshal(m, b)
@@ -723,8 +713,8 @@ func (m *ScriptHandler) XXX_Unmarshal(b []byte) error {
 func (m *ScriptHandler) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ScriptHandler.Marshal(b, m, deterministic)
 }
-func (m *ScriptHandler) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ScriptHandler.Merge(m, src)
+func (dst *ScriptHandler) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ScriptHandler.Merge(dst, src)
 }
 func (m *ScriptHandler) XXX_Size() int {
 	return xxx_messageInfo_ScriptHandler.Size(m)
@@ -755,7 +745,7 @@ func (m *ApiEndpointHandler) Reset()         { *m = ApiEndpointHandler{} }
 func (m *ApiEndpointHandler) String() string { return proto.CompactTextString(m) }
 func (*ApiEndpointHandler) ProtoMessage()    {}
 func (*ApiEndpointHandler) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{5}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{5}
 }
 func (m *ApiEndpointHandler) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ApiEndpointHandler.Unmarshal(m, b)
@@ -763,8 +753,8 @@ func (m *ApiEndpointHandler) XXX_Unmarshal(b []byte) error {
 func (m *ApiEndpointHandler) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ApiEndpointHandler.Marshal(b, m, deterministic)
 }
-func (m *ApiEndpointHandler) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ApiEndpointHandler.Merge(m, src)
+func (dst *ApiEndpointHandler) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiEndpointHandler.Merge(dst, src)
 }
 func (m *ApiEndpointHandler) XXX_Size() int {
 	return xxx_messageInfo_ApiEndpointHandler.Size(m)
@@ -813,7 +803,7 @@ func (m *HealthCheck) Reset()         { *m = HealthCheck{} }
 func (m *HealthCheck) String() string { return proto.CompactTextString(m) }
 func (*HealthCheck) ProtoMessage()    {}
 func (*HealthCheck) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{6}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{6}
 }
 func (m *HealthCheck) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HealthCheck.Unmarshal(m, b)
@@ -821,8 +811,8 @@ func (m *HealthCheck) XXX_Unmarshal(b []byte) error {
 func (m *HealthCheck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HealthCheck.Marshal(b, m, deterministic)
 }
-func (m *HealthCheck) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HealthCheck.Merge(m, src)
+func (dst *HealthCheck) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HealthCheck.Merge(dst, src)
 }
 func (m *HealthCheck) XXX_Size() int {
 	return xxx_messageInfo_HealthCheck.Size(m)
@@ -897,7 +887,7 @@ func (m *Library) Reset()         { *m = Library{} }
 func (m *Library) String() string { return proto.CompactTextString(m) }
 func (*Library) ProtoMessage()    {}
 func (*Library) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2e3b6ce3f971717f, []int{7}
+	return fileDescriptor_app_yaml_07fe113144fe6ee6, []int{7}
 }
 func (m *Library) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Library.Unmarshal(m, b)
@@ -905,8 +895,8 @@ func (m *Library) XXX_Unmarshal(b []byte) error {
 func (m *Library) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Library.Marshal(b, m, deterministic)
 }
-func (m *Library) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Library.Merge(m, src)
+func (dst *Library) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Library.Merge(dst, src)
 }
 func (m *Library) XXX_Size() int {
 	return xxx_messageInfo_Library.Size(m)
@@ -948,9 +938,11 @@ func init() {
 	proto.RegisterEnum("google.appengine.v1.UrlMap_RedirectHttpResponseCode", UrlMap_RedirectHttpResponseCode_name, UrlMap_RedirectHttpResponseCode_value)
 }
 
-func init() { proto.RegisterFile("google/appengine/v1/app_yaml.proto", fileDescriptor_2e3b6ce3f971717f) }
+func init() {
+	proto.RegisterFile("google/appengine/v1/app_yaml.proto", fileDescriptor_app_yaml_07fe113144fe6ee6)
+}
 
-var fileDescriptor_2e3b6ce3f971717f = []byte{
+var fileDescriptor_app_yaml_07fe113144fe6ee6 = []byte{
 	// 1232 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0xdd, 0x6e, 0x13, 0x47,
 	0x14, 0xc6, 0x76, 0x7e, 0x8f, 0x1d, 0xb3, 0x99, 0x00, 0x75, 0x02, 0x94, 0xd4, 0xa8, 0x02, 0x25,

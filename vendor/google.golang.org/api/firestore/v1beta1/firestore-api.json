@@ -790,7 +790,7 @@
       }
     }
   },
-  "revision": "20180814",
+  "revision": "20181222",
   "rootUrl": "https://firestore.googleapis.com/",
   "schemas": {
     "ArrayValue": {
@@ -1214,6 +1214,18 @@
         "fieldPath": {
           "description": "The path of the field. See Document.fields for the field path syntax\nreference.",
           "type": "string"
+        },
+        "increment": {
+          "$ref": "Value",
+          "description": "Adds the given value to the field's current value.\n\nThis must be an integer or a double value.\nIf the field is not an integer or double, or if the field does not yet\nexist, the transformation will set the field to the given value.\nIf either of the given value or the current field value are doubles,\nboth values will be interpreted as doubles. Double arithmetic and\nrepresentation of double values follow IEEE 754 semantics.\nIf there is positive/negative integer overflow, the field is resolved\nto the largest magnitude positive/negative integer."
+        },
+        "maximum": {
+          "$ref": "Value",
+          "description": "Sets the field to the maximum of its current value and the given value.\n\nThis must be an integer or a double value.\nIf the field is not an integer or double, or if the field does not yet\nexist, the transformation will set the field to the given value.\nIf a maximum operation is applied where the field and the input value\nare of mixed types (that is - one is an integer and one is a double)\nthe field takes on the type of the larger operand. If the operands are\nequivalent (e.g. 3 and 3.0), the field does not change.\n0, 0.0, and -0.0 are all zero. The maximum of a zero stored value and\nzero input value is always the stored value.\nThe maximum of any numeric value x and NaN is NaN."
+        },
+        "minimum": {
+          "$ref": "Value",
+          "description": "Sets the field to the minimum of its current value and the given value.\n\nThis must be an integer or a double value.\nIf the field is not an integer or double, or if the field does not yet\nexist, the transformation will set the field to the input value.\nIf a minimum operation is applied where the field and the input value\nare of mixed types (that is - one is an integer and one is a double)\nthe field takes on the type of the smaller operand. If the operands are\nequivalent (e.g. 3 and 3.0), the field does not change.\n0, 0.0, and -0.0 are all zero. The minimum of a zero stored value and\nzero input value is always the stored value.\nThe minimum of any numeric value x and NaN is NaN."
         },
         "removeAllFromArray": {
           "$ref": "ArrayValue",

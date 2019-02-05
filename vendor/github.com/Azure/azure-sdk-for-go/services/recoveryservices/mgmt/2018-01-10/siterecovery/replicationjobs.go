@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,8 +42,18 @@ func NewReplicationJobsClientWithBaseURI(baseURI string, subscriptionID string, 
 
 // Cancel the operation to cancel an Azure Site Recovery job.
 // Parameters:
-// jobName - job indentifier.
+// jobName - job identifier.
 func (client ReplicationJobsClient) Cancel(ctx context.Context, jobName string) (result ReplicationJobsCancelFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelPreparer(ctx, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationJobsClient", "Cancel", nil, "Failure preparing request")
@@ -89,10 +100,6 @@ func (client ReplicationJobsClient) CancelSender(req *http.Request) (future Repl
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -114,6 +121,16 @@ func (client ReplicationJobsClient) CancelResponder(resp *http.Response) (result
 // Parameters:
 // jobQueryParameter - job query filter.
 func (client ReplicationJobsClient) Export(ctx context.Context, jobQueryParameter JobQueryParameter) (result ReplicationJobsExportFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.Export")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ExportPreparer(ctx, jobQueryParameter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationJobsClient", "Export", nil, "Failure preparing request")
@@ -161,10 +178,6 @@ func (client ReplicationJobsClient) ExportSender(req *http.Request) (future Repl
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -186,6 +199,16 @@ func (client ReplicationJobsClient) ExportResponder(resp *http.Response) (result
 // Parameters:
 // jobName - job identifier
 func (client ReplicationJobsClient) Get(ctx context.Context, jobName string) (result Job, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationJobsClient", "Get", nil, "Failure preparing request")
@@ -253,6 +276,16 @@ func (client ReplicationJobsClient) GetResponder(resp *http.Response) (result Jo
 // Parameters:
 // filter - oData filter options.
 func (client ReplicationJobsClient) List(ctx context.Context, filter string) (result JobCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.List")
+		defer func() {
+			sc := -1
+			if result.jc.Response.Response != nil {
+				sc = result.jc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter)
 	if err != nil {
@@ -320,8 +353,8 @@ func (client ReplicationJobsClient) ListResponder(resp *http.Response) (result J
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationJobsClient) listNextResults(lastResults JobCollection) (result JobCollection, err error) {
-	req, err := lastResults.jobCollectionPreparer()
+func (client ReplicationJobsClient) listNextResults(ctx context.Context, lastResults JobCollection) (result JobCollection, err error) {
+	req, err := lastResults.jobCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationJobsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -342,6 +375,16 @@ func (client ReplicationJobsClient) listNextResults(lastResults JobCollection) (
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationJobsClient) ListComplete(ctx context.Context, filter string) (result JobCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter)
 	return
 }
@@ -350,6 +393,16 @@ func (client ReplicationJobsClient) ListComplete(ctx context.Context, filter str
 // Parameters:
 // jobName - job identifier.
 func (client ReplicationJobsClient) Restart(ctx context.Context, jobName string) (result ReplicationJobsRestartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.Restart")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RestartPreparer(ctx, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationJobsClient", "Restart", nil, "Failure preparing request")
@@ -396,10 +449,6 @@ func (client ReplicationJobsClient) RestartSender(req *http.Request) (future Rep
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -422,6 +471,16 @@ func (client ReplicationJobsClient) RestartResponder(resp *http.Response) (resul
 // jobName - job identifier.
 // resumeJobParams - resume rob comments.
 func (client ReplicationJobsClient) Resume(ctx context.Context, jobName string, resumeJobParams ResumeJobParams) (result ReplicationJobsResumeFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationJobsClient.Resume")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ResumePreparer(ctx, jobName, resumeJobParams)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationJobsClient", "Resume", nil, "Failure preparing request")
@@ -467,10 +526,6 @@ func (client ReplicationJobsClient) ResumeSender(req *http.Request) (future Repl
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

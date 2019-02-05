@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package resourcehealth
 
-import original "github.com/Azure/azure-sdk-for-go/services/resourcehealth/mgmt/2017-07-01/resourcehealth"
+import (
+	"context"
 
-type AvailabilityStatusesClient = original.AvailabilityStatusesClient
+	original "github.com/Azure/azure-sdk-for-go/services/resourcehealth/mgmt/2017-07-01/resourcehealth"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type AvailabilityStateValues = original.AvailabilityStateValues
 
 const (
@@ -49,24 +50,52 @@ type AvailabilityStatusListResultIterator = original.AvailabilityStatusListResul
 type AvailabilityStatusListResultPage = original.AvailabilityStatusListResultPage
 type AvailabilityStatusProperties = original.AvailabilityStatusProperties
 type AvailabilityStatusPropertiesRecentlyResolvedState = original.AvailabilityStatusPropertiesRecentlyResolvedState
+type AvailabilityStatusesClient = original.AvailabilityStatusesClient
+type BaseClient = original.BaseClient
+type ChildAvailabilityStatusesClient = original.ChildAvailabilityStatusesClient
+type ChildResourcesClient = original.ChildResourcesClient
 type ErrorResponse = original.ErrorResponse
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type RecommendedAction = original.RecommendedAction
 type ServiceImpactingEvent = original.ServiceImpactingEvent
 type ServiceImpactingEventIncidentProperties = original.ServiceImpactingEventIncidentProperties
 type ServiceImpactingEventStatus = original.ServiceImpactingEventStatus
-type OperationsClient = original.OperationsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewAvailabilityStatusListResultIterator(page AvailabilityStatusListResultPage) AvailabilityStatusListResultIterator {
+	return original.NewAvailabilityStatusListResultIterator(page)
+}
+func NewAvailabilityStatusListResultPage(getNextPage func(context.Context, AvailabilityStatusListResult) (AvailabilityStatusListResult, error)) AvailabilityStatusListResultPage {
+	return original.NewAvailabilityStatusListResultPage(getNextPage)
+}
 func NewAvailabilityStatusesClient(subscriptionID string) AvailabilityStatusesClient {
 	return original.NewAvailabilityStatusesClient(subscriptionID)
 }
 func NewAvailabilityStatusesClientWithBaseURI(baseURI string, subscriptionID string) AvailabilityStatusesClient {
 	return original.NewAvailabilityStatusesClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewChildAvailabilityStatusesClient(subscriptionID string) ChildAvailabilityStatusesClient {
+	return original.NewChildAvailabilityStatusesClient(subscriptionID)
+}
+func NewChildAvailabilityStatusesClientWithBaseURI(baseURI string, subscriptionID string) ChildAvailabilityStatusesClient {
+	return original.NewChildAvailabilityStatusesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewChildResourcesClient(subscriptionID string) ChildResourcesClient {
+	return original.NewChildResourcesClient(subscriptionID)
+}
+func NewChildResourcesClientWithBaseURI(baseURI string, subscriptionID string) ChildResourcesClient {
+	return original.NewChildResourcesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -76,12 +105,6 @@ func PossibleAvailabilityStateValuesValues() []AvailabilityStateValues {
 }
 func PossibleReasonChronicityTypesValues() []ReasonChronicityTypes {
 	return original.PossibleReasonChronicityTypesValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

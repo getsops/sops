@@ -19,6 +19,7 @@
 package test
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -26,10 +27,9 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/internal/leakcheck"
 
+	"google.golang.org/grpc/internal/envconfig"
 	testpb "google.golang.org/grpc/test/grpc_testing"
 )
 
@@ -106,8 +106,12 @@ func (d *delayConn) Read(b []byte) (n int, err error) {
 	return d.Conn.Read(b)
 }
 
-func TestGracefulStop(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestGracefulStop(t *testing.T) {
+	// Set default behavior and restore current setting after test.
+	old := envconfig.RequireHandshake
+	envconfig.RequireHandshake = envconfig.RequireHandshakeOff
+	defer func() { envconfig.RequireHandshake = old }()
+
 	// This test ensures GracefulStop cannot race and break RPCs on new
 	// connections created after GracefulStop was called but before
 	// listener.Accept() returns a "closing" error.
@@ -178,6 +182,7 @@ func TestGracefulStop(t *testing.T) {
 	defer dialCancel()
 	cc, err := grpc.DialContext(ctx, "", grpc.WithInsecure(), grpc.WithBlock(), grpc.WithDialer(d))
 	if err != nil {
+		dlis.allowClientRead()
 		t.Fatalf("grpc.Dial(%q) = %v", lis.Addr().String(), err)
 	}
 	client := testpb.NewTestServiceClient(cc)

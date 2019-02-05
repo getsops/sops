@@ -10,7 +10,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/awstesting/mock"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRequestCancelRetry(t *testing.T) {
@@ -32,6 +31,10 @@ func TestRequestCancelRetry(t *testing.T) {
 	close(c)
 
 	err := r.Send()
-	assert.True(t, strings.Contains(err.Error(), "canceled"))
-	assert.Equal(t, 1, reqNum)
+	if !strings.Contains(err.Error(), "canceled") {
+		t.Errorf("expect canceled in error, %v", err)
+	}
+	if e, a := 1, reqNum; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }

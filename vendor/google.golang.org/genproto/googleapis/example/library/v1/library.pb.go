@@ -46,7 +46,7 @@ func (m *Book) Reset()         { *m = Book{} }
 func (m *Book) String() string { return proto.CompactTextString(m) }
 func (*Book) ProtoMessage()    {}
 func (*Book) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{0}
+	return fileDescriptor_library_e1452ae13084213f, []int{0}
 }
 func (m *Book) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Book.Unmarshal(m, b)
@@ -54,8 +54,8 @@ func (m *Book) XXX_Unmarshal(b []byte) error {
 func (m *Book) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Book.Marshal(b, m, deterministic)
 }
-func (m *Book) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Book.Merge(m, src)
+func (dst *Book) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Book.Merge(dst, src)
 }
 func (m *Book) XXX_Size() int {
 	return xxx_messageInfo_Book.Size(m)
@@ -111,7 +111,7 @@ func (m *Shelf) Reset()         { *m = Shelf{} }
 func (m *Shelf) String() string { return proto.CompactTextString(m) }
 func (*Shelf) ProtoMessage()    {}
 func (*Shelf) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{1}
+	return fileDescriptor_library_e1452ae13084213f, []int{1}
 }
 func (m *Shelf) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Shelf.Unmarshal(m, b)
@@ -119,8 +119,8 @@ func (m *Shelf) XXX_Unmarshal(b []byte) error {
 func (m *Shelf) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Shelf.Marshal(b, m, deterministic)
 }
-func (m *Shelf) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Shelf.Merge(m, src)
+func (dst *Shelf) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Shelf.Merge(dst, src)
 }
 func (m *Shelf) XXX_Size() int {
 	return xxx_messageInfo_Shelf.Size(m)
@@ -158,7 +158,7 @@ func (m *CreateShelfRequest) Reset()         { *m = CreateShelfRequest{} }
 func (m *CreateShelfRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateShelfRequest) ProtoMessage()    {}
 func (*CreateShelfRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{2}
+	return fileDescriptor_library_e1452ae13084213f, []int{2}
 }
 func (m *CreateShelfRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateShelfRequest.Unmarshal(m, b)
@@ -166,8 +166,8 @@ func (m *CreateShelfRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateShelfRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateShelfRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateShelfRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateShelfRequest.Merge(m, src)
+func (dst *CreateShelfRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateShelfRequest.Merge(dst, src)
 }
 func (m *CreateShelfRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateShelfRequest.Size(m)
@@ -198,7 +198,7 @@ func (m *GetShelfRequest) Reset()         { *m = GetShelfRequest{} }
 func (m *GetShelfRequest) String() string { return proto.CompactTextString(m) }
 func (*GetShelfRequest) ProtoMessage()    {}
 func (*GetShelfRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{3}
+	return fileDescriptor_library_e1452ae13084213f, []int{3}
 }
 func (m *GetShelfRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetShelfRequest.Unmarshal(m, b)
@@ -206,8 +206,8 @@ func (m *GetShelfRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetShelfRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetShelfRequest.Marshal(b, m, deterministic)
 }
-func (m *GetShelfRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetShelfRequest.Merge(m, src)
+func (dst *GetShelfRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetShelfRequest.Merge(dst, src)
 }
 func (m *GetShelfRequest) XXX_Size() int {
 	return xxx_messageInfo_GetShelfRequest.Size(m)
@@ -244,7 +244,7 @@ func (m *ListShelvesRequest) Reset()         { *m = ListShelvesRequest{} }
 func (m *ListShelvesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListShelvesRequest) ProtoMessage()    {}
 func (*ListShelvesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{4}
+	return fileDescriptor_library_e1452ae13084213f, []int{4}
 }
 func (m *ListShelvesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListShelvesRequest.Unmarshal(m, b)
@@ -252,8 +252,8 @@ func (m *ListShelvesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListShelvesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListShelvesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListShelvesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListShelvesRequest.Merge(m, src)
+func (dst *ListShelvesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListShelvesRequest.Merge(dst, src)
 }
 func (m *ListShelvesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListShelvesRequest.Size(m)
@@ -297,7 +297,7 @@ func (m *ListShelvesResponse) Reset()         { *m = ListShelvesResponse{} }
 func (m *ListShelvesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListShelvesResponse) ProtoMessage()    {}
 func (*ListShelvesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{5}
+	return fileDescriptor_library_e1452ae13084213f, []int{5}
 }
 func (m *ListShelvesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListShelvesResponse.Unmarshal(m, b)
@@ -305,8 +305,8 @@ func (m *ListShelvesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListShelvesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListShelvesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListShelvesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListShelvesResponse.Merge(m, src)
+func (dst *ListShelvesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListShelvesResponse.Merge(dst, src)
 }
 func (m *ListShelvesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListShelvesResponse.Size(m)
@@ -344,7 +344,7 @@ func (m *DeleteShelfRequest) Reset()         { *m = DeleteShelfRequest{} }
 func (m *DeleteShelfRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteShelfRequest) ProtoMessage()    {}
 func (*DeleteShelfRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{6}
+	return fileDescriptor_library_e1452ae13084213f, []int{6}
 }
 func (m *DeleteShelfRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteShelfRequest.Unmarshal(m, b)
@@ -352,8 +352,8 @@ func (m *DeleteShelfRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteShelfRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteShelfRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteShelfRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteShelfRequest.Merge(m, src)
+func (dst *DeleteShelfRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteShelfRequest.Merge(dst, src)
 }
 func (m *DeleteShelfRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteShelfRequest.Size(m)
@@ -387,7 +387,7 @@ func (m *MergeShelvesRequest) Reset()         { *m = MergeShelvesRequest{} }
 func (m *MergeShelvesRequest) String() string { return proto.CompactTextString(m) }
 func (*MergeShelvesRequest) ProtoMessage()    {}
 func (*MergeShelvesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{7}
+	return fileDescriptor_library_e1452ae13084213f, []int{7}
 }
 func (m *MergeShelvesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MergeShelvesRequest.Unmarshal(m, b)
@@ -395,8 +395,8 @@ func (m *MergeShelvesRequest) XXX_Unmarshal(b []byte) error {
 func (m *MergeShelvesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MergeShelvesRequest.Marshal(b, m, deterministic)
 }
-func (m *MergeShelvesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MergeShelvesRequest.Merge(m, src)
+func (dst *MergeShelvesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MergeShelvesRequest.Merge(dst, src)
 }
 func (m *MergeShelvesRequest) XXX_Size() int {
 	return xxx_messageInfo_MergeShelvesRequest.Size(m)
@@ -436,7 +436,7 @@ func (m *CreateBookRequest) Reset()         { *m = CreateBookRequest{} }
 func (m *CreateBookRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateBookRequest) ProtoMessage()    {}
 func (*CreateBookRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{8}
+	return fileDescriptor_library_e1452ae13084213f, []int{8}
 }
 func (m *CreateBookRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateBookRequest.Unmarshal(m, b)
@@ -444,8 +444,8 @@ func (m *CreateBookRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateBookRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateBookRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateBookRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateBookRequest.Merge(m, src)
+func (dst *CreateBookRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateBookRequest.Merge(dst, src)
 }
 func (m *CreateBookRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateBookRequest.Size(m)
@@ -483,7 +483,7 @@ func (m *GetBookRequest) Reset()         { *m = GetBookRequest{} }
 func (m *GetBookRequest) String() string { return proto.CompactTextString(m) }
 func (*GetBookRequest) ProtoMessage()    {}
 func (*GetBookRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{9}
+	return fileDescriptor_library_e1452ae13084213f, []int{9}
 }
 func (m *GetBookRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetBookRequest.Unmarshal(m, b)
@@ -491,8 +491,8 @@ func (m *GetBookRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetBookRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetBookRequest.Marshal(b, m, deterministic)
 }
-func (m *GetBookRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetBookRequest.Merge(m, src)
+func (dst *GetBookRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetBookRequest.Merge(dst, src)
 }
 func (m *GetBookRequest) XXX_Size() int {
 	return xxx_messageInfo_GetBookRequest.Size(m)
@@ -531,7 +531,7 @@ func (m *ListBooksRequest) Reset()         { *m = ListBooksRequest{} }
 func (m *ListBooksRequest) String() string { return proto.CompactTextString(m) }
 func (*ListBooksRequest) ProtoMessage()    {}
 func (*ListBooksRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{10}
+	return fileDescriptor_library_e1452ae13084213f, []int{10}
 }
 func (m *ListBooksRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListBooksRequest.Unmarshal(m, b)
@@ -539,8 +539,8 @@ func (m *ListBooksRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListBooksRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListBooksRequest.Marshal(b, m, deterministic)
 }
-func (m *ListBooksRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListBooksRequest.Merge(m, src)
+func (dst *ListBooksRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBooksRequest.Merge(dst, src)
 }
 func (m *ListBooksRequest) XXX_Size() int {
 	return xxx_messageInfo_ListBooksRequest.Size(m)
@@ -591,7 +591,7 @@ func (m *ListBooksResponse) Reset()         { *m = ListBooksResponse{} }
 func (m *ListBooksResponse) String() string { return proto.CompactTextString(m) }
 func (*ListBooksResponse) ProtoMessage()    {}
 func (*ListBooksResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{11}
+	return fileDescriptor_library_e1452ae13084213f, []int{11}
 }
 func (m *ListBooksResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListBooksResponse.Unmarshal(m, b)
@@ -599,8 +599,8 @@ func (m *ListBooksResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListBooksResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListBooksResponse.Marshal(b, m, deterministic)
 }
-func (m *ListBooksResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListBooksResponse.Merge(m, src)
+func (dst *ListBooksResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListBooksResponse.Merge(dst, src)
 }
 func (m *ListBooksResponse) XXX_Size() int {
 	return xxx_messageInfo_ListBooksResponse.Size(m)
@@ -640,7 +640,7 @@ func (m *UpdateBookRequest) Reset()         { *m = UpdateBookRequest{} }
 func (m *UpdateBookRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateBookRequest) ProtoMessage()    {}
 func (*UpdateBookRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{12}
+	return fileDescriptor_library_e1452ae13084213f, []int{12}
 }
 func (m *UpdateBookRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateBookRequest.Unmarshal(m, b)
@@ -648,8 +648,8 @@ func (m *UpdateBookRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateBookRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateBookRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateBookRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateBookRequest.Merge(m, src)
+func (dst *UpdateBookRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateBookRequest.Merge(dst, src)
 }
 func (m *UpdateBookRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateBookRequest.Size(m)
@@ -687,7 +687,7 @@ func (m *DeleteBookRequest) Reset()         { *m = DeleteBookRequest{} }
 func (m *DeleteBookRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteBookRequest) ProtoMessage()    {}
 func (*DeleteBookRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{13}
+	return fileDescriptor_library_e1452ae13084213f, []int{13}
 }
 func (m *DeleteBookRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteBookRequest.Unmarshal(m, b)
@@ -695,8 +695,8 @@ func (m *DeleteBookRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteBookRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteBookRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteBookRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteBookRequest.Merge(m, src)
+func (dst *DeleteBookRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteBookRequest.Merge(dst, src)
 }
 func (m *DeleteBookRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteBookRequest.Size(m)
@@ -730,7 +730,7 @@ func (m *MoveBookRequest) Reset()         { *m = MoveBookRequest{} }
 func (m *MoveBookRequest) String() string { return proto.CompactTextString(m) }
 func (*MoveBookRequest) ProtoMessage()    {}
 func (*MoveBookRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40bd7925372a20e3, []int{14}
+	return fileDescriptor_library_e1452ae13084213f, []int{14}
 }
 func (m *MoveBookRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MoveBookRequest.Unmarshal(m, b)
@@ -738,8 +738,8 @@ func (m *MoveBookRequest) XXX_Unmarshal(b []byte) error {
 func (m *MoveBookRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MoveBookRequest.Marshal(b, m, deterministic)
 }
-func (m *MoveBookRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MoveBookRequest.Merge(m, src)
+func (dst *MoveBookRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MoveBookRequest.Merge(dst, src)
 }
 func (m *MoveBookRequest) XXX_Size() int {
 	return xxx_messageInfo_MoveBookRequest.Size(m)
@@ -1229,10 +1229,10 @@ var _LibraryService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/example/library/v1/library.proto", fileDescriptor_40bd7925372a20e3)
+	proto.RegisterFile("google/example/library/v1/library.proto", fileDescriptor_library_e1452ae13084213f)
 }
 
-var fileDescriptor_40bd7925372a20e3 = []byte{
+var fileDescriptor_library_e1452ae13084213f = []byte{
 	// 838 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xdb, 0x4e, 0xdb, 0x48,
 	0x18, 0x96, 0x21, 0x81, 0xf0, 0x87, 0x53, 0x06, 0x84, 0xb2, 0x26, 0x2c, 0xd9, 0x11, 0x87, 0x6c,

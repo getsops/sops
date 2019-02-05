@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewApplicationTypeClientWithBaseURI(baseURI string) ApplicationTypeClient {
 // clusterName - the name of the cluster resource
 // applicationTypeName - the name of the application type name resource
 func (client ApplicationTypeClient) Delete(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string) (result ApplicationTypeDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypeClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypeClient", "Delete", nil, "Failure preparing request")
@@ -92,10 +103,6 @@ func (client ApplicationTypeClient) DeleteSender(req *http.Request) (future Appl
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -119,6 +126,16 @@ func (client ApplicationTypeClient) DeleteResponder(resp *http.Response) (result
 // clusterName - the name of the cluster resource
 // applicationTypeName - the name of the application type name resource
 func (client ApplicationTypeClient) Get(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string) (result ApplicationTypeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypeClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypeClient", "Get", nil, "Failure preparing request")
@@ -188,6 +205,16 @@ func (client ApplicationTypeClient) GetResponder(resp *http.Response) (result Ap
 // resourceGroupName - the name of the resource group.
 // clusterName - the name of the cluster resource
 func (client ApplicationTypeClient) List(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string) (result ApplicationTypeResourceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypeClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, subscriptionID, resourceGroupName, clusterName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypeClient", "List", nil, "Failure preparing request")
@@ -258,6 +285,16 @@ func (client ApplicationTypeClient) ListResponder(resp *http.Response) (result A
 // applicationTypeName - the name of the application type name resource
 // parameters - the application type name resource.
 func (client ApplicationTypeClient) Put(ctx context.Context, subscriptionID string, resourceGroupName string, clusterName string, applicationTypeName string, parameters ApplicationTypeResource) (result ApplicationTypeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypeClient.Put")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PutPreparer(ctx, subscriptionID, resourceGroupName, clusterName, applicationTypeName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypeClient", "Put", nil, "Failure preparing request")

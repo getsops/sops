@@ -17,6 +17,7 @@ limitations under the License.
 package bigtable // import "cloud.google.com/go/bigtable"
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -26,7 +27,6 @@ import (
 	"cloud.google.com/go/bigtable/internal/gax"
 	btopt "cloud.google.com/go/bigtable/internal/option"
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	gtransport "google.golang.org/api/transport/grpc"
 	btpb "google.golang.org/genproto/googleapis/bigtable/v2"
@@ -61,6 +61,7 @@ func NewClient(ctx context.Context, project, instance string, opts ...option.Cli
 	return NewClientWithConfig(ctx, project, instance, ClientConfig{}, opts...)
 }
 
+// NewClientWithConfig creates a new client with the given config.
 func NewClientWithConfig(ctx context.Context, project, instance string, config ClientConfig, opts ...option.ClientOption) (*Client, error) {
 	o, err := btopt.DefaultClientOptions(prodAddr, Scope, clientUserAgent)
 	if err != nil {
@@ -70,7 +71,7 @@ func NewClientWithConfig(ctx context.Context, project, instance string, config C
 	o = append(o,
 		option.WithGRPCConnectionPool(4),
 		// Set the max size to correspond to server-side limits.
-		option.WithGRPCDialOption(grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(100<<20), grpc.MaxCallRecvMsgSize(100<<20))),
+		option.WithGRPCDialOption(grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(1<<28), grpc.MaxCallRecvMsgSize(1<<28))),
 		// TODO(grpc/grpc-go#1388) using connection pool without WithBlock
 		// can cause RPCs to fail randomly. We can delete this after the issue is fixed.
 		option.WithGRPCDialOption(grpc.WithBlock()))
@@ -463,7 +464,10 @@ func mutationsAreRetryable(muts []*btpb.Mutation) bool {
 	return true
 }
 
-// Apply applies a Mutation to a specific row.
+const maxMutations = 100000
+
+// Apply mutates a row atomically. A mutation must contain at least one
+// operation and at most 100000 operations.
 func (t *Table) Apply(ctx context.Context, row string, m *Mutation, opts ...ApplyOption) error {
 	ctx = mergeOutgoingMetadata(ctx, t.md)
 	after := func(res proto.Message) {
@@ -652,31 +656,31 @@ func (t *Table) ApplyBulk(ctx context.Context, rowKeys []string, muts []*Mutatio
 		origEntries[i] = &entryErr{Entry: &btpb.MutateRowsRequest_Entry{RowKey: []byte(key), Mutations: mut.ops}}
 	}
 
-	// entries will be reduced after each invocation to just what needs to be retried.
-	entries := make([]*entryErr, len(rowKeys))
-	copy(entries, origEntries)
 	var err error
 	ctx = traceStartSpan(ctx, "cloud.google.com/go/bigtable/ApplyBulk")
 	defer func() { traceEndSpan(ctx, err) }()
-	attrMap := make(map[string]interface{})
-	err = gax.Invoke(ctx, func(ctx context.Context) error {
-		attrMap["rowCount"] = len(entries)
-		tracePrintf(ctx, attrMap, "Row count in ApplyBulk")
-		err := t.doApplyBulk(ctx, entries, opts...)
+
+	for _, group := range groupEntries(origEntries, maxMutations) {
+		attrMap := make(map[string]interface{})
+		err = gax.Invoke(ctx, func(ctx context.Context) error {
+			attrMap["rowCount"] = len(group)
+			tracePrintf(ctx, attrMap, "Row count in ApplyBulk")
+			err := t.doApplyBulk(ctx, group, opts...)
+			if err != nil {
+				// We want to retry the entire request with the current group
+				return err
+			}
+			group = t.getApplyBulkRetries(group)
+			if len(group) > 0 && len(idempotentRetryCodes) > 0 {
+				// We have at least one mutation that needs to be retried.
+				// Return an arbitrary error that is retryable according to callOptions.
+				return status.Errorf(idempotentRetryCodes[0], "Synthetic error: partial failure of ApplyBulk")
+			}
+			return nil
+		}, retryOptions...)
 		if err != nil {
-			// We want to retry the entire request with the current entries
-			return err
+			return nil, err
 		}
-		entries = t.getApplyBulkRetries(entries)
-		if len(entries) > 0 && len(idempotentRetryCodes) > 0 {
-			// We have at least one mutation that needs to be retried.
-			// Return an arbitrary error that is retryable according to callOptions.
-			return status.Errorf(idempotentRetryCodes[0], "Synthetic error: partial failure of ApplyBulk")
-		}
-		return nil
-	}, retryOptions...)
-	if err != nil {
-		return nil, err
 	}
 
 	// Accumulate all of the errors into an array to return, interspersed with nils for successful
@@ -749,6 +753,32 @@ func (t *Table) doApplyBulk(ctx context.Context, entryErrs []*entryErr, opts ...
 		after(res)
 	}
 	return nil
+}
+
+// groupEntries groups entries into groups of a specified size without breaking up
+// individual entries.
+func groupEntries(entries []*entryErr, maxSize int) [][]*entryErr {
+	var (
+		res   [][]*entryErr
+		start int
+		gmuts int
+	)
+	addGroup := func(end int) {
+		if end-start > 0 {
+			res = append(res, entries[start:end])
+			start = end
+			gmuts = 0
+		}
+	}
+	for i, e := range entries {
+		emuts := len(e.Entry.Mutations)
+		if gmuts+emuts > maxSize {
+			addGroup(i)
+		}
+		gmuts += emuts
+	}
+	addGroup(len(entries))
+	return res
 }
 
 // Timestamp is in units of microseconds since 1 January 1970.
@@ -844,6 +874,8 @@ func mergeOutgoingMetadata(ctx context.Context, md metadata.MD) context.Context 
 	return metadata.NewOutgoingContext(ctx, metadata.Join(mdCopy, md))
 }
 
+// SampleRowKeys returns a sample of row keys in the table. The returned row keys will delimit contiguous sections of
+// the table of approximately equal size, which can be used to break up the data for distributed tasks like mapreduces.
 func (t *Table) SampleRowKeys(ctx context.Context) ([]string, error) {
 	ctx = mergeOutgoingMetadata(ctx, t.md)
 	var sampledRowKeys []string

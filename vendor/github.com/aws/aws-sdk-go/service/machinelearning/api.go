@@ -16,7 +16,7 @@ const opAddTags = "AddTags"
 // AddTagsRequest generates a "aws/request.Request" representing the
 // client's request for the AddTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -105,7 +105,7 @@ const opCreateBatchPrediction = "CreateBatchPrediction"
 // CreateBatchPredictionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBatchPrediction operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -203,7 +203,7 @@ const opCreateDataSourceFromRDS = "CreateDataSourceFromRDS"
 // CreateDataSourceFromRDSRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDataSourceFromRDS operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -301,7 +301,7 @@ const opCreateDataSourceFromRedshift = "CreateDataSourceFromRedshift"
 // CreateDataSourceFromRedshiftRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDataSourceFromRedshift operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -418,7 +418,7 @@ const opCreateDataSourceFromS3 = "CreateDataSourceFromS3"
 // CreateDataSourceFromS3Request generates a "aws/request.Request" representing the
 // client's request for the CreateDataSourceFromS3 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -530,7 +530,7 @@ const opCreateEvaluation = "CreateEvaluation"
 // CreateEvaluationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateEvaluation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -630,7 +630,7 @@ const opCreateMLModel = "CreateMLModel"
 // CreateMLModelRequest generates a "aws/request.Request" representing the
 // client's request for the CreateMLModel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -731,7 +731,7 @@ const opCreateRealtimeEndpoint = "CreateRealtimeEndpoint"
 // CreateRealtimeEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRealtimeEndpoint operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -816,7 +816,7 @@ const opDeleteBatchPrediction = "DeleteBatchPrediction"
 // DeleteBatchPredictionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBatchPrediction operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -904,7 +904,7 @@ const opDeleteDataSource = "DeleteDataSource"
 // DeleteDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -992,7 +992,7 @@ const opDeleteEvaluation = "DeleteEvaluation"
 // DeleteEvaluationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteEvaluation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1080,7 +1080,7 @@ const opDeleteMLModel = "DeleteMLModel"
 // DeleteMLModelRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteMLModel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1168,7 +1168,7 @@ const opDeleteRealtimeEndpoint = "DeleteRealtimeEndpoint"
 // DeleteRealtimeEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRealtimeEndpoint operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1251,7 +1251,7 @@ const opDeleteTags = "DeleteTags"
 // DeleteTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1339,7 +1339,7 @@ const opDescribeBatchPredictions = "DescribeBatchPredictions"
 // DescribeBatchPredictionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBatchPredictions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1476,7 +1476,7 @@ const opDescribeDataSources = "DescribeDataSources"
 // DescribeDataSourcesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDataSources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1612,7 +1612,7 @@ const opDescribeEvaluations = "DescribeEvaluations"
 // DescribeEvaluationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvaluations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1749,7 +1749,7 @@ const opDescribeMLModels = "DescribeMLModels"
 // DescribeMLModelsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMLModels operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1885,7 +1885,7 @@ const opDescribeTags = "DescribeTags"
 // DescribeTagsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1968,7 +1968,7 @@ const opGetBatchPrediction = "GetBatchPrediction"
 // GetBatchPredictionRequest generates a "aws/request.Request" representing the
 // client's request for the GetBatchPrediction operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2052,7 +2052,7 @@ const opGetDataSource = "GetDataSource"
 // GetDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the GetDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2140,7 +2140,7 @@ const opGetEvaluation = "GetEvaluation"
 // GetEvaluationRequest generates a "aws/request.Request" representing the
 // client's request for the GetEvaluation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2224,7 +2224,7 @@ const opGetMLModel = "GetMLModel"
 // GetMLModelRequest generates a "aws/request.Request" representing the
 // client's request for the GetMLModel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2310,7 +2310,7 @@ const opPredict = "Predict"
 // PredictRequest generates a "aws/request.Request" representing the
 // client's request for the Predict operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2403,7 +2403,7 @@ const opUpdateBatchPrediction = "UpdateBatchPrediction"
 // UpdateBatchPredictionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateBatchPrediction operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2489,7 +2489,7 @@ const opUpdateDataSource = "UpdateDataSource"
 // UpdateDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2575,7 +2575,7 @@ const opUpdateEvaluation = "UpdateEvaluation"
 // UpdateEvaluationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateEvaluation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2661,7 +2661,7 @@ const opUpdateMLModel = "UpdateMLModel"
 // UpdateMLModelRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateMLModel operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.

@@ -34,7 +34,7 @@ func (m *ListZonesRequest) Reset()         { *m = ListZonesRequest{} }
 func (m *ListZonesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListZonesRequest) ProtoMessage()    {}
 func (*ListZonesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{0}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{0}
 }
 func (m *ListZonesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListZonesRequest.Unmarshal(m, b)
@@ -42,8 +42,8 @@ func (m *ListZonesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListZonesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListZonesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListZonesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListZonesRequest.Merge(m, src)
+func (dst *ListZonesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListZonesRequest.Merge(dst, src)
 }
 func (m *ListZonesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListZonesRequest.Size(m)
@@ -74,7 +74,7 @@ func (m *ListZonesResponse) Reset()         { *m = ListZonesResponse{} }
 func (m *ListZonesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListZonesResponse) ProtoMessage()    {}
 func (*ListZonesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{1}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{1}
 }
 func (m *ListZonesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListZonesResponse.Unmarshal(m, b)
@@ -82,8 +82,8 @@ func (m *ListZonesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListZonesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListZonesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListZonesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListZonesResponse.Merge(m, src)
+func (dst *ListZonesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListZonesResponse.Merge(dst, src)
 }
 func (m *ListZonesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListZonesResponse.Size(m)
@@ -115,7 +115,7 @@ func (m *GetClusterRequest) Reset()         { *m = GetClusterRequest{} }
 func (m *GetClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*GetClusterRequest) ProtoMessage()    {}
 func (*GetClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{2}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{2}
 }
 func (m *GetClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetClusterRequest.Unmarshal(m, b)
@@ -123,8 +123,8 @@ func (m *GetClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *GetClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetClusterRequest.Merge(m, src)
+func (dst *GetClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetClusterRequest.Merge(dst, src)
 }
 func (m *GetClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_GetClusterRequest.Size(m)
@@ -156,7 +156,7 @@ func (m *ListClustersRequest) Reset()         { *m = ListClustersRequest{} }
 func (m *ListClustersRequest) String() string { return proto.CompactTextString(m) }
 func (*ListClustersRequest) ProtoMessage()    {}
 func (*ListClustersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{3}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{3}
 }
 func (m *ListClustersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListClustersRequest.Unmarshal(m, b)
@@ -164,8 +164,8 @@ func (m *ListClustersRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListClustersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListClustersRequest.Marshal(b, m, deterministic)
 }
-func (m *ListClustersRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListClustersRequest.Merge(m, src)
+func (dst *ListClustersRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListClustersRequest.Merge(dst, src)
 }
 func (m *ListClustersRequest) XXX_Size() int {
 	return xxx_messageInfo_ListClustersRequest.Size(m)
@@ -198,7 +198,7 @@ func (m *ListClustersResponse) Reset()         { *m = ListClustersResponse{} }
 func (m *ListClustersResponse) String() string { return proto.CompactTextString(m) }
 func (*ListClustersResponse) ProtoMessage()    {}
 func (*ListClustersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{4}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{4}
 }
 func (m *ListClustersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListClustersResponse.Unmarshal(m, b)
@@ -206,8 +206,8 @@ func (m *ListClustersResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListClustersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListClustersResponse.Marshal(b, m, deterministic)
 }
-func (m *ListClustersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListClustersResponse.Merge(m, src)
+func (dst *ListClustersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListClustersResponse.Merge(dst, src)
 }
 func (m *ListClustersResponse) XXX_Size() int {
 	return xxx_messageInfo_ListClustersResponse.Size(m)
@@ -254,7 +254,7 @@ func (m *CreateClusterRequest) Reset()         { *m = CreateClusterRequest{} }
 func (m *CreateClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateClusterRequest) ProtoMessage()    {}
 func (*CreateClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{5}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{5}
 }
 func (m *CreateClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateClusterRequest.Unmarshal(m, b)
@@ -262,8 +262,8 @@ func (m *CreateClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateClusterRequest.Merge(m, src)
+func (dst *CreateClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateClusterRequest.Merge(dst, src)
 }
 func (m *CreateClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateClusterRequest.Size(m)
@@ -313,7 +313,7 @@ func (m *CreateClusterMetadata) Reset()         { *m = CreateClusterMetadata{} }
 func (m *CreateClusterMetadata) String() string { return proto.CompactTextString(m) }
 func (*CreateClusterMetadata) ProtoMessage()    {}
 func (*CreateClusterMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{6}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{6}
 }
 func (m *CreateClusterMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateClusterMetadata.Unmarshal(m, b)
@@ -321,8 +321,8 @@ func (m *CreateClusterMetadata) XXX_Unmarshal(b []byte) error {
 func (m *CreateClusterMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateClusterMetadata.Marshal(b, m, deterministic)
 }
-func (m *CreateClusterMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateClusterMetadata.Merge(m, src)
+func (dst *CreateClusterMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateClusterMetadata.Merge(dst, src)
 }
 func (m *CreateClusterMetadata) XXX_Size() int {
 	return xxx_messageInfo_CreateClusterMetadata.Size(m)
@@ -376,7 +376,7 @@ func (m *UpdateClusterMetadata) Reset()         { *m = UpdateClusterMetadata{} }
 func (m *UpdateClusterMetadata) String() string { return proto.CompactTextString(m) }
 func (*UpdateClusterMetadata) ProtoMessage()    {}
 func (*UpdateClusterMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{7}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{7}
 }
 func (m *UpdateClusterMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateClusterMetadata.Unmarshal(m, b)
@@ -384,8 +384,8 @@ func (m *UpdateClusterMetadata) XXX_Unmarshal(b []byte) error {
 func (m *UpdateClusterMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateClusterMetadata.Marshal(b, m, deterministic)
 }
-func (m *UpdateClusterMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateClusterMetadata.Merge(m, src)
+func (dst *UpdateClusterMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateClusterMetadata.Merge(dst, src)
 }
 func (m *UpdateClusterMetadata) XXX_Size() int {
 	return xxx_messageInfo_UpdateClusterMetadata.Size(m)
@@ -438,7 +438,7 @@ func (m *DeleteClusterRequest) Reset()         { *m = DeleteClusterRequest{} }
 func (m *DeleteClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteClusterRequest) ProtoMessage()    {}
 func (*DeleteClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{8}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{8}
 }
 func (m *DeleteClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteClusterRequest.Unmarshal(m, b)
@@ -446,8 +446,8 @@ func (m *DeleteClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteClusterRequest.Merge(m, src)
+func (dst *DeleteClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteClusterRequest.Merge(dst, src)
 }
 func (m *DeleteClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteClusterRequest.Size(m)
@@ -479,7 +479,7 @@ func (m *UndeleteClusterRequest) Reset()         { *m = UndeleteClusterRequest{}
 func (m *UndeleteClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*UndeleteClusterRequest) ProtoMessage()    {}
 func (*UndeleteClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{9}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{9}
 }
 func (m *UndeleteClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UndeleteClusterRequest.Unmarshal(m, b)
@@ -487,8 +487,8 @@ func (m *UndeleteClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *UndeleteClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UndeleteClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *UndeleteClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UndeleteClusterRequest.Merge(m, src)
+func (dst *UndeleteClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UndeleteClusterRequest.Merge(dst, src)
 }
 func (m *UndeleteClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_UndeleteClusterRequest.Size(m)
@@ -522,7 +522,7 @@ func (m *UndeleteClusterMetadata) Reset()         { *m = UndeleteClusterMetadata
 func (m *UndeleteClusterMetadata) String() string { return proto.CompactTextString(m) }
 func (*UndeleteClusterMetadata) ProtoMessage()    {}
 func (*UndeleteClusterMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{10}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{10}
 }
 func (m *UndeleteClusterMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UndeleteClusterMetadata.Unmarshal(m, b)
@@ -530,8 +530,8 @@ func (m *UndeleteClusterMetadata) XXX_Unmarshal(b []byte) error {
 func (m *UndeleteClusterMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UndeleteClusterMetadata.Marshal(b, m, deterministic)
 }
-func (m *UndeleteClusterMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UndeleteClusterMetadata.Merge(m, src)
+func (dst *UndeleteClusterMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UndeleteClusterMetadata.Merge(dst, src)
 }
 func (m *UndeleteClusterMetadata) XXX_Size() int {
 	return xxx_messageInfo_UndeleteClusterMetadata.Size(m)
@@ -568,7 +568,7 @@ func (m *V2OperationMetadata) Reset()         { *m = V2OperationMetadata{} }
 func (m *V2OperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*V2OperationMetadata) ProtoMessage()    {}
 func (*V2OperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2a8715cfb8408734, []int{11}
+	return fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3, []int{11}
 }
 func (m *V2OperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_V2OperationMetadata.Unmarshal(m, b)
@@ -576,8 +576,8 @@ func (m *V2OperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *V2OperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_V2OperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *V2OperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_V2OperationMetadata.Merge(m, src)
+func (dst *V2OperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_V2OperationMetadata.Merge(dst, src)
 }
 func (m *V2OperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_V2OperationMetadata.Size(m)
@@ -604,10 +604,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/bigtable/admin/cluster/v1/bigtable_cluster_service_messages.proto", fileDescriptor_2a8715cfb8408734)
+	proto.RegisterFile("google/bigtable/admin/cluster/v1/bigtable_cluster_service_messages.proto", fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3)
 }
 
-var fileDescriptor_2a8715cfb8408734 = []byte{
+var fileDescriptor_bigtable_cluster_service_messages_964162c5e08631c3 = []byte{
 	// 541 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0x4d, 0x6f, 0xd3, 0x40,
 	0x10, 0xd5, 0x26, 0xe5, 0xa3, 0xe3, 0x4a, 0xb4, 0x6e, 0x02, 0x51, 0x24, 0x44, 0x64, 0x50, 0x69,

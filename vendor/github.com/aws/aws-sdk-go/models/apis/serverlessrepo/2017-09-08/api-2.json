@@ -84,6 +84,31 @@
         "shape" : "ForbiddenException"
       } ]
     },
+    "CreateCloudFormationTemplate" : {
+      "name" : "CreateCloudFormationTemplate",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/applications/{applicationId}/templates",
+        "responseCode" : 201
+      },
+      "input" : {
+        "shape" : "CreateCloudFormationTemplateRequest"
+      },
+      "output" : {
+        "shape" : "CreateCloudFormationTemplateResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
     "DeleteApplication" : {
       "name" : "DeleteApplication",
       "http" : {
@@ -145,6 +170,56 @@
       },
       "output" : {
         "shape" : "GetApplicationPolicyResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
+    "GetCloudFormationTemplate" : {
+      "name" : "GetCloudFormationTemplate",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/applications/{applicationId}/templates/{templateId}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetCloudFormationTemplateRequest"
+      },
+      "output" : {
+        "shape" : "GetCloudFormationTemplateResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
+    "ListApplicationDependencies" : {
+      "name" : "ListApplicationDependencies",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/applications/{applicationId}/dependencies",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListApplicationDependenciesRequest"
+      },
+      "output" : {
+        "shape" : "ListApplicationDependenciesResponse"
       },
       "errors" : [ {
         "shape" : "NotFoundException"
@@ -310,6 +385,34 @@
       },
       "required" : [ "Description", "Author", "ApplicationId", "Name" ]
     },
+    "ApplicationDependencyPage" : {
+      "type" : "structure",
+      "members" : {
+        "Dependencies" : {
+          "shape" : "__listOfApplicationDependencySummary",
+          "locationName" : "dependencies"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
+        }
+      },
+      "required" : [ "Dependencies" ]
+    },
+    "ApplicationDependencySummary" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "locationName" : "applicationId"
+        },
+        "SemanticVersion" : {
+          "shape" : "__string",
+          "locationName" : "semanticVersion"
+        }
+      },
+      "required" : [ "ApplicationId", "SemanticVersion" ]
+    },
     "ApplicationPage" : {
       "type" : "structure",
       "members" : {
@@ -420,6 +523,10 @@
       "error" : {
         "httpStatusCode" : 400
       }
+    },
+    "Capability" : {
+      "type" : "string",
+      "enum" : [ "CAPABILITY_IAM", "CAPABILITY_NAMED_IAM", "CAPABILITY_AUTO_EXPAND", "CAPABILITY_RESOURCE_POLICY" ]
     },
     "ChangeSetDetails" : {
       "type" : "structure",
@@ -693,6 +800,14 @@
           "shape" : "__listOfParameterDefinition",
           "locationName" : "parameterDefinitions"
         },
+        "RequiredCapabilities" : {
+          "shape" : "__listOfCapability",
+          "locationName" : "requiredCapabilities"
+        },
+        "ResourcesSupported" : {
+          "shape" : "__boolean",
+          "locationName" : "resourcesSupported"
+        },
         "SemanticVersion" : {
           "shape" : "__string",
           "locationName" : "semanticVersion"
@@ -710,9 +825,37 @@
     "CreateCloudFormationChangeSetInput" : {
       "type" : "structure",
       "members" : {
+        "Capabilities" : {
+          "shape" : "__listOf__string",
+          "locationName" : "capabilities"
+        },
+        "ChangeSetName" : {
+          "shape" : "__string",
+          "locationName" : "changeSetName"
+        },
+        "ClientToken" : {
+          "shape" : "__string",
+          "locationName" : "clientToken"
+        },
+        "Description" : {
+          "shape" : "__string",
+          "locationName" : "description"
+        },
+        "NotificationArns" : {
+          "shape" : "__listOf__string",
+          "locationName" : "notificationArns"
+        },
         "ParameterOverrides" : {
           "shape" : "__listOfParameterValue",
           "locationName" : "parameterOverrides"
+        },
+        "ResourceTypes" : {
+          "shape" : "__listOf__string",
+          "locationName" : "resourceTypes"
+        },
+        "RollbackConfiguration" : {
+          "shape" : "RollbackConfiguration",
+          "locationName" : "rollbackConfiguration"
         },
         "SemanticVersion" : {
           "shape" : "__string",
@@ -721,6 +864,14 @@
         "StackName" : {
           "shape" : "__string",
           "locationName" : "stackName"
+        },
+        "Tags" : {
+          "shape" : "__listOfTag",
+          "locationName" : "tags"
+        },
+        "TemplateId" : {
+          "shape" : "__string",
+          "locationName" : "templateId"
         }
       },
       "required" : [ "StackName" ]
@@ -733,9 +884,37 @@
           "location" : "uri",
           "locationName" : "applicationId"
         },
+        "Capabilities" : {
+          "shape" : "__listOf__string",
+          "locationName" : "capabilities"
+        },
+        "ChangeSetName" : {
+          "shape" : "__string",
+          "locationName" : "changeSetName"
+        },
+        "ClientToken" : {
+          "shape" : "__string",
+          "locationName" : "clientToken"
+        },
+        "Description" : {
+          "shape" : "__string",
+          "locationName" : "description"
+        },
+        "NotificationArns" : {
+          "shape" : "__listOf__string",
+          "locationName" : "notificationArns"
+        },
         "ParameterOverrides" : {
           "shape" : "__listOfParameterValue",
           "locationName" : "parameterOverrides"
+        },
+        "ResourceTypes" : {
+          "shape" : "__listOf__string",
+          "locationName" : "resourceTypes"
+        },
+        "RollbackConfiguration" : {
+          "shape" : "RollbackConfiguration",
+          "locationName" : "rollbackConfiguration"
         },
         "SemanticVersion" : {
           "shape" : "__string",
@@ -744,6 +923,14 @@
         "StackName" : {
           "shape" : "__string",
           "locationName" : "stackName"
+        },
+        "Tags" : {
+          "shape" : "__listOfTag",
+          "locationName" : "tags"
+        },
+        "TemplateId" : {
+          "shape" : "__string",
+          "locationName" : "templateId"
         }
       },
       "required" : [ "ApplicationId", "StackName" ]
@@ -766,6 +953,54 @@
         "StackId" : {
           "shape" : "__string",
           "locationName" : "stackId"
+        }
+      }
+    },
+    "CreateCloudFormationTemplateRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "applicationId"
+        },
+        "SemanticVersion" : {
+          "shape" : "__string",
+          "locationName" : "semanticVersion"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "CreateCloudFormationTemplateResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "locationName" : "applicationId"
+        },
+        "CreationTime" : {
+          "shape" : "__string",
+          "locationName" : "creationTime"
+        },
+        "ExpirationTime" : {
+          "shape" : "__string",
+          "locationName" : "expirationTime"
+        },
+        "SemanticVersion" : {
+          "shape" : "__string",
+          "locationName" : "semanticVersion"
+        },
+        "Status" : {
+          "shape" : "Status",
+          "locationName" : "status"
+        },
+        "TemplateId" : {
+          "shape" : "__string",
+          "locationName" : "templateId"
+        },
+        "TemplateUrl" : {
+          "shape" : "__string",
+          "locationName" : "templateUrl"
         }
       }
     },
@@ -882,6 +1117,55 @@
         }
       }
     },
+    "GetCloudFormationTemplateRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "applicationId"
+        },
+        "TemplateId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "templateId"
+        }
+      },
+      "required" : [ "ApplicationId", "TemplateId" ]
+    },
+    "GetCloudFormationTemplateResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "locationName" : "applicationId"
+        },
+        "CreationTime" : {
+          "shape" : "__string",
+          "locationName" : "creationTime"
+        },
+        "ExpirationTime" : {
+          "shape" : "__string",
+          "locationName" : "expirationTime"
+        },
+        "SemanticVersion" : {
+          "shape" : "__string",
+          "locationName" : "semanticVersion"
+        },
+        "Status" : {
+          "shape" : "Status",
+          "locationName" : "status"
+        },
+        "TemplateId" : {
+          "shape" : "__string",
+          "locationName" : "templateId"
+        },
+        "TemplateUrl" : {
+          "shape" : "__string",
+          "locationName" : "templateUrl"
+        }
+      }
+    },
     "InternalServerErrorException" : {
       "type" : "structure",
       "members" : {
@@ -897,6 +1181,45 @@
       "exception" : true,
       "error" : {
         "httpStatusCode" : 500
+      }
+    },
+    "ListApplicationDependenciesRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "applicationId"
+        },
+        "MaxItems" : {
+          "shape" : "MaxItems",
+          "location" : "querystring",
+          "locationName" : "maxItems"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "nextToken"
+        },
+        "SemanticVersion" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "semanticVersion"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "ListApplicationDependenciesResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Dependencies" : {
+          "shape" : "__listOfApplicationDependencySummary",
+          "locationName" : "dependencies"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
+        }
       }
     },
     "ListApplicationVersionsRequest" : {
@@ -1079,6 +1402,85 @@
         }
       }
     },
+    "RollbackConfiguration" : {
+      "type" : "structure",
+      "members" : {
+        "MonitoringTimeInMinutes" : {
+          "shape" : "__integer",
+          "locationName" : "monitoringTimeInMinutes"
+        },
+        "RollbackTriggers" : {
+          "shape" : "__listOfRollbackTrigger",
+          "locationName" : "rollbackTriggers"
+        }
+      }
+    },
+    "RollbackTrigger" : {
+      "type" : "structure",
+      "members" : {
+        "Arn" : {
+          "shape" : "__string",
+          "locationName" : "arn"
+        },
+        "Type" : {
+          "shape" : "__string",
+          "locationName" : "type"
+        }
+      },
+      "required" : [ "Type", "Arn" ]
+    },
+    "Status" : {
+      "type" : "string",
+      "enum" : [ "PREPARING", "ACTIVE", "EXPIRED" ]
+    },
+    "Tag" : {
+      "type" : "structure",
+      "members" : {
+        "Key" : {
+          "shape" : "__string",
+          "locationName" : "key"
+        },
+        "Value" : {
+          "shape" : "__string",
+          "locationName" : "value"
+        }
+      },
+      "required" : [ "Value", "Key" ]
+    },
+    "TemplateDetails" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "locationName" : "applicationId"
+        },
+        "CreationTime" : {
+          "shape" : "__string",
+          "locationName" : "creationTime"
+        },
+        "ExpirationTime" : {
+          "shape" : "__string",
+          "locationName" : "expirationTime"
+        },
+        "SemanticVersion" : {
+          "shape" : "__string",
+          "locationName" : "semanticVersion"
+        },
+        "Status" : {
+          "shape" : "Status",
+          "locationName" : "status"
+        },
+        "TemplateId" : {
+          "shape" : "__string",
+          "locationName" : "templateId"
+        },
+        "TemplateUrl" : {
+          "shape" : "__string",
+          "locationName" : "templateUrl"
+        }
+      },
+      "required" : [ "Status", "TemplateUrl", "CreationTime", "ExpirationTime", "ApplicationId", "TemplateId", "SemanticVersion" ]
+    },
     "TooManyRequestsException" : {
       "type" : "structure",
       "members" : {
@@ -1224,6 +1626,14 @@
           "shape" : "__listOfParameterDefinition",
           "locationName" : "parameterDefinitions"
         },
+        "RequiredCapabilities" : {
+          "shape" : "__listOfCapability",
+          "locationName" : "requiredCapabilities"
+        },
+        "ResourcesSupported" : {
+          "shape" : "__boolean",
+          "locationName" : "resourcesSupported"
+        },
         "SemanticVersion" : {
           "shape" : "__string",
           "locationName" : "semanticVersion"
@@ -1237,7 +1647,7 @@
           "locationName" : "templateUrl"
         }
       },
-      "required" : [ "TemplateUrl", "ParameterDefinitions", "CreationTime", "ApplicationId", "SemanticVersion" ]
+      "required" : [ "TemplateUrl", "ParameterDefinitions", "ResourcesSupported", "CreationTime", "RequiredCapabilities", "ApplicationId", "SemanticVersion" ]
     },
     "VersionSummary" : {
       "type" : "structure",
@@ -1270,6 +1680,12 @@
     "__integer" : {
       "type" : "integer"
     },
+    "__listOfApplicationDependencySummary" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "ApplicationDependencySummary"
+      }
+    },
     "__listOfApplicationPolicyStatement" : {
       "type" : "list",
       "member" : {
@@ -1282,6 +1698,12 @@
         "shape" : "ApplicationSummary"
       }
     },
+    "__listOfCapability" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Capability"
+      }
+    },
     "__listOfParameterDefinition" : {
       "type" : "list",
       "member" : {
@@ -1292,6 +1714,18 @@
       "type" : "list",
       "member" : {
         "shape" : "ParameterValue"
+      }
+    },
+    "__listOfRollbackTrigger" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "RollbackTrigger"
+      }
+    },
+    "__listOfTag" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "Tag"
       }
     },
     "__listOfVersionSummary" : {

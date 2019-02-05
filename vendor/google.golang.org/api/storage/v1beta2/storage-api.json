@@ -20,7 +20,7 @@
   "description": "Lets you store and retrieve potentially-large, immutable data objects.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/storage/docs/json_api/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/HYG9EPvfiUP7tMescl4OWXAYThs\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/IGI-eBwDd7fi4jdIKOTuY8L_lfo\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/cloud_storage-16.png",
     "x32": "https://www.google.com/images/icons/product/cloud_storage-32.png"
@@ -1010,7 +1010,7 @@
           ],
           "parameters": {
             "destinationBucket": {
-              "description": "Name of the bucket in which to store the new object.",
+              "description": "Name of the bucket containing the source objects. The destination object is stored in this bucket.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -1677,7 +1677,7 @@
       }
     }
   },
-  "revision": "20180404",
+  "revision": "20180905",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Bucket": {
@@ -2073,7 +2073,7 @@
                     "storage.objects.compose"
                   ]
                 },
-                "description": "The source object's name. The source object's bucket is implicitly the destination bucket.",
+                "description": "The source object's name. All source objects must reside in the same bucket.",
                 "type": "string"
               },
               "objectPreconditions": {

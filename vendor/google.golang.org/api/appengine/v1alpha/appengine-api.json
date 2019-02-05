@@ -17,7 +17,7 @@
   "basePath": "",
   "baseUrl": "https://appengine.googleapis.com/",
   "batchPath": "batch",
-  "description": "The App Engine Admin API enables developers to provision and manage their App Engine applications.",
+  "description": "Provisions and manages developers' App Engine applications.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/appengine/docs/admin-api/",
   "icons": {
@@ -694,7 +694,7 @@
       }
     }
   },
-  "revision": "20180615",
+  "revision": "20181020",
   "rootUrl": "https://appengine.googleapis.com/",
   "schemas": {
     "AuthorizedCertificate": {

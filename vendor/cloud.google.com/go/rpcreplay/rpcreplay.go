@@ -16,25 +16,24 @@ package rpcreplay
 
 import (
 	"bufio"
+	"context"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"os"
 	"sync"
-
-	"golang.org/x/net/context"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 
 	pb "cloud.google.com/go/rpcreplay/proto/rpcreplay"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 // A Recorder records RPCs for later playback.
@@ -364,44 +363,69 @@ func (rep *Replayer) read(r io.Reader) error {
 
 // DialOptions returns the options that must be passed to grpc.Dial
 // to enable replaying.
-func (r *Replayer) DialOptions() []grpc.DialOption {
+func (rep *Replayer) DialOptions() []grpc.DialOption {
 	return []grpc.DialOption{
 		// On replay, we make no RPCs, which means the connection may be closed
 		// before the normally async Dial completes. Making the Dial synchronous
 		// fixes that.
 		grpc.WithBlock(),
-		grpc.WithUnaryInterceptor(r.interceptUnary),
-		grpc.WithStreamInterceptor(r.interceptStream),
+		grpc.WithUnaryInterceptor(rep.interceptUnary),
+		grpc.WithStreamInterceptor(rep.interceptStream),
 	}
+}
+
+// Connection returns a fake gRPC connection suitable for replaying.
+func (rep *Replayer) Connection() (*grpc.ClientConn, error) {
+	// We don't need an actual connection, not even a loopback one.
+	// But we do need something to attach gRPC interceptors to.
+	// So we start a local server and connect to it, then close it down.
+	srv := grpc.NewServer()
+	l, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		if err := srv.Serve(l); err != nil {
+			panic(err) // we should never get an error because we just connect and stop
+		}
+	}()
+	conn, err := grpc.Dial(l.Addr().String(),
+		append([]grpc.DialOption{grpc.WithInsecure()}, rep.DialOptions()...)...)
+	if err != nil {
+		return nil, err
+	}
+	conn.Close()
+	srv.Stop()
+	return conn, nil
 }
 
 // Initial returns the initial state saved by the Recorder.
-func (r *Replayer) Initial() []byte { return r.initial }
+func (rep *Replayer) Initial() []byte { return rep.initial }
 
 // SetLogFunc sets a function to be used for debug logging. The function
 // should be safe to be called from multiple goroutines.
-func (r *Replayer) SetLogFunc(f func(format string, v ...interface{})) {
-	r.log = f
+func (rep *Replayer) SetLogFunc(f func(format string, v ...interface{})) {
+	rep.log = f
 }
 
 // Close closes the Replayer.
-func (r *Replayer) Close() error {
+func (rep *Replayer) Close() error {
 	return nil
 }
 
-func (r *Replayer) interceptUnary(_ context.Context, method string, req, res interface{}, _ *grpc.ClientConn, _ grpc.UnaryInvoker, _ ...grpc.CallOption) error {
+func (rep *Replayer) interceptUnary(_ context.Context, method string, req, res interface{}, _ *grpc.ClientConn, _ grpc.UnaryInvoker, _ ...grpc.CallOption) error {
 	mreq := req.(proto.Message)
-	if r.BeforeFunc != nil {
-		if err := r.BeforeFunc(method, mreq); err != nil {
+	if rep.BeforeFunc != nil {
+		if err := rep.BeforeFunc(method, mreq); err != nil {
 			return err
 		}
 	}
-	r.log("request %s (%s)", method, req)
-	call := r.extractCall(method, mreq)
+	rep.log("request %s (%s)", method, req)
+	call := rep.extractCall(method, mreq)
 	if call == nil {
 		return fmt.Errorf("replayer: request not found: %s", mreq)
 	}
-	r.log("returning %v", call.response)
+	rep.log("returning %v", call.response)
 	if call.response.err != nil {
 		return call.response.err
 	}
@@ -409,9 +433,9 @@ func (r *Replayer) interceptUnary(_ context.Context, method string, req, res int
 	return nil
 }
 
-func (r *Replayer) interceptStream(ctx context.Context, _ *grpc.StreamDesc, _ *grpc.ClientConn, method string, _ grpc.Streamer, _ ...grpc.CallOption) (grpc.ClientStream, error) {
-	r.log("create-stream %s", method)
-	str := r.extractStream(method)
+func (rep *Replayer) interceptStream(ctx context.Context, _ *grpc.StreamDesc, _ *grpc.ClientConn, method string, _ grpc.Streamer, _ ...grpc.CallOption) (grpc.ClientStream, error) {
+	rep.log("create-stream %s", method)
+	str := rep.extractStream(method)
 	if str == nil {
 		return nil, fmt.Errorf("replayer: stream not found for method %s", method)
 	}
@@ -469,30 +493,30 @@ func (rcs *repClientStream) CloseSend() error {
 
 // extractCall finds the first call in the list with the same method
 // and request. It returns nil if it can't find such a call.
-func (r *Replayer) extractCall(method string, req proto.Message) *call {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	for i, call := range r.calls {
+func (rep *Replayer) extractCall(method string, req proto.Message) *call {
+	rep.mu.Lock()
+	defer rep.mu.Unlock()
+	for i, call := range rep.calls {
 		if call == nil {
 			continue
 		}
 		if method == call.method && proto.Equal(req, call.request) {
-			r.calls[i] = nil // nil out this call so we don't reuse it
+			rep.calls[i] = nil // nil out this call so we don't reuse it
 			return call
 		}
 	}
 	return nil
 }
 
-func (r *Replayer) extractStream(method string) *stream {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	for i, stream := range r.streams {
+func (rep *Replayer) extractStream(method string) *stream {
+	rep.mu.Lock()
+	defer rep.mu.Unlock()
+	for i, stream := range rep.streams {
 		if stream == nil {
 			continue
 		}
 		if method == stream.method {
-			r.streams[i] = nil
+			rep.streams[i] = nil
 			return stream
 		}
 	}

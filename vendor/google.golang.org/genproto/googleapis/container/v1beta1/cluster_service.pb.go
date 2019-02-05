@@ -8,6 +8,7 @@ import fmt "fmt"
 import math "math"
 import empty "github.com/golang/protobuf/ptypes/empty"
 import _ "google.golang.org/genproto/googleapis/api/annotations"
+import _ "google.golang.org/genproto/googleapis/iam/v1"
 
 import (
 	context "golang.org/x/net/context"
@@ -45,7 +46,6 @@ var NodeTaint_Effect_name = map[int32]string{
 	2: "PREFER_NO_SCHEDULE",
 	3: "NO_EXECUTE",
 }
-
 var NodeTaint_Effect_value = map[string]int32{
 	"EFFECT_UNSPECIFIED": 0,
 	"NO_SCHEDULE":        1,
@@ -56,9 +56,34 @@ var NodeTaint_Effect_value = map[string]int32{
 func (x NodeTaint_Effect) String() string {
 	return proto.EnumName(NodeTaint_Effect_name, int32(x))
 }
-
 func (NodeTaint_Effect) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{1, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{1, 0}
+}
+
+// Istio auth mode, https://istio.io/docs/concepts/security/mutual-tls.html
+type IstioConfig_IstioAuthMode int32
+
+const (
+	// auth not enabled
+	IstioConfig_AUTH_NONE IstioConfig_IstioAuthMode = 0
+	// auth mutual TLS enabled
+	IstioConfig_AUTH_MUTUAL_TLS IstioConfig_IstioAuthMode = 1
+)
+
+var IstioConfig_IstioAuthMode_name = map[int32]string{
+	0: "AUTH_NONE",
+	1: "AUTH_MUTUAL_TLS",
+}
+var IstioConfig_IstioAuthMode_value = map[string]int32{
+	"AUTH_NONE":       0,
+	"AUTH_MUTUAL_TLS": 1,
+}
+
+func (x IstioConfig_IstioAuthMode) String() string {
+	return proto.EnumName(IstioConfig_IstioAuthMode_name, int32(x))
+}
+func (IstioConfig_IstioAuthMode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{10, 0}
 }
 
 // Allowed Network Policy providers.
@@ -75,7 +100,6 @@ var NetworkPolicy_Provider_name = map[int32]string{
 	0: "PROVIDER_UNSPECIFIED",
 	1: "CALICO",
 }
-
 var NetworkPolicy_Provider_value = map[string]int32{
 	"PROVIDER_UNSPECIFIED": 0,
 	"CALICO":               1,
@@ -84,9 +108,8 @@ var NetworkPolicy_Provider_value = map[string]int32{
 func (x NetworkPolicy_Provider) String() string {
 	return proto.EnumName(NetworkPolicy_Provider_name, int32(x))
 }
-
 func (NetworkPolicy_Provider) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{10, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{14, 0}
 }
 
 // The current status of the cluster.
@@ -109,6 +132,9 @@ const (
 	// The ERROR state indicates the cluster may be unusable. Details
 	// can be found in the `statusMessage` field.
 	Cluster_ERROR Cluster_Status = 5
+	// The DEGRADED state indicates the cluster requires user action to restore
+	// full functionality. Details can be found in the `statusMessage` field.
+	Cluster_DEGRADED Cluster_Status = 6
 )
 
 var Cluster_Status_name = map[int32]string{
@@ -118,8 +144,8 @@ var Cluster_Status_name = map[int32]string{
 	3: "RECONCILING",
 	4: "STOPPING",
 	5: "ERROR",
+	6: "DEGRADED",
 }
-
 var Cluster_Status_value = map[string]int32{
 	"STATUS_UNSPECIFIED": 0,
 	"PROVISIONING":       1,
@@ -127,14 +153,14 @@ var Cluster_Status_value = map[string]int32{
 	"RECONCILING":        3,
 	"STOPPING":           4,
 	"ERROR":              5,
+	"DEGRADED":           6,
 }
 
 func (x Cluster_Status) String() string {
 	return proto.EnumName(Cluster_Status_name, int32(x))
 }
-
 func (Cluster_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{13, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{18, 0}
 }
 
 // Current status of the operation.
@@ -160,7 +186,6 @@ var Operation_Status_name = map[int32]string{
 	3: "DONE",
 	4: "ABORTING",
 }
-
 var Operation_Status_value = map[string]int32{
 	"STATUS_UNSPECIFIED": 0,
 	"PENDING":            1,
@@ -172,9 +197,8 @@ var Operation_Status_value = map[string]int32{
 func (x Operation_Status) String() string {
 	return proto.EnumName(Operation_Status_name, int32(x))
 }
-
 func (Operation_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{15, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{20, 0}
 }
 
 // Operation type.
@@ -236,7 +260,6 @@ var Operation_Type_name = map[int32]string{
 	15: "SET_NETWORK_POLICY",
 	16: "SET_MAINTENANCE_POLICY",
 }
-
 var Operation_Type_value = map[string]int32{
 	"TYPE_UNSPECIFIED":         0,
 	"CREATE_CLUSTER":           1,
@@ -260,9 +283,8 @@ var Operation_Type_value = map[string]int32{
 func (x Operation_Type) String() string {
 	return proto.EnumName(Operation_Type_name, int32(x))
 }
-
 func (Operation_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{15, 1}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{20, 1}
 }
 
 // Operation type: what type update to perform.
@@ -288,7 +310,6 @@ var SetMasterAuthRequest_Action_name = map[int32]string{
 	2: "GENERATE_PASSWORD",
 	3: "SET_USERNAME",
 }
-
 var SetMasterAuthRequest_Action_value = map[string]int32{
 	"UNKNOWN":           0,
 	"SET_PASSWORD":      1,
@@ -299,9 +320,8 @@ var SetMasterAuthRequest_Action_value = map[string]int32{
 func (x SetMasterAuthRequest_Action) String() string {
 	return proto.EnumName(SetMasterAuthRequest_Action_name, int32(x))
 }
-
 func (SetMasterAuthRequest_Action) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{19, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{32, 0}
 }
 
 // The current status of the node pool instance.
@@ -340,7 +360,6 @@ var NodePool_Status_name = map[int32]string{
 	5: "STOPPING",
 	6: "ERROR",
 }
-
 var NodePool_Status_value = map[string]int32{
 	"STATUS_UNSPECIFIED": 0,
 	"PROVISIONING":       1,
@@ -354,9 +373,158 @@ var NodePool_Status_value = map[string]int32{
 func (x NodePool_Status) String() string {
 	return proto.EnumName(NodePool_Status_name, int32(x))
 }
-
 func (NodePool_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{33, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{46, 0}
+}
+
+// NodeMetadata is the configuration for if and how to expose the node
+// metadata to the workload running on the node.
+type WorkloadMetadataConfig_NodeMetadata int32
+
+const (
+	// Not set.
+	WorkloadMetadataConfig_UNSPECIFIED WorkloadMetadataConfig_NodeMetadata = 0
+	// Prevent workloads not in hostNetwork from accessing certain VM metadata,
+	// specifically kube-env, which contains Kubelet credentials, and the
+	// instance identity token.
+	//
+	// Metadata concealment is a temporary security solution available while the
+	// bootstrapping process for cluster nodes is being redesigned with
+	// significant security improvements.  This feature is scheduled to be
+	// deprecated in the future and later removed.
+	WorkloadMetadataConfig_SECURE WorkloadMetadataConfig_NodeMetadata = 1
+	// Expose all VM metadata to pods.
+	WorkloadMetadataConfig_EXPOSE WorkloadMetadataConfig_NodeMetadata = 2
+)
+
+var WorkloadMetadataConfig_NodeMetadata_name = map[int32]string{
+	0: "UNSPECIFIED",
+	1: "SECURE",
+	2: "EXPOSE",
+}
+var WorkloadMetadataConfig_NodeMetadata_value = map[string]int32{
+	"UNSPECIFIED": 0,
+	"SECURE":      1,
+	"EXPOSE":      2,
+}
+
+func (x WorkloadMetadataConfig_NodeMetadata) String() string {
+	return proto.EnumName(WorkloadMetadataConfig_NodeMetadata_name, int32(x))
+}
+func (WorkloadMetadataConfig_NodeMetadata) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{64, 0}
+}
+
+// LocationType is the type of GKE location, regional or zonal.
+type Location_LocationType int32
+
+const (
+	// LOCATION_TYPE_UNSPECIFIED means the location type was not determined.
+	Location_LOCATION_TYPE_UNSPECIFIED Location_LocationType = 0
+	// A GKE Location where Zonal clusters can be created.
+	Location_ZONE Location_LocationType = 1
+	// A GKE Location where Regional clusters can be created.
+	Location_REGION Location_LocationType = 2
+)
+
+var Location_LocationType_name = map[int32]string{
+	0: "LOCATION_TYPE_UNSPECIFIED",
+	1: "ZONE",
+	2: "REGION",
+}
+var Location_LocationType_value = map[string]int32{
+	"LOCATION_TYPE_UNSPECIFIED": 0,
+	"ZONE":                      1,
+	"REGION":                    2,
+}
+
+func (x Location_LocationType) String() string {
+	return proto.EnumName(Location_LocationType_name, int32(x))
+}
+func (Location_LocationType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{69, 0}
+}
+
+// Code for each condition
+type StatusCondition_Code int32
+
+const (
+	// UNKNOWN indicates a generic condition.
+	StatusCondition_UNKNOWN StatusCondition_Code = 0
+	// GCE_STOCKOUT indicates a Google Compute Engine stockout.
+	StatusCondition_GCE_STOCKOUT StatusCondition_Code = 1
+	// GKE_SERVICE_ACCOUNT_DELETED indicates that the user deleted their robot
+	// service account.
+	StatusCondition_GKE_SERVICE_ACCOUNT_DELETED StatusCondition_Code = 2
+	// Google Compute Engine quota was exceeded.
+	StatusCondition_GCE_QUOTA_EXCEEDED StatusCondition_Code = 3
+	// Cluster state was manually changed by an SRE due to a system logic error.
+	// More codes TBA
+	StatusCondition_SET_BY_OPERATOR StatusCondition_Code = 4
+)
+
+var StatusCondition_Code_name = map[int32]string{
+	0: "UNKNOWN",
+	1: "GCE_STOCKOUT",
+	2: "GKE_SERVICE_ACCOUNT_DELETED",
+	3: "GCE_QUOTA_EXCEEDED",
+	4: "SET_BY_OPERATOR",
+}
+var StatusCondition_Code_value = map[string]int32{
+	"UNKNOWN":                     0,
+	"GCE_STOCKOUT":                1,
+	"GKE_SERVICE_ACCOUNT_DELETED": 2,
+	"GCE_QUOTA_EXCEEDED":          3,
+	"SET_BY_OPERATOR":             4,
+}
+
+func (x StatusCondition_Code) String() string {
+	return proto.EnumName(StatusCondition_Code_name, int32(x))
+}
+func (StatusCondition_Code) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{70, 0}
+}
+
+// Status shows the current usage of a secondary IP range.
+type UsableSubnetworkSecondaryRange_Status int32
+
+const (
+	// UNKNOWN is the zero value of the Status enum. It's not a valid status.
+	UsableSubnetworkSecondaryRange_UNKNOWN UsableSubnetworkSecondaryRange_Status = 0
+	// UNUSED denotes that this range is unclaimed by any cluster.
+	UsableSubnetworkSecondaryRange_UNUSED UsableSubnetworkSecondaryRange_Status = 1
+	// IN_USE_SERVICE denotes that this range is claimed by a cluster for
+	// services. It cannot be used for other clusters.
+	UsableSubnetworkSecondaryRange_IN_USE_SERVICE UsableSubnetworkSecondaryRange_Status = 2
+	// IN_USE_SHAREABLE_POD denotes this range was created by the network admin
+	// and is currently claimed by a cluster for pods. It can only be used by
+	// other clusters as a pod range.
+	UsableSubnetworkSecondaryRange_IN_USE_SHAREABLE_POD UsableSubnetworkSecondaryRange_Status = 3
+	// IN_USE_MANAGED_POD denotes this range was created by GKE and is claimed
+	// for pods. It cannot be used for other clusters.
+	UsableSubnetworkSecondaryRange_IN_USE_MANAGED_POD UsableSubnetworkSecondaryRange_Status = 4
+)
+
+var UsableSubnetworkSecondaryRange_Status_name = map[int32]string{
+	0: "UNKNOWN",
+	1: "UNUSED",
+	2: "IN_USE_SERVICE",
+	3: "IN_USE_SHAREABLE_POD",
+	4: "IN_USE_MANAGED_POD",
+}
+var UsableSubnetworkSecondaryRange_Status_value = map[string]int32{
+	"UNKNOWN":              0,
+	"UNUSED":               1,
+	"IN_USE_SERVICE":       2,
+	"IN_USE_SHAREABLE_POD": 3,
+	"IN_USE_MANAGED_POD":   4,
+}
+
+func (x UsableSubnetworkSecondaryRange_Status) String() string {
+	return proto.EnumName(UsableSubnetworkSecondaryRange_Status_name, int32(x))
+}
+func (UsableSubnetworkSecondaryRange_Status) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{74, 0}
 }
 
 // Parameters that describe the nodes in a cluster.
@@ -396,8 +564,18 @@ type NodeConfig struct {
 	// Keys must conform to the regexp [a-zA-Z0-9-_]+ and be less than 128 bytes
 	// in length. These are reflected as part of a URL in the metadata server.
 	// Additionally, to avoid ambiguity, keys must not conflict with any other
-	// metadata keys for the project or be one of the four reserved keys:
-	// "instance-template", "kube-env", "startup-script", and "user-data"
+	// metadata keys for the project or be one of the reserved keys:
+	//  "cluster-location"
+	//  "cluster-name"
+	//  "cluster-uid"
+	//  "configure-sh"
+	//  "enable-oslogin"
+	//  "gci-ensure-gke-docker"
+	//  "gci-update-strategy"
+	//  "instance-template"
+	//  "kube-env"
+	//  "startup-script"
+	//  "user-data"
 	//
 	// Values are free-form strings, and only have meaning as interpreted by
 	// the image running in the instance. The only restriction placed on them is
@@ -437,13 +615,20 @@ type NodeConfig struct {
 	// See https://cloud.google.com/compute/docs/gpus for more information about
 	// support for GPUs.
 	Accelerators []*AcceleratorConfig `protobuf:"bytes,11,rep,name=accelerators,proto3" json:"accelerators,omitempty"`
+	// Type of the disk attached to each node (e.g. 'pd-standard' or 'pd-ssd')
+	//
+	// If unspecified, the default disk type is 'pd-standard'
+	DiskType string `protobuf:"bytes,12,opt,name=disk_type,json=diskType,proto3" json:"disk_type,omitempty"`
 	// Minimum CPU platform to be used by this instance. The instance may be
 	// scheduled on the specified or newer CPU platform. Applicable values are the
 	// friendly names of CPU platforms, such as
 	// <code>minCpuPlatform: &quot;Intel Haswell&quot;</code> or
 	// <code>minCpuPlatform: &quot;Intel Sandy Bridge&quot;</code>. For more
-	// information, read [how to specify min CPU platform](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
+	// information, read [how to specify min CPU
+	// platform](https://cloud.google.com/compute/docs/instances/specify-min-cpu-platform)
 	MinCpuPlatform string `protobuf:"bytes,13,opt,name=min_cpu_platform,json=minCpuPlatform,proto3" json:"min_cpu_platform,omitempty"`
+	// The workload metadata configuration for this node.
+	WorkloadMetadataConfig *WorkloadMetadataConfig `protobuf:"bytes,14,opt,name=workload_metadata_config,json=workloadMetadataConfig,proto3" json:"workload_metadata_config,omitempty"`
 	// List of kubernetes taints to be applied to each node.
 	//
 	// For more information, including usage and the valid values, see:
@@ -458,7 +643,7 @@ func (m *NodeConfig) Reset()         { *m = NodeConfig{} }
 func (m *NodeConfig) String() string { return proto.CompactTextString(m) }
 func (*NodeConfig) ProtoMessage()    {}
 func (*NodeConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{0}
 }
 func (m *NodeConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NodeConfig.Unmarshal(m, b)
@@ -466,8 +651,8 @@ func (m *NodeConfig) XXX_Unmarshal(b []byte) error {
 func (m *NodeConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NodeConfig.Marshal(b, m, deterministic)
 }
-func (m *NodeConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodeConfig.Merge(m, src)
+func (dst *NodeConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeConfig.Merge(dst, src)
 }
 func (m *NodeConfig) XXX_Size() int {
 	return xxx_messageInfo_NodeConfig.Size(m)
@@ -555,11 +740,25 @@ func (m *NodeConfig) GetAccelerators() []*AcceleratorConfig {
 	return nil
 }
 
+func (m *NodeConfig) GetDiskType() string {
+	if m != nil {
+		return m.DiskType
+	}
+	return ""
+}
+
 func (m *NodeConfig) GetMinCpuPlatform() string {
 	if m != nil {
 		return m.MinCpuPlatform
 	}
 	return ""
+}
+
+func (m *NodeConfig) GetWorkloadMetadataConfig() *WorkloadMetadataConfig {
+	if m != nil {
+		return m.WorkloadMetadataConfig
+	}
+	return nil
 }
 
 func (m *NodeConfig) GetTaints() []*NodeTaint {
@@ -590,7 +789,7 @@ func (m *NodeTaint) Reset()         { *m = NodeTaint{} }
 func (m *NodeTaint) String() string { return proto.CompactTextString(m) }
 func (*NodeTaint) ProtoMessage()    {}
 func (*NodeTaint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{1}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{1}
 }
 func (m *NodeTaint) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NodeTaint.Unmarshal(m, b)
@@ -598,8 +797,8 @@ func (m *NodeTaint) XXX_Unmarshal(b []byte) error {
 func (m *NodeTaint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NodeTaint.Marshal(b, m, deterministic)
 }
-func (m *NodeTaint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodeTaint.Merge(m, src)
+func (dst *NodeTaint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeTaint.Merge(dst, src)
 }
 func (m *NodeTaint) XXX_Size() int {
 	return xxx_messageInfo_NodeTaint.Size(m)
@@ -636,16 +835,17 @@ func (m *NodeTaint) GetEffect() NodeTaint_Effect {
 // certificates.
 type MasterAuth struct {
 	// The username to use for HTTP basic authentication to the master endpoint.
-	// For clusters v1.6.0 and later, you can disable basic authentication by
-	// providing an empty username.
+	// For clusters v1.6.0 and later, basic authentication can be disabled by
+	// leaving username unspecified (or setting it to the empty string).
 	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	// The password to use for HTTP basic authentication to the master endpoint.
 	// Because the master endpoint is open to the Internet, you should create a
 	// strong password.  If a password is provided for cluster creation, username
 	// must be non-empty.
 	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	// Configuration for client certificate authentication on the cluster.  If no
-	// configuration is specified, a client certificate is issued.
+	// Configuration for client certificate authentication on the cluster. For
+	// clusters before v1.12, if no configuration is specified, a client
+	// certificate is issued.
 	ClientCertificateConfig *ClientCertificateConfig `protobuf:"bytes,3,opt,name=client_certificate_config,json=clientCertificateConfig,proto3" json:"client_certificate_config,omitempty"`
 	// [Output only] Base64-encoded public certificate that is the root of
 	// trust for the cluster.
@@ -665,7 +865,7 @@ func (m *MasterAuth) Reset()         { *m = MasterAuth{} }
 func (m *MasterAuth) String() string { return proto.CompactTextString(m) }
 func (*MasterAuth) ProtoMessage()    {}
 func (*MasterAuth) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{2}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{2}
 }
 func (m *MasterAuth) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MasterAuth.Unmarshal(m, b)
@@ -673,8 +873,8 @@ func (m *MasterAuth) XXX_Unmarshal(b []byte) error {
 func (m *MasterAuth) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MasterAuth.Marshal(b, m, deterministic)
 }
-func (m *MasterAuth) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MasterAuth.Merge(m, src)
+func (dst *MasterAuth) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MasterAuth.Merge(dst, src)
 }
 func (m *MasterAuth) XXX_Size() int {
 	return xxx_messageInfo_MasterAuth.Size(m)
@@ -740,7 +940,7 @@ func (m *ClientCertificateConfig) Reset()         { *m = ClientCertificateConfig
 func (m *ClientCertificateConfig) String() string { return proto.CompactTextString(m) }
 func (*ClientCertificateConfig) ProtoMessage()    {}
 func (*ClientCertificateConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{3}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{3}
 }
 func (m *ClientCertificateConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClientCertificateConfig.Unmarshal(m, b)
@@ -748,8 +948,8 @@ func (m *ClientCertificateConfig) XXX_Unmarshal(b []byte) error {
 func (m *ClientCertificateConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ClientCertificateConfig.Marshal(b, m, deterministic)
 }
-func (m *ClientCertificateConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClientCertificateConfig.Merge(m, src)
+func (dst *ClientCertificateConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientCertificateConfig.Merge(dst, src)
 }
 func (m *ClientCertificateConfig) XXX_Size() int {
 	return xxx_messageInfo_ClientCertificateConfig.Size(m)
@@ -782,17 +982,24 @@ type AddonsConfig struct {
 	// Configuration for NetworkPolicy. This only tracks whether the addon
 	// is enabled or not on the Master, it does not track whether network policy
 	// is enabled for the nodes.
-	NetworkPolicyConfig  *NetworkPolicyConfig `protobuf:"bytes,4,opt,name=network_policy_config,json=networkPolicyConfig,proto3" json:"network_policy_config,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_unrecognized     []byte               `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	NetworkPolicyConfig *NetworkPolicyConfig `protobuf:"bytes,4,opt,name=network_policy_config,json=networkPolicyConfig,proto3" json:"network_policy_config,omitempty"`
+	// Configuration for Istio, an open platform to connect, manage, and secure
+	// microservices.
+	IstioConfig *IstioConfig `protobuf:"bytes,5,opt,name=istio_config,json=istioConfig,proto3" json:"istio_config,omitempty"`
+	// Configuration for the Cloud Run addon. The `IstioConfig` addon must be
+	// enabled in order to enable Cloud Run addon. This option can only be enabled
+	// at cluster creation time.
+	CloudRunConfig       *CloudRunConfig `protobuf:"bytes,7,opt,name=cloud_run_config,json=cloudRunConfig,proto3" json:"cloud_run_config,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *AddonsConfig) Reset()         { *m = AddonsConfig{} }
 func (m *AddonsConfig) String() string { return proto.CompactTextString(m) }
 func (*AddonsConfig) ProtoMessage()    {}
 func (*AddonsConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{4}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{4}
 }
 func (m *AddonsConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AddonsConfig.Unmarshal(m, b)
@@ -800,8 +1007,8 @@ func (m *AddonsConfig) XXX_Unmarshal(b []byte) error {
 func (m *AddonsConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AddonsConfig.Marshal(b, m, deterministic)
 }
-func (m *AddonsConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddonsConfig.Merge(m, src)
+func (dst *AddonsConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddonsConfig.Merge(dst, src)
 }
 func (m *AddonsConfig) XXX_Size() int {
 	return xxx_messageInfo_AddonsConfig.Size(m)
@@ -840,6 +1047,20 @@ func (m *AddonsConfig) GetNetworkPolicyConfig() *NetworkPolicyConfig {
 	return nil
 }
 
+func (m *AddonsConfig) GetIstioConfig() *IstioConfig {
+	if m != nil {
+		return m.IstioConfig
+	}
+	return nil
+}
+
+func (m *AddonsConfig) GetCloudRunConfig() *CloudRunConfig {
+	if m != nil {
+		return m.CloudRunConfig
+	}
+	return nil
+}
+
 // Configuration options for the HTTP (L7) load balancing controller addon,
 // which makes it easy to set up HTTP load balancers for services in a cluster.
 type HttpLoadBalancing struct {
@@ -856,7 +1077,7 @@ func (m *HttpLoadBalancing) Reset()         { *m = HttpLoadBalancing{} }
 func (m *HttpLoadBalancing) String() string { return proto.CompactTextString(m) }
 func (*HttpLoadBalancing) ProtoMessage()    {}
 func (*HttpLoadBalancing) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{5}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{5}
 }
 func (m *HttpLoadBalancing) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HttpLoadBalancing.Unmarshal(m, b)
@@ -864,8 +1085,8 @@ func (m *HttpLoadBalancing) XXX_Unmarshal(b []byte) error {
 func (m *HttpLoadBalancing) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HttpLoadBalancing.Marshal(b, m, deterministic)
 }
-func (m *HttpLoadBalancing) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HttpLoadBalancing.Merge(m, src)
+func (dst *HttpLoadBalancing) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpLoadBalancing.Merge(dst, src)
 }
 func (m *HttpLoadBalancing) XXX_Size() int {
 	return xxx_messageInfo_HttpLoadBalancing.Size(m)
@@ -900,7 +1121,7 @@ func (m *HorizontalPodAutoscaling) Reset()         { *m = HorizontalPodAutoscali
 func (m *HorizontalPodAutoscaling) String() string { return proto.CompactTextString(m) }
 func (*HorizontalPodAutoscaling) ProtoMessage()    {}
 func (*HorizontalPodAutoscaling) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{6}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{6}
 }
 func (m *HorizontalPodAutoscaling) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HorizontalPodAutoscaling.Unmarshal(m, b)
@@ -908,8 +1129,8 @@ func (m *HorizontalPodAutoscaling) XXX_Unmarshal(b []byte) error {
 func (m *HorizontalPodAutoscaling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HorizontalPodAutoscaling.Marshal(b, m, deterministic)
 }
-func (m *HorizontalPodAutoscaling) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HorizontalPodAutoscaling.Merge(m, src)
+func (dst *HorizontalPodAutoscaling) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HorizontalPodAutoscaling.Merge(dst, src)
 }
 func (m *HorizontalPodAutoscaling) XXX_Size() int {
 	return xxx_messageInfo_HorizontalPodAutoscaling.Size(m)
@@ -940,7 +1161,7 @@ func (m *KubernetesDashboard) Reset()         { *m = KubernetesDashboard{} }
 func (m *KubernetesDashboard) String() string { return proto.CompactTextString(m) }
 func (*KubernetesDashboard) ProtoMessage()    {}
 func (*KubernetesDashboard) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{7}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{7}
 }
 func (m *KubernetesDashboard) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KubernetesDashboard.Unmarshal(m, b)
@@ -948,8 +1169,8 @@ func (m *KubernetesDashboard) XXX_Unmarshal(b []byte) error {
 func (m *KubernetesDashboard) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_KubernetesDashboard.Marshal(b, m, deterministic)
 }
-func (m *KubernetesDashboard) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_KubernetesDashboard.Merge(m, src)
+func (dst *KubernetesDashboard) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KubernetesDashboard.Merge(dst, src)
 }
 func (m *KubernetesDashboard) XXX_Size() int {
 	return xxx_messageInfo_KubernetesDashboard.Size(m)
@@ -982,7 +1203,7 @@ func (m *NetworkPolicyConfig) Reset()         { *m = NetworkPolicyConfig{} }
 func (m *NetworkPolicyConfig) String() string { return proto.CompactTextString(m) }
 func (*NetworkPolicyConfig) ProtoMessage()    {}
 func (*NetworkPolicyConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{8}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{8}
 }
 func (m *NetworkPolicyConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NetworkPolicyConfig.Unmarshal(m, b)
@@ -990,8 +1211,8 @@ func (m *NetworkPolicyConfig) XXX_Unmarshal(b []byte) error {
 func (m *NetworkPolicyConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NetworkPolicyConfig.Marshal(b, m, deterministic)
 }
-func (m *NetworkPolicyConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NetworkPolicyConfig.Merge(m, src)
+func (dst *NetworkPolicyConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkPolicyConfig.Merge(dst, src)
 }
 func (m *NetworkPolicyConfig) XXX_Size() int {
 	return xxx_messageInfo_NetworkPolicyConfig.Size(m)
@@ -1003,6 +1224,176 @@ func (m *NetworkPolicyConfig) XXX_DiscardUnknown() {
 var xxx_messageInfo_NetworkPolicyConfig proto.InternalMessageInfo
 
 func (m *NetworkPolicyConfig) GetDisabled() bool {
+	if m != nil {
+		return m.Disabled
+	}
+	return false
+}
+
+// Configuration options for private clusters.
+type PrivateClusterConfig struct {
+	// Whether nodes have internal IP addresses only. If enabled, all nodes are
+	// given only RFC 1918 private addresses and communicate with the master via
+	// private networking.
+	EnablePrivateNodes bool `protobuf:"varint,1,opt,name=enable_private_nodes,json=enablePrivateNodes,proto3" json:"enable_private_nodes,omitempty"`
+	// Whether the master's internal IP address is used as the cluster endpoint.
+	EnablePrivateEndpoint bool `protobuf:"varint,2,opt,name=enable_private_endpoint,json=enablePrivateEndpoint,proto3" json:"enable_private_endpoint,omitempty"`
+	// The IP range in CIDR notation to use for the hosted master network. This
+	// range will be used for assigning internal IP addresses to the master or
+	// set of masters, as well as the ILB VIP. This range must not overlap with
+	// any other ranges in use within the cluster's network.
+	MasterIpv4CidrBlock string `protobuf:"bytes,3,opt,name=master_ipv4_cidr_block,json=masterIpv4CidrBlock,proto3" json:"master_ipv4_cidr_block,omitempty"`
+	// Output only. The internal IP address of this cluster's master endpoint.
+	PrivateEndpoint string `protobuf:"bytes,4,opt,name=private_endpoint,json=privateEndpoint,proto3" json:"private_endpoint,omitempty"`
+	// Output only. The external IP address of this cluster's master endpoint.
+	PublicEndpoint       string   `protobuf:"bytes,5,opt,name=public_endpoint,json=publicEndpoint,proto3" json:"public_endpoint,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PrivateClusterConfig) Reset()         { *m = PrivateClusterConfig{} }
+func (m *PrivateClusterConfig) String() string { return proto.CompactTextString(m) }
+func (*PrivateClusterConfig) ProtoMessage()    {}
+func (*PrivateClusterConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{9}
+}
+func (m *PrivateClusterConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PrivateClusterConfig.Unmarshal(m, b)
+}
+func (m *PrivateClusterConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PrivateClusterConfig.Marshal(b, m, deterministic)
+}
+func (dst *PrivateClusterConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PrivateClusterConfig.Merge(dst, src)
+}
+func (m *PrivateClusterConfig) XXX_Size() int {
+	return xxx_messageInfo_PrivateClusterConfig.Size(m)
+}
+func (m *PrivateClusterConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrivateClusterConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PrivateClusterConfig proto.InternalMessageInfo
+
+func (m *PrivateClusterConfig) GetEnablePrivateNodes() bool {
+	if m != nil {
+		return m.EnablePrivateNodes
+	}
+	return false
+}
+
+func (m *PrivateClusterConfig) GetEnablePrivateEndpoint() bool {
+	if m != nil {
+		return m.EnablePrivateEndpoint
+	}
+	return false
+}
+
+func (m *PrivateClusterConfig) GetMasterIpv4CidrBlock() string {
+	if m != nil {
+		return m.MasterIpv4CidrBlock
+	}
+	return ""
+}
+
+func (m *PrivateClusterConfig) GetPrivateEndpoint() string {
+	if m != nil {
+		return m.PrivateEndpoint
+	}
+	return ""
+}
+
+func (m *PrivateClusterConfig) GetPublicEndpoint() string {
+	if m != nil {
+		return m.PublicEndpoint
+	}
+	return ""
+}
+
+// Configuration options for Istio addon.
+type IstioConfig struct {
+	// Whether Istio is enabled for this cluster.
+	Disabled bool `protobuf:"varint,1,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	// The specified Istio auth mode, either none, or mutual TLS.
+	Auth                 IstioConfig_IstioAuthMode `protobuf:"varint,2,opt,name=auth,proto3,enum=google.container.v1beta1.IstioConfig_IstioAuthMode" json:"auth,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                  `json:"-"`
+	XXX_unrecognized     []byte                    `json:"-"`
+	XXX_sizecache        int32                     `json:"-"`
+}
+
+func (m *IstioConfig) Reset()         { *m = IstioConfig{} }
+func (m *IstioConfig) String() string { return proto.CompactTextString(m) }
+func (*IstioConfig) ProtoMessage()    {}
+func (*IstioConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{10}
+}
+func (m *IstioConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IstioConfig.Unmarshal(m, b)
+}
+func (m *IstioConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IstioConfig.Marshal(b, m, deterministic)
+}
+func (dst *IstioConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IstioConfig.Merge(dst, src)
+}
+func (m *IstioConfig) XXX_Size() int {
+	return xxx_messageInfo_IstioConfig.Size(m)
+}
+func (m *IstioConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_IstioConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IstioConfig proto.InternalMessageInfo
+
+func (m *IstioConfig) GetDisabled() bool {
+	if m != nil {
+		return m.Disabled
+	}
+	return false
+}
+
+func (m *IstioConfig) GetAuth() IstioConfig_IstioAuthMode {
+	if m != nil {
+		return m.Auth
+	}
+	return IstioConfig_AUTH_NONE
+}
+
+// Configuration options for the Cloud Run feature.
+type CloudRunConfig struct {
+	// Whether Cloud Run addon is enabled for this cluster.
+	Disabled             bool     `protobuf:"varint,1,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CloudRunConfig) Reset()         { *m = CloudRunConfig{} }
+func (m *CloudRunConfig) String() string { return proto.CompactTextString(m) }
+func (*CloudRunConfig) ProtoMessage()    {}
+func (*CloudRunConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{11}
+}
+func (m *CloudRunConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CloudRunConfig.Unmarshal(m, b)
+}
+func (m *CloudRunConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CloudRunConfig.Marshal(b, m, deterministic)
+}
+func (dst *CloudRunConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CloudRunConfig.Merge(dst, src)
+}
+func (m *CloudRunConfig) XXX_Size() int {
+	return xxx_messageInfo_CloudRunConfig.Size(m)
+}
+func (m *CloudRunConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_CloudRunConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CloudRunConfig proto.InternalMessageInfo
+
+func (m *CloudRunConfig) GetDisabled() bool {
 	if m != nil {
 		return m.Disabled
 	}
@@ -1028,7 +1419,7 @@ func (m *MasterAuthorizedNetworksConfig) Reset()         { *m = MasterAuthorized
 func (m *MasterAuthorizedNetworksConfig) String() string { return proto.CompactTextString(m) }
 func (*MasterAuthorizedNetworksConfig) ProtoMessage()    {}
 func (*MasterAuthorizedNetworksConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{9}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{12}
 }
 func (m *MasterAuthorizedNetworksConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MasterAuthorizedNetworksConfig.Unmarshal(m, b)
@@ -1036,8 +1427,8 @@ func (m *MasterAuthorizedNetworksConfig) XXX_Unmarshal(b []byte) error {
 func (m *MasterAuthorizedNetworksConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MasterAuthorizedNetworksConfig.Marshal(b, m, deterministic)
 }
-func (m *MasterAuthorizedNetworksConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MasterAuthorizedNetworksConfig.Merge(m, src)
+func (dst *MasterAuthorizedNetworksConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MasterAuthorizedNetworksConfig.Merge(dst, src)
 }
 func (m *MasterAuthorizedNetworksConfig) XXX_Size() int {
 	return xxx_messageInfo_MasterAuthorizedNetworksConfig.Size(m)
@@ -1079,7 +1470,7 @@ func (m *MasterAuthorizedNetworksConfig_CidrBlock) Reset() {
 func (m *MasterAuthorizedNetworksConfig_CidrBlock) String() string { return proto.CompactTextString(m) }
 func (*MasterAuthorizedNetworksConfig_CidrBlock) ProtoMessage()    {}
 func (*MasterAuthorizedNetworksConfig_CidrBlock) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{9, 0}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{12, 0}
 }
 func (m *MasterAuthorizedNetworksConfig_CidrBlock) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MasterAuthorizedNetworksConfig_CidrBlock.Unmarshal(m, b)
@@ -1087,8 +1478,8 @@ func (m *MasterAuthorizedNetworksConfig_CidrBlock) XXX_Unmarshal(b []byte) error
 func (m *MasterAuthorizedNetworksConfig_CidrBlock) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MasterAuthorizedNetworksConfig_CidrBlock.Marshal(b, m, deterministic)
 }
-func (m *MasterAuthorizedNetworksConfig_CidrBlock) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MasterAuthorizedNetworksConfig_CidrBlock.Merge(m, src)
+func (dst *MasterAuthorizedNetworksConfig_CidrBlock) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MasterAuthorizedNetworksConfig_CidrBlock.Merge(dst, src)
 }
 func (m *MasterAuthorizedNetworksConfig_CidrBlock) XXX_Size() int {
 	return xxx_messageInfo_MasterAuthorizedNetworksConfig_CidrBlock.Size(m)
@@ -1113,6 +1504,50 @@ func (m *MasterAuthorizedNetworksConfig_CidrBlock) GetCidrBlock() string {
 	return ""
 }
 
+// Configuration for the legacy Attribute Based Access Control authorization
+// mode.
+type LegacyAbac struct {
+	// Whether the ABAC authorizer is enabled for this cluster. When enabled,
+	// identities in the system, including service accounts, nodes, and
+	// controllers, will have statically granted permissions beyond those
+	// provided by the RBAC configuration or IAM.
+	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *LegacyAbac) Reset()         { *m = LegacyAbac{} }
+func (m *LegacyAbac) String() string { return proto.CompactTextString(m) }
+func (*LegacyAbac) ProtoMessage()    {}
+func (*LegacyAbac) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{13}
+}
+func (m *LegacyAbac) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_LegacyAbac.Unmarshal(m, b)
+}
+func (m *LegacyAbac) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_LegacyAbac.Marshal(b, m, deterministic)
+}
+func (dst *LegacyAbac) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LegacyAbac.Merge(dst, src)
+}
+func (m *LegacyAbac) XXX_Size() int {
+	return xxx_messageInfo_LegacyAbac.Size(m)
+}
+func (m *LegacyAbac) XXX_DiscardUnknown() {
+	xxx_messageInfo_LegacyAbac.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LegacyAbac proto.InternalMessageInfo
+
+func (m *LegacyAbac) GetEnabled() bool {
+	if m != nil {
+		return m.Enabled
+	}
+	return false
+}
+
 // Configuration options for the NetworkPolicy feature.
 // https://kubernetes.io/docs/concepts/services-networking/networkpolicies/
 type NetworkPolicy struct {
@@ -1129,7 +1564,7 @@ func (m *NetworkPolicy) Reset()         { *m = NetworkPolicy{} }
 func (m *NetworkPolicy) String() string { return proto.CompactTextString(m) }
 func (*NetworkPolicy) ProtoMessage()    {}
 func (*NetworkPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{10}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{14}
 }
 func (m *NetworkPolicy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NetworkPolicy.Unmarshal(m, b)
@@ -1137,8 +1572,8 @@ func (m *NetworkPolicy) XXX_Unmarshal(b []byte) error {
 func (m *NetworkPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NetworkPolicy.Marshal(b, m, deterministic)
 }
-func (m *NetworkPolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NetworkPolicy.Merge(m, src)
+func (dst *NetworkPolicy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkPolicy.Merge(dst, src)
 }
 func (m *NetworkPolicy) XXX_Size() int {
 	return xxx_messageInfo_NetworkPolicy.Size(m)
@@ -1176,11 +1611,11 @@ type IPAllocationPolicy struct {
 	// subnetwork.
 	SubnetworkName string `protobuf:"bytes,3,opt,name=subnetwork_name,json=subnetworkName,proto3" json:"subnetwork_name,omitempty"`
 	// This field is deprecated, use cluster_ipv4_cidr_block.
-	ClusterIpv4Cidr string `protobuf:"bytes,4,opt,name=cluster_ipv4_cidr,json=clusterIpv4Cidr,proto3" json:"cluster_ipv4_cidr,omitempty"`
+	ClusterIpv4Cidr string `protobuf:"bytes,4,opt,name=cluster_ipv4_cidr,json=clusterIpv4Cidr,proto3" json:"cluster_ipv4_cidr,omitempty"` // Deprecated: Do not use.
 	// This field is deprecated, use node_ipv4_cidr_block.
-	NodeIpv4Cidr string `protobuf:"bytes,5,opt,name=node_ipv4_cidr,json=nodeIpv4Cidr,proto3" json:"node_ipv4_cidr,omitempty"`
+	NodeIpv4Cidr string `protobuf:"bytes,5,opt,name=node_ipv4_cidr,json=nodeIpv4Cidr,proto3" json:"node_ipv4_cidr,omitempty"` // Deprecated: Do not use.
 	// This field is deprecated, use services_ipv4_cidr_block.
-	ServicesIpv4Cidr string `protobuf:"bytes,6,opt,name=services_ipv4_cidr,json=servicesIpv4Cidr,proto3" json:"services_ipv4_cidr,omitempty"`
+	ServicesIpv4Cidr string `protobuf:"bytes,6,opt,name=services_ipv4_cidr,json=servicesIpv4Cidr,proto3" json:"services_ipv4_cidr,omitempty"` // Deprecated: Do not use.
 	// The name of the secondary range to be used for the cluster CIDR
 	// block.  The secondary range will be used for pod IP
 	// addresses. This must be an existing secondary range associated
@@ -1243,17 +1678,46 @@ type IPAllocationPolicy struct {
 	// notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g.
 	// `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range
 	// to use.
-	ServicesIpv4CidrBlock string   `protobuf:"bytes,11,opt,name=services_ipv4_cidr_block,json=servicesIpv4CidrBlock,proto3" json:"services_ipv4_cidr_block,omitempty"`
-	XXX_NoUnkeyedLiteral  struct{} `json:"-"`
-	XXX_unrecognized      []byte   `json:"-"`
-	XXX_sizecache         int32    `json:"-"`
+	ServicesIpv4CidrBlock string `protobuf:"bytes,11,opt,name=services_ipv4_cidr_block,json=servicesIpv4CidrBlock,proto3" json:"services_ipv4_cidr_block,omitempty"`
+	// If true, allow allocation of cluster CIDR ranges that overlap with certain
+	// kinds of network routes. By default we do not allow cluster CIDR ranges to
+	// intersect with any user declared routes. With allow_route_overlap == true,
+	// we allow overlapping with CIDR ranges that are larger than the cluster CIDR
+	// range.
+	//
+	// If this field is set to true, then cluster and services CIDRs must be
+	// fully-specified (e.g. `10.96.0.0/14`, but not `/14`), which means:
+	// 1) When `use_ip_aliases` is true, `cluster_ipv4_cidr_block` and
+	//    `services_ipv4_cidr_block` must be fully-specified.
+	// 2) When `use_ip_aliases` is false, `cluster.cluster_ipv4_cidr` muse be
+	//    fully-specified.
+	AllowRouteOverlap bool `protobuf:"varint,12,opt,name=allow_route_overlap,json=allowRouteOverlap,proto3" json:"allow_route_overlap,omitempty"`
+	// The IP address range of the Cloud TPUs in this cluster. If unspecified, a
+	// range will be automatically chosen with the default size.
+	//
+	// This field is only applicable when `use_ip_aliases` is true.
+	//
+	// If unspecified, the range will use the default size.
+	//
+	// Set to /netmask (e.g. `/14`) to have a range chosen with a specific
+	// netmask.
+	//
+	// Set to a
+	// [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
+	// notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g.
+	// `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range
+	// to use.
+	TpuIpv4CidrBlock     string   `protobuf:"bytes,13,opt,name=tpu_ipv4_cidr_block,json=tpuIpv4CidrBlock,proto3" json:"tpu_ipv4_cidr_block,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *IPAllocationPolicy) Reset()         { *m = IPAllocationPolicy{} }
 func (m *IPAllocationPolicy) String() string { return proto.CompactTextString(m) }
 func (*IPAllocationPolicy) ProtoMessage()    {}
 func (*IPAllocationPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{11}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{15}
 }
 func (m *IPAllocationPolicy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_IPAllocationPolicy.Unmarshal(m, b)
@@ -1261,8 +1725,8 @@ func (m *IPAllocationPolicy) XXX_Unmarshal(b []byte) error {
 func (m *IPAllocationPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_IPAllocationPolicy.Marshal(b, m, deterministic)
 }
-func (m *IPAllocationPolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_IPAllocationPolicy.Merge(m, src)
+func (dst *IPAllocationPolicy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPAllocationPolicy.Merge(dst, src)
 }
 func (m *IPAllocationPolicy) XXX_Size() int {
 	return xxx_messageInfo_IPAllocationPolicy.Size(m)
@@ -1294,6 +1758,7 @@ func (m *IPAllocationPolicy) GetSubnetworkName() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *IPAllocationPolicy) GetClusterIpv4Cidr() string {
 	if m != nil {
 		return m.ClusterIpv4Cidr
@@ -1301,6 +1766,7 @@ func (m *IPAllocationPolicy) GetClusterIpv4Cidr() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *IPAllocationPolicy) GetNodeIpv4Cidr() string {
 	if m != nil {
 		return m.NodeIpv4Cidr
@@ -1308,6 +1774,7 @@ func (m *IPAllocationPolicy) GetNodeIpv4Cidr() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *IPAllocationPolicy) GetServicesIpv4Cidr() string {
 	if m != nil {
 		return m.ServicesIpv4Cidr
@@ -1350,6 +1817,61 @@ func (m *IPAllocationPolicy) GetServicesIpv4CidrBlock() string {
 	return ""
 }
 
+func (m *IPAllocationPolicy) GetAllowRouteOverlap() bool {
+	if m != nil {
+		return m.AllowRouteOverlap
+	}
+	return false
+}
+
+func (m *IPAllocationPolicy) GetTpuIpv4CidrBlock() string {
+	if m != nil {
+		return m.TpuIpv4CidrBlock
+	}
+	return ""
+}
+
+// Configuration for Binary Authorization.
+type BinaryAuthorization struct {
+	// Enable Binary Authorization for this cluster. If enabled, all container
+	// images will be validated by Google Binauthz.
+	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *BinaryAuthorization) Reset()         { *m = BinaryAuthorization{} }
+func (m *BinaryAuthorization) String() string { return proto.CompactTextString(m) }
+func (*BinaryAuthorization) ProtoMessage()    {}
+func (*BinaryAuthorization) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{16}
+}
+func (m *BinaryAuthorization) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BinaryAuthorization.Unmarshal(m, b)
+}
+func (m *BinaryAuthorization) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BinaryAuthorization.Marshal(b, m, deterministic)
+}
+func (dst *BinaryAuthorization) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BinaryAuthorization.Merge(dst, src)
+}
+func (m *BinaryAuthorization) XXX_Size() int {
+	return xxx_messageInfo_BinaryAuthorization.Size(m)
+}
+func (m *BinaryAuthorization) XXX_DiscardUnknown() {
+	xxx_messageInfo_BinaryAuthorization.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BinaryAuthorization proto.InternalMessageInfo
+
+func (m *BinaryAuthorization) GetEnabled() bool {
+	if m != nil {
+		return m.Enabled
+	}
+	return false
+}
+
 // Configuration for the PodSecurityPolicy feature.
 type PodSecurityPolicyConfig struct {
 	// Enable the PodSecurityPolicy controller for this cluster. If enabled, pods
@@ -1364,7 +1886,7 @@ func (m *PodSecurityPolicyConfig) Reset()         { *m = PodSecurityPolicyConfig
 func (m *PodSecurityPolicyConfig) String() string { return proto.CompactTextString(m) }
 func (*PodSecurityPolicyConfig) ProtoMessage()    {}
 func (*PodSecurityPolicyConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{12}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{17}
 }
 func (m *PodSecurityPolicyConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PodSecurityPolicyConfig.Unmarshal(m, b)
@@ -1372,8 +1894,8 @@ func (m *PodSecurityPolicyConfig) XXX_Unmarshal(b []byte) error {
 func (m *PodSecurityPolicyConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PodSecurityPolicyConfig.Marshal(b, m, deterministic)
 }
-func (m *PodSecurityPolicyConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicyConfig.Merge(m, src)
+func (dst *PodSecurityPolicyConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PodSecurityPolicyConfig.Merge(dst, src)
 }
 func (m *PodSecurityPolicyConfig) XXX_Size() int {
 	return xxx_messageInfo_PodSecurityPolicyConfig.Size(m)
@@ -1391,7 +1913,7 @@ func (m *PodSecurityPolicyConfig) GetEnabled() bool {
 	return false
 }
 
-// A Google Container Engine cluster.
+// A Google Kubernetes Engine cluster.
 type Cluster struct {
 	// The name of this cluster. The name must be unique within this project
 	// and zone, and can be up to 40 characters with the following restrictions:
@@ -1423,6 +1945,10 @@ type Cluster struct {
 	// If unspecified, the defaults are used.
 	NodeConfig *NodeConfig `protobuf:"bytes,4,opt,name=node_config,json=nodeConfig,proto3" json:"node_config,omitempty"`
 	// The authentication information for accessing the master endpoint.
+	// If unspecified, the defaults are used:
+	// For clusters before v1.12, if master_auth is unspecified, `username` will
+	// be set to "admin", a random password will be generated, and a client
+	// certificate will be issued.
 	MasterAuth *MasterAuth `protobuf:"bytes,5,opt,name=master_auth,json=masterAuth,proto3" json:"master_auth,omitempty"`
 	// The logging service the cluster should use to write logs.
 	// Currently available options:
@@ -1441,7 +1967,8 @@ type Cluster struct {
 	// The name of the Google Compute Engine
 	// [network](/compute/docs/networks-and-firewalls#networks) to which the
 	// cluster is connected. If left unspecified, the `default` network
-	// will be used.
+	// will be used. On output this shows the network ID instead of
+	// the name.
 	Network string `protobuf:"bytes,8,opt,name=network,proto3" json:"network,omitempty"`
 	// The IP address range of the container pods in this cluster, in
 	// [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
@@ -1452,14 +1979,15 @@ type Cluster struct {
 	AddonsConfig *AddonsConfig `protobuf:"bytes,10,opt,name=addons_config,json=addonsConfig,proto3" json:"addons_config,omitempty"`
 	// The name of the Google Compute Engine
 	// [subnetwork](/compute/docs/subnetworks) to which the
-	// cluster is connected.
+	// cluster is connected. On output this shows the subnetwork ID instead of
+	// the name.
 	Subnetwork string `protobuf:"bytes,11,opt,name=subnetwork,proto3" json:"subnetwork,omitempty"`
 	// The node pools associated with this cluster.
 	// This field should not be set if "node_config" or "initial_node_count" are
 	// specified.
 	NodePools []*NodePool `protobuf:"bytes,12,rep,name=node_pools,json=nodePools,proto3" json:"node_pools,omitempty"`
 	// The list of Google Compute Engine
-	// [locations](/compute/docs/zones#available) in which the cluster's nodes
+	// [zones](/compute/docs/zones#available) in which the cluster's nodes
 	// should be located.
 	Locations []string `protobuf:"bytes,13,rep,name=locations,proto3" json:"locations,omitempty"`
 	// Kubernetes alpha features are enabled on this cluster. This includes alpha
@@ -1469,6 +1997,13 @@ type Cluster struct {
 	// Alpha enabled clusters are automatically deleted thirty days after
 	// creation.
 	EnableKubernetesAlpha bool `protobuf:"varint,14,opt,name=enable_kubernetes_alpha,json=enableKubernetesAlpha,proto3" json:"enable_kubernetes_alpha,omitempty"`
+	// The resource labels for the cluster to use to annotate any related
+	// Google Compute Engine resources.
+	ResourceLabels map[string]string `protobuf:"bytes,15,rep,name=resource_labels,json=resourceLabels,proto3" json:"resource_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// The fingerprint of the set of labels for this cluster.
+	LabelFingerprint string `protobuf:"bytes,16,opt,name=label_fingerprint,json=labelFingerprint,proto3" json:"label_fingerprint,omitempty"`
+	// Configuration for the legacy ABAC authorization mode.
+	LegacyAbac *LegacyAbac `protobuf:"bytes,18,opt,name=legacy_abac,json=legacyAbac,proto3" json:"legacy_abac,omitempty"`
 	// Configuration options for the NetworkPolicy feature.
 	NetworkPolicy *NetworkPolicy `protobuf:"bytes,19,opt,name=network_policy,json=networkPolicy,proto3" json:"network_policy,omitempty"`
 	// Configuration for cluster IP allocation.
@@ -1477,15 +2012,44 @@ type Cluster struct {
 	MasterAuthorizedNetworksConfig *MasterAuthorizedNetworksConfig `protobuf:"bytes,22,opt,name=master_authorized_networks_config,json=masterAuthorizedNetworksConfig,proto3" json:"master_authorized_networks_config,omitempty"`
 	// Configure the maintenance policy for this cluster.
 	MaintenancePolicy *MaintenancePolicy `protobuf:"bytes,23,opt,name=maintenance_policy,json=maintenancePolicy,proto3" json:"maintenance_policy,omitempty"`
+	// Configuration for Binary Authorization.
+	BinaryAuthorization *BinaryAuthorization `protobuf:"bytes,24,opt,name=binary_authorization,json=binaryAuthorization,proto3" json:"binary_authorization,omitempty"`
 	// Configuration for the PodSecurityPolicy feature.
 	PodSecurityPolicyConfig *PodSecurityPolicyConfig `protobuf:"bytes,25,opt,name=pod_security_policy_config,json=podSecurityPolicyConfig,proto3" json:"pod_security_policy_config,omitempty"`
+	// Cluster-level autoscaling configuration.
+	Autoscaling *ClusterAutoscaling `protobuf:"bytes,26,opt,name=autoscaling,proto3" json:"autoscaling,omitempty"`
+	// Configuration for cluster networking.
+	NetworkConfig *NetworkConfig `protobuf:"bytes,27,opt,name=network_config,json=networkConfig,proto3" json:"network_config,omitempty"`
+	// If this is a private cluster setup. Private clusters are clusters that, by
+	// default have no external IP addresses on the nodes and where nodes and the
+	// master communicate over private IP addresses.
+	// This field is deprecated, use private_cluster_config.enable_private_nodes
+	// instead.
+	PrivateCluster bool `protobuf:"varint,28,opt,name=private_cluster,json=privateCluster,proto3" json:"private_cluster,omitempty"` // Deprecated: Do not use.
+	// The IP prefix in CIDR notation to use for the hosted master network.
+	// This prefix will be used for assigning private IP addresses to the
+	// master or set of masters, as well as the ILB VIP.
+	// This field is deprecated, use
+	// private_cluster_config.master_ipv4_cidr_block instead.
+	MasterIpv4CidrBlock string `protobuf:"bytes,29,opt,name=master_ipv4_cidr_block,json=masterIpv4CidrBlock,proto3" json:"master_ipv4_cidr_block,omitempty"` // Deprecated: Do not use.
+	// The default constraint on the maximum number of pods that can be run
+	// simultaneously on a node in the node pool of this cluster. Only honored
+	// if cluster created with IP Alias support.
+	DefaultMaxPodsConstraint *MaxPodsConstraint `protobuf:"bytes,30,opt,name=default_max_pods_constraint,json=defaultMaxPodsConstraint,proto3" json:"default_max_pods_constraint,omitempty"`
+	// Configuration for exporting resource usages. Resource usage export is
+	// disabled when this config unspecified.
+	ResourceUsageExportConfig *ResourceUsageExportConfig `protobuf:"bytes,33,opt,name=resource_usage_export_config,json=resourceUsageExportConfig,proto3" json:"resource_usage_export_config,omitempty"`
+	// Configuration for private cluster.
+	PrivateClusterConfig *PrivateClusterConfig `protobuf:"bytes,37,opt,name=private_cluster_config,json=privateClusterConfig,proto3" json:"private_cluster_config,omitempty"`
+	// Cluster-level Vertical Pod Autoscaling configuration.
+	VerticalPodAutoscaling *VerticalPodAutoscaling `protobuf:"bytes,39,opt,name=vertical_pod_autoscaling,json=verticalPodAutoscaling,proto3" json:"vertical_pod_autoscaling,omitempty"`
 	// [Output only] Server-defined URL for the resource.
 	SelfLink string `protobuf:"bytes,100,opt,name=self_link,json=selfLink,proto3" json:"self_link,omitempty"`
 	// [Output only] The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
 	// This field is deprecated, use location instead.
-	Zone string `protobuf:"bytes,101,opt,name=zone,proto3" json:"zone,omitempty"`
+	Zone string `protobuf:"bytes,101,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
 	// [Output only] The IP address of this cluster's master endpoint.
 	// The endpoint can be accessed from the internet at
 	// `https://username:password@endpoint/`.
@@ -1497,13 +2061,24 @@ type Cluster struct {
 	// found in validMasterVersions returned by getServerConfig.  The version can
 	// be upgraded over time; such upgrades are reflected in
 	// currentMasterVersion and currentNodeVersion.
+	//
+	// Users may specify either explicit versions offered by
+	// Kubernetes Engine or version aliases, which have the following behavior:
+	//
+	// - "latest": picks the highest valid Kubernetes version
+	// - "1.X": picks the highest valid patch+gke.N patch in the 1.X version
+	// - "1.X.Y": picks the highest valid gke.N patch in the 1.X.Y version
+	// - "1.X.Y-gke.N": picks an explicit Kubernetes version
+	// - "","-": picks the default Kubernetes version
 	InitialClusterVersion string `protobuf:"bytes,103,opt,name=initial_cluster_version,json=initialClusterVersion,proto3" json:"initial_cluster_version,omitempty"`
 	// [Output only] The current software version of the master endpoint.
 	CurrentMasterVersion string `protobuf:"bytes,104,opt,name=current_master_version,json=currentMasterVersion,proto3" json:"current_master_version,omitempty"`
-	// [Output only] The current version of the node software components.
+	// [Output only] Deprecated, use
+	// [NodePool.version](/kubernetes-engine/docs/reference/rest/v1beta1/projects.zones.clusters.nodePool)
+	// instead. The current version of the node software components.
 	// If they are currently at multiple versions because they're in the process
 	// of being upgraded, this reflects the minimum version of all nodes.
-	CurrentNodeVersion string `protobuf:"bytes,105,opt,name=current_node_version,json=currentNodeVersion,proto3" json:"current_node_version,omitempty"`
+	CurrentNodeVersion string `protobuf:"bytes,105,opt,name=current_node_version,json=currentNodeVersion,proto3" json:"current_node_version,omitempty"` // Deprecated: Do not use.
 	// [Output only] The time the cluster was created, in
 	// [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
 	CreateTime string `protobuf:"bytes,106,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
@@ -1522,12 +2097,11 @@ type Cluster struct {
 	// notation (e.g. `1.2.3.4/29`). Service addresses are
 	// typically put in the last `/16` from the container CIDR.
 	ServicesIpv4Cidr string `protobuf:"bytes,110,opt,name=services_ipv4_cidr,json=servicesIpv4Cidr,proto3" json:"services_ipv4_cidr,omitempty"`
-	// [Output only] The resource URLs of [instance
-	// groups](/compute/docs/instance-groups/) associated with this
-	// cluster.
-	InstanceGroupUrls []string `protobuf:"bytes,111,rep,name=instance_group_urls,json=instanceGroupUrls,proto3" json:"instance_group_urls,omitempty"`
-	// [Output only] The number of nodes currently in the cluster.
-	CurrentNodeCount int32 `protobuf:"varint,112,opt,name=current_node_count,json=currentNodeCount,proto3" json:"current_node_count,omitempty"`
+	// Deprecated. Use node_pools.instance_group_urls.
+	InstanceGroupUrls []string `protobuf:"bytes,111,rep,name=instance_group_urls,json=instanceGroupUrls,proto3" json:"instance_group_urls,omitempty"` // Deprecated: Do not use.
+	// [Output only]  The number of nodes currently in the cluster. Deprecated.
+	// Call Kubernetes API directly to retrieve node information.
+	CurrentNodeCount int32 `protobuf:"varint,112,opt,name=current_node_count,json=currentNodeCount,proto3" json:"current_node_count,omitempty"` // Deprecated: Do not use.
 	// [Output only] The time the cluster will be automatically
 	// deleted in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
 	ExpireTime string `protobuf:"bytes,113,opt,name=expire_time,json=expireTime,proto3" json:"expire_time,omitempty"`
@@ -1535,17 +2109,25 @@ type Cluster struct {
 	// [zone](/compute/docs/regions-zones/regions-zones#available) or
 	// [region](/compute/docs/regions-zones/regions-zones#available) in which
 	// the cluster resides.
-	Location             string   `protobuf:"bytes,114,opt,name=location,proto3" json:"location,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Location string `protobuf:"bytes,114,opt,name=location,proto3" json:"location,omitempty"`
+	// Enable the ability to use Cloud TPUs in this cluster.
+	EnableTpu bool `protobuf:"varint,115,opt,name=enable_tpu,json=enableTpu,proto3" json:"enable_tpu,omitempty"`
+	// [Output only] The IP address range of the Cloud TPUs in this cluster, in
+	// [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)
+	// notation (e.g. `1.2.3.4/29`).
+	TpuIpv4CidrBlock string `protobuf:"bytes,116,opt,name=tpu_ipv4_cidr_block,json=tpuIpv4CidrBlock,proto3" json:"tpu_ipv4_cidr_block,omitempty"`
+	// Which conditions caused the current cluster state.
+	Conditions           []*StatusCondition `protobuf:"bytes,118,rep,name=conditions,proto3" json:"conditions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *Cluster) Reset()         { *m = Cluster{} }
 func (m *Cluster) String() string { return proto.CompactTextString(m) }
 func (*Cluster) ProtoMessage()    {}
 func (*Cluster) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{13}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{18}
 }
 func (m *Cluster) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Cluster.Unmarshal(m, b)
@@ -1553,8 +2135,8 @@ func (m *Cluster) XXX_Unmarshal(b []byte) error {
 func (m *Cluster) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Cluster.Marshal(b, m, deterministic)
 }
-func (m *Cluster) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Cluster.Merge(m, src)
+func (dst *Cluster) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Cluster.Merge(dst, src)
 }
 func (m *Cluster) XXX_Size() int {
 	return xxx_messageInfo_Cluster.Size(m)
@@ -1663,6 +2245,27 @@ func (m *Cluster) GetEnableKubernetesAlpha() bool {
 	return false
 }
 
+func (m *Cluster) GetResourceLabels() map[string]string {
+	if m != nil {
+		return m.ResourceLabels
+	}
+	return nil
+}
+
+func (m *Cluster) GetLabelFingerprint() string {
+	if m != nil {
+		return m.LabelFingerprint
+	}
+	return ""
+}
+
+func (m *Cluster) GetLegacyAbac() *LegacyAbac {
+	if m != nil {
+		return m.LegacyAbac
+	}
+	return nil
+}
+
 func (m *Cluster) GetNetworkPolicy() *NetworkPolicy {
 	if m != nil {
 		return m.NetworkPolicy
@@ -1691,9 +2294,74 @@ func (m *Cluster) GetMaintenancePolicy() *MaintenancePolicy {
 	return nil
 }
 
+func (m *Cluster) GetBinaryAuthorization() *BinaryAuthorization {
+	if m != nil {
+		return m.BinaryAuthorization
+	}
+	return nil
+}
+
 func (m *Cluster) GetPodSecurityPolicyConfig() *PodSecurityPolicyConfig {
 	if m != nil {
 		return m.PodSecurityPolicyConfig
+	}
+	return nil
+}
+
+func (m *Cluster) GetAutoscaling() *ClusterAutoscaling {
+	if m != nil {
+		return m.Autoscaling
+	}
+	return nil
+}
+
+func (m *Cluster) GetNetworkConfig() *NetworkConfig {
+	if m != nil {
+		return m.NetworkConfig
+	}
+	return nil
+}
+
+// Deprecated: Do not use.
+func (m *Cluster) GetPrivateCluster() bool {
+	if m != nil {
+		return m.PrivateCluster
+	}
+	return false
+}
+
+// Deprecated: Do not use.
+func (m *Cluster) GetMasterIpv4CidrBlock() string {
+	if m != nil {
+		return m.MasterIpv4CidrBlock
+	}
+	return ""
+}
+
+func (m *Cluster) GetDefaultMaxPodsConstraint() *MaxPodsConstraint {
+	if m != nil {
+		return m.DefaultMaxPodsConstraint
+	}
+	return nil
+}
+
+func (m *Cluster) GetResourceUsageExportConfig() *ResourceUsageExportConfig {
+	if m != nil {
+		return m.ResourceUsageExportConfig
+	}
+	return nil
+}
+
+func (m *Cluster) GetPrivateClusterConfig() *PrivateClusterConfig {
+	if m != nil {
+		return m.PrivateClusterConfig
+	}
+	return nil
+}
+
+func (m *Cluster) GetVerticalPodAutoscaling() *VerticalPodAutoscaling {
+	if m != nil {
+		return m.VerticalPodAutoscaling
 	}
 	return nil
 }
@@ -1705,6 +2373,7 @@ func (m *Cluster) GetSelfLink() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *Cluster) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -1733,6 +2402,7 @@ func (m *Cluster) GetCurrentMasterVersion() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *Cluster) GetCurrentNodeVersion() string {
 	if m != nil {
 		return m.CurrentNodeVersion
@@ -1775,6 +2445,7 @@ func (m *Cluster) GetServicesIpv4Cidr() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *Cluster) GetInstanceGroupUrls() []string {
 	if m != nil {
 		return m.InstanceGroupUrls
@@ -1782,6 +2453,7 @@ func (m *Cluster) GetInstanceGroupUrls() []string {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *Cluster) GetCurrentNodeCount() int32 {
 	if m != nil {
 		return m.CurrentNodeCount
@@ -1803,17 +2475,48 @@ func (m *Cluster) GetLocation() string {
 	return ""
 }
 
+func (m *Cluster) GetEnableTpu() bool {
+	if m != nil {
+		return m.EnableTpu
+	}
+	return false
+}
+
+func (m *Cluster) GetTpuIpv4CidrBlock() string {
+	if m != nil {
+		return m.TpuIpv4CidrBlock
+	}
+	return ""
+}
+
+func (m *Cluster) GetConditions() []*StatusCondition {
+	if m != nil {
+		return m.Conditions
+	}
+	return nil
+}
+
 // ClusterUpdate describes an update to the cluster. Exactly one update can
 // be applied to a cluster with each request, so at most one field can be
 // provided.
 type ClusterUpdate struct {
 	// The Kubernetes version to change the nodes to (typically an
-	// upgrade). Use `-` to upgrade to the latest version supported by
-	// the server.
+	// upgrade).
+	//
+	// Users may specify either explicit versions offered by
+	// Kubernetes Engine or version aliases, which have the following behavior:
+	//
+	// - "latest": picks the highest valid Kubernetes version
+	// - "1.X": picks the highest valid patch+gke.N patch in the 1.X version
+	// - "1.X.Y": picks the highest valid gke.N patch in the 1.X.Y version
+	// - "1.X.Y-gke.N": picks an explicit Kubernetes version
+	// - "-": picks the Kubernetes master version
 	DesiredNodeVersion string `protobuf:"bytes,4,opt,name=desired_node_version,json=desiredNodeVersion,proto3" json:"desired_node_version,omitempty"`
 	// The monitoring service the cluster should use to write metrics.
 	// Currently available options:
 	//
+	// * "monitoring.googleapis.com/kubernetes" - the Google Cloud Monitoring
+	// service with Kubernetes-native resource model in Stackdriver
 	// * "monitoring.googleapis.com" - the Google Cloud Monitoring service
 	// * "none" - no metrics will be exported from the cluster
 	DesiredMonitoringService string `protobuf:"bytes,5,opt,name=desired_monitoring_service,json=desiredMonitoringService,proto3" json:"desired_monitoring_service,omitempty"`
@@ -1833,7 +2536,7 @@ type ClusterUpdate struct {
 	// the change applies to that single node pool.
 	DesiredNodePoolAutoscaling *NodePoolAutoscaling `protobuf:"bytes,9,opt,name=desired_node_pool_autoscaling,json=desiredNodePoolAutoscaling,proto3" json:"desired_node_pool_autoscaling,omitempty"`
 	// The desired list of Google Compute Engine
-	// [locations](/compute/docs/zones#available) in which the cluster's nodes
+	// [zones](/compute/docs/zones#available) in which the cluster's nodes
 	// should be located. Changing the locations a cluster is in will result
 	// in nodes being either created or removed from the cluster, depending on
 	// whether locations are being added or removed.
@@ -1844,9 +2547,33 @@ type ClusterUpdate struct {
 	DesiredMasterAuthorizedNetworksConfig *MasterAuthorizedNetworksConfig `protobuf:"bytes,12,opt,name=desired_master_authorized_networks_config,json=desiredMasterAuthorizedNetworksConfig,proto3" json:"desired_master_authorized_networks_config,omitempty"`
 	// The desired configuration options for the PodSecurityPolicy feature.
 	DesiredPodSecurityPolicyConfig *PodSecurityPolicyConfig `protobuf:"bytes,14,opt,name=desired_pod_security_policy_config,json=desiredPodSecurityPolicyConfig,proto3" json:"desired_pod_security_policy_config,omitempty"`
+	// Cluster-level autoscaling configuration.
+	DesiredClusterAutoscaling *ClusterAutoscaling `protobuf:"bytes,15,opt,name=desired_cluster_autoscaling,json=desiredClusterAutoscaling,proto3" json:"desired_cluster_autoscaling,omitempty"`
+	// The desired configuration options for the Binary Authorization feature.
+	DesiredBinaryAuthorization *BinaryAuthorization `protobuf:"bytes,16,opt,name=desired_binary_authorization,json=desiredBinaryAuthorization,proto3" json:"desired_binary_authorization,omitempty"`
+	// The logging service the cluster should use to write metrics.
+	// Currently available options:
+	//
+	// * "logging.googleapis.com/kubernetes" - the Google Cloud Logging
+	// service with Kubernetes-native resource model in Stackdriver
+	// * "logging.googleapis.com" - the Google Cloud Logging service
+	// * "none" - no logs will be exported from the cluster
+	DesiredLoggingService string `protobuf:"bytes,19,opt,name=desired_logging_service,json=desiredLoggingService,proto3" json:"desired_logging_service,omitempty"`
+	// The desired configuration for exporting resource usage.
+	DesiredResourceUsageExportConfig *ResourceUsageExportConfig `protobuf:"bytes,21,opt,name=desired_resource_usage_export_config,json=desiredResourceUsageExportConfig,proto3" json:"desired_resource_usage_export_config,omitempty"`
+	// Cluster-level Vertical Pod Autoscaling configuration.
+	DesiredVerticalPodAutoscaling *VerticalPodAutoscaling `protobuf:"bytes,22,opt,name=desired_vertical_pod_autoscaling,json=desiredVerticalPodAutoscaling,proto3" json:"desired_vertical_pod_autoscaling,omitempty"`
 	// The Kubernetes version to change the master to. The only valid value is the
-	// latest supported version. Use "-" to have the server automatically select
-	// the latest version.
+	// latest supported version.
+	//
+	// Users may specify either explicit versions offered by
+	// Kubernetes Engine or version aliases, which have the following behavior:
+	//
+	// - "latest": picks the highest valid Kubernetes version
+	// - "1.X": picks the highest valid patch+gke.N patch in the 1.X version
+	// - "1.X.Y": picks the highest valid gke.N patch in the 1.X.Y version
+	// - "1.X.Y-gke.N": picks an explicit Kubernetes version
+	// - "-": picks the default Kubernetes version
 	DesiredMasterVersion string   `protobuf:"bytes,100,opt,name=desired_master_version,json=desiredMasterVersion,proto3" json:"desired_master_version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1857,7 +2584,7 @@ func (m *ClusterUpdate) Reset()         { *m = ClusterUpdate{} }
 func (m *ClusterUpdate) String() string { return proto.CompactTextString(m) }
 func (*ClusterUpdate) ProtoMessage()    {}
 func (*ClusterUpdate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{14}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{19}
 }
 func (m *ClusterUpdate) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClusterUpdate.Unmarshal(m, b)
@@ -1865,8 +2592,8 @@ func (m *ClusterUpdate) XXX_Unmarshal(b []byte) error {
 func (m *ClusterUpdate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ClusterUpdate.Marshal(b, m, deterministic)
 }
-func (m *ClusterUpdate) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterUpdate.Merge(m, src)
+func (dst *ClusterUpdate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClusterUpdate.Merge(dst, src)
 }
 func (m *ClusterUpdate) XXX_Size() int {
 	return xxx_messageInfo_ClusterUpdate.Size(m)
@@ -1940,6 +2667,41 @@ func (m *ClusterUpdate) GetDesiredPodSecurityPolicyConfig() *PodSecurityPolicyCo
 	return nil
 }
 
+func (m *ClusterUpdate) GetDesiredClusterAutoscaling() *ClusterAutoscaling {
+	if m != nil {
+		return m.DesiredClusterAutoscaling
+	}
+	return nil
+}
+
+func (m *ClusterUpdate) GetDesiredBinaryAuthorization() *BinaryAuthorization {
+	if m != nil {
+		return m.DesiredBinaryAuthorization
+	}
+	return nil
+}
+
+func (m *ClusterUpdate) GetDesiredLoggingService() string {
+	if m != nil {
+		return m.DesiredLoggingService
+	}
+	return ""
+}
+
+func (m *ClusterUpdate) GetDesiredResourceUsageExportConfig() *ResourceUsageExportConfig {
+	if m != nil {
+		return m.DesiredResourceUsageExportConfig
+	}
+	return nil
+}
+
+func (m *ClusterUpdate) GetDesiredVerticalPodAutoscaling() *VerticalPodAutoscaling {
+	if m != nil {
+		return m.DesiredVerticalPodAutoscaling
+	}
+	return nil
+}
+
 func (m *ClusterUpdate) GetDesiredMasterVersion() string {
 	if m != nil {
 		return m.DesiredMasterVersion
@@ -1956,7 +2718,7 @@ type Operation struct {
 	// [zone](/compute/docs/zones#available) in which the operation
 	// is taking place.
 	// This field is deprecated, use location instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
 	// The operation type.
 	OperationType Operation_Type `protobuf:"varint,3,opt,name=operation_type,json=operationType,proto3,enum=google.container.v1beta1.Operation_Type" json:"operation_type,omitempty"`
 	// The current status of the operation.
@@ -1979,17 +2741,23 @@ type Operation struct {
 	StartTime string `protobuf:"bytes,10,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
 	// [Output only] The time the operation completed, in
 	// [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
-	EndTime              string   `protobuf:"bytes,11,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	EndTime string `protobuf:"bytes,11,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// [Output only] Progress information for an operation.
+	Progress *OperationProgress `protobuf:"bytes,12,opt,name=progress,proto3" json:"progress,omitempty"`
+	// Which conditions caused the current cluster state.
+	ClusterConditions []*StatusCondition `protobuf:"bytes,13,rep,name=cluster_conditions,json=clusterConditions,proto3" json:"cluster_conditions,omitempty"`
+	// Which conditions caused the current node pool state.
+	NodepoolConditions   []*StatusCondition `protobuf:"bytes,14,rep,name=nodepool_conditions,json=nodepoolConditions,proto3" json:"nodepool_conditions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *Operation) Reset()         { *m = Operation{} }
 func (m *Operation) String() string { return proto.CompactTextString(m) }
 func (*Operation) ProtoMessage()    {}
 func (*Operation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{15}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{20}
 }
 func (m *Operation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Operation.Unmarshal(m, b)
@@ -1997,8 +2765,8 @@ func (m *Operation) XXX_Unmarshal(b []byte) error {
 func (m *Operation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Operation.Marshal(b, m, deterministic)
 }
-func (m *Operation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Operation.Merge(m, src)
+func (dst *Operation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Operation.Merge(dst, src)
 }
 func (m *Operation) XXX_Size() int {
 	return xxx_messageInfo_Operation.Size(m)
@@ -2016,6 +2784,7 @@ func (m *Operation) GetName() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *Operation) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2086,17 +2855,289 @@ func (m *Operation) GetEndTime() string {
 	return ""
 }
 
+func (m *Operation) GetProgress() *OperationProgress {
+	if m != nil {
+		return m.Progress
+	}
+	return nil
+}
+
+func (m *Operation) GetClusterConditions() []*StatusCondition {
+	if m != nil {
+		return m.ClusterConditions
+	}
+	return nil
+}
+
+func (m *Operation) GetNodepoolConditions() []*StatusCondition {
+	if m != nil {
+		return m.NodepoolConditions
+	}
+	return nil
+}
+
+// Information about operation (or operation stage) progress.
+type OperationProgress struct {
+	// A non-parameterized string describing an operation stage.
+	// Unset for single-stage operations.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Status of an operation stage.
+	// Unset for single-stage operations.
+	Status Operation_Status `protobuf:"varint,2,opt,name=status,proto3,enum=google.container.v1beta1.Operation_Status" json:"status,omitempty"`
+	// Progress metric bundle, for example:
+	//   metrics: [{name: "nodes done",     int_value: 15},
+	//             {name: "nodes total",    int_value: 32}]
+	// or
+	//   metrics: [{name: "progress",       double_value: 0.56},
+	//             {name: "progress scale", double_value: 1.0}]
+	Metrics []*OperationProgress_Metric `protobuf:"bytes,3,rep,name=metrics,proto3" json:"metrics,omitempty"`
+	// Substages of an operation or a stage.
+	Stages               []*OperationProgress `protobuf:"bytes,4,rep,name=stages,proto3" json:"stages,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *OperationProgress) Reset()         { *m = OperationProgress{} }
+func (m *OperationProgress) String() string { return proto.CompactTextString(m) }
+func (*OperationProgress) ProtoMessage()    {}
+func (*OperationProgress) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{21}
+}
+func (m *OperationProgress) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OperationProgress.Unmarshal(m, b)
+}
+func (m *OperationProgress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OperationProgress.Marshal(b, m, deterministic)
+}
+func (dst *OperationProgress) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationProgress.Merge(dst, src)
+}
+func (m *OperationProgress) XXX_Size() int {
+	return xxx_messageInfo_OperationProgress.Size(m)
+}
+func (m *OperationProgress) XXX_DiscardUnknown() {
+	xxx_messageInfo_OperationProgress.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OperationProgress proto.InternalMessageInfo
+
+func (m *OperationProgress) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *OperationProgress) GetStatus() Operation_Status {
+	if m != nil {
+		return m.Status
+	}
+	return Operation_STATUS_UNSPECIFIED
+}
+
+func (m *OperationProgress) GetMetrics() []*OperationProgress_Metric {
+	if m != nil {
+		return m.Metrics
+	}
+	return nil
+}
+
+func (m *OperationProgress) GetStages() []*OperationProgress {
+	if m != nil {
+		return m.Stages
+	}
+	return nil
+}
+
+// Progress metric is (string, int|float|string) pair.
+type OperationProgress_Metric struct {
+	// Metric name, required.
+	// e.g., "nodes total", "percent done"
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Strictly one of the values is required.
+	//
+	// Types that are valid to be assigned to Value:
+	//	*OperationProgress_Metric_IntValue
+	//	*OperationProgress_Metric_DoubleValue
+	//	*OperationProgress_Metric_StringValue
+	Value                isOperationProgress_Metric_Value `protobuf_oneof:"value"`
+	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
+	XXX_unrecognized     []byte                           `json:"-"`
+	XXX_sizecache        int32                            `json:"-"`
+}
+
+func (m *OperationProgress_Metric) Reset()         { *m = OperationProgress_Metric{} }
+func (m *OperationProgress_Metric) String() string { return proto.CompactTextString(m) }
+func (*OperationProgress_Metric) ProtoMessage()    {}
+func (*OperationProgress_Metric) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{21, 0}
+}
+func (m *OperationProgress_Metric) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_OperationProgress_Metric.Unmarshal(m, b)
+}
+func (m *OperationProgress_Metric) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_OperationProgress_Metric.Marshal(b, m, deterministic)
+}
+func (dst *OperationProgress_Metric) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationProgress_Metric.Merge(dst, src)
+}
+func (m *OperationProgress_Metric) XXX_Size() int {
+	return xxx_messageInfo_OperationProgress_Metric.Size(m)
+}
+func (m *OperationProgress_Metric) XXX_DiscardUnknown() {
+	xxx_messageInfo_OperationProgress_Metric.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OperationProgress_Metric proto.InternalMessageInfo
+
+func (m *OperationProgress_Metric) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+type isOperationProgress_Metric_Value interface {
+	isOperationProgress_Metric_Value()
+}
+
+type OperationProgress_Metric_IntValue struct {
+	IntValue int64 `protobuf:"varint,2,opt,name=int_value,json=intValue,proto3,oneof"`
+}
+
+type OperationProgress_Metric_DoubleValue struct {
+	DoubleValue float64 `protobuf:"fixed64,3,opt,name=double_value,json=doubleValue,proto3,oneof"`
+}
+
+type OperationProgress_Metric_StringValue struct {
+	StringValue string `protobuf:"bytes,4,opt,name=string_value,json=stringValue,proto3,oneof"`
+}
+
+func (*OperationProgress_Metric_IntValue) isOperationProgress_Metric_Value() {}
+
+func (*OperationProgress_Metric_DoubleValue) isOperationProgress_Metric_Value() {}
+
+func (*OperationProgress_Metric_StringValue) isOperationProgress_Metric_Value() {}
+
+func (m *OperationProgress_Metric) GetValue() isOperationProgress_Metric_Value {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
+func (m *OperationProgress_Metric) GetIntValue() int64 {
+	if x, ok := m.GetValue().(*OperationProgress_Metric_IntValue); ok {
+		return x.IntValue
+	}
+	return 0
+}
+
+func (m *OperationProgress_Metric) GetDoubleValue() float64 {
+	if x, ok := m.GetValue().(*OperationProgress_Metric_DoubleValue); ok {
+		return x.DoubleValue
+	}
+	return 0
+}
+
+func (m *OperationProgress_Metric) GetStringValue() string {
+	if x, ok := m.GetValue().(*OperationProgress_Metric_StringValue); ok {
+		return x.StringValue
+	}
+	return ""
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*OperationProgress_Metric) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _OperationProgress_Metric_OneofMarshaler, _OperationProgress_Metric_OneofUnmarshaler, _OperationProgress_Metric_OneofSizer, []interface{}{
+		(*OperationProgress_Metric_IntValue)(nil),
+		(*OperationProgress_Metric_DoubleValue)(nil),
+		(*OperationProgress_Metric_StringValue)(nil),
+	}
+}
+
+func _OperationProgress_Metric_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*OperationProgress_Metric)
+	// value
+	switch x := m.Value.(type) {
+	case *OperationProgress_Metric_IntValue:
+		b.EncodeVarint(2<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.IntValue))
+	case *OperationProgress_Metric_DoubleValue:
+		b.EncodeVarint(3<<3 | proto.WireFixed64)
+		b.EncodeFixed64(math.Float64bits(x.DoubleValue))
+	case *OperationProgress_Metric_StringValue:
+		b.EncodeVarint(4<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.StringValue)
+	case nil:
+	default:
+		return fmt.Errorf("OperationProgress_Metric.Value has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _OperationProgress_Metric_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*OperationProgress_Metric)
+	switch tag {
+	case 2: // value.int_value
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.Value = &OperationProgress_Metric_IntValue{int64(x)}
+		return true, err
+	case 3: // value.double_value
+		if wire != proto.WireFixed64 {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeFixed64()
+		m.Value = &OperationProgress_Metric_DoubleValue{math.Float64frombits(x)}
+		return true, err
+	case 4: // value.string_value
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Value = &OperationProgress_Metric_StringValue{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _OperationProgress_Metric_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*OperationProgress_Metric)
+	// value
+	switch x := m.Value.(type) {
+	case *OperationProgress_Metric_IntValue:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(x.IntValue))
+	case *OperationProgress_Metric_DoubleValue:
+		n += 1 // tag and wire
+		n += 8
+	case *OperationProgress_Metric_StringValue:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.StringValue)))
+		n += len(x.StringValue)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 // CreateClusterRequest creates a cluster.
 type CreateClusterRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use parent instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the parent field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use parent instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
+	// This field has been deprecated and replaced by the parent field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
 	// A [cluster
 	// resource](/container-engine/reference/rest/v1beta1/projects.zones.clusters)
 	Cluster *Cluster `protobuf:"bytes,3,opt,name=cluster,proto3" json:"cluster,omitempty"`
@@ -2112,7 +3153,7 @@ func (m *CreateClusterRequest) Reset()         { *m = CreateClusterRequest{} }
 func (m *CreateClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateClusterRequest) ProtoMessage()    {}
 func (*CreateClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{16}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{22}
 }
 func (m *CreateClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateClusterRequest.Unmarshal(m, b)
@@ -2120,8 +3161,8 @@ func (m *CreateClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateClusterRequest.Merge(m, src)
+func (dst *CreateClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateClusterRequest.Merge(dst, src)
 }
 func (m *CreateClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateClusterRequest.Size(m)
@@ -2132,6 +3173,7 @@ func (m *CreateClusterRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateClusterRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *CreateClusterRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2139,6 +3181,7 @@ func (m *CreateClusterRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CreateClusterRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2162,18 +3205,18 @@ func (m *CreateClusterRequest) GetParent() string {
 
 // GetClusterRequest gets the settings of a cluster.
 type GetClusterRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to retrieve.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to retrieve.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// The name (project, location, cluster) of the cluster to retrieve.
 	// Specified in the format 'projects/*/locations/*/clusters/*'.
 	Name                 string   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
@@ -2186,7 +3229,7 @@ func (m *GetClusterRequest) Reset()         { *m = GetClusterRequest{} }
 func (m *GetClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*GetClusterRequest) ProtoMessage()    {}
 func (*GetClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{17}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{23}
 }
 func (m *GetClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetClusterRequest.Unmarshal(m, b)
@@ -2194,8 +3237,8 @@ func (m *GetClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *GetClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetClusterRequest.Merge(m, src)
+func (dst *GetClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetClusterRequest.Merge(dst, src)
 }
 func (m *GetClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_GetClusterRequest.Size(m)
@@ -2206,6 +3249,7 @@ func (m *GetClusterRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetClusterRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *GetClusterRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2213,6 +3257,7 @@ func (m *GetClusterRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetClusterRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2220,6 +3265,7 @@ func (m *GetClusterRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetClusterRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -2236,18 +3282,18 @@ func (m *GetClusterRequest) GetName() string {
 
 // UpdateClusterRequest updates the settings of a cluster.
 type UpdateClusterRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to upgrade.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// A description of the update.
 	Update *ClusterUpdate `protobuf:"bytes,4,opt,name=update,proto3" json:"update,omitempty"`
 	// The name (project, location, cluster) of the cluster to update.
@@ -2262,7 +3308,7 @@ func (m *UpdateClusterRequest) Reset()         { *m = UpdateClusterRequest{} }
 func (m *UpdateClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateClusterRequest) ProtoMessage()    {}
 func (*UpdateClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{18}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{24}
 }
 func (m *UpdateClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateClusterRequest.Unmarshal(m, b)
@@ -2270,8 +3316,8 @@ func (m *UpdateClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateClusterRequest.Merge(m, src)
+func (dst *UpdateClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateClusterRequest.Merge(dst, src)
 }
 func (m *UpdateClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateClusterRequest.Size(m)
@@ -2282,6 +3328,7 @@ func (m *UpdateClusterRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateClusterRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *UpdateClusterRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2289,6 +3336,7 @@ func (m *UpdateClusterRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *UpdateClusterRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2296,6 +3344,7 @@ func (m *UpdateClusterRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *UpdateClusterRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -2317,20 +3366,688 @@ func (m *UpdateClusterRequest) GetName() string {
 	return ""
 }
 
-// SetMasterAuthRequest updates the admin password of a cluster.
-type SetMasterAuthRequest struct {
-	// The Google Developers Console [project ID or project
+// SetNodePoolVersionRequest updates the version of a node pool.
+type UpdateNodePoolRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
+	// The Kubernetes version to change the nodes to (typically an
+	// upgrade).
+	//
+	// Users may specify either explicit versions offered by Kubernetes Engine or
+	// version aliases, which have the following behavior:
+	//
+	// - "latest": picks the highest valid Kubernetes version
+	// - "1.X": picks the highest valid patch+gke.N patch in the 1.X version
+	// - "1.X.Y": picks the highest valid gke.N patch in the 1.X.Y version
+	// - "1.X.Y-gke.N": picks an explicit Kubernetes version
+	// - "-": picks the Kubernetes master version
+	NodeVersion string `protobuf:"bytes,5,opt,name=node_version,json=nodeVersion,proto3" json:"node_version,omitempty"`
+	// The desired image type for the node pool.
+	ImageType string `protobuf:"bytes,6,opt,name=image_type,json=imageType,proto3" json:"image_type,omitempty"`
+	// The name (project, location, cluster, node pool) of the node pool to
+	// update. Specified in the format
+	// 'projects/*/locations/*/clusters/*/nodePools/*'.
+	Name                 string   `protobuf:"bytes,8,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateNodePoolRequest) Reset()         { *m = UpdateNodePoolRequest{} }
+func (m *UpdateNodePoolRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateNodePoolRequest) ProtoMessage()    {}
+func (*UpdateNodePoolRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{25}
+}
+func (m *UpdateNodePoolRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateNodePoolRequest.Unmarshal(m, b)
+}
+func (m *UpdateNodePoolRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateNodePoolRequest.Marshal(b, m, deterministic)
+}
+func (dst *UpdateNodePoolRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateNodePoolRequest.Merge(dst, src)
+}
+func (m *UpdateNodePoolRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateNodePoolRequest.Size(m)
+}
+func (m *UpdateNodePoolRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateNodePoolRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateNodePoolRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *UpdateNodePoolRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *UpdateNodePoolRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *UpdateNodePoolRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *UpdateNodePoolRequest) GetNodePoolId() string {
+	if m != nil {
+		return m.NodePoolId
+	}
+	return ""
+}
+
+func (m *UpdateNodePoolRequest) GetNodeVersion() string {
+	if m != nil {
+		return m.NodeVersion
+	}
+	return ""
+}
+
+func (m *UpdateNodePoolRequest) GetImageType() string {
+	if m != nil {
+		return m.ImageType
+	}
+	return ""
+}
+
+func (m *UpdateNodePoolRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// SetNodePoolAutoscalingRequest sets the autoscaler settings of a node pool.
+type SetNodePoolAutoscalingRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
+	// Autoscaling configuration for the node pool.
+	Autoscaling *NodePoolAutoscaling `protobuf:"bytes,5,opt,name=autoscaling,proto3" json:"autoscaling,omitempty"`
+	// The name (project, location, cluster, node pool) of the node pool to set
+	// autoscaler settings. Specified in the format
+	// 'projects/*/locations/*/clusters/*/nodePools/*'.
+	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetNodePoolAutoscalingRequest) Reset()         { *m = SetNodePoolAutoscalingRequest{} }
+func (m *SetNodePoolAutoscalingRequest) String() string { return proto.CompactTextString(m) }
+func (*SetNodePoolAutoscalingRequest) ProtoMessage()    {}
+func (*SetNodePoolAutoscalingRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{26}
+}
+func (m *SetNodePoolAutoscalingRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetNodePoolAutoscalingRequest.Unmarshal(m, b)
+}
+func (m *SetNodePoolAutoscalingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetNodePoolAutoscalingRequest.Marshal(b, m, deterministic)
+}
+func (dst *SetNodePoolAutoscalingRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetNodePoolAutoscalingRequest.Merge(dst, src)
+}
+func (m *SetNodePoolAutoscalingRequest) XXX_Size() int {
+	return xxx_messageInfo_SetNodePoolAutoscalingRequest.Size(m)
+}
+func (m *SetNodePoolAutoscalingRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetNodePoolAutoscalingRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetNodePoolAutoscalingRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *SetNodePoolAutoscalingRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetNodePoolAutoscalingRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetNodePoolAutoscalingRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetNodePoolAutoscalingRequest) GetNodePoolId() string {
+	if m != nil {
+		return m.NodePoolId
+	}
+	return ""
+}
+
+func (m *SetNodePoolAutoscalingRequest) GetAutoscaling() *NodePoolAutoscaling {
+	if m != nil {
+		return m.Autoscaling
+	}
+	return nil
+}
+
+func (m *SetNodePoolAutoscalingRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// SetLoggingServiceRequest sets the logging service of a cluster.
+type SetLoggingServiceRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
 	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to upgrade.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The logging service the cluster should use to write metrics.
+	// Currently available options:
+	//
+	// * "logging.googleapis.com" - the Google Cloud Logging service
+	// * "none" - no metrics will be exported from the cluster
+	LoggingService string `protobuf:"bytes,4,opt,name=logging_service,json=loggingService,proto3" json:"logging_service,omitempty"`
+	// The name (project, location, cluster) of the cluster to set logging.
+	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	Name                 string   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetLoggingServiceRequest) Reset()         { *m = SetLoggingServiceRequest{} }
+func (m *SetLoggingServiceRequest) String() string { return proto.CompactTextString(m) }
+func (*SetLoggingServiceRequest) ProtoMessage()    {}
+func (*SetLoggingServiceRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{27}
+}
+func (m *SetLoggingServiceRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetLoggingServiceRequest.Unmarshal(m, b)
+}
+func (m *SetLoggingServiceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetLoggingServiceRequest.Marshal(b, m, deterministic)
+}
+func (dst *SetLoggingServiceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetLoggingServiceRequest.Merge(dst, src)
+}
+func (m *SetLoggingServiceRequest) XXX_Size() int {
+	return xxx_messageInfo_SetLoggingServiceRequest.Size(m)
+}
+func (m *SetLoggingServiceRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetLoggingServiceRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetLoggingServiceRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *SetLoggingServiceRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+func (m *SetLoggingServiceRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetLoggingServiceRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *SetLoggingServiceRequest) GetLoggingService() string {
+	if m != nil {
+		return m.LoggingService
+	}
+	return ""
+}
+
+func (m *SetLoggingServiceRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// SetMonitoringServiceRequest sets the monitoring service of a cluster.
+type SetMonitoringServiceRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The monitoring service the cluster should use to write metrics.
+	// Currently available options:
+	//
+	// * "monitoring.googleapis.com" - the Google Cloud Monitoring service
+	// * "none" - no metrics will be exported from the cluster
+	MonitoringService string `protobuf:"bytes,4,opt,name=monitoring_service,json=monitoringService,proto3" json:"monitoring_service,omitempty"`
+	// The name (project, location, cluster) of the cluster to set monitoring.
+	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetMonitoringServiceRequest) Reset()         { *m = SetMonitoringServiceRequest{} }
+func (m *SetMonitoringServiceRequest) String() string { return proto.CompactTextString(m) }
+func (*SetMonitoringServiceRequest) ProtoMessage()    {}
+func (*SetMonitoringServiceRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{28}
+}
+func (m *SetMonitoringServiceRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetMonitoringServiceRequest.Unmarshal(m, b)
+}
+func (m *SetMonitoringServiceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetMonitoringServiceRequest.Marshal(b, m, deterministic)
+}
+func (dst *SetMonitoringServiceRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetMonitoringServiceRequest.Merge(dst, src)
+}
+func (m *SetMonitoringServiceRequest) XXX_Size() int {
+	return xxx_messageInfo_SetMonitoringServiceRequest.Size(m)
+}
+func (m *SetMonitoringServiceRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetMonitoringServiceRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetMonitoringServiceRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *SetMonitoringServiceRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetMonitoringServiceRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetMonitoringServiceRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *SetMonitoringServiceRequest) GetMonitoringService() string {
+	if m != nil {
+		return m.MonitoringService
+	}
+	return ""
+}
+
+func (m *SetMonitoringServiceRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// SetAddonsRequest sets the addons associated with the cluster.
+type SetAddonsConfigRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The desired configurations for the various addons available to run in the
+	// cluster.
+	AddonsConfig *AddonsConfig `protobuf:"bytes,4,opt,name=addons_config,json=addonsConfig,proto3" json:"addons_config,omitempty"`
+	// The name (project, location, cluster) of the cluster to set addons.
+	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetAddonsConfigRequest) Reset()         { *m = SetAddonsConfigRequest{} }
+func (m *SetAddonsConfigRequest) String() string { return proto.CompactTextString(m) }
+func (*SetAddonsConfigRequest) ProtoMessage()    {}
+func (*SetAddonsConfigRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{29}
+}
+func (m *SetAddonsConfigRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetAddonsConfigRequest.Unmarshal(m, b)
+}
+func (m *SetAddonsConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetAddonsConfigRequest.Marshal(b, m, deterministic)
+}
+func (dst *SetAddonsConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetAddonsConfigRequest.Merge(dst, src)
+}
+func (m *SetAddonsConfigRequest) XXX_Size() int {
+	return xxx_messageInfo_SetAddonsConfigRequest.Size(m)
+}
+func (m *SetAddonsConfigRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetAddonsConfigRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetAddonsConfigRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *SetAddonsConfigRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetAddonsConfigRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetAddonsConfigRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *SetAddonsConfigRequest) GetAddonsConfig() *AddonsConfig {
+	if m != nil {
+		return m.AddonsConfig
+	}
+	return nil
+}
+
+func (m *SetAddonsConfigRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// SetLocationsRequest sets the locations of the cluster.
+type SetLocationsRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The desired list of Google Compute Engine
+	// [zones](/compute/docs/zones#available) in which the cluster's nodes
+	// should be located. Changing the locations a cluster is in will result
+	// in nodes being either created or removed from the cluster, depending on
+	// whether locations are being added or removed.
+	//
+	// This list must always include the cluster's primary zone.
+	Locations []string `protobuf:"bytes,4,rep,name=locations,proto3" json:"locations,omitempty"`
+	// The name (project, location, cluster) of the cluster to set locations.
+	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetLocationsRequest) Reset()         { *m = SetLocationsRequest{} }
+func (m *SetLocationsRequest) String() string { return proto.CompactTextString(m) }
+func (*SetLocationsRequest) ProtoMessage()    {}
+func (*SetLocationsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{30}
+}
+func (m *SetLocationsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetLocationsRequest.Unmarshal(m, b)
+}
+func (m *SetLocationsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetLocationsRequest.Marshal(b, m, deterministic)
+}
+func (dst *SetLocationsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetLocationsRequest.Merge(dst, src)
+}
+func (m *SetLocationsRequest) XXX_Size() int {
+	return xxx_messageInfo_SetLocationsRequest.Size(m)
+}
+func (m *SetLocationsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetLocationsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetLocationsRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *SetLocationsRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetLocationsRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetLocationsRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *SetLocationsRequest) GetLocations() []string {
+	if m != nil {
+		return m.Locations
+	}
+	return nil
+}
+
+func (m *SetLocationsRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// UpdateMasterRequest updates the master of the cluster.
+type UpdateMasterRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The Kubernetes version to change the master to.
+	//
+	// Users may specify either explicit versions offered by
+	// Kubernetes Engine or version aliases, which have the following behavior:
+	//
+	// - "latest": picks the highest valid Kubernetes version
+	// - "1.X": picks the highest valid patch+gke.N patch in the 1.X version
+	// - "1.X.Y": picks the highest valid gke.N patch in the 1.X.Y version
+	// - "1.X.Y-gke.N": picks an explicit Kubernetes version
+	// - "-": picks the default Kubernetes version
+	MasterVersion string `protobuf:"bytes,4,opt,name=master_version,json=masterVersion,proto3" json:"master_version,omitempty"`
+	// The name (project, location, cluster) of the cluster to update.
+	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	Name                 string   `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateMasterRequest) Reset()         { *m = UpdateMasterRequest{} }
+func (m *UpdateMasterRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateMasterRequest) ProtoMessage()    {}
+func (*UpdateMasterRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{31}
+}
+func (m *UpdateMasterRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateMasterRequest.Unmarshal(m, b)
+}
+func (m *UpdateMasterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateMasterRequest.Marshal(b, m, deterministic)
+}
+func (dst *UpdateMasterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateMasterRequest.Merge(dst, src)
+}
+func (m *UpdateMasterRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateMasterRequest.Size(m)
+}
+func (m *UpdateMasterRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateMasterRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateMasterRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *UpdateMasterRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *UpdateMasterRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *UpdateMasterRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+func (m *UpdateMasterRequest) GetMasterVersion() string {
+	if m != nil {
+		return m.MasterVersion
+	}
+	return ""
+}
+
+func (m *UpdateMasterRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// SetMasterAuthRequest updates the admin password of a cluster.
+type SetMasterAuthRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to upgrade.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// The exact form of action to be taken on the master auth.
 	Action SetMasterAuthRequest_Action `protobuf:"varint,4,opt,name=action,proto3,enum=google.container.v1beta1.SetMasterAuthRequest_Action" json:"action,omitempty"`
 	// A description of the update.
@@ -2347,7 +4064,7 @@ func (m *SetMasterAuthRequest) Reset()         { *m = SetMasterAuthRequest{} }
 func (m *SetMasterAuthRequest) String() string { return proto.CompactTextString(m) }
 func (*SetMasterAuthRequest) ProtoMessage()    {}
 func (*SetMasterAuthRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{19}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{32}
 }
 func (m *SetMasterAuthRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetMasterAuthRequest.Unmarshal(m, b)
@@ -2355,8 +4072,8 @@ func (m *SetMasterAuthRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetMasterAuthRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetMasterAuthRequest.Marshal(b, m, deterministic)
 }
-func (m *SetMasterAuthRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetMasterAuthRequest.Merge(m, src)
+func (dst *SetMasterAuthRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetMasterAuthRequest.Merge(dst, src)
 }
 func (m *SetMasterAuthRequest) XXX_Size() int {
 	return xxx_messageInfo_SetMasterAuthRequest.Size(m)
@@ -2367,6 +4084,7 @@ func (m *SetMasterAuthRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetMasterAuthRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *SetMasterAuthRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2374,6 +4092,7 @@ func (m *SetMasterAuthRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetMasterAuthRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2381,6 +4100,7 @@ func (m *SetMasterAuthRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetMasterAuthRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -2411,18 +4131,18 @@ func (m *SetMasterAuthRequest) GetName() string {
 
 // DeleteClusterRequest deletes a cluster.
 type DeleteClusterRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to delete.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to delete.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// The name (project, location, cluster) of the cluster to delete.
 	// Specified in the format 'projects/*/locations/*/clusters/*'.
 	Name                 string   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
@@ -2435,7 +4155,7 @@ func (m *DeleteClusterRequest) Reset()         { *m = DeleteClusterRequest{} }
 func (m *DeleteClusterRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteClusterRequest) ProtoMessage()    {}
 func (*DeleteClusterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{20}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{33}
 }
 func (m *DeleteClusterRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteClusterRequest.Unmarshal(m, b)
@@ -2443,8 +4163,8 @@ func (m *DeleteClusterRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteClusterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteClusterRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteClusterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteClusterRequest.Merge(m, src)
+func (dst *DeleteClusterRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteClusterRequest.Merge(dst, src)
 }
 func (m *DeleteClusterRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteClusterRequest.Size(m)
@@ -2455,6 +4175,7 @@ func (m *DeleteClusterRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteClusterRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *DeleteClusterRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2462,6 +4183,7 @@ func (m *DeleteClusterRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *DeleteClusterRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2469,6 +4191,7 @@ func (m *DeleteClusterRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *DeleteClusterRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -2485,15 +4208,15 @@ func (m *DeleteClusterRequest) GetName() string {
 
 // ListClustersRequest lists clusters.
 type ListClustersRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use parent instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the parent field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides, or "-" for all zones.
-	// This field is deprecated, use parent instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
+	// This field has been deprecated and replaced by the parent field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
 	// The parent (project and location) where the clusters will be listed.
 	// Specified in the format 'projects/*/locations/*'.
 	// Location "-" matches all zones and all regions.
@@ -2507,7 +4230,7 @@ func (m *ListClustersRequest) Reset()         { *m = ListClustersRequest{} }
 func (m *ListClustersRequest) String() string { return proto.CompactTextString(m) }
 func (*ListClustersRequest) ProtoMessage()    {}
 func (*ListClustersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{21}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{34}
 }
 func (m *ListClustersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListClustersRequest.Unmarshal(m, b)
@@ -2515,8 +4238,8 @@ func (m *ListClustersRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListClustersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListClustersRequest.Marshal(b, m, deterministic)
 }
-func (m *ListClustersRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListClustersRequest.Merge(m, src)
+func (dst *ListClustersRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListClustersRequest.Merge(dst, src)
 }
 func (m *ListClustersRequest) XXX_Size() int {
 	return xxx_messageInfo_ListClustersRequest.Size(m)
@@ -2527,6 +4250,7 @@ func (m *ListClustersRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListClustersRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *ListClustersRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2534,6 +4258,7 @@ func (m *ListClustersRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *ListClustersRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2565,7 +4290,7 @@ func (m *ListClustersResponse) Reset()         { *m = ListClustersResponse{} }
 func (m *ListClustersResponse) String() string { return proto.CompactTextString(m) }
 func (*ListClustersResponse) ProtoMessage()    {}
 func (*ListClustersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{22}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{35}
 }
 func (m *ListClustersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListClustersResponse.Unmarshal(m, b)
@@ -2573,8 +4298,8 @@ func (m *ListClustersResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListClustersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListClustersResponse.Marshal(b, m, deterministic)
 }
-func (m *ListClustersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListClustersResponse.Merge(m, src)
+func (dst *ListClustersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListClustersResponse.Merge(dst, src)
 }
 func (m *ListClustersResponse) XXX_Size() int {
 	return xxx_messageInfo_ListClustersResponse.Size(m)
@@ -2601,18 +4326,18 @@ func (m *ListClustersResponse) GetMissingZones() []string {
 
 // GetOperationRequest gets a single operation.
 type GetOperationRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The server-assigned `name` of the operation.
-	// This field is deprecated, use name instead.
-	OperationId string `protobuf:"bytes,3,opt,name=operation_id,json=operationId,proto3" json:"operation_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The server-assigned `name` of the operation.
+	// This field has been deprecated and replaced by the name field.
+	OperationId string `protobuf:"bytes,3,opt,name=operation_id,json=operationId,proto3" json:"operation_id,omitempty"` // Deprecated: Do not use.
 	// The name (project, location, operation id) of the operation to get.
 	// Specified in the format 'projects/*/locations/*/operations/*'.
 	Name                 string   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
@@ -2625,7 +4350,7 @@ func (m *GetOperationRequest) Reset()         { *m = GetOperationRequest{} }
 func (m *GetOperationRequest) String() string { return proto.CompactTextString(m) }
 func (*GetOperationRequest) ProtoMessage()    {}
 func (*GetOperationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{23}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{36}
 }
 func (m *GetOperationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetOperationRequest.Unmarshal(m, b)
@@ -2633,8 +4358,8 @@ func (m *GetOperationRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetOperationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetOperationRequest.Marshal(b, m, deterministic)
 }
-func (m *GetOperationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetOperationRequest.Merge(m, src)
+func (dst *GetOperationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetOperationRequest.Merge(dst, src)
 }
 func (m *GetOperationRequest) XXX_Size() int {
 	return xxx_messageInfo_GetOperationRequest.Size(m)
@@ -2645,6 +4370,7 @@ func (m *GetOperationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetOperationRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *GetOperationRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2652,6 +4378,7 @@ func (m *GetOperationRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetOperationRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2659,6 +4386,7 @@ func (m *GetOperationRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetOperationRequest) GetOperationId() string {
 	if m != nil {
 		return m.OperationId
@@ -2675,14 +4403,14 @@ func (m *GetOperationRequest) GetName() string {
 
 // ListOperationsRequest lists operations.
 type ListOperationsRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use parent instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine [zone](/compute/docs/zones#available)
-	// to return operations for, or `-` for all zones.
-	// This field is deprecated, use parent instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
+	// This field has been deprecated and replaced by the parent field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) to return operations for, or `-` for
+	// all zones. This field has been deprecated and replaced by the parent field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
 	// The parent (project and location) where the operations will be listed.
 	// Specified in the format 'projects/*/locations/*'.
 	// Location "-" matches all zones and all regions.
@@ -2696,7 +4424,7 @@ func (m *ListOperationsRequest) Reset()         { *m = ListOperationsRequest{} }
 func (m *ListOperationsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListOperationsRequest) ProtoMessage()    {}
 func (*ListOperationsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{24}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{37}
 }
 func (m *ListOperationsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListOperationsRequest.Unmarshal(m, b)
@@ -2704,8 +4432,8 @@ func (m *ListOperationsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListOperationsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListOperationsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListOperationsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListOperationsRequest.Merge(m, src)
+func (dst *ListOperationsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListOperationsRequest.Merge(dst, src)
 }
 func (m *ListOperationsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListOperationsRequest.Size(m)
@@ -2716,6 +4444,7 @@ func (m *ListOperationsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListOperationsRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *ListOperationsRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2723,6 +4452,7 @@ func (m *ListOperationsRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *ListOperationsRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2739,17 +4469,17 @@ func (m *ListOperationsRequest) GetParent() string {
 
 // CancelOperationRequest cancels a single operation.
 type CancelOperationRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the operation resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The server-assigned `name` of the operation.
-	// This field is deprecated, use name instead.
-	OperationId string `protobuf:"bytes,3,opt,name=operation_id,json=operationId,proto3" json:"operation_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The server-assigned `name` of the operation.
+	// This field has been deprecated and replaced by the name field.
+	OperationId string `protobuf:"bytes,3,opt,name=operation_id,json=operationId,proto3" json:"operation_id,omitempty"` // Deprecated: Do not use.
 	// The name (project, location, operation id) of the operation to cancel.
 	// Specified in the format 'projects/*/locations/*/operations/*'.
 	Name                 string   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
@@ -2762,7 +4492,7 @@ func (m *CancelOperationRequest) Reset()         { *m = CancelOperationRequest{}
 func (m *CancelOperationRequest) String() string { return proto.CompactTextString(m) }
 func (*CancelOperationRequest) ProtoMessage()    {}
 func (*CancelOperationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{25}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{38}
 }
 func (m *CancelOperationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CancelOperationRequest.Unmarshal(m, b)
@@ -2770,8 +4500,8 @@ func (m *CancelOperationRequest) XXX_Unmarshal(b []byte) error {
 func (m *CancelOperationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CancelOperationRequest.Marshal(b, m, deterministic)
 }
-func (m *CancelOperationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CancelOperationRequest.Merge(m, src)
+func (dst *CancelOperationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CancelOperationRequest.Merge(dst, src)
 }
 func (m *CancelOperationRequest) XXX_Size() int {
 	return xxx_messageInfo_CancelOperationRequest.Size(m)
@@ -2782,6 +4512,7 @@ func (m *CancelOperationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CancelOperationRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *CancelOperationRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2789,6 +4520,7 @@ func (m *CancelOperationRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CancelOperationRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2796,6 +4528,7 @@ func (m *CancelOperationRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CancelOperationRequest) GetOperationId() string {
 	if m != nil {
 		return m.OperationId
@@ -2826,7 +4559,7 @@ func (m *ListOperationsResponse) Reset()         { *m = ListOperationsResponse{}
 func (m *ListOperationsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListOperationsResponse) ProtoMessage()    {}
 func (*ListOperationsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{26}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{39}
 }
 func (m *ListOperationsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListOperationsResponse.Unmarshal(m, b)
@@ -2834,8 +4567,8 @@ func (m *ListOperationsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListOperationsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListOperationsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListOperationsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListOperationsResponse.Merge(m, src)
+func (dst *ListOperationsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListOperationsResponse.Merge(dst, src)
 }
 func (m *ListOperationsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListOperationsResponse.Size(m)
@@ -2860,16 +4593,16 @@ func (m *ListOperationsResponse) GetMissingZones() []string {
 	return nil
 }
 
-// Gets the current Container Engine service configuration.
+// Gets the current Kubernetes Engine service configuration.
 type GetServerConfigRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine [zone](/compute/docs/zones#available)
-	// to return operations for.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) to return operations for.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
 	// The name (project and location) of the server config to get
 	// Specified in the format 'projects/*/locations/*'.
 	Name                 string   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
@@ -2882,7 +4615,7 @@ func (m *GetServerConfigRequest) Reset()         { *m = GetServerConfigRequest{}
 func (m *GetServerConfigRequest) String() string { return proto.CompactTextString(m) }
 func (*GetServerConfigRequest) ProtoMessage()    {}
 func (*GetServerConfigRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{27}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{40}
 }
 func (m *GetServerConfigRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetServerConfigRequest.Unmarshal(m, b)
@@ -2890,8 +4623,8 @@ func (m *GetServerConfigRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetServerConfigRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetServerConfigRequest.Marshal(b, m, deterministic)
 }
-func (m *GetServerConfigRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetServerConfigRequest.Merge(m, src)
+func (dst *GetServerConfigRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetServerConfigRequest.Merge(dst, src)
 }
 func (m *GetServerConfigRequest) XXX_Size() int {
 	return xxx_messageInfo_GetServerConfigRequest.Size(m)
@@ -2902,6 +4635,7 @@ func (m *GetServerConfigRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetServerConfigRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *GetServerConfigRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -2909,6 +4643,7 @@ func (m *GetServerConfigRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetServerConfigRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -2923,7 +4658,7 @@ func (m *GetServerConfigRequest) GetName() string {
 	return ""
 }
 
-// Container Engine service configuration.
+// Kubernetes Engine service configuration.
 type ServerConfig struct {
 	// Version of Kubernetes the service deploys by default.
 	DefaultClusterVersion string `protobuf:"bytes,1,opt,name=default_cluster_version,json=defaultClusterVersion,proto3" json:"default_cluster_version,omitempty"`
@@ -2944,7 +4679,7 @@ func (m *ServerConfig) Reset()         { *m = ServerConfig{} }
 func (m *ServerConfig) String() string { return proto.CompactTextString(m) }
 func (*ServerConfig) ProtoMessage()    {}
 func (*ServerConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{28}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{41}
 }
 func (m *ServerConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServerConfig.Unmarshal(m, b)
@@ -2952,8 +4687,8 @@ func (m *ServerConfig) XXX_Unmarshal(b []byte) error {
 func (m *ServerConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ServerConfig.Marshal(b, m, deterministic)
 }
-func (m *ServerConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServerConfig.Merge(m, src)
+func (dst *ServerConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServerConfig.Merge(dst, src)
 }
 func (m *ServerConfig) XXX_Size() int {
 	return xxx_messageInfo_ServerConfig.Size(m)
@@ -3001,22 +4736,23 @@ func (m *ServerConfig) GetValidMasterVersions() []string {
 
 // CreateNodePoolRequest creates a node pool for a cluster.
 type CreateNodePoolRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use parent instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the parent field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use parent instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use parent instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the parent field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the parent field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// The node pool to create.
 	NodePool *NodePool `protobuf:"bytes,4,opt,name=node_pool,json=nodePool,proto3" json:"node_pool,omitempty"`
-	// The parent (project, location, cluster id) where the node pool will be created.
-	// Specified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.
+	// The parent (project, location, cluster id) where the node pool will be
+	// created. Specified in the format
+	// 'projects/*/locations/*/clusters/*'.
 	Parent               string   `protobuf:"bytes,6,opt,name=parent,proto3" json:"parent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -3027,7 +4763,7 @@ func (m *CreateNodePoolRequest) Reset()         { *m = CreateNodePoolRequest{} }
 func (m *CreateNodePoolRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateNodePoolRequest) ProtoMessage()    {}
 func (*CreateNodePoolRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{29}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{42}
 }
 func (m *CreateNodePoolRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateNodePoolRequest.Unmarshal(m, b)
@@ -3035,8 +4771,8 @@ func (m *CreateNodePoolRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateNodePoolRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateNodePoolRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateNodePoolRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateNodePoolRequest.Merge(m, src)
+func (dst *CreateNodePoolRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateNodePoolRequest.Merge(dst, src)
 }
 func (m *CreateNodePoolRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateNodePoolRequest.Size(m)
@@ -3047,6 +4783,7 @@ func (m *CreateNodePoolRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateNodePoolRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *CreateNodePoolRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -3054,6 +4791,7 @@ func (m *CreateNodePoolRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CreateNodePoolRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -3061,6 +4799,7 @@ func (m *CreateNodePoolRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CreateNodePoolRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -3084,23 +4823,24 @@ func (m *CreateNodePoolRequest) GetParent() string {
 
 // DeleteNodePoolRequest deletes a node pool for a cluster.
 type DeleteNodePoolRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The name of the node pool to delete.
-	// This field is deprecated, use name instead.
-	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"`
-	// The name (project, location, cluster, node pool id) of the node pool to delete.
-	// Specified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool to delete.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
+	// The name (project, location, cluster, node pool id) of the node pool to
+	// delete. Specified in the format
+	// 'projects/*/locations/*/clusters/*/nodePools/*'.
 	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -3111,7 +4851,7 @@ func (m *DeleteNodePoolRequest) Reset()         { *m = DeleteNodePoolRequest{} }
 func (m *DeleteNodePoolRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteNodePoolRequest) ProtoMessage()    {}
 func (*DeleteNodePoolRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{30}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{43}
 }
 func (m *DeleteNodePoolRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteNodePoolRequest.Unmarshal(m, b)
@@ -3119,8 +4859,8 @@ func (m *DeleteNodePoolRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteNodePoolRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteNodePoolRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteNodePoolRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteNodePoolRequest.Merge(m, src)
+func (dst *DeleteNodePoolRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteNodePoolRequest.Merge(dst, src)
 }
 func (m *DeleteNodePoolRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteNodePoolRequest.Size(m)
@@ -3131,6 +4871,7 @@ func (m *DeleteNodePoolRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteNodePoolRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *DeleteNodePoolRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -3138,6 +4879,7 @@ func (m *DeleteNodePoolRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *DeleteNodePoolRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -3145,6 +4887,7 @@ func (m *DeleteNodePoolRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *DeleteNodePoolRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -3152,6 +4895,7 @@ func (m *DeleteNodePoolRequest) GetClusterId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *DeleteNodePoolRequest) GetNodePoolId() string {
 	if m != nil {
 		return m.NodePoolId
@@ -3168,20 +4912,20 @@ func (m *DeleteNodePoolRequest) GetName() string {
 
 // ListNodePoolsRequest lists the node pool(s) for a cluster.
 type ListNodePoolsRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use parent instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the parent field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use parent instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use parent instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The parent (project, location, cluster id) where the node pools will be listed.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	// This field has been deprecated and replaced by the parent field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the parent field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The parent (project, location, cluster id) where the node pools will be
+	// listed. Specified in the format 'projects/*/locations/*/clusters/*'.
 	Parent               string   `protobuf:"bytes,5,opt,name=parent,proto3" json:"parent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -3192,7 +4936,7 @@ func (m *ListNodePoolsRequest) Reset()         { *m = ListNodePoolsRequest{} }
 func (m *ListNodePoolsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListNodePoolsRequest) ProtoMessage()    {}
 func (*ListNodePoolsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{31}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{44}
 }
 func (m *ListNodePoolsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListNodePoolsRequest.Unmarshal(m, b)
@@ -3200,8 +4944,8 @@ func (m *ListNodePoolsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListNodePoolsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListNodePoolsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListNodePoolsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListNodePoolsRequest.Merge(m, src)
+func (dst *ListNodePoolsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListNodePoolsRequest.Merge(dst, src)
 }
 func (m *ListNodePoolsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListNodePoolsRequest.Size(m)
@@ -3212,6 +4956,7 @@ func (m *ListNodePoolsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListNodePoolsRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *ListNodePoolsRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -3219,6 +4964,7 @@ func (m *ListNodePoolsRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *ListNodePoolsRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -3226,6 +4972,7 @@ func (m *ListNodePoolsRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *ListNodePoolsRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -3242,23 +4989,24 @@ func (m *ListNodePoolsRequest) GetParent() string {
 
 // GetNodePoolRequest retrieves a node pool for a cluster.
 type GetNodePoolRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The name of the node pool.
-	// This field is deprecated, use name instead.
-	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"`
-	// The name (project, location, cluster, node pool id) of the node pool to get.
-	// Specified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
+	// The name (project, location, cluster, node pool id) of the node pool to
+	// get. Specified in the format
+	// 'projects/*/locations/*/clusters/*/nodePools/*'.
 	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -3269,7 +5017,7 @@ func (m *GetNodePoolRequest) Reset()         { *m = GetNodePoolRequest{} }
 func (m *GetNodePoolRequest) String() string { return proto.CompactTextString(m) }
 func (*GetNodePoolRequest) ProtoMessage()    {}
 func (*GetNodePoolRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{32}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{45}
 }
 func (m *GetNodePoolRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetNodePoolRequest.Unmarshal(m, b)
@@ -3277,8 +5025,8 @@ func (m *GetNodePoolRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetNodePoolRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetNodePoolRequest.Marshal(b, m, deterministic)
 }
-func (m *GetNodePoolRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetNodePoolRequest.Merge(m, src)
+func (dst *GetNodePoolRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetNodePoolRequest.Merge(dst, src)
 }
 func (m *GetNodePoolRequest) XXX_Size() int {
 	return xxx_messageInfo_GetNodePoolRequest.Size(m)
@@ -3289,6 +5037,7 @@ func (m *GetNodePoolRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetNodePoolRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *GetNodePoolRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -3296,6 +5045,7 @@ func (m *GetNodePoolRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetNodePoolRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -3303,6 +5053,7 @@ func (m *GetNodePoolRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetNodePoolRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -3310,6 +5061,7 @@ func (m *GetNodePoolRequest) GetClusterId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *GetNodePoolRequest) GetNodePoolId() string {
 	if m != nil {
 		return m.NodePoolId
@@ -3342,11 +5094,11 @@ type NodePool struct {
 	InitialNodeCount int32 `protobuf:"varint,3,opt,name=initial_node_count,json=initialNodeCount,proto3" json:"initial_node_count,omitempty"`
 	// [Output only] Server-defined URL for the resource.
 	SelfLink string `protobuf:"bytes,100,opt,name=self_link,json=selfLink,proto3" json:"self_link,omitempty"`
-	// [Output only] The version of the Kubernetes of this node.
+	// The version of the Kubernetes of this node.
 	Version string `protobuf:"bytes,101,opt,name=version,proto3" json:"version,omitempty"`
-	// [Output only] The resource URLs of [instance
-	// groups](/compute/docs/instance-groups/) associated with this
-	// node pool.
+	// [Output only] The resource URLs of the [managed instance
+	// groups](/compute/docs/instance-groups/creating-groups-of-managed-instances)
+	// associated with this node pool.
 	InstanceGroupUrls []string `protobuf:"bytes,102,rep,name=instance_group_urls,json=instanceGroupUrls,proto3" json:"instance_group_urls,omitempty"`
 	// [Output only] The status of the nodes in this pool instance.
 	Status NodePool_Status `protobuf:"varint,103,opt,name=status,proto3,enum=google.container.v1beta1.NodePool_Status" json:"status,omitempty"`
@@ -3357,17 +5109,22 @@ type NodePool struct {
 	// only if a valid configuration is present.
 	Autoscaling *NodePoolAutoscaling `protobuf:"bytes,4,opt,name=autoscaling,proto3" json:"autoscaling,omitempty"`
 	// NodeManagement configuration for this NodePool.
-	Management           *NodeManagement `protobuf:"bytes,5,opt,name=management,proto3" json:"management,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_unrecognized     []byte          `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	Management *NodeManagement `protobuf:"bytes,5,opt,name=management,proto3" json:"management,omitempty"`
+	// The constraint on the maximum number of pods that can be run
+	// simultaneously on a node in the node pool.
+	MaxPodsConstraint *MaxPodsConstraint `protobuf:"bytes,6,opt,name=max_pods_constraint,json=maxPodsConstraint,proto3" json:"max_pods_constraint,omitempty"`
+	// Which conditions caused the current node pool state.
+	Conditions           []*StatusCondition `protobuf:"bytes,105,rep,name=conditions,proto3" json:"conditions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
 }
 
 func (m *NodePool) Reset()         { *m = NodePool{} }
 func (m *NodePool) String() string { return proto.CompactTextString(m) }
 func (*NodePool) ProtoMessage()    {}
 func (*NodePool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{33}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{46}
 }
 func (m *NodePool) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NodePool.Unmarshal(m, b)
@@ -3375,8 +5132,8 @@ func (m *NodePool) XXX_Unmarshal(b []byte) error {
 func (m *NodePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NodePool.Marshal(b, m, deterministic)
 }
-func (m *NodePool) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodePool.Merge(m, src)
+func (dst *NodePool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodePool.Merge(dst, src)
 }
 func (m *NodePool) XXX_Size() int {
 	return xxx_messageInfo_NodePool.Size(m)
@@ -3457,6 +5214,20 @@ func (m *NodePool) GetManagement() *NodeManagement {
 	return nil
 }
 
+func (m *NodePool) GetMaxPodsConstraint() *MaxPodsConstraint {
+	if m != nil {
+		return m.MaxPodsConstraint
+	}
+	return nil
+}
+
+func (m *NodePool) GetConditions() []*StatusCondition {
+	if m != nil {
+		return m.Conditions
+	}
+	return nil
+}
+
 // NodeManagement defines the set of node management services turned on for the
 // node pool.
 type NodeManagement struct {
@@ -3475,7 +5246,7 @@ func (m *NodeManagement) Reset()         { *m = NodeManagement{} }
 func (m *NodeManagement) String() string { return proto.CompactTextString(m) }
 func (*NodeManagement) ProtoMessage()    {}
 func (*NodeManagement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{34}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{47}
 }
 func (m *NodeManagement) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NodeManagement.Unmarshal(m, b)
@@ -3483,8 +5254,8 @@ func (m *NodeManagement) XXX_Unmarshal(b []byte) error {
 func (m *NodeManagement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NodeManagement.Marshal(b, m, deterministic)
 }
-func (m *NodeManagement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodeManagement.Merge(m, src)
+func (dst *NodeManagement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeManagement.Merge(dst, src)
 }
 func (m *NodeManagement) XXX_Size() int {
 	return xxx_messageInfo_NodeManagement.Size(m)
@@ -3535,7 +5306,7 @@ func (m *AutoUpgradeOptions) Reset()         { *m = AutoUpgradeOptions{} }
 func (m *AutoUpgradeOptions) String() string { return proto.CompactTextString(m) }
 func (*AutoUpgradeOptions) ProtoMessage()    {}
 func (*AutoUpgradeOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{35}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{48}
 }
 func (m *AutoUpgradeOptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AutoUpgradeOptions.Unmarshal(m, b)
@@ -3543,8 +5314,8 @@ func (m *AutoUpgradeOptions) XXX_Unmarshal(b []byte) error {
 func (m *AutoUpgradeOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AutoUpgradeOptions.Marshal(b, m, deterministic)
 }
-func (m *AutoUpgradeOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AutoUpgradeOptions.Merge(m, src)
+func (dst *AutoUpgradeOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AutoUpgradeOptions.Merge(dst, src)
 }
 func (m *AutoUpgradeOptions) XXX_Size() int {
 	return xxx_messageInfo_AutoUpgradeOptions.Size(m)
@@ -3582,7 +5353,7 @@ func (m *MaintenancePolicy) Reset()         { *m = MaintenancePolicy{} }
 func (m *MaintenancePolicy) String() string { return proto.CompactTextString(m) }
 func (*MaintenancePolicy) ProtoMessage()    {}
 func (*MaintenancePolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{36}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{49}
 }
 func (m *MaintenancePolicy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MaintenancePolicy.Unmarshal(m, b)
@@ -3590,8 +5361,8 @@ func (m *MaintenancePolicy) XXX_Unmarshal(b []byte) error {
 func (m *MaintenancePolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MaintenancePolicy.Marshal(b, m, deterministic)
 }
-func (m *MaintenancePolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MaintenancePolicy.Merge(m, src)
+func (dst *MaintenancePolicy) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaintenancePolicy.Merge(dst, src)
 }
 func (m *MaintenancePolicy) XXX_Size() int {
 	return xxx_messageInfo_MaintenancePolicy.Size(m)
@@ -3626,7 +5397,7 @@ func (m *MaintenanceWindow) Reset()         { *m = MaintenanceWindow{} }
 func (m *MaintenanceWindow) String() string { return proto.CompactTextString(m) }
 func (*MaintenanceWindow) ProtoMessage()    {}
 func (*MaintenanceWindow) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{37}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{50}
 }
 func (m *MaintenanceWindow) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MaintenanceWindow.Unmarshal(m, b)
@@ -3634,8 +5405,8 @@ func (m *MaintenanceWindow) XXX_Unmarshal(b []byte) error {
 func (m *MaintenanceWindow) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MaintenanceWindow.Marshal(b, m, deterministic)
 }
-func (m *MaintenanceWindow) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MaintenanceWindow.Merge(m, src)
+func (dst *MaintenanceWindow) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaintenanceWindow.Merge(dst, src)
 }
 func (m *MaintenanceWindow) XXX_Size() int {
 	return xxx_messageInfo_MaintenanceWindow.Size(m)
@@ -3742,7 +5513,7 @@ func (m *DailyMaintenanceWindow) Reset()         { *m = DailyMaintenanceWindow{}
 func (m *DailyMaintenanceWindow) String() string { return proto.CompactTextString(m) }
 func (*DailyMaintenanceWindow) ProtoMessage()    {}
 func (*DailyMaintenanceWindow) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{38}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{51}
 }
 func (m *DailyMaintenanceWindow) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DailyMaintenanceWindow.Unmarshal(m, b)
@@ -3750,8 +5521,8 @@ func (m *DailyMaintenanceWindow) XXX_Unmarshal(b []byte) error {
 func (m *DailyMaintenanceWindow) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DailyMaintenanceWindow.Marshal(b, m, deterministic)
 }
-func (m *DailyMaintenanceWindow) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DailyMaintenanceWindow.Merge(m, src)
+func (dst *DailyMaintenanceWindow) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DailyMaintenanceWindow.Merge(dst, src)
 }
 func (m *DailyMaintenanceWindow) XXX_Size() int {
 	return xxx_messageInfo_DailyMaintenanceWindow.Size(m)
@@ -3779,21 +5550,21 @@ func (m *DailyMaintenanceWindow) GetDuration() string {
 // SetNodePoolManagementRequest sets the node management properties of a node
 // pool.
 type SetNodePoolManagementRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to update.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The name of the node pool to update.
-	// This field is deprecated, use name instead.
-	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to update.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool to update.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
 	// NodeManagement configuration for the node pool.
 	Management *NodeManagement `protobuf:"bytes,5,opt,name=management,proto3" json:"management,omitempty"`
 	// The name (project, location, cluster, node pool id) of the node pool to set
@@ -3809,7 +5580,7 @@ func (m *SetNodePoolManagementRequest) Reset()         { *m = SetNodePoolManagem
 func (m *SetNodePoolManagementRequest) String() string { return proto.CompactTextString(m) }
 func (*SetNodePoolManagementRequest) ProtoMessage()    {}
 func (*SetNodePoolManagementRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{39}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{52}
 }
 func (m *SetNodePoolManagementRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetNodePoolManagementRequest.Unmarshal(m, b)
@@ -3817,8 +5588,8 @@ func (m *SetNodePoolManagementRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetNodePoolManagementRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetNodePoolManagementRequest.Marshal(b, m, deterministic)
 }
-func (m *SetNodePoolManagementRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetNodePoolManagementRequest.Merge(m, src)
+func (dst *SetNodePoolManagementRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetNodePoolManagementRequest.Merge(dst, src)
 }
 func (m *SetNodePoolManagementRequest) XXX_Size() int {
 	return xxx_messageInfo_SetNodePoolManagementRequest.Size(m)
@@ -3829,6 +5600,7 @@ func (m *SetNodePoolManagementRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetNodePoolManagementRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *SetNodePoolManagementRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -3836,6 +5608,7 @@ func (m *SetNodePoolManagementRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetNodePoolManagementRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -3843,6 +5616,7 @@ func (m *SetNodePoolManagementRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetNodePoolManagementRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -3850,6 +5624,7 @@ func (m *SetNodePoolManagementRequest) GetClusterId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetNodePoolManagementRequest) GetNodePoolId() string {
 	if m != nil {
 		return m.NodePoolId
@@ -3871,25 +5646,124 @@ func (m *SetNodePoolManagementRequest) GetName() string {
 	return ""
 }
 
+// SetNodePoolSizeRequest sets the size a node
+// pool.
+type SetNodePoolSizeRequest struct {
+	// Deprecated. The Google Developers Console [project ID or project
+	// number](https://support.google.com/cloud/answer/6158840).
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
+	// [zone](/compute/docs/zones#available) in which the cluster
+	// resides.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to update.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool to update.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
+	// The desired node count for the pool.
+	NodeCount int32 `protobuf:"varint,5,opt,name=node_count,json=nodeCount,proto3" json:"node_count,omitempty"`
+	// The name (project, location, cluster, node pool id) of the node pool to set
+	// size.
+	// Specified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.
+	Name                 string   `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetNodePoolSizeRequest) Reset()         { *m = SetNodePoolSizeRequest{} }
+func (m *SetNodePoolSizeRequest) String() string { return proto.CompactTextString(m) }
+func (*SetNodePoolSizeRequest) ProtoMessage()    {}
+func (*SetNodePoolSizeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{53}
+}
+func (m *SetNodePoolSizeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetNodePoolSizeRequest.Unmarshal(m, b)
+}
+func (m *SetNodePoolSizeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetNodePoolSizeRequest.Marshal(b, m, deterministic)
+}
+func (dst *SetNodePoolSizeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetNodePoolSizeRequest.Merge(dst, src)
+}
+func (m *SetNodePoolSizeRequest) XXX_Size() int {
+	return xxx_messageInfo_SetNodePoolSizeRequest.Size(m)
+}
+func (m *SetNodePoolSizeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetNodePoolSizeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetNodePoolSizeRequest proto.InternalMessageInfo
+
+// Deprecated: Do not use.
+func (m *SetNodePoolSizeRequest) GetProjectId() string {
+	if m != nil {
+		return m.ProjectId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetNodePoolSizeRequest) GetZone() string {
+	if m != nil {
+		return m.Zone
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetNodePoolSizeRequest) GetClusterId() string {
+	if m != nil {
+		return m.ClusterId
+	}
+	return ""
+}
+
+// Deprecated: Do not use.
+func (m *SetNodePoolSizeRequest) GetNodePoolId() string {
+	if m != nil {
+		return m.NodePoolId
+	}
+	return ""
+}
+
+func (m *SetNodePoolSizeRequest) GetNodeCount() int32 {
+	if m != nil {
+		return m.NodeCount
+	}
+	return 0
+}
+
+func (m *SetNodePoolSizeRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
 // RollbackNodePoolUpgradeRequest rollbacks the previously Aborted or Failed
 // NodePool upgrade. This will be an no-op if the last upgrade successfully
 // completed.
 type RollbackNodePoolUpgradeRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to rollback.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The name of the node pool to rollback.
-	// This field is deprecated, use name instead.
-	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to rollback.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the node pool to rollback.
+	// This field has been deprecated and replaced by the name field.
+	NodePoolId string `protobuf:"bytes,4,opt,name=node_pool_id,json=nodePoolId,proto3" json:"node_pool_id,omitempty"` // Deprecated: Do not use.
 	// The name (project, location, cluster, node pool id) of the node poll to
 	// rollback upgrade.
 	// Specified in the format 'projects/*/locations/*/clusters/*/nodePools/*'.
@@ -3903,7 +5777,7 @@ func (m *RollbackNodePoolUpgradeRequest) Reset()         { *m = RollbackNodePool
 func (m *RollbackNodePoolUpgradeRequest) String() string { return proto.CompactTextString(m) }
 func (*RollbackNodePoolUpgradeRequest) ProtoMessage()    {}
 func (*RollbackNodePoolUpgradeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{40}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{54}
 }
 func (m *RollbackNodePoolUpgradeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RollbackNodePoolUpgradeRequest.Unmarshal(m, b)
@@ -3911,8 +5785,8 @@ func (m *RollbackNodePoolUpgradeRequest) XXX_Unmarshal(b []byte) error {
 func (m *RollbackNodePoolUpgradeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RollbackNodePoolUpgradeRequest.Marshal(b, m, deterministic)
 }
-func (m *RollbackNodePoolUpgradeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RollbackNodePoolUpgradeRequest.Merge(m, src)
+func (dst *RollbackNodePoolUpgradeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RollbackNodePoolUpgradeRequest.Merge(dst, src)
 }
 func (m *RollbackNodePoolUpgradeRequest) XXX_Size() int {
 	return xxx_messageInfo_RollbackNodePoolUpgradeRequest.Size(m)
@@ -3923,6 +5797,7 @@ func (m *RollbackNodePoolUpgradeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RollbackNodePoolUpgradeRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *RollbackNodePoolUpgradeRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -3930,6 +5805,7 @@ func (m *RollbackNodePoolUpgradeRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *RollbackNodePoolUpgradeRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -3937,6 +5813,7 @@ func (m *RollbackNodePoolUpgradeRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *RollbackNodePoolUpgradeRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -3944,6 +5821,7 @@ func (m *RollbackNodePoolUpgradeRequest) GetClusterId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *RollbackNodePoolUpgradeRequest) GetNodePoolId() string {
 	if m != nil {
 		return m.NodePoolId
@@ -3971,7 +5849,7 @@ func (m *ListNodePoolsResponse) Reset()         { *m = ListNodePoolsResponse{} }
 func (m *ListNodePoolsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListNodePoolsResponse) ProtoMessage()    {}
 func (*ListNodePoolsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{41}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{55}
 }
 func (m *ListNodePoolsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListNodePoolsResponse.Unmarshal(m, b)
@@ -3979,8 +5857,8 @@ func (m *ListNodePoolsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListNodePoolsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListNodePoolsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListNodePoolsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListNodePoolsResponse.Merge(m, src)
+func (dst *ListNodePoolsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListNodePoolsResponse.Merge(dst, src)
 }
 func (m *ListNodePoolsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListNodePoolsResponse.Size(m)
@@ -3998,6 +5876,118 @@ func (m *ListNodePoolsResponse) GetNodePools() []*NodePool {
 	return nil
 }
 
+// ClusterAutoscaling contains global, per-cluster information
+// required by Cluster Autoscaler to automatically adjust
+// the size of the cluster and create/delete
+// node pools based on the current needs.
+type ClusterAutoscaling struct {
+	// Enables automatic node pool creation and deletion.
+	EnableNodeAutoprovisioning bool `protobuf:"varint,1,opt,name=enable_node_autoprovisioning,json=enableNodeAutoprovisioning,proto3" json:"enable_node_autoprovisioning,omitempty"`
+	// Contains global constraints regarding minimum and maximum
+	// amount of resources in the cluster.
+	ResourceLimits       []*ResourceLimit `protobuf:"bytes,2,rep,name=resource_limits,json=resourceLimits,proto3" json:"resource_limits,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *ClusterAutoscaling) Reset()         { *m = ClusterAutoscaling{} }
+func (m *ClusterAutoscaling) String() string { return proto.CompactTextString(m) }
+func (*ClusterAutoscaling) ProtoMessage()    {}
+func (*ClusterAutoscaling) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{56}
+}
+func (m *ClusterAutoscaling) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClusterAutoscaling.Unmarshal(m, b)
+}
+func (m *ClusterAutoscaling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClusterAutoscaling.Marshal(b, m, deterministic)
+}
+func (dst *ClusterAutoscaling) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClusterAutoscaling.Merge(dst, src)
+}
+func (m *ClusterAutoscaling) XXX_Size() int {
+	return xxx_messageInfo_ClusterAutoscaling.Size(m)
+}
+func (m *ClusterAutoscaling) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClusterAutoscaling.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClusterAutoscaling proto.InternalMessageInfo
+
+func (m *ClusterAutoscaling) GetEnableNodeAutoprovisioning() bool {
+	if m != nil {
+		return m.EnableNodeAutoprovisioning
+	}
+	return false
+}
+
+func (m *ClusterAutoscaling) GetResourceLimits() []*ResourceLimit {
+	if m != nil {
+		return m.ResourceLimits
+	}
+	return nil
+}
+
+// Contains information about amount of some resource in the cluster.
+// For memory, value should be in GB.
+type ResourceLimit struct {
+	// Resource name "cpu", "memory" or gpu-specific string.
+	ResourceType string `protobuf:"bytes,1,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
+	// Minimum amount of the resource in the cluster.
+	Minimum int64 `protobuf:"varint,2,opt,name=minimum,proto3" json:"minimum,omitempty"`
+	// Maximum amount of the resource in the cluster.
+	Maximum              int64    `protobuf:"varint,3,opt,name=maximum,proto3" json:"maximum,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ResourceLimit) Reset()         { *m = ResourceLimit{} }
+func (m *ResourceLimit) String() string { return proto.CompactTextString(m) }
+func (*ResourceLimit) ProtoMessage()    {}
+func (*ResourceLimit) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{57}
+}
+func (m *ResourceLimit) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResourceLimit.Unmarshal(m, b)
+}
+func (m *ResourceLimit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResourceLimit.Marshal(b, m, deterministic)
+}
+func (dst *ResourceLimit) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceLimit.Merge(dst, src)
+}
+func (m *ResourceLimit) XXX_Size() int {
+	return xxx_messageInfo_ResourceLimit.Size(m)
+}
+func (m *ResourceLimit) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceLimit.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceLimit proto.InternalMessageInfo
+
+func (m *ResourceLimit) GetResourceType() string {
+	if m != nil {
+		return m.ResourceType
+	}
+	return ""
+}
+
+func (m *ResourceLimit) GetMinimum() int64 {
+	if m != nil {
+		return m.Minimum
+	}
+	return 0
+}
+
+func (m *ResourceLimit) GetMaximum() int64 {
+	if m != nil {
+		return m.Maximum
+	}
+	return 0
+}
+
 // NodePoolAutoscaling contains information required by cluster autoscaler to
 // adjust the size of the node pool to the current cluster usage.
 type NodePoolAutoscaling struct {
@@ -4008,7 +5998,9 @@ type NodePoolAutoscaling struct {
 	MinNodeCount int32 `protobuf:"varint,2,opt,name=min_node_count,json=minNodeCount,proto3" json:"min_node_count,omitempty"`
 	// Maximum number of nodes in the NodePool. Must be >= min_node_count. There
 	// has to enough quota to scale up the cluster.
-	MaxNodeCount         int32    `protobuf:"varint,3,opt,name=max_node_count,json=maxNodeCount,proto3" json:"max_node_count,omitempty"`
+	MaxNodeCount int32 `protobuf:"varint,3,opt,name=max_node_count,json=maxNodeCount,proto3" json:"max_node_count,omitempty"`
+	// Can this node pool be deleted automatically.
+	Autoprovisioned      bool     `protobuf:"varint,4,opt,name=autoprovisioned,proto3" json:"autoprovisioned,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -4018,7 +6010,7 @@ func (m *NodePoolAutoscaling) Reset()         { *m = NodePoolAutoscaling{} }
 func (m *NodePoolAutoscaling) String() string { return proto.CompactTextString(m) }
 func (*NodePoolAutoscaling) ProtoMessage()    {}
 func (*NodePoolAutoscaling) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{42}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{58}
 }
 func (m *NodePoolAutoscaling) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NodePoolAutoscaling.Unmarshal(m, b)
@@ -4026,8 +6018,8 @@ func (m *NodePoolAutoscaling) XXX_Unmarshal(b []byte) error {
 func (m *NodePoolAutoscaling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_NodePoolAutoscaling.Marshal(b, m, deterministic)
 }
-func (m *NodePoolAutoscaling) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NodePoolAutoscaling.Merge(m, src)
+func (dst *NodePoolAutoscaling) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodePoolAutoscaling.Merge(dst, src)
 }
 func (m *NodePoolAutoscaling) XXX_Size() int {
 	return xxx_messageInfo_NodePoolAutoscaling.Size(m)
@@ -4059,27 +6051,34 @@ func (m *NodePoolAutoscaling) GetMaxNodeCount() int32 {
 	return 0
 }
 
+func (m *NodePoolAutoscaling) GetAutoprovisioned() bool {
+	if m != nil {
+		return m.Autoprovisioned
+	}
+	return false
+}
+
 // SetLabelsRequest sets the Google Cloud Platform labels on a Google Container
 // Engine cluster, which will in turn set them for Google Compute Engine
 // resources used by that cluster
 type SetLabelsRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// The labels to set for that cluster.
 	ResourceLabels map[string]string `protobuf:"bytes,4,rep,name=resource_labels,json=resourceLabels,proto3" json:"resource_labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// The fingerprint of the previous set of labels for this resource,
 	// used to detect conflicts. The fingerprint is initially generated by
-	// Container Engine and changes after every request to modify or update
+	// Kubernetes Engine and changes after every request to modify or update
 	// labels. You must always provide an up-to-date fingerprint hash when
 	// updating or changing labels. Make a <code>get()</code> request to the
 	// resource to get the latest fingerprint.
@@ -4096,7 +6095,7 @@ func (m *SetLabelsRequest) Reset()         { *m = SetLabelsRequest{} }
 func (m *SetLabelsRequest) String() string { return proto.CompactTextString(m) }
 func (*SetLabelsRequest) ProtoMessage()    {}
 func (*SetLabelsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{43}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{59}
 }
 func (m *SetLabelsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetLabelsRequest.Unmarshal(m, b)
@@ -4104,8 +6103,8 @@ func (m *SetLabelsRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetLabelsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetLabelsRequest.Marshal(b, m, deterministic)
 }
-func (m *SetLabelsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetLabelsRequest.Merge(m, src)
+func (dst *SetLabelsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetLabelsRequest.Merge(dst, src)
 }
 func (m *SetLabelsRequest) XXX_Size() int {
 	return xxx_messageInfo_SetLabelsRequest.Size(m)
@@ -4116,6 +6115,7 @@ func (m *SetLabelsRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetLabelsRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *SetLabelsRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -4123,6 +6123,7 @@ func (m *SetLabelsRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetLabelsRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -4130,6 +6131,7 @@ func (m *SetLabelsRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetLabelsRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -4161,18 +6163,18 @@ func (m *SetLabelsRequest) GetName() string {
 // SetLegacyAbacRequest enables or disables the ABAC authorization mechanism for
 // a cluster.
 type SetLegacyAbacRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://support.google.com/cloud/answer/6158840).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster to update.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster to update.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// Whether ABAC authorization will be enabled in the cluster.
 	Enabled bool `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	// The name (project, location, cluster id) of the cluster to set legacy abac.
@@ -4187,7 +6189,7 @@ func (m *SetLegacyAbacRequest) Reset()         { *m = SetLegacyAbacRequest{} }
 func (m *SetLegacyAbacRequest) String() string { return proto.CompactTextString(m) }
 func (*SetLegacyAbacRequest) ProtoMessage()    {}
 func (*SetLegacyAbacRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{44}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{60}
 }
 func (m *SetLegacyAbacRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetLegacyAbacRequest.Unmarshal(m, b)
@@ -4195,8 +6197,8 @@ func (m *SetLegacyAbacRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetLegacyAbacRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetLegacyAbacRequest.Marshal(b, m, deterministic)
 }
-func (m *SetLegacyAbacRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetLegacyAbacRequest.Merge(m, src)
+func (dst *SetLegacyAbacRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetLegacyAbacRequest.Merge(dst, src)
 }
 func (m *SetLegacyAbacRequest) XXX_Size() int {
 	return xxx_messageInfo_SetLegacyAbacRequest.Size(m)
@@ -4207,6 +6209,7 @@ func (m *SetLegacyAbacRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetLegacyAbacRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *SetLegacyAbacRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -4214,6 +6217,7 @@ func (m *SetLegacyAbacRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetLegacyAbacRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -4221,6 +6225,7 @@ func (m *SetLegacyAbacRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetLegacyAbacRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -4245,21 +6250,23 @@ func (m *SetLegacyAbacRequest) GetName() string {
 // StartIPRotationRequest creates a new IP for the cluster and then performs
 // a node upgrade on each node pool to point to the new IP.
 type StartIPRotationRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The name (project, location, cluster id) of the cluster to start IP rotation.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
-	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The name (project, location, cluster id) of the cluster to start IP
+	// rotation. Specified in the format 'projects/*/locations/*/clusters/*'.
+	Name string `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
+	// Whether to rotate credentials during IP rotation.
+	RotateCredentials    bool     `protobuf:"varint,7,opt,name=rotate_credentials,json=rotateCredentials,proto3" json:"rotate_credentials,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -4269,7 +6276,7 @@ func (m *StartIPRotationRequest) Reset()         { *m = StartIPRotationRequest{}
 func (m *StartIPRotationRequest) String() string { return proto.CompactTextString(m) }
 func (*StartIPRotationRequest) ProtoMessage()    {}
 func (*StartIPRotationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{45}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{61}
 }
 func (m *StartIPRotationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StartIPRotationRequest.Unmarshal(m, b)
@@ -4277,8 +6284,8 @@ func (m *StartIPRotationRequest) XXX_Unmarshal(b []byte) error {
 func (m *StartIPRotationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StartIPRotationRequest.Marshal(b, m, deterministic)
 }
-func (m *StartIPRotationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StartIPRotationRequest.Merge(m, src)
+func (dst *StartIPRotationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StartIPRotationRequest.Merge(dst, src)
 }
 func (m *StartIPRotationRequest) XXX_Size() int {
 	return xxx_messageInfo_StartIPRotationRequest.Size(m)
@@ -4289,6 +6296,7 @@ func (m *StartIPRotationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StartIPRotationRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *StartIPRotationRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -4296,6 +6304,7 @@ func (m *StartIPRotationRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *StartIPRotationRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -4303,6 +6312,7 @@ func (m *StartIPRotationRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *StartIPRotationRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -4317,22 +6327,29 @@ func (m *StartIPRotationRequest) GetName() string {
 	return ""
 }
 
+func (m *StartIPRotationRequest) GetRotateCredentials() bool {
+	if m != nil {
+		return m.RotateCredentials
+	}
+	return false
+}
+
 // CompleteIPRotationRequest moves the cluster master back into single-IP mode.
 type CompleteIPRotationRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
-	// The name (project, location, cluster id) of the cluster to complete IP rotation.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
+	// The name (project, location, cluster id) of the cluster to complete IP
+	// rotation. Specified in the format 'projects/*/locations/*/clusters/*'.
 	Name                 string   `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -4343,7 +6360,7 @@ func (m *CompleteIPRotationRequest) Reset()         { *m = CompleteIPRotationReq
 func (m *CompleteIPRotationRequest) String() string { return proto.CompactTextString(m) }
 func (*CompleteIPRotationRequest) ProtoMessage()    {}
 func (*CompleteIPRotationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{46}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{62}
 }
 func (m *CompleteIPRotationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CompleteIPRotationRequest.Unmarshal(m, b)
@@ -4351,8 +6368,8 @@ func (m *CompleteIPRotationRequest) XXX_Unmarshal(b []byte) error {
 func (m *CompleteIPRotationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CompleteIPRotationRequest.Marshal(b, m, deterministic)
 }
-func (m *CompleteIPRotationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CompleteIPRotationRequest.Merge(m, src)
+func (dst *CompleteIPRotationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CompleteIPRotationRequest.Merge(dst, src)
 }
 func (m *CompleteIPRotationRequest) XXX_Size() int {
 	return xxx_messageInfo_CompleteIPRotationRequest.Size(m)
@@ -4363,6 +6380,7 @@ func (m *CompleteIPRotationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CompleteIPRotationRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *CompleteIPRotationRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -4370,6 +6388,7 @@ func (m *CompleteIPRotationRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CompleteIPRotationRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -4377,6 +6396,7 @@ func (m *CompleteIPRotationRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *CompleteIPRotationRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -4407,7 +6427,7 @@ func (m *AcceleratorConfig) Reset()         { *m = AcceleratorConfig{} }
 func (m *AcceleratorConfig) String() string { return proto.CompactTextString(m) }
 func (*AcceleratorConfig) ProtoMessage()    {}
 func (*AcceleratorConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{47}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{63}
 }
 func (m *AcceleratorConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AcceleratorConfig.Unmarshal(m, b)
@@ -4415,8 +6435,8 @@ func (m *AcceleratorConfig) XXX_Unmarshal(b []byte) error {
 func (m *AcceleratorConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AcceleratorConfig.Marshal(b, m, deterministic)
 }
-func (m *AcceleratorConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AcceleratorConfig.Merge(m, src)
+func (dst *AcceleratorConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AcceleratorConfig.Merge(dst, src)
 }
 func (m *AcceleratorConfig) XXX_Size() int {
 	return xxx_messageInfo_AcceleratorConfig.Size(m)
@@ -4441,24 +6461,66 @@ func (m *AcceleratorConfig) GetAcceleratorType() string {
 	return ""
 }
 
+// WorkloadMetadataConfig defines the metadata configuration to expose to
+// workloads on the node pool.
+type WorkloadMetadataConfig struct {
+	// NodeMetadata is the configuration for how to expose the node metadata to
+	// the workload running on the node.
+	NodeMetadata         WorkloadMetadataConfig_NodeMetadata `protobuf:"varint,1,opt,name=node_metadata,json=nodeMetadata,proto3,enum=google.container.v1beta1.WorkloadMetadataConfig_NodeMetadata" json:"node_metadata,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
+	XXX_unrecognized     []byte                              `json:"-"`
+	XXX_sizecache        int32                               `json:"-"`
+}
+
+func (m *WorkloadMetadataConfig) Reset()         { *m = WorkloadMetadataConfig{} }
+func (m *WorkloadMetadataConfig) String() string { return proto.CompactTextString(m) }
+func (*WorkloadMetadataConfig) ProtoMessage()    {}
+func (*WorkloadMetadataConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{64}
+}
+func (m *WorkloadMetadataConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WorkloadMetadataConfig.Unmarshal(m, b)
+}
+func (m *WorkloadMetadataConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WorkloadMetadataConfig.Marshal(b, m, deterministic)
+}
+func (dst *WorkloadMetadataConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WorkloadMetadataConfig.Merge(dst, src)
+}
+func (m *WorkloadMetadataConfig) XXX_Size() int {
+	return xxx_messageInfo_WorkloadMetadataConfig.Size(m)
+}
+func (m *WorkloadMetadataConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_WorkloadMetadataConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WorkloadMetadataConfig proto.InternalMessageInfo
+
+func (m *WorkloadMetadataConfig) GetNodeMetadata() WorkloadMetadataConfig_NodeMetadata {
+	if m != nil {
+		return m.NodeMetadata
+	}
+	return WorkloadMetadataConfig_UNSPECIFIED
+}
+
 // SetNetworkPolicyRequest enables/disables network policy for a cluster.
 type SetNetworkPolicyRequest struct {
-	// The Google Developers Console [project ID or project
+	// Deprecated. The Google Developers Console [project ID or project
 	// number](https://developers.google.com/console/help/new/#projectnumber).
-	// This field is deprecated, use name instead.
-	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"`
-	// The name of the Google Compute Engine
+	// This field has been deprecated and replaced by the name field.
+	ProjectId string `protobuf:"bytes,1,opt,name=project_id,json=projectId,proto3" json:"project_id,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the Google Compute Engine
 	// [zone](/compute/docs/zones#available) in which the cluster
 	// resides.
-	// This field is deprecated, use name instead.
-	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"`
-	// The name of the cluster.
-	// This field is deprecated, use name instead.
-	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"`
+	// This field has been deprecated and replaced by the name field.
+	Zone string `protobuf:"bytes,2,opt,name=zone,proto3" json:"zone,omitempty"` // Deprecated: Do not use.
+	// Deprecated. The name of the cluster.
+	// This field has been deprecated and replaced by the name field.
+	ClusterId string `protobuf:"bytes,3,opt,name=cluster_id,json=clusterId,proto3" json:"cluster_id,omitempty"` // Deprecated: Do not use.
 	// Configuration options for the NetworkPolicy feature.
 	NetworkPolicy *NetworkPolicy `protobuf:"bytes,4,opt,name=network_policy,json=networkPolicy,proto3" json:"network_policy,omitempty"`
-	// The name (project, location, cluster id) of the cluster to set networking policy.
-	// Specified in the format 'projects/*/locations/*/clusters/*'.
+	// The name (project, location, cluster id) of the cluster to set networking
+	// policy. Specified in the format 'projects/*/locations/*/clusters/*'.
 	Name                 string   `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -4469,7 +6531,7 @@ func (m *SetNetworkPolicyRequest) Reset()         { *m = SetNetworkPolicyRequest
 func (m *SetNetworkPolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*SetNetworkPolicyRequest) ProtoMessage()    {}
 func (*SetNetworkPolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{48}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{65}
 }
 func (m *SetNetworkPolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetNetworkPolicyRequest.Unmarshal(m, b)
@@ -4477,8 +6539,8 @@ func (m *SetNetworkPolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetNetworkPolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetNetworkPolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *SetNetworkPolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetNetworkPolicyRequest.Merge(m, src)
+func (dst *SetNetworkPolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetNetworkPolicyRequest.Merge(dst, src)
 }
 func (m *SetNetworkPolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_SetNetworkPolicyRequest.Size(m)
@@ -4489,6 +6551,7 @@ func (m *SetNetworkPolicyRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SetNetworkPolicyRequest proto.InternalMessageInfo
 
+// Deprecated: Do not use.
 func (m *SetNetworkPolicyRequest) GetProjectId() string {
 	if m != nil {
 		return m.ProjectId
@@ -4496,6 +6559,7 @@ func (m *SetNetworkPolicyRequest) GetProjectId() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetNetworkPolicyRequest) GetZone() string {
 	if m != nil {
 		return m.Zone
@@ -4503,6 +6567,7 @@ func (m *SetNetworkPolicyRequest) GetZone() string {
 	return ""
 }
 
+// Deprecated: Do not use.
 func (m *SetNetworkPolicyRequest) GetClusterId() string {
 	if m != nil {
 		return m.ClusterId
@@ -4551,7 +6616,7 @@ func (m *SetMaintenancePolicyRequest) Reset()         { *m = SetMaintenancePolic
 func (m *SetMaintenancePolicyRequest) String() string { return proto.CompactTextString(m) }
 func (*SetMaintenancePolicyRequest) ProtoMessage()    {}
 func (*SetMaintenancePolicyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e39a67f424410134, []int{49}
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{66}
 }
 func (m *SetMaintenancePolicyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetMaintenancePolicyRequest.Unmarshal(m, b)
@@ -4559,8 +6624,8 @@ func (m *SetMaintenancePolicyRequest) XXX_Unmarshal(b []byte) error {
 func (m *SetMaintenancePolicyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SetMaintenancePolicyRequest.Marshal(b, m, deterministic)
 }
-func (m *SetMaintenancePolicyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetMaintenancePolicyRequest.Merge(m, src)
+func (dst *SetMaintenancePolicyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetMaintenancePolicyRequest.Merge(dst, src)
 }
 func (m *SetMaintenancePolicyRequest) XXX_Size() int {
 	return xxx_messageInfo_SetMaintenancePolicyRequest.Size(m)
@@ -4606,6 +6671,711 @@ func (m *SetMaintenancePolicyRequest) GetName() string {
 	return ""
 }
 
+// ListLocationsRequest is used to request the locations that offer GKE.
+type ListLocationsRequest struct {
+	// Contains the name of the resource requested.
+	// Specified in the format 'projects/*'.
+	Parent               string   `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListLocationsRequest) Reset()         { *m = ListLocationsRequest{} }
+func (m *ListLocationsRequest) String() string { return proto.CompactTextString(m) }
+func (*ListLocationsRequest) ProtoMessage()    {}
+func (*ListLocationsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{67}
+}
+func (m *ListLocationsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListLocationsRequest.Unmarshal(m, b)
+}
+func (m *ListLocationsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListLocationsRequest.Marshal(b, m, deterministic)
+}
+func (dst *ListLocationsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListLocationsRequest.Merge(dst, src)
+}
+func (m *ListLocationsRequest) XXX_Size() int {
+	return xxx_messageInfo_ListLocationsRequest.Size(m)
+}
+func (m *ListLocationsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListLocationsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListLocationsRequest proto.InternalMessageInfo
+
+func (m *ListLocationsRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+// ListLocationsResponse returns the list of all GKE locations and their
+// recommendation state.
+type ListLocationsResponse struct {
+	// A full list of GKE locations.
+	Locations []*Location `protobuf:"bytes,1,rep,name=locations,proto3" json:"locations,omitempty"`
+	// Only return ListLocationsResponse that occur after the page_token. This
+	// value should be populated from the ListLocationsResponse.next_page_token if
+	// that response token was set (which happens when listing more Locations than
+	// fit in a single ListLocationsResponse).
+	NextPageToken        string   `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListLocationsResponse) Reset()         { *m = ListLocationsResponse{} }
+func (m *ListLocationsResponse) String() string { return proto.CompactTextString(m) }
+func (*ListLocationsResponse) ProtoMessage()    {}
+func (*ListLocationsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{68}
+}
+func (m *ListLocationsResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListLocationsResponse.Unmarshal(m, b)
+}
+func (m *ListLocationsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListLocationsResponse.Marshal(b, m, deterministic)
+}
+func (dst *ListLocationsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListLocationsResponse.Merge(dst, src)
+}
+func (m *ListLocationsResponse) XXX_Size() int {
+	return xxx_messageInfo_ListLocationsResponse.Size(m)
+}
+func (m *ListLocationsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListLocationsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListLocationsResponse proto.InternalMessageInfo
+
+func (m *ListLocationsResponse) GetLocations() []*Location {
+	if m != nil {
+		return m.Locations
+	}
+	return nil
+}
+
+func (m *ListLocationsResponse) GetNextPageToken() string {
+	if m != nil {
+		return m.NextPageToken
+	}
+	return ""
+}
+
+// Location returns the location name, and if the location is recommended
+// for GKE cluster scheduling.
+type Location struct {
+	// Contains the type of location this Location is for.
+	// Regional or Zonal.
+	Type Location_LocationType `protobuf:"varint,1,opt,name=type,proto3,enum=google.container.v1beta1.Location_LocationType" json:"type,omitempty"`
+	// Contains the name of the resource requested.
+	// Specified in the format 'projects/*/locations/*'.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Whether the location is recomended for GKE cluster scheduling.
+	Recommended          bool     `protobuf:"varint,3,opt,name=recommended,proto3" json:"recommended,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Location) Reset()         { *m = Location{} }
+func (m *Location) String() string { return proto.CompactTextString(m) }
+func (*Location) ProtoMessage()    {}
+func (*Location) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{69}
+}
+func (m *Location) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Location.Unmarshal(m, b)
+}
+func (m *Location) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Location.Marshal(b, m, deterministic)
+}
+func (dst *Location) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Location.Merge(dst, src)
+}
+func (m *Location) XXX_Size() int {
+	return xxx_messageInfo_Location.Size(m)
+}
+func (m *Location) XXX_DiscardUnknown() {
+	xxx_messageInfo_Location.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Location proto.InternalMessageInfo
+
+func (m *Location) GetType() Location_LocationType {
+	if m != nil {
+		return m.Type
+	}
+	return Location_LOCATION_TYPE_UNSPECIFIED
+}
+
+func (m *Location) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Location) GetRecommended() bool {
+	if m != nil {
+		return m.Recommended
+	}
+	return false
+}
+
+// StatusCondition describes why a cluster or a node pool has a certain status
+// (e.g., ERROR or DEGRADED).
+type StatusCondition struct {
+	// Machine-friendly representation of the condition
+	Code StatusCondition_Code `protobuf:"varint,1,opt,name=code,proto3,enum=google.container.v1beta1.StatusCondition_Code" json:"code,omitempty"`
+	// Human-friendly representation of the condition
+	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *StatusCondition) Reset()         { *m = StatusCondition{} }
+func (m *StatusCondition) String() string { return proto.CompactTextString(m) }
+func (*StatusCondition) ProtoMessage()    {}
+func (*StatusCondition) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{70}
+}
+func (m *StatusCondition) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StatusCondition.Unmarshal(m, b)
+}
+func (m *StatusCondition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StatusCondition.Marshal(b, m, deterministic)
+}
+func (dst *StatusCondition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatusCondition.Merge(dst, src)
+}
+func (m *StatusCondition) XXX_Size() int {
+	return xxx_messageInfo_StatusCondition.Size(m)
+}
+func (m *StatusCondition) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatusCondition.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatusCondition proto.InternalMessageInfo
+
+func (m *StatusCondition) GetCode() StatusCondition_Code {
+	if m != nil {
+		return m.Code
+	}
+	return StatusCondition_UNKNOWN
+}
+
+func (m *StatusCondition) GetMessage() string {
+	if m != nil {
+		return m.Message
+	}
+	return ""
+}
+
+// NetworkConfig reports the relative names of network & subnetwork.
+type NetworkConfig struct {
+	// Output only. The relative name of the Google Compute Engine
+	// [network][google.container.v1beta1.NetworkConfig.network](/compute/docs/networks-and-firewalls#networks) to which
+	// the cluster is connected.
+	// Example: projects/my-project/global/networks/my-network
+	Network string `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
+	// Output only. The relative name of the Google Compute Engine
+	// [subnetwork](/compute/docs/vpc) to which the cluster is connected.
+	// Example: projects/my-project/regions/us-central1/subnetworks/my-subnet
+	Subnetwork           string   `protobuf:"bytes,2,opt,name=subnetwork,proto3" json:"subnetwork,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NetworkConfig) Reset()         { *m = NetworkConfig{} }
+func (m *NetworkConfig) String() string { return proto.CompactTextString(m) }
+func (*NetworkConfig) ProtoMessage()    {}
+func (*NetworkConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{71}
+}
+func (m *NetworkConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NetworkConfig.Unmarshal(m, b)
+}
+func (m *NetworkConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NetworkConfig.Marshal(b, m, deterministic)
+}
+func (dst *NetworkConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NetworkConfig.Merge(dst, src)
+}
+func (m *NetworkConfig) XXX_Size() int {
+	return xxx_messageInfo_NetworkConfig.Size(m)
+}
+func (m *NetworkConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_NetworkConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NetworkConfig proto.InternalMessageInfo
+
+func (m *NetworkConfig) GetNetwork() string {
+	if m != nil {
+		return m.Network
+	}
+	return ""
+}
+
+func (m *NetworkConfig) GetSubnetwork() string {
+	if m != nil {
+		return m.Subnetwork
+	}
+	return ""
+}
+
+// ListUsableSubnetworksRequest requests the list of usable subnetworks.
+// available to a user for creating clusters.
+type ListUsableSubnetworksRequest struct {
+	// The parent project where subnetworks are usable.
+	// Specified in the format 'projects/*'.
+	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	// Filtering currently only supports equality on the networkProjectId and must
+	// be in the form: "networkProjectId=[PROJECTID]", where `networkProjectId`
+	// is the project which owns the listed subnetworks. This defaults to the
+	// parent project ID.
+	Filter string `protobuf:"bytes,2,opt,name=filter,proto3" json:"filter,omitempty"`
+	// The max number of results per page that should be returned. If the number
+	// of available results is larger than `page_size`, a `next_page_token` is
+	// returned which can be used to get the next page of results in subsequent
+	// requests. Acceptable values are 0 to 500, inclusive. (Default: 500)
+	PageSize int32 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Specifies a page token to use. Set this to the nextPageToken returned by
+	// previous list requests to get the next page of results.
+	PageToken            string   `protobuf:"bytes,4,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListUsableSubnetworksRequest) Reset()         { *m = ListUsableSubnetworksRequest{} }
+func (m *ListUsableSubnetworksRequest) String() string { return proto.CompactTextString(m) }
+func (*ListUsableSubnetworksRequest) ProtoMessage()    {}
+func (*ListUsableSubnetworksRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{72}
+}
+func (m *ListUsableSubnetworksRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListUsableSubnetworksRequest.Unmarshal(m, b)
+}
+func (m *ListUsableSubnetworksRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListUsableSubnetworksRequest.Marshal(b, m, deterministic)
+}
+func (dst *ListUsableSubnetworksRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListUsableSubnetworksRequest.Merge(dst, src)
+}
+func (m *ListUsableSubnetworksRequest) XXX_Size() int {
+	return xxx_messageInfo_ListUsableSubnetworksRequest.Size(m)
+}
+func (m *ListUsableSubnetworksRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListUsableSubnetworksRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListUsableSubnetworksRequest proto.InternalMessageInfo
+
+func (m *ListUsableSubnetworksRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *ListUsableSubnetworksRequest) GetFilter() string {
+	if m != nil {
+		return m.Filter
+	}
+	return ""
+}
+
+func (m *ListUsableSubnetworksRequest) GetPageSize() int32 {
+	if m != nil {
+		return m.PageSize
+	}
+	return 0
+}
+
+func (m *ListUsableSubnetworksRequest) GetPageToken() string {
+	if m != nil {
+		return m.PageToken
+	}
+	return ""
+}
+
+// ListUsableSubnetworksResponse is the response of
+// ListUsableSubnetworksRequest.
+type ListUsableSubnetworksResponse struct {
+	// A list of usable subnetworks in the specified network project.
+	Subnetworks []*UsableSubnetwork `protobuf:"bytes,1,rep,name=subnetworks,proto3" json:"subnetworks,omitempty"`
+	// This token allows you to get the next page of results for list requests.
+	// If the number of results is larger than `page_size`, use the
+	// `next_page_token` as a value for the query parameter `page_token` in the
+	// next request. The value will become empty when there are no more pages.
+	NextPageToken        string   `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListUsableSubnetworksResponse) Reset()         { *m = ListUsableSubnetworksResponse{} }
+func (m *ListUsableSubnetworksResponse) String() string { return proto.CompactTextString(m) }
+func (*ListUsableSubnetworksResponse) ProtoMessage()    {}
+func (*ListUsableSubnetworksResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{73}
+}
+func (m *ListUsableSubnetworksResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListUsableSubnetworksResponse.Unmarshal(m, b)
+}
+func (m *ListUsableSubnetworksResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListUsableSubnetworksResponse.Marshal(b, m, deterministic)
+}
+func (dst *ListUsableSubnetworksResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListUsableSubnetworksResponse.Merge(dst, src)
+}
+func (m *ListUsableSubnetworksResponse) XXX_Size() int {
+	return xxx_messageInfo_ListUsableSubnetworksResponse.Size(m)
+}
+func (m *ListUsableSubnetworksResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListUsableSubnetworksResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListUsableSubnetworksResponse proto.InternalMessageInfo
+
+func (m *ListUsableSubnetworksResponse) GetSubnetworks() []*UsableSubnetwork {
+	if m != nil {
+		return m.Subnetworks
+	}
+	return nil
+}
+
+func (m *ListUsableSubnetworksResponse) GetNextPageToken() string {
+	if m != nil {
+		return m.NextPageToken
+	}
+	return ""
+}
+
+// Secondary IP range of a usable subnetwork.
+type UsableSubnetworkSecondaryRange struct {
+	// The name associated with this subnetwork secondary range, used when adding
+	// an alias IP range to a VM instance.
+	RangeName string `protobuf:"bytes,1,opt,name=range_name,json=rangeName,proto3" json:"range_name,omitempty"`
+	// The range of IP addresses belonging to this subnetwork secondary range.
+	IpCidrRange string `protobuf:"bytes,2,opt,name=ip_cidr_range,json=ipCidrRange,proto3" json:"ip_cidr_range,omitempty"`
+	// This field is to determine the status of the secondary range programmably.
+	Status               UsableSubnetworkSecondaryRange_Status `protobuf:"varint,3,opt,name=status,proto3,enum=google.container.v1beta1.UsableSubnetworkSecondaryRange_Status" json:"status,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
+	XXX_unrecognized     []byte                                `json:"-"`
+	XXX_sizecache        int32                                 `json:"-"`
+}
+
+func (m *UsableSubnetworkSecondaryRange) Reset()         { *m = UsableSubnetworkSecondaryRange{} }
+func (m *UsableSubnetworkSecondaryRange) String() string { return proto.CompactTextString(m) }
+func (*UsableSubnetworkSecondaryRange) ProtoMessage()    {}
+func (*UsableSubnetworkSecondaryRange) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{74}
+}
+func (m *UsableSubnetworkSecondaryRange) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UsableSubnetworkSecondaryRange.Unmarshal(m, b)
+}
+func (m *UsableSubnetworkSecondaryRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UsableSubnetworkSecondaryRange.Marshal(b, m, deterministic)
+}
+func (dst *UsableSubnetworkSecondaryRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UsableSubnetworkSecondaryRange.Merge(dst, src)
+}
+func (m *UsableSubnetworkSecondaryRange) XXX_Size() int {
+	return xxx_messageInfo_UsableSubnetworkSecondaryRange.Size(m)
+}
+func (m *UsableSubnetworkSecondaryRange) XXX_DiscardUnknown() {
+	xxx_messageInfo_UsableSubnetworkSecondaryRange.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UsableSubnetworkSecondaryRange proto.InternalMessageInfo
+
+func (m *UsableSubnetworkSecondaryRange) GetRangeName() string {
+	if m != nil {
+		return m.RangeName
+	}
+	return ""
+}
+
+func (m *UsableSubnetworkSecondaryRange) GetIpCidrRange() string {
+	if m != nil {
+		return m.IpCidrRange
+	}
+	return ""
+}
+
+func (m *UsableSubnetworkSecondaryRange) GetStatus() UsableSubnetworkSecondaryRange_Status {
+	if m != nil {
+		return m.Status
+	}
+	return UsableSubnetworkSecondaryRange_UNKNOWN
+}
+
+// UsableSubnetwork resource returns the subnetwork name, its associated network
+// and the primary CIDR range.
+type UsableSubnetwork struct {
+	// Subnetwork Name.
+	// Example: projects/my-project/regions/us-central1/subnetworks/my-subnet
+	Subnetwork string `protobuf:"bytes,1,opt,name=subnetwork,proto3" json:"subnetwork,omitempty"`
+	// Network Name.
+	// Example: projects/my-project/global/networks/my-network
+	Network string `protobuf:"bytes,2,opt,name=network,proto3" json:"network,omitempty"`
+	// The range of internal addresses that are owned by this subnetwork.
+	IpCidrRange string `protobuf:"bytes,3,opt,name=ip_cidr_range,json=ipCidrRange,proto3" json:"ip_cidr_range,omitempty"`
+	// Secondary IP ranges.
+	SecondaryIpRanges []*UsableSubnetworkSecondaryRange `protobuf:"bytes,4,rep,name=secondary_ip_ranges,json=secondaryIpRanges,proto3" json:"secondary_ip_ranges,omitempty"`
+	// A human readable status message representing the reasons for cases where
+	// the caller cannot use the secondary ranges under the subnet. For example if
+	// the secondary_ip_ranges is empty due to a permission issue, an insufficient
+	// permission message will be given by status_message.
+	StatusMessage        string   `protobuf:"bytes,5,opt,name=status_message,json=statusMessage,proto3" json:"status_message,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UsableSubnetwork) Reset()         { *m = UsableSubnetwork{} }
+func (m *UsableSubnetwork) String() string { return proto.CompactTextString(m) }
+func (*UsableSubnetwork) ProtoMessage()    {}
+func (*UsableSubnetwork) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{75}
+}
+func (m *UsableSubnetwork) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UsableSubnetwork.Unmarshal(m, b)
+}
+func (m *UsableSubnetwork) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UsableSubnetwork.Marshal(b, m, deterministic)
+}
+func (dst *UsableSubnetwork) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UsableSubnetwork.Merge(dst, src)
+}
+func (m *UsableSubnetwork) XXX_Size() int {
+	return xxx_messageInfo_UsableSubnetwork.Size(m)
+}
+func (m *UsableSubnetwork) XXX_DiscardUnknown() {
+	xxx_messageInfo_UsableSubnetwork.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UsableSubnetwork proto.InternalMessageInfo
+
+func (m *UsableSubnetwork) GetSubnetwork() string {
+	if m != nil {
+		return m.Subnetwork
+	}
+	return ""
+}
+
+func (m *UsableSubnetwork) GetNetwork() string {
+	if m != nil {
+		return m.Network
+	}
+	return ""
+}
+
+func (m *UsableSubnetwork) GetIpCidrRange() string {
+	if m != nil {
+		return m.IpCidrRange
+	}
+	return ""
+}
+
+func (m *UsableSubnetwork) GetSecondaryIpRanges() []*UsableSubnetworkSecondaryRange {
+	if m != nil {
+		return m.SecondaryIpRanges
+	}
+	return nil
+}
+
+func (m *UsableSubnetwork) GetStatusMessage() string {
+	if m != nil {
+		return m.StatusMessage
+	}
+	return ""
+}
+
+// VerticalPodAutoscaling contains global, per-cluster information
+// required by Vertical Pod Autoscaler to automatically adjust
+// the resources of pods controlled by it.
+type VerticalPodAutoscaling struct {
+	// Enables vertical pod autoscaling.
+	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *VerticalPodAutoscaling) Reset()         { *m = VerticalPodAutoscaling{} }
+func (m *VerticalPodAutoscaling) String() string { return proto.CompactTextString(m) }
+func (*VerticalPodAutoscaling) ProtoMessage()    {}
+func (*VerticalPodAutoscaling) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{76}
+}
+func (m *VerticalPodAutoscaling) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_VerticalPodAutoscaling.Unmarshal(m, b)
+}
+func (m *VerticalPodAutoscaling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_VerticalPodAutoscaling.Marshal(b, m, deterministic)
+}
+func (dst *VerticalPodAutoscaling) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VerticalPodAutoscaling.Merge(dst, src)
+}
+func (m *VerticalPodAutoscaling) XXX_Size() int {
+	return xxx_messageInfo_VerticalPodAutoscaling.Size(m)
+}
+func (m *VerticalPodAutoscaling) XXX_DiscardUnknown() {
+	xxx_messageInfo_VerticalPodAutoscaling.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VerticalPodAutoscaling proto.InternalMessageInfo
+
+func (m *VerticalPodAutoscaling) GetEnabled() bool {
+	if m != nil {
+		return m.Enabled
+	}
+	return false
+}
+
+// Constraints applied to pods.
+type MaxPodsConstraint struct {
+	// Constraint enforced on the max num of pods per node.
+	MaxPodsPerNode       int64    `protobuf:"varint,1,opt,name=max_pods_per_node,json=maxPodsPerNode,proto3" json:"max_pods_per_node,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MaxPodsConstraint) Reset()         { *m = MaxPodsConstraint{} }
+func (m *MaxPodsConstraint) String() string { return proto.CompactTextString(m) }
+func (*MaxPodsConstraint) ProtoMessage()    {}
+func (*MaxPodsConstraint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{77}
+}
+func (m *MaxPodsConstraint) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MaxPodsConstraint.Unmarshal(m, b)
+}
+func (m *MaxPodsConstraint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MaxPodsConstraint.Marshal(b, m, deterministic)
+}
+func (dst *MaxPodsConstraint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MaxPodsConstraint.Merge(dst, src)
+}
+func (m *MaxPodsConstraint) XXX_Size() int {
+	return xxx_messageInfo_MaxPodsConstraint.Size(m)
+}
+func (m *MaxPodsConstraint) XXX_DiscardUnknown() {
+	xxx_messageInfo_MaxPodsConstraint.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MaxPodsConstraint proto.InternalMessageInfo
+
+func (m *MaxPodsConstraint) GetMaxPodsPerNode() int64 {
+	if m != nil {
+		return m.MaxPodsPerNode
+	}
+	return 0
+}
+
+// Configuration for exporting cluster resource usages.
+type ResourceUsageExportConfig struct {
+	// Configuration to use BigQuery as usage export destination.
+	BigqueryDestination *ResourceUsageExportConfig_BigQueryDestination `protobuf:"bytes,1,opt,name=bigquery_destination,json=bigqueryDestination,proto3" json:"bigquery_destination,omitempty"`
+	// Whether to enable network egress metering for this cluster. If enabled, a
+	// daemonset will be created in the cluster to meter network egress traffic.
+	EnableNetworkEgressMetering bool     `protobuf:"varint,2,opt,name=enable_network_egress_metering,json=enableNetworkEgressMetering,proto3" json:"enable_network_egress_metering,omitempty"`
+	XXX_NoUnkeyedLiteral        struct{} `json:"-"`
+	XXX_unrecognized            []byte   `json:"-"`
+	XXX_sizecache               int32    `json:"-"`
+}
+
+func (m *ResourceUsageExportConfig) Reset()         { *m = ResourceUsageExportConfig{} }
+func (m *ResourceUsageExportConfig) String() string { return proto.CompactTextString(m) }
+func (*ResourceUsageExportConfig) ProtoMessage()    {}
+func (*ResourceUsageExportConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{78}
+}
+func (m *ResourceUsageExportConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResourceUsageExportConfig.Unmarshal(m, b)
+}
+func (m *ResourceUsageExportConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResourceUsageExportConfig.Marshal(b, m, deterministic)
+}
+func (dst *ResourceUsageExportConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceUsageExportConfig.Merge(dst, src)
+}
+func (m *ResourceUsageExportConfig) XXX_Size() int {
+	return xxx_messageInfo_ResourceUsageExportConfig.Size(m)
+}
+func (m *ResourceUsageExportConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceUsageExportConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceUsageExportConfig proto.InternalMessageInfo
+
+func (m *ResourceUsageExportConfig) GetBigqueryDestination() *ResourceUsageExportConfig_BigQueryDestination {
+	if m != nil {
+		return m.BigqueryDestination
+	}
+	return nil
+}
+
+func (m *ResourceUsageExportConfig) GetEnableNetworkEgressMetering() bool {
+	if m != nil {
+		return m.EnableNetworkEgressMetering
+	}
+	return false
+}
+
+// Parameters for using BigQuery as the destination of resource usage export.
+type ResourceUsageExportConfig_BigQueryDestination struct {
+	// The ID of a BigQuery Dataset.
+	DatasetId            string   `protobuf:"bytes,1,opt,name=dataset_id,json=datasetId,proto3" json:"dataset_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ResourceUsageExportConfig_BigQueryDestination) Reset() {
+	*m = ResourceUsageExportConfig_BigQueryDestination{}
+}
+func (m *ResourceUsageExportConfig_BigQueryDestination) String() string {
+	return proto.CompactTextString(m)
+}
+func (*ResourceUsageExportConfig_BigQueryDestination) ProtoMessage() {}
+func (*ResourceUsageExportConfig_BigQueryDestination) Descriptor() ([]byte, []int) {
+	return fileDescriptor_cluster_service_4b3d530a1685571f, []int{78, 0}
+}
+func (m *ResourceUsageExportConfig_BigQueryDestination) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ResourceUsageExportConfig_BigQueryDestination.Unmarshal(m, b)
+}
+func (m *ResourceUsageExportConfig_BigQueryDestination) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ResourceUsageExportConfig_BigQueryDestination.Marshal(b, m, deterministic)
+}
+func (dst *ResourceUsageExportConfig_BigQueryDestination) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceUsageExportConfig_BigQueryDestination.Merge(dst, src)
+}
+func (m *ResourceUsageExportConfig_BigQueryDestination) XXX_Size() int {
+	return xxx_messageInfo_ResourceUsageExportConfig_BigQueryDestination.Size(m)
+}
+func (m *ResourceUsageExportConfig_BigQueryDestination) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceUsageExportConfig_BigQueryDestination.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceUsageExportConfig_BigQueryDestination proto.InternalMessageInfo
+
+func (m *ResourceUsageExportConfig_BigQueryDestination) GetDatasetId() string {
+	if m != nil {
+		return m.DatasetId
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*NodeConfig)(nil), "google.container.v1beta1.NodeConfig")
 	proto.RegisterMapType((map[string]string)(nil), "google.container.v1beta1.NodeConfig.LabelsEntry")
@@ -4618,17 +7388,32 @@ func init() {
 	proto.RegisterType((*HorizontalPodAutoscaling)(nil), "google.container.v1beta1.HorizontalPodAutoscaling")
 	proto.RegisterType((*KubernetesDashboard)(nil), "google.container.v1beta1.KubernetesDashboard")
 	proto.RegisterType((*NetworkPolicyConfig)(nil), "google.container.v1beta1.NetworkPolicyConfig")
+	proto.RegisterType((*PrivateClusterConfig)(nil), "google.container.v1beta1.PrivateClusterConfig")
+	proto.RegisterType((*IstioConfig)(nil), "google.container.v1beta1.IstioConfig")
+	proto.RegisterType((*CloudRunConfig)(nil), "google.container.v1beta1.CloudRunConfig")
 	proto.RegisterType((*MasterAuthorizedNetworksConfig)(nil), "google.container.v1beta1.MasterAuthorizedNetworksConfig")
 	proto.RegisterType((*MasterAuthorizedNetworksConfig_CidrBlock)(nil), "google.container.v1beta1.MasterAuthorizedNetworksConfig.CidrBlock")
+	proto.RegisterType((*LegacyAbac)(nil), "google.container.v1beta1.LegacyAbac")
 	proto.RegisterType((*NetworkPolicy)(nil), "google.container.v1beta1.NetworkPolicy")
 	proto.RegisterType((*IPAllocationPolicy)(nil), "google.container.v1beta1.IPAllocationPolicy")
+	proto.RegisterType((*BinaryAuthorization)(nil), "google.container.v1beta1.BinaryAuthorization")
 	proto.RegisterType((*PodSecurityPolicyConfig)(nil), "google.container.v1beta1.PodSecurityPolicyConfig")
 	proto.RegisterType((*Cluster)(nil), "google.container.v1beta1.Cluster")
+	proto.RegisterMapType((map[string]string)(nil), "google.container.v1beta1.Cluster.ResourceLabelsEntry")
 	proto.RegisterType((*ClusterUpdate)(nil), "google.container.v1beta1.ClusterUpdate")
 	proto.RegisterType((*Operation)(nil), "google.container.v1beta1.Operation")
+	proto.RegisterType((*OperationProgress)(nil), "google.container.v1beta1.OperationProgress")
+	proto.RegisterType((*OperationProgress_Metric)(nil), "google.container.v1beta1.OperationProgress.Metric")
 	proto.RegisterType((*CreateClusterRequest)(nil), "google.container.v1beta1.CreateClusterRequest")
 	proto.RegisterType((*GetClusterRequest)(nil), "google.container.v1beta1.GetClusterRequest")
 	proto.RegisterType((*UpdateClusterRequest)(nil), "google.container.v1beta1.UpdateClusterRequest")
+	proto.RegisterType((*UpdateNodePoolRequest)(nil), "google.container.v1beta1.UpdateNodePoolRequest")
+	proto.RegisterType((*SetNodePoolAutoscalingRequest)(nil), "google.container.v1beta1.SetNodePoolAutoscalingRequest")
+	proto.RegisterType((*SetLoggingServiceRequest)(nil), "google.container.v1beta1.SetLoggingServiceRequest")
+	proto.RegisterType((*SetMonitoringServiceRequest)(nil), "google.container.v1beta1.SetMonitoringServiceRequest")
+	proto.RegisterType((*SetAddonsConfigRequest)(nil), "google.container.v1beta1.SetAddonsConfigRequest")
+	proto.RegisterType((*SetLocationsRequest)(nil), "google.container.v1beta1.SetLocationsRequest")
+	proto.RegisterType((*UpdateMasterRequest)(nil), "google.container.v1beta1.UpdateMasterRequest")
 	proto.RegisterType((*SetMasterAuthRequest)(nil), "google.container.v1beta1.SetMasterAuthRequest")
 	proto.RegisterType((*DeleteClusterRequest)(nil), "google.container.v1beta1.DeleteClusterRequest")
 	proto.RegisterType((*ListClustersRequest)(nil), "google.container.v1beta1.ListClustersRequest")
@@ -4650,8 +7435,11 @@ func init() {
 	proto.RegisterType((*MaintenanceWindow)(nil), "google.container.v1beta1.MaintenanceWindow")
 	proto.RegisterType((*DailyMaintenanceWindow)(nil), "google.container.v1beta1.DailyMaintenanceWindow")
 	proto.RegisterType((*SetNodePoolManagementRequest)(nil), "google.container.v1beta1.SetNodePoolManagementRequest")
+	proto.RegisterType((*SetNodePoolSizeRequest)(nil), "google.container.v1beta1.SetNodePoolSizeRequest")
 	proto.RegisterType((*RollbackNodePoolUpgradeRequest)(nil), "google.container.v1beta1.RollbackNodePoolUpgradeRequest")
 	proto.RegisterType((*ListNodePoolsResponse)(nil), "google.container.v1beta1.ListNodePoolsResponse")
+	proto.RegisterType((*ClusterAutoscaling)(nil), "google.container.v1beta1.ClusterAutoscaling")
+	proto.RegisterType((*ResourceLimit)(nil), "google.container.v1beta1.ResourceLimit")
 	proto.RegisterType((*NodePoolAutoscaling)(nil), "google.container.v1beta1.NodePoolAutoscaling")
 	proto.RegisterType((*SetLabelsRequest)(nil), "google.container.v1beta1.SetLabelsRequest")
 	proto.RegisterMapType((map[string]string)(nil), "google.container.v1beta1.SetLabelsRequest.ResourceLabelsEntry")
@@ -4659,15 +7447,34 @@ func init() {
 	proto.RegisterType((*StartIPRotationRequest)(nil), "google.container.v1beta1.StartIPRotationRequest")
 	proto.RegisterType((*CompleteIPRotationRequest)(nil), "google.container.v1beta1.CompleteIPRotationRequest")
 	proto.RegisterType((*AcceleratorConfig)(nil), "google.container.v1beta1.AcceleratorConfig")
+	proto.RegisterType((*WorkloadMetadataConfig)(nil), "google.container.v1beta1.WorkloadMetadataConfig")
 	proto.RegisterType((*SetNetworkPolicyRequest)(nil), "google.container.v1beta1.SetNetworkPolicyRequest")
 	proto.RegisterType((*SetMaintenancePolicyRequest)(nil), "google.container.v1beta1.SetMaintenancePolicyRequest")
+	proto.RegisterType((*ListLocationsRequest)(nil), "google.container.v1beta1.ListLocationsRequest")
+	proto.RegisterType((*ListLocationsResponse)(nil), "google.container.v1beta1.ListLocationsResponse")
+	proto.RegisterType((*Location)(nil), "google.container.v1beta1.Location")
+	proto.RegisterType((*StatusCondition)(nil), "google.container.v1beta1.StatusCondition")
+	proto.RegisterType((*NetworkConfig)(nil), "google.container.v1beta1.NetworkConfig")
+	proto.RegisterType((*ListUsableSubnetworksRequest)(nil), "google.container.v1beta1.ListUsableSubnetworksRequest")
+	proto.RegisterType((*ListUsableSubnetworksResponse)(nil), "google.container.v1beta1.ListUsableSubnetworksResponse")
+	proto.RegisterType((*UsableSubnetworkSecondaryRange)(nil), "google.container.v1beta1.UsableSubnetworkSecondaryRange")
+	proto.RegisterType((*UsableSubnetwork)(nil), "google.container.v1beta1.UsableSubnetwork")
+	proto.RegisterType((*VerticalPodAutoscaling)(nil), "google.container.v1beta1.VerticalPodAutoscaling")
+	proto.RegisterType((*MaxPodsConstraint)(nil), "google.container.v1beta1.MaxPodsConstraint")
+	proto.RegisterType((*ResourceUsageExportConfig)(nil), "google.container.v1beta1.ResourceUsageExportConfig")
+	proto.RegisterType((*ResourceUsageExportConfig_BigQueryDestination)(nil), "google.container.v1beta1.ResourceUsageExportConfig.BigQueryDestination")
 	proto.RegisterEnum("google.container.v1beta1.NodeTaint_Effect", NodeTaint_Effect_name, NodeTaint_Effect_value)
+	proto.RegisterEnum("google.container.v1beta1.IstioConfig_IstioAuthMode", IstioConfig_IstioAuthMode_name, IstioConfig_IstioAuthMode_value)
 	proto.RegisterEnum("google.container.v1beta1.NetworkPolicy_Provider", NetworkPolicy_Provider_name, NetworkPolicy_Provider_value)
 	proto.RegisterEnum("google.container.v1beta1.Cluster_Status", Cluster_Status_name, Cluster_Status_value)
 	proto.RegisterEnum("google.container.v1beta1.Operation_Status", Operation_Status_name, Operation_Status_value)
 	proto.RegisterEnum("google.container.v1beta1.Operation_Type", Operation_Type_name, Operation_Type_value)
 	proto.RegisterEnum("google.container.v1beta1.SetMasterAuthRequest_Action", SetMasterAuthRequest_Action_name, SetMasterAuthRequest_Action_value)
 	proto.RegisterEnum("google.container.v1beta1.NodePool_Status", NodePool_Status_name, NodePool_Status_value)
+	proto.RegisterEnum("google.container.v1beta1.WorkloadMetadataConfig_NodeMetadata", WorkloadMetadataConfig_NodeMetadata_name, WorkloadMetadataConfig_NodeMetadata_value)
+	proto.RegisterEnum("google.container.v1beta1.Location_LocationType", Location_LocationType_name, Location_LocationType_value)
+	proto.RegisterEnum("google.container.v1beta1.StatusCondition_Code", StatusCondition_Code_name, StatusCondition_Code_value)
+	proto.RegisterEnum("google.container.v1beta1.UsableSubnetworkSecondaryRange_Status", UsableSubnetworkSecondaryRange_Status_name, UsableSubnetworkSecondaryRange_Status_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -4685,7 +7492,7 @@ type ClusterManagerClient interface {
 	// Lists all clusters owned by a project in either the specified zone or all
 	// zones.
 	ListClusters(ctx context.Context, in *ListClustersRequest, opts ...grpc.CallOption) (*ListClustersResponse, error)
-	// Gets the details of a specific cluster.
+	// Gets the details for a specific cluster.
 	GetCluster(ctx context.Context, in *GetClusterRequest, opts ...grpc.CallOption) (*Cluster, error)
 	// Creates a cluster, consisting of the specified number and type of Google
 	// Compute Engine instances.
@@ -4701,10 +7508,24 @@ type ClusterManagerClient interface {
 	// Finally, an entry is added to the project's global metadata indicating
 	// which CIDR range is being used by the cluster.
 	CreateCluster(ctx context.Context, in *CreateClusterRequest, opts ...grpc.CallOption) (*Operation, error)
-	// Updates the settings of a specific cluster.
+	// Updates the settings for a specific cluster.
 	UpdateCluster(ctx context.Context, in *UpdateClusterRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Updates the version and/or image type of a specific node pool.
+	UpdateNodePool(ctx context.Context, in *UpdateNodePoolRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Sets the autoscaling settings of a specific node pool.
+	SetNodePoolAutoscaling(ctx context.Context, in *SetNodePoolAutoscalingRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Sets the logging service for a specific cluster.
+	SetLoggingService(ctx context.Context, in *SetLoggingServiceRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Sets the monitoring service for a specific cluster.
+	SetMonitoringService(ctx context.Context, in *SetMonitoringServiceRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Sets the addons for a specific cluster.
+	SetAddonsConfig(ctx context.Context, in *SetAddonsConfigRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Sets the locations for a specific cluster.
+	SetLocations(ctx context.Context, in *SetLocationsRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Updates the master for a specific cluster.
+	UpdateMaster(ctx context.Context, in *UpdateMasterRequest, opts ...grpc.CallOption) (*Operation, error)
 	// Used to set master auth materials. Currently supports :-
-	// Changing the admin password of a specific cluster.
+	// Changing the admin password for a specific cluster.
 	// This can be either via password generation or explicitly set.
 	// Modify basic_auth.csv and reset the K8S API server.
 	SetMasterAuth(ctx context.Context, in *SetMasterAuthRequest, opts ...grpc.CallOption) (*Operation, error)
@@ -4724,7 +7545,7 @@ type ClusterManagerClient interface {
 	GetOperation(ctx context.Context, in *GetOperationRequest, opts ...grpc.CallOption) (*Operation, error)
 	// Cancels the specified operation.
 	CancelOperation(ctx context.Context, in *CancelOperationRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-	// Returns configuration info about the Container Engine service.
+	// Returns configuration info about the Kubernetes Engine service.
 	GetServerConfig(ctx context.Context, in *GetServerConfigRequest, opts ...grpc.CallOption) (*ServerConfig, error)
 	// Lists the node pools for a cluster.
 	ListNodePools(ctx context.Context, in *ListNodePoolsRequest, opts ...grpc.CallOption) (*ListNodePoolsResponse, error)
@@ -4747,10 +7568,16 @@ type ClusterManagerClient interface {
 	StartIPRotation(ctx context.Context, in *StartIPRotationRequest, opts ...grpc.CallOption) (*Operation, error)
 	// Completes master IP rotation.
 	CompleteIPRotation(ctx context.Context, in *CompleteIPRotationRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Sets the size for a specific node pool.
+	SetNodePoolSize(ctx context.Context, in *SetNodePoolSizeRequest, opts ...grpc.CallOption) (*Operation, error)
 	// Enables/Disables Network Policy for a cluster.
 	SetNetworkPolicy(ctx context.Context, in *SetNetworkPolicyRequest, opts ...grpc.CallOption) (*Operation, error)
 	// Sets the maintenance policy for a cluster.
 	SetMaintenancePolicy(ctx context.Context, in *SetMaintenancePolicyRequest, opts ...grpc.CallOption) (*Operation, error)
+	// Lists subnetworks that are usable for creating clusters in a project.
+	ListUsableSubnetworks(ctx context.Context, in *ListUsableSubnetworksRequest, opts ...grpc.CallOption) (*ListUsableSubnetworksResponse, error)
+	// Used to fetch locations that offer GKE.
+	ListLocations(ctx context.Context, in *ListLocationsRequest, opts ...grpc.CallOption) (*ListLocationsResponse, error)
 }
 
 type clusterManagerClient struct {
@@ -4791,6 +7618,69 @@ func (c *clusterManagerClient) CreateCluster(ctx context.Context, in *CreateClus
 func (c *clusterManagerClient) UpdateCluster(ctx context.Context, in *UpdateClusterRequest, opts ...grpc.CallOption) (*Operation, error) {
 	out := new(Operation)
 	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/UpdateCluster", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) UpdateNodePool(ctx context.Context, in *UpdateNodePoolRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/UpdateNodePool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) SetNodePoolAutoscaling(ctx context.Context, in *SetNodePoolAutoscalingRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetNodePoolAutoscaling", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) SetLoggingService(ctx context.Context, in *SetLoggingServiceRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetLoggingService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) SetMonitoringService(ctx context.Context, in *SetMonitoringServiceRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetMonitoringService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) SetAddonsConfig(ctx context.Context, in *SetAddonsConfigRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetAddonsConfig", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) SetLocations(ctx context.Context, in *SetLocationsRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetLocations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) UpdateMaster(ctx context.Context, in *UpdateMasterRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/UpdateMaster", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -4941,6 +7831,15 @@ func (c *clusterManagerClient) CompleteIPRotation(ctx context.Context, in *Compl
 	return out, nil
 }
 
+func (c *clusterManagerClient) SetNodePoolSize(ctx context.Context, in *SetNodePoolSizeRequest, opts ...grpc.CallOption) (*Operation, error) {
+	out := new(Operation)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetNodePoolSize", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *clusterManagerClient) SetNetworkPolicy(ctx context.Context, in *SetNetworkPolicyRequest, opts ...grpc.CallOption) (*Operation, error) {
 	out := new(Operation)
 	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/SetNetworkPolicy", in, out, opts...)
@@ -4959,12 +7858,30 @@ func (c *clusterManagerClient) SetMaintenancePolicy(ctx context.Context, in *Set
 	return out, nil
 }
 
+func (c *clusterManagerClient) ListUsableSubnetworks(ctx context.Context, in *ListUsableSubnetworksRequest, opts ...grpc.CallOption) (*ListUsableSubnetworksResponse, error) {
+	out := new(ListUsableSubnetworksResponse)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/ListUsableSubnetworks", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *clusterManagerClient) ListLocations(ctx context.Context, in *ListLocationsRequest, opts ...grpc.CallOption) (*ListLocationsResponse, error) {
+	out := new(ListLocationsResponse)
+	err := c.cc.Invoke(ctx, "/google.container.v1beta1.ClusterManager/ListLocations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClusterManagerServer is the server API for ClusterManager service.
 type ClusterManagerServer interface {
 	// Lists all clusters owned by a project in either the specified zone or all
 	// zones.
 	ListClusters(context.Context, *ListClustersRequest) (*ListClustersResponse, error)
-	// Gets the details of a specific cluster.
+	// Gets the details for a specific cluster.
 	GetCluster(context.Context, *GetClusterRequest) (*Cluster, error)
 	// Creates a cluster, consisting of the specified number and type of Google
 	// Compute Engine instances.
@@ -4980,10 +7897,24 @@ type ClusterManagerServer interface {
 	// Finally, an entry is added to the project's global metadata indicating
 	// which CIDR range is being used by the cluster.
 	CreateCluster(context.Context, *CreateClusterRequest) (*Operation, error)
-	// Updates the settings of a specific cluster.
+	// Updates the settings for a specific cluster.
 	UpdateCluster(context.Context, *UpdateClusterRequest) (*Operation, error)
+	// Updates the version and/or image type of a specific node pool.
+	UpdateNodePool(context.Context, *UpdateNodePoolRequest) (*Operation, error)
+	// Sets the autoscaling settings of a specific node pool.
+	SetNodePoolAutoscaling(context.Context, *SetNodePoolAutoscalingRequest) (*Operation, error)
+	// Sets the logging service for a specific cluster.
+	SetLoggingService(context.Context, *SetLoggingServiceRequest) (*Operation, error)
+	// Sets the monitoring service for a specific cluster.
+	SetMonitoringService(context.Context, *SetMonitoringServiceRequest) (*Operation, error)
+	// Sets the addons for a specific cluster.
+	SetAddonsConfig(context.Context, *SetAddonsConfigRequest) (*Operation, error)
+	// Sets the locations for a specific cluster.
+	SetLocations(context.Context, *SetLocationsRequest) (*Operation, error)
+	// Updates the master for a specific cluster.
+	UpdateMaster(context.Context, *UpdateMasterRequest) (*Operation, error)
 	// Used to set master auth materials. Currently supports :-
-	// Changing the admin password of a specific cluster.
+	// Changing the admin password for a specific cluster.
 	// This can be either via password generation or explicitly set.
 	// Modify basic_auth.csv and reset the K8S API server.
 	SetMasterAuth(context.Context, *SetMasterAuthRequest) (*Operation, error)
@@ -5003,7 +7934,7 @@ type ClusterManagerServer interface {
 	GetOperation(context.Context, *GetOperationRequest) (*Operation, error)
 	// Cancels the specified operation.
 	CancelOperation(context.Context, *CancelOperationRequest) (*empty.Empty, error)
-	// Returns configuration info about the Container Engine service.
+	// Returns configuration info about the Kubernetes Engine service.
 	GetServerConfig(context.Context, *GetServerConfigRequest) (*ServerConfig, error)
 	// Lists the node pools for a cluster.
 	ListNodePools(context.Context, *ListNodePoolsRequest) (*ListNodePoolsResponse, error)
@@ -5026,10 +7957,16 @@ type ClusterManagerServer interface {
 	StartIPRotation(context.Context, *StartIPRotationRequest) (*Operation, error)
 	// Completes master IP rotation.
 	CompleteIPRotation(context.Context, *CompleteIPRotationRequest) (*Operation, error)
+	// Sets the size for a specific node pool.
+	SetNodePoolSize(context.Context, *SetNodePoolSizeRequest) (*Operation, error)
 	// Enables/Disables Network Policy for a cluster.
 	SetNetworkPolicy(context.Context, *SetNetworkPolicyRequest) (*Operation, error)
 	// Sets the maintenance policy for a cluster.
 	SetMaintenancePolicy(context.Context, *SetMaintenancePolicyRequest) (*Operation, error)
+	// Lists subnetworks that are usable for creating clusters in a project.
+	ListUsableSubnetworks(context.Context, *ListUsableSubnetworksRequest) (*ListUsableSubnetworksResponse, error)
+	// Used to fetch locations that offer GKE.
+	ListLocations(context.Context, *ListLocationsRequest) (*ListLocationsResponse, error)
 }
 
 func RegisterClusterManagerServer(s *grpc.Server, srv ClusterManagerServer) {
@@ -5104,6 +8041,132 @@ func _ClusterManager_UpdateCluster_Handler(srv interface{}, ctx context.Context,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClusterManagerServer).UpdateCluster(ctx, req.(*UpdateClusterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_UpdateNodePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateNodePoolRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).UpdateNodePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/UpdateNodePool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).UpdateNodePool(ctx, req.(*UpdateNodePoolRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_SetNodePoolAutoscaling_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetNodePoolAutoscalingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).SetNodePoolAutoscaling(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/SetNodePoolAutoscaling",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).SetNodePoolAutoscaling(ctx, req.(*SetNodePoolAutoscalingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_SetLoggingService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetLoggingServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).SetLoggingService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/SetLoggingService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).SetLoggingService(ctx, req.(*SetLoggingServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_SetMonitoringService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetMonitoringServiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).SetMonitoringService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/SetMonitoringService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).SetMonitoringService(ctx, req.(*SetMonitoringServiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_SetAddonsConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAddonsConfigRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).SetAddonsConfig(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/SetAddonsConfig",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).SetAddonsConfig(ctx, req.(*SetAddonsConfigRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_SetLocations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetLocationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).SetLocations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/SetLocations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).SetLocations(ctx, req.(*SetLocationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_UpdateMaster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateMasterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).UpdateMaster(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/UpdateMaster",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).UpdateMaster(ctx, req.(*UpdateMasterRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -5396,6 +8459,24 @@ func _ClusterManager_CompleteIPRotation_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClusterManager_SetNodePoolSize_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetNodePoolSizeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).SetNodePoolSize(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/SetNodePoolSize",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).SetNodePoolSize(ctx, req.(*SetNodePoolSizeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ClusterManager_SetNetworkPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetNetworkPolicyRequest)
 	if err := dec(in); err != nil {
@@ -5432,6 +8513,42 @@ func _ClusterManager_SetMaintenancePolicy_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClusterManager_ListUsableSubnetworks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUsableSubnetworksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).ListUsableSubnetworks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/ListUsableSubnetworks",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).ListUsableSubnetworks(ctx, req.(*ListUsableSubnetworksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ClusterManager_ListLocations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListLocationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClusterManagerServer).ListLocations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.container.v1beta1.ClusterManager/ListLocations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClusterManagerServer).ListLocations(ctx, req.(*ListLocationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ClusterManager_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "google.container.v1beta1.ClusterManager",
 	HandlerType: (*ClusterManagerServer)(nil),
@@ -5451,6 +8568,34 @@ var _ClusterManager_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateCluster",
 			Handler:    _ClusterManager_UpdateCluster_Handler,
+		},
+		{
+			MethodName: "UpdateNodePool",
+			Handler:    _ClusterManager_UpdateNodePool_Handler,
+		},
+		{
+			MethodName: "SetNodePoolAutoscaling",
+			Handler:    _ClusterManager_SetNodePoolAutoscaling_Handler,
+		},
+		{
+			MethodName: "SetLoggingService",
+			Handler:    _ClusterManager_SetLoggingService_Handler,
+		},
+		{
+			MethodName: "SetMonitoringService",
+			Handler:    _ClusterManager_SetMonitoringService_Handler,
+		},
+		{
+			MethodName: "SetAddonsConfig",
+			Handler:    _ClusterManager_SetAddonsConfig_Handler,
+		},
+		{
+			MethodName: "SetLocations",
+			Handler:    _ClusterManager_SetLocations_Handler,
+		},
+		{
+			MethodName: "UpdateMaster",
+			Handler:    _ClusterManager_UpdateMaster_Handler,
 		},
 		{
 			MethodName: "SetMasterAuth",
@@ -5517,6 +8662,10 @@ var _ClusterManager_serviceDesc = grpc.ServiceDesc{
 			Handler:    _ClusterManager_CompleteIPRotation_Handler,
 		},
 		{
+			MethodName: "SetNodePoolSize",
+			Handler:    _ClusterManager_SetNodePoolSize_Handler,
+		},
+		{
 			MethodName: "SetNetworkPolicy",
 			Handler:    _ClusterManager_SetNetworkPolicy_Handler,
 		},
@@ -5524,289 +8673,463 @@ var _ClusterManager_serviceDesc = grpc.ServiceDesc{
 			MethodName: "SetMaintenancePolicy",
 			Handler:    _ClusterManager_SetMaintenancePolicy_Handler,
 		},
+		{
+			MethodName: "ListUsableSubnetworks",
+			Handler:    _ClusterManager_ListUsableSubnetworks_Handler,
+		},
+		{
+			MethodName: "ListLocations",
+			Handler:    _ClusterManager_ListLocations_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "google/container/v1beta1/cluster_service.proto",
 }
 
 func init() {
-	proto.RegisterFile("google/container/v1beta1/cluster_service.proto", fileDescriptor_e39a67f424410134)
+	proto.RegisterFile("google/container/v1beta1/cluster_service.proto", fileDescriptor_cluster_service_4b3d530a1685571f)
 }
 
-var fileDescriptor_e39a67f424410134 = []byte{
-	// 4381 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x7c, 0x5b, 0x6c, 0xe3, 0x56,
-	0x7a, 0xf0, 0xd2, 0x17, 0xd9, 0xfa, 0x24, 0xcb, 0xf2, 0xf1, 0x4d, 0x51, 0x26, 0x93, 0x09, 0x93,
-	0x4d, 0x26, 0x4e, 0x22, 0xcf, 0x25, 0x99, 0x3f, 0x3b, 0x93, 0xfc, 0xa9, 0x2c, 0x73, 0x6c, 0x75,
-	0x6c, 0x49, 0xa5, 0xec, 0x99, 0xcd, 0x34, 0x28, 0x97, 0x26, 0x8f, 0x65, 0xae, 0x29, 0x92, 0x4b,
-	0x52, 0x93, 0x78, 0xb6, 0x69, 0xbb, 0xdb, 0xbe, 0xf5, 0xad, 0x05, 0xda, 0x97, 0xa2, 0x01, 0xb6,
-	0x40, 0x91, 0xde, 0x80, 0x7d, 0x69, 0x17, 0x2d, 0x50, 0x14, 0x28, 0xd0, 0x97, 0xb6, 0x40, 0xd1,
-	0xf6, 0xb1, 0x28, 0xfa, 0xb2, 0xcf, 0x6d, 0x9f, 0x5b, 0x14, 0x28, 0xce, 0x85, 0x14, 0x29, 0x51,
-	0x94, 0x6c, 0xaf, 0xd3, 0x7d, 0x13, 0xbf, 0x73, 0xbe, 0xf3, 0x5d, 0xf8, 0xdd, 0x79, 0x6c, 0xa8,
-	0x74, 0x6c, 0xbb, 0x63, 0xe2, 0x4d, 0xcd, 0xb6, 0x7c, 0xd5, 0xb0, 0xb0, 0xbb, 0xf9, 0xec, 0xf6,
-	0x11, 0xf6, 0xd5, 0xdb, 0x9b, 0x9a, 0xd9, 0xf3, 0x7c, 0xec, 0x2a, 0x1e, 0x76, 0x9f, 0x19, 0x1a,
-	0xae, 0x38, 0xae, 0xed, 0xdb, 0xa8, 0xc4, 0xf6, 0x57, 0xc2, 0xfd, 0x15, 0xbe, 0xbf, 0x7c, 0x8d,
-	0x9f, 0xa4, 0x3a, 0xc6, 0xa6, 0x6a, 0x59, 0xb6, 0xaf, 0xfa, 0x86, 0x6d, 0x79, 0x0c, 0xaf, 0xfc,
-	0x22, 0x5f, 0xa5, 0x4f, 0x47, 0xbd, 0xe3, 0x4d, 0xdc, 0x75, 0xfc, 0x33, 0xb6, 0x28, 0xfe, 0x78,
-	0x16, 0xa0, 0x61, 0xeb, 0xb8, 0x66, 0x5b, 0xc7, 0x46, 0x07, 0xbd, 0x02, 0xf9, 0xae, 0xaa, 0x9d,
-	0x18, 0x16, 0x56, 0xfc, 0x33, 0x07, 0x97, 0x84, 0x1b, 0xc2, 0xcd, 0xac, 0x9c, 0xe3, 0xb0, 0x83,
-	0x33, 0x07, 0xa3, 0x1b, 0x90, 0xd7, 0x0d, 0xef, 0x54, 0xf1, 0x8c, 0xe7, 0x58, 0xe9, 0x1c, 0x95,
-	0xa6, 0x6e, 0x08, 0x37, 0x67, 0x65, 0x20, 0xb0, 0xb6, 0xf1, 0x1c, 0xef, 0x1c, 0x91, 0x43, 0x6c,
-	0xb5, 0xe7, 0x9f, 0x28, 0x9e, 0x66, 0x3b, 0xd8, 0x2b, 0x4d, 0xdf, 0x98, 0x26, 0x87, 0x50, 0x58,
-	0x9b, 0x82, 0xd0, 0x1b, 0xb0, 0xc8, 0x85, 0x53, 0x54, 0x4d, 0xb3, 0x7b, 0x96, 0x5f, 0xca, 0x52,
-	0x52, 0x05, 0x0e, 0xae, 0x32, 0x28, 0x6a, 0xc0, 0x7c, 0x17, 0xfb, 0xaa, 0xae, 0xfa, 0x6a, 0x69,
-	0xe6, 0xc6, 0xf4, 0xcd, 0xdc, 0x9d, 0x3b, 0x95, 0x51, 0x7a, 0xa8, 0xf4, 0x05, 0xa9, 0xec, 0x73,
-	0x24, 0xc9, 0xf2, 0xdd, 0x33, 0x39, 0x3c, 0x03, 0xbd, 0x04, 0x60, 0x74, 0xd5, 0x0e, 0x17, 0x6f,
-	0x96, 0xd2, 0xcc, 0x52, 0x08, 0x15, 0x6e, 0x17, 0x32, 0xa6, 0x7a, 0x84, 0x4d, 0xaf, 0x94, 0xa1,
-	0xc4, 0x6e, 0x4d, 0x44, 0x6c, 0x8f, 0xa2, 0x30, 0x52, 0x1c, 0x1f, 0xbd, 0x0e, 0x8b, 0xa6, 0xad,
-	0xa9, 0xa6, 0xe2, 0x79, 0xba, 0xc2, 0x24, 0x9c, 0xa3, 0x9a, 0x5a, 0xa0, 0xe0, 0xb6, 0xa7, 0xd7,
-	0xa8, 0x80, 0x08, 0x66, 0x7c, 0xb5, 0xe3, 0x95, 0xe6, 0xa9, 0x92, 0xe8, 0x6f, 0x74, 0x03, 0x72,
-	0x8e, 0x8b, 0xc9, 0x6b, 0x32, 0x8e, 0x4c, 0x5c, 0x82, 0x1b, 0xc2, 0xcd, 0x79, 0x39, 0x0a, 0x42,
-	0x4d, 0xc8, 0xab, 0x9a, 0x86, 0x4d, 0xec, 0xaa, 0xbe, 0xed, 0x7a, 0xa5, 0x1c, 0xe5, 0xf6, 0xad,
-	0xd1, 0xdc, 0x56, 0xfb, 0xbb, 0x19, 0xd3, 0x72, 0xec, 0x00, 0x74, 0x13, 0x8a, 0x5d, 0xc3, 0x52,
-	0x34, 0xa7, 0xa7, 0x38, 0xa6, 0xea, 0x1f, 0xdb, 0x6e, 0xb7, 0xb4, 0xc0, 0xde, 0x48, 0xd7, 0xb0,
-	0x6a, 0x4e, 0xaf, 0xc5, 0xa1, 0xe8, 0x01, 0x64, 0xc8, 0xd9, 0xbe, 0x57, 0x5a, 0xa4, 0x44, 0x5f,
-	0x4d, 0x57, 0xd1, 0x01, 0xd9, 0x2b, 0x73, 0x94, 0xf2, 0x03, 0x58, 0x88, 0xbd, 0x19, 0x54, 0x84,
-	0xe9, 0x53, 0x7c, 0xc6, 0xed, 0x8c, 0xfc, 0x44, 0x2b, 0x30, 0xfb, 0x4c, 0x35, 0x7b, 0x98, 0x1a,
-	0x56, 0x56, 0x66, 0x0f, 0xf7, 0xa7, 0xde, 0x17, 0xca, 0xdf, 0x80, 0x5c, 0x44, 0xd3, 0xe7, 0x41,
-	0x15, 0xff, 0x49, 0x80, 0x6c, 0xc8, 0xcd, 0xa4, 0x98, 0x68, 0x0b, 0x32, 0xf8, 0xf8, 0x18, 0x6b,
-	0x7e, 0x69, 0xfa, 0x86, 0x70, 0xb3, 0x70, 0x67, 0x63, 0x02, 0x51, 0x2b, 0x12, 0xc5, 0x90, 0x39,
-	0xa6, 0xf8, 0x31, 0x64, 0x18, 0x04, 0xad, 0x01, 0x92, 0x1e, 0x3e, 0x94, 0x6a, 0x07, 0xca, 0x61,
-	0xa3, 0xdd, 0x92, 0x6a, 0xf5, 0x87, 0x75, 0x69, 0xbb, 0xf8, 0x35, 0xb4, 0x08, 0xb9, 0x46, 0x53,
-	0x69, 0xd7, 0x76, 0xa5, 0xed, 0xc3, 0x3d, 0xa9, 0x28, 0x90, 0x8d, 0x2d, 0x59, 0x7a, 0x28, 0xc9,
-	0x4a, 0x14, 0x3e, 0x85, 0x0a, 0x00, 0x8d, 0xa6, 0x22, 0x7d, 0x53, 0xaa, 0x1d, 0x1e, 0x48, 0xc5,
-	0x69, 0xf1, 0x47, 0x53, 0x00, 0xfb, 0x2a, 0x89, 0x14, 0xd5, 0x9e, 0x7f, 0x82, 0xca, 0x30, 0xdf,
-	0xf3, 0xb0, 0x6b, 0xa9, 0xdd, 0xc0, 0x6f, 0xc3, 0x67, 0xb2, 0xe6, 0xa8, 0x9e, 0xf7, 0xa9, 0xed,
-	0xea, 0x5c, 0xc4, 0xf0, 0x19, 0x75, 0xe1, 0x05, 0xcd, 0x34, 0xb0, 0xe5, 0x2b, 0x1a, 0x76, 0x7d,
-	0xe3, 0xd8, 0xd0, 0x54, 0x1f, 0x2b, 0x1a, 0xb5, 0x12, 0x2a, 0x78, 0xee, 0xce, 0xed, 0xd1, 0x82,
-	0xd7, 0x28, 0x6a, 0xad, 0x8f, 0xc9, 0xcd, 0x6b, 0x5d, 0x4b, 0x5e, 0x40, 0xef, 0xc2, 0x5a, 0x10,
-	0xdf, 0x34, 0x35, 0x4a, 0xb2, 0xa4, 0x53, 0xc6, 0x56, 0xf8, 0x6a, 0x4d, 0x8d, 0xe0, 0xa2, 0x77,
-	0x00, 0x0d, 0x33, 0x59, 0xc2, 0x14, 0x63, 0x69, 0x88, 0x14, 0x71, 0x73, 0xbe, 0x9d, 0xbc, 0xe8,
-	0x63, 0xe6, 0xe6, 0x0c, 0xf2, 0x08, 0x9f, 0x89, 0x6d, 0x58, 0x1f, 0xc1, 0x37, 0x7a, 0x1f, 0x4a,
-	0x86, 0xe7, 0xf5, 0xb0, 0x92, 0x40, 0x4e, 0xa0, 0x8e, 0xb8, 0x46, 0xd7, 0x87, 0xf0, 0xc5, 0x1f,
-	0x4c, 0x43, 0xbe, 0xaa, 0xeb, 0xb6, 0xe5, 0xf1, 0xa3, 0x7e, 0x1e, 0x96, 0x4f, 0x7c, 0xdf, 0x51,
-	0x4c, 0x5b, 0xd5, 0x95, 0x23, 0xd5, 0x54, 0x2d, 0xcd, 0xb0, 0x3a, 0xf4, 0x94, 0x54, 0x5f, 0xdd,
-	0xf5, 0x7d, 0x67, 0xcf, 0x56, 0xf5, 0xad, 0x00, 0x45, 0x5e, 0x3a, 0x19, 0x04, 0x21, 0x07, 0xca,
-	0x27, 0xb6, 0x6b, 0x3c, 0x27, 0xd8, 0xa6, 0xe2, 0xd8, 0xba, 0xa2, 0xf6, 0x7c, 0xdb, 0xd3, 0x54,
-	0x93, 0xd0, 0x98, 0xa2, 0x34, 0x52, 0x42, 0xe5, 0x6e, 0x88, 0xdb, 0xb2, 0xf5, 0x6a, 0x1f, 0x53,
-	0x2e, 0x9d, 0x8c, 0x58, 0x41, 0xdf, 0x82, 0x95, 0xd3, 0xde, 0x11, 0x76, 0x2d, 0xec, 0x63, 0x4f,
-	0xd1, 0x55, 0xef, 0xe4, 0xc8, 0x56, 0x5d, 0x9d, 0x9b, 0xc8, 0x3b, 0xa3, 0x69, 0x3d, 0x0a, 0xb1,
-	0xb6, 0x03, 0x24, 0x79, 0xf9, 0x74, 0x18, 0x88, 0x54, 0x58, 0xb5, 0xb0, 0xff, 0xa9, 0xed, 0x9e,
-	0x2a, 0x8e, 0x6d, 0x1a, 0xda, 0x59, 0x60, 0x85, 0x33, 0xe3, 0x48, 0x34, 0x18, 0x5a, 0x8b, 0x62,
-	0x71, 0x0b, 0x5c, 0xb6, 0x86, 0x81, 0xe2, 0x26, 0x2c, 0x0d, 0xa9, 0x97, 0x78, 0x87, 0x6e, 0x78,
-	0xea, 0x91, 0x89, 0x75, 0xfe, 0x8e, 0xc3, 0x67, 0xf1, 0x1e, 0x94, 0x46, 0xe9, 0x2a, 0x15, 0xef,
-	0x36, 0x2c, 0x27, 0xc8, 0x3d, 0x0e, 0x25, 0x41, 0x8e, 0x54, 0x94, 0x7f, 0x17, 0xe0, 0x7a, 0x3f,
-	0x04, 0x10, 0x3e, 0xb1, 0xce, 0xcf, 0x08, 0xac, 0xb0, 0x04, 0x73, 0xd8, 0x8a, 0x62, 0x07, 0x8f,
-	0x48, 0x83, 0x9c, 0x66, 0xe8, 0xae, 0x72, 0x64, 0xda, 0xda, 0xa9, 0x57, 0x9a, 0xa2, 0xe1, 0x7c,
-	0x6b, 0xb4, 0x92, 0xd3, 0x09, 0x55, 0x6a, 0x86, 0xee, 0x6e, 0x91, 0xa3, 0x64, 0xd0, 0x82, 0x9f,
-	0x5e, 0x79, 0x1f, 0xb2, 0xe1, 0x02, 0xa9, 0x0c, 0x74, 0xc3, 0x73, 0x4c, 0xf5, 0x4c, 0x89, 0x84,
-	0xa9, 0x1c, 0x87, 0x35, 0x48, 0xa4, 0x22, 0x9e, 0x1b, 0x32, 0xc5, 0x63, 0x55, 0x36, 0x3c, 0x4f,
-	0xfc, 0x03, 0x01, 0x16, 0x62, 0x4a, 0x42, 0x7b, 0x30, 0xef, 0xb8, 0xf6, 0x33, 0x43, 0xc7, 0x2e,
-	0x3d, 0xaf, 0x90, 0x9a, 0xb4, 0xa3, 0xa8, 0x95, 0x16, 0xc7, 0x93, 0xc3, 0x13, 0xa2, 0xda, 0x9a,
-	0x8a, 0x69, 0x4b, 0xbc, 0x05, 0xf3, 0xad, 0xfe, 0xae, 0x95, 0x96, 0xdc, 0x7c, 0x5c, 0xdf, 0x96,
-	0xe4, 0x81, 0x60, 0x0e, 0x90, 0xa9, 0x55, 0xf7, 0xea, 0xb5, 0x66, 0x51, 0x10, 0xff, 0x74, 0x06,
-	0x50, 0xbd, 0x55, 0x35, 0x49, 0xc2, 0x27, 0x05, 0x19, 0x67, 0xf8, 0x35, 0x28, 0xf4, 0x3c, 0xac,
-	0x18, 0x8e, 0xa2, 0x9a, 0x86, 0xea, 0x61, 0x8f, 0xbf, 0x97, 0x7c, 0xcf, 0xc3, 0x75, 0xa7, 0xca,
-	0x60, 0xe8, 0x2d, 0x58, 0xd2, 0x5c, 0x4c, 0x22, 0xb1, 0xd7, 0x3b, 0xe2, 0x96, 0xcc, 0x59, 0x2a,
-	0xb2, 0x85, 0x76, 0x08, 0xa7, 0xe5, 0x54, 0xf8, 0xc4, 0x54, 0x3b, 0xcd, 0xcb, 0xa9, 0x10, 0x4c,
-	0xb5, 0xbb, 0x01, 0x4b, 0x41, 0xf0, 0x35, 0x9c, 0x67, 0xef, 0x2a, 0x44, 0xb1, 0xd4, 0xbb, 0xb2,
-	0xf2, 0x22, 0x5f, 0xa8, 0x3b, 0xcf, 0xde, 0x25, 0x6f, 0x8c, 0xf0, 0x69, 0xd9, 0x3a, 0x8e, 0x6c,
-	0x64, 0xe5, 0x52, 0x9e, 0x40, 0xc3, 0x5d, 0x6f, 0x03, 0xe2, 0x25, 0x9b, 0x17, 0xd9, 0x99, 0xa1,
-	0x3b, 0x8b, 0xc1, 0x4a, 0xb8, 0xfb, 0x23, 0xb8, 0xd6, 0x2f, 0x6e, 0x35, 0xdb, 0xd2, 0x55, 0xf7,
-	0x4c, 0x71, 0x55, 0xab, 0x83, 0x19, 0xd7, 0x73, 0x14, 0xef, 0x05, 0xbe, 0xa7, 0x1d, 0x6c, 0x91,
-	0xc9, 0x0e, 0x2a, 0x40, 0x15, 0x5e, 0x0a, 0xc9, 0x25, 0x9e, 0x30, 0x4f, 0x4f, 0x28, 0x07, 0x9b,
-	0x12, 0x8e, 0x78, 0x0f, 0xd6, 0x87, 0x74, 0xc0, 0xcd, 0x2d, 0x1b, 0xcb, 0x40, 0x01, 0xd7, 0xcc,
-	0x76, 0x37, 0x61, 0x25, 0xae, 0x0e, 0x8e, 0x03, 0x2c, 0x07, 0x45, 0x95, 0xc2, 0x10, 0xfe, 0x1f,
-	0x94, 0x86, 0x35, 0xc3, 0x91, 0x72, 0x14, 0x69, 0x75, 0x50, 0x3f, 0xcc, 0xc6, 0xef, 0xc2, 0x7a,
-	0xcb, 0xd6, 0xdb, 0x58, 0xeb, 0xb9, 0x86, 0x7f, 0x16, 0x8b, 0x05, 0x23, 0x9d, 0x59, 0xfc, 0xef,
-	0x02, 0xcc, 0xd5, 0x18, 0xdf, 0xa4, 0xa6, 0x8c, 0xb8, 0x17, 0xfd, 0x4d, 0x6a, 0x4a, 0x1d, 0x7b,
-	0x9a, 0x6b, 0x38, 0xc4, 0x14, 0xb9, 0x63, 0x45, 0x41, 0xe4, 0x4d, 0x1a, 0x96, 0xe1, 0x1b, 0xaa,
-	0xa9, 0x50, 0x41, 0x59, 0xd1, 0x3a, 0x4d, 0x8b, 0xd6, 0x22, 0x5f, 0x61, 0x45, 0x2f, 0xa9, 0x5b,
-	0x25, 0xc8, 0xf1, 0x5d, 0x91, 0x08, 0xfd, 0xda, 0x24, 0xe5, 0xb2, 0x0c, 0x56, 0xbf, 0xe1, 0x90,
-	0x20, 0xd7, 0xa5, 0x61, 0x85, 0xa4, 0xaf, 0x13, 0x6a, 0x61, 0xa9, 0xc7, 0xf4, 0x63, 0x90, 0x0c,
-	0xdd, 0x7e, 0xed, 0xf3, 0x06, 0xa9, 0xb6, 0x3b, 0x1d, 0xc3, 0xea, 0x04, 0x4d, 0x13, 0x37, 0xc1,
-	0x02, 0x07, 0xb7, 0x19, 0x94, 0xd4, 0x11, 0x5d, 0xdb, 0x32, 0x7c, 0xdb, 0x8d, 0xee, 0x65, 0x66,
-	0xb7, 0xd4, 0x5f, 0x09, 0xb6, 0x97, 0x60, 0x2e, 0xf0, 0x3d, 0x66, 0x58, 0xc1, 0x63, 0xb2, 0x27,
-	0x65, 0x93, 0x3d, 0xe9, 0x11, 0x2c, 0xa8, 0xb4, 0x30, 0x08, 0xb4, 0x05, 0x54, 0xcc, 0xd7, 0x53,
-	0xca, 0xf5, 0x48, 0x1d, 0x21, 0xe7, 0xd5, 0x68, 0x55, 0x71, 0x1d, 0x20, 0x12, 0x11, 0x98, 0x21,
-	0x45, 0x20, 0xa8, 0x0a, 0x54, 0xbf, 0x8a, 0x63, 0xdb, 0xa6, 0x57, 0xca, 0xd3, 0xa0, 0x2e, 0xa6,
-	0xbf, 0x97, 0x96, 0x6d, 0x9b, 0x72, 0xd6, 0xe2, 0xbf, 0x3c, 0x74, 0x0d, 0xb2, 0x41, 0xcc, 0xf2,
-	0x4a, 0x0b, 0xb4, 0x31, 0xe9, 0x03, 0xd0, 0x3d, 0x58, 0x67, 0x46, 0xa7, 0x44, 0xca, 0x01, 0xd5,
-	0x74, 0x4e, 0xd4, 0x52, 0x81, 0xda, 0xe4, 0x2a, 0x5b, 0xee, 0xa7, 0xbf, 0x2a, 0x59, 0x44, 0x0d,
-	0x28, 0xc4, 0xb3, 0x7b, 0x69, 0x99, 0xaa, 0xe1, 0x8d, 0x09, 0xc3, 0xb5, 0xbc, 0x10, 0x4b, 0xe8,
-	0xe8, 0x17, 0x60, 0x85, 0xc6, 0xd0, 0x80, 0xb3, 0xe0, 0xd4, 0x15, 0x7a, 0xea, 0xdb, 0xa3, 0x4f,
-	0x1d, 0x8e, 0xc9, 0x32, 0x32, 0x9c, 0xa1, 0x38, 0xfd, 0xab, 0x02, 0xbc, 0x12, 0xb1, 0x4d, 0x96,
-	0xf3, 0x14, 0xce, 0x43, 0xf8, 0x2a, 0xd7, 0x28, 0xb5, 0xf7, 0x2f, 0x9a, 0x35, 0xe5, 0xeb, 0xdd,
-	0xf4, 0xf4, 0xfd, 0x14, 0x50, 0x97, 0xf4, 0x15, 0xd8, 0x52, 0x2d, 0x0d, 0x07, 0x32, 0xae, 0x8f,
-	0xab, 0x21, 0xf7, 0xfb, 0x38, 0x5c, 0xc4, 0xa5, 0xee, 0x20, 0x08, 0x59, 0x50, 0x26, 0x85, 0xa3,
-	0xc7, 0x23, 0xcd, 0x40, 0xd1, 0xf5, 0xc2, 0xb8, 0xd2, 0x7f, 0x44, 0x90, 0x92, 0xd7, 0x9d, 0x11,
-	0xd1, 0xeb, 0x45, 0xc8, 0x7a, 0xd8, 0x3c, 0x56, 0x4c, 0xc3, 0x3a, 0xe5, 0xd5, 0xfe, 0x3c, 0x01,
-	0xec, 0x19, 0xd6, 0x29, 0x09, 0x5a, 0xcf, 0x6d, 0x2b, 0xa8, 0xe9, 0xe9, 0x6f, 0x52, 0xfa, 0x60,
-	0x4b, 0x77, 0x6c, 0xc3, 0xf2, 0x79, 0x11, 0x1f, 0x3e, 0x13, 0x33, 0x0c, 0xc2, 0x55, 0xe0, 0x88,
-	0xcf, 0xb0, 0xeb, 0x91, 0xe0, 0xd6, 0x61, 0xd1, 0x95, 0x2f, 0xf3, 0xa8, 0xf8, 0x98, 0x2d, 0xd2,
-	0xfe, 0xa3, 0xe7, 0xba, 0xa4, 0xb6, 0xe7, 0x6f, 0x37, 0x40, 0x3b, 0xe1, 0xd1, 0x9f, 0xad, 0xb2,
-	0xf7, 0x16, 0x60, 0xdd, 0x82, 0x00, 0xce, 0x82, 0x63, 0x80, 0x63, 0x50, 0x1c, 0xc4, 0xd7, 0x88,
-	0x33, 0x05, 0x18, 0x2f, 0x43, 0x8e, 0x27, 0x70, 0xdf, 0xe8, 0xe2, 0xd2, 0xb7, 0x99, 0xa3, 0x32,
-	0xd0, 0x81, 0xd1, 0xc5, 0xe8, 0x67, 0x20, 0xe3, 0xf9, 0xaa, 0xdf, 0xf3, 0x4a, 0xa7, 0xb4, 0x6c,
-	0xb9, 0x99, 0xd6, 0x64, 0x51, 0x11, 0x2a, 0x6d, 0xba, 0x5f, 0xe6, 0x78, 0xe8, 0xeb, 0x50, 0x60,
-	0xbf, 0x94, 0x2e, 0xf6, 0x3c, 0xb5, 0x83, 0x4b, 0x26, 0xa5, 0xb2, 0xc0, 0xa0, 0xfb, 0x0c, 0x88,
-	0xde, 0x81, 0xe5, 0x81, 0xcc, 0xe5, 0x19, 0xcf, 0x71, 0xa9, 0xcb, 0x22, 0x7b, 0x34, 0x71, 0xb5,
-	0x8d, 0xe7, 0x78, 0x44, 0x46, 0xb7, 0x46, 0x64, 0xf4, 0x0a, 0x2c, 0x1b, 0x96, 0xe7, 0x53, 0xe3,
-	0xec, 0xb8, 0x76, 0xcf, 0x51, 0x7a, 0xae, 0xe9, 0x95, 0x6c, 0x1a, 0x35, 0x96, 0x82, 0xa5, 0x1d,
-	0xb2, 0x72, 0xe8, 0x9a, 0x1e, 0x39, 0x3d, 0xa6, 0x48, 0x96, 0x65, 0x1c, 0xc6, 0x4b, 0x44, 0x8d,
-	0x2c, 0xcb, 0xbc, 0x0c, 0x39, 0xfc, 0x99, 0x63, 0xb8, 0x5c, 0x89, 0xdf, 0x61, 0x4a, 0x64, 0x20,
-	0xaa, 0xc4, 0x32, 0xcc, 0x07, 0x6e, 0x5b, 0x72, 0x99, 0x85, 0x04, 0xcf, 0xa2, 0x01, 0x19, 0xa6,
-	0x30, 0xd2, 0x51, 0xb7, 0x0f, 0xaa, 0x07, 0x87, 0xed, 0x81, 0x6a, 0xad, 0x08, 0x79, 0x5a, 0xc7,
-	0xb5, 0xeb, 0xcd, 0x46, 0xbd, 0xb1, 0x53, 0x14, 0x50, 0x0e, 0xe6, 0xe4, 0xc3, 0x06, 0x7d, 0x98,
-	0x22, 0x9d, 0xb9, 0x2c, 0xd5, 0x9a, 0x8d, 0x5a, 0x7d, 0x8f, 0x00, 0xa6, 0x51, 0x1e, 0xe6, 0xdb,
-	0x07, 0xcd, 0x56, 0x8b, 0x3c, 0xcd, 0xa0, 0x2c, 0xcc, 0x4a, 0xb2, 0xdc, 0x94, 0x8b, 0xb3, 0xe2,
-	0xef, 0x65, 0x60, 0x81, 0xbf, 0xa4, 0x43, 0x47, 0x27, 0x1d, 0xe8, 0x2d, 0x58, 0xd1, 0xb1, 0x67,
-	0xb8, 0x24, 0x64, 0x44, 0x0d, 0x86, 0x15, 0x5b, 0x88, 0xaf, 0x45, 0x0d, 0xe6, 0x03, 0x28, 0x07,
-	0x18, 0x09, 0x29, 0x8a, 0xd5, 0x5e, 0x25, 0xbe, 0x63, 0x7f, 0x28, 0x53, 0x3d, 0x85, 0xd5, 0x00,
-	0x3b, 0x9e, 0x6b, 0x32, 0xe7, 0xca, 0x35, 0xcb, 0xfc, 0x90, 0x58, 0x23, 0xbb, 0x39, 0x20, 0x0b,
-	0x49, 0x2d, 0x8a, 0xa1, 0x07, 0x69, 0x33, 0x22, 0x0b, 0xc9, 0x1f, 0x75, 0x9d, 0xbc, 0xe4, 0x00,
-	0x21, 0x32, 0x6d, 0x63, 0x19, 0xb4, 0xc8, 0x57, 0xea, 0xe1, 0xd0, 0xcd, 0x81, 0x97, 0x86, 0x8f,
-	0x8f, 0x76, 0xb3, 0xd9, 0xb1, 0xed, 0x1f, 0x27, 0x1d, 0x6d, 0x64, 0xcb, 0x03, 0x6c, 0x45, 0x1b,
-	0xb7, 0xb7, 0x20, 0x60, 0x5a, 0xe9, 0x27, 0x3a, 0xa0, 0x26, 0x1b, 0xb0, 0xb7, 0x17, 0xe6, 0xbb,
-	0xdf, 0x10, 0xe0, 0xcd, 0xf0, 0xc5, 0x8c, 0xcd, 0x07, 0xf9, 0x4b, 0xe6, 0x83, 0xaf, 0x07, 0x6f,
-	0x38, 0x3d, 0x2d, 0x7c, 0x0e, 0x62, 0xc0, 0x53, 0x4a, 0x08, 0x2f, 0x5c, 0x34, 0x84, 0x5f, 0xe7,
-	0x87, 0x8f, 0xaa, 0x43, 0xdf, 0x85, 0xb5, 0x01, 0x95, 0x04, 0xf6, 0xcd, 0x87, 0x38, 0x31, 0x29,
-	0xb8, 0x85, 0x8b, 0xff, 0x91, 0x81, 0x6c, 0xd3, 0xc1, 0x2e, 0x55, 0x6c, 0x62, 0x95, 0x1a, 0x24,
-	0x81, 0xa9, 0x48, 0x12, 0x68, 0x42, 0xc1, 0x0e, 0x90, 0x98, 0x21, 0x4d, 0x8f, 0x8b, 0x97, 0x21,
-	0x91, 0x0a, 0x31, 0x30, 0x79, 0x21, 0xc4, 0xa7, 0xf6, 0xb6, 0x15, 0x06, 0xde, 0x99, 0x71, 0x63,
-	0xbd, 0xfe, 0x41, 0x03, 0xa1, 0x77, 0x0d, 0x32, 0x3a, 0xf6, 0x55, 0xc3, 0xe4, 0x56, 0xcd, 0x9f,
-	0x12, 0x42, 0xf2, 0x6c, 0x52, 0x48, 0x8e, 0x65, 0xc2, 0xcc, 0x40, 0x26, 0x7c, 0x19, 0x72, 0xbe,
-	0xea, 0x76, 0xb0, 0xcf, 0x96, 0x99, 0x97, 0x01, 0x03, 0xd1, 0x0d, 0xd1, 0xa0, 0x97, 0x8d, 0x07,
-	0x3d, 0xd2, 0x3f, 0x7b, 0xbe, 0xea, 0xfa, 0x2c, 0x60, 0xb2, 0xe6, 0x24, 0x4b, 0x21, 0x34, 0x5e,
-	0xbe, 0x40, 0x33, 0x2a, 0x5b, 0x64, 0xb5, 0xe3, 0x1c, 0xb6, 0x74, 0xb2, 0x24, 0xca, 0x63, 0xc3,
-	0x65, 0x0e, 0xe6, 0x5a, 0x52, 0x63, 0x3b, 0x21, 0x52, 0xce, 0xc3, 0xcc, 0x76, 0xb3, 0x21, 0xb1,
-	0x10, 0x59, 0xdd, 0x6a, 0xca, 0x07, 0x34, 0x44, 0x8a, 0xff, 0x33, 0x05, 0x33, 0x54, 0xe7, 0x2b,
-	0x50, 0x3c, 0xf8, 0xb8, 0x25, 0x0d, 0x1c, 0x88, 0xa0, 0x50, 0x93, 0xa5, 0xea, 0x81, 0xa4, 0xd4,
-	0xf6, 0x0e, 0xdb, 0x07, 0x92, 0x5c, 0x14, 0x08, 0x6c, 0x5b, 0xda, 0x93, 0x22, 0xb0, 0x29, 0x02,
-	0x3b, 0x6c, 0xed, 0xc8, 0xd5, 0x6d, 0x49, 0xd9, 0xaf, 0x52, 0xd8, 0x34, 0x5a, 0x82, 0x85, 0x00,
-	0xd6, 0x68, 0x6e, 0x4b, 0xed, 0xe2, 0x0c, 0xd9, 0x26, 0x4b, 0xad, 0x6a, 0x5d, 0x0e, 0x51, 0x67,
-	0x19, 0xea, 0x76, 0x94, 0x44, 0x86, 0x30, 0xc3, 0xc9, 0x12, 0x4c, 0xa5, 0xd5, 0x6c, 0xee, 0x15,
-	0xe7, 0x08, 0x94, 0x13, 0xee, 0x43, 0xe7, 0xd1, 0x35, 0x28, 0xb5, 0xa5, 0x83, 0x3e, 0x48, 0xd9,
-	0xaf, 0x36, 0xaa, 0x3b, 0xd2, 0xbe, 0xd4, 0x38, 0x28, 0x66, 0xd1, 0x2a, 0x2c, 0x55, 0x0f, 0x0f,
-	0x9a, 0x0a, 0x27, 0xcb, 0x18, 0x01, 0xa2, 0x40, 0x0a, 0x8e, 0x33, 0x98, 0x43, 0x05, 0x00, 0x72,
-	0xd8, 0x5e, 0x75, 0x4b, 0xda, 0x6b, 0x17, 0xf3, 0x68, 0x19, 0x16, 0xc9, 0x33, 0x93, 0x49, 0xa9,
-	0x1e, 0x1e, 0xec, 0x16, 0x17, 0xa8, 0xf6, 0x63, 0x14, 0xdb, 0xf5, 0xa7, 0x52, 0xb1, 0x10, 0xc2,
-	0xa5, 0x83, 0x27, 0x4d, 0xf9, 0x91, 0xd2, 0x6a, 0xee, 0xd5, 0x6b, 0x1f, 0x17, 0x17, 0x51, 0x19,
-	0xd6, 0xd8, 0x21, 0xf5, 0xc6, 0x81, 0xd4, 0xa8, 0x36, 0x6a, 0x52, 0xb0, 0x56, 0x14, 0x7f, 0x57,
-	0x80, 0x95, 0x1a, 0x2d, 0x39, 0x78, 0x76, 0x92, 0xf1, 0x77, 0x7a, 0xd8, 0xf3, 0x89, 0x99, 0x38,
-	0xae, 0xfd, 0x6d, 0xac, 0xf9, 0x24, 0x90, 0x33, 0x17, 0xcc, 0x72, 0x48, 0x5d, 0x4f, 0xf4, 0xc3,
-	0x07, 0x30, 0xc7, 0x0b, 0x2d, 0x3e, 0xf2, 0x7b, 0x65, 0x6c, 0xc1, 0x22, 0x07, 0x18, 0xc4, 0x5f,
-	0x1c, 0x95, 0xe4, 0x76, 0xee, 0x0f, 0xfc, 0x49, 0x3c, 0x83, 0xa5, 0x1d, 0xec, 0x5f, 0x9e, 0x39,
-	0x3a, 0xf0, 0xe5, 0xed, 0x98, 0xce, 0x87, 0x1f, 0xd9, 0xa0, 0x0f, 0xd3, 0xc3, 0x58, 0x33, 0xdb,
-	0x8f, 0x35, 0xe2, 0x5f, 0x0a, 0xb0, 0xc2, 0x92, 0xf5, 0x95, 0x93, 0xff, 0x08, 0x32, 0x3d, 0x4a,
-	0x89, 0xf7, 0xc9, 0x6f, 0x8c, 0xd5, 0x1c, 0x63, 0x4c, 0xe6, 0x68, 0x89, 0xfc, 0xff, 0xcb, 0x14,
-	0xac, 0xb4, 0xb1, 0x1f, 0xe9, 0x88, 0xaf, 0x8c, 0xff, 0x7d, 0xc8, 0xa8, 0x9a, 0x1f, 0x94, 0x2f,
-	0x85, 0x3b, 0xef, 0x8d, 0xe6, 0x3f, 0x89, 0xa3, 0x4a, 0x95, 0x22, 0xcb, 0xfc, 0x10, 0xf4, 0x41,
-	0xa8, 0x8e, 0xf3, 0xf4, 0xfb, 0x83, 0xba, 0x98, 0x8b, 0xe8, 0xa2, 0x05, 0x19, 0x46, 0x83, 0x84,
-	0xa5, 0xc3, 0xc6, 0xa3, 0x46, 0xf3, 0x49, 0x83, 0xd5, 0x77, 0xc4, 0x35, 0x5a, 0xd5, 0x76, 0xfb,
-	0x49, 0x53, 0xde, 0x2e, 0x0a, 0xc4, 0x61, 0x77, 0xa4, 0x86, 0x24, 0x13, 0xe7, 0x0f, 0xc1, 0x53,
-	0xc1, 0xc6, 0xc3, 0xb6, 0x24, 0x37, 0xaa, 0xfb, 0x52, 0x71, 0x5a, 0xfc, 0x45, 0x58, 0xd9, 0xc6,
-	0x26, 0xfe, 0x0a, 0x8c, 0x23, 0x90, 0x67, 0x26, 0x22, 0xcf, 0xb7, 0x60, 0x79, 0xcf, 0xf0, 0x02,
-	0xbf, 0xf0, 0x2e, 0x41, 0xbc, 0xef, 0x78, 0x33, 0x31, 0xc7, 0x7b, 0x0e, 0x2b, 0x71, 0x0a, 0x9e,
-	0x63, 0x5b, 0x1e, 0x46, 0x1f, 0xc2, 0x3c, 0x67, 0xcd, 0x2b, 0x09, 0x74, 0x78, 0x30, 0x81, 0x9b,
-	0x87, 0x28, 0xe8, 0x55, 0x58, 0xe8, 0x1a, 0x9e, 0x47, 0x2a, 0x57, 0x42, 0x9e, 0x4d, 0x95, 0xb3,
-	0x72, 0x9e, 0x03, 0x9f, 0x12, 0x98, 0xf8, 0xcb, 0xb0, 0xbc, 0x83, 0xfd, 0x30, 0xb7, 0x5e, 0x42,
-	0xba, 0x57, 0x20, 0xdf, 0xaf, 0x0d, 0x42, 0xe5, 0xe6, 0x42, 0xd8, 0x08, 0xd7, 0x3f, 0x82, 0x55,
-	0x22, 0x7c, 0xc8, 0xc1, 0x55, 0x28, 0xf8, 0xfb, 0x02, 0xac, 0xd5, 0x48, 0xef, 0x63, 0x7e, 0xc5,
-	0x82, 0x46, 0xed, 0x88, 0x30, 0x31, 0x28, 0x29, 0x7f, 0xd1, 0x35, 0x80, 0x10, 0x3b, 0x78, 0xd5,
-	0xaf, 0x4e, 0x50, 0x09, 0xc9, 0x11, 0xb4, 0xc9, 0x5e, 0xb7, 0x02, 0x6b, 0x3b, 0xd8, 0x27, 0x8d,
-	0x0a, 0x0e, 0x3e, 0x3e, 0x5f, 0x5c, 0x11, 0x49, 0x52, 0xfe, 0xda, 0x14, 0xe4, 0xa3, 0xc7, 0xa3,
-	0x7b, 0xb0, 0xae, 0xe3, 0x63, 0xb5, 0x67, 0xfa, 0x43, 0xb3, 0x01, 0x46, 0x64, 0x95, 0x2f, 0x0f,
-	0xcc, 0x06, 0x2a, 0xb0, 0xfc, 0x4c, 0x35, 0x8d, 0x78, 0xcb, 0x16, 0x5c, 0x60, 0x58, 0xa2, 0x4b,
-	0x91, 0x8e, 0xcd, 0x63, 0x7d, 0x0e, 0xa3, 0x13, 0xe9, 0x73, 0x66, 0x82, 0x3e, 0x87, 0xae, 0xf4,
-	0xfb, 0x9c, 0x0d, 0x60, 0x47, 0x44, 0xf6, 0x7a, 0xa5, 0x59, 0x7a, 0xf6, 0x22, 0x5d, 0x08, 0xb7,
-	0x7a, 0xe8, 0x0e, 0xac, 0xb2, 0xbd, 0xf1, 0xf2, 0x9a, 0xdd, 0x4b, 0xc8, 0xca, 0x8c, 0xcd, 0x58,
-	0x75, 0xed, 0x89, 0x7f, 0x2d, 0xc0, 0x2a, 0x4b, 0xf6, 0xe1, 0x50, 0xef, 0x0a, 0x33, 0x5a, 0x36,
-	0xec, 0xd5, 0x78, 0x52, 0x9b, 0x64, 0xc8, 0x38, 0x1f, 0x0c, 0x19, 0x23, 0x6e, 0x93, 0x89, 0xb9,
-	0xcd, 0x17, 0x02, 0xac, 0xb2, 0xc0, 0x7b, 0xf5, 0x42, 0xdc, 0x80, 0x7c, 0xac, 0x9f, 0x65, 0x2f,
-	0x0e, 0xac, 0x7e, 0x23, 0x1b, 0x58, 0x5b, 0x26, 0x62, 0x6d, 0xbf, 0x22, 0xb0, 0xd0, 0x19, 0xf0,
-	0xe7, 0x5d, 0x1d, 0x83, 0xa3, 0xaa, 0xa6, 0xdf, 0x11, 0x00, 0xed, 0x60, 0xff, 0xa7, 0x55, 0x43,
-	0xff, 0x35, 0x03, 0xf3, 0x01, 0x6f, 0x89, 0x6d, 0xde, 0x07, 0x90, 0xe1, 0x1d, 0xea, 0xd4, 0x39,
-	0xbe, 0x1b, 0x70, 0x9c, 0x73, 0x7e, 0xa8, 0x48, 0x1d, 0x3a, 0x96, 0x60, 0x2e, 0x08, 0x0c, 0x6c,
-	0xee, 0x18, 0x3c, 0x8e, 0x9a, 0x6b, 0x1d, 0x8f, 0x9a, 0x6b, 0x55, 0xc3, 0xa6, 0xb2, 0x43, 0x4b,
-	0xa4, 0x37, 0xc7, 0x7b, 0xc3, 0xf8, 0x71, 0xde, 0x49, 0x52, 0xef, 0xd8, 0x84, 0x5c, 0x74, 0x38,
-	0x32, 0x73, 0x91, 0xe1, 0x48, 0xf4, 0x04, 0xb4, 0x0b, 0xd0, 0x55, 0x2d, 0xb5, 0x83, 0xbb, 0x81,
-	0xa5, 0xe5, 0xd2, 0x9a, 0x6b, 0x72, 0xde, 0x7e, 0xb8, 0x5f, 0x8e, 0xe0, 0x8a, 0xdf, 0x13, 0x2e,
-	0x3b, 0x72, 0x5b, 0x03, 0xc4, 0x1f, 0x94, 0x27, 0xf5, 0x83, 0x5d, 0x85, 0x0d, 0xd8, 0xa6, 0x07,
-	0x47, 0x71, 0x33, 0xb1, 0x51, 0xdc, 0x6c, 0x7f, 0x14, 0x97, 0x11, 0xff, 0x48, 0x80, 0x42, 0x9c,
-	0x45, 0x92, 0x3c, 0x89, 0xbc, 0x4a, 0xcf, 0xe9, 0xb8, 0xaa, 0x1e, 0xdc, 0xe3, 0xa0, 0x3a, 0x38,
-	0x64, 0x20, 0xd2, 0x73, 0xd3, 0x2d, 0x2e, 0x76, 0x54, 0xc3, 0xe5, 0x1f, 0x5a, 0x81, 0x80, 0x64,
-	0x0a, 0x41, 0x87, 0xb0, 0xc8, 0xd1, 0x15, 0xdb, 0x09, 0x06, 0x46, 0x63, 0x3e, 0x34, 0x54, 0xfb,
-	0x04, 0x9a, 0x0c, 0x47, 0x2e, 0xf4, 0x62, 0xcf, 0x62, 0x17, 0xd0, 0xf0, 0x2e, 0xf4, 0x1e, 0xac,
-	0x47, 0x19, 0x56, 0x22, 0x1d, 0x3d, 0x73, 0xa3, 0x95, 0x08, 0xef, 0xed, 0xb0, 0xb9, 0x1f, 0xfb,
-	0x8d, 0x4f, 0xfc, 0x26, 0x2c, 0x0d, 0x7d, 0x19, 0x40, 0x35, 0xc8, 0x7c, 0x6a, 0x58, 0xba, 0xfd,
-	0xe9, 0xf8, 0xab, 0x29, 0x11, 0xe4, 0x27, 0x14, 0x45, 0xe6, 0xa8, 0xe2, 0xaf, 0x0b, 0xb1, 0xa3,
-	0xd9, 0x2a, 0x32, 0xa1, 0xa4, 0xab, 0x86, 0x79, 0xa6, 0x44, 0xbf, 0x61, 0x70, 0x62, 0xcc, 0xf5,
-	0x53, 0x3e, 0xd6, 0x6f, 0x13, 0xcc, 0xa1, 0x33, 0x77, 0xbf, 0x26, 0xaf, 0xe9, 0x89, 0x2b, 0x5b,
-	0xf3, 0x90, 0x61, 0xf3, 0x2f, 0xb1, 0x0d, 0x6b, 0xc9, 0xd8, 0x03, 0xf3, 0x91, 0xa9, 0xc1, 0xf9,
-	0x48, 0x19, 0xe6, 0xf5, 0x1e, 0xab, 0x6e, 0x78, 0x34, 0x0c, 0x9f, 0xc5, 0xff, 0x14, 0xe0, 0x5a,
-	0xbb, 0x1f, 0x75, 0x23, 0x3e, 0xf0, 0x7f, 0x18, 0x7f, 0x7f, 0x62, 0xce, 0x9b, 0xd8, 0x57, 0x7d,
-	0x29, 0xc0, 0x75, 0xd9, 0x36, 0xcd, 0x23, 0x55, 0x3b, 0x0d, 0xe4, 0xe6, 0x66, 0xf7, 0xd3, 0x96,
-	0x74, 0x9e, 0xb2, 0x9a, 0x3e, 0x92, 0x95, 0x79, 0xa1, 0x1b, 0xff, 0x20, 0x2a, 0x5c, 0xe0, 0x83,
-	0xa8, 0xf8, 0x5d, 0x58, 0x4e, 0x1a, 0x23, 0x8f, 0xbe, 0x5a, 0xf3, 0x1a, 0x14, 0xba, 0x86, 0x15,
-	0x4d, 0x4f, 0xec, 0x9a, 0x6c, 0xbe, 0x6b, 0x58, 0xfd, 0xd4, 0x44, 0x76, 0xa9, 0x9f, 0x0d, 0x27,
-	0xb1, 0x7c, 0x57, 0xfd, 0x2c, 0xdc, 0x25, 0xfe, 0xe3, 0x14, 0x14, 0xdb, 0xd8, 0x67, 0x57, 0x1f,
-	0xaf, 0x4e, 0xeb, 0x1d, 0x58, 0x74, 0xb1, 0x67, 0xf7, 0x5c, 0x0d, 0x2b, 0xfc, 0x0e, 0x2c, 0xbb,
-	0x70, 0xfb, 0xff, 0x53, 0x9b, 0xfd, 0x18, 0x5b, 0x15, 0x99, 0x9f, 0x10, 0xbd, 0x11, 0x5b, 0x70,
-	0x63, 0x40, 0xf4, 0x16, 0x2c, 0xd1, 0xf3, 0x95, 0x63, 0xc3, 0xea, 0x60, 0xd7, 0x71, 0x8d, 0xb0,
-	0xbe, 0x29, 0xd2, 0x85, 0x87, 0x7d, 0x78, 0x92, 0x51, 0x96, 0xab, 0xb0, 0x9c, 0x40, 0xe7, 0x5c,
-	0xf7, 0x41, 0x7f, 0x4b, 0xa0, 0xb3, 0x93, 0x3d, 0xdc, 0x51, 0xb5, 0xb3, 0xea, 0x91, 0xaa, 0x5d,
-	0x9d, 0x5e, 0x23, 0x46, 0x32, 0x13, 0x37, 0x92, 0x24, 0x2b, 0xfe, 0x25, 0x58, 0xa3, 0xf1, 0xbc,
-	0xde, 0x92, 0xf9, 0x35, 0xee, 0xab, 0x1f, 0x3c, 0x44, 0xe9, 0x7f, 0x4f, 0x80, 0x17, 0x6a, 0x76,
-	0xd7, 0x21, 0x05, 0xf8, 0x57, 0xc9, 0x43, 0x34, 0xe8, 0x9c, 0xc2, 0xd2, 0xd0, 0x75, 0x65, 0x62,
-	0x35, 0x91, 0x0b, 0xcb, 0xdc, 0x5d, 0x08, 0x07, 0xd3, 0x72, 0x51, 0x8d, 0xee, 0x26, 0x8e, 0xf5,
-	0x26, 0x44, 0x61, 0xac, 0x2b, 0x63, 0x4c, 0x2d, 0x46, 0xe0, 0xa4, 0xd3, 0x12, 0xff, 0x41, 0x80,
-	0x75, 0x12, 0xd4, 0x63, 0x37, 0x0d, 0xae, 0x4c, 0xdc, 0xe1, 0x3b, 0x10, 0x33, 0x97, 0xba, 0x03,
-	0x91, 0xf4, 0x0a, 0xff, 0x4d, 0x80, 0x17, 0xe9, 0x14, 0x6e, 0xf0, 0x06, 0xc0, 0x95, 0x49, 0x95,
-	0x7c, 0x47, 0x61, 0xe6, 0x27, 0x72, 0x47, 0x21, 0x61, 0x7c, 0x73, 0xe7, 0x5f, 0xaf, 0x43, 0x81,
-	0x77, 0xee, 0x2c, 0x97, 0xb9, 0xe8, 0x4b, 0x01, 0xf2, 0xd1, 0x79, 0x16, 0x4a, 0x29, 0x88, 0x13,
-	0x26, 0x6b, 0xe5, 0xca, 0xa4, 0xdb, 0x59, 0x52, 0x11, 0xbf, 0xf1, 0xfd, 0x7f, 0xfe, 0xf1, 0x6f,
-	0x4e, 0xdd, 0x45, 0xb7, 0xc3, 0x3f, 0xda, 0xf8, 0x2e, 0xeb, 0xcd, 0x3e, 0xe4, 0x9a, 0xf4, 0x36,
-	0x37, 0x36, 0xc3, 0x6f, 0x8b, 0x9b, 0x1b, 0x9f, 0x6f, 0x86, 0x23, 0xb2, 0xdf, 0x16, 0x00, 0xfa,
-	0x33, 0x6f, 0x94, 0xa2, 0xa0, 0xa1, 0xc9, 0x78, 0x79, 0xfc, 0x2c, 0x2e, 0x89, 0x33, 0xa2, 0xb4,
-	0x11, 0x7c, 0x85, 0x6c, 0x6d, 0x6e, 0x7c, 0x8e, 0x7e, 0x20, 0xc0, 0x42, 0xec, 0x6b, 0x01, 0x4a,
-	0x51, 0x4b, 0xd2, 0x67, 0x85, 0xf2, 0x24, 0x03, 0x24, 0xf1, 0x03, 0xca, 0xe1, 0x3d, 0xf1, 0xfc,
-	0xba, 0xbb, 0x2f, 0x6c, 0x50, 0x26, 0x63, 0x63, 0xfb, 0x34, 0x26, 0x93, 0xe6, 0xfb, 0xe7, 0x62,
-	0xb2, 0x7c, 0x7e, 0x35, 0x12, 0x26, 0x7f, 0x28, 0xc0, 0x42, 0x6c, 0x12, 0x9e, 0xc6, 0x64, 0xd2,
-	0xc8, 0x7c, 0x32, 0x26, 0x7f, 0x96, 0x32, 0xb9, 0x2d, 0x7e, 0x74, 0x7e, 0x26, 0xbd, 0x28, 0x51,
-	0xc2, 0xf2, 0x17, 0x02, 0x2c, 0xc4, 0x26, 0xde, 0x69, 0x2c, 0x27, 0x8d, 0xc6, 0x27, 0x63, 0x99,
-	0x9b, 0xe7, 0xc6, 0x05, 0xcc, 0xf3, 0x87, 0x02, 0x14, 0xe2, 0xc3, 0x4c, 0xb4, 0x99, 0xee, 0xb6,
-	0x43, 0x03, 0xde, 0xf2, 0xad, 0xc9, 0x11, 0xb8, 0xa7, 0x3f, 0xa0, 0x0c, 0xbf, 0x87, 0xee, 0x4e,
-	0x6c, 0xad, 0x91, 0xf9, 0xe8, 0x17, 0x02, 0xe4, 0xa3, 0xa3, 0xee, 0xb4, 0xb0, 0x94, 0x30, 0x12,
-	0x9f, 0x4c, 0xa5, 0x09, 0x1c, 0xa6, 0xa9, 0xb4, 0xcf, 0x1e, 0xf7, 0xf9, 0xc5, 0x81, 0x31, 0x35,
-	0x4a, 0x51, 0x52, 0xf2, 0x44, 0xbb, 0xbc, 0x16, 0x60, 0x04, 0x7f, 0x64, 0x56, 0x91, 0xba, 0x8e,
-	0x7f, 0x26, 0x4a, 0x94, 0xb5, 0x8f, 0xc4, 0xfb, 0x17, 0x60, 0xed, 0xbe, 0x46, 0x69, 0x11, 0xdb,
-	0xfc, 0x52, 0x80, 0xc5, 0x81, 0x11, 0x72, 0x1a, 0x93, 0xc9, 0xd3, 0xe6, 0xf2, 0xeb, 0x69, 0x2e,
-	0xd8, 0xdf, 0x7e, 0x4e, 0x7d, 0x7e, 0xbe, 0xe9, 0x45, 0xd9, 0xfa, 0x91, 0x00, 0x0b, 0xb1, 0x3e,
-	0x04, 0x8d, 0x49, 0x2d, 0x83, 0x63, 0xc4, 0xf2, 0xe6, 0xc4, 0xfb, 0xb9, 0x85, 0x72, 0x25, 0xa3,
-	0x0f, 0x27, 0xb4, 0xd0, 0xa8, 0x53, 0x6d, 0xf6, 0x6f, 0x7d, 0xfe, 0xbe, 0x00, 0xb9, 0xc8, 0x50,
-	0x11, 0xbd, 0x9d, 0xaa, 0xe0, 0x81, 0xd9, 0x63, 0x79, 0x82, 0x8e, 0x2a, 0x89, 0xd1, 0xc9, 0x7c,
-	0xbf, 0xcf, 0x65, 0x10, 0x07, 0xe2, 0x73, 0xee, 0xb4, 0x38, 0x90, 0x38, 0x11, 0x9f, 0xcc, 0xb1,
-	0x76, 0x29, 0xbf, 0x5b, 0xe2, 0xe5, 0x14, 0x4b, 0x0c, 0xf8, 0x4f, 0x04, 0x28, 0xc4, 0xa7, 0xda,
-	0x69, 0x2c, 0x27, 0xce, 0xbf, 0x27, 0x63, 0x99, 0xab, 0x78, 0xe3, 0x92, 0x2a, 0xfe, 0x3b, 0x01,
-	0xd6, 0x47, 0xf4, 0xfd, 0x28, 0xe5, 0x6e, 0x53, 0xfa, 0xa8, 0x60, 0x32, 0x09, 0x7e, 0x8e, 0x4a,
-	0xf0, 0x48, 0x7c, 0x78, 0x29, 0x09, 0xee, 0xbb, 0x9c, 0x15, 0xa2, 0xfd, 0xbf, 0x17, 0x60, 0x35,
-	0x71, 0x70, 0x83, 0xee, 0xa5, 0x66, 0xe5, 0x91, 0x93, 0x9e, 0xc9, 0x24, 0x79, 0x4c, 0x25, 0x69,
-	0x89, 0x8f, 0x2e, 0x27, 0x09, 0xcd, 0xd4, 0x01, 0x03, 0x44, 0x9c, 0x3f, 0x16, 0x20, 0x1b, 0x76,
-	0xde, 0x68, 0x63, 0xf2, 0xf6, 0x7c, 0x32, 0xb6, 0x1b, 0x94, 0xed, 0x5d, 0xb1, 0x76, 0xa1, 0xa2,
-	0x22, 0xde, 0x99, 0x47, 0x6a, 0xa1, 0x7e, 0xaf, 0x3d, 0xa6, 0x16, 0x1a, 0x6a, 0xca, 0xbf, 0x8a,
-	0x5a, 0xa8, 0x4f, 0x94, 0xb0, 0xfc, 0x67, 0x02, 0x2c, 0x0e, 0xb4, 0xe1, 0x69, 0xf9, 0x26, 0xb9,
-	0x63, 0x9f, 0x8c, 0xed, 0x3d, 0xca, 0xf6, 0x43, 0xb1, 0x7a, 0x01, 0xb6, 0x29, 0x59, 0x27, 0x20,
-	0x4b, 0x18, 0xff, 0x2b, 0x01, 0xd0, 0x70, 0xfb, 0x8e, 0xee, 0xa6, 0x84, 0xc7, 0x51, 0xcd, 0xfe,
-	0x64, 0xec, 0x37, 0x29, 0xfb, 0x75, 0x71, 0xfb, 0xfc, 0xec, 0x6b, 0x01, 0xe5, 0x98, 0x04, 0x7f,
-	0x2e, 0xd0, 0x69, 0x57, 0xfc, 0x6f, 0xbc, 0x6e, 0xa7, 0xbb, 0x69, 0x42, 0xef, 0x3e, 0x19, 0xf7,
-	0xfb, 0x94, 0xfb, 0x1d, 0x71, 0xeb, 0x42, 0x36, 0x13, 0xa3, 0x4b, 0x78, 0xff, 0x1b, 0x81, 0xdf,
-	0xc8, 0x19, 0x6c, 0x62, 0xc7, 0xdd, 0x97, 0x49, 0xee, 0xd4, 0xaf, 0x38, 0x5e, 0xf2, 0xc8, 0x32,
-	0x40, 0xfb, 0xbe, 0xb0, 0xb1, 0xf5, 0x17, 0x02, 0x5c, 0xd3, 0xec, 0xee, 0x48, 0xea, 0x5b, 0xcb,
-	0xb5, 0xe0, 0x0f, 0xb4, 0xe8, 0xe5, 0xe3, 0x16, 0x29, 0xfa, 0x5a, 0xc2, 0xd3, 0x2a, 0x47, 0xe8,
-	0xd8, 0xa6, 0x6a, 0x75, 0x2a, 0xb6, 0xdb, 0xd9, 0xec, 0x60, 0x8b, 0x96, 0x84, 0x9b, 0x6c, 0x49,
-	0x75, 0x0c, 0x6f, 0xf8, 0x1f, 0x1e, 0x3c, 0x08, 0x21, 0x7f, 0x38, 0x75, 0x7d, 0x87, 0x9d, 0x51,
-	0x33, 0xed, 0x9e, 0x5e, 0xa9, 0x85, 0xa4, 0x1f, 0xdf, 0xde, 0x22, 0x5b, 0xff, 0x36, 0xd8, 0xf0,
-	0x09, 0xdd, 0xf0, 0x49, 0xb8, 0xe1, 0x93, 0xc7, 0xec, 0xac, 0xa3, 0x0c, 0xa5, 0x77, 0xf7, 0x7f,
-	0x03, 0x00, 0x00, 0xff, 0xff, 0x4a, 0x57, 0xdd, 0xd1, 0x5f, 0x41, 0x00, 0x00,
+var fileDescriptor_cluster_service_4b3d530a1685571f = []byte{
+	// 7032 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x5d, 0x6b, 0x6c, 0x23, 0xd7,
+	0x75, 0xf6, 0x50, 0x94, 0x44, 0x1d, 0x49, 0x14, 0x75, 0xa5, 0xd5, 0x72, 0xb9, 0x0f, 0xef, 0x8e,
+	0x5f, 0xeb, 0xb5, 0x2d, 0x79, 0xd7, 0x8e, 0xed, 0xf8, 0x11, 0x87, 0xa2, 0xc6, 0x5a, 0x61, 0x25,
+	0x92, 0x1e, 0x52, 0xbb, 0xb6, 0x62, 0x64, 0x3a, 0x22, 0xef, 0x52, 0xe3, 0x25, 0x67, 0xc6, 0x33,
+	0xc3, 0x7d, 0x19, 0x1b, 0xd4, 0x79, 0xb4, 0xe9, 0x23, 0x49, 0xf3, 0xea, 0x23, 0x4d, 0xd3, 0x34,
+	0x88, 0x93, 0x34, 0x29, 0x1a, 0x04, 0x45, 0x90, 0x36, 0x6d, 0xd3, 0xfe, 0x69, 0x81, 0xa6, 0x40,
+	0x0b, 0xb4, 0x3f, 0xfa, 0xa3, 0x0d, 0xda, 0x1f, 0x29, 0x8a, 0xb6, 0x68, 0x81, 0xf6, 0x4f, 0x7f,
+	0xb5, 0x28, 0xee, 0x6b, 0x1e, 0xe4, 0xf0, 0x21, 0x6a, 0xad, 0xf8, 0xd7, 0x6a, 0xce, 0xbd, 0xe7,
+	0x3e, 0xce, 0x3d, 0xf7, 0xdc, 0xef, 0x9c, 0x7b, 0x2e, 0x17, 0x96, 0x1b, 0x96, 0xd5, 0x68, 0xe2,
+	0x95, 0x9a, 0x65, 0x7a, 0xba, 0x61, 0x62, 0x67, 0xe5, 0xfa, 0xf9, 0x5d, 0xec, 0xe9, 0xe7, 0x57,
+	0x6a, 0xcd, 0xb6, 0xeb, 0x61, 0x47, 0x73, 0xb1, 0x73, 0xdd, 0xa8, 0xe1, 0x65, 0xdb, 0xb1, 0x3c,
+	0x0b, 0x65, 0x59, 0xfd, 0x65, 0xbf, 0xfe, 0x32, 0xaf, 0x9f, 0x3b, 0xc1, 0x5b, 0xd2, 0x6d, 0x63,
+	0x45, 0x37, 0x4d, 0xcb, 0xd3, 0x3d, 0xc3, 0x32, 0x5d, 0xc6, 0x97, 0x3b, 0xc5, 0x4b, 0x0d, 0xbd,
+	0xb5, 0x72, 0xfd, 0x3c, 0xf9, 0x47, 0xb3, 0xad, 0xa6, 0x51, 0xbb, 0xc5, 0xcb, 0x73, 0xd1, 0xf2,
+	0x48, 0xd9, 0x71, 0x5e, 0x46, 0xbf, 0x76, 0xdb, 0x57, 0x57, 0x70, 0xcb, 0xf6, 0x78, 0xa1, 0xfc,
+	0x1f, 0x13, 0x00, 0x45, 0xab, 0x8e, 0x0b, 0x96, 0x79, 0xd5, 0x68, 0xa0, 0x33, 0x30, 0xd3, 0xd2,
+	0x6b, 0x7b, 0x86, 0x89, 0x35, 0xef, 0x96, 0x8d, 0xb3, 0xd2, 0x69, 0xe9, 0xec, 0x94, 0x3a, 0xcd,
+	0x69, 0xd5, 0x5b, 0x36, 0x46, 0xa7, 0x61, 0xa6, 0x6e, 0xb8, 0xd7, 0x34, 0xd7, 0xb8, 0x8d, 0xb5,
+	0xc6, 0x6e, 0x36, 0x71, 0x5a, 0x3a, 0x3b, 0xae, 0x02, 0xa1, 0x55, 0x8c, 0xdb, 0x78, 0x7d, 0x97,
+	0x34, 0x62, 0xe9, 0x6d, 0x6f, 0x4f, 0x73, 0x6b, 0x96, 0x8d, 0xdd, 0xec, 0xd8, 0xe9, 0x31, 0xd2,
+	0x08, 0xa5, 0x55, 0x28, 0x09, 0x3d, 0x04, 0x73, 0x5c, 0x30, 0x9a, 0x5e, 0xab, 0x59, 0x6d, 0xd3,
+	0xcb, 0x4e, 0xd1, 0xae, 0xd2, 0x9c, 0x9c, 0x67, 0x54, 0x54, 0x84, 0x54, 0x0b, 0x7b, 0x7a, 0x5d,
+	0xf7, 0xf4, 0x6c, 0xf2, 0xf4, 0xd8, 0xd9, 0xe9, 0x0b, 0x17, 0x96, 0x7b, 0xc9, 0x70, 0x39, 0x98,
+	0xc8, 0xf2, 0x16, 0x67, 0x52, 0x4c, 0xcf, 0xb9, 0xa5, 0xfa, 0x6d, 0xa0, 0x93, 0x00, 0x46, 0x4b,
+	0x6f, 0xf0, 0xe9, 0x8d, 0xd3, 0x3e, 0xa7, 0x28, 0x85, 0x4e, 0xee, 0x22, 0x4c, 0x34, 0xf5, 0x5d,
+	0xdc, 0x74, 0xb3, 0x13, 0xb4, 0xb3, 0xc7, 0x87, 0xea, 0x6c, 0x93, 0xb2, 0xb0, 0xae, 0x38, 0x3f,
+	0x7a, 0x10, 0xe6, 0x9a, 0x56, 0x4d, 0x6f, 0x6a, 0xae, 0x5b, 0xd7, 0xd8, 0x0c, 0x27, 0xa9, 0xa4,
+	0x66, 0x29, 0xb9, 0xe2, 0xd6, 0x0b, 0x74, 0x82, 0x08, 0x92, 0x9e, 0xde, 0x70, 0xb3, 0x29, 0x2a,
+	0x24, 0xfa, 0x37, 0x3a, 0x0d, 0xd3, 0xb6, 0x83, 0xc9, 0x32, 0x19, 0xbb, 0x4d, 0x9c, 0x85, 0xd3,
+	0xd2, 0xd9, 0x94, 0x1a, 0x26, 0xa1, 0x12, 0xcc, 0xe8, 0xb5, 0x1a, 0x6e, 0x62, 0x47, 0xf7, 0x2c,
+	0xc7, 0xcd, 0x4e, 0xd3, 0xd1, 0x3e, 0xd2, 0x7b, 0xb4, 0xf9, 0xa0, 0x36, 0x1b, 0xb4, 0x1a, 0x69,
+	0x00, 0x1d, 0x87, 0x29, 0xba, 0xaa, 0x54, 0x2c, 0x33, 0x54, 0x2c, 0x29, 0x42, 0xa0, 0x52, 0x39,
+	0x0b, 0x99, 0x96, 0x61, 0x6a, 0x35, 0xbb, 0xad, 0xd9, 0x4d, 0xdd, 0xbb, 0x6a, 0x39, 0xad, 0xec,
+	0x2c, 0x5b, 0xae, 0x96, 0x61, 0x16, 0xec, 0x76, 0x99, 0x53, 0xd1, 0xeb, 0x90, 0xbd, 0x61, 0x39,
+	0xd7, 0x9a, 0x96, 0x5e, 0xd7, 0x84, 0xcc, 0xb5, 0x1a, 0xed, 0x30, 0x9b, 0x3e, 0x2d, 0xf5, 0x97,
+	0xe8, 0x15, 0xce, 0x29, 0xd6, 0x8e, 0x0f, 0x74, 0xe9, 0x46, 0x2c, 0x1d, 0x3d, 0x07, 0x13, 0xa4,
+	0x01, 0xcf, 0xcd, 0xce, 0xd1, 0xd9, 0xdf, 0xd7, 0x7f, 0xad, 0xaa, 0xa4, 0xae, 0xca, 0x59, 0x72,
+	0xcf, 0xc1, 0x6c, 0x44, 0x45, 0x50, 0x06, 0xc6, 0xae, 0xe1, 0x5b, 0x5c, 0xe1, 0xc9, 0x9f, 0x68,
+	0x11, 0xc6, 0xaf, 0xeb, 0xcd, 0x36, 0xa6, 0x1a, 0x3e, 0xa5, 0xb2, 0x8f, 0x67, 0x13, 0xcf, 0x48,
+	0xb9, 0xf7, 0xc2, 0x74, 0x68, 0xc9, 0xf7, 0xc3, 0x2a, 0xff, 0x8d, 0x04, 0x53, 0xfe, 0x68, 0x86,
+	0xe5, 0x44, 0xab, 0x30, 0x81, 0xaf, 0x5e, 0xc5, 0x35, 0x2f, 0x3b, 0x76, 0x5a, 0x3a, 0x9b, 0xbe,
+	0x70, 0x6e, 0x88, 0xa9, 0x2e, 0x2b, 0x94, 0x43, 0xe5, 0x9c, 0xf2, 0xab, 0x30, 0xc1, 0x28, 0x68,
+	0x09, 0x90, 0xf2, 0xd2, 0x4b, 0x4a, 0xa1, 0xaa, 0x6d, 0x17, 0x2b, 0x65, 0xa5, 0xb0, 0xf1, 0xd2,
+	0x86, 0xb2, 0x96, 0xb9, 0x07, 0xcd, 0xc1, 0x74, 0xb1, 0xa4, 0x55, 0x0a, 0x17, 0x95, 0xb5, 0xed,
+	0x4d, 0x25, 0x23, 0x91, 0x8a, 0x65, 0x55, 0x79, 0x49, 0x51, 0xb5, 0x30, 0x3d, 0x81, 0xd2, 0x00,
+	0xc5, 0x92, 0xa6, 0xbc, 0xa2, 0x14, 0xb6, 0xab, 0x4a, 0x66, 0x4c, 0xfe, 0x5e, 0x02, 0x60, 0x4b,
+	0x27, 0xe6, 0x2e, 0xdf, 0xf6, 0xf6, 0x50, 0x0e, 0x52, 0x6d, 0x17, 0x3b, 0xa6, 0xde, 0x12, 0x06,
+	0xc4, 0xff, 0x26, 0x65, 0xb6, 0xee, 0xba, 0x37, 0x2c, 0xa7, 0xce, 0xa7, 0xe8, 0x7f, 0xa3, 0x16,
+	0x1c, 0xab, 0x35, 0x0d, 0x6c, 0x7a, 0x5a, 0x0d, 0x3b, 0x9e, 0x71, 0xd5, 0xa8, 0xe9, 0x1e, 0x16,
+	0xda, 0x33, 0x46, 0xb5, 0xe7, 0x7c, 0xef, 0x89, 0x17, 0x28, 0x6b, 0x21, 0xe0, 0xe4, 0xea, 0x73,
+	0xb4, 0x16, 0x5f, 0x80, 0x9e, 0x84, 0x25, 0x61, 0xa4, 0x6b, 0x7a, 0xb8, 0xcb, 0x6c, 0x9d, 0x0e,
+	0x6c, 0x91, 0x97, 0x16, 0xf4, 0x10, 0x2f, 0x7a, 0x0c, 0x50, 0xf7, 0x20, 0xb3, 0x98, 0x72, 0xcc,
+	0x77, 0x75, 0x45, 0xec, 0x0d, 0xaf, 0x4e, 0x16, 0xfa, 0x2a, 0xb3, 0x37, 0x8c, 0x72, 0x09, 0xdf,
+	0x92, 0x2b, 0x70, 0xb4, 0xc7, 0xb8, 0xd1, 0x33, 0x90, 0x35, 0x5c, 0xb7, 0x8d, 0xb5, 0x98, 0xee,
+	0x24, 0x6a, 0x11, 0x96, 0x68, 0x79, 0x17, 0xbf, 0xfc, 0xa7, 0x49, 0x98, 0xc9, 0xd7, 0xeb, 0x96,
+	0xe9, 0xf2, 0xa6, 0x3e, 0x00, 0x0b, 0x7b, 0x9e, 0x67, 0x6b, 0x74, 0x5b, 0xee, 0xea, 0x4d, 0xdd,
+	0xac, 0x19, 0x66, 0x83, 0xb6, 0xd2, 0xd7, 0x68, 0x5c, 0xf4, 0x3c, 0x7b, 0xd3, 0xd2, 0xeb, 0xab,
+	0x82, 0x45, 0x9d, 0xdf, 0xeb, 0x24, 0x21, 0x1b, 0x72, 0x7b, 0x96, 0x63, 0xdc, 0x26, 0xdc, 0x4d,
+	0xcd, 0xb6, 0xea, 0x9a, 0xde, 0xf6, 0x2c, 0xb7, 0xa6, 0x37, 0x49, 0x1f, 0x09, 0xda, 0x47, 0x1f,
+	0x9b, 0x7d, 0xd1, 0xe7, 0x2d, 0x5b, 0xf5, 0x7c, 0xc0, 0xa9, 0x66, 0xf7, 0x7a, 0x94, 0xa0, 0x9f,
+	0x82, 0xc5, 0x6b, 0xed, 0x5d, 0xec, 0x98, 0xd8, 0xc3, 0xae, 0x56, 0xd7, 0xdd, 0xbd, 0x5d, 0x4b,
+	0x77, 0xea, 0x5c, 0x45, 0x1e, 0xeb, 0xdd, 0xd7, 0x25, 0x9f, 0x6b, 0x4d, 0x30, 0xa9, 0x0b, 0xd7,
+	0xba, 0x89, 0x48, 0x87, 0x23, 0x26, 0xf6, 0x88, 0xdd, 0xe1, 0xc7, 0xac, 0xd0, 0xc2, 0xe4, 0xa0,
+	0x2e, 0x8a, 0x8c, 0xad, 0x4c, 0xb9, 0xb8, 0x06, 0x2e, 0x98, 0xdd, 0x44, 0x74, 0x11, 0x66, 0x0c,
+	0xd7, 0x33, 0x2c, 0xd1, 0xf2, 0x38, 0x6d, 0xf9, 0x81, 0xde, 0x2d, 0x6f, 0x90, 0xda, 0xbc, 0xc5,
+	0x69, 0x23, 0xf8, 0x40, 0x2a, 0x64, 0x6a, 0x4d, 0xab, 0x5d, 0xd7, 0x9c, 0xb6, 0x29, 0x5a, 0x9b,
+	0xa4, 0xad, 0x9d, 0xed, 0xb7, 0x5b, 0xac, 0x76, 0x5d, 0x6d, 0x9b, 0xbc, 0xc1, 0x74, 0x2d, 0xf2,
+	0x2d, 0xaf, 0xc0, 0x7c, 0xd7, 0xe2, 0x93, 0xbd, 0x5b, 0x37, 0x5c, 0x7d, 0xb7, 0x89, 0xeb, 0x5c,
+	0x03, 0xfd, 0x6f, 0xf9, 0x29, 0xc8, 0xf6, 0x5a, 0xc9, 0xbe, 0x7c, 0xe7, 0x61, 0x21, 0x66, 0x55,
+	0x06, 0xb1, 0xc4, 0x48, 0xb9, 0x2f, 0xcb, 0xcf, 0x25, 0x60, 0xb1, 0xec, 0x18, 0xd7, 0xc9, 0xee,
+	0xe2, 0x9b, 0x9a, 0x31, 0x3d, 0x0e, 0x8b, 0xd8, 0x24, 0x75, 0x34, 0x9b, 0x15, 0x6b, 0xa6, 0x55,
+	0xc7, 0x2e, 0x6f, 0x00, 0xb1, 0x32, 0xce, 0x49, 0x2c, 0xab, 0x8b, 0x9e, 0x82, 0xa3, 0x1d, 0x1c,
+	0xd8, 0xac, 0xdb, 0x96, 0x61, 0x7a, 0x54, 0xd7, 0x53, 0xea, 0x91, 0x08, 0x93, 0xc2, 0x0b, 0xd1,
+	0x13, 0xb0, 0xd4, 0xa2, 0x26, 0x52, 0x33, 0xec, 0xeb, 0x4f, 0x6a, 0x35, 0xa3, 0xee, 0x68, 0xbb,
+	0x4d, 0xab, 0x76, 0x8d, 0xaa, 0xed, 0x94, 0xba, 0xc0, 0x4a, 0x37, 0xec, 0xeb, 0x4f, 0x16, 0x8c,
+	0xba, 0xb3, 0x4a, 0x8a, 0xd0, 0xc3, 0x90, 0xe9, 0xea, 0x25, 0x49, 0xab, 0xcf, 0xd9, 0x1d, 0xed,
+	0x3f, 0x04, 0x73, 0x76, 0x7b, 0xb7, 0x69, 0xd4, 0x82, 0x9a, 0x0c, 0xdd, 0xa4, 0x19, 0x59, 0x54,
+	0x94, 0xbf, 0x2e, 0xc1, 0x74, 0x48, 0x97, 0xfa, 0xc9, 0x0d, 0xad, 0x43, 0x92, 0x80, 0x36, 0x3a,
+	0xb3, 0xf4, 0x85, 0x27, 0x86, 0x52, 0x4e, 0xf6, 0x37, 0x39, 0x08, 0xb6, 0xac, 0x3a, 0x56, 0x69,
+	0x03, 0xf2, 0x13, 0x30, 0x1b, 0x21, 0xa3, 0x59, 0x98, 0xca, 0x6f, 0x57, 0x2f, 0x6a, 0xc5, 0x52,
+	0x51, 0xc9, 0xdc, 0x83, 0x16, 0x60, 0x8e, 0x7e, 0x6e, 0x6d, 0x57, 0xb7, 0xf3, 0x9b, 0x5a, 0x75,
+	0xb3, 0x92, 0x91, 0xe4, 0x47, 0x21, 0x1d, 0x55, 0xd3, 0xbe, 0x6b, 0xfc, 0x9f, 0x12, 0x9c, 0x0a,
+	0x0e, 0x21, 0xa2, 0x8b, 0xb8, 0xce, 0xf5, 0x44, 0xd8, 0xc1, 0x2c, 0x4c, 0xb2, 0xc5, 0x11, 0xdc,
+	0xe2, 0x13, 0xd5, 0x60, 0x3a, 0x58, 0x11, 0x37, 0x9b, 0xa0, 0x80, 0x62, 0xb5, 0xf7, 0x7c, 0xfb,
+	0x77, 0xb4, 0xec, 0xaf, 0xa0, 0x0a, 0x35, 0xf1, 0xa7, 0x9b, 0xdb, 0x82, 0xa9, 0x60, 0x69, 0xcf,
+	0x50, 0x18, 0x6d, 0x37, 0xf5, 0x5b, 0x5a, 0xe8, 0xa0, 0x9c, 0xe6, 0xb4, 0x22, 0x39, 0x2b, 0xc9,
+	0xd9, 0x11, 0xa8, 0x49, 0x82, 0x9f, 0x1d, 0xa2, 0x05, 0xf9, 0x41, 0x80, 0x4d, 0xdc, 0xd0, 0x6b,
+	0xb7, 0xf2, 0xbb, 0x7a, 0xad, 0xf7, 0xdc, 0xe4, 0xdf, 0x96, 0x60, 0x36, 0xb2, 0x61, 0xd0, 0x26,
+	0xa4, 0x6c, 0xc7, 0xba, 0x6e, 0xd4, 0xb1, 0x43, 0x2b, 0xa7, 0xfb, 0xe2, 0xdc, 0x30, 0xeb, 0x72,
+	0x99, 0xf3, 0xa9, 0x7e, 0x0b, 0xe1, 0x9e, 0x13, 0xd1, 0x9e, 0x1f, 0x87, 0x54, 0x39, 0xa8, 0xb5,
+	0x58, 0x56, 0x4b, 0x97, 0x37, 0xd6, 0x14, 0xb5, 0x03, 0x76, 0x00, 0x4c, 0x14, 0xf2, 0x9b, 0x1b,
+	0x85, 0x52, 0x46, 0x92, 0xbf, 0x3c, 0x0e, 0x68, 0xa3, 0x9c, 0x6f, 0x12, 0x8c, 0x4c, 0xfc, 0x1f,
+	0x3e, 0xe0, 0xfb, 0x21, 0xdd, 0x76, 0xb1, 0x66, 0xd8, 0x9a, 0xde, 0x34, 0x74, 0xd7, 0xdf, 0xa0,
+	0x33, 0x6d, 0x17, 0x6f, 0xd8, 0x79, 0x46, 0x43, 0x8f, 0xc0, 0x7c, 0xcd, 0xc1, 0x64, 0xb3, 0xb8,
+	0xed, 0x5d, 0x6e, 0x73, 0xf9, 0x90, 0x32, 0xac, 0xa0, 0xe2, 0xd3, 0xa9, 0x07, 0xe2, 0x7f, 0xb1,
+	0x25, 0x18, 0xe3, 0x1e, 0x88, 0x4f, 0xa6, 0xab, 0xb0, 0x0c, 0xf3, 0x02, 0x26, 0xf8, 0x3b, 0x97,
+	0x6d, 0xc2, 0xd5, 0x44, 0x56, 0x52, 0xe7, 0x78, 0xa1, 0xd8, 0xb8, 0xe8, 0x2c, 0xa4, 0x89, 0x0d,
+	0x09, 0x55, 0x1e, 0xf7, 0x2b, 0xcf, 0x90, 0x12, 0xbf, 0xe6, 0xe3, 0x80, 0xb8, 0xb7, 0xe3, 0x86,
+	0x6a, 0x4f, 0xf8, 0xb5, 0x33, 0xa2, 0xd4, 0xe7, 0x78, 0x11, 0x4e, 0x04, 0x7e, 0x65, 0xcd, 0x32,
+	0xeb, 0xba, 0x73, 0x4b, 0x73, 0x74, 0xb3, 0x81, 0xd9, 0x0c, 0x26, 0xe9, 0x0c, 0x8e, 0xf1, 0x3a,
+	0x15, 0x51, 0x45, 0x25, 0x35, 0xe8, 0x64, 0xf2, 0x70, 0xd2, 0xef, 0x32, 0xb6, 0x85, 0x14, 0x6d,
+	0x21, 0x27, 0x2a, 0xc5, 0x34, 0xf1, 0x1e, 0x38, 0xda, 0x25, 0x0f, 0xae, 0xa2, 0x53, 0x11, 0xdc,
+	0x14, 0x35, 0x65, 0x2b, 0xb0, 0x18, 0x15, 0x0b, 0xe7, 0x01, 0x86, 0x9c, 0xc2, 0x82, 0x61, 0x0c,
+	0x4f, 0x43, 0xb6, 0x5b, 0x3a, 0x9c, 0x69, 0x9a, 0x32, 0x1d, 0xe9, 0x94, 0x0f, 0x63, 0x5c, 0x86,
+	0x05, 0xbd, 0xd9, 0xb4, 0x6e, 0x68, 0x8e, 0xd5, 0xf6, 0xb0, 0x66, 0x5d, 0xc7, 0x4e, 0x53, 0xb7,
+	0xa9, 0x53, 0x93, 0x52, 0xe7, 0x69, 0x91, 0x4a, 0x4a, 0x4a, 0xac, 0x00, 0x3d, 0x06, 0x0b, 0x9e,
+	0xdd, 0xee, 0xea, 0x83, 0x39, 0x38, 0x19, 0xcf, 0x6e, 0x47, 0x9a, 0x97, 0x57, 0x60, 0x61, 0xd5,
+	0x30, 0x75, 0xe7, 0x96, 0xd8, 0xfd, 0x54, 0x51, 0xfb, 0xec, 0xbf, 0x27, 0xe0, 0x68, 0xd9, 0xaa,
+	0x57, 0x70, 0xad, 0xed, 0x18, 0xde, 0xad, 0xc8, 0x99, 0xd5, 0x9b, 0xe9, 0x9f, 0xb3, 0x30, 0xc9,
+	0x8f, 0x2a, 0xe2, 0x22, 0x86, 0x4c, 0x04, 0xfd, 0x9b, 0xb8, 0x88, 0x75, 0xec, 0xd6, 0x1c, 0xc3,
+	0x26, 0xbd, 0x73, 0xe3, 0x10, 0x26, 0xa1, 0x47, 0x01, 0x19, 0xa6, 0xe1, 0x19, 0x7a, 0x93, 0x9e,
+	0x69, 0xdc, 0x07, 0x1d, 0xa3, 0x3e, 0x68, 0x86, 0x97, 0x30, 0x1f, 0x96, 0xb8, 0xa1, 0x0a, 0x4c,
+	0xf3, 0x5a, 0x21, 0x9c, 0x73, 0xff, 0x30, 0xde, 0xaf, 0x0a, 0x66, 0x10, 0x3f, 0x50, 0x60, 0x9a,
+	0x9f, 0x72, 0xf4, 0xdc, 0x18, 0x1f, 0xd4, 0x4c, 0x60, 0x47, 0x55, 0x68, 0x05, 0x1e, 0xc4, 0x43,
+	0xc4, 0x79, 0x6e, 0x34, 0x0c, 0xb3, 0x21, 0xe2, 0x27, 0x6c, 0x5b, 0xa8, 0x69, 0x4e, 0xae, 0x30,
+	0x2a, 0x41, 0xe3, 0x2d, 0xcb, 0x34, 0x3c, 0xcb, 0x09, 0xd7, 0x65, 0xdb, 0x60, 0x3e, 0x28, 0x11,
+	0xd5, 0xb3, 0x30, 0x29, 0xec, 0x02, 0x53, 0x74, 0xf1, 0x89, 0xce, 0xc5, 0xed, 0x72, 0xa6, 0xcf,
+	0x5d, 0x3b, 0xfc, 0x12, 0xcc, 0xea, 0x14, 0x5e, 0x0b, 0x69, 0x01, 0x9d, 0xe6, 0x83, 0x7d, 0xbc,
+	0xef, 0x10, 0x1a, 0x57, 0x67, 0xf4, 0x30, 0x36, 0x3f, 0x05, 0x10, 0xb2, 0x56, 0x4c, 0xb1, 0x43,
+	0x14, 0x94, 0x07, 0x2a, 0x5f, 0xcd, 0xb6, 0xac, 0xa6, 0x9b, 0x9d, 0xa1, 0x07, 0x93, 0xdc, 0x7f,
+	0x5d, 0xca, 0x96, 0xd5, 0x54, 0xa7, 0x4c, 0xfe, 0x97, 0x8b, 0x4e, 0xc0, 0x94, 0xb0, 0xa7, 0x6e,
+	0x76, 0x96, 0xc6, 0x19, 0x02, 0x42, 0x08, 0xd0, 0x84, 0x40, 0xb5, 0xde, 0xb4, 0xf7, 0x74, 0xea,
+	0xb1, 0xfb, 0x80, 0x26, 0x80, 0x69, 0x79, 0x52, 0x88, 0x3e, 0x08, 0x73, 0x0e, 0x76, 0xad, 0xb6,
+	0x53, 0xc3, 0x1a, 0x8f, 0x99, 0x30, 0x3f, 0xfc, 0x3d, 0xfd, 0x50, 0x27, 0x95, 0xe4, 0xb2, 0xca,
+	0x19, 0xc3, 0x81, 0x93, 0xb4, 0x13, 0x21, 0x12, 0x6b, 0x4e, 0x9b, 0xd5, 0xae, 0x1a, 0x66, 0x03,
+	0x3b, 0xb6, 0x43, 0x20, 0x4d, 0x86, 0x6d, 0x4a, 0x5a, 0xf0, 0x52, 0x40, 0x27, 0x7a, 0xd7, 0xa4,
+	0x67, 0xa1, 0xa6, 0xef, 0xea, 0xb5, 0x2c, 0x1a, 0xa4, 0x77, 0xc1, 0xc1, 0xa9, 0x42, 0x33, 0x38,
+	0x44, 0x8b, 0x90, 0x8e, 0xe2, 0xfe, 0xec, 0x02, 0x6d, 0xe9, 0xa1, 0x21, 0x8f, 0x47, 0x75, 0x36,
+	0x02, 0xf5, 0xd1, 0x07, 0x61, 0x91, 0x9e, 0x59, 0x42, 0xda, 0xa2, 0xd5, 0x45, 0xda, 0xea, 0xa3,
+	0x7d, 0xf0, 0x54, 0xd7, 0x19, 0xa8, 0x22, 0xc3, 0xee, 0x3a, 0x17, 0x3f, 0x22, 0xc1, 0x99, 0xd0,
+	0x7e, 0x63, 0x58, 0x44, 0xe3, 0x63, 0xf0, 0xd5, 0x73, 0x89, 0xf6, 0xf6, 0xcc, 0xa8, 0x68, 0x46,
+	0x3d, 0xd5, 0xea, 0x0f, 0xab, 0x76, 0x00, 0xb5, 0x74, 0xc3, 0xf4, 0xb0, 0xa9, 0x9b, 0x35, 0x2c,
+	0xe6, 0x78, 0x74, 0x90, 0x77, 0xb9, 0x15, 0xf0, 0xf0, 0x29, 0xce, 0xb7, 0x3a, 0x49, 0xc4, 0xd7,
+	0xdb, 0xa5, 0xd6, 0xd6, 0x9f, 0x20, 0x9d, 0x7f, 0x36, 0x3b, 0xc8, 0x11, 0x8b, 0xb1, 0xd1, 0xea,
+	0xc2, 0x6e, 0x8c, 0xe1, 0x36, 0x21, 0x47, 0x9c, 0x56, 0x97, 0xdb, 0xe7, 0x0e, 0x87, 0xef, 0xd8,
+	0xa0, 0xb0, 0x43, 0x0f, 0xd3, 0xae, 0x1e, 0xb5, 0x7b, 0xd8, 0xfc, 0x22, 0x4c, 0x87, 0x1d, 0xe4,
+	0xdc, 0x20, 0x55, 0xe0, 0x7b, 0x26, 0xec, 0x1a, 0x87, 0x1b, 0x08, 0xeb, 0x2c, 0x1f, 0xf3, 0xf1,
+	0x21, 0x75, 0x96, 0x8f, 0x54, 0xe8, 0x2c, 0x1f, 0xdf, 0x23, 0x20, 0x7c, 0x0b, 0x8d, 0x1b, 0xbe,
+	0xec, 0x09, 0x62, 0x07, 0x28, 0x24, 0x49, 0xdb, 0x11, 0x2f, 0x0a, 0x3d, 0xdd, 0xd3, 0xab, 0x39,
+	0xe9, 0xc3, 0x98, 0x58, 0xcf, 0xe6, 0x75, 0x38, 0x5e, 0xc7, 0x57, 0xf5, 0x76, 0xd3, 0xd3, 0x5a,
+	0xfa, 0x4d, 0xcd, 0xb6, 0xea, 0x54, 0x5d, 0x5d, 0xcf, 0x21, 0x2a, 0x90, 0x3d, 0x35, 0x58, 0x79,
+	0x6e, 0x96, 0xad, 0x3a, 0xd1, 0x40, 0xce, 0xa2, 0x66, 0x79, 0x7b, 0x5d, 0x25, 0xc8, 0x83, 0x13,
+	0xbe, 0xa5, 0x6a, 0xbb, 0x7a, 0x03, 0x6b, 0xf8, 0xa6, 0x6d, 0x39, 0x9e, 0x90, 0xd7, 0x19, 0xda,
+	0x59, 0x1f, 0xef, 0x46, 0x98, 0xab, 0x6d, 0xc2, 0xac, 0x50, 0x5e, 0x2e, 0xbb, 0x63, 0x4e, 0xaf,
+	0x22, 0x54, 0x87, 0xa5, 0x0e, 0x39, 0x8a, 0xfe, 0x1e, 0xa0, 0xfd, 0x2d, 0xf7, 0xd1, 0xa9, 0x18,
+	0x57, 0x55, 0x5d, 0xb4, 0xe3, 0x1c, 0xd8, 0xd7, 0x21, 0x7b, 0x1d, 0x3b, 0x9e, 0x51, 0x8b, 0x89,
+	0xbd, 0x3c, 0x34, 0x28, 0xe0, 0x7a, 0x99, 0x73, 0x76, 0x44, 0x5e, 0x96, 0xae, 0xc7, 0xd2, 0xd1,
+	0x71, 0x98, 0x72, 0x71, 0xf3, 0xaa, 0xd6, 0x34, 0xcc, 0x6b, 0x3c, 0x46, 0x96, 0x22, 0x84, 0x4d,
+	0xc3, 0xbc, 0x86, 0x96, 0x20, 0x79, 0xdb, 0x32, 0x79, 0x24, 0x8c, 0xae, 0x3b, 0xfd, 0x26, 0x2e,
+	0x9b, 0xef, 0x90, 0xb2, 0xf0, 0x97, 0xff, 0x4d, 0x8e, 0x1e, 0x01, 0x51, 0x84, 0x88, 0xae, 0x63,
+	0xc7, 0x25, 0xfb, 0xbb, 0xc1, 0x10, 0x1e, 0x2f, 0xe6, 0x73, 0xbe, 0xcc, 0x0a, 0x69, 0xe4, 0xae,
+	0xed, 0x38, 0xd8, 0x24, 0xca, 0x13, 0x61, 0xdb, 0xe3, 0x08, 0x94, 0x95, 0x32, 0xbb, 0x16, 0x70,
+	0x09, 0x3a, 0x03, 0x44, 0x82, 0xc7, 0xf0, 0x47, 0x8c, 0x78, 0x39, 0x39, 0x44, 0x05, 0xd7, 0xbd,
+	0x30, 0xcd, 0x9d, 0x0a, 0xcf, 0x68, 0xe1, 0xec, 0xeb, 0xec, 0x80, 0x66, 0xa4, 0xaa, 0xd1, 0xc2,
+	0xe8, 0xfd, 0x30, 0xe1, 0x7a, 0xba, 0xd7, 0x76, 0xb3, 0xd7, 0xa8, 0x2b, 0x75, 0x76, 0xf0, 0xf1,
+	0x57, 0xa1, 0xf5, 0x55, 0xce, 0x87, 0x1e, 0x80, 0x34, 0xfb, 0x4b, 0x6b, 0x61, 0x97, 0xe8, 0x51,
+	0xb6, 0x49, 0x7b, 0x99, 0x65, 0xd4, 0x2d, 0x46, 0x24, 0x38, 0xb5, 0x03, 0x41, 0xbb, 0xc6, 0x6d,
+	0x9c, 0x6d, 0x31, 0x44, 0x17, 0x06, 0xd0, 0x15, 0xe3, 0x36, 0x26, 0xf8, 0x2f, 0xc6, 0xbb, 0x30,
+	0xd9, 0x01, 0xda, 0xe5, 0x59, 0x5c, 0x80, 0x05, 0xc3, 0x74, 0x3d, 0x6a, 0xc0, 0x1b, 0x8e, 0xd5,
+	0xb6, 0xb5, 0xb6, 0xd3, 0x74, 0xb3, 0x16, 0x41, 0x0b, 0x54, 0x36, 0xf3, 0xa2, 0x78, 0x9d, 0x94,
+	0x6e, 0x3b, 0x4d, 0x97, 0xf8, 0x2f, 0x11, 0x81, 0x32, 0x84, 0x69, 0x93, 0xf1, 0x30, 0xff, 0x25,
+	0x24, 0x4e, 0x86, 0x32, 0xef, 0x85, 0x69, 0x7c, 0xd3, 0x36, 0x1c, 0x2e, 0xcc, 0x37, 0x98, 0x30,
+	0x19, 0x89, 0x0a, 0x33, 0x07, 0x29, 0x71, 0xc4, 0x65, 0x1d, 0xa6, 0x2d, 0xe2, 0x9b, 0xb8, 0xc3,
+	0x1c, 0xa8, 0x78, 0x76, 0x3b, 0xeb, 0x52, 0x6c, 0x32, 0xc5, 0x28, 0x55, 0xbb, 0xdd, 0x0b, 0xc6,
+	0x7b, 0xf1, 0x30, 0x1e, 0x6d, 0x00, 0x10, 0xd7, 0xc6, 0x60, 0xa8, 0xe8, 0x3a, 0x45, 0x2e, 0x0f,
+	0xf7, 0x5e, 0x3a, 0xb6, 0x64, 0x05, 0xc1, 0xa1, 0x86, 0x98, 0x73, 0x79, 0x58, 0x88, 0x01, 0x34,
+	0xfb, 0xba, 0x16, 0xb8, 0x01, 0x13, 0xac, 0x07, 0xb4, 0x04, 0xa8, 0x52, 0xcd, 0x57, 0xb7, 0x2b,
+	0x1d, 0x5e, 0x72, 0x06, 0x66, 0xa8, 0xff, 0x5c, 0xd9, 0x28, 0x15, 0x37, 0x8a, 0xeb, 0x19, 0x09,
+	0x4d, 0xc3, 0xa4, 0xba, 0x5d, 0xa4, 0x1f, 0x09, 0x34, 0x07, 0xd3, 0xaa, 0x52, 0x28, 0x15, 0x0b,
+	0x1b, 0x9b, 0x84, 0x30, 0x86, 0x66, 0x20, 0x55, 0xa9, 0x96, 0xca, 0x65, 0xf2, 0x95, 0x44, 0x53,
+	0x30, 0xae, 0xa8, 0x6a, 0x49, 0xcd, 0x8c, 0x93, 0x82, 0x35, 0x65, 0x5d, 0xcd, 0xaf, 0x29, 0x6b,
+	0x99, 0x09, 0xf9, 0x0f, 0x01, 0x66, 0xb9, 0x5a, 0x6e, 0xdb, 0x75, 0xdd, 0xc3, 0xe8, 0x71, 0x58,
+	0xac, 0x63, 0xd7, 0x70, 0x08, 0x90, 0x08, 0x6f, 0x13, 0x16, 0x77, 0x42, 0xbc, 0x2c, 0xbc, 0x45,
+	0x9e, 0x87, 0x9c, 0xe0, 0x88, 0x01, 0xe3, 0x2c, 0x0a, 0x95, 0xe5, 0x35, 0xb6, 0xba, 0x30, 0xf9,
+	0x0e, 0x1c, 0x11, 0xdc, 0x51, 0x54, 0x3d, 0xb1, 0x2f, 0x54, 0xbd, 0xc0, 0x1b, 0x89, 0x04, 0xbe,
+	0x57, 0x3a, 0xe6, 0x42, 0x40, 0xb4, 0x66, 0xd4, 0x85, 0x83, 0x10, 0x9a, 0x0b, 0x41, 0xca, 0x1b,
+	0x75, 0xb2, 0x69, 0x04, 0x43, 0xe8, 0x9a, 0x90, 0xf9, 0x0a, 0x19, 0x5e, 0xb2, 0xe1, 0xdf, 0x16,
+	0xda, 0x70, 0xb2, 0xbb, 0xf9, 0xb0, 0x05, 0x9e, 0x1a, 0x18, 0x2e, 0xe6, 0x5d, 0x87, 0xcd, 0x6f,
+	0xae, 0x63, 0x58, 0x61, 0x13, 0xfc, 0x08, 0x88, 0x41, 0x6b, 0x01, 0xa4, 0x07, 0x0a, 0xe9, 0xc5,
+	0xf0, 0x36, 0x7d, 0x64, 0xff, 0x19, 0x09, 0x1e, 0xf6, 0x17, 0x66, 0x20, 0x4a, 0x9c, 0x39, 0x20,
+	0x4a, 0x7c, 0x40, 0xac, 0x70, 0x7f, 0xb0, 0x78, 0x07, 0x64, 0x31, 0xa6, 0x3e, 0xb0, 0x2b, 0x3d,
+	0x2a, 0xec, 0x3a, 0xc5, 0x1b, 0xef, 0xe5, 0x71, 0x37, 0x09, 0xee, 0x60, 0xdd, 0x8b, 0x23, 0x27,
+	0xbc, 0x60, 0x73, 0x23, 0xa0, 0xb1, 0x63, 0xbc, 0xc1, 0xee, 0x22, 0x64, 0xc1, 0x09, 0xd1, 0x5b,
+	0x2c, 0x8a, 0xcd, 0x8c, 0x82, 0x62, 0x85, 0x7e, 0xc4, 0x45, 0x21, 0x9e, 0x82, 0xa3, 0x81, 0x7e,
+	0x44, 0x1d, 0xe8, 0x05, 0x76, 0xa2, 0xfa, 0x5a, 0x12, 0xf1, 0xa3, 0x3f, 0x22, 0xc1, 0xfd, 0x82,
+	0xb1, 0x2f, 0x56, 0x3a, 0x32, 0x3a, 0x56, 0x3a, 0xcd, 0x3b, 0xe8, 0x59, 0x03, 0xdd, 0x02, 0x51,
+	0x47, 0xeb, 0x09, 0x6a, 0x96, 0x46, 0x04, 0x35, 0x62, 0xa7, 0xc6, 0x17, 0x13, 0x48, 0xd1, 0xb1,
+	0x55, 0x84, 0xdd, 0xe3, 0x97, 0x81, 0x11, 0xed, 0xe6, 0x96, 0x4f, 0xfe, 0xef, 0x14, 0x4c, 0x95,
+	0x6c, 0xec, 0x30, 0xe1, 0xc7, 0xc5, 0x69, 0x04, 0x2c, 0x4a, 0x74, 0xc0, 0xa2, 0x12, 0xa4, 0x2d,
+	0xc1, 0xc8, 0x8c, 0xcc, 0xd8, 0x20, 0xf4, 0xe0, 0x77, 0xb4, 0x4c, 0x8c, 0x8f, 0x3a, 0xeb, 0xf3,
+	0x53, 0x5b, 0xb4, 0xea, 0xc3, 0x90, 0xe4, 0xa0, 0x2b, 0xe2, 0xa0, 0xa1, 0x0e, 0x20, 0xb2, 0x04,
+	0x13, 0x75, 0xec, 0xe9, 0x46, 0x93, 0x5b, 0x3c, 0xfe, 0x15, 0x03, 0x50, 0xc6, 0xe3, 0x00, 0x4a,
+	0x04, 0x1f, 0x4e, 0x74, 0xe0, 0xc3, 0x7b, 0x61, 0xda, 0xd3, 0x9d, 0x06, 0xf6, 0x58, 0x31, 0xb3,
+	0xc0, 0xc0, 0x48, 0xb4, 0x42, 0xf8, 0xe8, 0x9f, 0xea, 0x3e, 0xfa, 0x5d, 0x4f, 0x77, 0x3c, 0x06,
+	0x1b, 0x58, 0xc8, 0x70, 0x8a, 0x52, 0x28, 0x6a, 0x38, 0x46, 0x31, 0x26, 0x2b, 0x64, 0x11, 0x94,
+	0x49, 0x6c, 0xd6, 0x69, 0xd1, 0x3a, 0x0d, 0x75, 0x37, 0x1c, 0xec, 0xba, 0xdc, 0xc2, 0x3d, 0x32,
+	0x84, 0x60, 0xca, 0x9c, 0x45, 0xf5, 0x99, 0xd1, 0x2b, 0x80, 0x42, 0x30, 0x5e, 0xe0, 0x86, 0xd9,
+	0xfd, 0xe2, 0x06, 0x11, 0x65, 0xf2, 0x29, 0x2e, 0xda, 0x61, 0xb8, 0x8e, 0x1e, 0x1e, 0xa1, 0xa6,
+	0xd3, 0xfb, 0x6d, 0x1a, 0x89, 0x56, 0x82, 0xb6, 0x65, 0x75, 0x20, 0xae, 0x98, 0x86, 0xc9, 0xb2,
+	0x52, 0x5c, 0x8b, 0x81, 0x14, 0x29, 0x48, 0xae, 0x95, 0x8a, 0x0a, 0xc3, 0x12, 0xf9, 0xd5, 0x92,
+	0x5a, 0xa5, 0x58, 0x42, 0xfe, 0xdf, 0x04, 0x24, 0xa9, 0xca, 0x2d, 0x42, 0xa6, 0xfa, 0x6a, 0x59,
+	0xe9, 0x68, 0x10, 0x41, 0xba, 0xa0, 0x2a, 0xf9, 0xaa, 0xa2, 0x15, 0x36, 0xb7, 0x2b, 0x55, 0x45,
+	0xcd, 0x48, 0x84, 0xb6, 0xa6, 0x6c, 0x2a, 0x21, 0x5a, 0x82, 0xd0, 0xb6, 0xcb, 0x14, 0x87, 0x68,
+	0x5b, 0x79, 0x4a, 0x1b, 0x43, 0xf3, 0x30, 0x2b, 0x68, 0xc5, 0xd2, 0x9a, 0x52, 0xc9, 0x24, 0x49,
+	0x35, 0x55, 0x29, 0xe7, 0x37, 0x54, 0x9f, 0x75, 0x9c, 0xb1, 0xae, 0x85, 0xbb, 0x98, 0x20, 0x83,
+	0xe1, 0xdd, 0x12, 0x4e, 0xad, 0x5c, 0x2a, 0x6d, 0x66, 0x26, 0x09, 0x95, 0x77, 0x1c, 0x50, 0x53,
+	0xe8, 0x04, 0x64, 0x2b, 0x4a, 0x35, 0x20, 0x69, 0x5b, 0xf9, 0x62, 0x7e, 0x5d, 0xd9, 0x52, 0x8a,
+	0xd5, 0xcc, 0x14, 0x3a, 0x02, 0xf3, 0xf9, 0xed, 0x6a, 0x49, 0xe3, 0xdd, 0xb2, 0x81, 0x00, 0x11,
+	0x20, 0x25, 0x47, 0x07, 0x38, 0x8d, 0xd2, 0x00, 0xa4, 0xb1, 0xcd, 0xfc, 0xaa, 0xb2, 0x59, 0xc9,
+	0xcc, 0xa0, 0x05, 0x98, 0x23, 0xdf, 0x6c, 0x4e, 0x5a, 0x7e, 0xbb, 0x7a, 0x31, 0x33, 0x4b, 0xa5,
+	0x1f, 0xe9, 0xb1, 0xb2, 0xb1, 0xa3, 0x64, 0xd2, 0x3e, 0x5d, 0xa9, 0x5e, 0x29, 0xa9, 0x97, 0xb4,
+	0x72, 0x69, 0x73, 0xa3, 0xf0, 0x6a, 0x66, 0x0e, 0xe5, 0x60, 0x89, 0x35, 0xb2, 0x51, 0xac, 0x2a,
+	0xc5, 0x7c, 0xb1, 0xa0, 0x88, 0xb2, 0x8c, 0xfc, 0xa9, 0x31, 0x98, 0xef, 0xd2, 0xd4, 0x58, 0xe3,
+	0x13, 0xd8, 0x84, 0xc4, 0xc8, 0x36, 0x61, 0x13, 0x26, 0x5b, 0xd8, 0x73, 0x8c, 0x1a, 0xcb, 0xe3,
+	0xea, 0x7b, 0x97, 0xdf, 0x35, 0xaa, 0xe5, 0x2d, 0xca, 0xaa, 0x8a, 0x26, 0x50, 0x81, 0x8e, 0xa8,
+	0x81, 0x5d, 0x9e, 0xcc, 0xb5, 0xaf, 0xcd, 0xc8, 0x59, 0x73, 0x9f, 0x94, 0x60, 0x82, 0x35, 0x1c,
+	0x3b, 0xeb, 0x93, 0x30, 0x65, 0x98, 0x9e, 0x16, 0x20, 0xed, 0xb1, 0x8b, 0xf7, 0xa8, 0x29, 0xc3,
+	0xf4, 0x2e, 0xd3, 0x5c, 0x9a, 0xfb, 0x60, 0xa6, 0x6e, 0xb5, 0x89, 0x1b, 0xc1, 0x6a, 0x10, 0xbb,
+	0x2b, 0x5d, 0xbc, 0x47, 0x9d, 0x66, 0x54, 0xbf, 0x92, 0xeb, 0x51, 0x18, 0xcb, 0x2a, 0x51, 0xf0,
+	0x4b, 0x2a, 0x31, 0x2a, 0xad, 0xb4, 0x3a, 0xc9, 0xe1, 0xbc, 0xfc, 0x35, 0x09, 0x16, 0x0b, 0xd4,
+	0x23, 0xe4, 0x18, 0x40, 0xc5, 0x6f, 0xb4, 0xb1, 0xeb, 0xa1, 0x33, 0x00, 0xb6, 0x63, 0xbd, 0x8e,
+	0x6b, 0x1e, 0x41, 0x9d, 0x92, 0x7f, 0x06, 0x4c, 0x71, 0xea, 0x46, 0xbd, 0xe7, 0x01, 0xf1, 0x1c,
+	0x4c, 0x8a, 0xf0, 0x0b, 0xcb, 0x6b, 0x38, 0x33, 0x10, 0x94, 0xa8, 0x82, 0x83, 0x18, 0x72, 0x5b,
+	0x27, 0xae, 0x17, 0x37, 0xd4, 0xfc, 0x4b, 0xfe, 0x98, 0x04, 0xf3, 0xeb, 0xd8, 0xbb, 0x7b, 0xa3,
+	0x3c, 0x03, 0xe0, 0x87, 0xcd, 0x59, 0x02, 0x06, 0x67, 0x15, 0x31, 0xf3, 0xba, 0xbf, 0x44, 0xe3,
+	0xc1, 0x12, 0xc9, 0x7f, 0x21, 0xc1, 0x22, 0x73, 0x37, 0x0e, 0x75, 0x28, 0x2f, 0xc2, 0x44, 0x9b,
+	0xf6, 0xca, 0xef, 0x37, 0x1e, 0x1a, 0x28, 0x52, 0x36, 0x48, 0x95, 0xb3, 0xc5, 0xce, 0xe5, 0xbf,
+	0x24, 0x38, 0xc2, 0xaa, 0xf9, 0xb1, 0xf7, 0x43, 0x99, 0xcc, 0xfd, 0x30, 0x13, 0xf1, 0x69, 0x82,
+	0x2b, 0x49, 0x30, 0x03, 0x87, 0xe6, 0x0c, 0xaf, 0x25, 0xd0, 0x0c, 0x1b, 0x39, 0xbd, 0xeb, 0x11,
+	0xee, 0x5b, 0x34, 0x25, 0x72, 0xa2, 0x33, 0x25, 0x52, 0xcc, 0x39, 0x15, 0x9a, 0xf3, 0xc7, 0x13,
+	0x70, 0xb2, 0x82, 0xbd, 0x38, 0xef, 0xe5, 0x5d, 0x34, 0xf7, 0x52, 0x34, 0xd2, 0x3a, 0x3e, 0x8a,
+	0x33, 0x16, 0x09, 0xb5, 0x0a, 0x51, 0x4c, 0x84, 0x44, 0xf1, 0x1d, 0x09, 0xb2, 0x15, 0xec, 0x45,
+	0xf1, 0xf4, 0x3e, 0xa4, 0x80, 0xc2, 0x52, 0x18, 0x5e, 0x02, 0x31, 0x37, 0x64, 0xc9, 0xd8, 0x1b,
+	0xb2, 0x38, 0x95, 0xfd, 0x81, 0x04, 0xc7, 0x2b, 0xd8, 0xeb, 0xf2, 0xc5, 0x0f, 0x67, 0xf1, 0xe2,
+	0xef, 0xec, 0x92, 0xbd, 0xee, 0xec, 0xe2, 0x84, 0xfe, 0x77, 0x12, 0x2c, 0x55, 0xb0, 0x17, 0x09,
+	0x00, 0x1c, 0xca, 0xd8, 0xbb, 0xae, 0xfe, 0x92, 0x07, 0xb8, 0xfa, 0x8b, 0x9b, 0xd9, 0xdb, 0x12,
+	0x2c, 0x50, 0x75, 0xe2, 0x4e, 0xfc, 0xe1, 0x4c, 0x2b, 0x72, 0x43, 0x98, 0xec, 0xbc, 0x21, 0x8c,
+	0x1b, 0xe7, 0xef, 0x4a, 0xb0, 0xc0, 0xac, 0x1e, 0xf3, 0x88, 0x0e, 0x67, 0x9c, 0x0f, 0x40, 0xba,
+	0xc3, 0x3b, 0x63, 0x6a, 0x33, 0xdb, 0x8a, 0x44, 0x7a, 0xc5, 0x80, 0x27, 0x43, 0x03, 0xfe, 0x97,
+	0x04, 0x2c, 0x12, 0x9d, 0x0f, 0x2e, 0x9c, 0x0f, 0x65, 0xc4, 0x5b, 0x30, 0xa1, 0xd7, 0x3c, 0x31,
+	0xd2, 0x74, 0xbf, 0xcb, 0xd1, 0xb8, 0xd1, 0x2d, 0xe7, 0x29, 0xb3, 0xca, 0x1b, 0x41, 0xcf, 0xfb,
+	0x27, 0xd8, 0x7e, 0xae, 0xd6, 0x3b, 0x8f, 0xaf, 0xb0, 0x5c, 0xca, 0x30, 0xc1, 0xfa, 0x20, 0xe0,
+	0x7f, 0xbb, 0x78, 0xa9, 0x58, 0xba, 0x52, 0x64, 0xe1, 0x46, 0x02, 0x40, 0xcb, 0xf9, 0x4a, 0xe5,
+	0x4a, 0x49, 0x5d, 0xcb, 0x48, 0x04, 0x16, 0xaf, 0x2b, 0x45, 0x45, 0x25, 0x10, 0xdb, 0x27, 0x27,
+	0x44, 0xc5, 0xed, 0x8a, 0xa2, 0x16, 0xf3, 0x5b, 0x4a, 0x66, 0x4c, 0xfe, 0xb8, 0x04, 0x8b, 0x6b,
+	0xb8, 0x89, 0x0f, 0xf9, 0x70, 0x17, 0x93, 0x4b, 0x86, 0x26, 0xb7, 0x07, 0x0b, 0x9b, 0x86, 0x2b,
+	0xf0, 0xce, 0xdd, 0xd8, 0x4c, 0x01, 0xb2, 0x4a, 0x46, 0x90, 0xd5, 0x6d, 0x58, 0x8c, 0xf6, 0xe4,
+	0xda, 0x96, 0xe9, 0x62, 0xf4, 0x02, 0xa4, 0xf8, 0x10, 0xdd, 0xac, 0x44, 0x21, 0xef, 0x10, 0x38,
+	0xce, 0x67, 0x41, 0xf7, 0xc1, 0x6c, 0xcb, 0x70, 0x5d, 0x62, 0x28, 0x49, 0xf7, 0x2c, 0x33, 0x6d,
+	0x4a, 0x9d, 0xe1, 0xc4, 0x1d, 0x42, 0x93, 0x7f, 0x41, 0x82, 0x85, 0x75, 0xec, 0xf9, 0x80, 0xf9,
+	0x2e, 0x4c, 0xf3, 0x01, 0x98, 0x09, 0xc2, 0x13, 0x11, 0x89, 0x4f, 0xfb, 0xf4, 0x1e, 0xd8, 0xee,
+	0x75, 0x38, 0x42, 0x24, 0xe1, 0x8f, 0xe6, 0x9d, 0x94, 0xfa, 0x27, 0x25, 0x58, 0x2a, 0xe8, 0x66,
+	0x0d, 0x37, 0x7f, 0x82, 0x93, 0x0f, 0x2b, 0xdc, 0x87, 0x25, 0x58, 0xea, 0x9c, 0x3d, 0xd7, 0x84,
+	0x02, 0x80, 0xcf, 0x2d, 0x74, 0xe1, 0xbe, 0x21, 0xdc, 0x1f, 0x35, 0xc4, 0x36, 0x9c, 0x3e, 0x34,
+	0x60, 0x69, 0x1d, 0x7b, 0xe4, 0xfc, 0xf4, 0x2f, 0x0f, 0x0f, 0x2e, 0x94, 0xb8, 0xd9, 0x7e, 0x34,
+	0x01, 0x33, 0xe1, 0x6e, 0x58, 0xf8, 0x91, 0xdd, 0xea, 0x76, 0x5e, 0xe8, 0x49, 0x22, 0xfc, 0x48,
+	0x8b, 0x3b, 0x2e, 0xf4, 0x96, 0x61, 0xe1, 0xba, 0xde, 0x34, 0xa2, 0x37, 0x0e, 0xe2, 0xe1, 0xd0,
+	0x3c, 0x2d, 0x0a, 0x5d, 0x38, 0xb8, 0x2c, 0x4c, 0xcf, 0xfa, 0x09, 0x41, 0xd7, 0xa4, 0x08, 0xd3,
+	0xd3, 0x92, 0x20, 0x4c, 0x7f, 0x0e, 0x58, 0x13, 0xa1, 0xba, 0x6e, 0x76, 0x9c, 0xb6, 0x3d, 0x47,
+	0x0b, 0xfc, 0xaa, 0x2e, 0xba, 0x00, 0x47, 0x58, 0xdd, 0xe8, 0x39, 0xc3, 0xde, 0x03, 0x4d, 0xa9,
+	0x6c, 0x98, 0x91, 0x20, 0xa0, 0x2b, 0xff, 0x95, 0x04, 0x47, 0x98, 0xfb, 0x77, 0xb8, 0x1e, 0xc0,
+	0x8b, 0x30, 0xe5, 0xa3, 0x60, 0x0e, 0x44, 0x86, 0xc9, 0x0c, 0x4a, 0x09, 0x88, 0x1c, 0xda, 0x56,
+	0x13, 0x91, 0x6d, 0xf5, 0x6d, 0x09, 0x8e, 0x30, 0x0b, 0xfe, 0x6e, 0x74, 0x69, 0xe2, 0xe0, 0xc8,
+	0x2f, 0x4a, 0xcc, 0xfe, 0x8a, 0xf1, 0x1e, 0x12, 0x6e, 0xea, 0xe5, 0x67, 0xff, 0x8e, 0x04, 0x68,
+	0x3d, 0xf0, 0x8f, 0xde, 0xed, 0xd2, 0xfb, 0xca, 0x04, 0xa4, 0xc4, 0x58, 0x63, 0x43, 0x2a, 0xcf,
+	0xc3, 0x04, 0xc7, 0xbb, 0x89, 0x7d, 0x24, 0x06, 0x72, 0x9e, 0x7d, 0x66, 0x22, 0xf6, 0xcd, 0x32,
+	0xc8, 0xc2, 0xa4, 0x30, 0x28, 0xec, 0xc9, 0x8d, 0xf8, 0x24, 0x26, 0x24, 0xee, 0x02, 0xfb, 0x2a,
+	0x33, 0x21, 0xdd, 0x97, 0xd7, 0x79, 0x3f, 0x36, 0xd6, 0xa0, 0xc0, 0xec, 0xe1, 0xc1, 0x3b, 0x67,
+	0xf0, 0xbd, 0xfd, 0x5e, 0x5c, 0x58, 0xbc, 0xc3, 0x0d, 0x4d, 0x1e, 0xd8, 0x0d, 0xbd, 0x08, 0xd0,
+	0xd2, 0x4d, 0xbd, 0x81, 0x5b, 0x42, 0xf3, 0xfa, 0x3e, 0xf5, 0x20, 0xed, 0x6d, 0xf9, 0xf5, 0xd5,
+	0x10, 0x2f, 0xfa, 0x00, 0x2c, 0xc4, 0x65, 0xdf, 0x4c, 0xec, 0x3f, 0xfb, 0x66, 0xbe, 0xd5, 0x95,
+	0x76, 0x13, 0xbd, 0x61, 0x37, 0x0e, 0x70, 0xc3, 0x2e, 0xbf, 0x25, 0x1d, 0xf4, 0x7e, 0x7c, 0x09,
+	0x10, 0xff, 0xd0, 0xae, 0x6c, 0x54, 0x2f, 0x6a, 0xec, 0x36, 0x7c, 0xac, 0xf3, 0xde, 0x3c, 0x19,
+	0xb9, 0x37, 0x1f, 0x0f, 0xee, 0xcd, 0x27, 0xe4, 0x6f, 0x49, 0x90, 0x8e, 0x8a, 0x12, 0x9d, 0x81,
+	0x19, 0xb2, 0x2e, 0x5a, 0xdb, 0x6e, 0x38, 0x7a, 0x5d, 0x3c, 0xcb, 0xa2, 0x6b, 0xb5, 0xcd, 0x48,
+	0xe8, 0x5e, 0xb6, 0xf8, 0x9a, 0x83, 0x6d, 0xdd, 0x70, 0x78, 0x36, 0x3a, 0x10, 0x92, 0x4a, 0x29,
+	0x68, 0x1b, 0xe6, 0x38, 0xbb, 0x66, 0xd9, 0xe2, 0x3e, 0x77, 0xc0, 0x25, 0x64, 0x3e, 0xe8, 0xa0,
+	0xc4, 0x78, 0xd4, 0x74, 0x3b, 0xf2, 0x2d, 0xb7, 0x00, 0x75, 0xd7, 0x42, 0xef, 0x81, 0xa3, 0xe1,
+	0x01, 0x6b, 0xa1, 0x4b, 0x15, 0xb6, 0xdd, 0x17, 0x43, 0x63, 0xaf, 0xf8, 0xf7, 0x2b, 0x03, 0x93,
+	0x8d, 0xe5, 0x57, 0x60, 0xbe, 0x2b, 0x9d, 0x0f, 0x15, 0x60, 0xe2, 0x86, 0x61, 0xd6, 0xad, 0x1b,
+	0x83, 0x5f, 0x9a, 0x85, 0x98, 0xaf, 0x50, 0x16, 0x95, 0xb3, 0x12, 0x70, 0x3b, 0xdf, 0x55, 0x8a,
+	0x9a, 0x90, 0xad, 0xeb, 0x46, 0xf3, 0x96, 0x16, 0x4e, 0x3c, 0xe4, 0x9d, 0x25, 0x06, 0xdd, 0x10,
+	0xae, 0x11, 0xce, 0xae, 0x36, 0x2f, 0xde, 0xa3, 0x2e, 0xd5, 0x63, 0x4b, 0x56, 0x53, 0x30, 0xc1,
+	0xae, 0xa7, 0xe5, 0x0a, 0x2c, 0xc5, 0x73, 0x77, 0x5c, 0x51, 0x25, 0x3a, 0xaf, 0xa8, 0x72, 0x90,
+	0xaa, 0xb7, 0x19, 0x8a, 0xe3, 0xef, 0x0c, 0xfc, 0x6f, 0xf9, 0xa7, 0x13, 0x70, 0x22, 0x14, 0x4d,
+	0x0b, 0xed, 0xd5, 0x77, 0xd1, 0xb9, 0x71, 0xf7, 0x8c, 0x4e, 0x9c, 0x17, 0xfa, 0xd7, 0x2c, 0xa0,
+	0x23, 0x44, 0x50, 0x31, 0x6e, 0xe3, 0x77, 0xd3, 0xe4, 0x4f, 0xf2, 0x24, 0x6c, 0x76, 0x72, 0x8d,
+	0xd3, 0x93, 0x6b, 0xca, 0xf4, 0x8f, 0xac, 0xb8, 0x19, 0xfd, 0xbe, 0x04, 0xa7, 0x54, 0xab, 0xd9,
+	0xdc, 0xd5, 0x6b, 0xd7, 0xc4, 0xb4, 0xf8, 0xc6, 0x7a, 0xb7, 0xc3, 0x81, 0x1d, 0xe6, 0xc1, 0x85,
+	0xb0, 0x14, 0x77, 0x61, 0xa2, 0xb9, 0xe8, 0xd2, 0x08, 0xb9, 0xe8, 0xf2, 0x37, 0x24, 0x40, 0x31,
+	0x89, 0x12, 0xef, 0x87, 0x13, 0x3c, 0xb7, 0x8b, 0x76, 0x40, 0xac, 0x10, 0x7d, 0x5f, 0x44, 0x8e,
+	0x76, 0xf1, 0x54, 0x35, 0xa5, 0xe6, 0x58, 0x1d, 0xd2, 0x6e, 0xbe, 0xa3, 0x06, 0x2a, 0x87, 0xd3,
+	0xd1, 0x8d, 0x96, 0xe1, 0x89, 0x57, 0x5c, 0x0f, 0x0d, 0xce, 0x55, 0xd8, 0x24, 0xf5, 0x43, 0x09,
+	0xe8, 0x94, 0x5d, 0xde, 0x83, 0xd9, 0x48, 0x05, 0xe2, 0x7c, 0xf9, 0x5d, 0x84, 0x7e, 0x1d, 0x61,
+	0x46, 0x10, 0xa9, 0xb3, 0x91, 0x85, 0xc9, 0x96, 0x61, 0x1a, 0xad, 0x76, 0x8b, 0xdd, 0x3d, 0xa9,
+	0xe2, 0x93, 0x96, 0xe8, 0x37, 0x69, 0xc9, 0x18, 0x2f, 0x61, 0x9f, 0x34, 0xe8, 0x17, 0x97, 0xed,
+	0xd3, 0xfb, 0xbd, 0xda, 0xfd, 0x90, 0x6e, 0x19, 0x66, 0x18, 0x4e, 0xb1, 0x9f, 0x61, 0x98, 0x69,
+	0x19, 0x66, 0x00, 0xa5, 0x48, 0x2d, 0xfd, 0x66, 0x37, 0xe8, 0x9a, 0x69, 0xe9, 0x37, 0x83, 0x5a,
+	0x67, 0x61, 0x2e, 0x22, 0x6f, 0xcc, 0x74, 0x25, 0xa5, 0x76, 0x92, 0xe5, 0x1f, 0x25, 0x20, 0x53,
+	0xc1, 0x1e, 0x4b, 0x72, 0x3b, 0x1c, 0x2d, 0x6e, 0x74, 0xbf, 0x32, 0x60, 0x37, 0x87, 0xef, 0xeb,
+	0x1b, 0x48, 0x8b, 0x0c, 0x71, 0xf4, 0xe7, 0x06, 0xe3, 0x3d, 0x9e, 0x1b, 0xc4, 0x6c, 0xf8, 0xbb,
+	0x91, 0x05, 0xf8, 0x15, 0x89, 0xc6, 0x28, 0x43, 0x8f, 0x13, 0x0e, 0x45, 0xc6, 0x21, 0x35, 0x4b,
+	0x46, 0xd5, 0x2c, 0xce, 0x3a, 0xfc, 0x01, 0x31, 0xd5, 0xe4, 0x5c, 0xdb, 0x28, 0xab, 0xfc, 0x57,
+	0x4a, 0x0e, 0x37, 0xc0, 0x17, 0x1a, 0x0c, 0x7a, 0x0c, 0x90, 0x43, 0x06, 0x81, 0xb5, 0x9a, 0x83,
+	0xeb, 0xd8, 0x24, 0xae, 0x84, 0x4b, 0x97, 0x25, 0xa5, 0xce, 0xb3, 0x92, 0x42, 0x50, 0x20, 0x7f,
+	0x42, 0x82, 0x63, 0x05, 0xab, 0x65, 0x13, 0xd7, 0xf6, 0x27, 0x35, 0xfc, 0xf0, 0x21, 0x71, 0x0d,
+	0xe6, 0xbb, 0x7e, 0x98, 0x83, 0x68, 0x62, 0xe8, 0xa7, 0x39, 0xf8, 0xc6, 0x95, 0xa8, 0xc5, 0xc8,
+	0xe8, 0xe1, 0xda, 0x64, 0xf3, 0x3e, 0x0c, 0x61, 0x1a, 0x33, 0x4b, 0x4c, 0xaf, 0xe6, 0x42, 0x74,
+	0x62, 0x99, 0xe4, 0xef, 0x4a, 0xb0, 0x14, 0xff, 0x13, 0x1b, 0x68, 0x17, 0x66, 0xa9, 0x91, 0xf0,
+	0x7f, 0x6a, 0x85, 0xbd, 0x0a, 0x7d, 0x61, 0xbf, 0xbf, 0xd5, 0xc1, 0x8e, 0x7d, 0x4e, 0x62, 0xaf,
+	0x1d, 0xc5, 0x97, 0xfc, 0x34, 0xcc, 0x84, 0x4b, 0x09, 0xf2, 0xee, 0x7a, 0x07, 0x5a, 0x51, 0x0a,
+	0xdb, 0xaa, 0x92, 0x91, 0xc8, 0xdf, 0xca, 0x2b, 0xe5, 0x52, 0x45, 0xc9, 0x24, 0xe4, 0xbf, 0x97,
+	0xe0, 0x28, 0xc1, 0x06, 0x91, 0x87, 0x36, 0x87, 0xb2, 0x64, 0xdd, 0xcf, 0x81, 0x92, 0x07, 0x7a,
+	0x0e, 0x14, 0xb7, 0x9d, 0xfe, 0x91, 0xdf, 0xc5, 0x75, 0x3d, 0x86, 0xe1, 0x33, 0x3c, 0xd9, 0x3d,
+	0xc3, 0x41, 0xd7, 0x87, 0x27, 0xbb, 0x67, 0x16, 0x9e, 0x55, 0xfc, 0x73, 0x9d, 0xe4, 0x5d, 0x79,
+	0xae, 0x13, 0x17, 0x10, 0x5e, 0x66, 0xa1, 0x99, 0xae, 0x2b, 0xad, 0x20, 0x78, 0x22, 0x45, 0x82,
+	0x27, 0x6f, 0x49, 0x0c, 0x7f, 0x84, 0x18, 0x38, 0xfe, 0x78, 0x7f, 0xf8, 0x9a, 0x6a, 0x20, 0xfc,
+	0x10, 0xfc, 0xe1, 0xab, 0xac, 0x07, 0x61, 0xce, 0xc4, 0x37, 0x3d, 0xcd, 0xa6, 0x81, 0x40, 0xeb,
+	0x1a, 0x16, 0xde, 0xcc, 0x2c, 0x21, 0x97, 0xf5, 0x06, 0xae, 0x12, 0xa2, 0xfc, 0x43, 0x09, 0x52,
+	0x82, 0x1f, 0x15, 0x20, 0xe9, 0x1f, 0xf7, 0xe9, 0x0b, 0x2b, 0x83, 0x7b, 0xf4, 0xff, 0xa0, 0x89,
+	0x7a, 0x94, 0xd9, 0x97, 0x4c, 0x22, 0xfa, 0x88, 0xd3, 0xc1, 0x35, 0xab, 0xd5, 0xc2, 0x66, 0x1d,
+	0xb3, 0x95, 0x4a, 0xa9, 0x61, 0x92, 0x5c, 0x80, 0x99, 0x70, 0x5b, 0xe8, 0x24, 0x1c, 0xdb, 0x2c,
+	0x15, 0xf2, 0xd5, 0x8d, 0x52, 0x51, 0x8b, 0xc9, 0xbd, 0x4a, 0x41, 0x72, 0xa7, 0x54, 0xe4, 0x1b,
+	0x48, 0x55, 0xd6, 0x37, 0x4a, 0xc5, 0x4c, 0x42, 0xfe, 0xb1, 0x04, 0x73, 0x1d, 0xde, 0x35, 0x5a,
+	0x85, 0x64, 0xcd, 0xaa, 0x8b, 0x39, 0x2d, 0x0f, 0xed, 0x96, 0x2f, 0x17, 0xe8, 0xa3, 0x7e, 0xc2,
+	0x4b, 0x01, 0x0d, 0x0f, 0x7c, 0xb0, 0x59, 0x89, 0x4f, 0xd9, 0x85, 0x24, 0xa9, 0xd7, 0x75, 0xa5,
+	0xb4, 0x5e, 0x50, 0xb4, 0x4a, 0xb5, 0x54, 0xb8, 0x54, 0xda, 0xae, 0x66, 0x24, 0x74, 0x2f, 0x1c,
+	0x5f, 0xbf, 0xa4, 0x68, 0x15, 0x45, 0xbd, 0xbc, 0x51, 0x50, 0xb4, 0x7c, 0xa1, 0x50, 0xda, 0x2e,
+	0x56, 0x35, 0x96, 0xb1, 0xb5, 0xc6, 0xbc, 0x76, 0xc2, 0xf2, 0xf2, 0x76, 0xa9, 0x9a, 0xd7, 0x94,
+	0x57, 0x0a, 0x8a, 0xb2, 0xa6, 0xac, 0x65, 0xc6, 0x44, 0x8e, 0xd5, 0xea, 0xab, 0x5a, 0xa9, 0xac,
+	0xa8, 0xf9, 0x6a, 0x49, 0xcd, 0x24, 0xe5, 0x0d, 0xff, 0x99, 0x7b, 0xf0, 0xba, 0x56, 0xbc, 0xab,
+	0x94, 0xa2, 0xaf, 0x3d, 0xa3, 0x8f, 0x2e, 0x13, 0x9d, 0x8f, 0x2e, 0xe5, 0x9f, 0x97, 0xe0, 0x04,
+	0x51, 0xc1, 0x6d, 0xfa, 0xdb, 0x02, 0xc1, 0xab, 0xf1, 0x41, 0xba, 0x4b, 0xe8, 0x57, 0x8d, 0xa6,
+	0x87, 0x1d, 0xde, 0x28, 0xff, 0x42, 0xc7, 0x61, 0x8a, 0xaa, 0x1c, 0x7d, 0xb1, 0xc1, 0x40, 0x58,
+	0x8a, 0x10, 0xe8, 0x4b, 0x0d, 0xb2, 0xc5, 0x03, 0x7d, 0x4c, 0xf2, 0x2d, 0xee, 0xeb, 0xe2, 0xe7,
+	0x25, 0x38, 0xd9, 0x63, 0x30, 0x7c, 0x5f, 0x6c, 0xc2, 0x74, 0x30, 0x78, 0xb1, 0x33, 0xfa, 0x24,
+	0x7b, 0x75, 0xb6, 0xa4, 0x86, 0xd9, 0x87, 0xde, 0x23, 0x6f, 0x27, 0xe0, 0x54, 0x67, 0x4b, 0xd1,
+	0xf7, 0xe2, 0x64, 0x66, 0xa1, 0xb7, 0xe5, 0xdc, 0x78, 0x39, 0xfe, 0x53, 0x72, 0x19, 0x66, 0x0d,
+	0x9b, 0x3d, 0xd6, 0xa0, 0x44, 0x11, 0x59, 0x30, 0xec, 0x82, 0x51, 0x77, 0x58, 0x13, 0x57, 0xfc,
+	0x38, 0x1d, 0x4b, 0x90, 0x7d, 0x71, 0xf8, 0x69, 0x45, 0x07, 0xd3, 0x11, 0xbd, 0x93, 0x1b, 0x7e,
+	0x48, 0x29, 0xa2, 0xa5, 0x00, 0x13, 0xdb, 0xc5, 0xed, 0x8a, 0xb2, 0xc6, 0xd2, 0x16, 0x37, 0x8a,
+	0xda, 0x76, 0xc5, 0x57, 0xd1, 0x4c, 0x02, 0x65, 0x61, 0x51, 0xd0, 0x2e, 0xe6, 0x55, 0x25, 0xbf,
+	0xba, 0xa9, 0x68, 0xe5, 0x12, 0x51, 0xca, 0x25, 0x40, 0xbc, 0x84, 0xa5, 0x13, 0xae, 0x51, 0x7a,
+	0x52, 0x7e, 0x2b, 0x01, 0x99, 0xce, 0xa1, 0x75, 0x68, 0xa0, 0xd4, 0xf5, 0xec, 0x37, 0xa4, 0xbb,
+	0x89, 0xa8, 0xee, 0x76, 0x09, 0x6d, 0xac, 0x5b, 0x68, 0x7b, 0xb0, 0x10, 0xbc, 0xee, 0x37, 0x6c,
+	0x56, 0x51, 0x20, 0xe7, 0x67, 0x46, 0x95, 0xa0, 0x3a, 0xef, 0x37, 0xba, 0x61, 0x53, 0x8a, 0x3b,
+	0x64, 0x6a, 0xb0, 0x7c, 0x01, 0x96, 0x7a, 0x24, 0x5e, 0xf7, 0x7e, 0x02, 0xff, 0x3e, 0x98, 0xef,
+	0x7e, 0xcb, 0xf7, 0x30, 0xcc, 0xfb, 0x11, 0x4b, 0x1b, 0x3b, 0xd4, 0xb7, 0xe1, 0xe0, 0x28, 0xcd,
+	0x43, 0x90, 0x65, 0xec, 0x10, 0xa0, 0x21, 0x7f, 0x26, 0x01, 0xc7, 0x7a, 0xe7, 0x9a, 0xdf, 0x86,
+	0xc5, 0x5d, 0xa3, 0xf1, 0x46, 0x1b, 0x3b, 0xb7, 0xb4, 0x3a, 0x76, 0x3d, 0xc3, 0x64, 0xc1, 0x19,
+	0x16, 0xaa, 0x5a, 0x1f, 0x21, 0xc1, 0x7d, 0x79, 0xd5, 0x68, 0xbc, 0x4c, 0xda, 0x5b, 0x0b, 0x9a,
+	0x53, 0x17, 0x44, 0x27, 0x21, 0x22, 0x2a, 0xc0, 0x29, 0xe1, 0xed, 0x72, 0x78, 0x81, 0x69, 0x86,
+	0x23, 0xc1, 0x5f, 0xd8, 0x11, 0x3f, 0x9b, 0x94, 0x52, 0x8f, 0x73, 0x7f, 0x97, 0x55, 0x52, 0x68,
+	0x9d, 0x2d, 0x5e, 0x25, 0xf7, 0x24, 0x2c, 0xc4, 0x74, 0x48, 0xb6, 0x1c, 0x81, 0x57, 0x2e, 0x0e,
+	0xe3, 0x05, 0x4e, 0xd9, 0xa8, 0x5f, 0xf8, 0x74, 0x1e, 0xd2, 0xdc, 0xff, 0x66, 0xe1, 0x19, 0x07,
+	0xfd, 0x93, 0x04, 0x33, 0xe1, 0xbb, 0x6b, 0xd4, 0x27, 0x36, 0x1d, 0x73, 0x9b, 0x9e, 0x5b, 0x1e,
+	0xb6, 0x3a, 0xb3, 0x56, 0xf2, 0x1b, 0x1f, 0xfe, 0xdb, 0x1f, 0x7f, 0x36, 0x71, 0x0d, 0x9d, 0xf7,
+	0x7f, 0x2b, 0xf1, 0x4d, 0x66, 0x3d, 0x5f, 0xe0, 0xb0, 0xc6, 0x5d, 0x39, 0xb7, 0xe2, 0x1f, 0xd9,
+	0x2b, 0xe7, 0xee, 0x88, 0xdf, 0x52, 0x74, 0x77, 0x9e, 0x42, 0x4f, 0xfa, 0x4c, 0x7e, 0xe5, 0x37,
+	0x03, 0x7c, 0x74, 0x67, 0x85, 0xde, 0x8a, 0xae, 0xbc, 0x49, 0xfe, 0x09, 0xf8, 0xd0, 0x3f, 0x48,
+	0x00, 0x41, 0xde, 0x23, 0xea, 0x83, 0x72, 0xba, 0xb2, 0x23, 0x73, 0x83, 0xef, 0xeb, 0xe5, 0x0f,
+	0xd1, 0x19, 0xdd, 0x0c, 0xcf, 0x88, 0x18, 0xbc, 0x1e, 0xf3, 0xf1, 0x87, 0xb5, 0x72, 0xee, 0xce,
+	0x4e, 0x01, 0xe5, 0x47, 0x99, 0xd1, 0xca, 0x9b, 0x01, 0xc2, 0xbb, 0x83, 0x7e, 0x24, 0xc1, 0x6c,
+	0x24, 0xff, 0x14, 0xf5, 0x59, 0x93, 0xb8, 0x44, 0xd5, 0xdc, 0x30, 0x17, 0xd1, 0xf2, 0x0d, 0x3a,
+	0xcd, 0x37, 0xe4, 0xfd, 0x2f, 0xdc, 0xb3, 0xd2, 0xb9, 0x9d, 0xf7, 0xca, 0x23, 0xad, 0xdd, 0xb3,
+	0xd2, 0x39, 0xf4, 0xef, 0x12, 0xcc, 0x46, 0xd2, 0x45, 0xfb, 0xcd, 0x2f, 0x2e, 0xaf, 0x74, 0xb8,
+	0xf9, 0x7d, 0x54, 0xa2, 0x13, 0xfc, 0x50, 0x6e, 0xff, 0xeb, 0x48, 0x26, 0xf8, 0x52, 0xee, 0xe0,
+	0x4b, 0x49, 0x66, 0xfb, 0x85, 0x04, 0xa4, 0xa3, 0x09, 0xa5, 0x68, 0x65, 0xd0, 0x74, 0x3b, 0x6e,
+	0x1a, 0x87, 0x9b, 0xef, 0x77, 0xd8, 0x7c, 0xbf, 0x29, 0xe5, 0x5e, 0xd8, 0xef, 0x84, 0x57, 0xfc,
+	0x88, 0x1e, 0x9f, 0xfc, 0x55, 0x59, 0x3f, 0xf0, 0xe4, 0x43, 0x8d, 0xbe, 0x19, 0x0e, 0x5d, 0xde,
+	0x59, 0x61, 0xf9, 0x4b, 0x44, 0x38, 0x3f, 0x48, 0x44, 0x02, 0xc5, 0xe1, 0x93, 0xe4, 0xe9, 0xbe,
+	0x11, 0xa1, 0xde, 0xb9, 0xaa, 0xc3, 0x09, 0xeb, 0xcf, 0x98, 0xb0, 0x7e, 0x20, 0xc9, 0x9b, 0x07,
+	0x13, 0x96, 0x8b, 0xbd, 0xd0, 0x18, 0x88, 0xec, 0xae, 0xc9, 0x57, 0xdf, 0x41, 0xd9, 0xe9, 0x91,
+	0xce, 0xd0, 0xcf, 0x26, 0x60, 0xbe, 0x2b, 0x5f, 0x15, 0x5d, 0xe8, 0x1f, 0x4d, 0x8b, 0x4b, 0x6e,
+	0x1d, 0x4e, 0x6c, 0xbf, 0xca, 0xc4, 0xf6, 0x69, 0x49, 0x7e, 0x7e, 0xff, 0x9b, 0xca, 0xf5, 0xbb,
+	0x26, 0x62, 0x2a, 0xca, 0x1b, 0x07, 0x17, 0x53, 0xd3, 0x6f, 0x0f, 0x7d, 0x96, 0x67, 0x04, 0x76,
+	0x65, 0x9c, 0x0e, 0xc8, 0xd1, 0xeb, 0x91, 0x35, 0x3b, 0x9c, 0x3c, 0xbe, 0xc4, 0xe4, 0xf1, 0x2b,
+	0x92, 0xfc, 0xe2, 0x48, 0xf2, 0x08, 0x7a, 0x27, 0x22, 0x79, 0x39, 0xa4, 0x8c, 0x23, 0x8b, 0xa4,
+	0x15, 0x6e, 0x12, 0xbd, 0x95, 0x80, 0xb9, 0x8e, 0xd4, 0x5a, 0xf4, 0x78, 0x5f, 0x81, 0xc4, 0x64,
+	0xe1, 0x0e, 0x27, 0x8b, 0x5f, 0x66, 0xb2, 0xf8, 0x94, 0x24, 0x3f, 0x37, 0x92, 0x2c, 0x58, 0xc7,
+	0x44, 0x0e, 0x5b, 0xf2, 0xc5, 0x83, 0xcb, 0x41, 0x17, 0xcd, 0x11, 0x19, 0xcc, 0x84, 0x93, 0x70,
+	0xfb, 0x21, 0xa2, 0x98, 0x64, 0xdd, 0xe1, 0x66, 0xff, 0x45, 0x36, 0xfb, 0xcf, 0x4b, 0xf2, 0xfb,
+	0x46, 0xdc, 0x19, 0xbc, 0x88, 0x08, 0xa0, 0x2c, 0x5f, 0xba, 0x1b, 0x7b, 0x23, 0x68, 0x11, 0xfd,
+	0x9f, 0x04, 0x33, 0xe1, 0x04, 0xdf, 0x7e, 0x32, 0x88, 0x49, 0x04, 0x1e, 0x4e, 0x06, 0xbf, 0xc6,
+	0x64, 0xf0, 0x99, 0x91, 0x64, 0xd0, 0x0e, 0xf5, 0x7a, 0xd7, 0x94, 0xa0, 0x25, 0x9a, 0x43, 0x1f,
+	0x4f, 0xc0, 0x6c, 0x24, 0x25, 0xb7, 0x1f, 0xe8, 0x88, 0xcb, 0xdd, 0x1d, 0x4e, 0x04, 0xbf, 0xc5,
+	0x44, 0xf0, 0x85, 0x91, 0x0d, 0x82, 0xdf, 0x2d, 0x91, 0x41, 0x55, 0x2e, 0x1d, 0x1c, 0x83, 0x74,
+	0xb6, 0x8a, 0x7e, 0x2c, 0xc1, 0x6c, 0x24, 0xa3, 0xb7, 0x9f, 0x28, 0xe2, 0x52, 0x7f, 0x87, 0x13,
+	0x05, 0x87, 0xd1, 0xe7, 0x46, 0x81, 0xd1, 0xe7, 0xee, 0x02, 0x8c, 0xfe, 0x37, 0x09, 0xd2, 0xd1,
+	0xe4, 0xcd, 0x7e, 0xc0, 0x2b, 0x36, 0xc9, 0x35, 0xf7, 0xf8, 0xf0, 0x0c, 0xdc, 0x1d, 0x6a, 0xd3,
+	0x59, 0x5b, 0xe8, 0x89, 0xa1, 0x51, 0x75, 0x90, 0x0f, 0xba, 0xf3, 0x0c, 0x7a, 0x6a, 0x3f, 0xf3,
+	0x0e, 0x65, 0x92, 0xfe, 0xab, 0x04, 0x33, 0xe1, 0xa4, 0xe1, 0x7e, 0xfb, 0x3b, 0x26, 0xb9, 0x78,
+	0x7f, 0x88, 0x3a, 0x3c, 0xb9, 0x7e, 0x4b, 0x1a, 0x8c, 0x8f, 0x2c, 0xea, 0x3a, 0x52, 0x46, 0x9b,
+	0xdc, 0xca, 0x9b, 0xe1, 0xfc, 0xdd, 0x3b, 0xe8, 0x7f, 0x24, 0x98, 0xeb, 0x48, 0x13, 0xee, 0x77,
+	0xa6, 0xc5, 0x67, 0x14, 0xe7, 0x96, 0x04, 0x87, 0xf8, 0x21, 0xfd, 0x65, 0xa5, 0x65, 0x7b, 0xb7,
+	0x42, 0x46, 0xec, 0xd9, 0x11, 0x66, 0xf9, 0x6c, 0x8d, 0xf6, 0x36, 0xc2, 0x69, 0xde, 0x73, 0xbe,
+	0x41, 0x93, 0x64, 0xe7, 0xce, 0x75, 0xe4, 0x02, 0xf7, 0x9b, 0x79, 0x7c, 0xda, 0x70, 0xee, 0xc1,
+	0x7e, 0x86, 0x2f, 0xa8, 0x2e, 0x1c, 0xc4, 0x21, 0x57, 0xfb, 0xce, 0x8a, 0x1b, 0x62, 0xde, 0x79,
+	0x16, 0x3d, 0xb3, 0x9f, 0xd9, 0x33, 0x5e, 0x9e, 0x61, 0x48, 0x6c, 0x75, 0x24, 0x65, 0x01, 0x0d,
+	0x08, 0x4a, 0x74, 0xe6, 0x89, 0xe6, 0x56, 0x86, 0xae, 0xcf, 0xb7, 0xed, 0xe7, 0xd9, 0xaa, 0x7f,
+	0x52, 0x42, 0x2f, 0x0c, 0xb9, 0x71, 0xc3, 0x06, 0x2b, 0x80, 0xeb, 0x3b, 0x5b, 0xe8, 0xd2, 0x5d,
+	0x44, 0xff, 0xe8, 0x67, 0x12, 0x30, 0x1d, 0x4a, 0x3d, 0x45, 0x8f, 0xf6, 0x5d, 0xed, 0x4e, 0xbf,
+	0x71, 0x88, 0x6c, 0x0e, 0xf9, 0xab, 0x6c, 0xe6, 0xbf, 0x11, 0x99, 0xf9, 0x08, 0x9e, 0xd0, 0xce,
+	0x6b, 0x68, 0xe7, 0x9d, 0xf3, 0x7b, 0xd0, 0x47, 0x13, 0x90, 0x8e, 0x66, 0x65, 0xf7, 0xb3, 0xe6,
+	0xb1, 0xf9, 0xdb, 0xc3, 0x19, 0xb9, 0x5f, 0x67, 0xf2, 0xf8, 0x9c, 0x24, 0x1f, 0x4c, 0x13, 0xee,
+	0x1a, 0x8e, 0x0b, 0xb7, 0x88, 0x3e, 0x91, 0x80, 0x74, 0x34, 0x97, 0xbb, 0x9f, 0x18, 0x62, 0xb3,
+	0xbe, 0x87, 0x13, 0x83, 0xaf, 0x16, 0xe7, 0x0e, 0xaa, 0x16, 0xe7, 0xde, 0x49, 0xb5, 0xf8, 0x5e,
+	0x02, 0x8e, 0xf6, 0xc8, 0xcb, 0x42, 0x7d, 0x22, 0xe3, 0xfd, 0x53, 0xb9, 0x86, 0x93, 0xd0, 0x1f,
+	0x31, 0x09, 0x7d, 0x57, 0x92, 0x5f, 0x3a, 0x58, 0x08, 0xc1, 0xe1, 0x83, 0x21, 0x1a, 0xb3, 0x27,
+	0xd7, 0xde, 0x39, 0x69, 0x85, 0x7b, 0x42, 0x7f, 0x9c, 0x80, 0x23, 0xb1, 0x69, 0x8a, 0xe8, 0xa9,
+	0xa1, 0x22, 0x2f, 0x5d, 0x79, 0x8d, 0xc3, 0x49, 0xed, 0xcf, 0x99, 0xd4, 0xfe, 0x44, 0x0a, 0x6d,
+	0x8d, 0x51, 0x03, 0x2f, 0xc1, 0x10, 0x88, 0xe8, 0x5a, 0xf2, 0xde, 0x3b, 0x18, 0x77, 0xe9, 0xec,
+	0x0e, 0x7d, 0x2c, 0x01, 0x53, 0x7e, 0x6a, 0x12, 0x3a, 0x37, 0x7c, 0xfe, 0xd2, 0x70, 0x72, 0xfa,
+	0x1a, 0x93, 0xd3, 0x6f, 0x4a, 0x72, 0x61, 0x24, 0x47, 0x22, 0x9a, 0xbc, 0x44, 0xe4, 0xb3, 0x2d,
+	0x97, 0x0f, 0x2e, 0x1f, 0xa7, 0xb3, 0x59, 0x22, 0x87, 0xd9, 0x48, 0x96, 0xd3, 0x00, 0xc7, 0xaa,
+	0x2b, 0x1d, 0xea, 0x70, 0x22, 0x2d, 0x41, 0xb7, 0x77, 0x2d, 0xd2, 0xd2, 0x0c, 0x37, 0x89, 0x7e,
+	0x29, 0x41, 0xaf, 0xe5, 0xc3, 0x89, 0x54, 0x7d, 0x23, 0x2d, 0xb1, 0x39, 0x57, 0xc3, 0xc9, 0xe2,
+	0x6d, 0x26, 0x8b, 0x2f, 0x49, 0x72, 0x7e, 0x04, 0x59, 0xd0, 0x8e, 0x6d, 0xd1, 0x31, 0x91, 0xc6,
+	0x65, 0xf9, 0xe5, 0xbb, 0xe0, 0x66, 0x76, 0xb5, 0x8b, 0xbe, 0x98, 0x00, 0xd4, 0x9d, 0x9f, 0x85,
+	0xfa, 0xfc, 0xdc, 0x54, 0xcf, 0x6c, 0xae, 0xe1, 0x04, 0xf3, 0x2d, 0x26, 0x98, 0xaf, 0x4a, 0xf2,
+	0xda, 0xfe, 0x05, 0x53, 0x13, 0x7d, 0x47, 0x64, 0xf3, 0xaa, 0x5c, 0x3d, 0xb8, 0x6c, 0x62, 0x9b,
+	0x46, 0x6f, 0xb3, 0xd8, 0x5c, 0x38, 0x4b, 0x7a, 0x40, 0x6c, 0x2e, 0x26, 0xa1, 0x7a, 0x38, 0xc1,
+	0x7c, 0x9f, 0x09, 0xe6, 0xf7, 0x24, 0x59, 0x39, 0xb0, 0xd5, 0x25, 0x9d, 0x13, 0xc9, 0x34, 0xe4,
+	0xdd, 0x77, 0xd6, 0xde, 0xf2, 0x8e, 0xd0, 0xe7, 0x58, 0x9e, 0x6a, 0xf4, 0x3f, 0x3d, 0x38, 0xdf,
+	0x5f, 0x50, 0x31, 0xd9, 0x65, 0xc3, 0x49, 0xea, 0xeb, 0x4c, 0x52, 0x5f, 0x96, 0xe4, 0xd5, 0x91,
+	0xec, 0x4c, 0xa4, 0x67, 0x22, 0xa6, 0x2b, 0xb2, 0x7a, 0x57, 0x62, 0x38, 0x9d, 0x0d, 0xa3, 0xaf,
+	0x8a, 0x27, 0xf0, 0x9d, 0x59, 0x5b, 0x83, 0x1e, 0xa5, 0xc7, 0xa7, 0xa6, 0x0d, 0x27, 0x9e, 0x6f,
+	0x33, 0xf1, 0x7c, 0x63, 0x04, 0xd0, 0xc3, 0x8f, 0xec, 0x8e, 0xde, 0x89, 0x88, 0x3e, 0x20, 0x5f,
+	0xbe, 0x4b, 0x61, 0xae, 0xee, 0xc6, 0xd1, 0x5f, 0xf2, 0xfc, 0xb3, 0xae, 0x7c, 0x9b, 0x7e, 0x38,
+	0xa7, 0x5f, 0xb6, 0x50, 0xee, 0xe9, 0x7d, 0xf3, 0x71, 0x27, 0x33, 0x4f, 0x65, 0xf7, 0x1c, 0x7a,
+	0x6f, 0x1f, 0xc7, 0xe2, 0xce, 0x8a, 0xde, 0x68, 0x38, 0xb8, 0xa1, 0x7b, 0xb8, 0xbe, 0xd2, 0xee,
+	0x1a, 0xf3, 0x97, 0x25, 0xe6, 0x1a, 0x07, 0xc1, 0xec, 0x01, 0xae, 0x71, 0x57, 0x34, 0x7b, 0x65,
+	0xe8, 0xfa, 0x7c, 0xd4, 0xcb, 0x74, 0xd4, 0x67, 0xd1, 0x83, 0x7d, 0x47, 0xed, 0xaf, 0xf9, 0xea,
+	0xf7, 0x25, 0x38, 0x51, 0xb3, 0x5a, 0x3d, 0xbb, 0x59, 0x5d, 0x28, 0x88, 0xff, 0xd0, 0x82, 0x5e,
+	0xb8, 0x94, 0x1d, 0xcb, 0xb3, 0xca, 0xd2, 0x4e, 0x9e, 0x33, 0x34, 0xac, 0xa6, 0x6e, 0x36, 0x96,
+	0x2d, 0xa7, 0xb1, 0xd2, 0xc0, 0x26, 0x8d, 0xce, 0xac, 0xb0, 0x22, 0xdd, 0x36, 0xdc, 0xee, 0xff,
+	0x9b, 0xf1, 0x39, 0x9f, 0xf2, 0xcd, 0xc4, 0xa9, 0x75, 0xd6, 0x06, 0xfd, 0x8f, 0x66, 0x96, 0x0b,
+	0x7e, 0xd7, 0x97, 0xcf, 0xaf, 0x92, 0xaa, 0x3f, 0x14, 0x15, 0x5e, 0xa3, 0x15, 0x5e, 0xf3, 0x2b,
+	0xbc, 0x76, 0x99, 0xb5, 0xb5, 0x3b, 0x41, 0xfb, 0x7b, 0xe2, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff,
+	0x29, 0xa8, 0xb0, 0xd5, 0x0a, 0x72, 0x00, 0x00,
 }

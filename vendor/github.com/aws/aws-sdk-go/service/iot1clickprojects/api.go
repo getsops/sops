@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opAssociateDeviceWithPlacement = "AssociateDeviceWithPlacement"
@@ -15,7 +17,7 @@ const opAssociateDeviceWithPlacement = "AssociateDeviceWithPlacement"
 // AssociateDeviceWithPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateDeviceWithPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -49,6 +51,7 @@ func (c *IoT1ClickProjects) AssociateDeviceWithPlacementRequest(input *Associate
 
 	output = &AssociateDeviceWithPlacementOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -99,7 +102,7 @@ const opCreatePlacement = "CreatePlacement"
 // CreatePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -133,6 +136,7 @@ func (c *IoT1ClickProjects) CreatePlacementRequest(input *CreatePlacementInput) 
 
 	output = &CreatePlacementOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -183,7 +187,7 @@ const opCreateProject = "CreateProject"
 // CreateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -217,6 +221,7 @@ func (c *IoT1ClickProjects) CreateProjectRequest(input *CreateProjectInput) (req
 
 	output = &CreateProjectOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -266,7 +271,7 @@ const opDeletePlacement = "DeletePlacement"
 // DeletePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -300,6 +305,7 @@ func (c *IoT1ClickProjects) DeletePlacementRequest(input *DeletePlacementInput) 
 
 	output = &DeletePlacementOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -353,7 +359,7 @@ const opDeleteProject = "DeleteProject"
 // DeleteProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -387,6 +393,7 @@ func (c *IoT1ClickProjects) DeleteProjectRequest(input *DeleteProjectInput) (req
 
 	output = &DeleteProjectOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -440,7 +447,7 @@ const opDescribePlacement = "DescribePlacement"
 // DescribePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -522,7 +529,7 @@ const opDescribeProject = "DescribeProject"
 // DescribeProjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -604,7 +611,7 @@ const opDisassociateDeviceFromPlacement = "DisassociateDeviceFromPlacement"
 // DisassociateDeviceFromPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateDeviceFromPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -638,6 +645,7 @@ func (c *IoT1ClickProjects) DisassociateDeviceFromPlacementRequest(input *Disass
 
 	output = &DisassociateDeviceFromPlacementOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -688,7 +696,7 @@ const opGetDevicesInPlacement = "GetDevicesInPlacement"
 // GetDevicesInPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the GetDevicesInPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -770,7 +778,7 @@ const opListPlacements = "ListPlacements"
 // ListPlacementsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPlacements operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -852,7 +860,7 @@ const opListProjects = "ListProjects"
 // ListProjectsRequest generates a "aws/request.Request" representing the
 // client's request for the ListProjects operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -933,7 +941,7 @@ const opUpdatePlacement = "UpdatePlacement"
 // UpdatePlacementRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -967,6 +975,7 @@ func (c *IoT1ClickProjects) UpdatePlacementRequest(input *UpdatePlacementInput) 
 
 	output = &UpdatePlacementOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1018,7 +1027,7 @@ const opUpdateProject = "UpdateProject"
 // UpdateProjectRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateProject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1052,6 +1061,7 @@ func (c *IoT1ClickProjects) UpdateProjectRequest(input *UpdateProjectInput) (req
 
 	output = &UpdateProjectOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 

@@ -29,7 +29,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-syntax = "proto3";
+syntax = "proto2";
 
 package goproto.test.import_public;
 
@@ -39,7 +39,7 @@ import public "import_public/sub/a.proto"; // Different Go package.
 import public "import_public/b.proto";     // Same Go package.
 
 message Public {
-  goproto.test.import_public.sub.M m = 1;
-  goproto.test.import_public.sub.E e = 2;
-  Local local = 3;
+  optional goproto.test.import_public.sub.M m = 1;
+  optional goproto.test.import_public.sub.E e = 2;
+  optional Local local = 3;
 }

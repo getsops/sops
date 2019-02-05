@@ -37,7 +37,7 @@ func (m *Range) Reset()         { *m = Range{} }
 func (m *Range) String() string { return proto.CompactTextString(m) }
 func (*Range) ProtoMessage()    {}
 func (*Range) Descriptor() ([]byte, []int) {
-	return fileDescriptor_296c87a77538e516, []int{0}
+	return fileDescriptor_range_ea4bc4104a5a55de, []int{0}
 }
 func (m *Range) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Range.Unmarshal(m, b)
@@ -45,8 +45,8 @@ func (m *Range) XXX_Unmarshal(b []byte) error {
 func (m *Range) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Range.Marshal(b, m, deterministic)
 }
-func (m *Range) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Range.Merge(m, src)
+func (dst *Range) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Range.Merge(dst, src)
 }
 func (m *Range) XXX_Size() int {
 	return xxx_messageInfo_Range.Size(m)
@@ -82,9 +82,11 @@ func init() {
 	proto.RegisterType((*Range)(nil), "google.genomics.v1.Range")
 }
 
-func init() { proto.RegisterFile("google/genomics/v1/range.proto", fileDescriptor_296c87a77538e516) }
+func init() {
+	proto.RegisterFile("google/genomics/v1/range.proto", fileDescriptor_range_ea4bc4104a5a55de)
+}
 
-var fileDescriptor_296c87a77538e516 = []byte{
+var fileDescriptor_range_ea4bc4104a5a55de = []byte{
 	// 209 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x4f, 0x4d, 0x4b, 0xc4, 0x30,
 	0x10, 0x25, 0x96, 0x15, 0x0c, 0x28, 0x12, 0x44, 0x8a, 0x88, 0x2c, 0x82, 0xb0, 0xa7, 0x84, 0xe2,

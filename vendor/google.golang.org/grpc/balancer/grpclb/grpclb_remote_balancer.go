@@ -19,6 +19,7 @@
 package grpclb
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -26,7 +27,6 @@ import (
 	"time"
 
 	timestamppb "github.com/golang/protobuf/ptypes/timestamp"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer"
 	lbpb "google.golang.org/grpc/balancer/grpclb/grpc_lb_v1"
@@ -80,7 +80,7 @@ func (lb *lbBalancer) processServerList(l *lbpb.ServerList) {
 	}
 
 	// Call refreshSubConns to create/remove SubConns.
-	lb.refreshSubConns(backendAddrs)
+	lb.refreshSubConns(backendAddrs, true)
 	// Regenerate and update picker no matter if there's update on backends (if
 	// any SubConn will be newed/removed). Because since the full serverList was
 	// different, there might be updates in drops or pick weights(different
@@ -96,7 +96,12 @@ func (lb *lbBalancer) processServerList(l *lbpb.ServerList) {
 // indicating whether the backendAddrs are different from the cached
 // backendAddrs (whether any SubConn was newed/removed).
 // Caller must hold lb.mu.
-func (lb *lbBalancer) refreshSubConns(backendAddrs []resolver.Address) bool {
+func (lb *lbBalancer) refreshSubConns(backendAddrs []resolver.Address, fromGRPCLBServer bool) bool {
+	opts := balancer.NewSubConnOptions{}
+	if fromGRPCLBServer {
+		opts.CredsBundle = lb.grpclbBackendCreds
+	}
+
 	lb.backendAddrs = nil
 	var backendsUpdated bool
 	// addrsSet is the set converted from backendAddrs, it's used to quick
@@ -113,7 +118,7 @@ func (lb *lbBalancer) refreshSubConns(backendAddrs []resolver.Address) bool {
 			backendsUpdated = true
 
 			// Use addrWithMD to create the SubConn.
-			sc, err := lb.cc.NewSubConn([]resolver.Address{addr}, balancer.NewSubConnOptions{})
+			sc, err := lb.cc.NewSubConn([]resolver.Address{addr}, opts)
 			if err != nil {
 				grpclog.Warningf("roundrobinBalancer: failed to create new SubConn: %v", err)
 				continue
@@ -187,7 +192,7 @@ func (lb *lbBalancer) callRemoteBalancer() (backoff bool, _ error) {
 	lbClient := &loadBalancerClient{cc: lb.ccRemoteLB}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	stream, err := lbClient.BalanceLoad(ctx, grpc.FailFast(false))
+	stream, err := lbClient.BalanceLoad(ctx, grpc.WaitForReady(true))
 	if err != nil {
 		return true, fmt.Errorf("grpclb: failed to perform RPC to the remote balancer %v", err)
 	}
@@ -236,10 +241,12 @@ func (lb *lbBalancer) watchRemoteBalancer() {
 				if err == errServerTerminatedConnection {
 					grpclog.Info(err)
 				} else {
-					grpclog.Error(err)
+					grpclog.Warning(err)
 				}
 			}
 		}
+		// Trigger a re-resolve when the stream errors.
+		lb.cc.cc.ResolveNow(resolver.ResolveNowOption{})
 
 		if !doBackoff {
 			retryCount = 0
@@ -266,6 +273,8 @@ func (lb *lbBalancer) dialRemoteLB(remoteLBName string) {
 			grpclog.Warningf("grpclb: failed to override the server name in the credentials: %v, using Insecure", err)
 			dopts = append(dopts, grpc.WithInsecure())
 		}
+	} else if bundle := lb.grpclbClientConnCreds; bundle != nil {
+		dopts = append(dopts, grpc.WithCredentialsBundle(bundle))
 	} else {
 		dopts = append(dopts, grpc.WithInsecure())
 	}
@@ -283,9 +292,12 @@ func (lb *lbBalancer) dialRemoteLB(remoteLBName string) {
 		dopts = append(dopts, grpc.WithChannelzParentID(lb.opt.ChannelzParentID))
 	}
 
-	// DialContext using manualResolver.Scheme, which is a random scheme generated
-	// when init grpclb. The target name is not important.
-	cc, err := grpc.DialContext(context.Background(), "grpclb:///grpclb.server", dopts...)
+	// DialContext using manualResolver.Scheme, which is a random scheme
+	// generated when init grpclb. The target scheme here is not important.
+	//
+	// The grpc dial target will be used by the creds (ALTS) as the authority,
+	// so it has to be set to remoteLBName that comes from resolver.
+	cc, err := grpc.DialContext(context.Background(), remoteLBName, dopts...)
 	if err != nil {
 		grpclog.Fatalf("failed to dial: %v", err)
 	}

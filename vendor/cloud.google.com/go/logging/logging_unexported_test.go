@@ -24,10 +24,10 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
-
 	"github.com/golang/protobuf/proto"
 	durpb "github.com/golang/protobuf/ptypes/duration"
 	structpb "github.com/golang/protobuf/ptypes/struct"
+	"google.golang.org/api/logging/v2"
 	"google.golang.org/api/support/bundler"
 	mrpb "google.golang.org/genproto/googleapis/api/monitoredres"
 	logtypepb "google.golang.org/genproto/googleapis/logging/type"
@@ -235,17 +235,17 @@ func TestToLogEntryTrace(t *testing.T) {
 	u := &url.URL{Scheme: "http"}
 	for _, test := range []struct {
 		in   Entry
-		want string
+		want logging.LogEntry
 	}{
-		{Entry{}, ""},
-		{Entry{Trace: "t1"}, "t1"},
+		{Entry{}, logging.LogEntry{}},
+		{Entry{Trace: "t1"}, logging.LogEntry{Trace: "t1"}},
 		{
 			Entry{
 				HTTPRequest: &HTTPRequest{
 					Request: &http.Request{URL: u, Header: http.Header{"foo": {"bar"}}},
 				},
 			},
-			"",
+			logging.LogEntry{},
 		},
 		{
 			Entry{
@@ -256,7 +256,7 @@ func TestToLogEntryTrace(t *testing.T) {
 					},
 				},
 			},
-			"projects/P/traces/t2",
+			logging.LogEntry{Trace: "projects/P/traces/t2"},
 		},
 		{
 			Entry{
@@ -268,15 +268,19 @@ func TestToLogEntryTrace(t *testing.T) {
 				},
 				Trace: "t4",
 			},
-			"t4",
+			logging.LogEntry{Trace: "t4"},
 		},
+		{Entry{Trace: "t1", SpanID: "007"}, logging.LogEntry{Trace: "t1", SpanId: "007"}},
 	} {
 		e, err := logger.toLogEntry(test.in)
 		if err != nil {
 			t.Fatalf("%+v: %v", test.in, err)
 		}
-		if got := e.Trace; got != test.want {
-			t.Errorf("%+v: got %q, want %q", test.in, got, test.want)
+		if got := e.Trace; got != test.want.Trace {
+			t.Errorf("%+v: got %q, want %q", test.in, got, test.want.Trace)
+		}
+		if got := e.SpanId; got != test.want.SpanId {
+			t.Errorf("%+v: got %q, want %q", test.in, got, test.want.SpanId)
 		}
 	}
 }

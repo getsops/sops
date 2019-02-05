@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewLoadBalancerBackendAddressPoolsClientWithBaseURI(baseURI string, subscri
 // loadBalancerName - the name of the load balancer.
 // backendAddressPoolName - the name of the backend address pool.
 func (client LoadBalancerBackendAddressPoolsClient) Get(ctx context.Context, resourceGroupName string, loadBalancerName string, backendAddressPoolName string) (result BackendAddressPool, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LoadBalancerBackendAddressPoolsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, loadBalancerName, backendAddressPoolName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.LoadBalancerBackendAddressPoolsClient", "Get", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client LoadBalancerBackendAddressPoolsClient) GetResponder(resp *http.Resp
 // resourceGroupName - the name of the resource group.
 // loadBalancerName - the name of the load balancer.
 func (client LoadBalancerBackendAddressPoolsClient) List(ctx context.Context, resourceGroupName string, loadBalancerName string) (result LoadBalancerBackendAddressPoolListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LoadBalancerBackendAddressPoolsClient.List")
+		defer func() {
+			sc := -1
+			if result.lbbaplr.Response.Response != nil {
+				sc = result.lbbaplr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, loadBalancerName)
 	if err != nil {
@@ -178,8 +199,8 @@ func (client LoadBalancerBackendAddressPoolsClient) ListResponder(resp *http.Res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client LoadBalancerBackendAddressPoolsClient) listNextResults(lastResults LoadBalancerBackendAddressPoolListResult) (result LoadBalancerBackendAddressPoolListResult, err error) {
-	req, err := lastResults.loadBalancerBackendAddressPoolListResultPreparer()
+func (client LoadBalancerBackendAddressPoolsClient) listNextResults(ctx context.Context, lastResults LoadBalancerBackendAddressPoolListResult) (result LoadBalancerBackendAddressPoolListResult, err error) {
+	req, err := lastResults.loadBalancerBackendAddressPoolListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.LoadBalancerBackendAddressPoolsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -200,6 +221,16 @@ func (client LoadBalancerBackendAddressPoolsClient) listNextResults(lastResults 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LoadBalancerBackendAddressPoolsClient) ListComplete(ctx context.Context, resourceGroupName string, loadBalancerName string) (result LoadBalancerBackendAddressPoolListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LoadBalancerBackendAddressPoolsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, loadBalancerName)
 	return
 }

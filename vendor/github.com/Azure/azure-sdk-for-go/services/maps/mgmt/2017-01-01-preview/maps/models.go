@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/maps/mgmt/2017-01-01-preview/maps"
+
 // KeyType enumerates the values for key type.
 type KeyType string
 
@@ -103,8 +106,8 @@ func (acp AccountCreateParameters) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// AccountKeys the set of keys which can be used to access the Maps REST APIs. Two keys are provided for key
-// rotation without interruption.
+// AccountKeys the set of keys which can be used to access the Maps REST APIs. Two keys are provided for
+// key rotation without interruption.
 type AccountKeys struct {
 	autorest.Response `json:"-"`
 	// ID - The full Azure resource identifier of the Maps Account.

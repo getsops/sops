@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) Service
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the ApiManagementServices_Backup operation.
 func (client ServicesClient) Backup(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBackupRestoreParameters) (result ServicesBackupFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Backup")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -107,10 +118,6 @@ func (client ServicesClient) BackupSender(req *http.Request) (future ServicesBac
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -132,6 +139,16 @@ func (client ServicesClient) BackupResponder(resp *http.Response) (result Servic
 // Parameters:
 // parameters - parameters supplied to the CheckNameAvailability operation.
 func (client ServicesClient) CheckNameAvailability(ctx context.Context, parameters ServiceCheckNameAvailabilityParameters) (result ServiceNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -207,6 +224,16 @@ func (client ServicesClient) CheckNameAvailabilityResponder(resp *http.Response)
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the CreateOrUpdate API Management service operation.
 func (client ServicesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceResource) (result ServiceResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -286,6 +313,16 @@ func (client ServicesClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client ServicesClient) Delete(ctx context.Context, resourceGroupName string, serviceName string) (result ErrorResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -361,6 +398,16 @@ func (client ServicesClient) DeleteResponder(resp *http.Response) (result ErrorR
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client ServicesClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result SetObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -436,6 +483,16 @@ func (client ServicesClient) GetResponder(resp *http.Response) (result SetObject
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client ServicesClient) GetSsoToken(ctx context.Context, resourceGroupName string, serviceName string) (result ServiceGetSsoTokenResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.GetSsoToken")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -508,6 +565,16 @@ func (client ServicesClient) GetSsoTokenResponder(resp *http.Response) (result S
 
 // List lists all API Management services within an Azure subscription.
 func (client ServicesClient) List(ctx context.Context) (result ServiceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.slr.Response.Response != nil {
+				sc = result.slr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -570,8 +637,8 @@ func (client ServicesClient) ListResponder(resp *http.Response) (result ServiceL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listNextResults(lastResults ServiceListResult) (result ServiceListResult, err error) {
-	req, err := lastResults.serviceListResultPreparer()
+func (client ServicesClient) listNextResults(ctx context.Context, lastResults ServiceListResult) (result ServiceListResult, err error) {
+	req, err := lastResults.serviceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ServicesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -592,6 +659,16 @@ func (client ServicesClient) listNextResults(lastResults ServiceListResult) (res
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListComplete(ctx context.Context) (result ServiceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -600,6 +677,16 @@ func (client ServicesClient) ListComplete(ctx context.Context) (result ServiceLi
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client ServicesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ServiceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.slr.Response.Response != nil {
+				sc = result.slr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -663,8 +750,8 @@ func (client ServicesClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listByResourceGroupNextResults(lastResults ServiceListResult) (result ServiceListResult, err error) {
-	req, err := lastResults.serviceListResultPreparer()
+func (client ServicesClient) listByResourceGroupNextResults(ctx context.Context, lastResults ServiceListResult) (result ServiceListResult, err error) {
+	req, err := lastResults.serviceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ServicesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -685,6 +772,16 @@ func (client ServicesClient) listByResourceGroupNextResults(lastResults ServiceL
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ServiceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -697,6 +794,16 @@ func (client ServicesClient) ListByResourceGroupComplete(ctx context.Context, re
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the ManageDeployments operation.
 func (client ServicesClient) ManageDeployments(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceManageDeploymentsParameters) (result ServicesManageDeploymentsFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ManageDeployments")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -754,10 +861,6 @@ func (client ServicesClient) ManageDeploymentsSender(req *http.Request) (future 
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -782,6 +885,16 @@ func (client ServicesClient) ManageDeploymentsResponder(resp *http.Response) (re
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the Restore API Management service from backup operation.
 func (client ServicesClient) Restore(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBackupRestoreParameters) (result ServicesRestoreFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Restore")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -842,10 +955,6 @@ func (client ServicesClient) RestoreSender(req *http.Request) (future ServicesRe
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -869,6 +978,16 @@ func (client ServicesClient) RestoreResponder(resp *http.Response) (result Servi
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the CreateOrUpdate API Management service operation.
 func (client ServicesClient) Update(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceBaseParameters) (result ServicesUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -924,10 +1043,6 @@ func (client ServicesClient) UpdateSender(req *http.Request) (future ServicesUpd
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -953,6 +1068,16 @@ func (client ServicesClient) UpdateResponder(resp *http.Response) (result Servic
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the UpdateHostname operation.
 func (client ServicesClient) UpdateHostname(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUpdateHostnameParameters) (result ServicesUpdateHostnameFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.UpdateHostname")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1008,10 +1133,6 @@ func (client ServicesClient) UpdateHostnameSender(req *http.Request) (future Ser
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1035,6 +1156,16 @@ func (client ServicesClient) UpdateHostnameResponder(resp *http.Response) (resul
 // serviceName - the name of the API Management service.
 // parameters - parameters supplied to the Upload SSL certificate for an API Management service operation.
 func (client ServicesClient) UploadCertificate(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceUploadCertificateParameters) (result CertificateInformation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.UploadCertificate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

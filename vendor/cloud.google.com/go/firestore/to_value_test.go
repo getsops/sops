@@ -21,8 +21,7 @@ import (
 	"time"
 
 	ts "github.com/golang/protobuf/ptypes/timestamp"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 	"google.golang.org/genproto/googleapis/type/latlng"
 )
 
@@ -162,6 +161,12 @@ func TestToProtoValue(t *testing.T) {
 				}),
 			}),
 		},
+
+		// Transforms are allowed in maps, but won't show up in the returned proto. Instead, we rely
+		// on seeing sawTransforms=true and a call to extractTransforms.
+		{map[string]interface{}{"a": ServerTimestamp, "b": 5}, mapval(map[string]*pb.Value{"b": intval(5)})},
+		{map[string]interface{}{"a": ArrayUnion(1, 2, 3), "b": 5}, mapval(map[string]*pb.Value{"b": intval(5)})},
+		{map[string]interface{}{"a": ArrayRemove(1, 2, 3), "b": 5}, mapval(map[string]*pb.Value{"b": intval(5)})},
 	} {
 		got, _, err := toProtoValue(reflect.ValueOf(test.in))
 		if err != nil {
@@ -185,7 +190,7 @@ func TestToProtoValueErrors(t *testing.T) {
 		make(chan int),                          // can't handle type
 		map[string]fmt.Stringer{"a": stringy{}}, // only empty interfaces
 		ServerTimestamp,                         // ServerTimestamp can only be a field value
-		[]interface{}{ServerTimestamp},
+		struct{ A interface{} }{A: ServerTimestamp},
 		map[string]interface{}{"a": []interface{}{ServerTimestamp}},
 		map[string]interface{}{"a": []interface{}{
 			map[string]interface{}{"b": ServerTimestamp},
@@ -194,10 +199,36 @@ func TestToProtoValueErrors(t *testing.T) {
 		[]interface{}{Delete},
 		map[string]interface{}{"a": Delete},
 		map[string]interface{}{"a": []interface{}{Delete}},
+
+		// Transforms are not allowed to occur in an array.
+		[]interface{}{ServerTimestamp},
+		[]interface{}{ArrayUnion(1, 2, 3)},
+		[]interface{}{ArrayRemove(1, 2, 3)},
+
+		// Transforms are not allowed to occur in a struct.
+		struct{ A interface{} }{A: ServerTimestamp},
+		struct{ A interface{} }{A: ArrayUnion()},
+		struct{ A interface{} }{A: ArrayRemove()},
 	} {
 		_, _, err := toProtoValue(reflect.ValueOf(in))
 		if err == nil {
 			t.Errorf("%v: got nil, want error", in)
+		}
+	}
+}
+
+func TestToProtoValue_SawTransform(t *testing.T) {
+	for i, in := range []interface{}{
+		map[string]interface{}{"a": ServerTimestamp},
+		map[string]interface{}{"a": ArrayUnion()},
+		map[string]interface{}{"a": ArrayRemove()},
+	} {
+		_, sawTransform, err := toProtoValue(reflect.ValueOf(in))
+		if err != nil {
+			t.Fatalf("%d %v: got err %v\nexpected nil", i, in, err)
+		}
+		if !sawTransform {
+			t.Errorf("%d %v: got sawTransform=false, expected sawTransform=true", i, in)
 		}
 	}
 }

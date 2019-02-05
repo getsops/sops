@@ -41,7 +41,7 @@ func (m *GetSupportAccountRequest) Reset()         { *m = GetSupportAccountReque
 func (m *GetSupportAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSupportAccountRequest) ProtoMessage()    {}
 func (*GetSupportAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{0}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{0}
 }
 func (m *GetSupportAccountRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetSupportAccountRequest.Unmarshal(m, b)
@@ -49,8 +49,8 @@ func (m *GetSupportAccountRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetSupportAccountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetSupportAccountRequest.Marshal(b, m, deterministic)
 }
-func (m *GetSupportAccountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSupportAccountRequest.Merge(m, src)
+func (dst *GetSupportAccountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSupportAccountRequest.Merge(dst, src)
 }
 func (m *GetSupportAccountRequest) XXX_Size() int {
 	return xxx_messageInfo_GetSupportAccountRequest.Size(m)
@@ -89,7 +89,7 @@ func (m *ListSupportAccountsRequest) Reset()         { *m = ListSupportAccountsR
 func (m *ListSupportAccountsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListSupportAccountsRequest) ProtoMessage()    {}
 func (*ListSupportAccountsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{1}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{1}
 }
 func (m *ListSupportAccountsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSupportAccountsRequest.Unmarshal(m, b)
@@ -97,8 +97,8 @@ func (m *ListSupportAccountsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListSupportAccountsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSupportAccountsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListSupportAccountsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSupportAccountsRequest.Merge(m, src)
+func (dst *ListSupportAccountsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSupportAccountsRequest.Merge(dst, src)
 }
 func (m *ListSupportAccountsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListSupportAccountsRequest.Size(m)
@@ -147,7 +147,7 @@ func (m *ListSupportAccountsResponse) Reset()         { *m = ListSupportAccounts
 func (m *ListSupportAccountsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListSupportAccountsResponse) ProtoMessage()    {}
 func (*ListSupportAccountsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{2}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{2}
 }
 func (m *ListSupportAccountsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSupportAccountsResponse.Unmarshal(m, b)
@@ -155,8 +155,8 @@ func (m *ListSupportAccountsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListSupportAccountsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSupportAccountsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListSupportAccountsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSupportAccountsResponse.Merge(m, src)
+func (dst *ListSupportAccountsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSupportAccountsResponse.Merge(dst, src)
 }
 func (m *ListSupportAccountsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListSupportAccountsResponse.Size(m)
@@ -195,7 +195,7 @@ func (m *GetCaseRequest) Reset()         { *m = GetCaseRequest{} }
 func (m *GetCaseRequest) String() string { return proto.CompactTextString(m) }
 func (*GetCaseRequest) ProtoMessage()    {}
 func (*GetCaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{3}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{3}
 }
 func (m *GetCaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetCaseRequest.Unmarshal(m, b)
@@ -203,8 +203,8 @@ func (m *GetCaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetCaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetCaseRequest.Marshal(b, m, deterministic)
 }
-func (m *GetCaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetCaseRequest.Merge(m, src)
+func (dst *GetCaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCaseRequest.Merge(dst, src)
 }
 func (m *GetCaseRequest) XXX_Size() int {
 	return xxx_messageInfo_GetCaseRequest.Size(m)
@@ -244,7 +244,7 @@ func (m *ListCasesRequest) Reset()         { *m = ListCasesRequest{} }
 func (m *ListCasesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCasesRequest) ProtoMessage()    {}
 func (*ListCasesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{4}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{4}
 }
 func (m *ListCasesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCasesRequest.Unmarshal(m, b)
@@ -252,8 +252,8 @@ func (m *ListCasesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListCasesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCasesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListCasesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCasesRequest.Merge(m, src)
+func (dst *ListCasesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCasesRequest.Merge(dst, src)
 }
 func (m *ListCasesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListCasesRequest.Size(m)
@@ -309,7 +309,7 @@ func (m *ListCasesResponse) Reset()         { *m = ListCasesResponse{} }
 func (m *ListCasesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCasesResponse) ProtoMessage()    {}
 func (*ListCasesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{5}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{5}
 }
 func (m *ListCasesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCasesResponse.Unmarshal(m, b)
@@ -317,8 +317,8 @@ func (m *ListCasesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListCasesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCasesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListCasesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCasesResponse.Merge(m, src)
+func (dst *ListCasesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCasesResponse.Merge(dst, src)
 }
 func (m *ListCasesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListCasesResponse.Size(m)
@@ -356,7 +356,7 @@ func (m *ListCommentsRequest) Reset()         { *m = ListCommentsRequest{} }
 func (m *ListCommentsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCommentsRequest) ProtoMessage()    {}
 func (*ListCommentsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{6}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{6}
 }
 func (m *ListCommentsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCommentsRequest.Unmarshal(m, b)
@@ -364,8 +364,8 @@ func (m *ListCommentsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListCommentsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCommentsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListCommentsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCommentsRequest.Merge(m, src)
+func (dst *ListCommentsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCommentsRequest.Merge(dst, src)
 }
 func (m *ListCommentsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListCommentsRequest.Size(m)
@@ -396,7 +396,7 @@ func (m *ListCommentsResponse) Reset()         { *m = ListCommentsResponse{} }
 func (m *ListCommentsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCommentsResponse) ProtoMessage()    {}
 func (*ListCommentsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{7}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{7}
 }
 func (m *ListCommentsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCommentsResponse.Unmarshal(m, b)
@@ -404,8 +404,8 @@ func (m *ListCommentsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListCommentsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCommentsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListCommentsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCommentsResponse.Merge(m, src)
+func (dst *ListCommentsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCommentsResponse.Merge(dst, src)
 }
 func (m *ListCommentsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListCommentsResponse.Size(m)
@@ -438,7 +438,7 @@ func (m *CreateCaseRequest) Reset()         { *m = CreateCaseRequest{} }
 func (m *CreateCaseRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateCaseRequest) ProtoMessage()    {}
 func (*CreateCaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{8}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{8}
 }
 func (m *CreateCaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateCaseRequest.Unmarshal(m, b)
@@ -446,8 +446,8 @@ func (m *CreateCaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateCaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateCaseRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateCaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateCaseRequest.Merge(m, src)
+func (dst *CreateCaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateCaseRequest.Merge(dst, src)
 }
 func (m *CreateCaseRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateCaseRequest.Size(m)
@@ -488,7 +488,7 @@ func (m *UpdateCaseRequest) Reset()         { *m = UpdateCaseRequest{} }
 func (m *UpdateCaseRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateCaseRequest) ProtoMessage()    {}
 func (*UpdateCaseRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{9}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{9}
 }
 func (m *UpdateCaseRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateCaseRequest.Unmarshal(m, b)
@@ -496,8 +496,8 @@ func (m *UpdateCaseRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateCaseRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateCaseRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateCaseRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateCaseRequest.Merge(m, src)
+func (dst *UpdateCaseRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateCaseRequest.Merge(dst, src)
 }
 func (m *UpdateCaseRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateCaseRequest.Size(m)
@@ -537,7 +537,7 @@ func (m *CreateCommentRequest) Reset()         { *m = CreateCommentRequest{} }
 func (m *CreateCommentRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateCommentRequest) ProtoMessage()    {}
 func (*CreateCommentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{10}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{10}
 }
 func (m *CreateCommentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateCommentRequest.Unmarshal(m, b)
@@ -545,8 +545,8 @@ func (m *CreateCommentRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateCommentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateCommentRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateCommentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateCommentRequest.Merge(m, src)
+func (dst *CreateCommentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateCommentRequest.Merge(dst, src)
 }
 func (m *CreateCommentRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateCommentRequest.Size(m)
@@ -582,7 +582,7 @@ func (m *GetIssueTaxonomyRequest) Reset()         { *m = GetIssueTaxonomyRequest
 func (m *GetIssueTaxonomyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetIssueTaxonomyRequest) ProtoMessage()    {}
 func (*GetIssueTaxonomyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_aca49aad65ebbfb0, []int{11}
+	return fileDescriptor_cloud_support_33c72ff20b6be0b4, []int{11}
 }
 func (m *GetIssueTaxonomyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetIssueTaxonomyRequest.Unmarshal(m, b)
@@ -590,8 +590,8 @@ func (m *GetIssueTaxonomyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetIssueTaxonomyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetIssueTaxonomyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetIssueTaxonomyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetIssueTaxonomyRequest.Merge(m, src)
+func (dst *GetIssueTaxonomyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetIssueTaxonomyRequest.Merge(dst, src)
 }
 func (m *GetIssueTaxonomyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetIssueTaxonomyRequest.Size(m)
@@ -990,10 +990,10 @@ var _CloudSupport_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/support/v1alpha1/cloud_support.proto", fileDescriptor_aca49aad65ebbfb0)
+	proto.RegisterFile("google/cloud/support/v1alpha1/cloud_support.proto", fileDescriptor_cloud_support_33c72ff20b6be0b4)
 }
 
-var fileDescriptor_aca49aad65ebbfb0 = []byte{
+var fileDescriptor_cloud_support_33c72ff20b6be0b4 = []byte{
 	// 863 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0x41, 0x4f, 0x33, 0x45,
 	0x18, 0xce, 0xb4, 0xc8, 0x07, 0x2f, 0xdf, 0xa7, 0x5f, 0x47, 0x82, 0x65, 0x0b, 0x49, 0x3b, 0x21,

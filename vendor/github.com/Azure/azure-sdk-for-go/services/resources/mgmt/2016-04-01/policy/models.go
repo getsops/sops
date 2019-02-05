@@ -18,11 +18,16 @@ package policy
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2016-04-01/policy"
 
 // Type enumerates the values for type.
 type Type string
@@ -138,20 +143,37 @@ type AssignmentListResultIterator struct {
 	page AssignmentListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AssignmentListResultIterator) Next() error {
+func (iter *AssignmentListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AssignmentListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -173,6 +195,11 @@ func (iter AssignmentListResultIterator) Value() Assignment {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AssignmentListResultIterator type.
+func NewAssignmentListResultIterator(page AssignmentListResultPage) AssignmentListResultIterator {
+	return AssignmentListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (alr AssignmentListResult) IsEmpty() bool {
 	return alr.Value == nil || len(*alr.Value) == 0
@@ -180,11 +207,11 @@ func (alr AssignmentListResult) IsEmpty() bool {
 
 // assignmentListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (alr AssignmentListResult) assignmentListResultPreparer() (*http.Request, error) {
+func (alr AssignmentListResult) assignmentListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if alr.NextLink == nil || len(to.String(alr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(alr.NextLink)))
@@ -192,19 +219,36 @@ func (alr AssignmentListResult) assignmentListResultPreparer() (*http.Request, e
 
 // AssignmentListResultPage contains a page of Assignment values.
 type AssignmentListResultPage struct {
-	fn  func(AssignmentListResult) (AssignmentListResult, error)
+	fn  func(context.Context, AssignmentListResult) (AssignmentListResult, error)
 	alr AssignmentListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AssignmentListResultPage) Next() error {
-	next, err := page.fn(page.alr)
+func (page *AssignmentListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssignmentListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.alr)
 	if err != nil {
 		return err
 	}
 	page.alr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AssignmentListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -223,6 +267,11 @@ func (page AssignmentListResultPage) Values() []Assignment {
 		return nil
 	}
 	return *page.alr.Value
+}
+
+// Creates a new instance of the AssignmentListResultPage type.
+func NewAssignmentListResultPage(getNextPage func(context.Context, AssignmentListResult) (AssignmentListResult, error)) AssignmentListResultPage {
+	return AssignmentListResultPage{fn: getNextPage}
 }
 
 // AssignmentProperties the policy assignment properties.
@@ -318,20 +367,37 @@ type DefinitionListResultIterator struct {
 	page DefinitionListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DefinitionListResultIterator) Next() error {
+func (iter *DefinitionListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DefinitionListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -353,6 +419,11 @@ func (iter DefinitionListResultIterator) Value() Definition {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DefinitionListResultIterator type.
+func NewDefinitionListResultIterator(page DefinitionListResultPage) DefinitionListResultIterator {
+	return DefinitionListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlr DefinitionListResult) IsEmpty() bool {
 	return dlr.Value == nil || len(*dlr.Value) == 0
@@ -360,11 +431,11 @@ func (dlr DefinitionListResult) IsEmpty() bool {
 
 // definitionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlr DefinitionListResult) definitionListResultPreparer() (*http.Request, error) {
+func (dlr DefinitionListResult) definitionListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlr.NextLink == nil || len(to.String(dlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlr.NextLink)))
@@ -372,19 +443,36 @@ func (dlr DefinitionListResult) definitionListResultPreparer() (*http.Request, e
 
 // DefinitionListResultPage contains a page of Definition values.
 type DefinitionListResultPage struct {
-	fn  func(DefinitionListResult) (DefinitionListResult, error)
+	fn  func(context.Context, DefinitionListResult) (DefinitionListResult, error)
 	dlr DefinitionListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DefinitionListResultPage) Next() error {
-	next, err := page.fn(page.dlr)
+func (page *DefinitionListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DefinitionListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlr)
 	if err != nil {
 		return err
 	}
 	page.dlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DefinitionListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -403,6 +491,11 @@ func (page DefinitionListResultPage) Values() []Definition {
 		return nil
 	}
 	return *page.dlr.Value
+}
+
+// Creates a new instance of the DefinitionListResultPage type.
+func NewDefinitionListResultPage(getNextPage func(context.Context, DefinitionListResult) (DefinitionListResult, error)) DefinitionListResultPage {
+	return DefinitionListResultPage{fn: getNextPage}
 }
 
 // DefinitionProperties the policy definition properties.

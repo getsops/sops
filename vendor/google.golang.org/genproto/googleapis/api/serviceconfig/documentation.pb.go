@@ -108,7 +108,7 @@ func (m *Documentation) Reset()         { *m = Documentation{} }
 func (m *Documentation) String() string { return proto.CompactTextString(m) }
 func (*Documentation) ProtoMessage()    {}
 func (*Documentation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dead24b587ac0742, []int{0}
+	return fileDescriptor_documentation_ed988d5b3c756a43, []int{0}
 }
 func (m *Documentation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Documentation.Unmarshal(m, b)
@@ -116,8 +116,8 @@ func (m *Documentation) XXX_Unmarshal(b []byte) error {
 func (m *Documentation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Documentation.Marshal(b, m, deterministic)
 }
-func (m *Documentation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Documentation.Merge(m, src)
+func (dst *Documentation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Documentation.Merge(dst, src)
 }
 func (m *Documentation) XXX_Size() int {
 	return xxx_messageInfo_Documentation.Size(m)
@@ -186,7 +186,7 @@ func (m *DocumentationRule) Reset()         { *m = DocumentationRule{} }
 func (m *DocumentationRule) String() string { return proto.CompactTextString(m) }
 func (*DocumentationRule) ProtoMessage()    {}
 func (*DocumentationRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dead24b587ac0742, []int{1}
+	return fileDescriptor_documentation_ed988d5b3c756a43, []int{1}
 }
 func (m *DocumentationRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DocumentationRule.Unmarshal(m, b)
@@ -194,8 +194,8 @@ func (m *DocumentationRule) XXX_Unmarshal(b []byte) error {
 func (m *DocumentationRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DocumentationRule.Marshal(b, m, deterministic)
 }
-func (m *DocumentationRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DocumentationRule.Merge(m, src)
+func (dst *DocumentationRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DocumentationRule.Merge(dst, src)
 }
 func (m *DocumentationRule) XXX_Size() int {
 	return xxx_messageInfo_DocumentationRule.Size(m)
@@ -260,7 +260,7 @@ func (m *Page) Reset()         { *m = Page{} }
 func (m *Page) String() string { return proto.CompactTextString(m) }
 func (*Page) ProtoMessage()    {}
 func (*Page) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dead24b587ac0742, []int{2}
+	return fileDescriptor_documentation_ed988d5b3c756a43, []int{2}
 }
 func (m *Page) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Page.Unmarshal(m, b)
@@ -268,8 +268,8 @@ func (m *Page) XXX_Unmarshal(b []byte) error {
 func (m *Page) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Page.Marshal(b, m, deterministic)
 }
-func (m *Page) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Page.Merge(m, src)
+func (dst *Page) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Page.Merge(dst, src)
 }
 func (m *Page) XXX_Size() int {
 	return xxx_messageInfo_Page.Size(m)
@@ -307,9 +307,11 @@ func init() {
 	proto.RegisterType((*Page)(nil), "google.api.Page")
 }
 
-func init() { proto.RegisterFile("google/api/documentation.proto", fileDescriptor_dead24b587ac0742) }
+func init() {
+	proto.RegisterFile("google/api/documentation.proto", fileDescriptor_documentation_ed988d5b3c756a43)
+}
 
-var fileDescriptor_dead24b587ac0742 = []byte{
+var fileDescriptor_documentation_ed988d5b3c756a43 = []byte{
 	// 356 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0xc1, 0x6a, 0xe3, 0x30,
 	0x14, 0x45, 0x71, 0xec, 0xcc, 0x64, 0x5e, 0x98, 0x61, 0x46, 0x0c, 0x19, 0x33, 0xd0, 0x12, 0xb2,

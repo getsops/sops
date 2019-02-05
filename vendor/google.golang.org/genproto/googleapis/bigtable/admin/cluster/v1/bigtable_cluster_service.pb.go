@@ -437,10 +437,10 @@ var _BigtableClusterService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/bigtable/admin/cluster/v1/bigtable_cluster_service.proto", fileDescriptor_597cf005382fe64c)
+	proto.RegisterFile("google/bigtable/admin/cluster/v1/bigtable_cluster_service.proto", fileDescriptor_bigtable_cluster_service_eb6b3340e63f14bc)
 }
 
-var fileDescriptor_597cf005382fe64c = []byte{
+var fileDescriptor_bigtable_cluster_service_eb6b3340e63f14bc = []byte{
 	// 515 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0x4f, 0x6b, 0x14, 0x31,
 	0x18, 0xc6, 0x89, 0x07, 0xa1, 0xc1, 0x45, 0xc8, 0xa1, 0x87, 0x6d, 0x0b, 0x32, 0x15, 0xb1, 0x23,

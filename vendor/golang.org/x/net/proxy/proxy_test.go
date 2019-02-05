@@ -12,6 +12,7 @@ import (
 	"strings"
 	"testing"
 
+	"golang.org/x/net/internal/socks"
 	"golang.org/x/net/internal/sockstest"
 )
 
@@ -53,6 +54,7 @@ func TestFromEnvironment(t *testing.T) {
 		{allProxyEnv: "127.0.0.1:8080", noProxyEnv: "localhost, 127.0.0.1", wantTypeOf: direct{}},
 		{allProxyEnv: "ftp://example.com:8000", noProxyEnv: "localhost, 127.0.0.1", wantTypeOf: direct{}},
 		{allProxyEnv: "socks5://example.com:8080", noProxyEnv: "localhost, 127.0.0.1", wantTypeOf: &PerHost{}},
+		{allProxyEnv: "socks5h://example.com", wantTypeOf: &socks.Dialer{}},
 		{allProxyEnv: "irc://example.com:8000", wantTypeOf: dummyDialer{}},
 		{noProxyEnv: "localhost, 127.0.0.1", wantTypeOf: direct{}},
 		{wantTypeOf: direct{}},

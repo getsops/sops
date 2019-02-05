@@ -41,7 +41,7 @@ func (m *GetGoogleServiceAccountRequest) Reset()         { *m = GetGoogleService
 func (m *GetGoogleServiceAccountRequest) String() string { return proto.CompactTextString(m) }
 func (*GetGoogleServiceAccountRequest) ProtoMessage()    {}
 func (*GetGoogleServiceAccountRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{0}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{0}
 }
 func (m *GetGoogleServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetGoogleServiceAccountRequest.Unmarshal(m, b)
@@ -49,8 +49,8 @@ func (m *GetGoogleServiceAccountRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetGoogleServiceAccountRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetGoogleServiceAccountRequest.Marshal(b, m, deterministic)
 }
-func (m *GetGoogleServiceAccountRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetGoogleServiceAccountRequest.Merge(m, src)
+func (dst *GetGoogleServiceAccountRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetGoogleServiceAccountRequest.Merge(dst, src)
 }
 func (m *GetGoogleServiceAccountRequest) XXX_Size() int {
 	return xxx_messageInfo_GetGoogleServiceAccountRequest.Size(m)
@@ -82,7 +82,7 @@ func (m *CreateTransferJobRequest) Reset()         { *m = CreateTransferJobReque
 func (m *CreateTransferJobRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateTransferJobRequest) ProtoMessage()    {}
 func (*CreateTransferJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{1}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{1}
 }
 func (m *CreateTransferJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateTransferJobRequest.Unmarshal(m, b)
@@ -90,8 +90,8 @@ func (m *CreateTransferJobRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateTransferJobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateTransferJobRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateTransferJobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateTransferJobRequest.Merge(m, src)
+func (dst *CreateTransferJobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateTransferJobRequest.Merge(dst, src)
 }
 func (m *CreateTransferJobRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateTransferJobRequest.Size(m)
@@ -139,7 +139,7 @@ func (m *UpdateTransferJobRequest) Reset()         { *m = UpdateTransferJobReque
 func (m *UpdateTransferJobRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateTransferJobRequest) ProtoMessage()    {}
 func (*UpdateTransferJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{2}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{2}
 }
 func (m *UpdateTransferJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateTransferJobRequest.Unmarshal(m, b)
@@ -147,8 +147,8 @@ func (m *UpdateTransferJobRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateTransferJobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateTransferJobRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateTransferJobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateTransferJobRequest.Merge(m, src)
+func (dst *UpdateTransferJobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateTransferJobRequest.Merge(dst, src)
 }
 func (m *UpdateTransferJobRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateTransferJobRequest.Size(m)
@@ -204,7 +204,7 @@ func (m *GetTransferJobRequest) Reset()         { *m = GetTransferJobRequest{} }
 func (m *GetTransferJobRequest) String() string { return proto.CompactTextString(m) }
 func (*GetTransferJobRequest) ProtoMessage()    {}
 func (*GetTransferJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{3}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{3}
 }
 func (m *GetTransferJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetTransferJobRequest.Unmarshal(m, b)
@@ -212,8 +212,8 @@ func (m *GetTransferJobRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetTransferJobRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetTransferJobRequest.Marshal(b, m, deterministic)
 }
-func (m *GetTransferJobRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetTransferJobRequest.Merge(m, src)
+func (dst *GetTransferJobRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTransferJobRequest.Merge(dst, src)
 }
 func (m *GetTransferJobRequest) XXX_Size() int {
 	return xxx_messageInfo_GetTransferJobRequest.Size(m)
@@ -263,7 +263,7 @@ func (m *ListTransferJobsRequest) Reset()         { *m = ListTransferJobsRequest
 func (m *ListTransferJobsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListTransferJobsRequest) ProtoMessage()    {}
 func (*ListTransferJobsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{4}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{4}
 }
 func (m *ListTransferJobsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTransferJobsRequest.Unmarshal(m, b)
@@ -271,8 +271,8 @@ func (m *ListTransferJobsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListTransferJobsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTransferJobsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListTransferJobsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTransferJobsRequest.Merge(m, src)
+func (dst *ListTransferJobsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTransferJobsRequest.Merge(dst, src)
 }
 func (m *ListTransferJobsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListTransferJobsRequest.Size(m)
@@ -319,7 +319,7 @@ func (m *ListTransferJobsResponse) Reset()         { *m = ListTransferJobsRespon
 func (m *ListTransferJobsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListTransferJobsResponse) ProtoMessage()    {}
 func (*ListTransferJobsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{5}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{5}
 }
 func (m *ListTransferJobsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListTransferJobsResponse.Unmarshal(m, b)
@@ -327,8 +327,8 @@ func (m *ListTransferJobsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListTransferJobsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListTransferJobsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListTransferJobsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListTransferJobsResponse.Merge(m, src)
+func (dst *ListTransferJobsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListTransferJobsResponse.Merge(dst, src)
 }
 func (m *ListTransferJobsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListTransferJobsResponse.Size(m)
@@ -367,7 +367,7 @@ func (m *PauseTransferOperationRequest) Reset()         { *m = PauseTransferOper
 func (m *PauseTransferOperationRequest) String() string { return proto.CompactTextString(m) }
 func (*PauseTransferOperationRequest) ProtoMessage()    {}
 func (*PauseTransferOperationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{6}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{6}
 }
 func (m *PauseTransferOperationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PauseTransferOperationRequest.Unmarshal(m, b)
@@ -375,8 +375,8 @@ func (m *PauseTransferOperationRequest) XXX_Unmarshal(b []byte) error {
 func (m *PauseTransferOperationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PauseTransferOperationRequest.Marshal(b, m, deterministic)
 }
-func (m *PauseTransferOperationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PauseTransferOperationRequest.Merge(m, src)
+func (dst *PauseTransferOperationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PauseTransferOperationRequest.Merge(dst, src)
 }
 func (m *PauseTransferOperationRequest) XXX_Size() int {
 	return xxx_messageInfo_PauseTransferOperationRequest.Size(m)
@@ -408,7 +408,7 @@ func (m *ResumeTransferOperationRequest) Reset()         { *m = ResumeTransferOp
 func (m *ResumeTransferOperationRequest) String() string { return proto.CompactTextString(m) }
 func (*ResumeTransferOperationRequest) ProtoMessage()    {}
 func (*ResumeTransferOperationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9e3f640a3e036c8f, []int{7}
+	return fileDescriptor_transfer_fe1aac113c6727f1, []int{7}
 }
 func (m *ResumeTransferOperationRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ResumeTransferOperationRequest.Unmarshal(m, b)
@@ -416,8 +416,8 @@ func (m *ResumeTransferOperationRequest) XXX_Unmarshal(b []byte) error {
 func (m *ResumeTransferOperationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ResumeTransferOperationRequest.Marshal(b, m, deterministic)
 }
-func (m *ResumeTransferOperationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ResumeTransferOperationRequest.Merge(m, src)
+func (dst *ResumeTransferOperationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResumeTransferOperationRequest.Merge(dst, src)
 }
 func (m *ResumeTransferOperationRequest) XXX_Size() int {
 	return xxx_messageInfo_ResumeTransferOperationRequest.Size(m)
@@ -749,10 +749,10 @@ var _StorageTransferService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/storagetransfer/v1/transfer.proto", fileDescriptor_9e3f640a3e036c8f)
+	proto.RegisterFile("google/storagetransfer/v1/transfer.proto", fileDescriptor_transfer_fe1aac113c6727f1)
 }
 
-var fileDescriptor_9e3f640a3e036c8f = []byte{
+var fileDescriptor_transfer_fe1aac113c6727f1 = []byte{
 	// 786 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xdf, 0x4e, 0x13, 0x4f,
 	0x14, 0xce, 0xf0, 0xef, 0x07, 0x03, 0xfc, 0x84, 0x49, 0x2c, 0x4b, 0x91, 0xda, 0x2c, 0x49, 0xc5,

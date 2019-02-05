@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/websearch"
+
 // AnswerType enumerates the values for answer type.
 type AnswerType string
 
@@ -4620,7 +4623,8 @@ func (rri *RankingRankingItem) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// RankingRankingResponse defines where on the search results page content should be placed and in what order.
+// RankingRankingResponse defines where on the search results page content should be placed and in what
+// order.
 type RankingRankingResponse struct {
 	// Pole - The search results that should be afforded the most visible treatment (for example, displayed above the mainline and sidebar).
 	Pole *RankingRankingGroup `json:"pole,omitempty"`
@@ -4894,8 +4898,8 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that could be returned at the root of a response should inherit from
-// this
+// Response defines a response. All schemas that could be returned at the root of a response should inherit
+// from this
 type Response struct {
 	// WebSearchURL - The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
@@ -6152,10 +6156,10 @@ func (sra SearchResultsAnswer) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &sra, true
 }
 
-// SpellSuggestions defines a suggested query string that likely represents the user's intent. The search results
-// include this response if Bing determines that the user may have intended to search for something different. For
-// example, if the user searches for alon brown, Bing may determine that the user likely intended to search for
-// Alton Brown instead (based on past searches by others of Alon Brown).
+// SpellSuggestions defines a suggested query string that likely represents the user's intent. The search
+// results include this response if Bing determines that the user may have intended to search for something
+// different. For example, if the user searches for alon brown, Bing may determine that the user likely
+// intended to search for Alton Brown instead (based on past searches by others of Alon Brown).
 type SpellSuggestions struct {
 	// Value - A list of suggested query strings that may represent the user's intention. The list contains only one Query object.
 	Value        *[]Query      `json:"value,omitempty"`

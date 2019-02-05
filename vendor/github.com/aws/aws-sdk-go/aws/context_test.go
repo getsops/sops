@@ -26,7 +26,7 @@ func TestSleepWithContext_Canceled(t *testing.T) {
 	ctx.Error = expectErr
 	close(ctx.DoneCh)
 
-	err := aws.SleepWithContext(ctx, 1*time.Millisecond)
+	err := aws.SleepWithContext(ctx, 10*time.Second)
 	if err == nil {
 		t.Fatalf("expect error, did not get one")
 	}

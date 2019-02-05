@@ -77,6 +77,10 @@ const (
 type Client struct {
 	// Key is the account key used to register with a CA and sign requests.
 	// Key.Public() must return a *rsa.PublicKey or *ecdsa.PublicKey.
+	//
+	// The following algorithms are supported:
+	// RS256, ES256, ES384 and ES512.
+	// See RFC7518 for more details about the algorithms.
 	Key crypto.Signer
 
 	// HTTPClient optionally specifies an HTTP client to use
@@ -319,6 +323,20 @@ func (c *Client) UpdateReg(ctx context.Context, a *Account) (*Account, error) {
 // a valid authorization (Authorization.Status is StatusValid). If so, the caller
 // need not fulfill any challenge and can proceed to requesting a certificate.
 func (c *Client) Authorize(ctx context.Context, domain string) (*Authorization, error) {
+	return c.authorize(ctx, "dns", domain)
+}
+
+// AuthorizeIP is the same as Authorize but requests IP address authorization.
+// Clients which successfully obtain such authorization may request to issue
+// a certificate for IP addresses.
+//
+// See the ACME spec extension for more details about IP address identifiers:
+// https://tools.ietf.org/html/draft-ietf-acme-ip.
+func (c *Client) AuthorizeIP(ctx context.Context, ipaddr string) (*Authorization, error) {
+	return c.authorize(ctx, "ip", ipaddr)
+}
+
+func (c *Client) authorize(ctx context.Context, typ, val string) (*Authorization, error) {
 	if _, err := c.Discover(ctx); err != nil {
 		return nil, err
 	}
@@ -332,7 +350,7 @@ func (c *Client) Authorize(ctx context.Context, domain string) (*Authorization, 
 		Identifier authzID `json:"identifier"`
 	}{
 		Resource:   "new-authz",
-		Identifier: authzID{Type: "dns", Value: domain},
+		Identifier: authzID{Type: typ, Value: val},
 	}
 	res, err := c.post(ctx, c.Key, c.dir.AuthzURL, req, wantStatus(http.StatusCreated))
 	if err != nil {

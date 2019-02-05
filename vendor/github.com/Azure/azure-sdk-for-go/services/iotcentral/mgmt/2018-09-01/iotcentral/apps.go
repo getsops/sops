@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,10 +45,21 @@ func NewAppsClientWithBaseURI(baseURI string, subscriptionID string) AppsClient 
 // Parameters:
 // operationInputs - set the name parameter in the OperationInputs structure to the name of the IoT Central
 // application to check.
-func (client AppsClient) CheckNameAvailability(ctx context.Context, operationInputs OperationInputs) (result AppNameAvailabilityInfo, err error) {
+func (client AppsClient) CheckNameAvailability(ctx context.Context, operationInputs OperationInputs) (result AppAvailabilityInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: operationInputs,
-			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true,
+				Chain: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Pattern, Rule: `^[a-z0-9-]{1,63}$`, Chain: nil}}}}}}); err != nil {
 		return result, validation.NewError("iotcentral.AppsClient", "CheckNameAvailability", err.Error())
 	}
 
@@ -102,7 +114,91 @@ func (client AppsClient) CheckNameAvailabilitySender(req *http.Request) (*http.R
 
 // CheckNameAvailabilityResponder handles the response to the CheckNameAvailability request. The method always
 // closes the http.Response Body.
-func (client AppsClient) CheckNameAvailabilityResponder(resp *http.Response) (result AppNameAvailabilityInfo, err error) {
+func (client AppsClient) CheckNameAvailabilityResponder(resp *http.Response) (result AppAvailabilityInfo, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// CheckSubdomainAvailability check if an IoT Central application subdomain is available.
+// Parameters:
+// operationInputs - set the name parameter in the OperationInputs structure to the subdomain of the IoT
+// Central application to check.
+func (client AppsClient) CheckSubdomainAvailability(ctx context.Context, operationInputs OperationInputs) (result AppAvailabilityInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.CheckSubdomainAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: operationInputs,
+			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true,
+				Chain: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Pattern, Rule: `^[a-z0-9-]{1,63}$`, Chain: nil}}}}}}); err != nil {
+		return result, validation.NewError("iotcentral.AppsClient", "CheckSubdomainAvailability", err.Error())
+	}
+
+	req, err := client.CheckSubdomainAvailabilityPreparer(ctx, operationInputs)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "CheckSubdomainAvailability", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.CheckSubdomainAvailabilitySender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "CheckSubdomainAvailability", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.CheckSubdomainAvailabilityResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "CheckSubdomainAvailability", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// CheckSubdomainAvailabilityPreparer prepares the CheckSubdomainAvailability request.
+func (client AppsClient) CheckSubdomainAvailabilityPreparer(ctx context.Context, operationInputs OperationInputs) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-09-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/providers/Microsoft.IoTCentral/checkSubdomainAvailability", pathParameters),
+		autorest.WithJSON(operationInputs),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CheckSubdomainAvailabilitySender sends the CheckSubdomainAvailability request. The method will close the
+// http.Response Body if it receives an error.
+func (client AppsClient) CheckSubdomainAvailabilitySender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// CheckSubdomainAvailabilityResponder handles the response to the CheckSubdomainAvailability request. The method always
+// closes the http.Response Body.
+func (client AppsClient) CheckSubdomainAvailabilityResponder(resp *http.Response) (result AppAvailabilityInfo, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -121,6 +217,16 @@ func (client AppsClient) CheckNameAvailabilityResponder(resp *http.Response) (re
 // resourceName - the ARM resource name of the IoT Central application.
 // app - the IoT Central application metadata and security metadata.
 func (client AppsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, app App) (result AppsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: app,
 			Constraints: []validation.Constraint{{Target: "app.AppProperties", Name: validation.Null, Rule: false,
@@ -180,10 +286,6 @@ func (client AppsClient) CreateOrUpdateSender(req *http.Request) (future AppsCre
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -206,6 +308,16 @@ func (client AppsClient) CreateOrUpdateResponder(resp *http.Response) (result Ap
 // resourceGroupName - the name of the resource group that contains the IoT Central application.
 // resourceName - the ARM resource name of the IoT Central application.
 func (client AppsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result AppsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "Delete", nil, "Failure preparing request")
@@ -251,10 +363,6 @@ func (client AppsClient) DeleteSender(req *http.Request) (future AppsDeleteFutur
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -276,6 +384,16 @@ func (client AppsClient) DeleteResponder(resp *http.Response) (result autorest.R
 // resourceGroupName - the name of the resource group that contains the IoT Central application.
 // resourceName - the ARM resource name of the IoT Central application.
 func (client AppsClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result App, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "Get", nil, "Failure preparing request")
@@ -342,6 +460,16 @@ func (client AppsClient) GetResponder(resp *http.Response) (result App, err erro
 // Parameters:
 // resourceGroupName - the name of the resource group that contains the IoT Central application.
 func (client AppsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AppListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -405,8 +533,8 @@ func (client AppsClient) ListByResourceGroupResponder(resp *http.Response) (resu
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AppsClient) listByResourceGroupNextResults(lastResults AppListResult) (result AppListResult, err error) {
-	req, err := lastResults.appListResultPreparer()
+func (client AppsClient) listByResourceGroupNextResults(ctx context.Context, lastResults AppListResult) (result AppListResult, err error) {
+	req, err := lastResults.appListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "iotcentral.AppsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -427,12 +555,32 @@ func (client AppsClient) listByResourceGroupNextResults(lastResults AppListResul
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result AppListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription get all IoT Central Applications in a subscription.
 func (client AppsClient) ListBySubscription(ctx context.Context) (result AppListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -495,8 +643,8 @@ func (client AppsClient) ListBySubscriptionResponder(resp *http.Response) (resul
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client AppsClient) listBySubscriptionNextResults(lastResults AppListResult) (result AppListResult, err error) {
-	req, err := lastResults.appListResultPreparer()
+func (client AppsClient) listBySubscriptionNextResults(ctx context.Context, lastResults AppListResult) (result AppListResult, err error) {
+	req, err := lastResults.appListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "iotcentral.AppsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -517,6 +665,16 @@ func (client AppsClient) listBySubscriptionNextResults(lastResults AppListResult
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppsClient) ListBySubscriptionComplete(ctx context.Context) (result AppListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -527,6 +685,16 @@ func (client AppsClient) ListBySubscriptionComplete(ctx context.Context) (result
 // resourceName - the ARM resource name of the IoT Central application.
 // appPatch - the IoT Central application metadata and security metadata.
 func (client AppsClient) Update(ctx context.Context, resourceGroupName string, resourceName string, appPatch AppPatch) (result AppsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, resourceName, appPatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "iotcentral.AppsClient", "Update", nil, "Failure preparing request")
@@ -571,10 +739,6 @@ func (client AppsClient) UpdateSender(req *http.Request) (future AppsUpdateFutur
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

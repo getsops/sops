@@ -19,6 +19,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"reflect"
@@ -28,7 +29,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"golang.org/x/net/context"
 	channelzpb "google.golang.org/grpc/channelz/grpc_channelz_v1"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/credentials"
@@ -51,6 +51,7 @@ var protoToSocketOpt protoToSocketOptFunc
 // with &utcLoc. However zero value of a time.Time type value loc field is nil.
 // This behavior will make reflect.DeepEqual fail upon unset time.Time field,
 // and cause false positive fatal error.
+// TODO: Go1.7 is no longer supported - does this need a change?
 var emptyTime time.Time
 
 type dummyChannel struct {
@@ -399,6 +400,33 @@ func TestGetServerSockets(t *testing.T) {
 	resp, _ = svr.GetServerSockets(context.Background(), &channelzpb.GetServerSocketsRequest{ServerId: svrID, StartSocketId: 0})
 	if resp.GetEnd() {
 		t.Fatalf("resp.GetEnd() want false, got %v", resp.GetEnd())
+	}
+}
+
+// This test makes a GetServerSockets with a non-zero start ID, and expect only
+// sockets with ID >= the given start ID.
+func TestGetServerSocketsNonZeroStartID(t *testing.T) {
+	channelz.NewChannelzStorage()
+	svrID := channelz.RegisterServer(&dummyServer{}, "")
+	refNames := []string{"listen socket 1", "normal socket 1", "normal socket 2"}
+	ids := make([]int64, 3)
+	ids[0] = channelz.RegisterListenSocket(&dummySocket{}, svrID, refNames[0])
+	ids[1] = channelz.RegisterNormalSocket(&dummySocket{}, svrID, refNames[1])
+	ids[2] = channelz.RegisterNormalSocket(&dummySocket{}, svrID, refNames[2])
+	svr := newCZServer()
+	// Make GetServerSockets with startID = ids[1]+1, so socket-1 won't be
+	// included in the response.
+	resp, _ := svr.GetServerSockets(context.Background(), &channelzpb.GetServerSocketsRequest{ServerId: svrID, StartSocketId: ids[1] + 1})
+	if !resp.GetEnd() {
+		t.Fatalf("resp.GetEnd() want: true, got: %v", resp.GetEnd())
+	}
+	// GetServerSockets only return normal socket-2, socket-1 should be
+	// filtered by start ID.
+	want := map[int64]string{
+		ids[2]: refNames[2],
+	}
+	if !reflect.DeepEqual(convertSocketRefSliceToMap(resp.GetSocketRef()), want) {
+		t.Fatalf("GetServerSockets want: %#v, got: %#v", want, resp.GetSocketRef())
 	}
 }
 

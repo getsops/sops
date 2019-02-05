@@ -1,0 +1,15 @@
+sudo: false
+language: go
+matrix:
+  include:
+    - go: 1.8.x
+      script: go test -v -race ./...
+    - go: 1.x
+      script:
+        - diff -u <(echo -n) <(gofmt -d .)
+        - go test -v -race ./...
+    - go: master
+      script: go test -v -race ./...
+  allow_failures:
+    - go: master
+  fast_finish: true

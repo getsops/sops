@@ -25,7 +25,6 @@ import (
 
 	"cloud.google.com/go/civil"
 	"cloud.google.com/go/internal/fields"
-
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -277,6 +276,10 @@ func paramValue(v reflect.Value) (bq.QueryParameterValue, error) {
 	// None of the above: assume a scalar type. (If it's not a valid type,
 	// paramType will catch the error.)
 	res.Value = fmt.Sprint(v.Interface())
+	// Ensure empty string values are sent.
+	if res.Value == "" {
+		res.ForceSendFields = append(res.ForceSendFields, "Value")
+	}
 	return res, nil
 }
 

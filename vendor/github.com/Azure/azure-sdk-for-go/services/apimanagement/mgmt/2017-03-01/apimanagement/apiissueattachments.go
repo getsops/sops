@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,7 +41,7 @@ func NewAPIIssueAttachmentsClientWithBaseURI(baseURI string, subscriptionID stri
 	return APIIssueAttachmentsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// ListByService lists all comments for the Issue assosiated with the specified API.
+// ListByService lists all comments for the Issue associated with the specified API.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
@@ -53,6 +54,16 @@ func NewAPIIssueAttachmentsClientWithBaseURI(baseURI string, subscriptionID stri
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIIssueAttachmentsClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueAttachmentCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.iac.Response.Response != nil {
+				sc = result.iac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -150,8 +161,8 @@ func (client APIIssueAttachmentsClient) ListByServiceResponder(resp *http.Respon
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIIssueAttachmentsClient) listByServiceNextResults(lastResults IssueAttachmentCollection) (result IssueAttachmentCollection, err error) {
-	req, err := lastResults.issueAttachmentCollectionPreparer()
+func (client APIIssueAttachmentsClient) listByServiceNextResults(ctx context.Context, lastResults IssueAttachmentCollection) (result IssueAttachmentCollection, err error) {
+	req, err := lastResults.issueAttachmentCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIIssueAttachmentsClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -172,6 +183,16 @@ func (client APIIssueAttachmentsClient) listByServiceNextResults(lastResults Iss
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIIssueAttachmentsClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, filter string, top *int32, skip *int32) (result IssueAttachmentCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, apiid, issueID, filter, top, skip)
 	return
 }

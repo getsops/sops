@@ -15,13 +15,13 @@
 package pubsub
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"sync/atomic"
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -122,7 +122,8 @@ func TestFlowControllerSaturation(t *testing.T) {
 	} {
 		fc := newFlowController(maxCount, maxSize)
 		// Atomically track flow controller state.
-		var curCount, curSize int64
+		// The flowController itself tracks count.
+		var curSize int64
 		success := errors.New("")
 		// Time out if wantSize or wantCount is never reached.
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -143,7 +144,7 @@ func TestFlowControllerSaturation(t *testing.T) {
 					if err := fc.acquire(ctx, test.acquireSize); err != nil {
 						return err
 					}
-					c := atomic.AddInt64(&curCount, 1)
+					c := int64(fc.count())
 					if c > test.wantCount {
 						return fmt.Errorf("count %d exceeds want %d", c, test.wantCount)
 					}
@@ -158,9 +159,6 @@ func TestFlowControllerSaturation(t *testing.T) {
 						hitSize = true
 					}
 					time.Sleep(5 * time.Millisecond) // Let other goroutines make progress.
-					if atomic.AddInt64(&curCount, -1) < 0 {
-						return errors.New("negative count")
-					}
 					if atomic.AddInt64(&curSize, -int64(test.acquireSize)) < 0 {
 						return errors.New("negative size")
 					}
@@ -214,6 +212,24 @@ func TestFlowControllerUnboundedCount(t *testing.T) {
 	// Fail to tryAcquire 3 bytes.
 	if fc.tryAcquire(3) {
 		t.Error("got true, wanted false")
+	}
+}
+
+func TestFlowControllerUnboundedCount2(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+	fc := newFlowController(0, 0)
+	// Successfully acquire 4 bytes.
+	if err := fc.acquire(ctx, 4); err != nil {
+		t.Errorf("got %v, wanted no error", err)
+	}
+	fc.release(1)
+	fc.release(1)
+	fc.release(1)
+	wantCount := int64(-2)
+	c := int64(fc.count())
+	if c != wantCount {
+		t.Fatalf("got count %d, want %d", c, wantCount)
 	}
 }
 

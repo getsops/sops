@@ -47,8 +47,8 @@ func (a *API) WaitersGoCode() string {
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, "import (\n%q\n\n%q\n%q\n)",
 		"time",
-		"github.com/aws/aws-sdk-go/aws",
-		"github.com/aws/aws-sdk-go/aws/request",
+		SDKImportRoot+"/aws",
+		SDKImportRoot+"/aws/request",
 	)
 
 	for _, w := range a.Waiters {

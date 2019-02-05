@@ -15,10 +15,10 @@
 package bigquery
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 
-	"golang.org/x/net/context"
 	bq "google.golang.org/api/bigquery/v2"
 	"google.golang.org/api/iterator"
 )
@@ -69,7 +69,7 @@ type RowIterator struct {
 //
 // dst may implement ValueLoader, or may be a *[]Value, *map[string]Value, or struct pointer.
 //
-// If dst is a *[]Value, it will be set to to new []Value whose i'th element
+// If dst is a *[]Value, it will be set to new []Value whose i'th element
 // will be populated with the i'th column of the row.
 //
 // If dst is a *map[string]Value, a new map will be created if dst is nil. Then

@@ -52,10 +52,10 @@ func youtubeMain(client *http.Client, argv []string) {
 	call := service.Videos.Insert("snippet,status", upload)
 
 	file, err := os.Open(filename)
-	defer file.Close()
 	if err != nil {
 		log.Fatalf("Error opening %v: %v", filename, err)
 	}
+	defer file.Close()
 
 	response, err := call.Media(file).Do()
 	if err != nil {

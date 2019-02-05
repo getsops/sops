@@ -44,7 +44,6 @@ var IntentView_name = map[int32]string{
 	0: "INTENT_VIEW_UNSPECIFIED",
 	1: "INTENT_VIEW_FULL",
 }
-
 var IntentView_value = map[string]int32{
 	"INTENT_VIEW_UNSPECIFIED": 0,
 	"INTENT_VIEW_FULL":        1,
@@ -53,9 +52,8 @@ var IntentView_value = map[string]int32{
 func (x IntentView) String() string {
 	return proto.EnumName(IntentView_name, int32(x))
 }
-
 func (IntentView) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0}
 }
 
 // Represents the different states that webhooks can be in.
@@ -76,7 +74,6 @@ var Intent_WebhookState_name = map[int32]string{
 	1: "WEBHOOK_STATE_ENABLED",
 	2: "WEBHOOK_STATE_ENABLED_FOR_SLOT_FILLING",
 }
-
 var Intent_WebhookState_value = map[string]int32{
 	"WEBHOOK_STATE_UNSPECIFIED":              0,
 	"WEBHOOK_STATE_ENABLED":                  1,
@@ -86,9 +83,8 @@ var Intent_WebhookState_value = map[string]int32{
 func (x Intent_WebhookState) String() string {
 	return proto.EnumName(Intent_WebhookState_name, int32(x))
 }
-
 func (Intent_WebhookState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 0}
 }
 
 // Represents different types of training phrases.
@@ -110,7 +106,6 @@ var Intent_TrainingPhrase_Type_name = map[int32]string{
 	1: "EXAMPLE",
 	2: "TEMPLATE",
 }
-
 var Intent_TrainingPhrase_Type_value = map[string]int32{
 	"TYPE_UNSPECIFIED": 0,
 	"EXAMPLE":          1,
@@ -120,9 +115,8 @@ var Intent_TrainingPhrase_Type_value = map[string]int32{
 func (x Intent_TrainingPhrase_Type) String() string {
 	return proto.EnumName(Intent_TrainingPhrase_Type_name, int32(x))
 }
-
 func (Intent_TrainingPhrase_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 0, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 0, 0}
 }
 
 // Represents different platforms that a rich message can be intended for.
@@ -220,7 +214,6 @@ var Intent_Message_Platform_name = map[int32]string{
 	7: "VIBER",
 	8: "ACTIONS_ON_GOOGLE",
 }
-
 var Intent_Message_Platform_value = map[string]int32{
 	"PLATFORM_UNSPECIFIED": 0,
 	"FACEBOOK":             1,
@@ -236,9 +229,8 @@ var Intent_Message_Platform_value = map[string]int32{
 func (x Intent_Message_Platform) String() string {
 	return proto.EnumName(Intent_Message_Platform_name, int32(x))
 }
-
 func (Intent_Message_Platform) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 0}
 }
 
 // Represents an intent.
@@ -315,7 +307,7 @@ func (m *Intent) Reset()         { *m = Intent{} }
 func (m *Intent) String() string { return proto.CompactTextString(m) }
 func (*Intent) ProtoMessage()    {}
 func (*Intent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0}
 }
 func (m *Intent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent.Unmarshal(m, b)
@@ -323,8 +315,8 @@ func (m *Intent) XXX_Unmarshal(b []byte) error {
 func (m *Intent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent.Marshal(b, m, deterministic)
 }
-func (m *Intent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent.Merge(m, src)
+func (dst *Intent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent.Merge(dst, src)
 }
 func (m *Intent) XXX_Size() int {
 	return xxx_messageInfo_Intent.Size(m)
@@ -484,7 +476,7 @@ func (m *Intent_TrainingPhrase) Reset()         { *m = Intent_TrainingPhrase{} }
 func (m *Intent_TrainingPhrase) String() string { return proto.CompactTextString(m) }
 func (*Intent_TrainingPhrase) ProtoMessage()    {}
 func (*Intent_TrainingPhrase) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 0}
 }
 func (m *Intent_TrainingPhrase) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_TrainingPhrase.Unmarshal(m, b)
@@ -492,8 +484,8 @@ func (m *Intent_TrainingPhrase) XXX_Unmarshal(b []byte) error {
 func (m *Intent_TrainingPhrase) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_TrainingPhrase.Marshal(b, m, deterministic)
 }
-func (m *Intent_TrainingPhrase) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_TrainingPhrase.Merge(m, src)
+func (dst *Intent_TrainingPhrase) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_TrainingPhrase.Merge(dst, src)
 }
 func (m *Intent_TrainingPhrase) XXX_Size() int {
 	return xxx_messageInfo_Intent_TrainingPhrase.Size(m)
@@ -557,7 +549,7 @@ func (m *Intent_TrainingPhrase_Part) Reset()         { *m = Intent_TrainingPhras
 func (m *Intent_TrainingPhrase_Part) String() string { return proto.CompactTextString(m) }
 func (*Intent_TrainingPhrase_Part) ProtoMessage()    {}
 func (*Intent_TrainingPhrase_Part) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 0, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 0, 0}
 }
 func (m *Intent_TrainingPhrase_Part) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_TrainingPhrase_Part.Unmarshal(m, b)
@@ -565,8 +557,8 @@ func (m *Intent_TrainingPhrase_Part) XXX_Unmarshal(b []byte) error {
 func (m *Intent_TrainingPhrase_Part) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_TrainingPhrase_Part.Marshal(b, m, deterministic)
 }
-func (m *Intent_TrainingPhrase_Part) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_TrainingPhrase_Part.Merge(m, src)
+func (dst *Intent_TrainingPhrase_Part) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_TrainingPhrase_Part.Merge(dst, src)
 }
 func (m *Intent_TrainingPhrase_Part) XXX_Size() int {
 	return xxx_messageInfo_Intent_TrainingPhrase_Part.Size(m)
@@ -645,7 +637,7 @@ func (m *Intent_Parameter) Reset()         { *m = Intent_Parameter{} }
 func (m *Intent_Parameter) String() string { return proto.CompactTextString(m) }
 func (*Intent_Parameter) ProtoMessage()    {}
 func (*Intent_Parameter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 1}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 1}
 }
 func (m *Intent_Parameter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Parameter.Unmarshal(m, b)
@@ -653,8 +645,8 @@ func (m *Intent_Parameter) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Parameter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Parameter.Marshal(b, m, deterministic)
 }
-func (m *Intent_Parameter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Parameter.Merge(m, src)
+func (dst *Intent_Parameter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Parameter.Merge(dst, src)
 }
 func (m *Intent_Parameter) XXX_Size() int {
 	return xxx_messageInfo_Intent_Parameter.Size(m)
@@ -749,7 +741,7 @@ func (m *Intent_Message) Reset()         { *m = Intent_Message{} }
 func (m *Intent_Message) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message) ProtoMessage()    {}
 func (*Intent_Message) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2}
 }
 func (m *Intent_Message) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message.Unmarshal(m, b)
@@ -757,8 +749,8 @@ func (m *Intent_Message) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message.Merge(m, src)
+func (dst *Intent_Message) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message.Merge(dst, src)
 }
 func (m *Intent_Message) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message.Size(m)
@@ -1188,7 +1180,7 @@ func (m *Intent_Message_Text) Reset()         { *m = Intent_Message_Text{} }
 func (m *Intent_Message_Text) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_Text) ProtoMessage()    {}
 func (*Intent_Message_Text) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 0}
 }
 func (m *Intent_Message_Text) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_Text.Unmarshal(m, b)
@@ -1196,8 +1188,8 @@ func (m *Intent_Message_Text) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_Text) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_Text.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_Text) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_Text.Merge(m, src)
+func (dst *Intent_Message_Text) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_Text.Merge(dst, src)
 }
 func (m *Intent_Message_Text) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_Text.Size(m)
@@ -1231,7 +1223,7 @@ func (m *Intent_Message_Image) Reset()         { *m = Intent_Message_Image{} }
 func (m *Intent_Message_Image) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_Image) ProtoMessage()    {}
 func (*Intent_Message_Image) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 1}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 1}
 }
 func (m *Intent_Message_Image) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_Image.Unmarshal(m, b)
@@ -1239,8 +1231,8 @@ func (m *Intent_Message_Image) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_Image) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_Image.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_Image) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_Image.Merge(m, src)
+func (dst *Intent_Message_Image) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_Image.Merge(dst, src)
 }
 func (m *Intent_Message_Image) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_Image.Size(m)
@@ -1280,7 +1272,7 @@ func (m *Intent_Message_QuickReplies) Reset()         { *m = Intent_Message_Quic
 func (m *Intent_Message_QuickReplies) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_QuickReplies) ProtoMessage()    {}
 func (*Intent_Message_QuickReplies) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 2}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 2}
 }
 func (m *Intent_Message_QuickReplies) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_QuickReplies.Unmarshal(m, b)
@@ -1288,8 +1280,8 @@ func (m *Intent_Message_QuickReplies) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_QuickReplies) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_QuickReplies.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_QuickReplies) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_QuickReplies.Merge(m, src)
+func (dst *Intent_Message_QuickReplies) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_QuickReplies.Merge(dst, src)
 }
 func (m *Intent_Message_QuickReplies) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_QuickReplies.Size(m)
@@ -1333,7 +1325,7 @@ func (m *Intent_Message_Card) Reset()         { *m = Intent_Message_Card{} }
 func (m *Intent_Message_Card) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_Card) ProtoMessage()    {}
 func (*Intent_Message_Card) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 3}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 3}
 }
 func (m *Intent_Message_Card) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_Card.Unmarshal(m, b)
@@ -1341,8 +1333,8 @@ func (m *Intent_Message_Card) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_Card) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_Card.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_Card) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_Card.Merge(m, src)
+func (dst *Intent_Message_Card) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_Card.Merge(dst, src)
 }
 func (m *Intent_Message_Card) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_Card.Size(m)
@@ -1397,7 +1389,7 @@ func (m *Intent_Message_Card_Button) Reset()         { *m = Intent_Message_Card_
 func (m *Intent_Message_Card_Button) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_Card_Button) ProtoMessage()    {}
 func (*Intent_Message_Card_Button) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 3, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 3, 0}
 }
 func (m *Intent_Message_Card_Button) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_Card_Button.Unmarshal(m, b)
@@ -1405,8 +1397,8 @@ func (m *Intent_Message_Card_Button) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_Card_Button) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_Card_Button.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_Card_Button) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_Card_Button.Merge(m, src)
+func (dst *Intent_Message_Card_Button) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_Card_Button.Merge(dst, src)
 }
 func (m *Intent_Message_Card_Button) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_Card_Button.Size(m)
@@ -1451,7 +1443,7 @@ func (m *Intent_Message_SimpleResponse) Reset()         { *m = Intent_Message_Si
 func (m *Intent_Message_SimpleResponse) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_SimpleResponse) ProtoMessage()    {}
 func (*Intent_Message_SimpleResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 4}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 4}
 }
 func (m *Intent_Message_SimpleResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_SimpleResponse.Unmarshal(m, b)
@@ -1459,8 +1451,8 @@ func (m *Intent_Message_SimpleResponse) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_SimpleResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_SimpleResponse.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_SimpleResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_SimpleResponse.Merge(m, src)
+func (dst *Intent_Message_SimpleResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_SimpleResponse.Merge(dst, src)
 }
 func (m *Intent_Message_SimpleResponse) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_SimpleResponse.Size(m)
@@ -1508,7 +1500,7 @@ func (m *Intent_Message_SimpleResponses) Reset()         { *m = Intent_Message_S
 func (m *Intent_Message_SimpleResponses) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_SimpleResponses) ProtoMessage()    {}
 func (*Intent_Message_SimpleResponses) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 5}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 5}
 }
 func (m *Intent_Message_SimpleResponses) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_SimpleResponses.Unmarshal(m, b)
@@ -1516,8 +1508,8 @@ func (m *Intent_Message_SimpleResponses) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_SimpleResponses) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_SimpleResponses.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_SimpleResponses) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_SimpleResponses.Merge(m, src)
+func (dst *Intent_Message_SimpleResponses) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_SimpleResponses.Merge(dst, src)
 }
 func (m *Intent_Message_SimpleResponses) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_SimpleResponses.Size(m)
@@ -1556,7 +1548,7 @@ func (m *Intent_Message_BasicCard) Reset()         { *m = Intent_Message_BasicCa
 func (m *Intent_Message_BasicCard) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_BasicCard) ProtoMessage()    {}
 func (*Intent_Message_BasicCard) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 6}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 6}
 }
 func (m *Intent_Message_BasicCard) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_BasicCard.Unmarshal(m, b)
@@ -1564,8 +1556,8 @@ func (m *Intent_Message_BasicCard) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_BasicCard) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_BasicCard.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_BasicCard) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_BasicCard.Merge(m, src)
+func (dst *Intent_Message_BasicCard) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_BasicCard.Merge(dst, src)
 }
 func (m *Intent_Message_BasicCard) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_BasicCard.Size(m)
@@ -1626,7 +1618,7 @@ func (m *Intent_Message_BasicCard_Button) Reset()         { *m = Intent_Message_
 func (m *Intent_Message_BasicCard_Button) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_BasicCard_Button) ProtoMessage()    {}
 func (*Intent_Message_BasicCard_Button) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 6, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 6, 0}
 }
 func (m *Intent_Message_BasicCard_Button) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_BasicCard_Button.Unmarshal(m, b)
@@ -1634,8 +1626,8 @@ func (m *Intent_Message_BasicCard_Button) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_BasicCard_Button) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_BasicCard_Button.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_BasicCard_Button) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_BasicCard_Button.Merge(m, src)
+func (dst *Intent_Message_BasicCard_Button) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_BasicCard_Button.Merge(dst, src)
 }
 func (m *Intent_Message_BasicCard_Button) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_BasicCard_Button.Size(m)
@@ -1677,7 +1669,7 @@ func (m *Intent_Message_BasicCard_Button_OpenUriAction) String() string {
 }
 func (*Intent_Message_BasicCard_Button_OpenUriAction) ProtoMessage() {}
 func (*Intent_Message_BasicCard_Button_OpenUriAction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 6, 0, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 6, 0, 0}
 }
 func (m *Intent_Message_BasicCard_Button_OpenUriAction) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_BasicCard_Button_OpenUriAction.Unmarshal(m, b)
@@ -1685,8 +1677,8 @@ func (m *Intent_Message_BasicCard_Button_OpenUriAction) XXX_Unmarshal(b []byte) 
 func (m *Intent_Message_BasicCard_Button_OpenUriAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_BasicCard_Button_OpenUriAction.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_BasicCard_Button_OpenUriAction) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_BasicCard_Button_OpenUriAction.Merge(m, src)
+func (dst *Intent_Message_BasicCard_Button_OpenUriAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_BasicCard_Button_OpenUriAction.Merge(dst, src)
 }
 func (m *Intent_Message_BasicCard_Button_OpenUriAction) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_BasicCard_Button_OpenUriAction.Size(m)
@@ -1718,7 +1710,7 @@ func (m *Intent_Message_Suggestion) Reset()         { *m = Intent_Message_Sugges
 func (m *Intent_Message_Suggestion) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_Suggestion) ProtoMessage()    {}
 func (*Intent_Message_Suggestion) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 7}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 7}
 }
 func (m *Intent_Message_Suggestion) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_Suggestion.Unmarshal(m, b)
@@ -1726,8 +1718,8 @@ func (m *Intent_Message_Suggestion) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_Suggestion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_Suggestion.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_Suggestion) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_Suggestion.Merge(m, src)
+func (dst *Intent_Message_Suggestion) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_Suggestion.Merge(dst, src)
 }
 func (m *Intent_Message_Suggestion) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_Suggestion.Size(m)
@@ -1758,7 +1750,7 @@ func (m *Intent_Message_Suggestions) Reset()         { *m = Intent_Message_Sugge
 func (m *Intent_Message_Suggestions) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_Suggestions) ProtoMessage()    {}
 func (*Intent_Message_Suggestions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 8}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 8}
 }
 func (m *Intent_Message_Suggestions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_Suggestions.Unmarshal(m, b)
@@ -1766,8 +1758,8 @@ func (m *Intent_Message_Suggestions) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_Suggestions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_Suggestions.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_Suggestions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_Suggestions.Merge(m, src)
+func (dst *Intent_Message_Suggestions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_Suggestions.Merge(dst, src)
 }
 func (m *Intent_Message_Suggestions) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_Suggestions.Size(m)
@@ -1802,7 +1794,7 @@ func (m *Intent_Message_LinkOutSuggestion) Reset()         { *m = Intent_Message
 func (m *Intent_Message_LinkOutSuggestion) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_LinkOutSuggestion) ProtoMessage()    {}
 func (*Intent_Message_LinkOutSuggestion) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 9}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 9}
 }
 func (m *Intent_Message_LinkOutSuggestion) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_LinkOutSuggestion.Unmarshal(m, b)
@@ -1810,8 +1802,8 @@ func (m *Intent_Message_LinkOutSuggestion) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_LinkOutSuggestion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_LinkOutSuggestion.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_LinkOutSuggestion) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_LinkOutSuggestion.Merge(m, src)
+func (dst *Intent_Message_LinkOutSuggestion) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_LinkOutSuggestion.Merge(dst, src)
 }
 func (m *Intent_Message_LinkOutSuggestion) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_LinkOutSuggestion.Size(m)
@@ -1851,7 +1843,7 @@ func (m *Intent_Message_ListSelect) Reset()         { *m = Intent_Message_ListSe
 func (m *Intent_Message_ListSelect) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_ListSelect) ProtoMessage()    {}
 func (*Intent_Message_ListSelect) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 10}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 10}
 }
 func (m *Intent_Message_ListSelect) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_ListSelect.Unmarshal(m, b)
@@ -1859,8 +1851,8 @@ func (m *Intent_Message_ListSelect) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_ListSelect) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_ListSelect.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_ListSelect) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_ListSelect.Merge(m, src)
+func (dst *Intent_Message_ListSelect) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_ListSelect.Merge(dst, src)
 }
 func (m *Intent_Message_ListSelect) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_ListSelect.Size(m)
@@ -1904,7 +1896,7 @@ func (m *Intent_Message_ListSelect_Item) Reset()         { *m = Intent_Message_L
 func (m *Intent_Message_ListSelect_Item) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_ListSelect_Item) ProtoMessage()    {}
 func (*Intent_Message_ListSelect_Item) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 10, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 10, 0}
 }
 func (m *Intent_Message_ListSelect_Item) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_ListSelect_Item.Unmarshal(m, b)
@@ -1912,8 +1904,8 @@ func (m *Intent_Message_ListSelect_Item) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_ListSelect_Item) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_ListSelect_Item.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_ListSelect_Item) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_ListSelect_Item.Merge(m, src)
+func (dst *Intent_Message_ListSelect_Item) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_ListSelect_Item.Merge(dst, src)
 }
 func (m *Intent_Message_ListSelect_Item) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_ListSelect_Item.Size(m)
@@ -1965,7 +1957,7 @@ func (m *Intent_Message_CarouselSelect) Reset()         { *m = Intent_Message_Ca
 func (m *Intent_Message_CarouselSelect) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_CarouselSelect) ProtoMessage()    {}
 func (*Intent_Message_CarouselSelect) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 11}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 11}
 }
 func (m *Intent_Message_CarouselSelect) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_CarouselSelect.Unmarshal(m, b)
@@ -1973,8 +1965,8 @@ func (m *Intent_Message_CarouselSelect) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_CarouselSelect) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_CarouselSelect.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_CarouselSelect) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_CarouselSelect.Merge(m, src)
+func (dst *Intent_Message_CarouselSelect) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_CarouselSelect.Merge(dst, src)
 }
 func (m *Intent_Message_CarouselSelect) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_CarouselSelect.Size(m)
@@ -2011,7 +2003,7 @@ func (m *Intent_Message_CarouselSelect_Item) Reset()         { *m = Intent_Messa
 func (m *Intent_Message_CarouselSelect_Item) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_CarouselSelect_Item) ProtoMessage()    {}
 func (*Intent_Message_CarouselSelect_Item) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 11, 0}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 11, 0}
 }
 func (m *Intent_Message_CarouselSelect_Item) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_CarouselSelect_Item.Unmarshal(m, b)
@@ -2019,8 +2011,8 @@ func (m *Intent_Message_CarouselSelect_Item) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_CarouselSelect_Item) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_CarouselSelect_Item.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_CarouselSelect_Item) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_CarouselSelect_Item.Merge(m, src)
+func (dst *Intent_Message_CarouselSelect_Item) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_CarouselSelect_Item.Merge(dst, src)
 }
 func (m *Intent_Message_CarouselSelect_Item) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_CarouselSelect_Item.Size(m)
@@ -2077,7 +2069,7 @@ func (m *Intent_Message_SelectItemInfo) Reset()         { *m = Intent_Message_Se
 func (m *Intent_Message_SelectItemInfo) String() string { return proto.CompactTextString(m) }
 func (*Intent_Message_SelectItemInfo) ProtoMessage()    {}
 func (*Intent_Message_SelectItemInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 2, 12}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 2, 12}
 }
 func (m *Intent_Message_SelectItemInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_Message_SelectItemInfo.Unmarshal(m, b)
@@ -2085,8 +2077,8 @@ func (m *Intent_Message_SelectItemInfo) XXX_Unmarshal(b []byte) error {
 func (m *Intent_Message_SelectItemInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_Message_SelectItemInfo.Marshal(b, m, deterministic)
 }
-func (m *Intent_Message_SelectItemInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_Message_SelectItemInfo.Merge(m, src)
+func (dst *Intent_Message_SelectItemInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_Message_SelectItemInfo.Merge(dst, src)
 }
 func (m *Intent_Message_SelectItemInfo) XXX_Size() int {
 	return xxx_messageInfo_Intent_Message_SelectItemInfo.Size(m)
@@ -2128,7 +2120,7 @@ func (m *Intent_FollowupIntentInfo) Reset()         { *m = Intent_FollowupIntent
 func (m *Intent_FollowupIntentInfo) String() string { return proto.CompactTextString(m) }
 func (*Intent_FollowupIntentInfo) ProtoMessage()    {}
 func (*Intent_FollowupIntentInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{0, 3}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{0, 3}
 }
 func (m *Intent_FollowupIntentInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Intent_FollowupIntentInfo.Unmarshal(m, b)
@@ -2136,8 +2128,8 @@ func (m *Intent_FollowupIntentInfo) XXX_Unmarshal(b []byte) error {
 func (m *Intent_FollowupIntentInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Intent_FollowupIntentInfo.Marshal(b, m, deterministic)
 }
-func (m *Intent_FollowupIntentInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Intent_FollowupIntentInfo.Merge(m, src)
+func (dst *Intent_FollowupIntentInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Intent_FollowupIntentInfo.Merge(dst, src)
 }
 func (m *Intent_FollowupIntentInfo) XXX_Size() int {
 	return xxx_messageInfo_Intent_FollowupIntentInfo.Size(m)
@@ -2189,7 +2181,7 @@ func (m *ListIntentsRequest) Reset()         { *m = ListIntentsRequest{} }
 func (m *ListIntentsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListIntentsRequest) ProtoMessage()    {}
 func (*ListIntentsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{1}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{1}
 }
 func (m *ListIntentsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListIntentsRequest.Unmarshal(m, b)
@@ -2197,8 +2189,8 @@ func (m *ListIntentsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListIntentsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListIntentsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListIntentsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListIntentsRequest.Merge(m, src)
+func (dst *ListIntentsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListIntentsRequest.Merge(dst, src)
 }
 func (m *ListIntentsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListIntentsRequest.Size(m)
@@ -2261,7 +2253,7 @@ func (m *ListIntentsResponse) Reset()         { *m = ListIntentsResponse{} }
 func (m *ListIntentsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListIntentsResponse) ProtoMessage()    {}
 func (*ListIntentsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{2}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{2}
 }
 func (m *ListIntentsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListIntentsResponse.Unmarshal(m, b)
@@ -2269,8 +2261,8 @@ func (m *ListIntentsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListIntentsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListIntentsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListIntentsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListIntentsResponse.Merge(m, src)
+func (dst *ListIntentsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListIntentsResponse.Merge(dst, src)
 }
 func (m *ListIntentsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListIntentsResponse.Size(m)
@@ -2317,7 +2309,7 @@ func (m *GetIntentRequest) Reset()         { *m = GetIntentRequest{} }
 func (m *GetIntentRequest) String() string { return proto.CompactTextString(m) }
 func (*GetIntentRequest) ProtoMessage()    {}
 func (*GetIntentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{3}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{3}
 }
 func (m *GetIntentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetIntentRequest.Unmarshal(m, b)
@@ -2325,8 +2317,8 @@ func (m *GetIntentRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetIntentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetIntentRequest.Marshal(b, m, deterministic)
 }
-func (m *GetIntentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetIntentRequest.Merge(m, src)
+func (dst *GetIntentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetIntentRequest.Merge(dst, src)
 }
 func (m *GetIntentRequest) XXX_Size() int {
 	return xxx_messageInfo_GetIntentRequest.Size(m)
@@ -2382,7 +2374,7 @@ func (m *CreateIntentRequest) Reset()         { *m = CreateIntentRequest{} }
 func (m *CreateIntentRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateIntentRequest) ProtoMessage()    {}
 func (*CreateIntentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{4}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{4}
 }
 func (m *CreateIntentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateIntentRequest.Unmarshal(m, b)
@@ -2390,8 +2382,8 @@ func (m *CreateIntentRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateIntentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateIntentRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateIntentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateIntentRequest.Merge(m, src)
+func (dst *CreateIntentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateIntentRequest.Merge(dst, src)
 }
 func (m *CreateIntentRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateIntentRequest.Size(m)
@@ -2454,7 +2446,7 @@ func (m *UpdateIntentRequest) Reset()         { *m = UpdateIntentRequest{} }
 func (m *UpdateIntentRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateIntentRequest) ProtoMessage()    {}
 func (*UpdateIntentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{5}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{5}
 }
 func (m *UpdateIntentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateIntentRequest.Unmarshal(m, b)
@@ -2462,8 +2454,8 @@ func (m *UpdateIntentRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateIntentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateIntentRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateIntentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateIntentRequest.Merge(m, src)
+func (dst *UpdateIntentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateIntentRequest.Merge(dst, src)
 }
 func (m *UpdateIntentRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateIntentRequest.Size(m)
@@ -2516,7 +2508,7 @@ func (m *DeleteIntentRequest) Reset()         { *m = DeleteIntentRequest{} }
 func (m *DeleteIntentRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteIntentRequest) ProtoMessage()    {}
 func (*DeleteIntentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{6}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{6}
 }
 func (m *DeleteIntentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteIntentRequest.Unmarshal(m, b)
@@ -2524,8 +2516,8 @@ func (m *DeleteIntentRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteIntentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteIntentRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteIntentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteIntentRequest.Merge(m, src)
+func (dst *DeleteIntentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteIntentRequest.Merge(dst, src)
 }
 func (m *DeleteIntentRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteIntentRequest.Size(m)
@@ -2573,7 +2565,7 @@ func (m *BatchUpdateIntentsRequest) Reset()         { *m = BatchUpdateIntentsReq
 func (m *BatchUpdateIntentsRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchUpdateIntentsRequest) ProtoMessage()    {}
 func (*BatchUpdateIntentsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{7}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{7}
 }
 func (m *BatchUpdateIntentsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchUpdateIntentsRequest.Unmarshal(m, b)
@@ -2581,8 +2573,8 @@ func (m *BatchUpdateIntentsRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchUpdateIntentsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchUpdateIntentsRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchUpdateIntentsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchUpdateIntentsRequest.Merge(m, src)
+func (dst *BatchUpdateIntentsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateIntentsRequest.Merge(dst, src)
 }
 func (m *BatchUpdateIntentsRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchUpdateIntentsRequest.Size(m)
@@ -2741,7 +2733,7 @@ func (m *BatchUpdateIntentsResponse) Reset()         { *m = BatchUpdateIntentsRe
 func (m *BatchUpdateIntentsResponse) String() string { return proto.CompactTextString(m) }
 func (*BatchUpdateIntentsResponse) ProtoMessage()    {}
 func (*BatchUpdateIntentsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{8}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{8}
 }
 func (m *BatchUpdateIntentsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchUpdateIntentsResponse.Unmarshal(m, b)
@@ -2749,8 +2741,8 @@ func (m *BatchUpdateIntentsResponse) XXX_Unmarshal(b []byte) error {
 func (m *BatchUpdateIntentsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchUpdateIntentsResponse.Marshal(b, m, deterministic)
 }
-func (m *BatchUpdateIntentsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchUpdateIntentsResponse.Merge(m, src)
+func (dst *BatchUpdateIntentsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateIntentsResponse.Merge(dst, src)
 }
 func (m *BatchUpdateIntentsResponse) XXX_Size() int {
 	return xxx_messageInfo_BatchUpdateIntentsResponse.Size(m)
@@ -2785,7 +2777,7 @@ func (m *BatchDeleteIntentsRequest) Reset()         { *m = BatchDeleteIntentsReq
 func (m *BatchDeleteIntentsRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchDeleteIntentsRequest) ProtoMessage()    {}
 func (*BatchDeleteIntentsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{9}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{9}
 }
 func (m *BatchDeleteIntentsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchDeleteIntentsRequest.Unmarshal(m, b)
@@ -2793,8 +2785,8 @@ func (m *BatchDeleteIntentsRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchDeleteIntentsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchDeleteIntentsRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchDeleteIntentsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchDeleteIntentsRequest.Merge(m, src)
+func (dst *BatchDeleteIntentsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchDeleteIntentsRequest.Merge(dst, src)
 }
 func (m *BatchDeleteIntentsRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchDeleteIntentsRequest.Size(m)
@@ -2832,7 +2824,7 @@ func (m *IntentBatch) Reset()         { *m = IntentBatch{} }
 func (m *IntentBatch) String() string { return proto.CompactTextString(m) }
 func (*IntentBatch) ProtoMessage()    {}
 func (*IntentBatch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6c20e31044d743bd, []int{10}
+	return fileDescriptor_intent_eb465f5d3cf7c1e7, []int{10}
 }
 func (m *IntentBatch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_IntentBatch.Unmarshal(m, b)
@@ -2840,8 +2832,8 @@ func (m *IntentBatch) XXX_Unmarshal(b []byte) error {
 func (m *IntentBatch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_IntentBatch.Marshal(b, m, deterministic)
 }
-func (m *IntentBatch) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_IntentBatch.Merge(m, src)
+func (dst *IntentBatch) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IntentBatch.Merge(dst, src)
 }
 func (m *IntentBatch) XXX_Size() int {
 	return xxx_messageInfo_IntentBatch.Size(m)
@@ -3193,10 +3185,10 @@ var _Intents_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dialogflow/v2/intent.proto", fileDescriptor_6c20e31044d743bd)
+	proto.RegisterFile("google/cloud/dialogflow/v2/intent.proto", fileDescriptor_intent_eb465f5d3cf7c1e7)
 }
 
-var fileDescriptor_6c20e31044d743bd = []byte{
+var fileDescriptor_intent_eb465f5d3cf7c1e7 = []byte{
 	// 2562 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe4, 0x5a, 0x4b, 0x73, 0x23, 0x57,
 	0xf5, 0x77, 0xeb, 0x61, 0x4b, 0x47, 0xb2, 0x2c, 0x5f, 0x4f, 0x26, 0x9a, 0x4e, 0xf2, 0xff, 0x3b,

@@ -88,6 +88,10 @@ type BudgetsAPI interface {
 	DescribeBudgetWithContext(aws.Context, *budgets.DescribeBudgetInput, ...request.Option) (*budgets.DescribeBudgetOutput, error)
 	DescribeBudgetRequest(*budgets.DescribeBudgetInput) (*request.Request, *budgets.DescribeBudgetOutput)
 
+	DescribeBudgetPerformanceHistory(*budgets.DescribeBudgetPerformanceHistoryInput) (*budgets.DescribeBudgetPerformanceHistoryOutput, error)
+	DescribeBudgetPerformanceHistoryWithContext(aws.Context, *budgets.DescribeBudgetPerformanceHistoryInput, ...request.Option) (*budgets.DescribeBudgetPerformanceHistoryOutput, error)
+	DescribeBudgetPerformanceHistoryRequest(*budgets.DescribeBudgetPerformanceHistoryInput) (*request.Request, *budgets.DescribeBudgetPerformanceHistoryOutput)
+
 	DescribeBudgets(*budgets.DescribeBudgetsInput) (*budgets.DescribeBudgetsOutput, error)
 	DescribeBudgetsWithContext(aws.Context, *budgets.DescribeBudgetsInput, ...request.Option) (*budgets.DescribeBudgetsOutput, error)
 	DescribeBudgetsRequest(*budgets.DescribeBudgetsInput) (*request.Request, *budgets.DescribeBudgetsOutput)

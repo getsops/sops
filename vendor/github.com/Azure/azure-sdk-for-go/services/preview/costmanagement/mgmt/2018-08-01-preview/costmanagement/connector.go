@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewConnectorClientWithBaseURI(baseURI string, subscriptionID string) Connec
 // connectorName - connector Name.
 // connector - connector details
 func (client ConnectorClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, connectorName string, connector ConnectorDefinition) (result ConnectorDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectorClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, connectorName, connector)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ConnectorClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client ConnectorClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // resourceGroupName - azure Resource Group Name.
 // connectorName - connector Name.
 func (client ConnectorClient) Delete(ctx context.Context, resourceGroupName string, connectorName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectorClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, connectorName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ConnectorClient", "Delete", nil, "Failure preparing request")
@@ -180,6 +201,16 @@ func (client ConnectorClient) DeleteResponder(resp *http.Response) (result autor
 // resourceGroupName - azure Resource Group Name.
 // connectorName - connector Name.
 func (client ConnectorClient) Get(ctx context.Context, resourceGroupName string, connectorName string) (result ConnectorDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectorClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, connectorName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ConnectorClient", "Get", nil, "Failure preparing request")
@@ -244,6 +275,16 @@ func (client ConnectorClient) GetResponder(resp *http.Response) (result Connecto
 
 // List list all connector definitions for a subscription
 func (client ConnectorClient) List(ctx context.Context) (result ConnectorDefinitionListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectorClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ConnectorClient", "List", nil, "Failure preparing request")
@@ -308,6 +349,16 @@ func (client ConnectorClient) ListResponder(resp *http.Response) (result Connect
 // Parameters:
 // resourceGroupName - azure Resource Group Name.
 func (client ConnectorClient) ListByResourceGroupName(ctx context.Context, resourceGroupName string) (result ConnectorDefinitionListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectorClient.ListByResourceGroupName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupNamePreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ConnectorClient", "ListByResourceGroupName", nil, "Failure preparing request")
@@ -375,6 +426,16 @@ func (client ConnectorClient) ListByResourceGroupNameResponder(resp *http.Respon
 // connectorName - connector Name.
 // connector - connector details
 func (client ConnectorClient) Update(ctx context.Context, resourceGroupName string, connectorName string, connector ConnectorDefinition) (result ConnectorDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConnectorClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, connectorName, connector)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ConnectorClient", "Update", nil, "Failure preparing request")

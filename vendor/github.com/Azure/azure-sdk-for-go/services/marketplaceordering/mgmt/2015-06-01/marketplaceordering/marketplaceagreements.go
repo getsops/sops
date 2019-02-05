@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewMarketplaceAgreementsClientWithBaseURI(baseURI string, subscriptionID st
 // planID - plan identifier string of image being deployed.
 // parameters - parameters supplied to the Create Marketplace Terms operation.
 func (client MarketplaceAgreementsClient) Create(ctx context.Context, publisherID string, offerID string, planID string, parameters AgreementTerms) (result AgreementTerms, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplaceAgreementsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, publisherID, offerID, planID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "marketplaceordering.MarketplaceAgreementsClient", "Create", nil, "Failure preparing request")
@@ -118,6 +129,16 @@ func (client MarketplaceAgreementsClient) CreateResponder(resp *http.Response) (
 // offerID - offer identifier string of image being deployed.
 // planID - plan identifier string of image being deployed.
 func (client MarketplaceAgreementsClient) Get(ctx context.Context, publisherID string, offerID string, planID string) (result AgreementTerms, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplaceAgreementsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, publisherID, offerID, planID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "marketplaceordering.MarketplaceAgreementsClient", "Get", nil, "Failure preparing request")

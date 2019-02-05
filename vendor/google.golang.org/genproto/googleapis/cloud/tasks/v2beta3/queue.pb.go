@@ -43,9 +43,11 @@ const (
 	// The queue is disabled.
 	//
 	// A queue becomes `DISABLED` when
-	// [queue.yaml](https://cloud.google.com/appengine/docs/python/config/queueref) or
-	// [queue.xml](https://cloud.google.com/appengine/docs/standard/java/config/queueref) is uploaded
-	// which does not contain the queue. You cannot directly disable a queue.
+	// [queue.yaml](https://cloud.google.com/appengine/docs/python/config/queueref)
+	// or
+	// [queue.xml](https://cloud.google.com/appengine/docs/standard/java/config/queueref)
+	// is uploaded which does not contain the queue. You cannot directly disable
+	// a queue.
 	//
 	// When a queue is disabled, tasks can still be added to a queue
 	// but the tasks are not dispatched.
@@ -61,7 +63,6 @@ var Queue_State_name = map[int32]string{
 	2: "PAUSED",
 	3: "DISABLED",
 }
-
 var Queue_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"RUNNING":           1,
@@ -72,9 +73,8 @@ var Queue_State_value = map[string]int32{
 func (x Queue_State) String() string {
 	return proto.EnumName(Queue_State_name, int32(x))
 }
-
 func (Queue_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_36e1ae9449bd88db, []int{0, 0}
+	return fileDescriptor_queue_a25af721e5e14a04, []int{0, 0}
 }
 
 // A queue is a container of related tasks. Queues are configured to manage
@@ -100,23 +100,14 @@ type Queue struct {
 	// * `QUEUE_ID` can contain letters ([A-Za-z]), numbers ([0-9]), or
 	//   hyphens (-). The maximum length is 100 characters.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Caller-specified and required in [CreateQueue][google.cloud.tasks.v2beta3.CloudTasks.CreateQueue][],
-	// after which the queue config type becomes output only, though fields within
-	// the config are mutable.
-	//
-	// The queue's type.
-	//
-	// The type applies to all tasks in the queue.
-	//
 	// Types that are valid to be assigned to QueueType:
 	//	*Queue_AppEngineHttpQueue
 	QueueType isQueue_QueueType `protobuf_oneof:"queue_type"`
 	// Rate limits for task dispatches.
 	//
-	// [rate_limits][google.cloud.tasks.v2beta3.Queue.rate_limits] and
-	// [retry_config][google.cloud.tasks.v2beta3.Queue.retry_config] are related because they both
-	// control task attempts however they control how tasks are
-	// attempted in different ways:
+	// [rate_limits][google.cloud.tasks.v2beta3.Queue.rate_limits] and [retry_config][google.cloud.tasks.v2beta3.Queue.retry_config] are
+	// related because they both control task attempts. However they control task
+	// attempts in different ways:
 	//
 	// * [rate_limits][google.cloud.tasks.v2beta3.Queue.rate_limits] controls the total rate of
 	//   dispatches from a queue (i.e. all traffic dispatched from the
@@ -126,6 +117,16 @@ type Queue struct {
 	//   particular a task after its first attempt fails. That is,
 	//   [retry_config][google.cloud.tasks.v2beta3.Queue.retry_config] controls task retries (the
 	//   second attempt, third attempt, etc).
+	//
+	// The queue's actual dispatch rate is the result of:
+	//
+	// * Number of tasks in the queue
+	// * User-specified throttling: [rate limits][Queue.RateLimits]
+	//   [retry configuration][Queue.RetryConfig], and the
+	//   [queue's state][google.cloud.tasks.v2beta3.Queue.state].
+	// * System throttling due to `429` (Too Many Requests) or `503` (Service
+	//   Unavailable) responses from the worker, high error rates, or to smooth
+	//   sudden large traffic spikes.
 	RateLimits *RateLimits `protobuf:"bytes,4,opt,name=rate_limits,json=rateLimits,proto3" json:"rate_limits,omitempty"`
 	// Settings that determine the retry behavior.
 	//
@@ -165,7 +166,7 @@ func (m *Queue) Reset()         { *m = Queue{} }
 func (m *Queue) String() string { return proto.CompactTextString(m) }
 func (*Queue) ProtoMessage()    {}
 func (*Queue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_36e1ae9449bd88db, []int{0}
+	return fileDescriptor_queue_a25af721e5e14a04, []int{0}
 }
 func (m *Queue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Queue.Unmarshal(m, b)
@@ -173,8 +174,8 @@ func (m *Queue) XXX_Unmarshal(b []byte) error {
 func (m *Queue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Queue.Marshal(b, m, deterministic)
 }
-func (m *Queue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Queue.Merge(m, src)
+func (dst *Queue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Queue.Merge(dst, src)
 }
 func (m *Queue) XXX_Size() int {
 	return xxx_messageInfo_Queue.Size(m)
@@ -377,7 +378,7 @@ func (m *RateLimits) Reset()         { *m = RateLimits{} }
 func (m *RateLimits) String() string { return proto.CompactTextString(m) }
 func (*RateLimits) ProtoMessage()    {}
 func (*RateLimits) Descriptor() ([]byte, []int) {
-	return fileDescriptor_36e1ae9449bd88db, []int{1}
+	return fileDescriptor_queue_a25af721e5e14a04, []int{1}
 }
 func (m *RateLimits) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RateLimits.Unmarshal(m, b)
@@ -385,8 +386,8 @@ func (m *RateLimits) XXX_Unmarshal(b []byte) error {
 func (m *RateLimits) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RateLimits.Marshal(b, m, deterministic)
 }
-func (m *RateLimits) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RateLimits.Merge(m, src)
+func (dst *RateLimits) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimits.Merge(dst, src)
 }
 func (m *RateLimits) XXX_Size() int {
 	return xxx_messageInfo_RateLimits.Size(m)
@@ -519,7 +520,7 @@ func (m *RetryConfig) Reset()         { *m = RetryConfig{} }
 func (m *RetryConfig) String() string { return proto.CompactTextString(m) }
 func (*RetryConfig) ProtoMessage()    {}
 func (*RetryConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_36e1ae9449bd88db, []int{2}
+	return fileDescriptor_queue_a25af721e5e14a04, []int{2}
 }
 func (m *RetryConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RetryConfig.Unmarshal(m, b)
@@ -527,8 +528,8 @@ func (m *RetryConfig) XXX_Unmarshal(b []byte) error {
 func (m *RetryConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RetryConfig.Marshal(b, m, deterministic)
 }
-func (m *RetryConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RetryConfig.Merge(m, src)
+func (dst *RetryConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RetryConfig.Merge(dst, src)
 }
 func (m *RetryConfig) XXX_Size() int {
 	return xxx_messageInfo_RetryConfig.Size(m)
@@ -582,10 +583,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/tasks/v2beta3/queue.proto", fileDescriptor_36e1ae9449bd88db)
+	proto.RegisterFile("google/cloud/tasks/v2beta3/queue.proto", fileDescriptor_queue_a25af721e5e14a04)
 }
 
-var fileDescriptor_36e1ae9449bd88db = []byte{
+var fileDescriptor_queue_a25af721e5e14a04 = []byte{
 	// 646 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x94, 0xcf, 0x4e, 0xdb, 0x4e,
 	0x10, 0xc7, 0x31, 0x10, 0xf8, 0x31, 0xce, 0x0f, 0xa5, 0x2b, 0xd1, 0x86, 0xa8, 0xa2, 0x69, 0x5a,

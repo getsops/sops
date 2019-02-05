@@ -1120,7 +1120,8 @@
         "projectArn":{"shape":"AmazonResourceName"},
         "name":{"shape":"Name"},
         "description":{"shape":"Message"},
-        "rules":{"shape":"Rules"}
+        "rules":{"shape":"Rules"},
+        "maxDevices":{"shape":"Integer"}
       }
     },
     "CreateDevicePoolResult":{
@@ -1392,7 +1393,8 @@
         "remoteDebugEnabled":{"shape":"Boolean"},
         "fleetType":{"shape":"String"},
         "fleetName":{"shape":"String"},
-        "instances":{"shape":"DeviceInstances"}
+        "instances":{"shape":"DeviceInstances"},
+        "availability":{"shape":"DeviceAvailability"}
       }
     },
     "DeviceAttribute":{
@@ -1407,8 +1409,53 @@
         "APPIUM_VERSION",
         "INSTANCE_ARN",
         "INSTANCE_LABELS",
+        "FLEET_TYPE",
+        "OS_VERSION",
+        "MODEL",
+        "AVAILABILITY"
+      ]
+    },
+    "DeviceAvailability":{
+      "type":"string",
+      "enum":[
+        "TEMPORARY_NOT_AVAILABLE",
+        "BUSY",
+        "AVAILABLE",
+        "HIGHLY_AVAILABLE"
+      ]
+    },
+    "DeviceFilter":{
+      "type":"structure",
+      "members":{
+        "attribute":{"shape":"DeviceFilterAttribute"},
+        "operator":{"shape":"RuleOperator"},
+        "values":{"shape":"DeviceFilterValues"}
+      }
+    },
+    "DeviceFilterAttribute":{
+      "type":"string",
+      "enum":[
+        "ARN",
+        "PLATFORM",
+        "OS_VERSION",
+        "MODEL",
+        "AVAILABILITY",
+        "FORM_FACTOR",
+        "MANUFACTURER",
+        "REMOTE_ACCESS_ENABLED",
+        "REMOTE_DEBUG_ENABLED",
+        "INSTANCE_ARN",
+        "INSTANCE_LABELS",
         "FLEET_TYPE"
       ]
+    },
+    "DeviceFilterValues":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
+    "DeviceFilters":{
+      "type":"list",
+      "member":{"shape":"DeviceFilter"}
     },
     "DeviceFormFactor":{
       "type":"string",
@@ -1458,7 +1505,8 @@
         "name":{"shape":"Name"},
         "description":{"shape":"Message"},
         "type":{"shape":"DevicePoolType"},
-        "rules":{"shape":"Rules"}
+        "rules":{"shape":"Rules"},
+        "maxDevices":{"shape":"Integer"}
       }
     },
     "DevicePoolCompatibilityResult":{
@@ -1483,6 +1531,25 @@
     "DevicePools":{
       "type":"list",
       "member":{"shape":"DevicePool"}
+    },
+    "DeviceSelectionConfiguration":{
+      "type":"structure",
+      "required":[
+        "filters",
+        "maxDevices"
+      ],
+      "members":{
+        "filters":{"shape":"DeviceFilters"},
+        "maxDevices":{"shape":"Integer"}
+      }
+    },
+    "DeviceSelectionResult":{
+      "type":"structure",
+      "members":{
+        "filters":{"shape":"DeviceFilters"},
+        "matchedDevicesCount":{"shape":"Integer"},
+        "maxDevices":{"shape":"Integer"}
+      }
     },
     "Devices":{
       "type":"list",
@@ -1923,7 +1990,8 @@
       "type":"structure",
       "members":{
         "arn":{"shape":"AmazonResourceName"},
-        "nextToken":{"shape":"PaginationToken"}
+        "nextToken":{"shape":"PaginationToken"},
+        "filters":{"shape":"DeviceFilters"}
       }
     },
     "ListDevicesResult":{
@@ -2461,7 +2529,9 @@
       "enum":[
         "EQUALS",
         "LESS_THAN",
+        "LESS_THAN_OR_EQUALS",
         "GREATER_THAN",
+        "GREATER_THAN_OR_EQUALS",
         "IN",
         "NOT_IN",
         "CONTAINS"
@@ -2503,7 +2573,8 @@
         "customerArtifactPaths":{"shape":"CustomerArtifactPaths"},
         "webUrl":{"shape":"String"},
         "skipAppResign":{"shape":"SkipAppResign"},
-        "testSpecArn":{"shape":"AmazonResourceName"}
+        "testSpecArn":{"shape":"AmazonResourceName"},
+        "deviceSelectionResult":{"shape":"DeviceSelectionResult"}
       }
     },
     "Runs":{
@@ -2562,13 +2633,13 @@
       "type":"structure",
       "required":[
         "projectArn",
-        "devicePoolArn",
         "test"
       ],
       "members":{
         "projectArn":{"shape":"AmazonResourceName"},
         "appArn":{"shape":"AmazonResourceName"},
         "devicePoolArn":{"shape":"AmazonResourceName"},
+        "deviceSelectionConfiguration":{"shape":"DeviceSelectionConfiguration"},
         "name":{"shape":"Name"},
         "test":{"shape":"ScheduleRunTest"},
         "configuration":{"shape":"ScheduleRunConfiguration"},
@@ -2700,9 +2771,13 @@
         "APPIUM_JAVA_JUNIT",
         "APPIUM_JAVA_TESTNG",
         "APPIUM_PYTHON",
+        "APPIUM_NODE",
+        "APPIUM_RUBY",
         "APPIUM_WEB_JAVA_JUNIT",
         "APPIUM_WEB_JAVA_TESTNG",
         "APPIUM_WEB_PYTHON",
+        "APPIUM_WEB_NODE",
+        "APPIUM_WEB_RUBY",
         "CALABASH",
         "INSTRUMENTATION",
         "UIAUTOMATION",
@@ -2771,7 +2846,9 @@
         "arn":{"shape":"AmazonResourceName"},
         "name":{"shape":"Name"},
         "description":{"shape":"Message"},
-        "rules":{"shape":"Rules"}
+        "rules":{"shape":"Rules"},
+        "maxDevices":{"shape":"Integer"},
+        "clearMaxDevices":{"shape":"Boolean"}
       }
     },
     "UpdateDevicePoolResult":{
@@ -2911,9 +2988,13 @@
         "APPIUM_JAVA_JUNIT_TEST_PACKAGE",
         "APPIUM_JAVA_TESTNG_TEST_PACKAGE",
         "APPIUM_PYTHON_TEST_PACKAGE",
+        "APPIUM_NODE_TEST_PACKAGE",
+        "APPIUM_RUBY_TEST_PACKAGE",
         "APPIUM_WEB_JAVA_JUNIT_TEST_PACKAGE",
         "APPIUM_WEB_JAVA_TESTNG_TEST_PACKAGE",
         "APPIUM_WEB_PYTHON_TEST_PACKAGE",
+        "APPIUM_WEB_NODE_TEST_PACKAGE",
+        "APPIUM_WEB_RUBY_TEST_PACKAGE",
         "CALABASH_TEST_PACKAGE",
         "INSTRUMENTATION_TEST_PACKAGE",
         "UIAUTOMATION_TEST_PACKAGE",
@@ -2923,9 +3004,13 @@
         "APPIUM_JAVA_JUNIT_TEST_SPEC",
         "APPIUM_JAVA_TESTNG_TEST_SPEC",
         "APPIUM_PYTHON_TEST_SPEC",
+        "APPIUM_NODE_TEST_SPEC",
+        "APPIUM_RUBY_TEST_SPEC",
         "APPIUM_WEB_JAVA_JUNIT_TEST_SPEC",
         "APPIUM_WEB_JAVA_TESTNG_TEST_SPEC",
         "APPIUM_WEB_PYTHON_TEST_SPEC",
+        "APPIUM_WEB_NODE_TEST_SPEC",
+        "APPIUM_WEB_RUBY_TEST_SPEC",
         "INSTRUMENTATION_TEST_SPEC",
         "XCTEST_UI_TEST_SPEC"
       ]

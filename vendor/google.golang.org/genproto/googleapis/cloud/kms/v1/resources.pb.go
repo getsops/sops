@@ -38,7 +38,6 @@ var ProtectionLevel_name = map[int32]string{
 	1: "SOFTWARE",
 	2: "HSM",
 }
-
 var ProtectionLevel_value = map[string]int32{
 	"PROTECTION_LEVEL_UNSPECIFIED": 0,
 	"SOFTWARE":                     1,
@@ -48,9 +47,8 @@ var ProtectionLevel_value = map[string]int32{
 func (x ProtectionLevel) String() string {
 	return proto.EnumName(ProtectionLevel_name, int32(x))
 }
-
 func (ProtectionLevel) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{0}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{0}
 }
 
 // [CryptoKeyPurpose][google.cloud.kms.v1.CryptoKey.CryptoKeyPurpose] describes the cryptographic capabilities of a
@@ -81,7 +79,6 @@ var CryptoKey_CryptoKeyPurpose_name = map[int32]string{
 	5: "ASYMMETRIC_SIGN",
 	6: "ASYMMETRIC_DECRYPT",
 }
-
 var CryptoKey_CryptoKeyPurpose_value = map[string]int32{
 	"CRYPTO_KEY_PURPOSE_UNSPECIFIED": 0,
 	"ENCRYPT_DECRYPT":                1,
@@ -92,9 +89,8 @@ var CryptoKey_CryptoKeyPurpose_value = map[string]int32{
 func (x CryptoKey_CryptoKeyPurpose) String() string {
 	return proto.EnumName(CryptoKey_CryptoKeyPurpose_name, int32(x))
 }
-
 func (CryptoKey_CryptoKeyPurpose) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{1, 0}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{1, 0}
 }
 
 // Attestion formats provided by the HSM.
@@ -111,7 +107,6 @@ var KeyOperationAttestation_AttestationFormat_name = map[int32]string{
 	0: "ATTESTATION_FORMAT_UNSPECIFIED",
 	3: "CAVIUM_V1_COMPRESSED",
 }
-
 var KeyOperationAttestation_AttestationFormat_value = map[string]int32{
 	"ATTESTATION_FORMAT_UNSPECIFIED": 0,
 	"CAVIUM_V1_COMPRESSED":           3,
@@ -120,9 +115,8 @@ var KeyOperationAttestation_AttestationFormat_value = map[string]int32{
 func (x KeyOperationAttestation_AttestationFormat) String() string {
 	return proto.EnumName(KeyOperationAttestation_AttestationFormat_name, int32(x))
 }
-
 func (KeyOperationAttestation_AttestationFormat) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{3, 0}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{3, 0}
 }
 
 // The algorithm of the [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating what
@@ -202,7 +196,6 @@ var CryptoKeyVersion_CryptoKeyVersionAlgorithm_name = map[int32]string{
 	12: "EC_SIGN_P256_SHA256",
 	13: "EC_SIGN_P384_SHA384",
 }
-
 var CryptoKeyVersion_CryptoKeyVersionAlgorithm_value = map[string]int32{
 	"CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED": 0,
 	"GOOGLE_SYMMETRIC_ENCRYPTION":              1,
@@ -222,9 +215,8 @@ var CryptoKeyVersion_CryptoKeyVersionAlgorithm_value = map[string]int32{
 func (x CryptoKeyVersion_CryptoKeyVersionAlgorithm) String() string {
 	return proto.EnumName(CryptoKeyVersion_CryptoKeyVersionAlgorithm_name, int32(x))
 }
-
 func (CryptoKeyVersion_CryptoKeyVersionAlgorithm) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{4, 0}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{4, 0}
 }
 
 // The state of a [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion], indicating if it can be used.
@@ -260,7 +252,6 @@ var CryptoKeyVersion_CryptoKeyVersionState_name = map[int32]string{
 	3: "DESTROYED",
 	4: "DESTROY_SCHEDULED",
 }
-
 var CryptoKeyVersion_CryptoKeyVersionState_value = map[string]int32{
 	"CRYPTO_KEY_VERSION_STATE_UNSPECIFIED": 0,
 	"PENDING_GENERATION":                   5,
@@ -273,9 +264,8 @@ var CryptoKeyVersion_CryptoKeyVersionState_value = map[string]int32{
 func (x CryptoKeyVersion_CryptoKeyVersionState) String() string {
 	return proto.EnumName(CryptoKeyVersion_CryptoKeyVersionState_name, int32(x))
 }
-
 func (CryptoKeyVersion_CryptoKeyVersionState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{4, 1}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{4, 1}
 }
 
 // A view for [CryptoKeyVersion][google.cloud.kms.v1.CryptoKeyVersion]s. Controls the level of detail returned
@@ -297,7 +287,6 @@ var CryptoKeyVersion_CryptoKeyVersionView_name = map[int32]string{
 	0: "CRYPTO_KEY_VERSION_VIEW_UNSPECIFIED",
 	1: "FULL",
 }
-
 var CryptoKeyVersion_CryptoKeyVersionView_value = map[string]int32{
 	"CRYPTO_KEY_VERSION_VIEW_UNSPECIFIED": 0,
 	"FULL":                                1,
@@ -306,9 +295,8 @@ var CryptoKeyVersion_CryptoKeyVersionView_value = map[string]int32{
 func (x CryptoKeyVersion_CryptoKeyVersionView) String() string {
 	return proto.EnumName(CryptoKeyVersion_CryptoKeyVersionView_name, int32(x))
 }
-
 func (CryptoKeyVersion_CryptoKeyVersionView) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{4, 2}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{4, 2}
 }
 
 // A [KeyRing][google.cloud.kms.v1.KeyRing] is a toplevel logical grouping of [CryptoKeys][google.cloud.kms.v1.CryptoKey].
@@ -327,7 +315,7 @@ func (m *KeyRing) Reset()         { *m = KeyRing{} }
 func (m *KeyRing) String() string { return proto.CompactTextString(m) }
 func (*KeyRing) ProtoMessage()    {}
 func (*KeyRing) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{0}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{0}
 }
 func (m *KeyRing) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KeyRing.Unmarshal(m, b)
@@ -335,8 +323,8 @@ func (m *KeyRing) XXX_Unmarshal(b []byte) error {
 func (m *KeyRing) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_KeyRing.Marshal(b, m, deterministic)
 }
-func (m *KeyRing) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_KeyRing.Merge(m, src)
+func (dst *KeyRing) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KeyRing.Merge(dst, src)
 }
 func (m *KeyRing) XXX_Size() int {
 	return xxx_messageInfo_KeyRing.Size(m)
@@ -421,7 +409,7 @@ func (m *CryptoKey) Reset()         { *m = CryptoKey{} }
 func (m *CryptoKey) String() string { return proto.CompactTextString(m) }
 func (*CryptoKey) ProtoMessage()    {}
 func (*CryptoKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{1}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{1}
 }
 func (m *CryptoKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CryptoKey.Unmarshal(m, b)
@@ -429,8 +417,8 @@ func (m *CryptoKey) XXX_Unmarshal(b []byte) error {
 func (m *CryptoKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CryptoKey.Marshal(b, m, deterministic)
 }
-func (m *CryptoKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CryptoKey.Merge(m, src)
+func (dst *CryptoKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CryptoKey.Merge(dst, src)
 }
 func (m *CryptoKey) XXX_Size() int {
 	return xxx_messageInfo_CryptoKey.Size(m)
@@ -593,7 +581,7 @@ func (m *CryptoKeyVersionTemplate) Reset()         { *m = CryptoKeyVersionTempla
 func (m *CryptoKeyVersionTemplate) String() string { return proto.CompactTextString(m) }
 func (*CryptoKeyVersionTemplate) ProtoMessage()    {}
 func (*CryptoKeyVersionTemplate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{2}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{2}
 }
 func (m *CryptoKeyVersionTemplate) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CryptoKeyVersionTemplate.Unmarshal(m, b)
@@ -601,8 +589,8 @@ func (m *CryptoKeyVersionTemplate) XXX_Unmarshal(b []byte) error {
 func (m *CryptoKeyVersionTemplate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CryptoKeyVersionTemplate.Marshal(b, m, deterministic)
 }
-func (m *CryptoKeyVersionTemplate) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CryptoKeyVersionTemplate.Merge(m, src)
+func (dst *CryptoKeyVersionTemplate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CryptoKeyVersionTemplate.Merge(dst, src)
 }
 func (m *CryptoKeyVersionTemplate) XXX_Size() int {
 	return xxx_messageInfo_CryptoKeyVersionTemplate.Size(m)
@@ -643,7 +631,7 @@ func (m *KeyOperationAttestation) Reset()         { *m = KeyOperationAttestation
 func (m *KeyOperationAttestation) String() string { return proto.CompactTextString(m) }
 func (*KeyOperationAttestation) ProtoMessage()    {}
 func (*KeyOperationAttestation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{3}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{3}
 }
 func (m *KeyOperationAttestation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KeyOperationAttestation.Unmarshal(m, b)
@@ -651,8 +639,8 @@ func (m *KeyOperationAttestation) XXX_Unmarshal(b []byte) error {
 func (m *KeyOperationAttestation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_KeyOperationAttestation.Marshal(b, m, deterministic)
 }
-func (m *KeyOperationAttestation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_KeyOperationAttestation.Merge(m, src)
+func (dst *KeyOperationAttestation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_KeyOperationAttestation.Merge(dst, src)
 }
 func (m *KeyOperationAttestation) XXX_Size() int {
 	return xxx_messageInfo_KeyOperationAttestation.Size(m)
@@ -726,7 +714,7 @@ func (m *CryptoKeyVersion) Reset()         { *m = CryptoKeyVersion{} }
 func (m *CryptoKeyVersion) String() string { return proto.CompactTextString(m) }
 func (*CryptoKeyVersion) ProtoMessage()    {}
 func (*CryptoKeyVersion) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{4}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{4}
 }
 func (m *CryptoKeyVersion) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CryptoKeyVersion.Unmarshal(m, b)
@@ -734,8 +722,8 @@ func (m *CryptoKeyVersion) XXX_Unmarshal(b []byte) error {
 func (m *CryptoKeyVersion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CryptoKeyVersion.Marshal(b, m, deterministic)
 }
-func (m *CryptoKeyVersion) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CryptoKeyVersion.Merge(m, src)
+func (dst *CryptoKeyVersion) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CryptoKeyVersion.Merge(dst, src)
 }
 func (m *CryptoKeyVersion) XXX_Size() int {
 	return xxx_messageInfo_CryptoKeyVersion.Size(m)
@@ -830,7 +818,7 @@ func (m *PublicKey) Reset()         { *m = PublicKey{} }
 func (m *PublicKey) String() string { return proto.CompactTextString(m) }
 func (*PublicKey) ProtoMessage()    {}
 func (*PublicKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e40e1384d35a80c5, []int{5}
+	return fileDescriptor_resources_0cd4d0dda71f2af2, []int{5}
 }
 func (m *PublicKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PublicKey.Unmarshal(m, b)
@@ -838,8 +826,8 @@ func (m *PublicKey) XXX_Unmarshal(b []byte) error {
 func (m *PublicKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PublicKey.Marshal(b, m, deterministic)
 }
-func (m *PublicKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PublicKey.Merge(m, src)
+func (dst *PublicKey) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PublicKey.Merge(dst, src)
 }
 func (m *PublicKey) XXX_Size() int {
 	return xxx_messageInfo_PublicKey.Size(m)
@@ -881,10 +869,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/kms/v1/resources.proto", fileDescriptor_e40e1384d35a80c5)
+	proto.RegisterFile("google/cloud/kms/v1/resources.proto", fileDescriptor_resources_0cd4d0dda71f2af2)
 }
 
-var fileDescriptor_e40e1384d35a80c5 = []byte{
+var fileDescriptor_resources_0cd4d0dda71f2af2 = []byte{
 	// 1197 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x5d, 0x6e, 0xdb, 0x46,
 	0x10, 0x0e, 0x25, 0xcb, 0xb2, 0x46, 0x4e, 0x4c, 0xaf, 0xf3, 0xa3, 0xb8, 0x41, 0x62, 0x28, 0x29,

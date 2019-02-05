@@ -35,25 +35,39 @@ type ShapeValidation struct {
 	Type ShapeValidationType
 }
 
-var validationGoCodeTmpls = template.Must(template.New("validationGoCodeTmpls").Parse(`
+var validationGoCodeTmpls = template.Must(
+	template.New("validationGoCodeTmpls").
+		Funcs(template.FuncMap{
+			"getMin": func(ref *ShapeRef) float64 {
+				if !ref.CanBeEmpty() && ref.Shape.Min <= 0 {
+					return 1
+				}
+
+				return ref.Shape.Min
+			},
+		}).
+		Parse(`
 {{ define "requiredValue" -}}
     if s.{{ .Name }} == nil { 
 		invalidParams.Add(request.NewErrParamRequired("{{ .Name }}"))
     }
 {{- end }}
 {{ define "minLen" -}}
-	if s.{{ .Name }} != nil && len(s.{{ .Name }}) < {{ .Ref.Shape.Min }} {
-		invalidParams.Add(request.NewErrParamMinLen("{{ .Name }}", {{ .Ref.Shape.Min }}))
+	{{- $min := getMin .Ref -}}
+	if s.{{ .Name }} != nil && len(s.{{ .Name }}) < {{ $min }} {
+		invalidParams.Add(request.NewErrParamMinLen("{{ .Name }}", {{ $min }}))
 	}
 {{- end }}
 {{ define "minLenString" -}}
-	if s.{{ .Name }} != nil && len(*s.{{ .Name }}) < {{ .Ref.Shape.Min }} {
-		invalidParams.Add(request.NewErrParamMinLen("{{ .Name }}", {{ .Ref.Shape.Min }}))
+	{{- $min := getMin .Ref -}}
+	if s.{{ .Name }} != nil && len(*s.{{ .Name }}) < {{ $min }} {
+		invalidParams.Add(request.NewErrParamMinLen("{{ .Name }}", {{ $min }}))
 	}
 {{- end }}
 {{ define "minVal" -}}
-	if s.{{ .Name }} != nil && *s.{{ .Name }} < {{ .Ref.Shape.Min }} {
-		invalidParams.Add(request.NewErrParamMinValue("{{ .Name }}", {{ .Ref.Shape.Min }}))
+	{{- $min := getMin .Ref -}}
+	if s.{{ .Name }} != nil && *s.{{ .Name }} < {{ $min }} {
+		invalidParams.Add(request.NewErrParamMinValue("{{ .Name }}", {{ $min }}))
 	}
 {{- end }}
 {{ define "nestedMapList" -}}

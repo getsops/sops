@@ -40,7 +40,6 @@ var AliasContext_Kind_name = map[int32]string{
 	2: "MOVABLE",
 	4: "OTHER",
 }
-
 var AliasContext_Kind_value = map[string]int32{
 	"KIND_UNSPECIFIED": 0,
 	"FIXED":            1,
@@ -51,9 +50,8 @@ var AliasContext_Kind_value = map[string]int32{
 func (x AliasContext_Kind) String() string {
 	return proto.EnumName(AliasContext_Kind_name, int32(x))
 }
-
 func (AliasContext_Kind) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{1, 0}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{1, 0}
 }
 
 // A SourceContext is a reference to a tree of files. A SourceContext together
@@ -77,7 +75,7 @@ func (m *SourceContext) Reset()         { *m = SourceContext{} }
 func (m *SourceContext) String() string { return proto.CompactTextString(m) }
 func (*SourceContext) ProtoMessage()    {}
 func (*SourceContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{0}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{0}
 }
 func (m *SourceContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SourceContext.Unmarshal(m, b)
@@ -85,8 +83,8 @@ func (m *SourceContext) XXX_Unmarshal(b []byte) error {
 func (m *SourceContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SourceContext.Marshal(b, m, deterministic)
 }
-func (m *SourceContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceContext.Merge(m, src)
+func (dst *SourceContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SourceContext.Merge(dst, src)
 }
 func (m *SourceContext) XXX_Size() int {
 	return xxx_messageInfo_SourceContext.Size(m)
@@ -262,7 +260,7 @@ func (m *AliasContext) Reset()         { *m = AliasContext{} }
 func (m *AliasContext) String() string { return proto.CompactTextString(m) }
 func (*AliasContext) ProtoMessage()    {}
 func (*AliasContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{1}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{1}
 }
 func (m *AliasContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AliasContext.Unmarshal(m, b)
@@ -270,8 +268,8 @@ func (m *AliasContext) XXX_Unmarshal(b []byte) error {
 func (m *AliasContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AliasContext.Marshal(b, m, deterministic)
 }
-func (m *AliasContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AliasContext.Merge(m, src)
+func (dst *AliasContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AliasContext.Merge(dst, src)
 }
 func (m *AliasContext) XXX_Size() int {
 	return xxx_messageInfo_AliasContext.Size(m)
@@ -317,7 +315,7 @@ func (m *CloudRepoSourceContext) Reset()         { *m = CloudRepoSourceContext{}
 func (m *CloudRepoSourceContext) String() string { return proto.CompactTextString(m) }
 func (*CloudRepoSourceContext) ProtoMessage()    {}
 func (*CloudRepoSourceContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{2}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{2}
 }
 func (m *CloudRepoSourceContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CloudRepoSourceContext.Unmarshal(m, b)
@@ -325,8 +323,8 @@ func (m *CloudRepoSourceContext) XXX_Unmarshal(b []byte) error {
 func (m *CloudRepoSourceContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CloudRepoSourceContext.Marshal(b, m, deterministic)
 }
-func (m *CloudRepoSourceContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CloudRepoSourceContext.Merge(m, src)
+func (dst *CloudRepoSourceContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CloudRepoSourceContext.Merge(dst, src)
 }
 func (m *CloudRepoSourceContext) XXX_Size() int {
 	return xxx_messageInfo_CloudRepoSourceContext.Size(m)
@@ -475,7 +473,7 @@ func (m *GerritSourceContext) Reset()         { *m = GerritSourceContext{} }
 func (m *GerritSourceContext) String() string { return proto.CompactTextString(m) }
 func (*GerritSourceContext) ProtoMessage()    {}
 func (*GerritSourceContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{3}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{3}
 }
 func (m *GerritSourceContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GerritSourceContext.Unmarshal(m, b)
@@ -483,8 +481,8 @@ func (m *GerritSourceContext) XXX_Unmarshal(b []byte) error {
 func (m *GerritSourceContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GerritSourceContext.Marshal(b, m, deterministic)
 }
-func (m *GerritSourceContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GerritSourceContext.Merge(m, src)
+func (dst *GerritSourceContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GerritSourceContext.Merge(dst, src)
 }
 func (m *GerritSourceContext) XXX_Size() int {
 	return xxx_messageInfo_GerritSourceContext.Size(m)
@@ -633,7 +631,7 @@ func (m *GitSourceContext) Reset()         { *m = GitSourceContext{} }
 func (m *GitSourceContext) String() string { return proto.CompactTextString(m) }
 func (*GitSourceContext) ProtoMessage()    {}
 func (*GitSourceContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{4}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{4}
 }
 func (m *GitSourceContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GitSourceContext.Unmarshal(m, b)
@@ -641,8 +639,8 @@ func (m *GitSourceContext) XXX_Unmarshal(b []byte) error {
 func (m *GitSourceContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GitSourceContext.Marshal(b, m, deterministic)
 }
-func (m *GitSourceContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GitSourceContext.Merge(m, src)
+func (dst *GitSourceContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GitSourceContext.Merge(dst, src)
 }
 func (m *GitSourceContext) XXX_Size() int {
 	return xxx_messageInfo_GitSourceContext.Size(m)
@@ -685,7 +683,7 @@ func (m *RepoId) Reset()         { *m = RepoId{} }
 func (m *RepoId) String() string { return proto.CompactTextString(m) }
 func (*RepoId) ProtoMessage()    {}
 func (*RepoId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{5}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{5}
 }
 func (m *RepoId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RepoId.Unmarshal(m, b)
@@ -693,8 +691,8 @@ func (m *RepoId) XXX_Unmarshal(b []byte) error {
 func (m *RepoId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RepoId.Marshal(b, m, deterministic)
 }
-func (m *RepoId) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RepoId.Merge(m, src)
+func (dst *RepoId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RepoId.Merge(dst, src)
 }
 func (m *RepoId) XXX_Size() int {
 	return xxx_messageInfo_RepoId.Size(m)
@@ -828,7 +826,7 @@ func (m *ProjectRepoId) Reset()         { *m = ProjectRepoId{} }
 func (m *ProjectRepoId) String() string { return proto.CompactTextString(m) }
 func (*ProjectRepoId) ProtoMessage()    {}
 func (*ProjectRepoId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_49411dfe5c54cc3e, []int{6}
+	return fileDescriptor_source_context_78f437f8b7f72e1b, []int{6}
 }
 func (m *ProjectRepoId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProjectRepoId.Unmarshal(m, b)
@@ -836,8 +834,8 @@ func (m *ProjectRepoId) XXX_Unmarshal(b []byte) error {
 func (m *ProjectRepoId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProjectRepoId.Marshal(b, m, deterministic)
 }
-func (m *ProjectRepoId) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProjectRepoId.Merge(m, src)
+func (dst *ProjectRepoId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProjectRepoId.Merge(dst, src)
 }
 func (m *ProjectRepoId) XXX_Size() int {
 	return xxx_messageInfo_ProjectRepoId.Size(m)
@@ -875,10 +873,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1alpha1/source_context.proto", fileDescriptor_49411dfe5c54cc3e)
+	proto.RegisterFile("google/devtools/containeranalysis/v1alpha1/source_context.proto", fileDescriptor_source_context_78f437f8b7f72e1b)
 }
 
-var fileDescriptor_49411dfe5c54cc3e = []byte{
+var fileDescriptor_source_context_78f437f8b7f72e1b = []byte{
 	// 675 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0x5d, 0x4e, 0xdb, 0x4a,
 	0x14, 0xc7, 0xe3, 0x38, 0x24, 0xf8, 0x84, 0x70, 0xa3, 0xb9, 0xe8, 0x2a, 0x97, 0x7b, 0xab, 0x52,

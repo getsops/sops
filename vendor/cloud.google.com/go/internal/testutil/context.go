@@ -16,12 +16,12 @@
 package testutil
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"golang.org/x/oauth2/jwt"
@@ -85,7 +85,7 @@ func jwtConfigFromFile(filename string, scopes []string) (*jwt.Config, error) {
 	}
 	jsonKey, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot read the JSON key file, err: %v", err)
+		return nil, fmt.Errorf("cannot read the JSON key file, err: %v", err)
 	}
 	conf, err := google.JWTConfigFromJSON(jsonKey, scopes...)
 	if err != nil {

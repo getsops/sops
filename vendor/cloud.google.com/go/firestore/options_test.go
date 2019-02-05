@@ -17,7 +17,7 @@ package firestore
 import (
 	"testing"
 
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 )
 
 func TestProcessPreconditionsForVerify(t *testing.T) {

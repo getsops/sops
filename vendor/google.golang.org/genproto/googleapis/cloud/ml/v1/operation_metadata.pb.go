@@ -40,7 +40,6 @@ var OperationMetadata_OperationType_name = map[int32]string{
 	2: "DELETE_VERSION",
 	3: "DELETE_MODEL",
 }
-
 var OperationMetadata_OperationType_value = map[string]int32{
 	"OPERATION_TYPE_UNSPECIFIED": 0,
 	"CREATE_VERSION":             1,
@@ -51,9 +50,8 @@ var OperationMetadata_OperationType_value = map[string]int32{
 func (x OperationMetadata_OperationType) String() string {
 	return proto.EnumName(OperationMetadata_OperationType_name, int32(x))
 }
-
 func (OperationMetadata_OperationType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6a63a989e77eed3e, []int{0, 0}
+	return fileDescriptor_operation_metadata_67f21a738daf74c6, []int{0, 0}
 }
 
 // Represents the metadata of the long-running operation.
@@ -81,7 +79,7 @@ func (m *OperationMetadata) Reset()         { *m = OperationMetadata{} }
 func (m *OperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*OperationMetadata) ProtoMessage()    {}
 func (*OperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6a63a989e77eed3e, []int{0}
+	return fileDescriptor_operation_metadata_67f21a738daf74c6, []int{0}
 }
 func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationMetadata.Unmarshal(m, b)
@@ -89,8 +87,8 @@ func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *OperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *OperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationMetadata.Merge(m, src)
+func (dst *OperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationMetadata.Merge(dst, src)
 }
 func (m *OperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_OperationMetadata.Size(m)
@@ -156,10 +154,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/ml/v1/operation_metadata.proto", fileDescriptor_6a63a989e77eed3e)
+	proto.RegisterFile("google/cloud/ml/v1/operation_metadata.proto", fileDescriptor_operation_metadata_67f21a738daf74c6)
 }
 
-var fileDescriptor_6a63a989e77eed3e = []byte{
+var fileDescriptor_operation_metadata_67f21a738daf74c6 = []byte{
 	// 454 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x92, 0x5f, 0x6b, 0xdb, 0x30,
 	0x14, 0xc5, 0xe7, 0xb6, 0x6b, 0x1a, 0x75, 0x0d, 0x99, 0x1e, 0xb6, 0xcc, 0xfb, 0x17, 0xfa, 0x30,

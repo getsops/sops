@@ -19,11 +19,10 @@
 package metadata
 
 import (
+	"context"
 	"reflect"
 	"strconv"
 	"testing"
-
-	"golang.org/x/net/context"
 )
 
 func TestPairsMD(t *testing.T) {

@@ -17,6 +17,7 @@ limitations under the License.
 package spanner
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"testing"
@@ -24,7 +25,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"golang.org/x/net/context"
 	edpb "google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -39,6 +39,7 @@ func TestRetry(t *testing.T) {
 	responses := []error{
 		status.Errorf(codes.Internal, "transport is closing"),
 		status.Errorf(codes.Unknown, "unexpected EOF"),
+		status.Errorf(codes.Internal, "unexpected EOF"),
 		status.Errorf(codes.Internal, "stream terminated by RST_STREAM with error code: 2"),
 		status.Errorf(codes.Unavailable, "service is currently unavailable"),
 		errRetry(fmt.Errorf("just retry it")),

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -48,8 +48,10 @@ func TestApply(t *testing.T) {
 		WithGRPCConn(conn),
 		WithUserAgent("ua"),
 		WithCredentialsFile("service-account.json"),
+		WithCredentialsJSON([]byte(`{some: "json"}`)),
 		WithCredentials(&google.DefaultCredentials{ProjectID: "p"}),
 		WithAPIKey("api-key"),
+		WithAudiences("https://example.com/"),
 	}
 	var got internal.DialSettings
 	for _, opt := range opts {
@@ -62,7 +64,9 @@ func TestApply(t *testing.T) {
 		GRPCConn:        conn,
 		Credentials:     &google.DefaultCredentials{ProjectID: "p"},
 		CredentialsFile: "service-account.json",
+		CredentialsJSON: []byte(`{some: "json"}`),
 		APIKey:          "api-key",
+		Audiences:       []string{"https://example.com/"},
 	}
 	if !cmp.Equal(got, want, cmpopts.IgnoreUnexported(grpc.ClientConn{})) {
 		t.Errorf("\ngot  %#v\nwant %#v", got, want)

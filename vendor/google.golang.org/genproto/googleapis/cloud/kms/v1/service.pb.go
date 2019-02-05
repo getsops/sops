@@ -49,7 +49,7 @@ func (m *ListKeyRingsRequest) Reset()         { *m = ListKeyRingsRequest{} }
 func (m *ListKeyRingsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListKeyRingsRequest) ProtoMessage()    {}
 func (*ListKeyRingsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{0}
+	return fileDescriptor_service_799861e3104b1d84, []int{0}
 }
 func (m *ListKeyRingsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListKeyRingsRequest.Unmarshal(m, b)
@@ -57,8 +57,8 @@ func (m *ListKeyRingsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListKeyRingsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListKeyRingsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListKeyRingsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListKeyRingsRequest.Merge(m, src)
+func (dst *ListKeyRingsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListKeyRingsRequest.Merge(dst, src)
 }
 func (m *ListKeyRingsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListKeyRingsRequest.Size(m)
@@ -114,7 +114,7 @@ func (m *ListCryptoKeysRequest) Reset()         { *m = ListCryptoKeysRequest{} }
 func (m *ListCryptoKeysRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCryptoKeysRequest) ProtoMessage()    {}
 func (*ListCryptoKeysRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{1}
+	return fileDescriptor_service_799861e3104b1d84, []int{1}
 }
 func (m *ListCryptoKeysRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCryptoKeysRequest.Unmarshal(m, b)
@@ -122,8 +122,8 @@ func (m *ListCryptoKeysRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListCryptoKeysRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCryptoKeysRequest.Marshal(b, m, deterministic)
 }
-func (m *ListCryptoKeysRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCryptoKeysRequest.Merge(m, src)
+func (dst *ListCryptoKeysRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCryptoKeysRequest.Merge(dst, src)
 }
 func (m *ListCryptoKeysRequest) XXX_Size() int {
 	return xxx_messageInfo_ListCryptoKeysRequest.Size(m)
@@ -187,7 +187,7 @@ func (m *ListCryptoKeyVersionsRequest) Reset()         { *m = ListCryptoKeyVersi
 func (m *ListCryptoKeyVersionsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCryptoKeyVersionsRequest) ProtoMessage()    {}
 func (*ListCryptoKeyVersionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{2}
+	return fileDescriptor_service_799861e3104b1d84, []int{2}
 }
 func (m *ListCryptoKeyVersionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCryptoKeyVersionsRequest.Unmarshal(m, b)
@@ -195,8 +195,8 @@ func (m *ListCryptoKeyVersionsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListCryptoKeyVersionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCryptoKeyVersionsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListCryptoKeyVersionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCryptoKeyVersionsRequest.Merge(m, src)
+func (dst *ListCryptoKeyVersionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCryptoKeyVersionsRequest.Merge(dst, src)
 }
 func (m *ListCryptoKeyVersionsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListCryptoKeyVersionsRequest.Size(m)
@@ -253,7 +253,7 @@ func (m *ListKeyRingsResponse) Reset()         { *m = ListKeyRingsResponse{} }
 func (m *ListKeyRingsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListKeyRingsResponse) ProtoMessage()    {}
 func (*ListKeyRingsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{3}
+	return fileDescriptor_service_799861e3104b1d84, []int{3}
 }
 func (m *ListKeyRingsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListKeyRingsResponse.Unmarshal(m, b)
@@ -261,8 +261,8 @@ func (m *ListKeyRingsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListKeyRingsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListKeyRingsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListKeyRingsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListKeyRingsResponse.Merge(m, src)
+func (dst *ListKeyRingsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListKeyRingsResponse.Merge(dst, src)
 }
 func (m *ListKeyRingsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListKeyRingsResponse.Size(m)
@@ -312,7 +312,7 @@ func (m *ListCryptoKeysResponse) Reset()         { *m = ListCryptoKeysResponse{}
 func (m *ListCryptoKeysResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCryptoKeysResponse) ProtoMessage()    {}
 func (*ListCryptoKeysResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{4}
+	return fileDescriptor_service_799861e3104b1d84, []int{4}
 }
 func (m *ListCryptoKeysResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCryptoKeysResponse.Unmarshal(m, b)
@@ -320,8 +320,8 @@ func (m *ListCryptoKeysResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListCryptoKeysResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCryptoKeysResponse.Marshal(b, m, deterministic)
 }
-func (m *ListCryptoKeysResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCryptoKeysResponse.Merge(m, src)
+func (dst *ListCryptoKeysResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCryptoKeysResponse.Merge(dst, src)
 }
 func (m *ListCryptoKeysResponse) XXX_Size() int {
 	return xxx_messageInfo_ListCryptoKeysResponse.Size(m)
@@ -373,7 +373,7 @@ func (m *ListCryptoKeyVersionsResponse) Reset()         { *m = ListCryptoKeyVers
 func (m *ListCryptoKeyVersionsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCryptoKeyVersionsResponse) ProtoMessage()    {}
 func (*ListCryptoKeyVersionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{5}
+	return fileDescriptor_service_799861e3104b1d84, []int{5}
 }
 func (m *ListCryptoKeyVersionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCryptoKeyVersionsResponse.Unmarshal(m, b)
@@ -381,8 +381,8 @@ func (m *ListCryptoKeyVersionsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListCryptoKeyVersionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCryptoKeyVersionsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListCryptoKeyVersionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCryptoKeyVersionsResponse.Merge(m, src)
+func (dst *ListCryptoKeyVersionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCryptoKeyVersionsResponse.Merge(dst, src)
 }
 func (m *ListCryptoKeyVersionsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListCryptoKeyVersionsResponse.Size(m)
@@ -427,7 +427,7 @@ func (m *GetKeyRingRequest) Reset()         { *m = GetKeyRingRequest{} }
 func (m *GetKeyRingRequest) String() string { return proto.CompactTextString(m) }
 func (*GetKeyRingRequest) ProtoMessage()    {}
 func (*GetKeyRingRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{6}
+	return fileDescriptor_service_799861e3104b1d84, []int{6}
 }
 func (m *GetKeyRingRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetKeyRingRequest.Unmarshal(m, b)
@@ -435,8 +435,8 @@ func (m *GetKeyRingRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetKeyRingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetKeyRingRequest.Marshal(b, m, deterministic)
 }
-func (m *GetKeyRingRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetKeyRingRequest.Merge(m, src)
+func (dst *GetKeyRingRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetKeyRingRequest.Merge(dst, src)
 }
 func (m *GetKeyRingRequest) XXX_Size() int {
 	return xxx_messageInfo_GetKeyRingRequest.Size(m)
@@ -467,7 +467,7 @@ func (m *GetCryptoKeyRequest) Reset()         { *m = GetCryptoKeyRequest{} }
 func (m *GetCryptoKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetCryptoKeyRequest) ProtoMessage()    {}
 func (*GetCryptoKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{7}
+	return fileDescriptor_service_799861e3104b1d84, []int{7}
 }
 func (m *GetCryptoKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetCryptoKeyRequest.Unmarshal(m, b)
@@ -475,8 +475,8 @@ func (m *GetCryptoKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetCryptoKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetCryptoKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetCryptoKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetCryptoKeyRequest.Merge(m, src)
+func (dst *GetCryptoKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCryptoKeyRequest.Merge(dst, src)
 }
 func (m *GetCryptoKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetCryptoKeyRequest.Size(m)
@@ -507,7 +507,7 @@ func (m *GetCryptoKeyVersionRequest) Reset()         { *m = GetCryptoKeyVersionR
 func (m *GetCryptoKeyVersionRequest) String() string { return proto.CompactTextString(m) }
 func (*GetCryptoKeyVersionRequest) ProtoMessage()    {}
 func (*GetCryptoKeyVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{8}
+	return fileDescriptor_service_799861e3104b1d84, []int{8}
 }
 func (m *GetCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetCryptoKeyVersionRequest.Unmarshal(m, b)
@@ -515,8 +515,8 @@ func (m *GetCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetCryptoKeyVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetCryptoKeyVersionRequest.Marshal(b, m, deterministic)
 }
-func (m *GetCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetCryptoKeyVersionRequest.Merge(m, src)
+func (dst *GetCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetCryptoKeyVersionRequest.Merge(dst, src)
 }
 func (m *GetCryptoKeyVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_GetCryptoKeyVersionRequest.Size(m)
@@ -548,7 +548,7 @@ func (m *GetPublicKeyRequest) Reset()         { *m = GetPublicKeyRequest{} }
 func (m *GetPublicKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*GetPublicKeyRequest) ProtoMessage()    {}
 func (*GetPublicKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{9}
+	return fileDescriptor_service_799861e3104b1d84, []int{9}
 }
 func (m *GetPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPublicKeyRequest.Unmarshal(m, b)
@@ -556,8 +556,8 @@ func (m *GetPublicKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetPublicKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetPublicKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *GetPublicKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetPublicKeyRequest.Merge(m, src)
+func (dst *GetPublicKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetPublicKeyRequest.Merge(dst, src)
 }
 func (m *GetPublicKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_GetPublicKeyRequest.Size(m)
@@ -594,7 +594,7 @@ func (m *CreateKeyRingRequest) Reset()         { *m = CreateKeyRingRequest{} }
 func (m *CreateKeyRingRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateKeyRingRequest) ProtoMessage()    {}
 func (*CreateKeyRingRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{10}
+	return fileDescriptor_service_799861e3104b1d84, []int{10}
 }
 func (m *CreateKeyRingRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateKeyRingRequest.Unmarshal(m, b)
@@ -602,8 +602,8 @@ func (m *CreateKeyRingRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateKeyRingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateKeyRingRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateKeyRingRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateKeyRingRequest.Merge(m, src)
+func (dst *CreateKeyRingRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateKeyRingRequest.Merge(dst, src)
 }
 func (m *CreateKeyRingRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateKeyRingRequest.Size(m)
@@ -654,7 +654,7 @@ func (m *CreateCryptoKeyRequest) Reset()         { *m = CreateCryptoKeyRequest{}
 func (m *CreateCryptoKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateCryptoKeyRequest) ProtoMessage()    {}
 func (*CreateCryptoKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{11}
+	return fileDescriptor_service_799861e3104b1d84, []int{11}
 }
 func (m *CreateCryptoKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateCryptoKeyRequest.Unmarshal(m, b)
@@ -662,8 +662,8 @@ func (m *CreateCryptoKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateCryptoKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateCryptoKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateCryptoKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateCryptoKeyRequest.Merge(m, src)
+func (dst *CreateCryptoKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateCryptoKeyRequest.Merge(dst, src)
 }
 func (m *CreateCryptoKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateCryptoKeyRequest.Size(m)
@@ -711,7 +711,7 @@ func (m *CreateCryptoKeyVersionRequest) Reset()         { *m = CreateCryptoKeyVe
 func (m *CreateCryptoKeyVersionRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateCryptoKeyVersionRequest) ProtoMessage()    {}
 func (*CreateCryptoKeyVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{12}
+	return fileDescriptor_service_799861e3104b1d84, []int{12}
 }
 func (m *CreateCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateCryptoKeyVersionRequest.Unmarshal(m, b)
@@ -719,8 +719,8 @@ func (m *CreateCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateCryptoKeyVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateCryptoKeyVersionRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateCryptoKeyVersionRequest.Merge(m, src)
+func (dst *CreateCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateCryptoKeyVersionRequest.Merge(dst, src)
 }
 func (m *CreateCryptoKeyVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateCryptoKeyVersionRequest.Size(m)
@@ -760,7 +760,7 @@ func (m *UpdateCryptoKeyRequest) Reset()         { *m = UpdateCryptoKeyRequest{}
 func (m *UpdateCryptoKeyRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateCryptoKeyRequest) ProtoMessage()    {}
 func (*UpdateCryptoKeyRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{13}
+	return fileDescriptor_service_799861e3104b1d84, []int{13}
 }
 func (m *UpdateCryptoKeyRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateCryptoKeyRequest.Unmarshal(m, b)
@@ -768,8 +768,8 @@ func (m *UpdateCryptoKeyRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateCryptoKeyRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateCryptoKeyRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateCryptoKeyRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateCryptoKeyRequest.Merge(m, src)
+func (dst *UpdateCryptoKeyRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateCryptoKeyRequest.Merge(dst, src)
 }
 func (m *UpdateCryptoKeyRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateCryptoKeyRequest.Size(m)
@@ -809,7 +809,7 @@ func (m *UpdateCryptoKeyVersionRequest) Reset()         { *m = UpdateCryptoKeyVe
 func (m *UpdateCryptoKeyVersionRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateCryptoKeyVersionRequest) ProtoMessage()    {}
 func (*UpdateCryptoKeyVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{14}
+	return fileDescriptor_service_799861e3104b1d84, []int{14}
 }
 func (m *UpdateCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateCryptoKeyVersionRequest.Unmarshal(m, b)
@@ -817,8 +817,8 @@ func (m *UpdateCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateCryptoKeyVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateCryptoKeyVersionRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateCryptoKeyVersionRequest.Merge(m, src)
+func (dst *UpdateCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateCryptoKeyVersionRequest.Merge(dst, src)
 }
 func (m *UpdateCryptoKeyVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateCryptoKeyVersionRequest.Size(m)
@@ -879,7 +879,7 @@ func (m *EncryptRequest) Reset()         { *m = EncryptRequest{} }
 func (m *EncryptRequest) String() string { return proto.CompactTextString(m) }
 func (*EncryptRequest) ProtoMessage()    {}
 func (*EncryptRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{15}
+	return fileDescriptor_service_799861e3104b1d84, []int{15}
 }
 func (m *EncryptRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EncryptRequest.Unmarshal(m, b)
@@ -887,8 +887,8 @@ func (m *EncryptRequest) XXX_Unmarshal(b []byte) error {
 func (m *EncryptRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EncryptRequest.Marshal(b, m, deterministic)
 }
-func (m *EncryptRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EncryptRequest.Merge(m, src)
+func (dst *EncryptRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EncryptRequest.Merge(dst, src)
 }
 func (m *EncryptRequest) XXX_Size() int {
 	return xxx_messageInfo_EncryptRequest.Size(m)
@@ -940,7 +940,7 @@ func (m *DecryptRequest) Reset()         { *m = DecryptRequest{} }
 func (m *DecryptRequest) String() string { return proto.CompactTextString(m) }
 func (*DecryptRequest) ProtoMessage()    {}
 func (*DecryptRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{16}
+	return fileDescriptor_service_799861e3104b1d84, []int{16}
 }
 func (m *DecryptRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DecryptRequest.Unmarshal(m, b)
@@ -948,8 +948,8 @@ func (m *DecryptRequest) XXX_Unmarshal(b []byte) error {
 func (m *DecryptRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DecryptRequest.Marshal(b, m, deterministic)
 }
-func (m *DecryptRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DecryptRequest.Merge(m, src)
+func (dst *DecryptRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DecryptRequest.Merge(dst, src)
 }
 func (m *DecryptRequest) XXX_Size() int {
 	return xxx_messageInfo_DecryptRequest.Size(m)
@@ -998,7 +998,7 @@ func (m *AsymmetricSignRequest) Reset()         { *m = AsymmetricSignRequest{} }
 func (m *AsymmetricSignRequest) String() string { return proto.CompactTextString(m) }
 func (*AsymmetricSignRequest) ProtoMessage()    {}
 func (*AsymmetricSignRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{17}
+	return fileDescriptor_service_799861e3104b1d84, []int{17}
 }
 func (m *AsymmetricSignRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsymmetricSignRequest.Unmarshal(m, b)
@@ -1006,8 +1006,8 @@ func (m *AsymmetricSignRequest) XXX_Unmarshal(b []byte) error {
 func (m *AsymmetricSignRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsymmetricSignRequest.Marshal(b, m, deterministic)
 }
-func (m *AsymmetricSignRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsymmetricSignRequest.Merge(m, src)
+func (dst *AsymmetricSignRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsymmetricSignRequest.Merge(dst, src)
 }
 func (m *AsymmetricSignRequest) XXX_Size() int {
 	return xxx_messageInfo_AsymmetricSignRequest.Size(m)
@@ -1049,7 +1049,7 @@ func (m *AsymmetricDecryptRequest) Reset()         { *m = AsymmetricDecryptReque
 func (m *AsymmetricDecryptRequest) String() string { return proto.CompactTextString(m) }
 func (*AsymmetricDecryptRequest) ProtoMessage()    {}
 func (*AsymmetricDecryptRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{18}
+	return fileDescriptor_service_799861e3104b1d84, []int{18}
 }
 func (m *AsymmetricDecryptRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsymmetricDecryptRequest.Unmarshal(m, b)
@@ -1057,8 +1057,8 @@ func (m *AsymmetricDecryptRequest) XXX_Unmarshal(b []byte) error {
 func (m *AsymmetricDecryptRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsymmetricDecryptRequest.Marshal(b, m, deterministic)
 }
-func (m *AsymmetricDecryptRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsymmetricDecryptRequest.Merge(m, src)
+func (dst *AsymmetricDecryptRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsymmetricDecryptRequest.Merge(dst, src)
 }
 func (m *AsymmetricDecryptRequest) XXX_Size() int {
 	return xxx_messageInfo_AsymmetricDecryptRequest.Size(m)
@@ -1096,7 +1096,7 @@ func (m *DecryptResponse) Reset()         { *m = DecryptResponse{} }
 func (m *DecryptResponse) String() string { return proto.CompactTextString(m) }
 func (*DecryptResponse) ProtoMessage()    {}
 func (*DecryptResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{19}
+	return fileDescriptor_service_799861e3104b1d84, []int{19}
 }
 func (m *DecryptResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DecryptResponse.Unmarshal(m, b)
@@ -1104,8 +1104,8 @@ func (m *DecryptResponse) XXX_Unmarshal(b []byte) error {
 func (m *DecryptResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DecryptResponse.Marshal(b, m, deterministic)
 }
-func (m *DecryptResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DecryptResponse.Merge(m, src)
+func (dst *DecryptResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DecryptResponse.Merge(dst, src)
 }
 func (m *DecryptResponse) XXX_Size() int {
 	return xxx_messageInfo_DecryptResponse.Size(m)
@@ -1138,7 +1138,7 @@ func (m *EncryptResponse) Reset()         { *m = EncryptResponse{} }
 func (m *EncryptResponse) String() string { return proto.CompactTextString(m) }
 func (*EncryptResponse) ProtoMessage()    {}
 func (*EncryptResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{20}
+	return fileDescriptor_service_799861e3104b1d84, []int{20}
 }
 func (m *EncryptResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EncryptResponse.Unmarshal(m, b)
@@ -1146,8 +1146,8 @@ func (m *EncryptResponse) XXX_Unmarshal(b []byte) error {
 func (m *EncryptResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EncryptResponse.Marshal(b, m, deterministic)
 }
-func (m *EncryptResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EncryptResponse.Merge(m, src)
+func (dst *EncryptResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EncryptResponse.Merge(dst, src)
 }
 func (m *EncryptResponse) XXX_Size() int {
 	return xxx_messageInfo_EncryptResponse.Size(m)
@@ -1185,7 +1185,7 @@ func (m *AsymmetricSignResponse) Reset()         { *m = AsymmetricSignResponse{}
 func (m *AsymmetricSignResponse) String() string { return proto.CompactTextString(m) }
 func (*AsymmetricSignResponse) ProtoMessage()    {}
 func (*AsymmetricSignResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{21}
+	return fileDescriptor_service_799861e3104b1d84, []int{21}
 }
 func (m *AsymmetricSignResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsymmetricSignResponse.Unmarshal(m, b)
@@ -1193,8 +1193,8 @@ func (m *AsymmetricSignResponse) XXX_Unmarshal(b []byte) error {
 func (m *AsymmetricSignResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsymmetricSignResponse.Marshal(b, m, deterministic)
 }
-func (m *AsymmetricSignResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsymmetricSignResponse.Merge(m, src)
+func (dst *AsymmetricSignResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsymmetricSignResponse.Merge(dst, src)
 }
 func (m *AsymmetricSignResponse) XXX_Size() int {
 	return xxx_messageInfo_AsymmetricSignResponse.Size(m)
@@ -1225,7 +1225,7 @@ func (m *AsymmetricDecryptResponse) Reset()         { *m = AsymmetricDecryptResp
 func (m *AsymmetricDecryptResponse) String() string { return proto.CompactTextString(m) }
 func (*AsymmetricDecryptResponse) ProtoMessage()    {}
 func (*AsymmetricDecryptResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{22}
+	return fileDescriptor_service_799861e3104b1d84, []int{22}
 }
 func (m *AsymmetricDecryptResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AsymmetricDecryptResponse.Unmarshal(m, b)
@@ -1233,8 +1233,8 @@ func (m *AsymmetricDecryptResponse) XXX_Unmarshal(b []byte) error {
 func (m *AsymmetricDecryptResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AsymmetricDecryptResponse.Marshal(b, m, deterministic)
 }
-func (m *AsymmetricDecryptResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AsymmetricDecryptResponse.Merge(m, src)
+func (dst *AsymmetricDecryptResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AsymmetricDecryptResponse.Merge(dst, src)
 }
 func (m *AsymmetricDecryptResponse) XXX_Size() int {
 	return xxx_messageInfo_AsymmetricDecryptResponse.Size(m)
@@ -1267,7 +1267,7 @@ func (m *UpdateCryptoKeyPrimaryVersionRequest) Reset()         { *m = UpdateCryp
 func (m *UpdateCryptoKeyPrimaryVersionRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateCryptoKeyPrimaryVersionRequest) ProtoMessage()    {}
 func (*UpdateCryptoKeyPrimaryVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{23}
+	return fileDescriptor_service_799861e3104b1d84, []int{23}
 }
 func (m *UpdateCryptoKeyPrimaryVersionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateCryptoKeyPrimaryVersionRequest.Unmarshal(m, b)
@@ -1275,8 +1275,8 @@ func (m *UpdateCryptoKeyPrimaryVersionRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateCryptoKeyPrimaryVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateCryptoKeyPrimaryVersionRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateCryptoKeyPrimaryVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateCryptoKeyPrimaryVersionRequest.Merge(m, src)
+func (dst *UpdateCryptoKeyPrimaryVersionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateCryptoKeyPrimaryVersionRequest.Merge(dst, src)
 }
 func (m *UpdateCryptoKeyPrimaryVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateCryptoKeyPrimaryVersionRequest.Size(m)
@@ -1314,7 +1314,7 @@ func (m *DestroyCryptoKeyVersionRequest) Reset()         { *m = DestroyCryptoKey
 func (m *DestroyCryptoKeyVersionRequest) String() string { return proto.CompactTextString(m) }
 func (*DestroyCryptoKeyVersionRequest) ProtoMessage()    {}
 func (*DestroyCryptoKeyVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{24}
+	return fileDescriptor_service_799861e3104b1d84, []int{24}
 }
 func (m *DestroyCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DestroyCryptoKeyVersionRequest.Unmarshal(m, b)
@@ -1322,8 +1322,8 @@ func (m *DestroyCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 func (m *DestroyCryptoKeyVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DestroyCryptoKeyVersionRequest.Marshal(b, m, deterministic)
 }
-func (m *DestroyCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DestroyCryptoKeyVersionRequest.Merge(m, src)
+func (dst *DestroyCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DestroyCryptoKeyVersionRequest.Merge(dst, src)
 }
 func (m *DestroyCryptoKeyVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_DestroyCryptoKeyVersionRequest.Size(m)
@@ -1354,7 +1354,7 @@ func (m *RestoreCryptoKeyVersionRequest) Reset()         { *m = RestoreCryptoKey
 func (m *RestoreCryptoKeyVersionRequest) String() string { return proto.CompactTextString(m) }
 func (*RestoreCryptoKeyVersionRequest) ProtoMessage()    {}
 func (*RestoreCryptoKeyVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{25}
+	return fileDescriptor_service_799861e3104b1d84, []int{25}
 }
 func (m *RestoreCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RestoreCryptoKeyVersionRequest.Unmarshal(m, b)
@@ -1362,8 +1362,8 @@ func (m *RestoreCryptoKeyVersionRequest) XXX_Unmarshal(b []byte) error {
 func (m *RestoreCryptoKeyVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RestoreCryptoKeyVersionRequest.Marshal(b, m, deterministic)
 }
-func (m *RestoreCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RestoreCryptoKeyVersionRequest.Merge(m, src)
+func (dst *RestoreCryptoKeyVersionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RestoreCryptoKeyVersionRequest.Merge(dst, src)
 }
 func (m *RestoreCryptoKeyVersionRequest) XXX_Size() int {
 	return xxx_messageInfo_RestoreCryptoKeyVersionRequest.Size(m)
@@ -1399,7 +1399,7 @@ func (m *Digest) Reset()         { *m = Digest{} }
 func (m *Digest) String() string { return proto.CompactTextString(m) }
 func (*Digest) ProtoMessage()    {}
 func (*Digest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{26}
+	return fileDescriptor_service_799861e3104b1d84, []int{26}
 }
 func (m *Digest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Digest.Unmarshal(m, b)
@@ -1407,8 +1407,8 @@ func (m *Digest) XXX_Unmarshal(b []byte) error {
 func (m *Digest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Digest.Marshal(b, m, deterministic)
 }
-func (m *Digest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Digest.Merge(m, src)
+func (dst *Digest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Digest.Merge(dst, src)
 }
 func (m *Digest) XXX_Size() int {
 	return xxx_messageInfo_Digest.Size(m)
@@ -1565,7 +1565,7 @@ func (m *LocationMetadata) Reset()         { *m = LocationMetadata{} }
 func (m *LocationMetadata) String() string { return proto.CompactTextString(m) }
 func (*LocationMetadata) ProtoMessage()    {}
 func (*LocationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_723aeaeb61739a25, []int{27}
+	return fileDescriptor_service_799861e3104b1d84, []int{27}
 }
 func (m *LocationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LocationMetadata.Unmarshal(m, b)
@@ -1573,8 +1573,8 @@ func (m *LocationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *LocationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LocationMetadata.Marshal(b, m, deterministic)
 }
-func (m *LocationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LocationMetadata.Merge(m, src)
+func (dst *LocationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LocationMetadata.Merge(dst, src)
 }
 func (m *LocationMetadata) XXX_Size() int {
 	return xxx_messageInfo_LocationMetadata.Size(m)
@@ -2415,9 +2415,11 @@ var _KeyManagementService_serviceDesc = grpc.ServiceDesc{
 	Metadata: "google/cloud/kms/v1/service.proto",
 }
 
-func init() { proto.RegisterFile("google/cloud/kms/v1/service.proto", fileDescriptor_723aeaeb61739a25) }
+func init() {
+	proto.RegisterFile("google/cloud/kms/v1/service.proto", fileDescriptor_service_799861e3104b1d84)
+}
 
-var fileDescriptor_723aeaeb61739a25 = []byte{
+var fileDescriptor_service_799861e3104b1d84 = []byte{
 	// 1666 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0xcd, 0x73, 0x1b, 0xc5,
 	0x12, 0x7f, 0x63, 0xe7, 0x39, 0x76, 0xfb, 0x2b, 0x19, 0x27, 0x8e, 0x9f, 0x62, 0xbb, 0xfc, 0x26,

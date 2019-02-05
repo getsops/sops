@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
@@ -48,6 +49,16 @@ func NewListClient(endpoint string) ListClient {
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client ListClient) AddFaceFromStream(ctx context.Context, faceListID string, imageParameter io.ReadCloser, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.AddFaceFromStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -137,6 +148,16 @@ func (client ListClient) AddFaceFromStreamResponder(resp *http.Response) (result
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face
 // detected in the entire image.
 func (client ListClient) AddFaceFromURL(ctx context.Context, faceListID string, imageURL ImageURL, userData string, targetFace []int32) (result PersistedFace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.AddFaceFromURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -222,6 +243,16 @@ func (client ListClient) AddFaceFromURLResponder(resp *http.Response) (result Pe
 // faceListID - id referencing a particular face list.
 // body - request body for creating a face list.
 func (client ListClient) Create(ctx context.Context, faceListID string, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -298,6 +329,16 @@ func (client ListClient) CreateResponder(resp *http.Response) (result autorest.R
 // Parameters:
 // faceListID - id referencing a particular face list.
 func (client ListClient) Delete(ctx context.Context, faceListID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -362,12 +403,22 @@ func (client ListClient) DeleteResponder(resp *http.Response) (result autorest.R
 	return
 }
 
-// DeleteFace delete an existing face from a face list (given by a persisitedFaceId and a faceListId). Persisted image
+// DeleteFace delete an existing face from a face list (given by a persistedFaceId and a faceListId). Persisted image
 // related to the face will also be deleted.
 // Parameters:
 // faceListID - id referencing a particular face list.
 // persistedFaceID - id referencing a particular persistedFaceId of an existing face.
 func (client ListClient) DeleteFace(ctx context.Context, faceListID string, persistedFaceID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.DeleteFace")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -437,6 +488,16 @@ func (client ListClient) DeleteFaceResponder(resp *http.Response) (result autore
 // Parameters:
 // faceListID - id referencing a particular face list.
 func (client ListClient) Get(ctx context.Context, faceListID string) (result List, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -504,6 +565,16 @@ func (client ListClient) GetResponder(resp *http.Response) (result List, err err
 
 // List retrieve information about all existing face lists. Only faceListId, name and userData will be returned.
 func (client ListClient) List(ctx context.Context) (result ListList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "face.ListClient", "List", nil, "Failure preparing request")
@@ -563,6 +634,16 @@ func (client ListClient) ListResponder(resp *http.Response) (result ListList, er
 // faceListID - id referencing a particular face list.
 // body - request body for updating a face list.
 func (client ListClient) Update(ctx context.Context, faceListID string, body NameAndUserDataContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},

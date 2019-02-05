@@ -27,7 +27,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Available log entry formats. Log entries can be written to Stackdriver
+// Available log entry formats. Log entries can be written to
 // Logging in either format and can be exported in either format.
 // Version 2 is the preferred format.
 type LogSink_VersionFormat int32
@@ -46,7 +46,6 @@ var LogSink_VersionFormat_name = map[int32]string{
 	1: "V2",
 	2: "V1",
 }
-
 var LogSink_VersionFormat_value = map[string]int32{
 	"VERSION_FORMAT_UNSPECIFIED": 0,
 	"V2":                         1,
@@ -56,9 +55,8 @@ var LogSink_VersionFormat_value = map[string]int32{
 func (x LogSink_VersionFormat) String() string {
 	return proto.EnumName(LogSink_VersionFormat_name, int32(x))
 }
-
 func (LogSink_VersionFormat) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{0, 0}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{0, 0}
 }
 
 // Describes a sink used to export log entries to one of the following
@@ -95,7 +93,7 @@ type LogSink struct {
 	// entries.  The v2 format is used by default and cannot be changed.
 	OutputVersionFormat LogSink_VersionFormat `protobuf:"varint,6,opt,name=output_version_format,json=outputVersionFormat,proto3,enum=google.logging.v2.LogSink_VersionFormat" json:"output_version_format,omitempty"` // Deprecated: Do not use.
 	// Output only. An IAM identity&mdash;a service account or group&mdash;under
-	// which Stackdriver Logging writes the exported log entries to the sink's
+	// which Logging writes the exported log entries to the sink's
 	// destination.  This field is set by
 	// [sinks.create](/logging/docs/api/reference/rest/v2/projects.sinks/create)
 	// and
@@ -136,7 +134,7 @@ func (m *LogSink) Reset()         { *m = LogSink{} }
 func (m *LogSink) String() string { return proto.CompactTextString(m) }
 func (*LogSink) ProtoMessage()    {}
 func (*LogSink) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{0}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{0}
 }
 func (m *LogSink) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LogSink.Unmarshal(m, b)
@@ -144,8 +142,8 @@ func (m *LogSink) XXX_Unmarshal(b []byte) error {
 func (m *LogSink) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LogSink.Marshal(b, m, deterministic)
 }
-func (m *LogSink) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LogSink.Merge(m, src)
+func (dst *LogSink) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LogSink.Merge(dst, src)
 }
 func (m *LogSink) XXX_Size() int {
 	return xxx_messageInfo_LogSink.Size(m)
@@ -242,7 +240,7 @@ func (m *ListSinksRequest) Reset()         { *m = ListSinksRequest{} }
 func (m *ListSinksRequest) String() string { return proto.CompactTextString(m) }
 func (*ListSinksRequest) ProtoMessage()    {}
 func (*ListSinksRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{1}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{1}
 }
 func (m *ListSinksRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSinksRequest.Unmarshal(m, b)
@@ -250,8 +248,8 @@ func (m *ListSinksRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListSinksRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSinksRequest.Marshal(b, m, deterministic)
 }
-func (m *ListSinksRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSinksRequest.Merge(m, src)
+func (dst *ListSinksRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSinksRequest.Merge(dst, src)
 }
 func (m *ListSinksRequest) XXX_Size() int {
 	return xxx_messageInfo_ListSinksRequest.Size(m)
@@ -300,7 +298,7 @@ func (m *ListSinksResponse) Reset()         { *m = ListSinksResponse{} }
 func (m *ListSinksResponse) String() string { return proto.CompactTextString(m) }
 func (*ListSinksResponse) ProtoMessage()    {}
 func (*ListSinksResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{2}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{2}
 }
 func (m *ListSinksResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListSinksResponse.Unmarshal(m, b)
@@ -308,8 +306,8 @@ func (m *ListSinksResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListSinksResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListSinksResponse.Marshal(b, m, deterministic)
 }
-func (m *ListSinksResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListSinksResponse.Merge(m, src)
+func (dst *ListSinksResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListSinksResponse.Merge(dst, src)
 }
 func (m *ListSinksResponse) XXX_Size() int {
 	return xxx_messageInfo_ListSinksResponse.Size(m)
@@ -354,7 +352,7 @@ func (m *GetSinkRequest) Reset()         { *m = GetSinkRequest{} }
 func (m *GetSinkRequest) String() string { return proto.CompactTextString(m) }
 func (*GetSinkRequest) ProtoMessage()    {}
 func (*GetSinkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{3}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{3}
 }
 func (m *GetSinkRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetSinkRequest.Unmarshal(m, b)
@@ -362,8 +360,8 @@ func (m *GetSinkRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetSinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetSinkRequest.Marshal(b, m, deterministic)
 }
-func (m *GetSinkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSinkRequest.Merge(m, src)
+func (dst *GetSinkRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSinkRequest.Merge(dst, src)
 }
 func (m *GetSinkRequest) XXX_Size() int {
 	return xxx_messageInfo_GetSinkRequest.Size(m)
@@ -398,7 +396,7 @@ type CreateSinkRequest struct {
 	// Optional. Determines the kind of IAM identity returned as `writer_identity`
 	// in the new sink.  If this value is omitted or set to false, and if the
 	// sink's parent is a project, then the value returned as `writer_identity` is
-	// the same group or service account used by Stackdriver Logging before the
+	// the same group or service account used by Logging before the
 	// addition of writer identities to this API. The sink's destination must be
 	// in the same project as the sink itself.
 	//
@@ -416,7 +414,7 @@ func (m *CreateSinkRequest) Reset()         { *m = CreateSinkRequest{} }
 func (m *CreateSinkRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateSinkRequest) ProtoMessage()    {}
 func (*CreateSinkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{4}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{4}
 }
 func (m *CreateSinkRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateSinkRequest.Unmarshal(m, b)
@@ -424,8 +422,8 @@ func (m *CreateSinkRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateSinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateSinkRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateSinkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateSinkRequest.Merge(m, src)
+func (dst *CreateSinkRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateSinkRequest.Merge(dst, src)
 }
 func (m *CreateSinkRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateSinkRequest.Size(m)
@@ -496,7 +494,7 @@ type UpdateSinkRequest struct {
 	// empty updateMask will be an error.
 	//
 	// For a detailed `FieldMask` definition, see
-	// https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask
+	// https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#google.protobuf.FieldMask
 	//
 	// Example: `updateMask=filter`.
 	UpdateMask           *field_mask.FieldMask `protobuf:"bytes,4,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`
@@ -509,7 +507,7 @@ func (m *UpdateSinkRequest) Reset()         { *m = UpdateSinkRequest{} }
 func (m *UpdateSinkRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateSinkRequest) ProtoMessage()    {}
 func (*UpdateSinkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{5}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{5}
 }
 func (m *UpdateSinkRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateSinkRequest.Unmarshal(m, b)
@@ -517,8 +515,8 @@ func (m *UpdateSinkRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateSinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateSinkRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateSinkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateSinkRequest.Merge(m, src)
+func (dst *UpdateSinkRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateSinkRequest.Merge(dst, src)
 }
 func (m *UpdateSinkRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateSinkRequest.Size(m)
@@ -578,7 +576,7 @@ func (m *DeleteSinkRequest) Reset()         { *m = DeleteSinkRequest{} }
 func (m *DeleteSinkRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteSinkRequest) ProtoMessage()    {}
 func (*DeleteSinkRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{6}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{6}
 }
 func (m *DeleteSinkRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteSinkRequest.Unmarshal(m, b)
@@ -586,8 +584,8 @@ func (m *DeleteSinkRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteSinkRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteSinkRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteSinkRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteSinkRequest.Merge(m, src)
+func (dst *DeleteSinkRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteSinkRequest.Merge(dst, src)
 }
 func (m *DeleteSinkRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteSinkRequest.Size(m)
@@ -605,7 +603,7 @@ func (m *DeleteSinkRequest) GetSinkName() string {
 	return ""
 }
 
-// Specifies a set of log entries that are not to be stored in Stackdriver
+// Specifies a set of log entries that are not to be stored in
 // Logging. If your project receives a large volume of logs, you might be able
 // to use exclusions to reduce your chargeable logs. Exclusions are processed
 // after log sinks, so you can export log entries before they are excluded.
@@ -642,7 +640,7 @@ func (m *LogExclusion) Reset()         { *m = LogExclusion{} }
 func (m *LogExclusion) String() string { return proto.CompactTextString(m) }
 func (*LogExclusion) ProtoMessage()    {}
 func (*LogExclusion) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{7}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{7}
 }
 func (m *LogExclusion) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LogExclusion.Unmarshal(m, b)
@@ -650,8 +648,8 @@ func (m *LogExclusion) XXX_Unmarshal(b []byte) error {
 func (m *LogExclusion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LogExclusion.Marshal(b, m, deterministic)
 }
-func (m *LogExclusion) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LogExclusion.Merge(m, src)
+func (dst *LogExclusion) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LogExclusion.Merge(dst, src)
 }
 func (m *LogExclusion) XXX_Size() int {
 	return xxx_messageInfo_LogExclusion.Size(m)
@@ -717,7 +715,7 @@ func (m *ListExclusionsRequest) Reset()         { *m = ListExclusionsRequest{} }
 func (m *ListExclusionsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListExclusionsRequest) ProtoMessage()    {}
 func (*ListExclusionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{8}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{8}
 }
 func (m *ListExclusionsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListExclusionsRequest.Unmarshal(m, b)
@@ -725,8 +723,8 @@ func (m *ListExclusionsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListExclusionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListExclusionsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListExclusionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListExclusionsRequest.Merge(m, src)
+func (dst *ListExclusionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListExclusionsRequest.Merge(dst, src)
 }
 func (m *ListExclusionsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListExclusionsRequest.Size(m)
@@ -775,7 +773,7 @@ func (m *ListExclusionsResponse) Reset()         { *m = ListExclusionsResponse{}
 func (m *ListExclusionsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListExclusionsResponse) ProtoMessage()    {}
 func (*ListExclusionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{9}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{9}
 }
 func (m *ListExclusionsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListExclusionsResponse.Unmarshal(m, b)
@@ -783,8 +781,8 @@ func (m *ListExclusionsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListExclusionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListExclusionsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListExclusionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListExclusionsResponse.Merge(m, src)
+func (dst *ListExclusionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListExclusionsResponse.Merge(dst, src)
 }
 func (m *ListExclusionsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListExclusionsResponse.Size(m)
@@ -829,7 +827,7 @@ func (m *GetExclusionRequest) Reset()         { *m = GetExclusionRequest{} }
 func (m *GetExclusionRequest) String() string { return proto.CompactTextString(m) }
 func (*GetExclusionRequest) ProtoMessage()    {}
 func (*GetExclusionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{10}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{10}
 }
 func (m *GetExclusionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetExclusionRequest.Unmarshal(m, b)
@@ -837,8 +835,8 @@ func (m *GetExclusionRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetExclusionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetExclusionRequest.Marshal(b, m, deterministic)
 }
-func (m *GetExclusionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetExclusionRequest.Merge(m, src)
+func (dst *GetExclusionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetExclusionRequest.Merge(dst, src)
 }
 func (m *GetExclusionRequest) XXX_Size() int {
 	return xxx_messageInfo_GetExclusionRequest.Size(m)
@@ -879,7 +877,7 @@ func (m *CreateExclusionRequest) Reset()         { *m = CreateExclusionRequest{}
 func (m *CreateExclusionRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateExclusionRequest) ProtoMessage()    {}
 func (*CreateExclusionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{11}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{11}
 }
 func (m *CreateExclusionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateExclusionRequest.Unmarshal(m, b)
@@ -887,8 +885,8 @@ func (m *CreateExclusionRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateExclusionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateExclusionRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateExclusionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateExclusionRequest.Merge(m, src)
+func (dst *CreateExclusionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateExclusionRequest.Merge(dst, src)
 }
 func (m *CreateExclusionRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateExclusionRequest.Size(m)
@@ -944,7 +942,7 @@ func (m *UpdateExclusionRequest) Reset()         { *m = UpdateExclusionRequest{}
 func (m *UpdateExclusionRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateExclusionRequest) ProtoMessage()    {}
 func (*UpdateExclusionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{12}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{12}
 }
 func (m *UpdateExclusionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateExclusionRequest.Unmarshal(m, b)
@@ -952,8 +950,8 @@ func (m *UpdateExclusionRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateExclusionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateExclusionRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateExclusionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateExclusionRequest.Merge(m, src)
+func (dst *UpdateExclusionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateExclusionRequest.Merge(dst, src)
 }
 func (m *UpdateExclusionRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateExclusionRequest.Size(m)
@@ -1005,7 +1003,7 @@ func (m *DeleteExclusionRequest) Reset()         { *m = DeleteExclusionRequest{}
 func (m *DeleteExclusionRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteExclusionRequest) ProtoMessage()    {}
 func (*DeleteExclusionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_775871f9b2cdbeb8, []int{13}
+	return fileDescriptor_logging_config_5737f9be5c535814, []int{13}
 }
 func (m *DeleteExclusionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteExclusionRequest.Unmarshal(m, b)
@@ -1013,8 +1011,8 @@ func (m *DeleteExclusionRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteExclusionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteExclusionRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteExclusionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteExclusionRequest.Merge(m, src)
+func (dst *DeleteExclusionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteExclusionRequest.Merge(dst, src)
 }
 func (m *DeleteExclusionRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteExclusionRequest.Size(m)
@@ -1458,10 +1456,10 @@ var _ConfigServiceV2_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/logging/v2/logging_config.proto", fileDescriptor_775871f9b2cdbeb8)
+	proto.RegisterFile("google/logging/v2/logging_config.proto", fileDescriptor_logging_config_5737f9be5c535814)
 }
 
-var fileDescriptor_775871f9b2cdbeb8 = []byte{
+var fileDescriptor_logging_config_5737f9be5c535814 = []byte{
 	// 1446 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x58, 0xcf, 0x6f, 0xdc, 0x44,
 	0x14, 0xc6, 0xde, 0x36, 0xcd, 0xbe, 0xb4, 0xf9, 0x31, 0xa5, 0xcb, 0xe2, 0xf4, 0xc7, 0xd6, 0x0d,

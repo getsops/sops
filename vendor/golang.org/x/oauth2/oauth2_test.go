@@ -5,6 +5,7 @@
 package oauth2
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -13,8 +14,6 @@ import (
 	"net/url"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 type mockTransport struct {

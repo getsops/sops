@@ -47,7 +47,7 @@ func (m *Usage) Reset()         { *m = Usage{} }
 func (m *Usage) String() string { return proto.CompactTextString(m) }
 func (*Usage) ProtoMessage()    {}
 func (*Usage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_701aa74a03c68f0a, []int{0}
+	return fileDescriptor_usage_d93cb687fa4d5498, []int{0}
 }
 func (m *Usage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Usage.Unmarshal(m, b)
@@ -55,8 +55,8 @@ func (m *Usage) XXX_Unmarshal(b []byte) error {
 func (m *Usage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Usage.Marshal(b, m, deterministic)
 }
-func (m *Usage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Usage.Merge(m, src)
+func (dst *Usage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Usage.Merge(dst, src)
 }
 func (m *Usage) XXX_Size() int {
 	return xxx_messageInfo_Usage.Size(m)
@@ -136,7 +136,7 @@ func (m *UsageRule) Reset()         { *m = UsageRule{} }
 func (m *UsageRule) String() string { return proto.CompactTextString(m) }
 func (*UsageRule) ProtoMessage()    {}
 func (*UsageRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_701aa74a03c68f0a, []int{1}
+	return fileDescriptor_usage_d93cb687fa4d5498, []int{1}
 }
 func (m *UsageRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UsageRule.Unmarshal(m, b)
@@ -144,8 +144,8 @@ func (m *UsageRule) XXX_Unmarshal(b []byte) error {
 func (m *UsageRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UsageRule.Marshal(b, m, deterministic)
 }
-func (m *UsageRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UsageRule.Merge(m, src)
+func (dst *UsageRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UsageRule.Merge(dst, src)
 }
 func (m *UsageRule) XXX_Size() int {
 	return xxx_messageInfo_UsageRule.Size(m)
@@ -182,9 +182,9 @@ func init() {
 	proto.RegisterType((*UsageRule)(nil), "google.api.UsageRule")
 }
 
-func init() { proto.RegisterFile("google/api/usage.proto", fileDescriptor_701aa74a03c68f0a) }
+func init() { proto.RegisterFile("google/api/usage.proto", fileDescriptor_usage_d93cb687fa4d5498) }
 
-var fileDescriptor_701aa74a03c68f0a = []byte{
+var fileDescriptor_usage_d93cb687fa4d5498 = []byte{
 	// 331 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x91, 0xc1, 0x4b, 0xfb, 0x30,
 	0x14, 0xc7, 0xe9, 0xf6, 0xdb, 0x7e, 0x5b, 0x14, 0x0f, 0x41, 0x47, 0x99, 0x0a, 0x65, 0xa7, 0x82,

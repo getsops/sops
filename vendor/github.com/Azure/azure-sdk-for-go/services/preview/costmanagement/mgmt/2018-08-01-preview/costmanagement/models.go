@@ -18,26 +18,118 @@ package costmanagement
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
+	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/costmanagement/mgmt/2018-08-01-preview/costmanagement"
+
+// AlertCategory enumerates the values for alert category.
+type AlertCategory string
+
+const (
+	// Billing ...
+	Billing AlertCategory = "Billing"
+	// Cost ...
+	Cost AlertCategory = "Cost"
+	// Usage ...
+	Usage AlertCategory = "Usage"
+)
+
+// PossibleAlertCategoryValues returns an array of possible values for the AlertCategory const type.
+func PossibleAlertCategoryValues() []AlertCategory {
+	return []AlertCategory{Billing, Cost, Usage}
+}
+
+// AlertCriteria enumerates the values for alert criteria.
+type AlertCriteria string
+
+const (
+	// CostThresholdExceeded ...
+	CostThresholdExceeded AlertCriteria = "CostThresholdExceeded"
+	// CreditThresholdReached ...
+	CreditThresholdReached AlertCriteria = "CreditThresholdReached"
+	// UsageThresholdExceeded ...
+	UsageThresholdExceeded AlertCriteria = "UsageThresholdExceeded"
+)
+
+// PossibleAlertCriteriaValues returns an array of possible values for the AlertCriteria const type.
+func PossibleAlertCriteriaValues() []AlertCriteria {
+	return []AlertCriteria{CostThresholdExceeded, CreditThresholdReached, UsageThresholdExceeded}
+}
+
+// AlertSource enumerates the values for alert source.
+type AlertSource string
+
+const (
+	// Preset ...
+	Preset AlertSource = "Preset"
+	// User ...
+	User AlertSource = "User"
+)
+
+// PossibleAlertSourceValues returns an array of possible values for the AlertSource const type.
+func PossibleAlertSourceValues() []AlertSource {
+	return []AlertSource{Preset, User}
+}
+
+// AlertStatus enumerates the values for alert status.
+type AlertStatus string
+
+const (
+	// Active ...
+	Active AlertStatus = "Active"
+	// Dismissed ...
+	Dismissed AlertStatus = "Dismissed"
+	// Overridden ...
+	Overridden AlertStatus = "Overridden"
+	// Resolved ...
+	Resolved AlertStatus = "Resolved"
+)
+
+// PossibleAlertStatusValues returns an array of possible values for the AlertStatus const type.
+func PossibleAlertStatusValues() []AlertStatus {
+	return []AlertStatus{Active, Dismissed, Overridden, Resolved}
+}
+
+// AlertType enumerates the values for alert type.
+type AlertType string
+
+const (
+	// Budget ...
+	Budget AlertType = "Budget"
+	// Credit ...
+	Credit AlertType = "Credit"
+	// Invoice ...
+	Invoice AlertType = "Invoice"
+)
+
+// PossibleAlertTypeValues returns an array of possible values for the AlertType const type.
+func PossibleAlertTypeValues() []AlertType {
+	return []AlertType{Budget, Credit, Invoice}
+}
 
 // ConnectorStatus enumerates the values for connector status.
 type ConnectorStatus string
 
 const (
-	// Active ...
-	Active ConnectorStatus = "active"
-	// Error ...
-	Error ConnectorStatus = "error"
-	// Suspended ...
-	Suspended ConnectorStatus = "suspended"
+	// ConnectorStatusActive ...
+	ConnectorStatusActive ConnectorStatus = "active"
+	// ConnectorStatusError ...
+	ConnectorStatusError ConnectorStatus = "error"
+	// ConnectorStatusSuspended ...
+	ConnectorStatusSuspended ConnectorStatus = "suspended"
 )
 
 // PossibleConnectorStatusValues returns an array of possible values for the ConnectorStatus const type.
 func PossibleConnectorStatusValues() []ConnectorStatus {
-	return []ConnectorStatus{Active, Error, Suspended}
+	return []ConnectorStatus{ConnectorStatusActive, ConnectorStatusError, ConnectorStatusSuspended}
 }
 
 // ExecutionStatus enumerates the values for execution status.
@@ -168,6 +260,314 @@ func PossibleTimeframeTypeValues() []TimeframeType {
 	return []TimeframeType{Custom, MonthToDate, WeekToDate}
 }
 
+// Alert the Alert model definition
+type Alert struct {
+	autorest.Response `json:"-"`
+	// ID - Alert id
+	ID *string `json:"id,omitempty"`
+	// Name - Alert name
+	Name *string `json:"name,omitempty"`
+	// Type - Alert type
+	Type *string `json:"type,omitempty"`
+	// AlertProperties - Alert properties
+	*AlertProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Alert.
+func (a Alert) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if a.ID != nil {
+		objectMap["id"] = a.ID
+	}
+	if a.Name != nil {
+		objectMap["name"] = a.Name
+	}
+	if a.Type != nil {
+		objectMap["type"] = a.Type
+	}
+	if a.AlertProperties != nil {
+		objectMap["properties"] = a.AlertProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for Alert struct.
+func (a *Alert) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				a.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				a.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				a.Type = &typeVar
+			}
+		case "properties":
+			if v != nil {
+				var alertProperties AlertProperties
+				err = json.Unmarshal(*v, &alertProperties)
+				if err != nil {
+					return err
+				}
+				a.AlertProperties = &alertProperties
+			}
+		}
+	}
+
+	return nil
+}
+
+// AlertDefinition the definition (rule) of an Alert
+type AlertDefinition struct {
+	// Category - Category of the alert. Possible values include: 'Cost', 'Usage', 'Billing'
+	Category AlertCategory `json:"category,omitempty"`
+	// Type - The type of cost-entity the alert is defined on. Possible values include: 'Budget', 'Invoice', 'Credit'
+	Type AlertType `json:"type,omitempty"`
+	// Criteria - Criteria (condition) of the alert. Possible values include: 'CostThresholdExceeded', 'UsageThresholdExceeded', 'CreditThresholdReached'
+	Criteria AlertCriteria `json:"criteria,omitempty"`
+}
+
+// AlertListResult result of listing alerts. It contains a list of available alerts in the scope provided.
+type AlertListResult struct {
+	autorest.Response `json:"-"`
+	// Value - The list of alerts.
+	Value *[]Alert `json:"value,omitempty"`
+	// NextLink - The URI to fetch the next page of Alerts.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// AlertListResultIterator provides access to a complete listing of Alert values.
+type AlertListResultIterator struct {
+	i    int
+	page AlertListResultPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *AlertListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AlertListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter AlertListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter AlertListResultIterator) Response() AlertListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter AlertListResultIterator) Value() Alert {
+	if !iter.page.NotDone() {
+		return Alert{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the AlertListResultIterator type.
+func NewAlertListResultIterator(page AlertListResultPage) AlertListResultIterator {
+	return AlertListResultIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (alr AlertListResult) IsEmpty() bool {
+	return alr.Value == nil || len(*alr.Value) == 0
+}
+
+// alertListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (alr AlertListResult) alertListResultPreparer(ctx context.Context) (*http.Request, error) {
+	if alr.NextLink == nil || len(to.String(alr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(alr.NextLink)))
+}
+
+// AlertListResultPage contains a page of Alert values.
+type AlertListResultPage struct {
+	fn  func(context.Context, AlertListResult) (AlertListResult, error)
+	alr AlertListResult
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *AlertListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.alr)
+	if err != nil {
+		return err
+	}
+	page.alr = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AlertListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page AlertListResultPage) NotDone() bool {
+	return !page.alr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page AlertListResultPage) Response() AlertListResult {
+	return page.alr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page AlertListResultPage) Values() []Alert {
+	if page.alr.IsEmpty() {
+		return nil
+	}
+	return *page.alr.Value
+}
+
+// Creates a new instance of the AlertListResultPage type.
+func NewAlertListResultPage(getNextPage func(context.Context, AlertListResult) (AlertListResult, error)) AlertListResultPage {
+	return AlertListResultPage{fn: getNextPage}
+}
+
+// AlertProperties the properties of an Alert.
+type AlertProperties struct {
+	// CostEntityID - The id of the creating cost-entity (budget, invoice, credit).
+	CostEntityID *string `json:"costEntityId,omitempty"`
+	// Definition - The definition (rule) of an Alert
+	Definition *AlertDefinition `json:"definition,omitempty"`
+	// Description - Description of an alert.
+	Description *string `json:"description,omitempty"`
+	// Scope - The scope of an alert.
+	Scope *string `json:"scope,omitempty"`
+	// Source - The source of an Alert. Possible values include: 'Preset', 'User'
+	Source AlertSource `json:"source,omitempty"`
+	// Details - Specific details of an alert - key-value dictionary.
+	Details map[string]*string `json:"details"`
+	// CreationTime - The time when the alert was created.
+	CreationTime *date.Time `json:"creationTime,omitempty"`
+	// CloseTime - The time when the alert was closed (resolved / overridden).
+	CloseTime *date.Time `json:"closeTime,omitempty"`
+	// Status - The current status of the alert. Possible values include: 'Active', 'Overridden', 'Resolved', 'Dismissed'
+	Status AlertStatus `json:"status,omitempty"`
+	// StatusModificationTime - The current status when alert status was modified.
+	StatusModificationTime *date.Time `json:"statusModificationTime,omitempty"`
+	// ModificationTime - The current status when alert was modified.
+	ModificationTime *date.Time `json:"modificationTime,omitempty"`
+	// ModificationUsername - The username who modified the alert.
+	ModificationUsername *string `json:"modificationUsername,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for AlertProperties.
+func (ap AlertProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ap.CostEntityID != nil {
+		objectMap["costEntityId"] = ap.CostEntityID
+	}
+	if ap.Definition != nil {
+		objectMap["definition"] = ap.Definition
+	}
+	if ap.Description != nil {
+		objectMap["description"] = ap.Description
+	}
+	if ap.Scope != nil {
+		objectMap["scope"] = ap.Scope
+	}
+	if ap.Source != "" {
+		objectMap["source"] = ap.Source
+	}
+	if ap.Details != nil {
+		objectMap["details"] = ap.Details
+	}
+	if ap.CreationTime != nil {
+		objectMap["creationTime"] = ap.CreationTime
+	}
+	if ap.CloseTime != nil {
+		objectMap["closeTime"] = ap.CloseTime
+	}
+	if ap.Status != "" {
+		objectMap["status"] = ap.Status
+	}
+	if ap.StatusModificationTime != nil {
+		objectMap["statusModificationTime"] = ap.StatusModificationTime
+	}
+	if ap.ModificationTime != nil {
+		objectMap["modificationTime"] = ap.ModificationTime
+	}
+	if ap.ModificationUsername != nil {
+		objectMap["modificationUsername"] = ap.ModificationUsername
+	}
+	return json.Marshal(objectMap)
+}
+
 // CommonReportProperties the common properties of the report.
 type CommonReportProperties struct {
 	// Format - The format of the report being delivered. Possible values include: 'Csv'
@@ -184,7 +584,7 @@ type ConnectorCollectionErrorInfo struct {
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	// ErrorCode - Short error message
 	ErrorCode *string `json:"errorCode,omitempty"`
-	// ErrorStartTime - Time the error started occuring (Last time error occurred in lastRun)
+	// ErrorStartTime - Time the error started occurring (Last time error occurred in lastRun)
 	ErrorStartTime *date.Time `json:"errorStartTime,omitempty"`
 }
 
@@ -324,8 +724,8 @@ func (cd *ConnectorDefinition) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ConnectorDefinitionListResult result of listing connector definitions. It contains a list of available connector
-// definitions in the scope provided.
+// ConnectorDefinitionListResult result of listing connector definitions. It contains a list of available
+// connector definitions in the scope provided.
 type ConnectorDefinitionListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of connector definitions.
@@ -348,7 +748,7 @@ type ConnectorProperties struct {
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
 	// ModifiedOn - Connector last modified datetime
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
-	// Status - Connector status. Possible values include: 'Active', 'Error', 'Suspended'
+	// Status - Connector status. Possible values include: 'ConnectorStatusActive', 'ConnectorStatusError', 'ConnectorStatusSuspended'
 	Status ConnectorStatus `json:"status,omitempty"`
 	// Collection - Collection information
 	Collection *ConnectorCollectionInfo `json:"collection,omitempty"`
@@ -487,11 +887,176 @@ type ErrorDetails struct {
 	Details *[]ErrorBase `json:"details,omitempty"`
 }
 
-// ErrorResponse error response indicates that the service is not able to process the incoming request. The reason
-// is provided in the error message.
+// ErrorResponse error response indicates that the service is not able to process the incoming request. The
+// reason is provided in the error message.
 type ErrorResponse struct {
 	// Error - The details of the error.
 	Error *ErrorDetails `json:"error,omitempty"`
+}
+
+// Operation a Cost Management REST API operation.
+type Operation struct {
+	// Name - Operation name: {provider}/{resource}/{operation}.
+	Name *string `json:"name,omitempty"`
+	// Display - The object that represents the operation.
+	Display *OperationDisplay `json:"display,omitempty"`
+}
+
+// OperationDisplay the object that represents the operation.
+type OperationDisplay struct {
+	// Provider - Service provider: Microsoft.CostManagement.
+	Provider *string `json:"provider,omitempty"`
+	// Resource - Resource on which the operation is performed: UsageDetail, etc.
+	Resource *string `json:"resource,omitempty"`
+	// Operation - Operation type: Read, write, delete, etc.
+	Operation *string `json:"operation,omitempty"`
+}
+
+// OperationListResult result of listing CostManagement operations. It contains a list of operations and a
+// URL link to get the next set of results.
+type OperationListResult struct {
+	autorest.Response `json:"-"`
+	// Value - List of CostManagement operations supported by the Microsoft.CostManagement resource provider.
+	Value *[]Operation `json:"value,omitempty"`
+	// NextLink - URL to get the next set of operation list results if there are any.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// OperationListResultIterator provides access to a complete listing of Operation values.
+type OperationListResultIterator struct {
+	i    int
+	page OperationListResultPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter OperationListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter OperationListResultIterator) Response() OperationListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter OperationListResultIterator) Value() Operation {
+	if !iter.page.NotDone() {
+		return Operation{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (olr OperationListResult) IsEmpty() bool {
+	return olr.Value == nil || len(*olr.Value) == 0
+}
+
+// operationListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
+	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(olr.NextLink)))
+}
+
+// OperationListResultPage contains a page of Operation values.
+type OperationListResultPage struct {
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
+	olr OperationListResult
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
+	if err != nil {
+		return err
+	}
+	page.olr = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page OperationListResultPage) NotDone() bool {
+	return !page.olr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page OperationListResultPage) Response() OperationListResult {
+	return page.olr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page OperationListResultPage) Values() []Operation {
+	if page.olr.IsEmpty() {
+		return nil
+	}
+	return *page.olr.Value
+}
+
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
 }
 
 // Query ...
@@ -714,7 +1279,7 @@ type ReportAggregation struct {
 
 // ReportComparisonExpression the comparison expression to be used in the report.
 type ReportComparisonExpression struct {
-	// Name - The name of the column to use in comaprison.
+	// Name - The name of the column to use in comparison.
 	Name *string `json:"name,omitempty"`
 	// Operator - The operator to use for comparison.
 	Operator *string `json:"operator,omitempty"`
@@ -728,9 +1293,9 @@ type ReportDataset struct {
 	Granularity GranularityType `json:"granularity,omitempty"`
 	// Configuration - Has configuration information for the data in the report. The configuration will be ignored if aggregation and grouping are provided.
 	Configuration *ReportDatasetConfiguration `json:"configuration,omitempty"`
-	// Aggregation - Dictionary of aggregation expression to use in the report. The key of each item in the dictionary is the alias for the aggregated column. Report can have upto 2 aggregation clauses.
+	// Aggregation - Dictionary of aggregation expression to use in the report. The key of each item in the dictionary is the alias for the aggregated column. Report can have up to 2 aggregation clauses.
 	Aggregation map[string]*ReportAggregation `json:"aggregation"`
-	// Grouping - Array of group by expression to use in the report. Report can have upto 2 group by clauses.
+	// Grouping - Array of group by expression to use in the report. Report can have up to 2 group by clauses.
 	Grouping *[]ReportGrouping `json:"grouping,omitempty"`
 	// Filter - Has filter expression to use in the report.
 	Filter *ReportFilter `json:"filter,omitempty"`
@@ -791,7 +1356,7 @@ type ReportDeliveryInfo struct {
 	Destination *ReportDeliveryDestination `json:"destination,omitempty"`
 }
 
-// ReportExecution a report exeuction.
+// ReportExecution a report execution.
 type ReportExecution struct {
 	*ReportExecutionProperties `json:"properties,omitempty"`
 	// ID - Resource Id.
@@ -913,9 +1478,9 @@ type ReportExecutionProperties struct {
 
 // ReportFilter the filter expression to be used in the report.
 type ReportFilter struct {
-	// And - The logical "AND" expression. Must have atleast 2 items.
+	// And - The logical "AND" expression. Must have at least 2 items.
 	And *[]ReportFilter `json:"and,omitempty"`
-	// Or - The logical "OR" expression. Must have atleast 2 items.
+	// Or - The logical "OR" expression. Must have at least 2 items.
 	Or *[]ReportFilter `json:"or,omitempty"`
 	// Not - The logical "NOT" expression.
 	Not *ReportFilter `json:"not,omitempty"`
@@ -933,7 +1498,8 @@ type ReportGrouping struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// ReportListResult result of listing reports. It contains a list of available reports in the scope provided.
+// ReportListResult result of listing reports. It contains a list of available reports in the scope
+// provided.
 type ReportListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of reports.

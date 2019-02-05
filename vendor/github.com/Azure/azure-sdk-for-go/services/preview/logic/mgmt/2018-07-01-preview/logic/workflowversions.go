@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewWorkflowVersionsClientWithBaseURI(baseURI string, subscriptionID string)
 // workflowName - the workflow name.
 // versionID - the workflow versionId.
 func (client WorkflowVersionsClient) Get(ctx context.Context, resourceGroupName string, workflowName string, versionID string) (result WorkflowVersion, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowVersionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workflowName, versionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowVersionsClient", "Get", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client WorkflowVersionsClient) GetResponder(resp *http.Response) (result W
 // workflowName - the workflow name.
 // top - the number of items to be included in the result.
 func (client WorkflowVersionsClient) List(ctx context.Context, resourceGroupName string, workflowName string, top *int32) (result WorkflowVersionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowVersionsClient.List")
+		defer func() {
+			sc := -1
+			if result.wvlr.Response.Response != nil {
+				sc = result.wvlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, workflowName, top)
 	if err != nil {
@@ -181,8 +202,8 @@ func (client WorkflowVersionsClient) ListResponder(resp *http.Response) (result 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkflowVersionsClient) listNextResults(lastResults WorkflowVersionListResult) (result WorkflowVersionListResult, err error) {
-	req, err := lastResults.workflowVersionListResultPreparer()
+func (client WorkflowVersionsClient) listNextResults(ctx context.Context, lastResults WorkflowVersionListResult) (result WorkflowVersionListResult, err error) {
+	req, err := lastResults.workflowVersionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowVersionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -203,6 +224,16 @@ func (client WorkflowVersionsClient) listNextResults(lastResults WorkflowVersion
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowVersionsClient) ListComplete(ctx context.Context, resourceGroupName string, workflowName string, top *int32) (result WorkflowVersionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowVersionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, workflowName, top)
 	return
 }

@@ -5,6 +5,7 @@
 package webdav
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -18,8 +19,6 @@ import (
 	"sort"
 	"strings"
 	"testing"
-
-	"golang.org/x/net/context"
 )
 
 // TODO: add tests to check XML responses with the expected prefix path

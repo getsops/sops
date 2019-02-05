@@ -17,11 +17,11 @@
 package container
 
 import (
+	"context"
 	"time"
 
 	"cloud.google.com/go/internal/version"
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
+	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
 	"google.golang.org/api/transport"
 	containerpb "google.golang.org/genproto/googleapis/container/v1"

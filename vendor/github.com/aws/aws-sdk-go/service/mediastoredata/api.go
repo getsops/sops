@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opDeleteObject = "DeleteObject"
@@ -17,7 +19,7 @@ const opDeleteObject = "DeleteObject"
 // DeleteObjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -51,6 +53,7 @@ func (c *MediaStoreData) DeleteObjectRequest(input *DeleteObjectInput) (req *req
 
 	output = &DeleteObjectOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -102,7 +105,7 @@ const opDescribeObject = "DescribeObject"
 // DescribeObjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -187,7 +190,7 @@ const opGetObject = "GetObject"
 // GetObjectRequest generates a "aws/request.Request" representing the
 // client's request for the GetObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -275,7 +278,7 @@ const opListItems = "ListItems"
 // ListItemsRequest generates a "aws/request.Request" representing the
 // client's request for the ListItems operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -358,7 +361,7 @@ const opPutObject = "PutObject"
 // PutObjectRequest generates a "aws/request.Request" representing the
 // client's request for the PutObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -400,7 +403,7 @@ func (c *MediaStoreData) PutObjectRequest(input *PutObjectInput) (req *request.R
 
 // PutObject API operation for AWS Elemental MediaStore Data Plane.
 //
-// Uploads an object to the specified path. Object sizes are limited to 10 MB.
+// Uploads an object to the specified path. Object sizes are limited to 25 MB.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -839,11 +842,24 @@ func (s *Item) SetType(v string) *Item {
 type ListItemsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum results to return. The service might return fewer results.
+	// The maximum number of results to return per API request. For example, you
+	// submit a ListItems request with MaxResults set at 500. Although 2,000 items
+	// match your request, the service returns no more than the first 500 items.
+	// (The service also returns a NextToken value that you can use to fetch the
+	// next batch of results.) The service might return fewer results than the MaxResults
+	// value.
+	//
+	// If MaxResults is not included in the request, the service defaults to pagination
+	// with a maximum of 1,000 results per page.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
 
-	// The NextToken received in the ListItemsResponse for the same container and
-	// path. Tokens expire after 15 minutes.
+	// The token that identifies which batch of results that you want to see. For
+	// example, you submit a ListItems request with MaxResults set at 500. The service
+	// returns the first batch of results (up to 500) and a NextToken value. To
+	// see the next batch of results, you can submit the ListItems request a second
+	// time and specify the NextToken value.
+	//
+	// Tokens expire after 15 minutes.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
 	// The path in the container from which to retrieve items. Format: <folder name>/<folder
@@ -895,10 +911,14 @@ func (s *ListItemsInput) SetPath(v string) *ListItemsInput {
 type ListItemsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Metadata entries for the folders and objects at the requested path.
+	// The metadata entries for the folders and objects at the requested path.
 	Items []*Item `type:"list"`
 
-	// The NextToken used to request the next page of results using ListItems.
+	// The token that can be used in a request to view the next set of results.
+	// For example, you submit a ListItems request that matches 2,000 items with
+	// MaxResults set at 500. The service returns the first batch of results (up
+	// to 500) and a NextToken value that can be used to fetch the next batch of
+	// results.
 	NextToken *string `type:"string"`
 }
 
@@ -1046,7 +1066,7 @@ type PutObjectOutput struct {
 	// Unique identifier of the object in the container.
 	ETag *string `min:"1" type:"string"`
 
-	// The storage class where the object was persisted. Should be “Temporal”.
+	// The storage class where the object was persisted. The class should be “Temporal”.
 	StorageClass *string `min:"1" type:"string" enum:"StorageClass"`
 }
 

@@ -23,6 +23,9 @@ import (
 	"io"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datalake/store/2015-10-01-preview/filesystem"
+
 // AppendModeType enumerates the values for append mode type.
 type AppendModeType string
 
@@ -122,8 +125,8 @@ type ACLStatusResult struct {
 	ACLStatus *ACLStatus `json:"AclStatus,omitempty"`
 }
 
-// AdlsAccessControlException a WebHDFS exception thrown indicating that access is denied due to insufficient
-// permissions. Thrown when a 403 error response code is returned (forbidden).
+// AdlsAccessControlException a WebHDFS exception thrown indicating that access is denied due to
+// insufficient permissions. Thrown when a 403 error response code is returned (forbidden).
 type AdlsAccessControlException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -204,8 +207,8 @@ func (aace AdlsAccessControlException) AsBasicAdlsRemoteException() (BasicAdlsRe
 	return &aace, true
 }
 
-// AdlsBadOffsetException a WebHDFS exception thrown indicating the append or read is from a bad offset. Thrown
-// when a 400 error response code is returned for append and open operations (Bad request).
+// AdlsBadOffsetException a WebHDFS exception thrown indicating the append or read is from a bad offset.
+// Thrown when a 400 error response code is returned for append and open operations (Bad request).
 type AdlsBadOffsetException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -315,8 +318,8 @@ func (ae *AdlsError) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// AdlsFileAlreadyExistsException a WebHDFS exception thrown indicating the file or folder already exists. Thrown
-// when a 403 error response code is returned (forbidden).
+// AdlsFileAlreadyExistsException a WebHDFS exception thrown indicating the file or folder already exists.
+// Thrown when a 403 error response code is returned (forbidden).
 type AdlsFileAlreadyExistsException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -397,8 +400,8 @@ func (afaee AdlsFileAlreadyExistsException) AsBasicAdlsRemoteException() (BasicA
 	return &afaee, true
 }
 
-// AdlsFileNotFoundException a WebHDFS exception thrown indicating the file or folder could not be found. Thrown
-// when a 404 error response code is returned (not found).
+// AdlsFileNotFoundException a WebHDFS exception thrown indicating the file or folder could not be found.
+// Thrown when a 404 error response code is returned (not found).
 type AdlsFileNotFoundException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -479,8 +482,8 @@ func (afnfe AdlsFileNotFoundException) AsBasicAdlsRemoteException() (BasicAdlsRe
 	return &afnfe, true
 }
 
-// AdlsIllegalArgumentException a WebHDFS exception thrown indicating that one more arguments is incorrect. Thrown
-// when a 400 error response code is returned (bad request).
+// AdlsIllegalArgumentException a WebHDFS exception thrown indicating that one more arguments is incorrect.
+// Thrown when a 400 error response code is returned (bad request).
 type AdlsIllegalArgumentException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -561,8 +564,8 @@ func (aiae AdlsIllegalArgumentException) AsBasicAdlsRemoteException() (BasicAdls
 	return &aiae, true
 }
 
-// AdlsIOException a WebHDFS exception thrown indicating there was an IO (read or write) error. Thrown when a 403
-// error response code is returned (forbidden).
+// AdlsIOException a WebHDFS exception thrown indicating there was an IO (read or write) error. Thrown when
+// a 403 error response code is returned (forbidden).
 type AdlsIOException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -657,7 +660,8 @@ type BasicAdlsRemoteException interface {
 	AsAdlsRemoteException() (*AdlsRemoteException, bool)
 }
 
-// AdlsRemoteException data Lake Store filesystem exception based on the WebHDFS definition for RemoteExceptions.
+// AdlsRemoteException data Lake Store filesystem exception based on the WebHDFS definition for
+// RemoteExceptions.
 type AdlsRemoteException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -807,8 +811,8 @@ func (are AdlsRemoteException) AsBasicAdlsRemoteException() (BasicAdlsRemoteExce
 	return &are, true
 }
 
-// AdlsRuntimeException a WebHDFS exception thrown when an unexpected error occurs during an operation. Thrown when
-// a 500 error response code is returned (Internal server error).
+// AdlsRuntimeException a WebHDFS exception thrown when an unexpected error occurs during an operation.
+// Thrown when a 500 error response code is returned (Internal server error).
 type AdlsRuntimeException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -889,8 +893,8 @@ func (are AdlsRuntimeException) AsBasicAdlsRemoteException() (BasicAdlsRemoteExc
 	return &are, true
 }
 
-// AdlsSecurityException a WebHDFS exception thrown indicating that access is denied. Thrown when a 401 error
-// response code is returned (Unauthorized).
+// AdlsSecurityException a WebHDFS exception thrown indicating that access is denied. Thrown when a 401
+// error response code is returned (Unauthorized).
 type AdlsSecurityException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -971,8 +975,8 @@ func (ase AdlsSecurityException) AsBasicAdlsRemoteException() (BasicAdlsRemoteEx
 	return &ase, true
 }
 
-// AdlsUnsupportedOperationException a WebHDFS exception thrown indicating that the requested operation is not
-// supported. Thrown when a 400 error response code is returned (bad request).
+// AdlsUnsupportedOperationException a WebHDFS exception thrown indicating that the requested operation is
+// not supported. Thrown when a 400 error response code is returned (bad request).
 type AdlsUnsupportedOperationException struct {
 	// JavaClassName - the full class package name for the exception thrown, such as 'java.lang.IllegalArgumentException'.
 	JavaClassName *string `json:"javaClassName,omitempty"`
@@ -1059,7 +1063,7 @@ type ContentSummary struct {
 	DirectoryCount *int64 `json:"directoryCount,omitempty"`
 	// FileCount - the number of files.
 	FileCount *int64 `json:"fileCount,omitempty"`
-	// Length - the number of bytes used by the contet.
+	// Length - the number of bytes used by the content.
 	Length *int64 `json:"length,omitempty"`
 	// SpaceConsumed - the disk space consumed by the content.
 	SpaceConsumed *int64 `json:"spaceConsumed,omitempty"`

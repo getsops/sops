@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opBatchGetTraces = "BatchGetTraces"
@@ -16,7 +18,7 @@ const opBatchGetTraces = "BatchGetTraces"
 // BatchGetTracesRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetTraces operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -151,12 +153,94 @@ func (c *XRay) BatchGetTracesPagesWithContext(ctx aws.Context, input *BatchGetTr
 	return p.Err()
 }
 
+const opCreateGroup = "CreateGroup"
+
+// CreateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the CreateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateGroup for more information on using the CreateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateGroupRequest method.
+//    req, resp := client.CreateGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/CreateGroup
+func (c *XRay) CreateGroupRequest(input *CreateGroupInput) (req *request.Request, output *CreateGroupOutput) {
+	op := &request.Operation{
+		Name:       opCreateGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/CreateGroup",
+	}
+
+	if input == nil {
+		input = &CreateGroupInput{}
+	}
+
+	output = &CreateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateGroup API operation for AWS X-Ray.
+//
+// Creates a group resource with a name and a filter expression.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS X-Ray's
+// API operation CreateGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is missing required parameters or has invalid parameters.
+//
+//   * ErrCodeThrottledException "ThrottledException"
+//   The request exceeds the maximum number of requests per second.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/CreateGroup
+func (c *XRay) CreateGroup(input *CreateGroupInput) (*CreateGroupOutput, error) {
+	req, out := c.CreateGroupRequest(input)
+	return out, req.Send()
+}
+
+// CreateGroupWithContext is the same as CreateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) CreateGroupWithContext(ctx aws.Context, input *CreateGroupInput, opts ...request.Option) (*CreateGroupOutput, error) {
+	req, out := c.CreateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateSamplingRule = "CreateSamplingRule"
 
 // CreateSamplingRuleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSamplingRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -242,12 +326,95 @@ func (c *XRay) CreateSamplingRuleWithContext(ctx aws.Context, input *CreateSampl
 	return out, req.Send()
 }
 
+const opDeleteGroup = "DeleteGroup"
+
+// DeleteGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteGroup for more information on using the DeleteGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteGroupRequest method.
+//    req, resp := client.DeleteGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/DeleteGroup
+func (c *XRay) DeleteGroupRequest(input *DeleteGroupInput) (req *request.Request, output *DeleteGroupOutput) {
+	op := &request.Operation{
+		Name:       opDeleteGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/DeleteGroup",
+	}
+
+	if input == nil {
+		input = &DeleteGroupInput{}
+	}
+
+	output = &DeleteGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteGroup API operation for AWS X-Ray.
+//
+// Deletes a group resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS X-Ray's
+// API operation DeleteGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is missing required parameters or has invalid parameters.
+//
+//   * ErrCodeThrottledException "ThrottledException"
+//   The request exceeds the maximum number of requests per second.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/DeleteGroup
+func (c *XRay) DeleteGroup(input *DeleteGroupInput) (*DeleteGroupOutput, error) {
+	req, out := c.DeleteGroupRequest(input)
+	return out, req.Send()
+}
+
+// DeleteGroupWithContext is the same as DeleteGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) DeleteGroupWithContext(ctx aws.Context, input *DeleteGroupInput, opts ...request.Option) (*DeleteGroupOutput, error) {
+	req, out := c.DeleteGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteSamplingRule = "DeleteSamplingRule"
 
 // DeleteSamplingRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSamplingRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -329,7 +496,7 @@ const opGetEncryptionConfig = "GetEncryptionConfig"
 // GetEncryptionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetEncryptionConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -406,12 +573,176 @@ func (c *XRay) GetEncryptionConfigWithContext(ctx aws.Context, input *GetEncrypt
 	return out, req.Send()
 }
 
+const opGetGroup = "GetGroup"
+
+// GetGroupRequest generates a "aws/request.Request" representing the
+// client's request for the GetGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetGroup for more information on using the GetGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetGroupRequest method.
+//    req, resp := client.GetGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetGroup
+func (c *XRay) GetGroupRequest(input *GetGroupInput) (req *request.Request, output *GetGroupOutput) {
+	op := &request.Operation{
+		Name:       opGetGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/GetGroup",
+	}
+
+	if input == nil {
+		input = &GetGroupInput{}
+	}
+
+	output = &GetGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetGroup API operation for AWS X-Ray.
+//
+// Retrieves group resource details.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS X-Ray's
+// API operation GetGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is missing required parameters or has invalid parameters.
+//
+//   * ErrCodeThrottledException "ThrottledException"
+//   The request exceeds the maximum number of requests per second.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetGroup
+func (c *XRay) GetGroup(input *GetGroupInput) (*GetGroupOutput, error) {
+	req, out := c.GetGroupRequest(input)
+	return out, req.Send()
+}
+
+// GetGroupWithContext is the same as GetGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) GetGroupWithContext(ctx aws.Context, input *GetGroupInput, opts ...request.Option) (*GetGroupOutput, error) {
+	req, out := c.GetGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetGroups = "GetGroups"
+
+// GetGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the GetGroups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetGroups for more information on using the GetGroups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetGroupsRequest method.
+//    req, resp := client.GetGroupsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetGroups
+func (c *XRay) GetGroupsRequest(input *GetGroupsInput) (req *request.Request, output *GetGroupsOutput) {
+	op := &request.Operation{
+		Name:       opGetGroups,
+		HTTPMethod: "POST",
+		HTTPPath:   "/Groups",
+	}
+
+	if input == nil {
+		input = &GetGroupsInput{}
+	}
+
+	output = &GetGroupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetGroups API operation for AWS X-Ray.
+//
+// Retrieves all active group details.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS X-Ray's
+// API operation GetGroups for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is missing required parameters or has invalid parameters.
+//
+//   * ErrCodeThrottledException "ThrottledException"
+//   The request exceeds the maximum number of requests per second.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/GetGroups
+func (c *XRay) GetGroups(input *GetGroupsInput) (*GetGroupsOutput, error) {
+	req, out := c.GetGroupsRequest(input)
+	return out, req.Send()
+}
+
+// GetGroupsWithContext is the same as GetGroups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetGroups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) GetGroupsWithContext(ctx aws.Context, input *GetGroupsInput, opts ...request.Option) (*GetGroupsOutput, error) {
+	req, out := c.GetGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetSamplingRules = "GetSamplingRules"
 
 // GetSamplingRulesRequest generates a "aws/request.Request" representing the
 // client's request for the GetSamplingRules operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -493,7 +824,7 @@ const opGetSamplingStatisticSummaries = "GetSamplingStatisticSummaries"
 // GetSamplingStatisticSummariesRequest generates a "aws/request.Request" representing the
 // client's request for the GetSamplingStatisticSummaries operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -575,7 +906,7 @@ const opGetSamplingTargets = "GetSamplingTargets"
 // GetSamplingTargetsRequest generates a "aws/request.Request" representing the
 // client's request for the GetSamplingTargets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -657,7 +988,7 @@ const opGetServiceGraph = "GetServiceGraph"
 // GetServiceGraphRequest generates a "aws/request.Request" representing the
 // client's request for the GetServiceGraph operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -799,7 +1130,7 @@ const opGetTraceGraph = "GetTraceGraph"
 // GetTraceGraphRequest generates a "aws/request.Request" representing the
 // client's request for the GetTraceGraph operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -937,7 +1268,7 @@ const opGetTraceSummaries = "GetTraceSummaries"
 // GetTraceSummariesRequest generates a "aws/request.Request" representing the
 // client's request for the GetTraceSummaries operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1091,7 +1422,7 @@ const opPutEncryptionConfig = "PutEncryptionConfig"
 // PutEncryptionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the PutEncryptionConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1173,7 +1504,7 @@ const opPutTelemetryRecords = "PutTelemetryRecords"
 // PutTelemetryRecordsRequest generates a "aws/request.Request" representing the
 // client's request for the PutTelemetryRecords operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1207,6 +1538,7 @@ func (c *XRay) PutTelemetryRecordsRequest(input *PutTelemetryRecordsInput) (req 
 
 	output = &PutTelemetryRecordsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1255,7 +1587,7 @@ const opPutTraceSegments = "PutTraceSegments"
 // PutTraceSegmentsRequest generates a "aws/request.Request" representing the
 // client's request for the PutTraceSegments operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1377,12 +1709,94 @@ func (c *XRay) PutTraceSegmentsWithContext(ctx aws.Context, input *PutTraceSegme
 	return out, req.Send()
 }
 
+const opUpdateGroup = "UpdateGroup"
+
+// UpdateGroupRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateGroup for more information on using the UpdateGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateGroupRequest method.
+//    req, resp := client.UpdateGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/UpdateGroup
+func (c *XRay) UpdateGroupRequest(input *UpdateGroupInput) (req *request.Request, output *UpdateGroupOutput) {
+	op := &request.Operation{
+		Name:       opUpdateGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/UpdateGroup",
+	}
+
+	if input == nil {
+		input = &UpdateGroupInput{}
+	}
+
+	output = &UpdateGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateGroup API operation for AWS X-Ray.
+//
+// Updates a group resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS X-Ray's
+// API operation UpdateGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is missing required parameters or has invalid parameters.
+//
+//   * ErrCodeThrottledException "ThrottledException"
+//   The request exceeds the maximum number of requests per second.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/xray-2016-04-12/UpdateGroup
+func (c *XRay) UpdateGroup(input *UpdateGroupInput) (*UpdateGroupOutput, error) {
+	req, out := c.UpdateGroupRequest(input)
+	return out, req.Send()
+}
+
+// UpdateGroupWithContext is the same as UpdateGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *XRay) UpdateGroupWithContext(ctx aws.Context, input *UpdateGroupInput, opts ...request.Option) (*UpdateGroupOutput, error) {
+	req, out := c.UpdateGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateSamplingRule = "UpdateSamplingRule"
 
 // UpdateSamplingRuleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSamplingRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1544,6 +1958,30 @@ func (s *AnnotationValue) SetStringValue(v string) *AnnotationValue {
 	return s
 }
 
+// A list of availability zones corresponding to the segments in a trace.
+type AvailabilityZoneDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The name of a corresponding availability zone.
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AvailabilityZoneDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AvailabilityZoneDetail) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *AvailabilityZoneDetail) SetName(v string) *AvailabilityZoneDetail {
+	s.Name = &v
+	return s
+}
+
 type BackendConnectionErrors struct {
 	_ struct{} `type:"structure"`
 
@@ -1694,6 +2132,85 @@ func (s *BatchGetTracesOutput) SetUnprocessedTraceIds(v []*string) *BatchGetTrac
 	return s
 }
 
+type CreateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The filter expression defining criteria by which to group traces.
+	FilterExpression *string `min:"1" type:"string"`
+
+	// The case-sensitive name of the new group. Default is a reserved name and
+	// names must be unique.
+	//
+	// GroupName is a required field
+	GroupName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateGroupInput"}
+	if s.FilterExpression != nil && len(*s.FilterExpression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FilterExpression", 1))
+	}
+	if s.GroupName == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupName"))
+	}
+	if s.GroupName != nil && len(*s.GroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilterExpression sets the FilterExpression field's value.
+func (s *CreateGroupInput) SetFilterExpression(v string) *CreateGroupInput {
+	s.FilterExpression = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *CreateGroupInput) SetGroupName(v string) *CreateGroupInput {
+	s.GroupName = &v
+	return s
+}
+
+type CreateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The group that was created. Contains the name of the group that was created,
+	// the ARN of the group that was generated based on the group name, and the
+	// filter expression that was assigned to the group.
+	Group *Group `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetGroup sets the Group field's value.
+func (s *CreateGroupOutput) SetGroup(v *Group) *CreateGroupOutput {
+	s.Group = v
+	return s
+}
+
 type CreateSamplingRuleInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1758,6 +2275,68 @@ func (s CreateSamplingRuleOutput) GoString() string {
 func (s *CreateSamplingRuleOutput) SetSamplingRuleRecord(v *SamplingRuleRecord) *CreateSamplingRuleOutput {
 	s.SamplingRuleRecord = v
 	return s
+}
+
+type DeleteGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the group that was generated on creation.
+	GroupARN *string `min:"1" type:"string"`
+
+	// The case-sensitive name of the group.
+	GroupName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteGroupInput"}
+	if s.GroupARN != nil && len(*s.GroupARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupARN", 1))
+	}
+	if s.GroupName != nil && len(*s.GroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupARN sets the GroupARN field's value.
+func (s *DeleteGroupInput) SetGroupARN(v string) *DeleteGroupInput {
+	s.GroupARN = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *DeleteGroupInput) SetGroupName(v string) *DeleteGroupInput {
+	s.GroupName = &v
+	return s
+}
+
+type DeleteGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteGroupOutput) GoString() string {
+	return s.String()
 }
 
 type DeleteSamplingRuleInput struct {
@@ -1990,6 +2569,143 @@ func (s *EncryptionConfig) SetType(v string) *EncryptionConfig {
 	return s
 }
 
+// The root cause of a trace summary error.
+type ErrorRootCause struct {
+	_ struct{} `type:"structure"`
+
+	// A list of services corresponding to an error. A service identifies a segment
+	// and it contains a name, account ID, type, and inferred flag.
+	Services []*ErrorRootCauseService `type:"list"`
+}
+
+// String returns the string representation
+func (s ErrorRootCause) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ErrorRootCause) GoString() string {
+	return s.String()
+}
+
+// SetServices sets the Services field's value.
+func (s *ErrorRootCause) SetServices(v []*ErrorRootCauseService) *ErrorRootCause {
+	s.Services = v
+	return s
+}
+
+// A collection of segments and corresponding subsegments associated to a trace
+// summary error.
+type ErrorRootCauseEntity struct {
+	_ struct{} `type:"structure"`
+
+	// The types and messages of the exceptions.
+	Exceptions []*RootCauseException `type:"list"`
+
+	// The name of the entity.
+	Name *string `type:"string"`
+
+	// A flag that denotes a remote subsegment.
+	Remote *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s ErrorRootCauseEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ErrorRootCauseEntity) GoString() string {
+	return s.String()
+}
+
+// SetExceptions sets the Exceptions field's value.
+func (s *ErrorRootCauseEntity) SetExceptions(v []*RootCauseException) *ErrorRootCauseEntity {
+	s.Exceptions = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ErrorRootCauseEntity) SetName(v string) *ErrorRootCauseEntity {
+	s.Name = &v
+	return s
+}
+
+// SetRemote sets the Remote field's value.
+func (s *ErrorRootCauseEntity) SetRemote(v bool) *ErrorRootCauseEntity {
+	s.Remote = &v
+	return s
+}
+
+// A collection of fields identifying the services in a trace summary error.
+type ErrorRootCauseService struct {
+	_ struct{} `type:"structure"`
+
+	// The account ID associated to the service.
+	AccountId *string `type:"string"`
+
+	// The path of root cause entities found on the service.
+	EntityPath []*ErrorRootCauseEntity `type:"list"`
+
+	// A Boolean value indicating if the service is inferred from the trace.
+	Inferred *bool `type:"boolean"`
+
+	// The service name.
+	Name *string `type:"string"`
+
+	// A collection of associated service names.
+	Names []*string `type:"list"`
+
+	// The type associated to the service.
+	Type *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ErrorRootCauseService) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ErrorRootCauseService) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ErrorRootCauseService) SetAccountId(v string) *ErrorRootCauseService {
+	s.AccountId = &v
+	return s
+}
+
+// SetEntityPath sets the EntityPath field's value.
+func (s *ErrorRootCauseService) SetEntityPath(v []*ErrorRootCauseEntity) *ErrorRootCauseService {
+	s.EntityPath = v
+	return s
+}
+
+// SetInferred sets the Inferred field's value.
+func (s *ErrorRootCauseService) SetInferred(v bool) *ErrorRootCauseService {
+	s.Inferred = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ErrorRootCauseService) SetName(v string) *ErrorRootCauseService {
+	s.Name = &v
+	return s
+}
+
+// SetNames sets the Names field's value.
+func (s *ErrorRootCauseService) SetNames(v []*string) *ErrorRootCauseService {
+	s.Names = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ErrorRootCauseService) SetType(v string) *ErrorRootCauseService {
+	s.Type = &v
+	return s
+}
+
 // Information about requests that failed with a 4xx Client Error status code.
 type ErrorStatistics struct {
 	_ struct{} `type:"structure"`
@@ -2030,6 +2746,143 @@ func (s *ErrorStatistics) SetThrottleCount(v int64) *ErrorStatistics {
 // SetTotalCount sets the TotalCount field's value.
 func (s *ErrorStatistics) SetTotalCount(v int64) *ErrorStatistics {
 	s.TotalCount = &v
+	return s
+}
+
+// The root cause information for a trace summary fault.
+type FaultRootCause struct {
+	_ struct{} `type:"structure"`
+
+	// A list of corresponding services. A service identifies a segment and it contains
+	// a name, account ID, type, and inferred flag.
+	Services []*FaultRootCauseService `type:"list"`
+}
+
+// String returns the string representation
+func (s FaultRootCause) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FaultRootCause) GoString() string {
+	return s.String()
+}
+
+// SetServices sets the Services field's value.
+func (s *FaultRootCause) SetServices(v []*FaultRootCauseService) *FaultRootCause {
+	s.Services = v
+	return s
+}
+
+// A collection of segments and corresponding subsegments associated to a trace
+// summary fault error.
+type FaultRootCauseEntity struct {
+	_ struct{} `type:"structure"`
+
+	// The types and messages of the exceptions.
+	Exceptions []*RootCauseException `type:"list"`
+
+	// The name of the entity.
+	Name *string `type:"string"`
+
+	// A flag that denotes a remote subsegment.
+	Remote *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s FaultRootCauseEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FaultRootCauseEntity) GoString() string {
+	return s.String()
+}
+
+// SetExceptions sets the Exceptions field's value.
+func (s *FaultRootCauseEntity) SetExceptions(v []*RootCauseException) *FaultRootCauseEntity {
+	s.Exceptions = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *FaultRootCauseEntity) SetName(v string) *FaultRootCauseEntity {
+	s.Name = &v
+	return s
+}
+
+// SetRemote sets the Remote field's value.
+func (s *FaultRootCauseEntity) SetRemote(v bool) *FaultRootCauseEntity {
+	s.Remote = &v
+	return s
+}
+
+// A collection of fields identifying the services in a trace summary fault.
+type FaultRootCauseService struct {
+	_ struct{} `type:"structure"`
+
+	// The account ID associated to the service.
+	AccountId *string `type:"string"`
+
+	// The path of root cause entities found on the service.
+	EntityPath []*FaultRootCauseEntity `type:"list"`
+
+	// A Boolean value indicating if the service is inferred from the trace.
+	Inferred *bool `type:"boolean"`
+
+	// The service name.
+	Name *string `type:"string"`
+
+	// A collection of associated service names.
+	Names []*string `type:"list"`
+
+	// The type associated to the service.
+	Type *string `type:"string"`
+}
+
+// String returns the string representation
+func (s FaultRootCauseService) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FaultRootCauseService) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *FaultRootCauseService) SetAccountId(v string) *FaultRootCauseService {
+	s.AccountId = &v
+	return s
+}
+
+// SetEntityPath sets the EntityPath field's value.
+func (s *FaultRootCauseService) SetEntityPath(v []*FaultRootCauseEntity) *FaultRootCauseService {
+	s.EntityPath = v
+	return s
+}
+
+// SetInferred sets the Inferred field's value.
+func (s *FaultRootCauseService) SetInferred(v bool) *FaultRootCauseService {
+	s.Inferred = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *FaultRootCauseService) SetName(v string) *FaultRootCauseService {
+	s.Name = &v
+	return s
+}
+
+// SetNames sets the Names field's value.
+func (s *FaultRootCauseService) SetNames(v []*string) *FaultRootCauseService {
+	s.Names = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *FaultRootCauseService) SetType(v string) *FaultRootCauseService {
+	s.Type = &v
 	return s
 }
 
@@ -2101,6 +2954,146 @@ func (s GetEncryptionConfigOutput) GoString() string {
 // SetEncryptionConfig sets the EncryptionConfig field's value.
 func (s *GetEncryptionConfigOutput) SetEncryptionConfig(v *EncryptionConfig) *GetEncryptionConfigOutput {
 	s.EncryptionConfig = v
+	return s
+}
+
+type GetGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the group that was generated on creation.
+	GroupARN *string `min:"1" type:"string"`
+
+	// The case-sensitive name of the group.
+	GroupName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s GetGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetGroupInput"}
+	if s.GroupARN != nil && len(*s.GroupARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupARN", 1))
+	}
+	if s.GroupName != nil && len(*s.GroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupARN sets the GroupARN field's value.
+func (s *GetGroupInput) SetGroupARN(v string) *GetGroupInput {
+	s.GroupARN = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *GetGroupInput) SetGroupName(v string) *GetGroupInput {
+	s.GroupName = &v
+	return s
+}
+
+type GetGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The group that was requested. Contains the name of the group, the ARN of
+	// the group, and the filter expression that assigned to the group.
+	Group *Group `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetGroup sets the Group field's value.
+func (s *GetGroupOutput) SetGroup(v *Group) *GetGroupOutput {
+	s.Group = v
+	return s
+}
+
+type GetGroupsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Pagination token. Not used.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s GetGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetGroupsInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetGroupsInput) SetNextToken(v string) *GetGroupsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The collection of all active groups.
+	Groups []*GroupSummary `type:"list"`
+
+	// Pagination token. Not used.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetGroups sets the Groups field's value.
+func (s *GetGroupsOutput) SetGroups(v []*GroupSummary) *GetGroupsOutput {
+	s.Groups = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetGroupsOutput) SetNextToken(v string) *GetGroupsOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -2308,10 +3301,16 @@ func (s *GetSamplingTargetsOutput) SetUnprocessedStatistics(v []*UnprocessedStat
 type GetServiceGraphInput struct {
 	_ struct{} `type:"structure"`
 
-	// The end of the time frame for which to generate a graph.
+	// The end of the timeframe for which to generate a graph.
 	//
 	// EndTime is a required field
 	EndTime *time.Time `type:"timestamp" required:"true"`
+
+	// The ARN of a group to generate a graph based on.
+	GroupARN *string `min:"1" type:"string"`
+
+	// The name of a group to generate a graph based on.
+	GroupName *string `min:"1" type:"string"`
 
 	// Pagination token. Not used.
 	NextToken *string `type:"string"`
@@ -2338,6 +3337,12 @@ func (s *GetServiceGraphInput) Validate() error {
 	if s.EndTime == nil {
 		invalidParams.Add(request.NewErrParamRequired("EndTime"))
 	}
+	if s.GroupARN != nil && len(*s.GroupARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupARN", 1))
+	}
+	if s.GroupName != nil && len(*s.GroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupName", 1))
+	}
 	if s.StartTime == nil {
 		invalidParams.Add(request.NewErrParamRequired("StartTime"))
 	}
@@ -2351,6 +3356,18 @@ func (s *GetServiceGraphInput) Validate() error {
 // SetEndTime sets the EndTime field's value.
 func (s *GetServiceGraphInput) SetEndTime(v time.Time) *GetServiceGraphInput {
 	s.EndTime = &v
+	return s
+}
+
+// SetGroupARN sets the GroupARN field's value.
+func (s *GetServiceGraphInput) SetGroupARN(v string) *GetServiceGraphInput {
+	s.GroupARN = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *GetServiceGraphInput) SetGroupName(v string) *GetServiceGraphInput {
+	s.GroupName = &v
 	return s
 }
 
@@ -2368,6 +3385,11 @@ func (s *GetServiceGraphInput) SetStartTime(v time.Time) *GetServiceGraphInput {
 
 type GetServiceGraphOutput struct {
 	_ struct{} `type:"structure"`
+
+	// A flag indicating whether the group's filter expression has been consistent,
+	// or if the returned service graph may show traces from an older version of
+	// the group's filter expression.
+	ContainsOldGroupVersions *bool `type:"boolean"`
 
 	// The end of the time frame for which the graph was generated.
 	EndTime *time.Time `type:"timestamp"`
@@ -2391,6 +3413,12 @@ func (s GetServiceGraphOutput) String() string {
 // GoString returns the string representation
 func (s GetServiceGraphOutput) GoString() string {
 	return s.String()
+}
+
+// SetContainsOldGroupVersions sets the ContainsOldGroupVersions field's value.
+func (s *GetServiceGraphOutput) SetContainsOldGroupVersions(v bool) *GetServiceGraphOutput {
+	s.ContainsOldGroupVersions = &v
+	return s
 }
 
 // SetEndTime sets the EndTime field's value.
@@ -2633,6 +3661,90 @@ func (s *GetTraceSummariesOutput) SetTracesProcessedCount(v int64) *GetTraceSumm
 	return s
 }
 
+// Details and metadata for a group.
+type Group struct {
+	_ struct{} `type:"structure"`
+
+	// The filter expression defining the parameters to include traces.
+	FilterExpression *string `type:"string"`
+
+	// The ARN of the group generated based on the GroupName.
+	GroupARN *string `type:"string"`
+
+	// The unique case-sensitive name of the group.
+	GroupName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Group) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Group) GoString() string {
+	return s.String()
+}
+
+// SetFilterExpression sets the FilterExpression field's value.
+func (s *Group) SetFilterExpression(v string) *Group {
+	s.FilterExpression = &v
+	return s
+}
+
+// SetGroupARN sets the GroupARN field's value.
+func (s *Group) SetGroupARN(v string) *Group {
+	s.GroupARN = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *Group) SetGroupName(v string) *Group {
+	s.GroupName = &v
+	return s
+}
+
+// Details for a group without metadata.
+type GroupSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The filter expression defining the parameters to include traces.
+	FilterExpression *string `type:"string"`
+
+	// The ARN of the group generated based on the GroupName.
+	GroupARN *string `type:"string"`
+
+	// The unique case-sensitive name of the group.
+	GroupName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GroupSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GroupSummary) GoString() string {
+	return s.String()
+}
+
+// SetFilterExpression sets the FilterExpression field's value.
+func (s *GroupSummary) SetFilterExpression(v string) *GroupSummary {
+	s.FilterExpression = &v
+	return s
+}
+
+// SetGroupARN sets the GroupARN field's value.
+func (s *GroupSummary) SetGroupARN(v string) *GroupSummary {
+	s.GroupARN = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *GroupSummary) SetGroupName(v string) *GroupSummary {
+	s.GroupName = &v
+	return s
+}
+
 // An entry in a histogram for a statistic. A histogram maps the range of observed
 // values on the X axis, and the prevalence of each value on the Y axis.
 type HistogramEntry struct {
@@ -2724,6 +3836,30 @@ func (s *Http) SetHttpURL(v string) *Http {
 // SetUserAgent sets the UserAgent field's value.
 func (s *Http) SetUserAgent(v string) *Http {
 	s.UserAgent = &v
+	return s
+}
+
+// A list of EC2 instance IDs corresponding to the segments in a trace.
+type InstanceIdDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of a corresponding EC2 instance.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation
+func (s InstanceIdDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InstanceIdDetail) GoString() string {
+	return s.String()
+}
+
+// SetId sets the Id field's value.
+func (s *InstanceIdDetail) SetId(v string) *InstanceIdDetail {
+	s.Id = &v
 	return s
 }
 
@@ -2953,6 +4089,200 @@ func (s PutTraceSegmentsOutput) GoString() string {
 // SetUnprocessedTraceSegments sets the UnprocessedTraceSegments field's value.
 func (s *PutTraceSegmentsOutput) SetUnprocessedTraceSegments(v []*UnprocessedTraceSegment) *PutTraceSegmentsOutput {
 	s.UnprocessedTraceSegments = v
+	return s
+}
+
+// A list of resources ARNs corresponding to the segments in a trace.
+type ResourceARNDetail struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of a corresponding resource.
+	ARN *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceARNDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceARNDetail) GoString() string {
+	return s.String()
+}
+
+// SetARN sets the ARN field's value.
+func (s *ResourceARNDetail) SetARN(v string) *ResourceARNDetail {
+	s.ARN = &v
+	return s
+}
+
+// The root cause information for a response time warning.
+type ResponseTimeRootCause struct {
+	_ struct{} `type:"structure"`
+
+	// A list of corresponding services. A service identifies a segment and contains
+	// a name, account ID, type, and inferred flag.
+	Services []*ResponseTimeRootCauseService `type:"list"`
+}
+
+// String returns the string representation
+func (s ResponseTimeRootCause) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResponseTimeRootCause) GoString() string {
+	return s.String()
+}
+
+// SetServices sets the Services field's value.
+func (s *ResponseTimeRootCause) SetServices(v []*ResponseTimeRootCauseService) *ResponseTimeRootCause {
+	s.Services = v
+	return s
+}
+
+// A collection of segments and corresponding subsegments associated to a response
+// time warning.
+type ResponseTimeRootCauseEntity struct {
+	_ struct{} `type:"structure"`
+
+	// The types and messages of the exceptions.
+	Coverage *float64 `type:"double"`
+
+	// The name of the entity.
+	Name *string `type:"string"`
+
+	// A flag that denotes a remote subsegment.
+	Remote *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s ResponseTimeRootCauseEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResponseTimeRootCauseEntity) GoString() string {
+	return s.String()
+}
+
+// SetCoverage sets the Coverage field's value.
+func (s *ResponseTimeRootCauseEntity) SetCoverage(v float64) *ResponseTimeRootCauseEntity {
+	s.Coverage = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ResponseTimeRootCauseEntity) SetName(v string) *ResponseTimeRootCauseEntity {
+	s.Name = &v
+	return s
+}
+
+// SetRemote sets the Remote field's value.
+func (s *ResponseTimeRootCauseEntity) SetRemote(v bool) *ResponseTimeRootCauseEntity {
+	s.Remote = &v
+	return s
+}
+
+// A collection of fields identifying the service in a response time warning.
+type ResponseTimeRootCauseService struct {
+	_ struct{} `type:"structure"`
+
+	// The account ID associated to the service.
+	AccountId *string `type:"string"`
+
+	// The path of root cause entities found on the service.
+	EntityPath []*ResponseTimeRootCauseEntity `type:"list"`
+
+	// A Boolean value indicating if the service is inferred from the trace.
+	Inferred *bool `type:"boolean"`
+
+	// The service name.
+	Name *string `type:"string"`
+
+	// A collection of associated service names.
+	Names []*string `type:"list"`
+
+	// The type associated to the service.
+	Type *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ResponseTimeRootCauseService) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResponseTimeRootCauseService) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *ResponseTimeRootCauseService) SetAccountId(v string) *ResponseTimeRootCauseService {
+	s.AccountId = &v
+	return s
+}
+
+// SetEntityPath sets the EntityPath field's value.
+func (s *ResponseTimeRootCauseService) SetEntityPath(v []*ResponseTimeRootCauseEntity) *ResponseTimeRootCauseService {
+	s.EntityPath = v
+	return s
+}
+
+// SetInferred sets the Inferred field's value.
+func (s *ResponseTimeRootCauseService) SetInferred(v bool) *ResponseTimeRootCauseService {
+	s.Inferred = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ResponseTimeRootCauseService) SetName(v string) *ResponseTimeRootCauseService {
+	s.Name = &v
+	return s
+}
+
+// SetNames sets the Names field's value.
+func (s *ResponseTimeRootCauseService) SetNames(v []*string) *ResponseTimeRootCauseService {
+	s.Names = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ResponseTimeRootCauseService) SetType(v string) *ResponseTimeRootCauseService {
+	s.Type = &v
+	return s
+}
+
+// The exception associated with a root cause.
+type RootCauseException struct {
+	_ struct{} `type:"structure"`
+
+	// The message of the exception.
+	Message *string `type:"string"`
+
+	// The name of the exception.
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s RootCauseException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RootCauseException) GoString() string {
+	return s.String()
+}
+
+// SetMessage sets the Message field's value.
+func (s *RootCauseException) SetMessage(v string) *RootCauseException {
+	s.Message = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *RootCauseException) SetName(v string) *RootCauseException {
+	s.Name = &v
 	return s
 }
 
@@ -4002,9 +5332,22 @@ type TraceSummary struct {
 	// Annotations from the trace's segment documents.
 	Annotations map[string][]*ValueWithServiceIds `type:"map"`
 
+	// A list of availability zones for any zone corresponding to the trace segments.
+	AvailabilityZones []*AvailabilityZoneDetail `type:"list"`
+
 	// The length of time in seconds between the start time of the root segment
 	// and the end time of the last segment that completed.
 	Duration *float64 `type:"double"`
+
+	// The root of a trace.
+	EntryPoint *ServiceId `type:"structure"`
+
+	// A collection of ErrorRootCause structures corresponding to the trace segments.
+	ErrorRootCauses []*ErrorRootCause `type:"list"`
+
+	// A collection of FaultRootCause structures corresponding to the the trace
+	// segments.
+	FaultRootCauses []*FaultRootCause `type:"list"`
 
 	// One or more of the segment documents has a 400 series error.
 	HasError *bool `type:"boolean"`
@@ -4022,14 +5365,27 @@ type TraceSummary struct {
 	// and subsegments.
 	Id *string `min:"1" type:"string"`
 
+	// A list of EC2 instance IDs for any instance corresponding to the trace segments.
+	InstanceIds []*InstanceIdDetail `type:"list"`
+
 	// One or more of the segment documents is in progress.
 	IsPartial *bool `type:"boolean"`
+
+	// A list of resource ARNs for any resource corresponding to the trace segments.
+	ResourceARNs []*ResourceARNDetail `type:"list"`
 
 	// The length of time in seconds between the start and end times of the root
 	// segment. If the service performs work asynchronously, the response time measures
 	// the time before the response is sent to the user, while the duration measures
 	// the amount of time before the last traced activity completes.
 	ResponseTime *float64 `type:"double"`
+
+	// A collection of ResponseTimeRootCause structures corresponding to the trace
+	// segments.
+	ResponseTimeRootCauses []*ResponseTimeRootCause `type:"list"`
+
+	// The revision number of a trace.
+	Revision *int64 `type:"integer"`
 
 	// Service IDs from the trace's segment documents.
 	ServiceIds []*ServiceId `type:"list"`
@@ -4054,9 +5410,33 @@ func (s *TraceSummary) SetAnnotations(v map[string][]*ValueWithServiceIds) *Trac
 	return s
 }
 
+// SetAvailabilityZones sets the AvailabilityZones field's value.
+func (s *TraceSummary) SetAvailabilityZones(v []*AvailabilityZoneDetail) *TraceSummary {
+	s.AvailabilityZones = v
+	return s
+}
+
 // SetDuration sets the Duration field's value.
 func (s *TraceSummary) SetDuration(v float64) *TraceSummary {
 	s.Duration = &v
+	return s
+}
+
+// SetEntryPoint sets the EntryPoint field's value.
+func (s *TraceSummary) SetEntryPoint(v *ServiceId) *TraceSummary {
+	s.EntryPoint = v
+	return s
+}
+
+// SetErrorRootCauses sets the ErrorRootCauses field's value.
+func (s *TraceSummary) SetErrorRootCauses(v []*ErrorRootCause) *TraceSummary {
+	s.ErrorRootCauses = v
+	return s
+}
+
+// SetFaultRootCauses sets the FaultRootCauses field's value.
+func (s *TraceSummary) SetFaultRootCauses(v []*FaultRootCause) *TraceSummary {
+	s.FaultRootCauses = v
 	return s
 }
 
@@ -4090,15 +5470,39 @@ func (s *TraceSummary) SetId(v string) *TraceSummary {
 	return s
 }
 
+// SetInstanceIds sets the InstanceIds field's value.
+func (s *TraceSummary) SetInstanceIds(v []*InstanceIdDetail) *TraceSummary {
+	s.InstanceIds = v
+	return s
+}
+
 // SetIsPartial sets the IsPartial field's value.
 func (s *TraceSummary) SetIsPartial(v bool) *TraceSummary {
 	s.IsPartial = &v
 	return s
 }
 
+// SetResourceARNs sets the ResourceARNs field's value.
+func (s *TraceSummary) SetResourceARNs(v []*ResourceARNDetail) *TraceSummary {
+	s.ResourceARNs = v
+	return s
+}
+
 // SetResponseTime sets the ResponseTime field's value.
 func (s *TraceSummary) SetResponseTime(v float64) *TraceSummary {
 	s.ResponseTime = &v
+	return s
+}
+
+// SetResponseTimeRootCauses sets the ResponseTimeRootCauses field's value.
+func (s *TraceSummary) SetResponseTimeRootCauses(v []*ResponseTimeRootCause) *TraceSummary {
+	s.ResponseTimeRootCauses = v
+	return s
+}
+
+// SetRevision sets the Revision field's value.
+func (s *TraceSummary) SetRevision(v int64) *TraceSummary {
+	s.Revision = &v
 	return s
 }
 
@@ -4229,6 +5633,91 @@ func (s *UnprocessedTraceSegment) SetId(v string) *UnprocessedTraceSegment {
 // SetMessage sets the Message field's value.
 func (s *UnprocessedTraceSegment) SetMessage(v string) *UnprocessedTraceSegment {
 	s.Message = &v
+	return s
+}
+
+type UpdateGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The updated filter expression defining criteria by which to group traces.
+	FilterExpression *string `min:"1" type:"string"`
+
+	// The ARN that was generated upon creation.
+	GroupARN *string `min:"1" type:"string"`
+
+	// The case-sensitive name of the group.
+	GroupName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateGroupInput"}
+	if s.FilterExpression != nil && len(*s.FilterExpression) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FilterExpression", 1))
+	}
+	if s.GroupARN != nil && len(*s.GroupARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupARN", 1))
+	}
+	if s.GroupName != nil && len(*s.GroupName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GroupName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilterExpression sets the FilterExpression field's value.
+func (s *UpdateGroupInput) SetFilterExpression(v string) *UpdateGroupInput {
+	s.FilterExpression = &v
+	return s
+}
+
+// SetGroupARN sets the GroupARN field's value.
+func (s *UpdateGroupInput) SetGroupARN(v string) *UpdateGroupInput {
+	s.GroupARN = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *UpdateGroupInput) SetGroupName(v string) *UpdateGroupInput {
+	s.GroupName = &v
+	return s
+}
+
+type UpdateGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The group that was updated. Contains the name of the group that was updated,
+	// the ARN of the group that was updated, and the updated filter expression
+	// assigned to the group.
+	Group *Group `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetGroup sets the Group field's value.
+func (s *UpdateGroupOutput) SetGroup(v *Group) *UpdateGroupOutput {
+	s.Group = v
 	return s
 }
 

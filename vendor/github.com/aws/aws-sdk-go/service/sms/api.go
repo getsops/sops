@@ -8,14 +8,109 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
+
+const opCreateApp = "CreateApp"
+
+// CreateAppRequest generates a "aws/request.Request" representing the
+// client's request for the CreateApp operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateApp for more information on using the CreateApp
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateAppRequest method.
+//    req, resp := client.CreateAppRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/CreateApp
+func (c *SMS) CreateAppRequest(input *CreateAppInput) (req *request.Request, output *CreateAppOutput) {
+	op := &request.Operation{
+		Name:       opCreateApp,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateAppInput{}
+	}
+
+	output = &CreateAppOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateApp API operation for AWS Server Migration Service.
+//
+// Creates an application. An application consists of one or more server groups.
+// Each server group contain one or more servers.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation CreateApp for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/CreateApp
+func (c *SMS) CreateApp(input *CreateAppInput) (*CreateAppOutput, error) {
+	req, out := c.CreateAppRequest(input)
+	return out, req.Send()
+}
+
+// CreateAppWithContext is the same as CreateApp with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateApp for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) CreateAppWithContext(ctx aws.Context, input *CreateAppInput, opts ...request.Option) (*CreateAppOutput, error) {
+	req, out := c.CreateAppRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
 
 const opCreateReplicationJob = "CreateReplicationJob"
 
 // CreateReplicationJobRequest generates a "aws/request.Request" representing the
 // client's request for the CreateReplicationJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -54,10 +149,9 @@ func (c *SMS) CreateReplicationJobRequest(input *CreateReplicationJobInput) (req
 
 // CreateReplicationJob API operation for AWS Server Migration Service.
 //
-// The CreateReplicationJob API is used to create a ReplicationJob to replicate
-// a server on AWS. Call this API to first create a ReplicationJob, which will
-// then schedule periodic ReplicationRuns to replicate your server to AWS. Each
-// ReplicationRun will result in the creation of an AWS AMI.
+// Creates a replication job. The replication job schedules periodic replication
+// runs to replicate your server to AWS. Each replication run creates an Amazon
+// Machine Image (AMI).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -68,33 +162,32 @@ func (c *SMS) CreateReplicationJobRequest(input *CreateReplicationJobInput) (req
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeServerCannotBeReplicatedException "ServerCannotBeReplicatedException"
-//   The provided server cannot be replicated.
+//   The specified server cannot be replicated.
 //
 //   * ErrCodeReplicationJobAlreadyExistsException "ReplicationJobAlreadyExistsException"
-//   An active Replication Job already exists for the specified server.
+//   The specified replication job already exists.
 //
 //   * ErrCodeNoConnectorsAvailableException "NoConnectorsAvailableException"
-//   No connectors are available to handle this request. Please associate connector(s)
-//   and verify any existing connectors are healthy and can respond to requests.
+//   There are no connectors available.
 //
 //   * ErrCodeInternalError "InternalError"
-//   An internal error has occured.
+//   An internal error occurred.
+//
+//   * ErrCodeTemporarilyUnavailableException "TemporarilyUnavailableException"
+//   The service is temporarily unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/CreateReplicationJob
 func (c *SMS) CreateReplicationJob(input *CreateReplicationJobInput) (*CreateReplicationJobOutput, error) {
@@ -118,12 +211,293 @@ func (c *SMS) CreateReplicationJobWithContext(ctx aws.Context, input *CreateRepl
 	return out, req.Send()
 }
 
+const opDeleteApp = "DeleteApp"
+
+// DeleteAppRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteApp operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteApp for more information on using the DeleteApp
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteAppRequest method.
+//    req, resp := client.DeleteAppRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteApp
+func (c *SMS) DeleteAppRequest(input *DeleteAppInput) (req *request.Request, output *DeleteAppOutput) {
+	op := &request.Operation{
+		Name:       opDeleteApp,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteAppInput{}
+	}
+
+	output = &DeleteAppOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteApp API operation for AWS Server Migration Service.
+//
+// Deletes an existing application. Optionally deletes the launched stack associated
+// with the application and all AWS SMS replication jobs for servers in the
+// application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation DeleteApp for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteApp
+func (c *SMS) DeleteApp(input *DeleteAppInput) (*DeleteAppOutput, error) {
+	req, out := c.DeleteAppRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAppWithContext is the same as DeleteApp with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteApp for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) DeleteAppWithContext(ctx aws.Context, input *DeleteAppInput, opts ...request.Option) (*DeleteAppOutput, error) {
+	req, out := c.DeleteAppRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteAppLaunchConfiguration = "DeleteAppLaunchConfiguration"
+
+// DeleteAppLaunchConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAppLaunchConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAppLaunchConfiguration for more information on using the DeleteAppLaunchConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteAppLaunchConfigurationRequest method.
+//    req, resp := client.DeleteAppLaunchConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteAppLaunchConfiguration
+func (c *SMS) DeleteAppLaunchConfigurationRequest(input *DeleteAppLaunchConfigurationInput) (req *request.Request, output *DeleteAppLaunchConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAppLaunchConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteAppLaunchConfigurationInput{}
+	}
+
+	output = &DeleteAppLaunchConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteAppLaunchConfiguration API operation for AWS Server Migration Service.
+//
+// Deletes existing launch configuration for an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation DeleteAppLaunchConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteAppLaunchConfiguration
+func (c *SMS) DeleteAppLaunchConfiguration(input *DeleteAppLaunchConfigurationInput) (*DeleteAppLaunchConfigurationOutput, error) {
+	req, out := c.DeleteAppLaunchConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAppLaunchConfigurationWithContext is the same as DeleteAppLaunchConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAppLaunchConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) DeleteAppLaunchConfigurationWithContext(ctx aws.Context, input *DeleteAppLaunchConfigurationInput, opts ...request.Option) (*DeleteAppLaunchConfigurationOutput, error) {
+	req, out := c.DeleteAppLaunchConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteAppReplicationConfiguration = "DeleteAppReplicationConfiguration"
+
+// DeleteAppReplicationConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAppReplicationConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAppReplicationConfiguration for more information on using the DeleteAppReplicationConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteAppReplicationConfigurationRequest method.
+//    req, resp := client.DeleteAppReplicationConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteAppReplicationConfiguration
+func (c *SMS) DeleteAppReplicationConfigurationRequest(input *DeleteAppReplicationConfigurationInput) (req *request.Request, output *DeleteAppReplicationConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAppReplicationConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteAppReplicationConfigurationInput{}
+	}
+
+	output = &DeleteAppReplicationConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteAppReplicationConfiguration API operation for AWS Server Migration Service.
+//
+// Deletes existing replication configuration for an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation DeleteAppReplicationConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteAppReplicationConfiguration
+func (c *SMS) DeleteAppReplicationConfiguration(input *DeleteAppReplicationConfigurationInput) (*DeleteAppReplicationConfigurationOutput, error) {
+	req, out := c.DeleteAppReplicationConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAppReplicationConfigurationWithContext is the same as DeleteAppReplicationConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAppReplicationConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) DeleteAppReplicationConfigurationWithContext(ctx aws.Context, input *DeleteAppReplicationConfigurationInput, opts ...request.Option) (*DeleteAppReplicationConfigurationOutput, error) {
+	req, out := c.DeleteAppReplicationConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteReplicationJob = "DeleteReplicationJob"
 
 // DeleteReplicationJobRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteReplicationJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -157,15 +531,17 @@ func (c *SMS) DeleteReplicationJobRequest(input *DeleteReplicationJobInput) (req
 
 	output = &DeleteReplicationJobOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeleteReplicationJob API operation for AWS Server Migration Service.
 //
-// The DeleteReplicationJob API is used to delete a ReplicationJob, resulting
-// in no further ReplicationRuns. This will delete the contents of the S3 bucket
-// used to store SMS artifacts, but will not delete any AMIs created by the
-// SMS service.
+// Deletes the specified replication job.
+//
+// After you delete a replication job, there are no further replication runs.
+// AWS deletes the contents of the Amazon S3 bucket used to store AWS SMS artifacts.
+// The AMIs created by the replication runs are not deleted.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -176,23 +552,20 @@ func (c *SMS) DeleteReplicationJobRequest(input *DeleteReplicationJobInput) (req
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeReplicationJobNotFoundException "ReplicationJobNotFoundException"
-//   The specified Replication Job cannot be found.
+//   The specified replication job does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteReplicationJob
 func (c *SMS) DeleteReplicationJob(input *DeleteReplicationJobInput) (*DeleteReplicationJobOutput, error) {
@@ -221,7 +594,7 @@ const opDeleteServerCatalog = "DeleteServerCatalog"
 // DeleteServerCatalogRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServerCatalog operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -255,14 +628,13 @@ func (c *SMS) DeleteServerCatalogRequest(input *DeleteServerCatalogInput) (req *
 
 	output = &DeleteServerCatalogOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeleteServerCatalog API operation for AWS Server Migration Service.
 //
-// The DeleteServerCatalog API clears all servers from your server catalog.
-// This means that these servers will no longer be accessible to the Server
-// Migration Service.
+// Deletes all servers from your server catalog.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -273,20 +645,17 @@ func (c *SMS) DeleteServerCatalogRequest(input *DeleteServerCatalogInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DeleteServerCatalog
 func (c *SMS) DeleteServerCatalog(input *DeleteServerCatalogInput) (*DeleteServerCatalogOutput, error) {
@@ -315,7 +684,7 @@ const opDisassociateConnector = "DisassociateConnector"
 // DisassociateConnectorRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateConnector operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -349,13 +718,16 @@ func (c *SMS) DisassociateConnectorRequest(input *DisassociateConnectorInput) (r
 
 	output = &DisassociateConnectorOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DisassociateConnector API operation for AWS Server Migration Service.
 //
-// The DisassociateConnector API will disassociate a connector from the Server
-// Migration Service, rendering it unavailable to support replication jobs.
+// Disassociates the specified connector from AWS SMS.
+//
+// After you disassociate a connector, it is no longer available to support
+// replication jobs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -366,20 +738,17 @@ func (c *SMS) DisassociateConnectorRequest(input *DisassociateConnectorInput) (r
 //
 // Returned Error Codes:
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/DisassociateConnector
 func (c *SMS) DisassociateConnector(input *DisassociateConnectorInput) (*DisassociateConnectorOutput, error) {
@@ -403,12 +772,474 @@ func (c *SMS) DisassociateConnectorWithContext(ctx aws.Context, input *Disassoci
 	return out, req.Send()
 }
 
+const opGenerateChangeSet = "GenerateChangeSet"
+
+// GenerateChangeSetRequest generates a "aws/request.Request" representing the
+// client's request for the GenerateChangeSet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GenerateChangeSet for more information on using the GenerateChangeSet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GenerateChangeSetRequest method.
+//    req, resp := client.GenerateChangeSetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GenerateChangeSet
+func (c *SMS) GenerateChangeSetRequest(input *GenerateChangeSetInput) (req *request.Request, output *GenerateChangeSetOutput) {
+	op := &request.Operation{
+		Name:       opGenerateChangeSet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GenerateChangeSetInput{}
+	}
+
+	output = &GenerateChangeSetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GenerateChangeSet API operation for AWS Server Migration Service.
+//
+// Generates a target change set for a currently launched stack and writes it
+// to an Amazon S3 object in the customer’s Amazon S3 bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation GenerateChangeSet for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GenerateChangeSet
+func (c *SMS) GenerateChangeSet(input *GenerateChangeSetInput) (*GenerateChangeSetOutput, error) {
+	req, out := c.GenerateChangeSetRequest(input)
+	return out, req.Send()
+}
+
+// GenerateChangeSetWithContext is the same as GenerateChangeSet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GenerateChangeSet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) GenerateChangeSetWithContext(ctx aws.Context, input *GenerateChangeSetInput, opts ...request.Option) (*GenerateChangeSetOutput, error) {
+	req, out := c.GenerateChangeSetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGenerateTemplate = "GenerateTemplate"
+
+// GenerateTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GenerateTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GenerateTemplate for more information on using the GenerateTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GenerateTemplateRequest method.
+//    req, resp := client.GenerateTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GenerateTemplate
+func (c *SMS) GenerateTemplateRequest(input *GenerateTemplateInput) (req *request.Request, output *GenerateTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGenerateTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GenerateTemplateInput{}
+	}
+
+	output = &GenerateTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GenerateTemplate API operation for AWS Server Migration Service.
+//
+// Generates an Amazon CloudFormation template based on the current launch configuration
+// and writes it to an Amazon S3 object in the customer’s Amazon S3 bucket.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation GenerateTemplate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GenerateTemplate
+func (c *SMS) GenerateTemplate(input *GenerateTemplateInput) (*GenerateTemplateOutput, error) {
+	req, out := c.GenerateTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GenerateTemplateWithContext is the same as GenerateTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GenerateTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) GenerateTemplateWithContext(ctx aws.Context, input *GenerateTemplateInput, opts ...request.Option) (*GenerateTemplateOutput, error) {
+	req, out := c.GenerateTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetApp = "GetApp"
+
+// GetAppRequest generates a "aws/request.Request" representing the
+// client's request for the GetApp operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetApp for more information on using the GetApp
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAppRequest method.
+//    req, resp := client.GetAppRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetApp
+func (c *SMS) GetAppRequest(input *GetAppInput) (req *request.Request, output *GetAppOutput) {
+	op := &request.Operation{
+		Name:       opGetApp,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAppInput{}
+	}
+
+	output = &GetAppOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetApp API operation for AWS Server Migration Service.
+//
+// Retrieve information about an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation GetApp for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetApp
+func (c *SMS) GetApp(input *GetAppInput) (*GetAppOutput, error) {
+	req, out := c.GetAppRequest(input)
+	return out, req.Send()
+}
+
+// GetAppWithContext is the same as GetApp with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetApp for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) GetAppWithContext(ctx aws.Context, input *GetAppInput, opts ...request.Option) (*GetAppOutput, error) {
+	req, out := c.GetAppRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAppLaunchConfiguration = "GetAppLaunchConfiguration"
+
+// GetAppLaunchConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetAppLaunchConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAppLaunchConfiguration for more information on using the GetAppLaunchConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAppLaunchConfigurationRequest method.
+//    req, resp := client.GetAppLaunchConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetAppLaunchConfiguration
+func (c *SMS) GetAppLaunchConfigurationRequest(input *GetAppLaunchConfigurationInput) (req *request.Request, output *GetAppLaunchConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetAppLaunchConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAppLaunchConfigurationInput{}
+	}
+
+	output = &GetAppLaunchConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAppLaunchConfiguration API operation for AWS Server Migration Service.
+//
+// Retrieves the application launch configuration associated with an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation GetAppLaunchConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetAppLaunchConfiguration
+func (c *SMS) GetAppLaunchConfiguration(input *GetAppLaunchConfigurationInput) (*GetAppLaunchConfigurationOutput, error) {
+	req, out := c.GetAppLaunchConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetAppLaunchConfigurationWithContext is the same as GetAppLaunchConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAppLaunchConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) GetAppLaunchConfigurationWithContext(ctx aws.Context, input *GetAppLaunchConfigurationInput, opts ...request.Option) (*GetAppLaunchConfigurationOutput, error) {
+	req, out := c.GetAppLaunchConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetAppReplicationConfiguration = "GetAppReplicationConfiguration"
+
+// GetAppReplicationConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetAppReplicationConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetAppReplicationConfiguration for more information on using the GetAppReplicationConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetAppReplicationConfigurationRequest method.
+//    req, resp := client.GetAppReplicationConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetAppReplicationConfiguration
+func (c *SMS) GetAppReplicationConfigurationRequest(input *GetAppReplicationConfigurationInput) (req *request.Request, output *GetAppReplicationConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetAppReplicationConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetAppReplicationConfigurationInput{}
+	}
+
+	output = &GetAppReplicationConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetAppReplicationConfiguration API operation for AWS Server Migration Service.
+//
+// Retrieves an application replication configuration associatd with an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation GetAppReplicationConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetAppReplicationConfiguration
+func (c *SMS) GetAppReplicationConfiguration(input *GetAppReplicationConfigurationInput) (*GetAppReplicationConfigurationOutput, error) {
+	req, out := c.GetAppReplicationConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetAppReplicationConfigurationWithContext is the same as GetAppReplicationConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetAppReplicationConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) GetAppReplicationConfigurationWithContext(ctx aws.Context, input *GetAppReplicationConfigurationInput, opts ...request.Option) (*GetAppReplicationConfigurationOutput, error) {
+	req, out := c.GetAppReplicationConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetConnectors = "GetConnectors"
 
 // GetConnectorsRequest generates a "aws/request.Request" representing the
 // client's request for the GetConnectors operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -453,8 +1284,7 @@ func (c *SMS) GetConnectorsRequest(input *GetConnectorsInput) (req *request.Requ
 
 // GetConnectors API operation for AWS Server Migration Service.
 //
-// The GetConnectors API returns a list of connectors that are registered with
-// the Server Migration Service.
+// Describes the connectors registered with the AWS SMS.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -465,7 +1295,8 @@ func (c *SMS) GetConnectorsRequest(input *GetConnectorsInput) (req *request.Requ
 //
 // Returned Error Codes:
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetConnectors
 func (c *SMS) GetConnectors(input *GetConnectorsInput) (*GetConnectorsOutput, error) {
@@ -544,7 +1375,7 @@ const opGetReplicationJobs = "GetReplicationJobs"
 // GetReplicationJobsRequest generates a "aws/request.Request" representing the
 // client's request for the GetReplicationJobs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -589,9 +1420,7 @@ func (c *SMS) GetReplicationJobsRequest(input *GetReplicationJobsInput) (req *re
 
 // GetReplicationJobs API operation for AWS Server Migration Service.
 //
-// The GetReplicationJobs API will return all of your ReplicationJobs and their
-// details. This API returns a paginated list, that may be consecutively called
-// with nextToken to retrieve all ReplicationJobs.
+// Describes the specified replication job or all of your replication jobs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -602,15 +1431,14 @@ func (c *SMS) GetReplicationJobsRequest(input *GetReplicationJobsInput) (req *re
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetReplicationJobs
 func (c *SMS) GetReplicationJobs(input *GetReplicationJobsInput) (*GetReplicationJobsOutput, error) {
@@ -689,7 +1517,7 @@ const opGetReplicationRuns = "GetReplicationRuns"
 // GetReplicationRunsRequest generates a "aws/request.Request" representing the
 // client's request for the GetReplicationRuns operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -734,9 +1562,7 @@ func (c *SMS) GetReplicationRunsRequest(input *GetReplicationRunsInput) (req *re
 
 // GetReplicationRuns API operation for AWS Server Migration Service.
 //
-// The GetReplicationRuns API will return all ReplicationRuns for a given ReplicationJob.
-// This API returns a paginated list, that may be consecutively called with
-// nextToken to retrieve all ReplicationRuns for a ReplicationJob.
+// Describes the replication runs for the specified replication job.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -747,15 +1573,14 @@ func (c *SMS) GetReplicationRunsRequest(input *GetReplicationRunsInput) (req *re
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetReplicationRuns
 func (c *SMS) GetReplicationRuns(input *GetReplicationRunsInput) (*GetReplicationRunsOutput, error) {
@@ -834,7 +1659,7 @@ const opGetServers = "GetServers"
 // GetServersRequest generates a "aws/request.Request" representing the
 // client's request for the GetServers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -879,8 +1704,9 @@ func (c *SMS) GetServersRequest(input *GetServersInput) (req *request.Request, o
 
 // GetServers API operation for AWS Server Migration Service.
 //
-// The GetServers API returns a list of all servers in your server catalog.
-// For this call to succeed, you must previously have called ImportServerCatalog.
+// Describes the servers in your server catalog.
+//
+// Before you can describe your servers, you must import them using ImportServerCatalog.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -891,7 +1717,8 @@ func (c *SMS) GetServersRequest(input *GetServersInput) (req *request.Request, o
 //
 // Returned Error Codes:
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/GetServers
 func (c *SMS) GetServers(input *GetServersInput) (*GetServersOutput, error) {
@@ -970,7 +1797,7 @@ const opImportServerCatalog = "ImportServerCatalog"
 // ImportServerCatalogRequest generates a "aws/request.Request" representing the
 // client's request for the ImportServerCatalog operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1004,15 +1831,17 @@ func (c *SMS) ImportServerCatalogRequest(input *ImportServerCatalogInput) (req *
 
 	output = &ImportServerCatalogOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // ImportServerCatalog API operation for AWS Server Migration Service.
 //
-// The ImportServerCatalog API is used to gather the complete list of on-premises
-// servers on your premises. This API call requires connectors to be installed
-// and monitoring all servers you would like imported. This API call returns
-// immediately, but may take some time to retrieve all of the servers.
+// Gathers a complete list of on-premises servers. Connectors must be installed
+// and monitoring all servers that you want to import.
+//
+// This call returns immediately, but might take additional time to retrieve
+// all the servers.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1023,24 +1852,20 @@ func (c *SMS) ImportServerCatalogRequest(input *ImportServerCatalogInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeNoConnectorsAvailableException "NoConnectorsAvailableException"
-//   No connectors are available to handle this request. Please associate connector(s)
-//   and verify any existing connectors are healthy and can respond to requests.
+//   There are no connectors available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/ImportServerCatalog
 func (c *SMS) ImportServerCatalog(input *ImportServerCatalogInput) (*ImportServerCatalogOutput, error) {
@@ -1064,12 +1889,476 @@ func (c *SMS) ImportServerCatalogWithContext(ctx aws.Context, input *ImportServe
 	return out, req.Send()
 }
 
+const opLaunchApp = "LaunchApp"
+
+// LaunchAppRequest generates a "aws/request.Request" representing the
+// client's request for the LaunchApp operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See LaunchApp for more information on using the LaunchApp
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the LaunchAppRequest method.
+//    req, resp := client.LaunchAppRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/LaunchApp
+func (c *SMS) LaunchAppRequest(input *LaunchAppInput) (req *request.Request, output *LaunchAppOutput) {
+	op := &request.Operation{
+		Name:       opLaunchApp,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &LaunchAppInput{}
+	}
+
+	output = &LaunchAppOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// LaunchApp API operation for AWS Server Migration Service.
+//
+// Launches an application stack.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation LaunchApp for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/LaunchApp
+func (c *SMS) LaunchApp(input *LaunchAppInput) (*LaunchAppOutput, error) {
+	req, out := c.LaunchAppRequest(input)
+	return out, req.Send()
+}
+
+// LaunchAppWithContext is the same as LaunchApp with the addition of
+// the ability to pass a context and additional request options.
+//
+// See LaunchApp for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) LaunchAppWithContext(ctx aws.Context, input *LaunchAppInput, opts ...request.Option) (*LaunchAppOutput, error) {
+	req, out := c.LaunchAppRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListApps = "ListApps"
+
+// ListAppsRequest generates a "aws/request.Request" representing the
+// client's request for the ListApps operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListApps for more information on using the ListApps
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListAppsRequest method.
+//    req, resp := client.ListAppsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/ListApps
+func (c *SMS) ListAppsRequest(input *ListAppsInput) (req *request.Request, output *ListAppsOutput) {
+	op := &request.Operation{
+		Name:       opListApps,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListAppsInput{}
+	}
+
+	output = &ListAppsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListApps API operation for AWS Server Migration Service.
+//
+// Returns a list of summaries for all applications.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation ListApps for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/ListApps
+func (c *SMS) ListApps(input *ListAppsInput) (*ListAppsOutput, error) {
+	req, out := c.ListAppsRequest(input)
+	return out, req.Send()
+}
+
+// ListAppsWithContext is the same as ListApps with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListApps for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) ListAppsWithContext(ctx aws.Context, input *ListAppsInput, opts ...request.Option) (*ListAppsOutput, error) {
+	req, out := c.ListAppsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutAppLaunchConfiguration = "PutAppLaunchConfiguration"
+
+// PutAppLaunchConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the PutAppLaunchConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutAppLaunchConfiguration for more information on using the PutAppLaunchConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutAppLaunchConfigurationRequest method.
+//    req, resp := client.PutAppLaunchConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/PutAppLaunchConfiguration
+func (c *SMS) PutAppLaunchConfigurationRequest(input *PutAppLaunchConfigurationInput) (req *request.Request, output *PutAppLaunchConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opPutAppLaunchConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutAppLaunchConfigurationInput{}
+	}
+
+	output = &PutAppLaunchConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutAppLaunchConfiguration API operation for AWS Server Migration Service.
+//
+// Creates a launch configuration for an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation PutAppLaunchConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/PutAppLaunchConfiguration
+func (c *SMS) PutAppLaunchConfiguration(input *PutAppLaunchConfigurationInput) (*PutAppLaunchConfigurationOutput, error) {
+	req, out := c.PutAppLaunchConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// PutAppLaunchConfigurationWithContext is the same as PutAppLaunchConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutAppLaunchConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) PutAppLaunchConfigurationWithContext(ctx aws.Context, input *PutAppLaunchConfigurationInput, opts ...request.Option) (*PutAppLaunchConfigurationOutput, error) {
+	req, out := c.PutAppLaunchConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutAppReplicationConfiguration = "PutAppReplicationConfiguration"
+
+// PutAppReplicationConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the PutAppReplicationConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutAppReplicationConfiguration for more information on using the PutAppReplicationConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutAppReplicationConfigurationRequest method.
+//    req, resp := client.PutAppReplicationConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/PutAppReplicationConfiguration
+func (c *SMS) PutAppReplicationConfigurationRequest(input *PutAppReplicationConfigurationInput) (req *request.Request, output *PutAppReplicationConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opPutAppReplicationConfiguration,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutAppReplicationConfigurationInput{}
+	}
+
+	output = &PutAppReplicationConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutAppReplicationConfiguration API operation for AWS Server Migration Service.
+//
+// Creates or updates a replication configuration for an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation PutAppReplicationConfiguration for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/PutAppReplicationConfiguration
+func (c *SMS) PutAppReplicationConfiguration(input *PutAppReplicationConfigurationInput) (*PutAppReplicationConfigurationOutput, error) {
+	req, out := c.PutAppReplicationConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// PutAppReplicationConfigurationWithContext is the same as PutAppReplicationConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutAppReplicationConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) PutAppReplicationConfigurationWithContext(ctx aws.Context, input *PutAppReplicationConfigurationInput, opts ...request.Option) (*PutAppReplicationConfigurationOutput, error) {
+	req, out := c.PutAppReplicationConfigurationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartAppReplication = "StartAppReplication"
+
+// StartAppReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the StartAppReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartAppReplication for more information on using the StartAppReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartAppReplicationRequest method.
+//    req, resp := client.StartAppReplicationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/StartAppReplication
+func (c *SMS) StartAppReplicationRequest(input *StartAppReplicationInput) (req *request.Request, output *StartAppReplicationOutput) {
+	op := &request.Operation{
+		Name:       opStartAppReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartAppReplicationInput{}
+	}
+
+	output = &StartAppReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartAppReplication API operation for AWS Server Migration Service.
+//
+// Starts replicating an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation StartAppReplication for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/StartAppReplication
+func (c *SMS) StartAppReplication(input *StartAppReplicationInput) (*StartAppReplicationOutput, error) {
+	req, out := c.StartAppReplicationRequest(input)
+	return out, req.Send()
+}
+
+// StartAppReplicationWithContext is the same as StartAppReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartAppReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) StartAppReplicationWithContext(ctx aws.Context, input *StartAppReplicationInput, opts ...request.Option) (*StartAppReplicationOutput, error) {
+	req, out := c.StartAppReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartOnDemandReplicationRun = "StartOnDemandReplicationRun"
 
 // StartOnDemandReplicationRunRequest generates a "aws/request.Request" representing the
 // client's request for the StartOnDemandReplicationRun operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1108,11 +2397,12 @@ func (c *SMS) StartOnDemandReplicationRunRequest(input *StartOnDemandReplication
 
 // StartOnDemandReplicationRun API operation for AWS Server Migration Service.
 //
-// The StartOnDemandReplicationRun API is used to start a ReplicationRun on
-// demand (in addition to those that are scheduled based on your frequency).
-// This ReplicationRun will start immediately. StartOnDemandReplicationRun is
-// subject to limits on how many on demand ReplicationRuns you may call per
-// 24-hour period.
+// Starts an on-demand replication run for the specified replication job. This
+// replication run starts immediately. This replication run is in addition to
+// the ones already scheduled.
+//
+// There is a limit on the number of on-demand replications runs you can request
+// in a 24-hour period.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1123,23 +2413,21 @@ func (c *SMS) StartOnDemandReplicationRunRequest(input *StartOnDemandReplication
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeReplicationRunLimitExceededException "ReplicationRunLimitExceededException"
-//   This user has exceeded the maximum allowed Replication Run limit.
+//   You have exceeded the number of on-demand replication runs you can request
+//   in a 24-hour period.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/StartOnDemandReplicationRun
 func (c *SMS) StartOnDemandReplicationRun(input *StartOnDemandReplicationRunInput) (*StartOnDemandReplicationRunOutput, error) {
@@ -1163,12 +2451,290 @@ func (c *SMS) StartOnDemandReplicationRunWithContext(ctx aws.Context, input *Sta
 	return out, req.Send()
 }
 
+const opStopAppReplication = "StopAppReplication"
+
+// StopAppReplicationRequest generates a "aws/request.Request" representing the
+// client's request for the StopAppReplication operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopAppReplication for more information on using the StopAppReplication
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopAppReplicationRequest method.
+//    req, resp := client.StopAppReplicationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/StopAppReplication
+func (c *SMS) StopAppReplicationRequest(input *StopAppReplicationInput) (req *request.Request, output *StopAppReplicationOutput) {
+	op := &request.Operation{
+		Name:       opStopAppReplication,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopAppReplicationInput{}
+	}
+
+	output = &StopAppReplicationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StopAppReplication API operation for AWS Server Migration Service.
+//
+// Stops replicating an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation StopAppReplication for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/StopAppReplication
+func (c *SMS) StopAppReplication(input *StopAppReplicationInput) (*StopAppReplicationOutput, error) {
+	req, out := c.StopAppReplicationRequest(input)
+	return out, req.Send()
+}
+
+// StopAppReplicationWithContext is the same as StopAppReplication with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopAppReplication for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) StopAppReplicationWithContext(ctx aws.Context, input *StopAppReplicationInput, opts ...request.Option) (*StopAppReplicationOutput, error) {
+	req, out := c.StopAppReplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTerminateApp = "TerminateApp"
+
+// TerminateAppRequest generates a "aws/request.Request" representing the
+// client's request for the TerminateApp operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TerminateApp for more information on using the TerminateApp
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TerminateAppRequest method.
+//    req, resp := client.TerminateAppRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/TerminateApp
+func (c *SMS) TerminateAppRequest(input *TerminateAppInput) (req *request.Request, output *TerminateAppOutput) {
+	op := &request.Operation{
+		Name:       opTerminateApp,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TerminateAppInput{}
+	}
+
+	output = &TerminateAppOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TerminateApp API operation for AWS Server Migration Service.
+//
+// Terminates the stack for an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation TerminateApp for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/TerminateApp
+func (c *SMS) TerminateApp(input *TerminateAppInput) (*TerminateAppOutput, error) {
+	req, out := c.TerminateAppRequest(input)
+	return out, req.Send()
+}
+
+// TerminateAppWithContext is the same as TerminateApp with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TerminateApp for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) TerminateAppWithContext(ctx aws.Context, input *TerminateAppInput, opts ...request.Option) (*TerminateAppOutput, error) {
+	req, out := c.TerminateAppRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateApp = "UpdateApp"
+
+// UpdateAppRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateApp operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateApp for more information on using the UpdateApp
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateAppRequest method.
+//    req, resp := client.UpdateAppRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/UpdateApp
+func (c *SMS) UpdateAppRequest(input *UpdateAppInput) (req *request.Request, output *UpdateAppOutput) {
+	op := &request.Operation{
+		Name:       opUpdateApp,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateAppInput{}
+	}
+
+	output = &UpdateAppOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateApp API operation for AWS Server Migration Service.
+//
+// Updates an application.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Server Migration Service's
+// API operation UpdateApp for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   A specified parameter is not valid.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
+//   A required parameter is missing.
+//
+//   * ErrCodeInternalError "InternalError"
+//   An internal error occurred.
+//
+//   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
+//   This operation is not allowed.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/UpdateApp
+func (c *SMS) UpdateApp(input *UpdateAppInput) (*UpdateAppOutput, error) {
+	req, out := c.UpdateAppRequest(input)
+	return out, req.Send()
+}
+
+// UpdateAppWithContext is the same as UpdateApp with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateApp for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SMS) UpdateAppWithContext(ctx aws.Context, input *UpdateAppInput, opts ...request.Option) (*UpdateAppOutput, error) {
+	req, out := c.UpdateAppRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateReplicationJob = "UpdateReplicationJob"
 
 // UpdateReplicationJobRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateReplicationJob operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1202,14 +2768,13 @@ func (c *SMS) UpdateReplicationJobRequest(input *UpdateReplicationJobInput) (req
 
 	output = &UpdateReplicationJobOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // UpdateReplicationJob API operation for AWS Server Migration Service.
 //
-// The UpdateReplicationJob API is used to change the settings of your existing
-// ReplicationJob created using CreateReplicationJob. Calling this API will
-// affect the next scheduled ReplicationRun.
+// Updates the specified settings for the specified replication job.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1220,29 +2785,29 @@ func (c *SMS) UpdateReplicationJobRequest(input *UpdateReplicationJobInput) (req
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidParameterException "InvalidParameterException"
-//   A parameter specified in the request is not valid, is unsupported, or cannot
-//   be used.
+//   A specified parameter is not valid.
 //
 //   * ErrCodeMissingRequiredParameterException "MissingRequiredParameterException"
-//   The request is missing a required parameter. Ensure that you have supplied
-//   all the required parameters for the request.
+//   A required parameter is missing.
 //
 //   * ErrCodeOperationNotPermittedException "OperationNotPermittedException"
-//   The specified operation is not allowed. This error can occur for a number
-//   of reasons; for example, you might be trying to start a Replication Run before
-//   seed Replication Run.
+//   This operation is not allowed.
 //
 //   * ErrCodeUnauthorizedOperationException "UnauthorizedOperationException"
-//   This user does not have permissions to perform this operation.
+//   You lack permissions needed to perform this operation. Check your IAM policies,
+//   and ensure that you are using the correct access keys.
 //
 //   * ErrCodeServerCannotBeReplicatedException "ServerCannotBeReplicatedException"
-//   The provided server cannot be replicated.
+//   The specified server cannot be replicated.
 //
 //   * ErrCodeReplicationJobNotFoundException "ReplicationJobNotFoundException"
-//   The specified Replication Job cannot be found.
+//   The specified replication job does not exist.
 //
 //   * ErrCodeInternalError "InternalError"
-//   An internal error has occured.
+//   An internal error occurred.
+//
+//   * ErrCodeTemporarilyUnavailableException "TemporarilyUnavailableException"
+//   The service is temporarily unavailable.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sms-2016-10-24/UpdateReplicationJob
 func (c *SMS) UpdateReplicationJob(input *UpdateReplicationJobInput) (*UpdateReplicationJobOutput, error) {
@@ -1266,38 +2831,197 @@ func (c *SMS) UpdateReplicationJobWithContext(ctx aws.Context, input *UpdateRepl
 	return out, req.Send()
 }
 
-// Object representing a Connector
+// Information about the application.
+type AppSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Unique ID of the application.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// Time of creation of this application.
+	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
+
+	// Description of the application.
+	Description *string `locationName:"description" type:"string"`
+
+	// Timestamp of the application's creation.
+	LastModified *time.Time `locationName:"lastModified" type:"timestamp"`
+
+	// Timestamp of the application's most recent successful replication.
+	LatestReplicationTime *time.Time `locationName:"latestReplicationTime" type:"timestamp"`
+
+	// Details about the latest launch of the application.
+	LaunchDetails *LaunchDetails `locationName:"launchDetails" type:"structure"`
+
+	// Launch status of the application.
+	LaunchStatus *string `locationName:"launchStatus" type:"string" enum:"AppLaunchStatus"`
+
+	// A message related to the launch status of the application.
+	LaunchStatusMessage *string `locationName:"launchStatusMessage" type:"string"`
+
+	// Name of the application.
+	Name *string `locationName:"name" type:"string"`
+
+	// Replication status of the application.
+	ReplicationStatus *string `locationName:"replicationStatus" type:"string" enum:"AppReplicationStatus"`
+
+	// A message related to the replication status of the application.
+	ReplicationStatusMessage *string `locationName:"replicationStatusMessage" type:"string"`
+
+	// Name of the service role in the customer's account used by AWS SMS.
+	RoleName *string `locationName:"roleName" type:"string"`
+
+	// Status of the application.
+	Status *string `locationName:"status" type:"string" enum:"AppStatus"`
+
+	// A message related to the status of the application
+	StatusMessage *string `locationName:"statusMessage" type:"string"`
+
+	// Number of server groups present in the application.
+	TotalServerGroups *int64 `locationName:"totalServerGroups" type:"integer"`
+
+	// Number of servers present in the application.
+	TotalServers *int64 `locationName:"totalServers" type:"integer"`
+}
+
+// String returns the string representation
+func (s AppSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AppSummary) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *AppSummary) SetAppId(v string) *AppSummary {
+	s.AppId = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *AppSummary) SetCreationTime(v time.Time) *AppSummary {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *AppSummary) SetDescription(v string) *AppSummary {
+	s.Description = &v
+	return s
+}
+
+// SetLastModified sets the LastModified field's value.
+func (s *AppSummary) SetLastModified(v time.Time) *AppSummary {
+	s.LastModified = &v
+	return s
+}
+
+// SetLatestReplicationTime sets the LatestReplicationTime field's value.
+func (s *AppSummary) SetLatestReplicationTime(v time.Time) *AppSummary {
+	s.LatestReplicationTime = &v
+	return s
+}
+
+// SetLaunchDetails sets the LaunchDetails field's value.
+func (s *AppSummary) SetLaunchDetails(v *LaunchDetails) *AppSummary {
+	s.LaunchDetails = v
+	return s
+}
+
+// SetLaunchStatus sets the LaunchStatus field's value.
+func (s *AppSummary) SetLaunchStatus(v string) *AppSummary {
+	s.LaunchStatus = &v
+	return s
+}
+
+// SetLaunchStatusMessage sets the LaunchStatusMessage field's value.
+func (s *AppSummary) SetLaunchStatusMessage(v string) *AppSummary {
+	s.LaunchStatusMessage = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AppSummary) SetName(v string) *AppSummary {
+	s.Name = &v
+	return s
+}
+
+// SetReplicationStatus sets the ReplicationStatus field's value.
+func (s *AppSummary) SetReplicationStatus(v string) *AppSummary {
+	s.ReplicationStatus = &v
+	return s
+}
+
+// SetReplicationStatusMessage sets the ReplicationStatusMessage field's value.
+func (s *AppSummary) SetReplicationStatusMessage(v string) *AppSummary {
+	s.ReplicationStatusMessage = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *AppSummary) SetRoleName(v string) *AppSummary {
+	s.RoleName = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *AppSummary) SetStatus(v string) *AppSummary {
+	s.Status = &v
+	return s
+}
+
+// SetStatusMessage sets the StatusMessage field's value.
+func (s *AppSummary) SetStatusMessage(v string) *AppSummary {
+	s.StatusMessage = &v
+	return s
+}
+
+// SetTotalServerGroups sets the TotalServerGroups field's value.
+func (s *AppSummary) SetTotalServerGroups(v int64) *AppSummary {
+	s.TotalServerGroups = &v
+	return s
+}
+
+// SetTotalServers sets the TotalServers field's value.
+func (s *AppSummary) SetTotalServers(v int64) *AppSummary {
+	s.TotalServers = &v
+	return s
+}
+
+// Represents a connector.
 type Connector struct {
 	_ struct{} `type:"structure"`
 
-	// Timestamp of an operation
+	// The time the connector was associated.
 	AssociatedOn *time.Time `locationName:"associatedOn" type:"timestamp"`
 
-	// List of Connector Capabilities
-	CapabilityList []*string `locationName:"capabilityList" locationNameList:"item" type:"list"`
+	// The capabilities of the connector.
+	CapabilityList []*string `locationName:"capabilityList" type:"list"`
 
-	// Unique Identifier for Connector
+	// The identifier of the connector.
 	ConnectorId *string `locationName:"connectorId" type:"string"`
 
-	// Internet Protocol (IP) Address
+	// The IP address of the connector.
 	IpAddress *string `locationName:"ipAddress" type:"string"`
 
-	// Hardware (MAC) address
+	// The MAC address of the connector.
 	MacAddress *string `locationName:"macAddress" type:"string"`
 
-	// Status of on-premises Connector
+	// The status of the connector.
 	Status *string `locationName:"status" type:"string" enum:"ConnectorStatus"`
 
-	// Connector version string
+	// The connector version.
 	Version *string `locationName:"version" type:"string"`
 
-	// Unique Identifier for VM Manager
+	// The identifier of the VM manager.
 	VmManagerId *string `locationName:"vmManagerId" type:"string"`
 
-	// VM Manager Name
+	// The name of the VM manager.
 	VmManagerName *string `locationName:"vmManagerName" type:"string"`
 
-	// VM Management Product
+	// The VM management product.
 	VmManagerType *string `locationName:"vmManagerType" type:"string" enum:"VmManagerType"`
 }
 
@@ -1371,31 +3095,163 @@ func (s *Connector) SetVmManagerType(v string) *Connector {
 	return s
 }
 
+type CreateAppInput struct {
+	_ struct{} `type:"structure"`
+
+	// A unique, case-sensitive identifier you provide to ensure idempotency of
+	// application creation.
+	ClientToken *string `locationName:"clientToken" type:"string"`
+
+	// Description of the new application
+	Description *string `locationName:"description" type:"string"`
+
+	// Name of the new application.
+	Name *string `locationName:"name" type:"string"`
+
+	// Name of service role in customer's account to be used by AWS SMS.
+	RoleName *string `locationName:"roleName" type:"string"`
+
+	// List of server groups to include in the application.
+	ServerGroups []*ServerGroup `locationName:"serverGroups" type:"list"`
+
+	// List of tags to be associated with the application.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s CreateAppInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAppInput) GoString() string {
+	return s.String()
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateAppInput) SetClientToken(v string) *CreateAppInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateAppInput) SetDescription(v string) *CreateAppInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateAppInput) SetName(v string) *CreateAppInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *CreateAppInput) SetRoleName(v string) *CreateAppInput {
+	s.RoleName = &v
+	return s
+}
+
+// SetServerGroups sets the ServerGroups field's value.
+func (s *CreateAppInput) SetServerGroups(v []*ServerGroup) *CreateAppInput {
+	s.ServerGroups = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateAppInput) SetTags(v []*Tag) *CreateAppInput {
+	s.Tags = v
+	return s
+}
+
+type CreateAppOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summary description of the application.
+	AppSummary *AppSummary `locationName:"appSummary" type:"structure"`
+
+	// List of server groups included in the application.
+	ServerGroups []*ServerGroup `locationName:"serverGroups" type:"list"`
+
+	// List of taags associated with the application.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s CreateAppOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateAppOutput) GoString() string {
+	return s.String()
+}
+
+// SetAppSummary sets the AppSummary field's value.
+func (s *CreateAppOutput) SetAppSummary(v *AppSummary) *CreateAppOutput {
+	s.AppSummary = v
+	return s
+}
+
+// SetServerGroups sets the ServerGroups field's value.
+func (s *CreateAppOutput) SetServerGroups(v []*ServerGroup) *CreateAppOutput {
+	s.ServerGroups = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateAppOutput) SetTags(v []*Tag) *CreateAppOutput {
+	s.Tags = v
+	return s
+}
+
 type CreateReplicationJobInput struct {
 	_ struct{} `type:"structure"`
 
-	// The description for a Replication Job/Run.
+	// The description of the replication job.
 	Description *string `locationName:"description" type:"string"`
 
-	// Interval between Replication Runs. This value is specified in hours, and
-	// represents the time between consecutive Replication Runs.
-	//
-	// Frequency is a required field
-	Frequency *int64 `locationName:"frequency" type:"integer" required:"true"`
+	// When true, the replication job produces encrypted AMIs. See also KmsKeyId
+	// below.
+	Encrypted *bool `locationName:"encrypted" type:"boolean"`
 
-	// The license type to be used for the Amazon Machine Image (AMI) created after
-	// a successful ReplicationRun.
+	// The time between consecutive replication runs, in hours.
+	Frequency *int64 `locationName:"frequency" type:"integer"`
+
+	// KMS key ID for replication jobs that produce encrypted AMIs. Can be any of
+	// the following:
+	//
+	//    * KMS key ID
+	//
+	//    * KMS key alias
+	//
+	//    * ARN referring to KMS key ID
+	//
+	//    * ARN referring to KMS key alias
+	//
+	// If encrypted is true but a KMS key id is not specified, the customer's default
+	// KMS key for EBS is used.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The license type to be used for the AMI created by a successful replication
+	// run.
 	LicenseType *string `locationName:"licenseType" type:"string" enum:"LicenseType"`
 
-	// Name of service role in customer's account to be used by SMS service.
+	// The maximum number of SMS-created AMIs to retain. The oldest will be deleted
+	// once the maximum number is reached and a new AMI is created.
+	NumberOfRecentAmisToKeep *int64 `locationName:"numberOfRecentAmisToKeep" type:"integer"`
+
+	// The name of the IAM role to be used by the AWS SMS.
 	RoleName *string `locationName:"roleName" type:"string"`
 
-	// Timestamp of an operation
+	RunOnce *bool `locationName:"runOnce" type:"boolean"`
+
+	// The seed replication time.
 	//
 	// SeedReplicationTime is a required field
 	SeedReplicationTime *time.Time `locationName:"seedReplicationTime" type:"timestamp" required:"true"`
 
-	// Unique Identifier for a server
+	// The identifier of the server.
 	//
 	// ServerId is a required field
 	ServerId *string `locationName:"serverId" type:"string" required:"true"`
@@ -1414,9 +3270,6 @@ func (s CreateReplicationJobInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateReplicationJobInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateReplicationJobInput"}
-	if s.Frequency == nil {
-		invalidParams.Add(request.NewErrParamRequired("Frequency"))
-	}
 	if s.SeedReplicationTime == nil {
 		invalidParams.Add(request.NewErrParamRequired("SeedReplicationTime"))
 	}
@@ -1436,9 +3289,21 @@ func (s *CreateReplicationJobInput) SetDescription(v string) *CreateReplicationJ
 	return s
 }
 
+// SetEncrypted sets the Encrypted field's value.
+func (s *CreateReplicationJobInput) SetEncrypted(v bool) *CreateReplicationJobInput {
+	s.Encrypted = &v
+	return s
+}
+
 // SetFrequency sets the Frequency field's value.
 func (s *CreateReplicationJobInput) SetFrequency(v int64) *CreateReplicationJobInput {
 	s.Frequency = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *CreateReplicationJobInput) SetKmsKeyId(v string) *CreateReplicationJobInput {
+	s.KmsKeyId = &v
 	return s
 }
 
@@ -1448,9 +3313,21 @@ func (s *CreateReplicationJobInput) SetLicenseType(v string) *CreateReplicationJ
 	return s
 }
 
+// SetNumberOfRecentAmisToKeep sets the NumberOfRecentAmisToKeep field's value.
+func (s *CreateReplicationJobInput) SetNumberOfRecentAmisToKeep(v int64) *CreateReplicationJobInput {
+	s.NumberOfRecentAmisToKeep = &v
+	return s
+}
+
 // SetRoleName sets the RoleName field's value.
 func (s *CreateReplicationJobInput) SetRoleName(v string) *CreateReplicationJobInput {
 	s.RoleName = &v
+	return s
+}
+
+// SetRunOnce sets the RunOnce field's value.
+func (s *CreateReplicationJobInput) SetRunOnce(v bool) *CreateReplicationJobInput {
+	s.RunOnce = &v
 	return s
 }
 
@@ -1469,7 +3346,7 @@ func (s *CreateReplicationJobInput) SetServerId(v string) *CreateReplicationJobI
 type CreateReplicationJobOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for a Replication Job.
+	// The unique identifier of the replication job.
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string"`
 }
 
@@ -1489,10 +3366,141 @@ func (s *CreateReplicationJobOutput) SetReplicationJobId(v string) *CreateReplic
 	return s
 }
 
+type DeleteAppInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application to delete.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// While deleting the application, stop all replication jobs corresponding to
+	// the servers in the application.
+	ForceStopAppReplication *bool `locationName:"forceStopAppReplication" type:"boolean"`
+
+	// While deleting the application, terminate the stack corresponding to the
+	// application.
+	ForceTerminateApp *bool `locationName:"forceTerminateApp" type:"boolean"`
+}
+
+// String returns the string representation
+func (s DeleteAppInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAppInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *DeleteAppInput) SetAppId(v string) *DeleteAppInput {
+	s.AppId = &v
+	return s
+}
+
+// SetForceStopAppReplication sets the ForceStopAppReplication field's value.
+func (s *DeleteAppInput) SetForceStopAppReplication(v bool) *DeleteAppInput {
+	s.ForceStopAppReplication = &v
+	return s
+}
+
+// SetForceTerminateApp sets the ForceTerminateApp field's value.
+func (s *DeleteAppInput) SetForceTerminateApp(v bool) *DeleteAppInput {
+	s.ForceTerminateApp = &v
+	return s
+}
+
+type DeleteAppLaunchConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the launch configuration.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteAppLaunchConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAppLaunchConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *DeleteAppLaunchConfigurationInput) SetAppId(v string) *DeleteAppLaunchConfigurationInput {
+	s.AppId = &v
+	return s
+}
+
+type DeleteAppLaunchConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAppLaunchConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAppLaunchConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteAppOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAppOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAppOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteAppReplicationConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the replication configuration.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteAppReplicationConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAppReplicationConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *DeleteAppReplicationConfigurationInput) SetAppId(v string) *DeleteAppReplicationConfigurationInput {
+	s.AppId = &v
+	return s
+}
+
+type DeleteAppReplicationConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAppReplicationConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAppReplicationConfigurationOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteReplicationJobInput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for a Replication Job.
+	// The identifier of the replication job.
 	//
 	// ReplicationJobId is a required field
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string" required:"true"`
@@ -1572,7 +3580,7 @@ func (s DeleteServerCatalogOutput) GoString() string {
 type DisassociateConnectorInput struct {
 	_ struct{} `type:"structure"`
 
-	// Unique Identifier for Connector
+	// The identifier of the connector.
 	//
 	// ConnectorId is a required field
 	ConnectorId *string `locationName:"connectorId" type:"string" required:"true"`
@@ -1621,14 +3629,300 @@ func (s DisassociateConnectorOutput) GoString() string {
 	return s.String()
 }
 
+type GenerateChangeSetInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the change set.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// Format for the change set.
+	ChangesetFormat *string `locationName:"changesetFormat" type:"string" enum:"OutputFormat"`
+}
+
+// String returns the string representation
+func (s GenerateChangeSetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GenerateChangeSetInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *GenerateChangeSetInput) SetAppId(v string) *GenerateChangeSetInput {
+	s.AppId = &v
+	return s
+}
+
+// SetChangesetFormat sets the ChangesetFormat field's value.
+func (s *GenerateChangeSetInput) SetChangesetFormat(v string) *GenerateChangeSetInput {
+	s.ChangesetFormat = &v
+	return s
+}
+
+type GenerateChangeSetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Location of the Amazon S3 object.
+	S3Location *S3Location `locationName:"s3Location" type:"structure"`
+}
+
+// String returns the string representation
+func (s GenerateChangeSetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GenerateChangeSetOutput) GoString() string {
+	return s.String()
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *GenerateChangeSetOutput) SetS3Location(v *S3Location) *GenerateChangeSetOutput {
+	s.S3Location = v
+	return s
+}
+
+type GenerateTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the Amazon CloudFormation template.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// Format for generating the Amazon CloudFormation template.
+	TemplateFormat *string `locationName:"templateFormat" type:"string" enum:"OutputFormat"`
+}
+
+// String returns the string representation
+func (s GenerateTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GenerateTemplateInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *GenerateTemplateInput) SetAppId(v string) *GenerateTemplateInput {
+	s.AppId = &v
+	return s
+}
+
+// SetTemplateFormat sets the TemplateFormat field's value.
+func (s *GenerateTemplateInput) SetTemplateFormat(v string) *GenerateTemplateInput {
+	s.TemplateFormat = &v
+	return s
+}
+
+type GenerateTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Location of the Amazon S3 object.
+	S3Location *S3Location `locationName:"s3Location" type:"structure"`
+}
+
+// String returns the string representation
+func (s GenerateTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GenerateTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *GenerateTemplateOutput) SetS3Location(v *S3Location) *GenerateTemplateOutput {
+	s.S3Location = v
+	return s
+}
+
+type GetAppInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application whose information is being retrieved.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s GetAppInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAppInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *GetAppInput) SetAppId(v string) *GetAppInput {
+	s.AppId = &v
+	return s
+}
+
+type GetAppLaunchConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application launch configuration.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s GetAppLaunchConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAppLaunchConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *GetAppLaunchConfigurationInput) SetAppId(v string) *GetAppLaunchConfigurationInput {
+	s.AppId = &v
+	return s
+}
+
+type GetAppLaunchConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the launch configuration.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// Name of the service role in the customer's account that Amazon CloudFormation
+	// uses to launch the application.
+	RoleName *string `locationName:"roleName" type:"string"`
+
+	// List of launch configurations for server groups in this application.
+	ServerGroupLaunchConfigurations []*ServerGroupLaunchConfiguration `locationName:"serverGroupLaunchConfigurations" type:"list"`
+}
+
+// String returns the string representation
+func (s GetAppLaunchConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAppLaunchConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *GetAppLaunchConfigurationOutput) SetAppId(v string) *GetAppLaunchConfigurationOutput {
+	s.AppId = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *GetAppLaunchConfigurationOutput) SetRoleName(v string) *GetAppLaunchConfigurationOutput {
+	s.RoleName = &v
+	return s
+}
+
+// SetServerGroupLaunchConfigurations sets the ServerGroupLaunchConfigurations field's value.
+func (s *GetAppLaunchConfigurationOutput) SetServerGroupLaunchConfigurations(v []*ServerGroupLaunchConfiguration) *GetAppLaunchConfigurationOutput {
+	s.ServerGroupLaunchConfigurations = v
+	return s
+}
+
+type GetAppOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the application.
+	AppSummary *AppSummary `locationName:"appSummary" type:"structure"`
+
+	// List of server groups belonging to the application.
+	ServerGroups []*ServerGroup `locationName:"serverGroups" type:"list"`
+
+	// List of tags associated with the application.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s GetAppOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAppOutput) GoString() string {
+	return s.String()
+}
+
+// SetAppSummary sets the AppSummary field's value.
+func (s *GetAppOutput) SetAppSummary(v *AppSummary) *GetAppOutput {
+	s.AppSummary = v
+	return s
+}
+
+// SetServerGroups sets the ServerGroups field's value.
+func (s *GetAppOutput) SetServerGroups(v []*ServerGroup) *GetAppOutput {
+	s.ServerGroups = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetAppOutput) SetTags(v []*Tag) *GetAppOutput {
+	s.Tags = v
+	return s
+}
+
+type GetAppReplicationConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the replication configuration.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s GetAppReplicationConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAppReplicationConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *GetAppReplicationConfigurationInput) SetAppId(v string) *GetAppReplicationConfigurationInput {
+	s.AppId = &v
+	return s
+}
+
+type GetAppReplicationConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Replication configurations associated with server groups in this application.
+	ServerGroupReplicationConfigurations []*ServerGroupReplicationConfiguration `locationName:"serverGroupReplicationConfigurations" type:"list"`
+}
+
+// String returns the string representation
+func (s GetAppReplicationConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetAppReplicationConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetServerGroupReplicationConfigurations sets the ServerGroupReplicationConfigurations field's value.
+func (s *GetAppReplicationConfigurationOutput) SetServerGroupReplicationConfigurations(v []*ServerGroupReplicationConfiguration) *GetAppReplicationConfigurationOutput {
+	s.ServerGroupReplicationConfigurations = v
+	return s
+}
+
 type GetConnectorsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of results to return in one API call. If left empty, this
-	// will default to 50.
+	// The maximum number of results to return in a single call. The default value
+	// is 50. To retrieve the remaining results, make another call with the returned
+	// NextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// Pagination token to pass as input to API call
+	// The token for the next set of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -1657,10 +3951,11 @@ func (s *GetConnectorsInput) SetNextToken(v string) *GetConnectorsInput {
 type GetConnectorsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// List of connectors
-	ConnectorList []*Connector `locationName:"connectorList" locationNameList:"item" type:"list"`
+	// Information about the registered connectors.
+	ConnectorList []*Connector `locationName:"connectorList" type:"list"`
 
-	// Pagination token to pass as input to API call
+	// The token required to retrieve the next set of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 }
 
@@ -1689,14 +3984,15 @@ func (s *GetConnectorsOutput) SetNextToken(v string) *GetConnectorsOutput {
 type GetReplicationJobsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of results to return in one API call. If left empty, this
-	// will default to 50.
+	// The maximum number of results to return in a single call. The default value
+	// is 50. To retrieve the remaining results, make another call with the returned
+	// NextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// Pagination token to pass as input to API call
+	// The token for the next set of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The unique identifier for a Replication Job.
+	// The identifier of the replication job.
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string"`
 }
 
@@ -1731,11 +4027,12 @@ func (s *GetReplicationJobsInput) SetReplicationJobId(v string) *GetReplicationJ
 type GetReplicationJobsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Pagination token to pass as input to API call
+	// The token required to retrieve the next set of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// List of Replication Jobs
-	ReplicationJobList []*ReplicationJob `locationName:"replicationJobList" locationNameList:"item" type:"list"`
+	// Information about the replication jobs.
+	ReplicationJobList []*ReplicationJob `locationName:"replicationJobList" type:"list"`
 }
 
 // String returns the string representation
@@ -1763,14 +4060,15 @@ func (s *GetReplicationJobsOutput) SetReplicationJobList(v []*ReplicationJob) *G
 type GetReplicationRunsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of results to return in one API call. If left empty, this
-	// will default to 50.
+	// The maximum number of results to return in a single call. The default value
+	// is 50. To retrieve the remaining results, make another call with the returned
+	// NextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// Pagination token to pass as input to API call
+	// The token for the next set of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// The unique identifier for a Replication Job.
+	// The identifier of the replication job.
 	//
 	// ReplicationJobId is a required field
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string" required:"true"`
@@ -1820,14 +4118,15 @@ func (s *GetReplicationRunsInput) SetReplicationJobId(v string) *GetReplicationR
 type GetReplicationRunsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Pagination token to pass as input to API call
+	// The token required to retrieve the next set of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// Object representing a Replication Job
+	// Information about the replication job.
 	ReplicationJob *ReplicationJob `locationName:"replicationJob" type:"structure"`
 
-	// List of Replication Runs
-	ReplicationRunList []*ReplicationRun `locationName:"replicationRunList" locationNameList:"item" type:"list"`
+	// Information about the replication runs.
+	ReplicationRunList []*ReplicationRun `locationName:"replicationRunList" type:"list"`
 }
 
 // String returns the string representation
@@ -1861,12 +4160,16 @@ func (s *GetReplicationRunsOutput) SetReplicationRunList(v []*ReplicationRun) *G
 type GetServersInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of results to return in one API call. If left empty, this
-	// will default to 50.
+	// The maximum number of results to return in a single call. The default value
+	// is 50. To retrieve the remaining results, make another call with the returned
+	// NextToken value.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// Pagination token to pass as input to API call
+	// The token for the next set of results.
 	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// List of VmServerAddress objects
+	VmServerAddressList []*VmServerAddress `locationName:"vmServerAddressList" type:"list"`
 }
 
 // String returns the string representation
@@ -1891,20 +4194,27 @@ func (s *GetServersInput) SetNextToken(v string) *GetServersInput {
 	return s
 }
 
+// SetVmServerAddressList sets the VmServerAddressList field's value.
+func (s *GetServersInput) SetVmServerAddressList(v []*VmServerAddress) *GetServersInput {
+	s.VmServerAddressList = v
+	return s
+}
+
 type GetServersOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Timestamp of an operation
+	// The time when the server was last modified.
 	LastModifiedOn *time.Time `locationName:"lastModifiedOn" type:"timestamp"`
 
-	// Pagination token to pass as input to API call
+	// The token required to retrieve the next set of results. This value is null
+	// when there are no more results to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
-	// Status of Server catalog
+	// The status of the server catalog.
 	ServerCatalogStatus *string `locationName:"serverCatalogStatus" type:"string" enum:"ServerCatalogStatus"`
 
-	// List of servers from catalog
-	ServerList []*Server `locationName:"serverList" locationNameList:"item" type:"list"`
+	// Information about the servers.
+	ServerList []*Server `locationName:"serverList" type:"list"`
 }
 
 // String returns the string representation
@@ -1969,52 +4279,332 @@ func (s ImportServerCatalogOutput) GoString() string {
 	return s.String()
 }
 
-// Object representing a Replication Job
+type LaunchAppInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application to launch.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s LaunchAppInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LaunchAppInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *LaunchAppInput) SetAppId(v string) *LaunchAppInput {
+	s.AppId = &v
+	return s
+}
+
+type LaunchAppOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s LaunchAppOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LaunchAppOutput) GoString() string {
+	return s.String()
+}
+
+// Details about the latest launch of an application.
+type LaunchDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Latest time this application was launched successfully.
+	LatestLaunchTime *time.Time `locationName:"latestLaunchTime" type:"timestamp"`
+
+	// Identifier of the latest stack launched for this application.
+	StackId *string `locationName:"stackId" type:"string"`
+
+	// Name of the latest stack launched for this application.
+	StackName *string `locationName:"stackName" type:"string"`
+}
+
+// String returns the string representation
+func (s LaunchDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LaunchDetails) GoString() string {
+	return s.String()
+}
+
+// SetLatestLaunchTime sets the LatestLaunchTime field's value.
+func (s *LaunchDetails) SetLatestLaunchTime(v time.Time) *LaunchDetails {
+	s.LatestLaunchTime = &v
+	return s
+}
+
+// SetStackId sets the StackId field's value.
+func (s *LaunchDetails) SetStackId(v string) *LaunchDetails {
+	s.StackId = &v
+	return s
+}
+
+// SetStackName sets the StackName field's value.
+func (s *LaunchDetails) SetStackName(v string) *LaunchDetails {
+	s.StackName = &v
+	return s
+}
+
+type ListAppsInput struct {
+	_ struct{} `type:"structure"`
+
+	AppIds []*string `locationName:"appIds" type:"list"`
+
+	// The maximum number of results to return in a single call. The default value
+	// is 50. To retrieve the remaining results, make another call with the returned
+	// NextToken value.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAppsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAppsInput) GoString() string {
+	return s.String()
+}
+
+// SetAppIds sets the AppIds field's value.
+func (s *ListAppsInput) SetAppIds(v []*string) *ListAppsInput {
+	s.AppIds = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListAppsInput) SetMaxResults(v int64) *ListAppsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAppsInput) SetNextToken(v string) *ListAppsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListAppsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of application summaries.
+	Apps []*AppSummary `locationName:"apps" type:"list"`
+
+	// The token required to retrieve the next set of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListAppsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListAppsOutput) GoString() string {
+	return s.String()
+}
+
+// SetApps sets the Apps field's value.
+func (s *ListAppsOutput) SetApps(v []*AppSummary) *ListAppsOutput {
+	s.Apps = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListAppsOutput) SetNextToken(v string) *ListAppsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type PutAppLaunchConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application associated with the launch configuration.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// Name of service role in the customer's account that Amazon CloudFormation
+	// uses to launch the application.
+	RoleName *string `locationName:"roleName" type:"string"`
+
+	// Launch configurations for server groups in the application.
+	ServerGroupLaunchConfigurations []*ServerGroupLaunchConfiguration `locationName:"serverGroupLaunchConfigurations" type:"list"`
+}
+
+// String returns the string representation
+func (s PutAppLaunchConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAppLaunchConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *PutAppLaunchConfigurationInput) SetAppId(v string) *PutAppLaunchConfigurationInput {
+	s.AppId = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *PutAppLaunchConfigurationInput) SetRoleName(v string) *PutAppLaunchConfigurationInput {
+	s.RoleName = &v
+	return s
+}
+
+// SetServerGroupLaunchConfigurations sets the ServerGroupLaunchConfigurations field's value.
+func (s *PutAppLaunchConfigurationInput) SetServerGroupLaunchConfigurations(v []*ServerGroupLaunchConfiguration) *PutAppLaunchConfigurationInput {
+	s.ServerGroupLaunchConfigurations = v
+	return s
+}
+
+type PutAppLaunchConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutAppLaunchConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAppLaunchConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+type PutAppReplicationConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application tassociated with the replication configuration.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// Replication configurations for server groups in the application.
+	ServerGroupReplicationConfigurations []*ServerGroupReplicationConfiguration `locationName:"serverGroupReplicationConfigurations" type:"list"`
+}
+
+// String returns the string representation
+func (s PutAppReplicationConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAppReplicationConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *PutAppReplicationConfigurationInput) SetAppId(v string) *PutAppReplicationConfigurationInput {
+	s.AppId = &v
+	return s
+}
+
+// SetServerGroupReplicationConfigurations sets the ServerGroupReplicationConfigurations field's value.
+func (s *PutAppReplicationConfigurationInput) SetServerGroupReplicationConfigurations(v []*ServerGroupReplicationConfiguration) *PutAppReplicationConfigurationInput {
+	s.ServerGroupReplicationConfigurations = v
+	return s
+}
+
+type PutAppReplicationConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutAppReplicationConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAppReplicationConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a replication job.
 type ReplicationJob struct {
 	_ struct{} `type:"structure"`
 
-	// The description for a Replication Job/Run.
+	// The description of the replication job.
 	Description *string `locationName:"description" type:"string"`
 
-	// Interval between Replication Runs. This value is specified in hours, and
-	// represents the time between consecutive Replication Runs.
+	// Whether the replication job should produce encrypted AMIs or not. See also
+	// KmsKeyId below.
+	Encrypted *bool `locationName:"encrypted" type:"boolean"`
+
+	// The time between consecutive replication runs, in hours.
 	Frequency *int64 `locationName:"frequency" type:"integer"`
 
-	// The AMI id for the image resulting from a Replication Run.
+	// KMS key ID for replication jobs that produce encrypted AMIs. Can be any of
+	// the following:
+	//
+	//    * KMS key ID
+	//
+	//    * KMS key alias
+	//
+	//    * ARN referring to KMS key ID
+	//
+	//    * ARN referring to KMS key alias
+	//
+	// If encrypted is true but a KMS key id is not specified, the customer's default
+	// KMS key for EBS is used.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The ID of the latest Amazon Machine Image (AMI).
 	LatestAmiId *string `locationName:"latestAmiId" type:"string"`
 
-	// The license type to be used for the Amazon Machine Image (AMI) created after
-	// a successful ReplicationRun.
+	// The license type to be used for the AMI created by a successful replication
+	// run.
 	LicenseType *string `locationName:"licenseType" type:"string" enum:"LicenseType"`
 
-	// Timestamp of an operation
+	// The start time of the next replication run.
 	NextReplicationRunStartTime *time.Time `locationName:"nextReplicationRunStartTime" type:"timestamp"`
 
-	// The unique identifier for a Replication Job.
+	// Number of recent AMIs to keep in the customer's account for a replication
+	// job. By default the value is set to zero, meaning that all AMIs are kept.
+	NumberOfRecentAmisToKeep *int64 `locationName:"numberOfRecentAmisToKeep" type:"integer"`
+
+	// The identifier of the replication job.
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string"`
 
-	// List of Replication Runs
-	ReplicationRunList []*ReplicationRun `locationName:"replicationRunList" locationNameList:"item" type:"list"`
+	// Information about the replication runs.
+	ReplicationRunList []*ReplicationRun `locationName:"replicationRunList" type:"list"`
 
-	// Name of service role in customer's account to be used by SMS service.
+	// The name of the IAM role to be used by the Server Migration Service.
 	RoleName *string `locationName:"roleName" type:"string"`
 
-	// Timestamp of an operation
+	RunOnce *bool `locationName:"runOnce" type:"boolean"`
+
+	// The seed replication time.
 	SeedReplicationTime *time.Time `locationName:"seedReplicationTime" type:"timestamp"`
 
-	// Unique Identifier for a server
+	// The identifier of the server.
 	ServerId *string `locationName:"serverId" type:"string"`
 
-	// Type of server.
+	// The type of server.
 	ServerType *string `locationName:"serverType" type:"string" enum:"ServerType"`
 
-	// Current state of Replication Job
+	// The state of the replication job.
 	State *string `locationName:"state" type:"string" enum:"ReplicationJobState"`
 
-	// String describing current status of Replication Job
+	// The description of the current status of the replication job.
 	StatusMessage *string `locationName:"statusMessage" type:"string"`
 
-	// Object representing a VM server
+	// Information about the VM server.
 	VmServer *VmServer `locationName:"vmServer" type:"structure"`
 }
 
@@ -2034,9 +4624,21 @@ func (s *ReplicationJob) SetDescription(v string) *ReplicationJob {
 	return s
 }
 
+// SetEncrypted sets the Encrypted field's value.
+func (s *ReplicationJob) SetEncrypted(v bool) *ReplicationJob {
+	s.Encrypted = &v
+	return s
+}
+
 // SetFrequency sets the Frequency field's value.
 func (s *ReplicationJob) SetFrequency(v int64) *ReplicationJob {
 	s.Frequency = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *ReplicationJob) SetKmsKeyId(v string) *ReplicationJob {
+	s.KmsKeyId = &v
 	return s
 }
 
@@ -2058,6 +4660,12 @@ func (s *ReplicationJob) SetNextReplicationRunStartTime(v time.Time) *Replicatio
 	return s
 }
 
+// SetNumberOfRecentAmisToKeep sets the NumberOfRecentAmisToKeep field's value.
+func (s *ReplicationJob) SetNumberOfRecentAmisToKeep(v int64) *ReplicationJob {
+	s.NumberOfRecentAmisToKeep = &v
+	return s
+}
+
 // SetReplicationJobId sets the ReplicationJobId field's value.
 func (s *ReplicationJob) SetReplicationJobId(v string) *ReplicationJob {
 	s.ReplicationJobId = &v
@@ -2073,6 +4681,12 @@ func (s *ReplicationJob) SetReplicationRunList(v []*ReplicationRun) *Replication
 // SetRoleName sets the RoleName field's value.
 func (s *ReplicationJob) SetRoleName(v string) *ReplicationJob {
 	s.RoleName = &v
+	return s
+}
+
+// SetRunOnce sets the RunOnce field's value.
+func (s *ReplicationJob) SetRunOnce(v bool) *ReplicationJob {
+	s.RunOnce = &v
 	return s
 }
 
@@ -2112,32 +4726,54 @@ func (s *ReplicationJob) SetVmServer(v *VmServer) *ReplicationJob {
 	return s
 }
 
-// Object representing a Replication Run
+// Represents a replication run.
 type ReplicationRun struct {
 	_ struct{} `type:"structure"`
 
-	// The AMI id for the image resulting from a Replication Run.
+	// The identifier of the Amazon Machine Image (AMI) from the replication run.
 	AmiId *string `locationName:"amiId" type:"string"`
 
-	// Timestamp of an operation
+	// The completion time of the last replication run.
 	CompletedTime *time.Time `locationName:"completedTime" type:"timestamp"`
 
-	// The description for a Replication Job/Run.
+	// The description of the replication run.
 	Description *string `locationName:"description" type:"string"`
 
-	// The unique identifier for a Replication Run.
+	// Whether the replication run should produce encrypted AMI or not. See also
+	// KmsKeyId below.
+	Encrypted *bool `locationName:"encrypted" type:"boolean"`
+
+	// KMS key ID for replication jobs that produce encrypted AMIs. Can be any of
+	// the following:
+	//
+	//    * KMS key ID
+	//
+	//    * KMS key alias
+	//
+	//    * ARN referring to KMS key ID
+	//
+	//    * ARN referring to KMS key alias
+	//
+	// If encrypted is true but a KMS key id is not specified, the customer's default
+	// KMS key for EBS is used.
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The identifier of the replication run.
 	ReplicationRunId *string `locationName:"replicationRunId" type:"string"`
 
-	// Timestamp of an operation
+	// The start time of the next replication run.
 	ScheduledStartTime *time.Time `locationName:"scheduledStartTime" type:"timestamp"`
 
-	// Current state of Replication Run
+	// Details of the current stage of the replication run.
+	StageDetails *ReplicationRunStageDetails `locationName:"stageDetails" type:"structure"`
+
+	// The state of the replication run.
 	State *string `locationName:"state" type:"string" enum:"ReplicationRunState"`
 
-	// String describing current status of Replication Run
+	// The description of the current status of the replication job.
 	StatusMessage *string `locationName:"statusMessage" type:"string"`
 
-	// Type of Replication Run
+	// The type of replication run.
 	Type *string `locationName:"type" type:"string" enum:"ReplicationRunType"`
 }
 
@@ -2169,6 +4805,18 @@ func (s *ReplicationRun) SetDescription(v string) *ReplicationRun {
 	return s
 }
 
+// SetEncrypted sets the Encrypted field's value.
+func (s *ReplicationRun) SetEncrypted(v bool) *ReplicationRun {
+	s.Encrypted = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *ReplicationRun) SetKmsKeyId(v string) *ReplicationRun {
+	s.KmsKeyId = &v
+	return s
+}
+
 // SetReplicationRunId sets the ReplicationRunId field's value.
 func (s *ReplicationRun) SetReplicationRunId(v string) *ReplicationRun {
 	s.ReplicationRunId = &v
@@ -2178,6 +4826,12 @@ func (s *ReplicationRun) SetReplicationRunId(v string) *ReplicationRun {
 // SetScheduledStartTime sets the ScheduledStartTime field's value.
 func (s *ReplicationRun) SetScheduledStartTime(v time.Time) *ReplicationRun {
 	s.ScheduledStartTime = &v
+	return s
+}
+
+// SetStageDetails sets the StageDetails field's value.
+func (s *ReplicationRun) SetStageDetails(v *ReplicationRunStageDetails) *ReplicationRun {
+	s.StageDetails = v
 	return s
 }
 
@@ -2199,23 +4853,89 @@ func (s *ReplicationRun) SetType(v string) *ReplicationRun {
 	return s
 }
 
-// Object representing a server
+// Details of the current stage of a replication run.
+type ReplicationRunStageDetails struct {
+	_ struct{} `type:"structure"`
+
+	// String describing the current stage of a replication run.
+	Stage *string `locationName:"stage" type:"string"`
+
+	// String describing the progress of the current stage of a replication run.
+	StageProgress *string `locationName:"stageProgress" type:"string"`
+}
+
+// String returns the string representation
+func (s ReplicationRunStageDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReplicationRunStageDetails) GoString() string {
+	return s.String()
+}
+
+// SetStage sets the Stage field's value.
+func (s *ReplicationRunStageDetails) SetStage(v string) *ReplicationRunStageDetails {
+	s.Stage = &v
+	return s
+}
+
+// SetStageProgress sets the StageProgress field's value.
+func (s *ReplicationRunStageDetails) SetStageProgress(v string) *ReplicationRunStageDetails {
+	s.StageProgress = &v
+	return s
+}
+
+// Location of the Amazon S3 object in the customer's account.
+type S3Location struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon S3 bucket name.
+	Bucket *string `locationName:"bucket" type:"string"`
+
+	// Amazon S3 bucket key.
+	Key *string `locationName:"key" type:"string"`
+}
+
+// String returns the string representation
+func (s S3Location) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3Location) GoString() string {
+	return s.String()
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *S3Location) SetBucket(v string) *S3Location {
+	s.Bucket = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *S3Location) SetKey(v string) *S3Location {
+	s.Key = &v
+	return s
+}
+
+// Represents a server.
 type Server struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for a Replication Job.
+	// The identifier of the replication job.
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string"`
 
-	// An indicator of the Replication Job being deleted or failed.
+	// Indicates whether the replication job is deleted or failed.
 	ReplicationJobTerminated *bool `locationName:"replicationJobTerminated" type:"boolean"`
 
-	// Unique Identifier for a server
+	// The identifier of the server.
 	ServerId *string `locationName:"serverId" type:"string"`
 
-	// Type of server.
+	// The type of server.
 	ServerType *string `locationName:"serverType" type:"string" enum:"ServerType"`
 
-	// Object representing a VM server
+	// Information about the VM server.
 	VmServer *VmServer `locationName:"vmServer" type:"structure"`
 }
 
@@ -2259,13 +4979,386 @@ func (s *Server) SetVmServer(v *VmServer) *Server {
 	return s
 }
 
+// A logical grouping of servers.
+type ServerGroup struct {
+	_ struct{} `type:"structure"`
+
+	// Name of a server group.
+	Name *string `locationName:"name" type:"string"`
+
+	// Identifier of a server group.
+	ServerGroupId *string `locationName:"serverGroupId" type:"string"`
+
+	// List of servers belonging to a server group.
+	ServerList []*Server `locationName:"serverList" type:"list"`
+}
+
+// String returns the string representation
+func (s ServerGroup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerGroup) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *ServerGroup) SetName(v string) *ServerGroup {
+	s.Name = &v
+	return s
+}
+
+// SetServerGroupId sets the ServerGroupId field's value.
+func (s *ServerGroup) SetServerGroupId(v string) *ServerGroup {
+	s.ServerGroupId = &v
+	return s
+}
+
+// SetServerList sets the ServerList field's value.
+func (s *ServerGroup) SetServerList(v []*Server) *ServerGroup {
+	s.ServerList = v
+	return s
+}
+
+// Launch configuration for a server group.
+type ServerGroupLaunchConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Launch order of servers in the server group.
+	LaunchOrder *int64 `locationName:"launchOrder" type:"integer"`
+
+	// Identifier of the server group the launch configuration is associated with.
+	ServerGroupId *string `locationName:"serverGroupId" type:"string"`
+
+	// Launch configuration for servers in the server group.
+	ServerLaunchConfigurations []*ServerLaunchConfiguration `locationName:"serverLaunchConfigurations" type:"list"`
+}
+
+// String returns the string representation
+func (s ServerGroupLaunchConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerGroupLaunchConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetLaunchOrder sets the LaunchOrder field's value.
+func (s *ServerGroupLaunchConfiguration) SetLaunchOrder(v int64) *ServerGroupLaunchConfiguration {
+	s.LaunchOrder = &v
+	return s
+}
+
+// SetServerGroupId sets the ServerGroupId field's value.
+func (s *ServerGroupLaunchConfiguration) SetServerGroupId(v string) *ServerGroupLaunchConfiguration {
+	s.ServerGroupId = &v
+	return s
+}
+
+// SetServerLaunchConfigurations sets the ServerLaunchConfigurations field's value.
+func (s *ServerGroupLaunchConfiguration) SetServerLaunchConfigurations(v []*ServerLaunchConfiguration) *ServerGroupLaunchConfiguration {
+	s.ServerLaunchConfigurations = v
+	return s
+}
+
+// Replication configuration for a server group.
+type ServerGroupReplicationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the server group this replication configuration is associated
+	// with.
+	ServerGroupId *string `locationName:"serverGroupId" type:"string"`
+
+	// Replication configuration for servers in the server group.
+	ServerReplicationConfigurations []*ServerReplicationConfiguration `locationName:"serverReplicationConfigurations" type:"list"`
+}
+
+// String returns the string representation
+func (s ServerGroupReplicationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerGroupReplicationConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetServerGroupId sets the ServerGroupId field's value.
+func (s *ServerGroupReplicationConfiguration) SetServerGroupId(v string) *ServerGroupReplicationConfiguration {
+	s.ServerGroupId = &v
+	return s
+}
+
+// SetServerReplicationConfigurations sets the ServerReplicationConfigurations field's value.
+func (s *ServerGroupReplicationConfiguration) SetServerReplicationConfigurations(v []*ServerReplicationConfiguration) *ServerGroupReplicationConfiguration {
+	s.ServerReplicationConfigurations = v
+	return s
+}
+
+// Launch configuration for a server.
+type ServerLaunchConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// If true, a publicly accessible IP address is created when launching the server.
+	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
+
+	// Name of the EC2 SSH Key to be used for connecting to the launched server.
+	Ec2KeyName *string `locationName:"ec2KeyName" type:"string"`
+
+	// Instance type to be used for launching the server.
+	InstanceType *string `locationName:"instanceType" type:"string"`
+
+	// Logical ID of the server in the Amazon CloudFormation template.
+	LogicalId *string `locationName:"logicalId" type:"string"`
+
+	// Identifier of the security group that applies to the launched server.
+	SecurityGroup *string `locationName:"securityGroup" type:"string"`
+
+	// Identifier of the server the launch configuration is associated with.
+	Server *Server `locationName:"server" type:"structure"`
+
+	// Identifier of the subnet the server should be launched into.
+	Subnet *string `locationName:"subnet" type:"string"`
+
+	// Location of the user-data script to be executed when launching the server.
+	UserData *UserData `locationName:"userData" type:"structure"`
+
+	// Identifier of the VPC the server should be launched into.
+	Vpc *string `locationName:"vpc" type:"string"`
+}
+
+// String returns the string representation
+func (s ServerLaunchConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerLaunchConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAssociatePublicIpAddress sets the AssociatePublicIpAddress field's value.
+func (s *ServerLaunchConfiguration) SetAssociatePublicIpAddress(v bool) *ServerLaunchConfiguration {
+	s.AssociatePublicIpAddress = &v
+	return s
+}
+
+// SetEc2KeyName sets the Ec2KeyName field's value.
+func (s *ServerLaunchConfiguration) SetEc2KeyName(v string) *ServerLaunchConfiguration {
+	s.Ec2KeyName = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *ServerLaunchConfiguration) SetInstanceType(v string) *ServerLaunchConfiguration {
+	s.InstanceType = &v
+	return s
+}
+
+// SetLogicalId sets the LogicalId field's value.
+func (s *ServerLaunchConfiguration) SetLogicalId(v string) *ServerLaunchConfiguration {
+	s.LogicalId = &v
+	return s
+}
+
+// SetSecurityGroup sets the SecurityGroup field's value.
+func (s *ServerLaunchConfiguration) SetSecurityGroup(v string) *ServerLaunchConfiguration {
+	s.SecurityGroup = &v
+	return s
+}
+
+// SetServer sets the Server field's value.
+func (s *ServerLaunchConfiguration) SetServer(v *Server) *ServerLaunchConfiguration {
+	s.Server = v
+	return s
+}
+
+// SetSubnet sets the Subnet field's value.
+func (s *ServerLaunchConfiguration) SetSubnet(v string) *ServerLaunchConfiguration {
+	s.Subnet = &v
+	return s
+}
+
+// SetUserData sets the UserData field's value.
+func (s *ServerLaunchConfiguration) SetUserData(v *UserData) *ServerLaunchConfiguration {
+	s.UserData = v
+	return s
+}
+
+// SetVpc sets the Vpc field's value.
+func (s *ServerLaunchConfiguration) SetVpc(v string) *ServerLaunchConfiguration {
+	s.Vpc = &v
+	return s
+}
+
+// Replication configuration of a server.
+type ServerReplicationConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Identifier of the server this replication configuration is associated with.
+	Server *Server `locationName:"server" type:"structure"`
+
+	// Parameters for replicating the server.
+	ServerReplicationParameters *ServerReplicationParameters `locationName:"serverReplicationParameters" type:"structure"`
+}
+
+// String returns the string representation
+func (s ServerReplicationConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerReplicationConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetServer sets the Server field's value.
+func (s *ServerReplicationConfiguration) SetServer(v *Server) *ServerReplicationConfiguration {
+	s.Server = v
+	return s
+}
+
+// SetServerReplicationParameters sets the ServerReplicationParameters field's value.
+func (s *ServerReplicationConfiguration) SetServerReplicationParameters(v *ServerReplicationParameters) *ServerReplicationConfiguration {
+	s.ServerReplicationParameters = v
+	return s
+}
+
+// Replication parameters for replicating a server.
+type ServerReplicationParameters struct {
+	_ struct{} `type:"structure"`
+
+	// When true, the replication job produces encrypted AMIs. See also KmsKeyId
+	// below.
+	Encrypted *bool `locationName:"encrypted" type:"boolean"`
+
+	// Frequency of creating replication jobs for the server.
+	Frequency *int64 `locationName:"frequency" type:"integer"`
+
+	// KMS key ID for replication jobs that produce encrypted AMIs. Can be any of
+	// the following:
+	//
+	// KMS key ID
+	//
+	//    * KMS key alias
+	//
+	//    * ARN referring to KMS key ID
+	//
+	//    * ARN referring to KMS key alias
+	//
+	//  If encrypted is true
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// License type for creating a replication job for the server.
+	LicenseType *string `locationName:"licenseType" type:"string" enum:"LicenseType"`
+
+	// Number of recent AMIs to keep when creating a replication job for this server.
+	NumberOfRecentAmisToKeep *int64 `locationName:"numberOfRecentAmisToKeep" type:"integer"`
+
+	RunOnce *bool `locationName:"runOnce" type:"boolean"`
+
+	// Seed time for creating a replication job for the server.
+	SeedTime *time.Time `locationName:"seedTime" type:"timestamp"`
+}
+
+// String returns the string representation
+func (s ServerReplicationParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerReplicationParameters) GoString() string {
+	return s.String()
+}
+
+// SetEncrypted sets the Encrypted field's value.
+func (s *ServerReplicationParameters) SetEncrypted(v bool) *ServerReplicationParameters {
+	s.Encrypted = &v
+	return s
+}
+
+// SetFrequency sets the Frequency field's value.
+func (s *ServerReplicationParameters) SetFrequency(v int64) *ServerReplicationParameters {
+	s.Frequency = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *ServerReplicationParameters) SetKmsKeyId(v string) *ServerReplicationParameters {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLicenseType sets the LicenseType field's value.
+func (s *ServerReplicationParameters) SetLicenseType(v string) *ServerReplicationParameters {
+	s.LicenseType = &v
+	return s
+}
+
+// SetNumberOfRecentAmisToKeep sets the NumberOfRecentAmisToKeep field's value.
+func (s *ServerReplicationParameters) SetNumberOfRecentAmisToKeep(v int64) *ServerReplicationParameters {
+	s.NumberOfRecentAmisToKeep = &v
+	return s
+}
+
+// SetRunOnce sets the RunOnce field's value.
+func (s *ServerReplicationParameters) SetRunOnce(v bool) *ServerReplicationParameters {
+	s.RunOnce = &v
+	return s
+}
+
+// SetSeedTime sets the SeedTime field's value.
+func (s *ServerReplicationParameters) SetSeedTime(v time.Time) *ServerReplicationParameters {
+	s.SeedTime = &v
+	return s
+}
+
+type StartAppReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application to replicate.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s StartAppReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAppReplicationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *StartAppReplicationInput) SetAppId(v string) *StartAppReplicationInput {
+	s.AppId = &v
+	return s
+}
+
+type StartAppReplicationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartAppReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartAppReplicationOutput) GoString() string {
+	return s.String()
+}
+
 type StartOnDemandReplicationRunInput struct {
 	_ struct{} `type:"structure"`
 
-	// The description for a Replication Job/Run.
+	// The description of the replication run.
 	Description *string `locationName:"description" type:"string"`
 
-	// The unique identifier for a Replication Job.
+	// The identifier of the replication job.
 	//
 	// ReplicationJobId is a required field
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string" required:"true"`
@@ -2309,7 +5402,7 @@ func (s *StartOnDemandReplicationRunInput) SetReplicationJobId(v string) *StartO
 type StartOnDemandReplicationRunOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The unique identifier for a Replication Run.
+	// The identifier of the replication run.
 	ReplicationRunId *string `locationName:"replicationRunId" type:"string"`
 }
 
@@ -2329,29 +5422,266 @@ func (s *StartOnDemandReplicationRunOutput) SetReplicationRunId(v string) *Start
 	return s
 }
 
+type StopAppReplicationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application to stop replicating.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s StopAppReplicationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopAppReplicationInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *StopAppReplicationInput) SetAppId(v string) *StopAppReplicationInput {
+	s.AppId = &v
+	return s
+}
+
+type StopAppReplicationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopAppReplicationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopAppReplicationOutput) GoString() string {
+	return s.String()
+}
+
+// A label that can be assigned to an application.
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	// Tag key.
+	Key *string `locationName:"key" type:"string"`
+
+	// Tag value.
+	Value *string `locationName:"value" type:"string"`
+}
+
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *Tag) SetKey(v string) *Tag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Tag) SetValue(v string) *Tag {
+	s.Value = &v
+	return s
+}
+
+type TerminateAppInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application to terminate.
+	AppId *string `locationName:"appId" type:"string"`
+}
+
+// String returns the string representation
+func (s TerminateAppInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TerminateAppInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *TerminateAppInput) SetAppId(v string) *TerminateAppInput {
+	s.AppId = &v
+	return s
+}
+
+type TerminateAppOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TerminateAppOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TerminateAppOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateAppInput struct {
+	_ struct{} `type:"structure"`
+
+	// ID of the application to update.
+	AppId *string `locationName:"appId" type:"string"`
+
+	// New description of the application.
+	Description *string `locationName:"description" type:"string"`
+
+	// New name of the application.
+	Name *string `locationName:"name" type:"string"`
+
+	// Name of the service role in the customer's account used by AWS SMS.
+	RoleName *string `locationName:"roleName" type:"string"`
+
+	// List of server groups in the application to update.
+	ServerGroups []*ServerGroup `locationName:"serverGroups" type:"list"`
+
+	// List of tags to associate with the application.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s UpdateAppInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAppInput) GoString() string {
+	return s.String()
+}
+
+// SetAppId sets the AppId field's value.
+func (s *UpdateAppInput) SetAppId(v string) *UpdateAppInput {
+	s.AppId = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateAppInput) SetDescription(v string) *UpdateAppInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateAppInput) SetName(v string) *UpdateAppInput {
+	s.Name = &v
+	return s
+}
+
+// SetRoleName sets the RoleName field's value.
+func (s *UpdateAppInput) SetRoleName(v string) *UpdateAppInput {
+	s.RoleName = &v
+	return s
+}
+
+// SetServerGroups sets the ServerGroups field's value.
+func (s *UpdateAppInput) SetServerGroups(v []*ServerGroup) *UpdateAppInput {
+	s.ServerGroups = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateAppInput) SetTags(v []*Tag) *UpdateAppInput {
+	s.Tags = v
+	return s
+}
+
+type UpdateAppOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Summary description of the application.
+	AppSummary *AppSummary `locationName:"appSummary" type:"structure"`
+
+	// List of updated server groups in the application.
+	ServerGroups []*ServerGroup `locationName:"serverGroups" type:"list"`
+
+	// List of tags associated with the application.
+	Tags []*Tag `locationName:"tags" type:"list"`
+}
+
+// String returns the string representation
+func (s UpdateAppOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateAppOutput) GoString() string {
+	return s.String()
+}
+
+// SetAppSummary sets the AppSummary field's value.
+func (s *UpdateAppOutput) SetAppSummary(v *AppSummary) *UpdateAppOutput {
+	s.AppSummary = v
+	return s
+}
+
+// SetServerGroups sets the ServerGroups field's value.
+func (s *UpdateAppOutput) SetServerGroups(v []*ServerGroup) *UpdateAppOutput {
+	s.ServerGroups = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateAppOutput) SetTags(v []*Tag) *UpdateAppOutput {
+	s.Tags = v
+	return s
+}
+
 type UpdateReplicationJobInput struct {
 	_ struct{} `type:"structure"`
 
-	// The description for a Replication Job/Run.
+	// The description of the replication job.
 	Description *string `locationName:"description" type:"string"`
 
-	// Interval between Replication Runs. This value is specified in hours, and
-	// represents the time between consecutive Replication Runs.
+	// When true, the replication job produces encrypted AMIs . See also KmsKeyId
+	// below.
+	Encrypted *bool `locationName:"encrypted" type:"boolean"`
+
+	// The time between consecutive replication runs, in hours.
 	Frequency *int64 `locationName:"frequency" type:"integer"`
 
-	// The license type to be used for the Amazon Machine Image (AMI) created after
-	// a successful ReplicationRun.
+	// KMS key ID for replication jobs that produce encrypted AMIs. Can be any of
+	// the following:
+	//
+	// KMS key ID
+	//
+	//    * KMS key alias
+	//
+	//    * ARN referring to KMS key ID
+	//
+	//    * ARN referring to KMS key alias
+	//
+	//  If encrypted is true
+	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
+
+	// The license type to be used for the AMI created by a successful replication
+	// run.
 	LicenseType *string `locationName:"licenseType" type:"string" enum:"LicenseType"`
 
-	// Timestamp of an operation
+	// The start time of the next replication run.
 	NextReplicationRunStartTime *time.Time `locationName:"nextReplicationRunStartTime" type:"timestamp"`
 
-	// The unique identifier for a Replication Job.
+	// The maximum number of SMS-created AMIs to retain. The oldest will be deleted
+	// once the maximum number is reached and a new AMI is created.
+	NumberOfRecentAmisToKeep *int64 `locationName:"numberOfRecentAmisToKeep" type:"integer"`
+
+	// The identifier of the replication job.
 	//
 	// ReplicationJobId is a required field
 	ReplicationJobId *string `locationName:"replicationJobId" type:"string" required:"true"`
 
-	// Name of service role in customer's account to be used by SMS service.
+	// The name of the IAM role to be used by AWS SMS.
 	RoleName *string `locationName:"roleName" type:"string"`
 }
 
@@ -2384,9 +5714,21 @@ func (s *UpdateReplicationJobInput) SetDescription(v string) *UpdateReplicationJ
 	return s
 }
 
+// SetEncrypted sets the Encrypted field's value.
+func (s *UpdateReplicationJobInput) SetEncrypted(v bool) *UpdateReplicationJobInput {
+	s.Encrypted = &v
+	return s
+}
+
 // SetFrequency sets the Frequency field's value.
 func (s *UpdateReplicationJobInput) SetFrequency(v int64) *UpdateReplicationJobInput {
 	s.Frequency = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *UpdateReplicationJobInput) SetKmsKeyId(v string) *UpdateReplicationJobInput {
+	s.KmsKeyId = &v
 	return s
 }
 
@@ -2399,6 +5741,12 @@ func (s *UpdateReplicationJobInput) SetLicenseType(v string) *UpdateReplicationJ
 // SetNextReplicationRunStartTime sets the NextReplicationRunStartTime field's value.
 func (s *UpdateReplicationJobInput) SetNextReplicationRunStartTime(v time.Time) *UpdateReplicationJobInput {
 	s.NextReplicationRunStartTime = &v
+	return s
+}
+
+// SetNumberOfRecentAmisToKeep sets the NumberOfRecentAmisToKeep field's value.
+func (s *UpdateReplicationJobInput) SetNumberOfRecentAmisToKeep(v int64) *UpdateReplicationJobInput {
+	s.NumberOfRecentAmisToKeep = &v
 	return s
 }
 
@@ -2428,23 +5776,48 @@ func (s UpdateReplicationJobOutput) GoString() string {
 	return s.String()
 }
 
-// Object representing a VM server
+// A script that runs on first launch of an Amazon EC2 instance. Used for configuring
+// the server during launch.
+type UserData struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon S3 location of the user-data script.
+	S3Location *S3Location `locationName:"s3Location" type:"structure"`
+}
+
+// String returns the string representation
+func (s UserData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UserData) GoString() string {
+	return s.String()
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *UserData) SetS3Location(v *S3Location) *UserData {
+	s.S3Location = v
+	return s
+}
+
+// Represents a VM server.
 type VmServer struct {
 	_ struct{} `type:"structure"`
 
-	// VM Manager Name
+	// The name of the VM manager.
 	VmManagerName *string `locationName:"vmManagerName" type:"string"`
 
-	// VM Management Product
+	// The type of VM management product.
 	VmManagerType *string `locationName:"vmManagerType" type:"string" enum:"VmManagerType"`
 
-	// Name of Virtual Machine
+	// The name of the VM.
 	VmName *string `locationName:"vmName" type:"string"`
 
-	// Path to VM
+	// The VM folder path in the vCenter Server virtual machine inventory tree.
 	VmPath *string `locationName:"vmPath" type:"string"`
 
-	// Object representing a server's location
+	// Information about the VM server location.
 	VmServerAddress *VmServerAddress `locationName:"vmServerAddress" type:"structure"`
 }
 
@@ -2488,14 +5861,14 @@ func (s *VmServer) SetVmServerAddress(v *VmServerAddress) *VmServer {
 	return s
 }
 
-// Object representing a server's location
+// Represents a VM server location.
 type VmServerAddress struct {
 	_ struct{} `type:"structure"`
 
-	// Unique Identifier for a VM
+	// The identifier of the VM.
 	VmId *string `locationName:"vmId" type:"string"`
 
-	// Unique Identifier for VM Manager
+	// The identifier of the VM manager.
 	VmManagerId *string `locationName:"vmManagerId" type:"string"`
 }
 
@@ -2521,13 +5894,131 @@ func (s *VmServerAddress) SetVmManagerId(v string) *VmServerAddress {
 	return s
 }
 
-// Capabilities for a Connector
+const (
+	// AppLaunchStatusReadyForConfiguration is a AppLaunchStatus enum value
+	AppLaunchStatusReadyForConfiguration = "READY_FOR_CONFIGURATION"
+
+	// AppLaunchStatusConfigurationInProgress is a AppLaunchStatus enum value
+	AppLaunchStatusConfigurationInProgress = "CONFIGURATION_IN_PROGRESS"
+
+	// AppLaunchStatusConfigurationInvalid is a AppLaunchStatus enum value
+	AppLaunchStatusConfigurationInvalid = "CONFIGURATION_INVALID"
+
+	// AppLaunchStatusReadyForLaunch is a AppLaunchStatus enum value
+	AppLaunchStatusReadyForLaunch = "READY_FOR_LAUNCH"
+
+	// AppLaunchStatusValidationInProgress is a AppLaunchStatus enum value
+	AppLaunchStatusValidationInProgress = "VALIDATION_IN_PROGRESS"
+
+	// AppLaunchStatusLaunchPending is a AppLaunchStatus enum value
+	AppLaunchStatusLaunchPending = "LAUNCH_PENDING"
+
+	// AppLaunchStatusLaunchInProgress is a AppLaunchStatus enum value
+	AppLaunchStatusLaunchInProgress = "LAUNCH_IN_PROGRESS"
+
+	// AppLaunchStatusLaunched is a AppLaunchStatus enum value
+	AppLaunchStatusLaunched = "LAUNCHED"
+
+	// AppLaunchStatusDeltaLaunchInProgress is a AppLaunchStatus enum value
+	AppLaunchStatusDeltaLaunchInProgress = "DELTA_LAUNCH_IN_PROGRESS"
+
+	// AppLaunchStatusDeltaLaunchFailed is a AppLaunchStatus enum value
+	AppLaunchStatusDeltaLaunchFailed = "DELTA_LAUNCH_FAILED"
+
+	// AppLaunchStatusLaunchFailed is a AppLaunchStatus enum value
+	AppLaunchStatusLaunchFailed = "LAUNCH_FAILED"
+
+	// AppLaunchStatusTerminateInProgress is a AppLaunchStatus enum value
+	AppLaunchStatusTerminateInProgress = "TERMINATE_IN_PROGRESS"
+
+	// AppLaunchStatusTerminateFailed is a AppLaunchStatus enum value
+	AppLaunchStatusTerminateFailed = "TERMINATE_FAILED"
+
+	// AppLaunchStatusTerminated is a AppLaunchStatus enum value
+	AppLaunchStatusTerminated = "TERMINATED"
+)
+
+const (
+	// AppReplicationStatusReadyForConfiguration is a AppReplicationStatus enum value
+	AppReplicationStatusReadyForConfiguration = "READY_FOR_CONFIGURATION"
+
+	// AppReplicationStatusConfigurationInProgress is a AppReplicationStatus enum value
+	AppReplicationStatusConfigurationInProgress = "CONFIGURATION_IN_PROGRESS"
+
+	// AppReplicationStatusConfigurationInvalid is a AppReplicationStatus enum value
+	AppReplicationStatusConfigurationInvalid = "CONFIGURATION_INVALID"
+
+	// AppReplicationStatusReadyForReplication is a AppReplicationStatus enum value
+	AppReplicationStatusReadyForReplication = "READY_FOR_REPLICATION"
+
+	// AppReplicationStatusValidationInProgress is a AppReplicationStatus enum value
+	AppReplicationStatusValidationInProgress = "VALIDATION_IN_PROGRESS"
+
+	// AppReplicationStatusReplicationPending is a AppReplicationStatus enum value
+	AppReplicationStatusReplicationPending = "REPLICATION_PENDING"
+
+	// AppReplicationStatusReplicationInProgress is a AppReplicationStatus enum value
+	AppReplicationStatusReplicationInProgress = "REPLICATION_IN_PROGRESS"
+
+	// AppReplicationStatusReplicated is a AppReplicationStatus enum value
+	AppReplicationStatusReplicated = "REPLICATED"
+
+	// AppReplicationStatusDeltaReplicationInProgress is a AppReplicationStatus enum value
+	AppReplicationStatusDeltaReplicationInProgress = "DELTA_REPLICATION_IN_PROGRESS"
+
+	// AppReplicationStatusDeltaReplicated is a AppReplicationStatus enum value
+	AppReplicationStatusDeltaReplicated = "DELTA_REPLICATED"
+
+	// AppReplicationStatusDeltaReplicationFailed is a AppReplicationStatus enum value
+	AppReplicationStatusDeltaReplicationFailed = "DELTA_REPLICATION_FAILED"
+
+	// AppReplicationStatusReplicationFailed is a AppReplicationStatus enum value
+	AppReplicationStatusReplicationFailed = "REPLICATION_FAILED"
+
+	// AppReplicationStatusReplicationStopping is a AppReplicationStatus enum value
+	AppReplicationStatusReplicationStopping = "REPLICATION_STOPPING"
+
+	// AppReplicationStatusReplicationStopFailed is a AppReplicationStatus enum value
+	AppReplicationStatusReplicationStopFailed = "REPLICATION_STOP_FAILED"
+
+	// AppReplicationStatusReplicationStopped is a AppReplicationStatus enum value
+	AppReplicationStatusReplicationStopped = "REPLICATION_STOPPED"
+)
+
+const (
+	// AppStatusCreating is a AppStatus enum value
+	AppStatusCreating = "CREATING"
+
+	// AppStatusActive is a AppStatus enum value
+	AppStatusActive = "ACTIVE"
+
+	// AppStatusUpdating is a AppStatus enum value
+	AppStatusUpdating = "UPDATING"
+
+	// AppStatusDeleting is a AppStatus enum value
+	AppStatusDeleting = "DELETING"
+
+	// AppStatusDeleted is a AppStatus enum value
+	AppStatusDeleted = "DELETED"
+
+	// AppStatusDeleteFailed is a AppStatus enum value
+	AppStatusDeleteFailed = "DELETE_FAILED"
+)
+
 const (
 	// ConnectorCapabilityVsphere is a ConnectorCapability enum value
 	ConnectorCapabilityVsphere = "VSPHERE"
+
+	// ConnectorCapabilityScvmm is a ConnectorCapability enum value
+	ConnectorCapabilityScvmm = "SCVMM"
+
+	// ConnectorCapabilityHypervManager is a ConnectorCapability enum value
+	ConnectorCapabilityHypervManager = "HYPERV-MANAGER"
+
+	// ConnectorCapabilitySnapshotBatching is a ConnectorCapability enum value
+	ConnectorCapabilitySnapshotBatching = "SNAPSHOT_BATCHING"
 )
 
-// Status of on-premises Connector
 const (
 	// ConnectorStatusHealthy is a ConnectorStatus enum value
 	ConnectorStatusHealthy = "HEALTHY"
@@ -2536,8 +6027,6 @@ const (
 	ConnectorStatusUnhealthy = "UNHEALTHY"
 )
 
-// The license type to be used for the Amazon Machine Image (AMI) created after
-// a successful ReplicationRun.
 const (
 	// LicenseTypeAws is a LicenseType enum value
 	LicenseTypeAws = "AWS"
@@ -2546,7 +6035,14 @@ const (
 	LicenseTypeByol = "BYOL"
 )
 
-// Current state of Replication Job
+const (
+	// OutputFormatJson is a OutputFormat enum value
+	OutputFormatJson = "JSON"
+
+	// OutputFormatYaml is a OutputFormat enum value
+	OutputFormatYaml = "YAML"
+)
+
 const (
 	// ReplicationJobStatePending is a ReplicationJobState enum value
 	ReplicationJobStatePending = "PENDING"
@@ -2562,9 +6058,17 @@ const (
 
 	// ReplicationJobStateDeleted is a ReplicationJobState enum value
 	ReplicationJobStateDeleted = "DELETED"
+
+	// ReplicationJobStateCompleted is a ReplicationJobState enum value
+	ReplicationJobStateCompleted = "COMPLETED"
+
+	// ReplicationJobStatePausedOnFailure is a ReplicationJobState enum value
+	ReplicationJobStatePausedOnFailure = "PAUSED_ON_FAILURE"
+
+	// ReplicationJobStateFailing is a ReplicationJobState enum value
+	ReplicationJobStateFailing = "FAILING"
 )
 
-// Current state of Replication Run
 const (
 	// ReplicationRunStatePending is a ReplicationRunState enum value
 	ReplicationRunStatePending = "PENDING"
@@ -2588,7 +6092,6 @@ const (
 	ReplicationRunStateDeleted = "DELETED"
 )
 
-// Type of Replication Run
 const (
 	// ReplicationRunTypeOnDemand is a ReplicationRunType enum value
 	ReplicationRunTypeOnDemand = "ON_DEMAND"
@@ -2597,7 +6100,6 @@ const (
 	ReplicationRunTypeAutomatic = "AUTOMATIC"
 )
 
-// Status of Server catalog
 const (
 	// ServerCatalogStatusNotImported is a ServerCatalogStatus enum value
 	ServerCatalogStatusNotImported = "NOT_IMPORTED"
@@ -2615,14 +6117,18 @@ const (
 	ServerCatalogStatusExpired = "EXPIRED"
 )
 
-// Type of server.
 const (
 	// ServerTypeVirtualMachine is a ServerType enum value
 	ServerTypeVirtualMachine = "VIRTUAL_MACHINE"
 )
 
-// VM Management Product
 const (
 	// VmManagerTypeVsphere is a VmManagerType enum value
 	VmManagerTypeVsphere = "VSPHERE"
+
+	// VmManagerTypeScvmm is a VmManagerType enum value
+	VmManagerTypeScvmm = "SCVMM"
+
+	// VmManagerTypeHypervManager is a VmManagerType enum value
+	VmManagerTypeHypervManager = "HYPERV-MANAGER"
 )

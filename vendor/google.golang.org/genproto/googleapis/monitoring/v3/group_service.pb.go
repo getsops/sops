@@ -55,7 +55,7 @@ func (m *ListGroupsRequest) Reset()         { *m = ListGroupsRequest{} }
 func (m *ListGroupsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListGroupsRequest) ProtoMessage()    {}
 func (*ListGroupsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{0}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{0}
 }
 func (m *ListGroupsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListGroupsRequest.Unmarshal(m, b)
@@ -63,8 +63,8 @@ func (m *ListGroupsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListGroupsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListGroupsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListGroupsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListGroupsRequest.Merge(m, src)
+func (dst *ListGroupsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListGroupsRequest.Merge(dst, src)
 }
 func (m *ListGroupsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListGroupsRequest.Size(m)
@@ -244,7 +244,7 @@ func (m *ListGroupsResponse) Reset()         { *m = ListGroupsResponse{} }
 func (m *ListGroupsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListGroupsResponse) ProtoMessage()    {}
 func (*ListGroupsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{1}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{1}
 }
 func (m *ListGroupsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListGroupsResponse.Unmarshal(m, b)
@@ -252,8 +252,8 @@ func (m *ListGroupsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListGroupsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListGroupsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListGroupsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListGroupsResponse.Merge(m, src)
+func (dst *ListGroupsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListGroupsResponse.Merge(dst, src)
 }
 func (m *ListGroupsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListGroupsResponse.Size(m)
@@ -292,7 +292,7 @@ func (m *GetGroupRequest) Reset()         { *m = GetGroupRequest{} }
 func (m *GetGroupRequest) String() string { return proto.CompactTextString(m) }
 func (*GetGroupRequest) ProtoMessage()    {}
 func (*GetGroupRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{2}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{2}
 }
 func (m *GetGroupRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetGroupRequest.Unmarshal(m, b)
@@ -300,8 +300,8 @@ func (m *GetGroupRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetGroupRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetGroupRequest.Marshal(b, m, deterministic)
 }
-func (m *GetGroupRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetGroupRequest.Merge(m, src)
+func (dst *GetGroupRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetGroupRequest.Merge(dst, src)
 }
 func (m *GetGroupRequest) XXX_Size() int {
 	return xxx_messageInfo_GetGroupRequest.Size(m)
@@ -338,7 +338,7 @@ func (m *CreateGroupRequest) Reset()         { *m = CreateGroupRequest{} }
 func (m *CreateGroupRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateGroupRequest) ProtoMessage()    {}
 func (*CreateGroupRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{3}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{3}
 }
 func (m *CreateGroupRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateGroupRequest.Unmarshal(m, b)
@@ -346,8 +346,8 @@ func (m *CreateGroupRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateGroupRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateGroupRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateGroupRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateGroupRequest.Merge(m, src)
+func (dst *CreateGroupRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateGroupRequest.Merge(dst, src)
 }
 func (m *CreateGroupRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateGroupRequest.Size(m)
@@ -395,7 +395,7 @@ func (m *UpdateGroupRequest) Reset()         { *m = UpdateGroupRequest{} }
 func (m *UpdateGroupRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateGroupRequest) ProtoMessage()    {}
 func (*UpdateGroupRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{4}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{4}
 }
 func (m *UpdateGroupRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateGroupRequest.Unmarshal(m, b)
@@ -403,8 +403,8 @@ func (m *UpdateGroupRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateGroupRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateGroupRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateGroupRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateGroupRequest.Merge(m, src)
+func (dst *UpdateGroupRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateGroupRequest.Merge(dst, src)
 }
 func (m *UpdateGroupRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateGroupRequest.Size(m)
@@ -443,7 +443,7 @@ func (m *DeleteGroupRequest) Reset()         { *m = DeleteGroupRequest{} }
 func (m *DeleteGroupRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteGroupRequest) ProtoMessage()    {}
 func (*DeleteGroupRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{5}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{5}
 }
 func (m *DeleteGroupRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteGroupRequest.Unmarshal(m, b)
@@ -451,8 +451,8 @@ func (m *DeleteGroupRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteGroupRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteGroupRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteGroupRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteGroupRequest.Merge(m, src)
+func (dst *DeleteGroupRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteGroupRequest.Merge(dst, src)
 }
 func (m *DeleteGroupRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteGroupRequest.Size(m)
@@ -503,7 +503,7 @@ func (m *ListGroupMembersRequest) Reset()         { *m = ListGroupMembersRequest
 func (m *ListGroupMembersRequest) String() string { return proto.CompactTextString(m) }
 func (*ListGroupMembersRequest) ProtoMessage()    {}
 func (*ListGroupMembersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{6}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{6}
 }
 func (m *ListGroupMembersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListGroupMembersRequest.Unmarshal(m, b)
@@ -511,8 +511,8 @@ func (m *ListGroupMembersRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListGroupMembersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListGroupMembersRequest.Marshal(b, m, deterministic)
 }
-func (m *ListGroupMembersRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListGroupMembersRequest.Merge(m, src)
+func (dst *ListGroupMembersRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListGroupMembersRequest.Merge(dst, src)
 }
 func (m *ListGroupMembersRequest) XXX_Size() int {
 	return xxx_messageInfo_ListGroupMembersRequest.Size(m)
@@ -577,7 +577,7 @@ func (m *ListGroupMembersResponse) Reset()         { *m = ListGroupMembersRespon
 func (m *ListGroupMembersResponse) String() string { return proto.CompactTextString(m) }
 func (*ListGroupMembersResponse) ProtoMessage()    {}
 func (*ListGroupMembersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_21ad21d0ed55c55a, []int{7}
+	return fileDescriptor_group_service_c051ad810375e8ee, []int{7}
 }
 func (m *ListGroupMembersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListGroupMembersResponse.Unmarshal(m, b)
@@ -585,8 +585,8 @@ func (m *ListGroupMembersResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListGroupMembersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListGroupMembersResponse.Marshal(b, m, deterministic)
 }
-func (m *ListGroupMembersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListGroupMembersResponse.Merge(m, src)
+func (dst *ListGroupMembersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListGroupMembersResponse.Merge(dst, src)
 }
 func (m *ListGroupMembersResponse) XXX_Size() int {
 	return xxx_messageInfo_ListGroupMembersResponse.Size(m)
@@ -881,10 +881,10 @@ var _GroupService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/monitoring/v3/group_service.proto", fileDescriptor_21ad21d0ed55c55a)
+	proto.RegisterFile("google/monitoring/v3/group_service.proto", fileDescriptor_group_service_c051ad810375e8ee)
 }
 
-var fileDescriptor_21ad21d0ed55c55a = []byte{
+var fileDescriptor_group_service_c051ad810375e8ee = []byte{
 	// 826 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0x4d, 0x6f, 0xd3, 0x4c,
 	0x10, 0x7e, 0xdd, 0xa4, 0x69, 0xb2, 0x69, 0xd5, 0x76, 0x55, 0xf5, 0x8d, 0xdc, 0x0f, 0x05, 0xf7,

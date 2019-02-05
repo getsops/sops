@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewIdentityProviderClient() IdentityProviderClient {
 // identityProviderName - identity Provider Type identifier.
 // parameters - create parameters.
 func (client IdentityProviderClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, identityProviderName IdentityProviderType, parameters IdentityProviderContract) (result IdentityProviderContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, apimBaseURL, identityProviderName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client IdentityProviderClient) CreateOrUpdateResponder(resp *http.Response
 // ifMatch - the entity state (Etag) version of the backend to delete. A value of "*" can be used for If-Match
 // to unconditionally apply the operation.
 func (client IdentityProviderClient) Delete(ctx context.Context, apimBaseURL string, identityProviderName IdentityProviderType, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, apimBaseURL, identityProviderName, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client IdentityProviderClient) DeleteResponder(resp *http.Response) (resul
 // https://myapimservice.management.azure-api.net.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) Get(ctx context.Context, apimBaseURL string, identityProviderName IdentityProviderType) (result IdentityProviderContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, apimBaseURL, identityProviderName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "Get", nil, "Failure preparing request")
@@ -254,6 +285,16 @@ func (client IdentityProviderClient) GetResponder(resp *http.Response) (result I
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client IdentityProviderClient) List(ctx context.Context, apimBaseURL string) (result IdentityProviderList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "List", nil, "Failure preparing request")
@@ -323,6 +364,16 @@ func (client IdentityProviderClient) ListResponder(resp *http.Response) (result 
 // ifMatch - the entity state (Etag) version of the identity provider configuration to update. A value of "*"
 // can be used for If-Match to unconditionally apply the operation.
 func (client IdentityProviderClient) Update(ctx context.Context, apimBaseURL string, identityProviderName IdentityProviderType, parameters IdentityProviderUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, apimBaseURL, identityProviderName, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "Update", nil, "Failure preparing request")

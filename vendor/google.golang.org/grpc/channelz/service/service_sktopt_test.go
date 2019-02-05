@@ -1,4 +1,4 @@
-// +build linux,!appengine,go1.7
+// +build linux,!appengine
 // +build 386 amd64
 
 /*
@@ -26,13 +26,13 @@
 package service
 
 import (
+	"context"
 	"reflect"
 	"strconv"
 	"testing"
 
 	"github.com/golang/protobuf/ptypes"
 	durpb "github.com/golang/protobuf/ptypes/duration"
-	"golang.org/x/net/context"
 	"golang.org/x/sys/unix"
 	channelzpb "google.golang.org/grpc/channelz/grpc_channelz_v1"
 	"google.golang.org/grpc/internal/channelz"

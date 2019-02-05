@@ -312,6 +312,14 @@ func parseAndAugment(bctx *build.Context, pkg *build.Package, isTest bool, fileS
 			return natives.FS.Open(name)
 		},
 	}
+
+	// reflect needs to tell Go 1.11 apart from Go 1.11.1 for https://github.com/gopherjs/gopherjs/issues/862,
+	// so provide it with the custom go1.11.1 build tag whenever we're on Go 1.11.1 or later.
+	// TODO: Remove this ad hoc special behavior in GopherJS 1.12.
+	if runtime.Version() != "go1.11" {
+		nativesContext.ReleaseTags = append(nativesContext.ReleaseTags, "go1.11.1")
+	}
+
 	if nativesPkg, err := nativesContext.Import(importPath, "", 0); err == nil {
 		names := nativesPkg.GoFiles
 		if isTest {

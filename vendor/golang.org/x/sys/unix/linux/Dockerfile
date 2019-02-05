@@ -11,15 +11,15 @@ RUN apt-get update && apt-get install -y  --no-install-recommends \
 # Get the git sources. If not cached, this takes O(5 minutes).
 WORKDIR /git
 RUN git config --global advice.detachedHead false
-# Linux Kernel: Released 12 Aug 2018
-RUN git clone --branch v4.18 --depth 1 https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux
-# GNU C library: Released 01 Aug 2018 (we should try to get a secure way to clone this)
-RUN git clone --branch glibc-2.28 --depth 1 git://sourceware.org/git/glibc.git
+# Linux Kernel: Released 23 Dec 2018
+RUN git clone --branch v4.20 --depth 1 https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux
+# GNU C library: Released 01 Feb 2019 (we should try to get a secure way to clone this)
+RUN git clone --branch release/2.29/master --depth 1 git://sourceware.org/git/glibc.git
 
 # Get Go
-ENV GOLANG_VERSION 1.11
+ENV GOLANG_VERSION 1.12beta2
 ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
-ENV GOLANG_DOWNLOAD_SHA256 b3fcf280ff86558e0559e185b601c9eade0fd24c900b4c63cd14d1d38613e499
+ENV GOLANG_DOWNLOAD_SHA256 9e4884b46a72e0558187a8af6e8733e039432df1b755f14b361f18b63fa5a63e
 
 RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
     && echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - \
@@ -30,7 +30,7 @@ ENV PATH /usr/local/go/bin:$PATH
 
 # Linux and Glibc build dependencies and emulator
 RUN apt-get update && apt-get install -y  --no-install-recommends \
-        bison gawk make python \
+        bison gawk make python3 \
         gcc gcc-multilib \
         gettext texinfo \
         qemu-user \

@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opBatchGetNamedQuery = "BatchGetNamedQuery"
@@ -15,7 +17,7 @@ const opBatchGetNamedQuery = "BatchGetNamedQuery"
 // BatchGetNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -105,7 +107,7 @@ const opBatchGetQueryExecution = "BatchGetQueryExecution"
 // BatchGetQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -193,7 +195,7 @@ const opCreateNamedQuery = "CreateNamedQuery"
 // CreateNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the CreateNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -281,7 +283,7 @@ const opDeleteNamedQuery = "DeleteNamedQuery"
 // DeleteNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -315,6 +317,7 @@ func (c *Athena) DeleteNamedQueryRequest(input *DeleteNamedQueryInput) (req *req
 
 	output = &DeleteNamedQueryOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -369,7 +372,7 @@ const opGetNamedQuery = "GetNamedQuery"
 // GetNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the GetNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -453,7 +456,7 @@ const opGetQueryExecution = "GetQueryExecution"
 // GetQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the GetQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -538,7 +541,7 @@ const opGetQueryResults = "GetQueryResults"
 // GetQueryResultsRequest generates a "aws/request.Request" representing the
 // client's request for the GetQueryResults operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -680,7 +683,7 @@ const opListNamedQueries = "ListNamedQueries"
 // ListNamedQueriesRequest generates a "aws/request.Request" representing the
 // client's request for the ListNamedQueries operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -824,7 +827,7 @@ const opListQueryExecutions = "ListQueryExecutions"
 // ListQueryExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListQueryExecutions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -968,7 +971,7 @@ const opStartQueryExecution = "StartQueryExecution"
 // StartQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the StartQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1030,7 +1033,8 @@ func (c *Athena) StartQueryExecutionRequest(input *StartQueryExecutionInput) (re
 //   a required parameter may be missing or out of range.
 //
 //   * ErrCodeTooManyRequestsException "TooManyRequestsException"
-//   Indicates that the request was throttled.
+//   Indicates that the request was throttled and includes the reason for throttling,
+//   for example, the limit of concurrent queries has been exceeded.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/StartQueryExecution
 func (c *Athena) StartQueryExecution(input *StartQueryExecutionInput) (*StartQueryExecutionOutput, error) {
@@ -1059,7 +1063,7 @@ const opStopQueryExecution = "StopQueryExecution"
 // StopQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the StopQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1093,6 +1097,7 @@ func (c *Athena) StopQueryExecutionRequest(input *StopQueryExecutionInput) (req 
 
 	output = &StopQueryExecutionOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1556,9 +1561,7 @@ type DeleteNamedQueryInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of the query to delete.
-	//
-	// NamedQueryId is a required field
-	NamedQueryId *string `type:"string" required:"true" idempotencyToken:"true"`
+	NamedQueryId *string `type:"string" idempotencyToken:"true"`
 }
 
 // String returns the string representation
@@ -1569,19 +1572,6 @@ func (s DeleteNamedQueryInput) String() string {
 // GoString returns the string representation
 func (s DeleteNamedQueryInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeleteNamedQueryInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeleteNamedQueryInput"}
-	if s.NamedQueryId == nil {
-		invalidParams.Add(request.NewErrParamRequired("NamedQueryId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetNamedQueryId sets the NamedQueryId field's value.
@@ -1604,8 +1594,8 @@ func (s DeleteNamedQueryOutput) GoString() string {
 	return s.String()
 }
 
-// If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption
-// option used.
+// If query results are encrypted in Amazon S3, indicates the encryption option
+// used (for example, SSE-KMS or CSE-KMS) and key information.
 type EncryptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -1842,6 +1832,9 @@ type GetQueryResultsOutput struct {
 
 	// The results of the query execution.
 	ResultSet *ResultSet `type:"structure"`
+
+	// The number of rows inserted with a CREATE TABLE AS SELECT statement.
+	UpdateCount *int64 `type:"long"`
 }
 
 // String returns the string representation
@@ -1863,6 +1856,12 @@ func (s *GetQueryResultsOutput) SetNextToken(v string) *GetQueryResultsOutput {
 // SetResultSet sets the ResultSet field's value.
 func (s *GetQueryResultsOutput) SetResultSet(v *ResultSet) *GetQueryResultsOutput {
 	s.ResultSet = v
+	return s
+}
+
+// SetUpdateCount sets the UpdateCount field's value.
+func (s *GetQueryResultsOutput) SetUpdateCount(v int64) *GetQueryResultsOutput {
+	s.UpdateCount = &v
 	return s
 }
 
@@ -2080,8 +2079,14 @@ type QueryExecution struct {
 	// option, if any, used for query results.
 	ResultConfiguration *ResultConfiguration `type:"structure"`
 
+	// The type of query statement that was run. DDL indicates DDL query statements.
+	// DML indicates DML (Data Manipulation Language) query statements, such as
+	// CREATE TABLE AS SELECT. UTILITY indicates query statements other than DDL
+	// and DML, such as SHOW CREATE TABLE, or DESCRIBE <table>.
+	StatementType *string `type:"string" enum:"StatementType"`
+
 	// The amount of data scanned during the query execution and the amount of time
-	// that it took to execute.
+	// that it took to execute, and the type of statement that was run.
 	Statistics *QueryExecutionStatistics `type:"structure"`
 
 	// The completion date, current state, submission time, and state change reason
@@ -2120,6 +2125,12 @@ func (s *QueryExecution) SetQueryExecutionId(v string) *QueryExecution {
 // SetResultConfiguration sets the ResultConfiguration field's value.
 func (s *QueryExecution) SetResultConfiguration(v *ResultConfiguration) *QueryExecution {
 	s.ResultConfiguration = v
+	return s
+}
+
+// SetStatementType sets the StatementType field's value.
+func (s *QueryExecution) SetStatementType(v string) *QueryExecution {
+	s.StatementType = &v
 	return s
 }
 
@@ -2173,7 +2184,7 @@ func (s *QueryExecutionContext) SetDatabase(v string) *QueryExecutionContext {
 }
 
 // The amount of data scanned during the query execution and the amount of time
-// that it took to execute.
+// that it took to execute, and the type of statement that was run.
 type QueryExecutionStatistics struct {
 	_ struct{} `type:"structure"`
 
@@ -2214,11 +2225,12 @@ type QueryExecutionStatus struct {
 	// The date and time that the query completed.
 	CompletionDateTime *time.Time `type:"timestamp"`
 
-	// The state of query execution. SUBMITTED indicates that the query is queued
-	// for execution. RUNNING indicates that the query is scanning data and returning
-	// results. SUCCEEDED indicates that the query completed without error. FAILED
-	// indicates that the query experienced an error and did not complete processing.
-	// CANCELLED indicates that user input interrupted query execution.
+	// The state of query execution. QUEUED state is listed but is not used by Athena
+	// and is reserved for future use. RUNNING indicates that the query has been
+	// submitted to the service, and Athena will execute the query as soon as resources
+	// are available. SUCCEEDED indicates that the query completed without error.
+	// FAILED indicates that the query experienced an error and did not complete
+	// processing.CANCELLED indicates that user input interrupted query execution.
 	State *string `type:"string" enum:"QueryExecutionState"`
 
 	// Further detail about the status of the query.
@@ -2267,11 +2279,12 @@ func (s *QueryExecutionStatus) SetSubmissionDateTime(v time.Time) *QueryExecutio
 type ResultConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// If query results are encrypted in S3, indicates the S3 encryption option
-	// used (for example, SSE-KMS or CSE-KMS and key information.
+	// If query results are encrypted in Amazon S3, indicates the encryption option
+	// used (for example, SSE-KMS or CSE-KMS) and key information.
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
 
-	// The location in S3 where query results are stored.
+	// The location in Amazon S3 where your query results are stored, such as s3://path/to/query/bucket/.
+	// For more information, see Queries and Query Result Files.  (http://docs.aws.amazon.com/athena/latest/ug/querying.html)
 	//
 	// OutputLocation is a required field
 	OutputLocation *string `type:"string" required:"true"`
@@ -2357,7 +2370,7 @@ func (s *ResultSet) SetRows(v []*Row) *ResultSet {
 type ResultSetMetadata struct {
 	_ struct{} `type:"structure"`
 
-	// Information about the columns in a query execution result.
+	// Information about the columns returned in a query result metadata.
 	ColumnInfo []*ColumnInfo `type:"list"`
 }
 
@@ -2522,9 +2535,7 @@ type StopQueryExecutionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of the query execution to stop.
-	//
-	// QueryExecutionId is a required field
-	QueryExecutionId *string `type:"string" required:"true" idempotencyToken:"true"`
+	QueryExecutionId *string `type:"string" idempotencyToken:"true"`
 }
 
 // String returns the string representation
@@ -2535,19 +2546,6 @@ func (s StopQueryExecutionInput) String() string {
 // GoString returns the string representation
 func (s StopQueryExecutionInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *StopQueryExecutionInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "StopQueryExecutionInput"}
-	if s.QueryExecutionId == nil {
-		invalidParams.Add(request.NewErrParamRequired("QueryExecutionId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetQueryExecutionId sets the QueryExecutionId field's value.
@@ -2696,6 +2694,19 @@ const (
 	QueryExecutionStateCancelled = "CANCELLED"
 )
 
+const (
+	// StatementTypeDdl is a StatementType enum value
+	StatementTypeDdl = "DDL"
+
+	// StatementTypeDml is a StatementType enum value
+	StatementTypeDml = "DML"
+
+	// StatementTypeUtility is a StatementType enum value
+	StatementTypeUtility = "UTILITY"
+)
+
+// The reason for the query throttling, for example, when it exceeds the concurrent
+// query limit.
 const (
 	// ThrottleReasonConcurrentQueryLimitExceeded is a ThrottleReason enum value
 	ThrottleReasonConcurrentQueryLimitExceeded = "CONCURRENT_QUERY_LIMIT_EXCEEDED"

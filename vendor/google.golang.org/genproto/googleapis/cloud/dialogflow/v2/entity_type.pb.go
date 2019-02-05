@@ -48,7 +48,6 @@ var EntityType_Kind_name = map[int32]string{
 	1: "KIND_MAP",
 	2: "KIND_LIST",
 }
-
 var EntityType_Kind_value = map[string]int32{
 	"KIND_UNSPECIFIED": 0,
 	"KIND_MAP":         1,
@@ -58,9 +57,8 @@ var EntityType_Kind_value = map[string]int32{
 func (x EntityType_Kind) String() string {
 	return proto.EnumName(EntityType_Kind_name, int32(x))
 }
-
 func (EntityType_Kind) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{0, 0}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{0, 0}
 }
 
 // Represents different entity type expansion modes. Automated expansion
@@ -80,7 +78,6 @@ var EntityType_AutoExpansionMode_name = map[int32]string{
 	0: "AUTO_EXPANSION_MODE_UNSPECIFIED",
 	1: "AUTO_EXPANSION_MODE_DEFAULT",
 }
-
 var EntityType_AutoExpansionMode_value = map[string]int32{
 	"AUTO_EXPANSION_MODE_UNSPECIFIED": 0,
 	"AUTO_EXPANSION_MODE_DEFAULT":     1,
@@ -89,9 +86,8 @@ var EntityType_AutoExpansionMode_value = map[string]int32{
 func (x EntityType_AutoExpansionMode) String() string {
 	return proto.EnumName(EntityType_AutoExpansionMode_name, int32(x))
 }
-
 func (EntityType_AutoExpansionMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{0, 1}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{0, 1}
 }
 
 // Represents an entity type.
@@ -121,7 +117,7 @@ func (m *EntityType) Reset()         { *m = EntityType{} }
 func (m *EntityType) String() string { return proto.CompactTextString(m) }
 func (*EntityType) ProtoMessage()    {}
 func (*EntityType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{0}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{0}
 }
 func (m *EntityType) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityType.Unmarshal(m, b)
@@ -129,8 +125,8 @@ func (m *EntityType) XXX_Unmarshal(b []byte) error {
 func (m *EntityType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EntityType.Marshal(b, m, deterministic)
 }
-func (m *EntityType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EntityType.Merge(m, src)
+func (dst *EntityType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EntityType.Merge(dst, src)
 }
 func (m *EntityType) XXX_Size() int {
 	return xxx_messageInfo_EntityType.Size(m)
@@ -197,7 +193,7 @@ func (m *EntityType_Entity) Reset()         { *m = EntityType_Entity{} }
 func (m *EntityType_Entity) String() string { return proto.CompactTextString(m) }
 func (*EntityType_Entity) ProtoMessage()    {}
 func (*EntityType_Entity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{0, 0}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{0, 0}
 }
 func (m *EntityType_Entity) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityType_Entity.Unmarshal(m, b)
@@ -205,8 +201,8 @@ func (m *EntityType_Entity) XXX_Unmarshal(b []byte) error {
 func (m *EntityType_Entity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EntityType_Entity.Marshal(b, m, deterministic)
 }
-func (m *EntityType_Entity) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EntityType_Entity.Merge(m, src)
+func (dst *EntityType_Entity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EntityType_Entity.Merge(dst, src)
 }
 func (m *EntityType_Entity) XXX_Size() int {
 	return xxx_messageInfo_EntityType_Entity.Size(m)
@@ -256,7 +252,7 @@ func (m *ListEntityTypesRequest) Reset()         { *m = ListEntityTypesRequest{}
 func (m *ListEntityTypesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListEntityTypesRequest) ProtoMessage()    {}
 func (*ListEntityTypesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{1}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{1}
 }
 func (m *ListEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListEntityTypesRequest.Unmarshal(m, b)
@@ -264,8 +260,8 @@ func (m *ListEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListEntityTypesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListEntityTypesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListEntityTypesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListEntityTypesRequest.Merge(m, src)
+func (dst *ListEntityTypesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListEntityTypesRequest.Merge(dst, src)
 }
 func (m *ListEntityTypesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListEntityTypesRequest.Size(m)
@@ -321,7 +317,7 @@ func (m *ListEntityTypesResponse) Reset()         { *m = ListEntityTypesResponse
 func (m *ListEntityTypesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListEntityTypesResponse) ProtoMessage()    {}
 func (*ListEntityTypesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{2}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{2}
 }
 func (m *ListEntityTypesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListEntityTypesResponse.Unmarshal(m, b)
@@ -329,8 +325,8 @@ func (m *ListEntityTypesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListEntityTypesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListEntityTypesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListEntityTypesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListEntityTypesResponse.Merge(m, src)
+func (dst *ListEntityTypesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListEntityTypesResponse.Merge(dst, src)
 }
 func (m *ListEntityTypesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListEntityTypesResponse.Size(m)
@@ -375,7 +371,7 @@ func (m *GetEntityTypeRequest) Reset()         { *m = GetEntityTypeRequest{} }
 func (m *GetEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*GetEntityTypeRequest) ProtoMessage()    {}
 func (*GetEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{3}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{3}
 }
 func (m *GetEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetEntityTypeRequest.Unmarshal(m, b)
@@ -383,8 +379,8 @@ func (m *GetEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *GetEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetEntityTypeRequest.Merge(m, src)
+func (dst *GetEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetEntityTypeRequest.Merge(dst, src)
 }
 func (m *GetEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_GetEntityTypeRequest.Size(m)
@@ -431,7 +427,7 @@ func (m *CreateEntityTypeRequest) Reset()         { *m = CreateEntityTypeRequest
 func (m *CreateEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateEntityTypeRequest) ProtoMessage()    {}
 func (*CreateEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{4}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{4}
 }
 func (m *CreateEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateEntityTypeRequest.Unmarshal(m, b)
@@ -439,8 +435,8 @@ func (m *CreateEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateEntityTypeRequest.Merge(m, src)
+func (dst *CreateEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateEntityTypeRequest.Merge(dst, src)
 }
 func (m *CreateEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateEntityTypeRequest.Size(m)
@@ -494,7 +490,7 @@ func (m *UpdateEntityTypeRequest) Reset()         { *m = UpdateEntityTypeRequest
 func (m *UpdateEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateEntityTypeRequest) ProtoMessage()    {}
 func (*UpdateEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{5}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{5}
 }
 func (m *UpdateEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateEntityTypeRequest.Unmarshal(m, b)
@@ -502,8 +498,8 @@ func (m *UpdateEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateEntityTypeRequest.Merge(m, src)
+func (dst *UpdateEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateEntityTypeRequest.Merge(dst, src)
 }
 func (m *UpdateEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateEntityTypeRequest.Size(m)
@@ -549,7 +545,7 @@ func (m *DeleteEntityTypeRequest) Reset()         { *m = DeleteEntityTypeRequest
 func (m *DeleteEntityTypeRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteEntityTypeRequest) ProtoMessage()    {}
 func (*DeleteEntityTypeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{6}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{6}
 }
 func (m *DeleteEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteEntityTypeRequest.Unmarshal(m, b)
@@ -557,8 +553,8 @@ func (m *DeleteEntityTypeRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteEntityTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteEntityTypeRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteEntityTypeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteEntityTypeRequest.Merge(m, src)
+func (dst *DeleteEntityTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteEntityTypeRequest.Merge(dst, src)
 }
 func (m *DeleteEntityTypeRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteEntityTypeRequest.Size(m)
@@ -608,7 +604,7 @@ func (m *BatchUpdateEntityTypesRequest) Reset()         { *m = BatchUpdateEntity
 func (m *BatchUpdateEntityTypesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchUpdateEntityTypesRequest) ProtoMessage()    {}
 func (*BatchUpdateEntityTypesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{7}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{7}
 }
 func (m *BatchUpdateEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchUpdateEntityTypesRequest.Unmarshal(m, b)
@@ -616,8 +612,8 @@ func (m *BatchUpdateEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchUpdateEntityTypesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchUpdateEntityTypesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchUpdateEntityTypesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchUpdateEntityTypesRequest.Merge(m, src)
+func (dst *BatchUpdateEntityTypesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateEntityTypesRequest.Merge(dst, src)
 }
 func (m *BatchUpdateEntityTypesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchUpdateEntityTypesRequest.Size(m)
@@ -771,7 +767,7 @@ func (m *BatchUpdateEntityTypesResponse) Reset()         { *m = BatchUpdateEntit
 func (m *BatchUpdateEntityTypesResponse) String() string { return proto.CompactTextString(m) }
 func (*BatchUpdateEntityTypesResponse) ProtoMessage()    {}
 func (*BatchUpdateEntityTypesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{8}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{8}
 }
 func (m *BatchUpdateEntityTypesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchUpdateEntityTypesResponse.Unmarshal(m, b)
@@ -779,8 +775,8 @@ func (m *BatchUpdateEntityTypesResponse) XXX_Unmarshal(b []byte) error {
 func (m *BatchUpdateEntityTypesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchUpdateEntityTypesResponse.Marshal(b, m, deterministic)
 }
-func (m *BatchUpdateEntityTypesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchUpdateEntityTypesResponse.Merge(m, src)
+func (dst *BatchUpdateEntityTypesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateEntityTypesResponse.Merge(dst, src)
 }
 func (m *BatchUpdateEntityTypesResponse) XXX_Size() int {
 	return xxx_messageInfo_BatchUpdateEntityTypesResponse.Size(m)
@@ -815,7 +811,7 @@ func (m *BatchDeleteEntityTypesRequest) Reset()         { *m = BatchDeleteEntity
 func (m *BatchDeleteEntityTypesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchDeleteEntityTypesRequest) ProtoMessage()    {}
 func (*BatchDeleteEntityTypesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{9}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{9}
 }
 func (m *BatchDeleteEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchDeleteEntityTypesRequest.Unmarshal(m, b)
@@ -823,8 +819,8 @@ func (m *BatchDeleteEntityTypesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchDeleteEntityTypesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchDeleteEntityTypesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchDeleteEntityTypesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchDeleteEntityTypesRequest.Merge(m, src)
+func (dst *BatchDeleteEntityTypesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchDeleteEntityTypesRequest.Merge(dst, src)
 }
 func (m *BatchDeleteEntityTypesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchDeleteEntityTypesRequest.Size(m)
@@ -871,7 +867,7 @@ func (m *BatchCreateEntitiesRequest) Reset()         { *m = BatchCreateEntitiesR
 func (m *BatchCreateEntitiesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchCreateEntitiesRequest) ProtoMessage()    {}
 func (*BatchCreateEntitiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{10}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{10}
 }
 func (m *BatchCreateEntitiesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchCreateEntitiesRequest.Unmarshal(m, b)
@@ -879,8 +875,8 @@ func (m *BatchCreateEntitiesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchCreateEntitiesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchCreateEntitiesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchCreateEntitiesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchCreateEntitiesRequest.Merge(m, src)
+func (dst *BatchCreateEntitiesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchCreateEntitiesRequest.Merge(dst, src)
 }
 func (m *BatchCreateEntitiesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchCreateEntitiesRequest.Size(m)
@@ -936,7 +932,7 @@ func (m *BatchUpdateEntitiesRequest) Reset()         { *m = BatchUpdateEntitiesR
 func (m *BatchUpdateEntitiesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchUpdateEntitiesRequest) ProtoMessage()    {}
 func (*BatchUpdateEntitiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{11}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{11}
 }
 func (m *BatchUpdateEntitiesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchUpdateEntitiesRequest.Unmarshal(m, b)
@@ -944,8 +940,8 @@ func (m *BatchUpdateEntitiesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchUpdateEntitiesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchUpdateEntitiesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchUpdateEntitiesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchUpdateEntitiesRequest.Merge(m, src)
+func (dst *BatchUpdateEntitiesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchUpdateEntitiesRequest.Merge(dst, src)
 }
 func (m *BatchUpdateEntitiesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchUpdateEntitiesRequest.Size(m)
@@ -1008,7 +1004,7 @@ func (m *BatchDeleteEntitiesRequest) Reset()         { *m = BatchDeleteEntitiesR
 func (m *BatchDeleteEntitiesRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchDeleteEntitiesRequest) ProtoMessage()    {}
 func (*BatchDeleteEntitiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{12}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{12}
 }
 func (m *BatchDeleteEntitiesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchDeleteEntitiesRequest.Unmarshal(m, b)
@@ -1016,8 +1012,8 @@ func (m *BatchDeleteEntitiesRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchDeleteEntitiesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchDeleteEntitiesRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchDeleteEntitiesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchDeleteEntitiesRequest.Merge(m, src)
+func (dst *BatchDeleteEntitiesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchDeleteEntitiesRequest.Merge(dst, src)
 }
 func (m *BatchDeleteEntitiesRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchDeleteEntitiesRequest.Size(m)
@@ -1062,7 +1058,7 @@ func (m *EntityTypeBatch) Reset()         { *m = EntityTypeBatch{} }
 func (m *EntityTypeBatch) String() string { return proto.CompactTextString(m) }
 func (*EntityTypeBatch) ProtoMessage()    {}
 func (*EntityTypeBatch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_252de8d6c5f5c76d, []int{13}
+	return fileDescriptor_entity_type_5022cc8f1b023825, []int{13}
 }
 func (m *EntityTypeBatch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityTypeBatch.Unmarshal(m, b)
@@ -1070,8 +1066,8 @@ func (m *EntityTypeBatch) XXX_Unmarshal(b []byte) error {
 func (m *EntityTypeBatch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_EntityTypeBatch.Marshal(b, m, deterministic)
 }
-func (m *EntityTypeBatch) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EntityTypeBatch.Merge(m, src)
+func (dst *EntityTypeBatch) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EntityTypeBatch.Merge(dst, src)
 }
 func (m *EntityTypeBatch) XXX_Size() int {
 	return xxx_messageInfo_EntityTypeBatch.Size(m)
@@ -1531,10 +1527,10 @@ var _EntityTypes_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dialogflow/v2/entity_type.proto", fileDescriptor_252de8d6c5f5c76d)
+	proto.RegisterFile("google/cloud/dialogflow/v2/entity_type.proto", fileDescriptor_entity_type_5022cc8f1b023825)
 }
 
-var fileDescriptor_252de8d6c5f5c76d = []byte{
+var fileDescriptor_entity_type_5022cc8f1b023825 = []byte{
 	// 1233 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x98, 0xcf, 0x6f, 0xe3, 0x44,
 	0x14, 0xc7, 0x3b, 0x69, 0x5a, 0xb5, 0x2f, 0xed, 0x36, 0x9d, 0x76, 0xdb, 0xc8, 0xdd, 0xee, 0x16,

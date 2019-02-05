@@ -1,13 +1,13 @@
 {
   "metadata" : {
     "apiVersion" : "2017-11-27",
-    "endpointPrefix" : "mq",
+    "endpointPrefix": "mq",
     "signingName" : "mq",
-    "serviceFullName" : "AmazonMQ",
-    "serviceId" : "mq",
+    "serviceFullName": "AmazonMQ",
+    "serviceId": "mq",
     "protocol" : "rest-json",
     "jsonVersion" : "1.1",
-    "uid" : "mq-2017-11-27",
+    "uid": "mq-2017-11-27",
     "signatureVersion" : "v4"
   },
   "operations" : {
@@ -56,6 +56,31 @@
       }, {
         "shape" : "ConflictException"
       }, {
+        "shape": "ForbiddenException"
+      }
+      ]
+    },
+    "CreateTags": {
+      "name": "CreateTags",
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/tags/{resource-arn}",
+        "responseCode": 204
+      },
+      "input": {
+        "shape": "CreateTagsRequest"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
         "shape" : "ForbiddenException"
       } ]
     },
@@ -96,6 +121,31 @@
       },
       "output" : {
         "shape" : "DeleteBrokerResponse"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
+    "DeleteTags": {
+      "name": "DeleteTags",
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/v1/tags/{resource-arn}",
+        "responseCode": 204
+      },
+      "input": {
+        "shape": "DeleteTagsRequest"
       },
       "errors" : [ {
         "shape" : "NotFoundException"
@@ -287,6 +337,34 @@
         "shape" : "ForbiddenException"
       } ]
     },
+    "ListTags": {
+      "name": "ListTags",
+      "http": {
+        "method": "GET",
+        "requestUri": "/v1/tags/{resource-arn}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ListTagsRequest"
+      },
+      "output": {
+        "shape": "ListTagsResponse"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
     "ListUsers" : {
       "name" : "ListUsers",
       "http" : {
@@ -352,6 +430,8 @@
         "shape" : "BadRequestException"
       }, {
         "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ConflictException"
       }, {
         "shape" : "ForbiddenException"
       } ]
@@ -517,6 +597,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
         }
       }
     },
@@ -640,6 +724,10 @@
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
         },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
+        },
         "Users" : {
           "shape" : "__listOfUser",
           "locationName" : "users"
@@ -715,6 +803,10 @@
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
         },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
+        },
         "Users" : {
           "shape" : "__listOfUser",
           "locationName" : "users"
@@ -748,6 +840,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
         }
       }
     },
@@ -790,6 +886,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
         }
       }
     },
@@ -817,6 +917,23 @@
           "locationName" : "name"
         }
       }
+    },
+    "CreateTagsRequest": {
+      "type": "structure",
+      "members": {
+        "ResourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "resource-arn"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
+        }
+      },
+      "required": [
+        "ResourceArn"
+      ]
     },
     "CreateUserInput" : {
       "type" : "structure",
@@ -899,6 +1016,25 @@
           "locationName" : "brokerId"
         }
       }
+    },
+    "DeleteTagsRequest": {
+      "type": "structure",
+      "members": {
+        "ResourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "resource-arn"
+        },
+        "TagKeys": {
+          "shape": "__listOf__string",
+          "location": "querystring",
+          "locationName": "tagKeys"
+        }
+      },
+      "required": [
+        "TagKeys",
+        "ResourceArn"
+      ]
     },
     "DeleteUserRequest" : {
       "type" : "structure",
@@ -983,6 +1119,10 @@
           "shape" : "WeeklyStartTime",
           "locationName" : "maintenanceWindowStartTime"
         },
+        "PendingEngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "pendingEngineVersion"
+        },
         "PubliclyAccessible" : {
           "shape" : "__boolean",
           "locationName" : "publiclyAccessible"
@@ -994,6 +1134,10 @@
         "SubnetIds" : {
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
         },
         "Users" : {
           "shape" : "__listOfUserSummary",
@@ -1071,6 +1215,10 @@
           "shape" : "WeeklyStartTime",
           "locationName" : "maintenanceWindowStartTime"
         },
+        "PendingEngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "pendingEngineVersion"
+        },
         "PubliclyAccessible" : {
           "shape" : "__boolean",
           "locationName" : "publiclyAccessible"
@@ -1082,6 +1230,10 @@
         "SubnetIds" : {
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
         },
         "Users" : {
           "shape" : "__listOfUserSummary",
@@ -1134,6 +1286,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
         }
       }
     },
@@ -1465,6 +1621,28 @@
         }
       }
     },
+    "ListTagsRequest": {
+      "type": "structure",
+      "members": {
+        "ResourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "resource-arn"
+        }
+      },
+      "required": [
+        "ResourceArn"
+      ]
+    },
+    "ListTagsResponse": {
+      "type": "structure",
+      "members": {
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
+        }
+      }
+    },
     "ListUsersOutput" : {
       "type" : "structure",
       "members" : {
@@ -1637,6 +1815,15 @@
       "type" : "string",
       "enum" : [ "DISALLOWED_ELEMENT_REMOVED", "DISALLOWED_ATTRIBUTE_REMOVED", "INVALID_ATTRIBUTE_VALUE_REMOVED" ]
     },
+    "Tags": {
+      "type": "structure",
+      "members": {
+        "Tags": {
+          "shape": "__mapOf__string",
+          "locationName": "tags"
+        }
+      }
+    },
     "UnauthorizedException" : {
       "type" : "structure",
       "members" : {
@@ -1657,9 +1844,17 @@
     "UpdateBrokerInput" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1670,6 +1865,10 @@
     "UpdateBrokerOutput" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "locationName" : "brokerId"
@@ -1677,6 +1876,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1687,6 +1890,10 @@
     "UpdateBrokerRequest" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "location" : "uri",
@@ -1695,6 +1902,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1706,6 +1917,10 @@
     "UpdateBrokerResponse" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "locationName" : "brokerId"
@@ -1713,6 +1928,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1997,6 +2216,15 @@
     },
     "__long" : {
       "type" : "long"
+    },
+    "__mapOf__string": {
+      "type": "map",
+      "key": {
+        "shape": "__string"
+      },
+      "value": {
+        "shape": "__string"
+      }
     },
     "__string" : {
       "type" : "string"

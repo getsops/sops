@@ -34,9 +34,9 @@
     "ActionOnFailure": {
       "base": null,
       "refs": {
-        "Step$ActionOnFailure": "<p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>",
-        "StepConfig$ActionOnFailure": "<p>The action to take if the step fails.</p>",
-        "StepSummary$ActionOnFailure": "<p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>"
+        "Step$ActionOnFailure": "<p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>",
+        "StepConfig$ActionOnFailure": "<p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>",
+        "StepSummary$ActionOnFailure": "<p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is available for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>"
       }
     },
     "AddInstanceFleetInput": {
@@ -86,7 +86,7 @@
       }
     },
     "Application": {
-      "base": "<p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href=\"http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-mapr.html\">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>\"mapr-m3\" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>\"mapr-m5\" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>\"mapr\" with the user arguments specifying \"--edition,m3\" or \"--edition,m5\" - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.x and later, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note>",
+      "base": "<p>With Amazon EMR release version 4.0 and later, the only accepted parameter is the application name. To pass arguments to applications, you use configuration classifications specified using configuration JSON objects. For more information, see <a href=\"http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html\">Configuring Applications</a>.</p> <p>With earlier Amazon EMR releases, the application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument.</p>",
       "refs": {
         "ApplicationList$member": null
       }
@@ -95,7 +95,7 @@
       "base": null,
       "refs": {
         "Cluster$Applications": "<p>The applications installed on this cluster.</p>",
-        "RunJobFlowInput$Applications": "<p>For Amazon EMR releases 4.0 and later. A list of applications for the cluster. Valid values are: \"Hadoop\", \"Hive\", \"Mahout\", \"Pig\", and \"Spark.\" They are case insensitive.</p>"
+        "RunJobFlowInput$Applications": "<p>Applies to Amazon EMR releases 4.0 and later. A case-insensitive list of applications for Amazon EMR to install and configure when launching the cluster. For a list of applications available for each Amazon EMR release version, see the <a href=\"http://docs.aws.amazon.com/emr/latest/ReleaseGuide/\">Amazon EMR Release Guide</a>.</p>"
       }
     },
     "AutoScalingPolicy": {
@@ -805,9 +805,9 @@
         "InstanceTypeConfig$InstanceType": "<p>An EC2 instance type, such as <code>m3.xlarge</code>. </p>",
         "InstanceTypeSpecification$InstanceType": "<p>The EC2 instance type, for example <code>m3.xlarge</code>.</p>",
         "JobFlowInstancesConfig$MasterInstanceType": "<p>The EC2 instance type of the master node.</p>",
-        "JobFlowInstancesConfig$SlaveInstanceType": "<p>The EC2 instance type of the slave nodes.</p>",
+        "JobFlowInstancesConfig$SlaveInstanceType": "<p>The EC2 instance type of the core and task nodes.</p>",
         "JobFlowInstancesDetail$MasterInstanceType": "<p>The Amazon EC2 master node instance type.</p>",
-        "JobFlowInstancesDetail$SlaveInstanceType": "<p>The Amazon EC2 slave node instance type.</p>"
+        "JobFlowInstancesDetail$SlaveInstanceType": "<p>The Amazon EC2 core and task node instance type.</p>"
       }
     },
     "InstanceTypeConfig": {
@@ -851,7 +851,7 @@
         "InstanceGroupModifyConfig$InstanceCount": "<p>Target size for the instance group.</p>",
         "InstanceResizePolicy$InstanceTerminationTimeout": "<p>Decommissioning timeout override for the specific list of instances to be terminated.</p>",
         "JobFlowInstancesConfig$InstanceCount": "<p>The number of EC2 instances in the cluster.</p>",
-        "JobFlowInstancesDetail$InstanceCount": "<p>The number of Amazon EC2 instances in the cluster. If the value is 1, the same instance serves as both the master and slave node. If the value is greater than 1, one instance is the master node and all others are slave nodes.</p>",
+        "JobFlowInstancesDetail$InstanceCount": "<p>The number of Amazon EC2 instances in the cluster. If the value is 1, the same instance serves as both the master and core and task node. If the value is greater than 1, one instance is the master node and all others are core and task nodes.</p>",
         "JobFlowInstancesDetail$NormalizedInstanceHours": "<p>An approximation of the cost of the cluster, represented in m1.small/hours. This value is incremented one time for every hour that an m1.small runs. Larger instances are weighted more, so an Amazon EC2 instance that is roughly four times more expensive would result in the normalized instance hours being incremented by four. This result is only an approximation and does not reflect the actual billing rate.</p>",
         "RunJobFlowInput$EbsRootVolumeSize": "<p>The size, in GiB, of the EBS root device volume of the Linux AMI that is used for each EC2 instance. Available in Amazon EMR version 4.x and later.</p>",
         "ScalingConstraints$MinCapacity": "<p>The lower boundary of EC2 instances in an instance group below which scaling activities are not allowed to shrink. Scale-in activities will not terminate instances below this boundary.</p>",
@@ -1198,7 +1198,7 @@
       "base": null,
       "refs": {
         "JobFlowInstancesConfig$AdditionalMasterSecurityGroups": "<p>A list of additional Amazon EC2 security group IDs for the master node.</p>",
-        "JobFlowInstancesConfig$AdditionalSlaveSecurityGroups": "<p>A list of additional Amazon EC2 security group IDs for the slave nodes.</p>"
+        "JobFlowInstancesConfig$AdditionalSlaveSecurityGroups": "<p>A list of additional Amazon EC2 security group IDs for the core and task nodes.</p>"
       }
     },
     "SetTerminationProtectionInput": {
@@ -1233,7 +1233,7 @@
     "SpotProvisioningTimeoutAction": {
       "base": null,
       "refs": {
-        "SpotProvisioningSpecification$TimeoutAction": "<p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired. Spot instances are not uprovisioned within the Spot provisioining timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>"
+        "SpotProvisioningSpecification$TimeoutAction": "<p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired; that is, when all Spot instances could not be provisioned within the Spot provisioning timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>"
       }
     },
     "Statistic": {
@@ -1383,7 +1383,7 @@
         "Ec2InstanceAttributes$Ec2AvailabilityZone": "<p>The Availability Zone in which the cluster will run. </p>",
         "Ec2InstanceAttributes$IamInstanceProfile": "<p>The IAM role that was specified when the cluster was launched. The EC2 instances of the cluster assume this role.</p>",
         "Ec2InstanceAttributes$EmrManagedMasterSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the master node.</p>",
-        "Ec2InstanceAttributes$EmrManagedSlaveSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the slave nodes.</p>",
+        "Ec2InstanceAttributes$EmrManagedSlaveSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the core and task nodes.</p>",
         "Ec2InstanceAttributes$ServiceAccessSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the Amazon EMR service to access clusters in VPC private subnets.</p>",
         "FailureDetails$Reason": "<p>The reason for the step failure. In the case where the service cannot successfully determine the root cause of the failure, it returns \"Unknown Error\" as a reason.</p>",
         "FailureDetails$Message": "<p>The descriptive message including the error the EMR service has identified as the cause of step failure. This is text from an error log that describes the root cause of the failure.</p>",
@@ -1421,7 +1421,7 @@
         "Application$Args": "<p>Arguments for Amazon EMR to pass to the application.</p>",
         "Command$Args": "<p>Arguments for Amazon EMR to pass to the command for execution.</p>",
         "Ec2InstanceAttributes$AdditionalMasterSecurityGroups": "<p>A list of additional Amazon EC2 security group IDs for the master node.</p>",
-        "Ec2InstanceAttributes$AdditionalSlaveSecurityGroups": "<p>A list of additional Amazon EC2 security group IDs for the slave nodes.</p>",
+        "Ec2InstanceAttributes$AdditionalSlaveSecurityGroups": "<p>A list of additional Amazon EC2 security group IDs for the core and task nodes.</p>",
         "HadoopStepConfig$Args": "<p>The list of command line arguments to pass to the JAR file's main function for execution.</p>",
         "RemoveTagsInput$TagKeys": "<p>A list of tag keys to remove from a resource.</p>"
       }
@@ -1573,7 +1573,7 @@
         "JobFlowInstancesConfig$HadoopVersion": "<p>Applies only to Amazon EMR release versions earlier than 4.0. The Hadoop version for the cluster. Valid inputs are \"0.18\" (deprecated), \"0.20\" (deprecated), \"0.20.205\" (deprecated), \"1.0.3\", \"2.2.0\", or \"2.4.0\". If you do not set this value, the default of 0.18 is used, unless the <code>AmiVersion</code> parameter is set in the RunJobFlow call, in which case the default version of Hadoop for that AMI version is used.</p>",
         "JobFlowInstancesConfig$Ec2SubnetId": "<p>Applies to clusters that use the uniform instance group configuration. To launch the cluster in Amazon Virtual Private Cloud (Amazon VPC), set this parameter to the identifier of the Amazon VPC subnet where you want the cluster to launch. If you do not specify this value, the cluster launches in the normal Amazon Web Services cloud, outside of an Amazon VPC, if the account launching the cluster supports EC2 Classic networks in the region where the cluster launches.</p> <p>Amazon VPC currently does not support cluster compute quadruple extra large (cc1.4xlarge) instances. Thus you cannot specify the cc1.4xlarge instance type for clusters launched in an Amazon VPC.</p>",
         "JobFlowInstancesConfig$EmrManagedMasterSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the master node.</p>",
-        "JobFlowInstancesConfig$EmrManagedSlaveSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the slave nodes.</p>",
+        "JobFlowInstancesConfig$EmrManagedSlaveSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the core and task nodes.</p>",
         "JobFlowInstancesConfig$ServiceAccessSecurityGroup": "<p>The identifier of the Amazon EC2 security group for the Amazon EMR service to access clusters in VPC private subnets.</p>",
         "JobFlowInstancesDetail$Ec2KeyName": "<p>The name of an Amazon EC2 key pair that can be used to ssh to the master node.</p>",
         "JobFlowInstancesDetail$Ec2SubnetId": "<p>For clusters launched within Amazon Virtual Private Cloud, this is the identifier of the subnet where the cluster was launched.</p>",

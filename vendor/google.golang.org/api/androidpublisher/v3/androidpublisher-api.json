@@ -12,10 +12,10 @@
   "baseUrl": "https://www.googleapis.com/androidpublisher/v3/applications/",
   "batchPath": "batch/androidpublisher/v3",
   "canonicalName": "Android Publisher",
-  "description": "Lets Android application developers access their Google Play accounts.",
+  "description": "Accesses Android application developers' Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/zem5Qd2iN88JN9HgdtGKjtTNK54\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/eVpQc0jG6TIyPBL3ViLHrjLeGpk\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -388,6 +388,11 @@
                 "editId"
               ],
               "parameters": {
+                "ackBundleInstallationWarning": {
+                  "description": "Must be set to true if the bundle installation may trigger a warning on user devices (for example, if installation size may be over a threshold, typically 100 MB).",
+                  "location": "query",
+                  "type": "boolean"
+                },
                 "editId": {
                   "description": "Unique identifier for this edit.",
                   "location": "path",
@@ -2221,7 +2226,7 @@
       }
     }
   },
-  "revision": "20180827",
+  "revision": "20190120",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Apk": {
@@ -2876,7 +2881,7 @@
           "type": "string"
         },
         "purchaseType": {
-          "description": "The type of purchase of the inapp product. This field is only set if this purchase was not made using the standard in-app billing flow. Possible values are:  \n- Test (i.e. purchased from a license testing account) \n- Promo (i.e. purchased using a promo code)",
+          "description": "The type of purchase of the inapp product. This field is only set if this purchase was not made using the standard in-app billing flow. Possible values are:  \n- Test (i.e. purchased from a license testing account) \n- Promo (i.e. purchased using a promo code) \n- Rewarded (i.e. from watching a video ad instead of paying)",
           "format": "int32",
           "type": "integer"
         }
@@ -3046,6 +3051,11 @@
         "autoRenewing": {
           "description": "Whether the subscription will automatically be renewed when it reaches its current expiry time.",
           "type": "boolean"
+        },
+        "autoResumeTimeMillis": {
+          "description": "Time at which the subscription will be automatically resumed, in milliseconds since the Epoch. Only present if the user has requested to pause the subscription.",
+          "format": "int64",
+          "type": "string"
         },
         "cancelReason": {
           "description": "The reason why a subscription was canceled or is not auto-renewing. Possible values are:  \n- User canceled the subscription \n- Subscription was canceled by the system, for example because of a billing problem \n- Subscription was replaced with a new subscription \n- Subscription was canceled by the developer",

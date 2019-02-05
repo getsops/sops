@@ -37,7 +37,6 @@ var Operation_Importance_name = map[int32]string{
 	0: "LOW",
 	1: "HIGH",
 }
-
 var Operation_Importance_value = map[string]int32{
 	"LOW":  0,
 	"HIGH": 1,
@@ -46,9 +45,8 @@ var Operation_Importance_value = map[string]int32{
 func (x Operation_Importance) String() string {
 	return proto.EnumName(Operation_Importance_name, int32(x))
 }
-
 func (Operation_Importance) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_afd5d09de2965ad3, []int{0, 0}
+	return fileDescriptor_operation_b9b924901f6a3776, []int{0, 0}
 }
 
 // Represents information regarding an operation.
@@ -121,7 +119,7 @@ func (m *Operation) Reset()         { *m = Operation{} }
 func (m *Operation) String() string { return proto.CompactTextString(m) }
 func (*Operation) ProtoMessage()    {}
 func (*Operation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_afd5d09de2965ad3, []int{0}
+	return fileDescriptor_operation_b9b924901f6a3776, []int{0}
 }
 func (m *Operation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Operation.Unmarshal(m, b)
@@ -129,8 +127,8 @@ func (m *Operation) XXX_Unmarshal(b []byte) error {
 func (m *Operation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Operation.Marshal(b, m, deterministic)
 }
-func (m *Operation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Operation.Merge(m, src)
+func (dst *Operation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Operation.Merge(dst, src)
 }
 func (m *Operation) XXX_Size() int {
 	return xxx_messageInfo_Operation.Size(m)
@@ -211,10 +209,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/api/servicecontrol/v1/operation.proto", fileDescriptor_afd5d09de2965ad3)
+	proto.RegisterFile("google/api/servicecontrol/v1/operation.proto", fileDescriptor_operation_b9b924901f6a3776)
 }
 
-var fileDescriptor_afd5d09de2965ad3 = []byte{
+var fileDescriptor_operation_b9b924901f6a3776 = []byte{
 	// 483 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xcf, 0x6b, 0x13, 0x41,
 	0x14, 0xc7, 0x9d, 0xa6, 0xf9, 0xf5, 0x56, 0x63, 0x1c, 0x3c, 0x2c, 0xa1, 0x90, 0x58, 0x50, 0x72,

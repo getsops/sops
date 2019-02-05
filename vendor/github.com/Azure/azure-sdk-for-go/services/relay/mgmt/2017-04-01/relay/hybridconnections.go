@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewHybridConnectionsClientWithBaseURI(baseURI string, subscriptionID string
 // hybridConnectionName - the hybrid connection name.
 // parameters - parameters supplied to create a hybrid connection.
 func (client HybridConnectionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string, parameters HybridConnection) (result HybridConnection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -139,6 +150,16 @@ func (client HybridConnectionsClient) CreateOrUpdateResponder(resp *http.Respons
 // authorizationRuleName - the authorization rule name.
 // parameters - the authorization rule parameters.
 func (client HybridConnectionsClient) CreateOrUpdateAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string, authorizationRuleName string, parameters AuthorizationRule) (result AuthorizationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.CreateOrUpdateAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -230,6 +251,16 @@ func (client HybridConnectionsClient) CreateOrUpdateAuthorizationRuleResponder(r
 // namespaceName - the namespace name
 // hybridConnectionName - the hybrid connection name.
 func (client HybridConnectionsClient) Delete(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -311,6 +342,16 @@ func (client HybridConnectionsClient) DeleteResponder(resp *http.Response) (resu
 // hybridConnectionName - the hybrid connection name.
 // authorizationRuleName - the authorization rule name.
 func (client HybridConnectionsClient) DeleteAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string, authorizationRuleName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.DeleteAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -394,6 +435,16 @@ func (client HybridConnectionsClient) DeleteAuthorizationRuleResponder(resp *htt
 // namespaceName - the namespace name
 // hybridConnectionName - the hybrid connection name.
 func (client HybridConnectionsClient) Get(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string) (result HybridConnection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -476,6 +527,16 @@ func (client HybridConnectionsClient) GetResponder(resp *http.Response) (result 
 // hybridConnectionName - the hybrid connection name.
 // authorizationRuleName - the authorization rule name.
 func (client HybridConnectionsClient) GetAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string, authorizationRuleName string) (result AuthorizationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.GetAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -560,6 +621,16 @@ func (client HybridConnectionsClient) GetAuthorizationRuleResponder(resp *http.R
 // namespaceName - the namespace name
 // hybridConnectionName - the hybrid connection name.
 func (client HybridConnectionsClient) ListAuthorizationRules(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string) (result AuthorizationRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.arlr.Response.Response != nil {
+				sc = result.arlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -637,8 +708,8 @@ func (client HybridConnectionsClient) ListAuthorizationRulesResponder(resp *http
 }
 
 // listAuthorizationRulesNextResults retrieves the next set of results, if any.
-func (client HybridConnectionsClient) listAuthorizationRulesNextResults(lastResults AuthorizationRuleListResult) (result AuthorizationRuleListResult, err error) {
-	req, err := lastResults.authorizationRuleListResultPreparer()
+func (client HybridConnectionsClient) listAuthorizationRulesNextResults(ctx context.Context, lastResults AuthorizationRuleListResult) (result AuthorizationRuleListResult, err error) {
+	req, err := lastResults.authorizationRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "relay.HybridConnectionsClient", "listAuthorizationRulesNextResults", nil, "Failure preparing next results request")
 	}
@@ -659,6 +730,16 @@ func (client HybridConnectionsClient) listAuthorizationRulesNextResults(lastResu
 
 // ListAuthorizationRulesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client HybridConnectionsClient) ListAuthorizationRulesComplete(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string) (result AuthorizationRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAuthorizationRules(ctx, resourceGroupName, namespaceName, hybridConnectionName)
 	return
 }
@@ -668,6 +749,16 @@ func (client HybridConnectionsClient) ListAuthorizationRulesComplete(ctx context
 // resourceGroupName - name of the Resource group within the Azure subscription.
 // namespaceName - the namespace name
 func (client HybridConnectionsClient) ListByNamespace(ctx context.Context, resourceGroupName string, namespaceName string) (result HybridConnectionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.ListByNamespace")
+		defer func() {
+			sc := -1
+			if result.hclr.Response.Response != nil {
+				sc = result.hclr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -742,8 +833,8 @@ func (client HybridConnectionsClient) ListByNamespaceResponder(resp *http.Respon
 }
 
 // listByNamespaceNextResults retrieves the next set of results, if any.
-func (client HybridConnectionsClient) listByNamespaceNextResults(lastResults HybridConnectionListResult) (result HybridConnectionListResult, err error) {
-	req, err := lastResults.hybridConnectionListResultPreparer()
+func (client HybridConnectionsClient) listByNamespaceNextResults(ctx context.Context, lastResults HybridConnectionListResult) (result HybridConnectionListResult, err error) {
+	req, err := lastResults.hybridConnectionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "relay.HybridConnectionsClient", "listByNamespaceNextResults", nil, "Failure preparing next results request")
 	}
@@ -764,6 +855,16 @@ func (client HybridConnectionsClient) listByNamespaceNextResults(lastResults Hyb
 
 // ListByNamespaceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client HybridConnectionsClient) ListByNamespaceComplete(ctx context.Context, resourceGroupName string, namespaceName string) (result HybridConnectionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.ListByNamespace")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByNamespace(ctx, resourceGroupName, namespaceName)
 	return
 }
@@ -775,6 +876,16 @@ func (client HybridConnectionsClient) ListByNamespaceComplete(ctx context.Contex
 // hybridConnectionName - the hybrid connection name.
 // authorizationRuleName - the authorization rule name.
 func (client HybridConnectionsClient) ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string, authorizationRuleName string) (result AccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -861,6 +972,16 @@ func (client HybridConnectionsClient) ListKeysResponder(resp *http.Response) (re
 // authorizationRuleName - the authorization rule name.
 // parameters - parameters supplied to regenerate authorization rule.
 func (client HybridConnectionsClient) RegenerateKeys(ctx context.Context, resourceGroupName string, namespaceName string, hybridConnectionName string, authorizationRuleName string, parameters RegenerateAccessKeyParameters) (result AccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionsClient.RegenerateKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

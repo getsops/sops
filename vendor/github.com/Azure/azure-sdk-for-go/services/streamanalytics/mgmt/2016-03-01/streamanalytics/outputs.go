@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,10 +49,20 @@ func NewOutputsClientWithBaseURI(baseURI string, subscriptionID string) OutputsC
 // jobName - the name of the streaming job.
 // outputName - the name of the output.
 // ifMatch - the ETag of the output. Omit this value to always overwrite the current output. Specify the
-// last-seen ETag value to prevent accidentally overwritting concurrent changes.
+// last-seen ETag value to prevent accidentally overwriting concurrent changes.
 // ifNoneMatch - set to '*' to allow a new output to be created, but to prevent updating an existing output.
 // Other values will result in a 412 Pre-condition Failed response.
 func (client OutputsClient) CreateOrReplace(ctx context.Context, output Output, resourceGroupName string, jobName string, outputName string, ifMatch string, ifNoneMatch string) (result Output, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.CreateOrReplace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrReplacePreparer(ctx, output, resourceGroupName, jobName, outputName, ifMatch, ifNoneMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.OutputsClient", "CreateOrReplace", nil, "Failure preparing request")
@@ -132,6 +143,16 @@ func (client OutputsClient) CreateOrReplaceResponder(resp *http.Response) (resul
 // jobName - the name of the streaming job.
 // outputName - the name of the output.
 func (client OutputsClient) Delete(ctx context.Context, resourceGroupName string, jobName string, outputName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, jobName, outputName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.OutputsClient", "Delete", nil, "Failure preparing request")
@@ -201,6 +222,16 @@ func (client OutputsClient) DeleteResponder(resp *http.Response) (result autores
 // jobName - the name of the streaming job.
 // outputName - the name of the output.
 func (client OutputsClient) Get(ctx context.Context, resourceGroupName string, jobName string, outputName string) (result Output, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, jobName, outputName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.OutputsClient", "Get", nil, "Failure preparing request")
@@ -273,6 +304,16 @@ func (client OutputsClient) GetResponder(resp *http.Response) (result Output, er
 // to include in the response, or "*" to include all properties. By default, all properties are returned except
 // diagnostics. Currently only accepts '*' as a valid value.
 func (client OutputsClient) ListByStreamingJob(ctx context.Context, resourceGroupName string, jobName string, selectParameter string) (result OutputListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.ListByStreamingJob")
+		defer func() {
+			sc := -1
+			if result.olr.Response.Response != nil {
+				sc = result.olr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByStreamingJobNextResults
 	req, err := client.ListByStreamingJobPreparer(ctx, resourceGroupName, jobName, selectParameter)
 	if err != nil {
@@ -340,8 +381,8 @@ func (client OutputsClient) ListByStreamingJobResponder(resp *http.Response) (re
 }
 
 // listByStreamingJobNextResults retrieves the next set of results, if any.
-func (client OutputsClient) listByStreamingJobNextResults(lastResults OutputListResult) (result OutputListResult, err error) {
-	req, err := lastResults.outputListResultPreparer()
+func (client OutputsClient) listByStreamingJobNextResults(ctx context.Context, lastResults OutputListResult) (result OutputListResult, err error) {
+	req, err := lastResults.outputListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "streamanalytics.OutputsClient", "listByStreamingJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -362,6 +403,16 @@ func (client OutputsClient) listByStreamingJobNextResults(lastResults OutputList
 
 // ListByStreamingJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OutputsClient) ListByStreamingJobComplete(ctx context.Context, resourceGroupName string, jobName string, selectParameter string) (result OutputListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.ListByStreamingJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByStreamingJob(ctx, resourceGroupName, jobName, selectParameter)
 	return
 }
@@ -377,6 +428,16 @@ func (client OutputsClient) ListByStreamingJobComplete(ctx context.Context, reso
 // test the existing output as is or if specified, the properties specified will overwrite the corresponding
 // properties in the existing output (exactly like a PATCH operation) and the resulting output will be tested.
 func (client OutputsClient) Test(ctx context.Context, resourceGroupName string, jobName string, outputName string, output *Output) (result OutputsTestFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.Test")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.TestPreparer(ctx, resourceGroupName, jobName, outputName, output)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.OutputsClient", "Test", nil, "Failure preparing request")
@@ -428,10 +489,6 @@ func (client OutputsClient) TestSender(req *http.Request) (future OutputsTestFut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -461,8 +518,18 @@ func (client OutputsClient) TestResponder(resp *http.Response) (result ResourceT
 // jobName - the name of the streaming job.
 // outputName - the name of the output.
 // ifMatch - the ETag of the output. Omit this value to always overwrite the current output. Specify the
-// last-seen ETag value to prevent accidentally overwritting concurrent changes.
+// last-seen ETag value to prevent accidentally overwriting concurrent changes.
 func (client OutputsClient) Update(ctx context.Context, output Output, resourceGroupName string, jobName string, outputName string, ifMatch string) (result Output, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OutputsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, output, resourceGroupName, jobName, outputName, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.OutputsClient", "Update", nil, "Failure preparing request")

@@ -55,7 +55,6 @@ var BatchOperationMetadata_State_name = map[int32]string{
 	3: "FAILED",
 	4: "CANCELLED",
 }
-
 var BatchOperationMetadata_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"PROCESSING":        1,
@@ -67,9 +66,8 @@ var BatchOperationMetadata_State_value = map[string]int32{
 func (x BatchOperationMetadata_State) String() string {
 	return proto.EnumName(BatchOperationMetadata_State_name, int32(x))
 }
-
 func (BatchOperationMetadata_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{28, 0}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{28, 0}
 }
 
 // A Product contains ReferenceImages.
@@ -111,7 +109,7 @@ func (m *Product) Reset()         { *m = Product{} }
 func (m *Product) String() string { return proto.CompactTextString(m) }
 func (*Product) ProtoMessage()    {}
 func (*Product) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{0}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{0}
 }
 func (m *Product) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Product.Unmarshal(m, b)
@@ -119,8 +117,8 @@ func (m *Product) XXX_Unmarshal(b []byte) error {
 func (m *Product) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Product.Marshal(b, m, deterministic)
 }
-func (m *Product) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Product.Merge(m, src)
+func (dst *Product) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Product.Merge(dst, src)
 }
 func (m *Product) XXX_Size() int {
 	return xxx_messageInfo_Product.Size(m)
@@ -183,7 +181,7 @@ func (m *Product_KeyValue) Reset()         { *m = Product_KeyValue{} }
 func (m *Product_KeyValue) String() string { return proto.CompactTextString(m) }
 func (*Product_KeyValue) ProtoMessage()    {}
 func (*Product_KeyValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{0, 0}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{0, 0}
 }
 func (m *Product_KeyValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Product_KeyValue.Unmarshal(m, b)
@@ -191,8 +189,8 @@ func (m *Product_KeyValue) XXX_Unmarshal(b []byte) error {
 func (m *Product_KeyValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Product_KeyValue.Marshal(b, m, deterministic)
 }
-func (m *Product_KeyValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Product_KeyValue.Merge(m, src)
+func (dst *Product_KeyValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Product_KeyValue.Merge(dst, src)
 }
 func (m *Product_KeyValue) XXX_Size() int {
 	return xxx_messageInfo_Product_KeyValue.Size(m)
@@ -251,7 +249,7 @@ func (m *ProductSet) Reset()         { *m = ProductSet{} }
 func (m *ProductSet) String() string { return proto.CompactTextString(m) }
 func (*ProductSet) ProtoMessage()    {}
 func (*ProductSet) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{1}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{1}
 }
 func (m *ProductSet) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProductSet.Unmarshal(m, b)
@@ -259,8 +257,8 @@ func (m *ProductSet) XXX_Unmarshal(b []byte) error {
 func (m *ProductSet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProductSet.Marshal(b, m, deterministic)
 }
-func (m *ProductSet) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProductSet.Merge(m, src)
+func (dst *ProductSet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProductSet.Merge(dst, src)
 }
 func (m *ProductSet) XXX_Size() int {
 	return xxx_messageInfo_ProductSet.Size(m)
@@ -334,7 +332,7 @@ func (m *ReferenceImage) Reset()         { *m = ReferenceImage{} }
 func (m *ReferenceImage) String() string { return proto.CompactTextString(m) }
 func (*ReferenceImage) ProtoMessage()    {}
 func (*ReferenceImage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{2}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{2}
 }
 func (m *ReferenceImage) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReferenceImage.Unmarshal(m, b)
@@ -342,8 +340,8 @@ func (m *ReferenceImage) XXX_Unmarshal(b []byte) error {
 func (m *ReferenceImage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReferenceImage.Marshal(b, m, deterministic)
 }
-func (m *ReferenceImage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReferenceImage.Merge(m, src)
+func (dst *ReferenceImage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReferenceImage.Merge(dst, src)
 }
 func (m *ReferenceImage) XXX_Size() int {
 	return xxx_messageInfo_ReferenceImage.Size(m)
@@ -398,7 +396,7 @@ func (m *CreateProductRequest) Reset()         { *m = CreateProductRequest{} }
 func (m *CreateProductRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateProductRequest) ProtoMessage()    {}
 func (*CreateProductRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{3}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{3}
 }
 func (m *CreateProductRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateProductRequest.Unmarshal(m, b)
@@ -406,8 +404,8 @@ func (m *CreateProductRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateProductRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateProductRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateProductRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateProductRequest.Merge(m, src)
+func (dst *CreateProductRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateProductRequest.Merge(dst, src)
 }
 func (m *CreateProductRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateProductRequest.Size(m)
@@ -459,7 +457,7 @@ func (m *ListProductsRequest) Reset()         { *m = ListProductsRequest{} }
 func (m *ListProductsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListProductsRequest) ProtoMessage()    {}
 func (*ListProductsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{4}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{4}
 }
 func (m *ListProductsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProductsRequest.Unmarshal(m, b)
@@ -467,8 +465,8 @@ func (m *ListProductsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListProductsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListProductsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListProductsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListProductsRequest.Merge(m, src)
+func (dst *ListProductsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListProductsRequest.Merge(dst, src)
 }
 func (m *ListProductsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListProductsRequest.Size(m)
@@ -516,7 +514,7 @@ func (m *ListProductsResponse) Reset()         { *m = ListProductsResponse{} }
 func (m *ListProductsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListProductsResponse) ProtoMessage()    {}
 func (*ListProductsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{5}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{5}
 }
 func (m *ListProductsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProductsResponse.Unmarshal(m, b)
@@ -524,8 +522,8 @@ func (m *ListProductsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListProductsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListProductsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListProductsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListProductsResponse.Merge(m, src)
+func (dst *ListProductsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListProductsResponse.Merge(dst, src)
 }
 func (m *ListProductsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListProductsResponse.Size(m)
@@ -566,7 +564,7 @@ func (m *GetProductRequest) Reset()         { *m = GetProductRequest{} }
 func (m *GetProductRequest) String() string { return proto.CompactTextString(m) }
 func (*GetProductRequest) ProtoMessage()    {}
 func (*GetProductRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{6}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{6}
 }
 func (m *GetProductRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetProductRequest.Unmarshal(m, b)
@@ -574,8 +572,8 @@ func (m *GetProductRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetProductRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetProductRequest.Marshal(b, m, deterministic)
 }
-func (m *GetProductRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetProductRequest.Merge(m, src)
+func (dst *GetProductRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetProductRequest.Merge(dst, src)
 }
 func (m *GetProductRequest) XXX_Size() int {
 	return xxx_messageInfo_GetProductRequest.Size(m)
@@ -613,7 +611,7 @@ func (m *UpdateProductRequest) Reset()         { *m = UpdateProductRequest{} }
 func (m *UpdateProductRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateProductRequest) ProtoMessage()    {}
 func (*UpdateProductRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{7}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{7}
 }
 func (m *UpdateProductRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateProductRequest.Unmarshal(m, b)
@@ -621,8 +619,8 @@ func (m *UpdateProductRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateProductRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateProductRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateProductRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateProductRequest.Merge(m, src)
+func (dst *UpdateProductRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateProductRequest.Merge(dst, src)
 }
 func (m *UpdateProductRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateProductRequest.Size(m)
@@ -663,7 +661,7 @@ func (m *DeleteProductRequest) Reset()         { *m = DeleteProductRequest{} }
 func (m *DeleteProductRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteProductRequest) ProtoMessage()    {}
 func (*DeleteProductRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{8}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{8}
 }
 func (m *DeleteProductRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteProductRequest.Unmarshal(m, b)
@@ -671,8 +669,8 @@ func (m *DeleteProductRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteProductRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteProductRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteProductRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteProductRequest.Merge(m, src)
+func (dst *DeleteProductRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteProductRequest.Merge(dst, src)
 }
 func (m *DeleteProductRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteProductRequest.Size(m)
@@ -712,7 +710,7 @@ func (m *CreateProductSetRequest) Reset()         { *m = CreateProductSetRequest
 func (m *CreateProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateProductSetRequest) ProtoMessage()    {}
 func (*CreateProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{9}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{9}
 }
 func (m *CreateProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateProductSetRequest.Unmarshal(m, b)
@@ -720,8 +718,8 @@ func (m *CreateProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateProductSetRequest.Merge(m, src)
+func (dst *CreateProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateProductSetRequest.Merge(dst, src)
 }
 func (m *CreateProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateProductSetRequest.Size(m)
@@ -772,7 +770,7 @@ func (m *ListProductSetsRequest) Reset()         { *m = ListProductSetsRequest{}
 func (m *ListProductSetsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListProductSetsRequest) ProtoMessage()    {}
 func (*ListProductSetsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{10}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{10}
 }
 func (m *ListProductSetsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProductSetsRequest.Unmarshal(m, b)
@@ -780,8 +778,8 @@ func (m *ListProductSetsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListProductSetsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListProductSetsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListProductSetsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListProductSetsRequest.Merge(m, src)
+func (dst *ListProductSetsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListProductSetsRequest.Merge(dst, src)
 }
 func (m *ListProductSetsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListProductSetsRequest.Size(m)
@@ -829,7 +827,7 @@ func (m *ListProductSetsResponse) Reset()         { *m = ListProductSetsResponse
 func (m *ListProductSetsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListProductSetsResponse) ProtoMessage()    {}
 func (*ListProductSetsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{11}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{11}
 }
 func (m *ListProductSetsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProductSetsResponse.Unmarshal(m, b)
@@ -837,8 +835,8 @@ func (m *ListProductSetsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListProductSetsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListProductSetsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListProductSetsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListProductSetsResponse.Merge(m, src)
+func (dst *ListProductSetsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListProductSetsResponse.Merge(dst, src)
 }
 func (m *ListProductSetsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListProductSetsResponse.Size(m)
@@ -879,7 +877,7 @@ func (m *GetProductSetRequest) Reset()         { *m = GetProductSetRequest{} }
 func (m *GetProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*GetProductSetRequest) ProtoMessage()    {}
 func (*GetProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{12}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{12}
 }
 func (m *GetProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetProductSetRequest.Unmarshal(m, b)
@@ -887,8 +885,8 @@ func (m *GetProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *GetProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetProductSetRequest.Merge(m, src)
+func (dst *GetProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetProductSetRequest.Merge(dst, src)
 }
 func (m *GetProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_GetProductSetRequest.Size(m)
@@ -924,7 +922,7 @@ func (m *UpdateProductSetRequest) Reset()         { *m = UpdateProductSetRequest
 func (m *UpdateProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateProductSetRequest) ProtoMessage()    {}
 func (*UpdateProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{13}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{13}
 }
 func (m *UpdateProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateProductSetRequest.Unmarshal(m, b)
@@ -932,8 +930,8 @@ func (m *UpdateProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateProductSetRequest.Merge(m, src)
+func (dst *UpdateProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateProductSetRequest.Merge(dst, src)
 }
 func (m *UpdateProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateProductSetRequest.Size(m)
@@ -974,7 +972,7 @@ func (m *DeleteProductSetRequest) Reset()         { *m = DeleteProductSetRequest
 func (m *DeleteProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteProductSetRequest) ProtoMessage()    {}
 func (*DeleteProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{14}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{14}
 }
 func (m *DeleteProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteProductSetRequest.Unmarshal(m, b)
@@ -982,8 +980,8 @@ func (m *DeleteProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteProductSetRequest.Merge(m, src)
+func (dst *DeleteProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteProductSetRequest.Merge(dst, src)
 }
 func (m *DeleteProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteProductSetRequest.Size(m)
@@ -1025,7 +1023,7 @@ func (m *CreateReferenceImageRequest) Reset()         { *m = CreateReferenceImag
 func (m *CreateReferenceImageRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateReferenceImageRequest) ProtoMessage()    {}
 func (*CreateReferenceImageRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{15}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{15}
 }
 func (m *CreateReferenceImageRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateReferenceImageRequest.Unmarshal(m, b)
@@ -1033,8 +1031,8 @@ func (m *CreateReferenceImageRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateReferenceImageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateReferenceImageRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateReferenceImageRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateReferenceImageRequest.Merge(m, src)
+func (dst *CreateReferenceImageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateReferenceImageRequest.Merge(dst, src)
 }
 func (m *CreateReferenceImageRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateReferenceImageRequest.Size(m)
@@ -1089,7 +1087,7 @@ func (m *ListReferenceImagesRequest) Reset()         { *m = ListReferenceImagesR
 func (m *ListReferenceImagesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListReferenceImagesRequest) ProtoMessage()    {}
 func (*ListReferenceImagesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{16}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{16}
 }
 func (m *ListReferenceImagesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListReferenceImagesRequest.Unmarshal(m, b)
@@ -1097,8 +1095,8 @@ func (m *ListReferenceImagesRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListReferenceImagesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListReferenceImagesRequest.Marshal(b, m, deterministic)
 }
-func (m *ListReferenceImagesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListReferenceImagesRequest.Merge(m, src)
+func (dst *ListReferenceImagesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListReferenceImagesRequest.Merge(dst, src)
 }
 func (m *ListReferenceImagesRequest) XXX_Size() int {
 	return xxx_messageInfo_ListReferenceImagesRequest.Size(m)
@@ -1147,7 +1145,7 @@ func (m *ListReferenceImagesResponse) Reset()         { *m = ListReferenceImages
 func (m *ListReferenceImagesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListReferenceImagesResponse) ProtoMessage()    {}
 func (*ListReferenceImagesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{17}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{17}
 }
 func (m *ListReferenceImagesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListReferenceImagesResponse.Unmarshal(m, b)
@@ -1155,8 +1153,8 @@ func (m *ListReferenceImagesResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListReferenceImagesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListReferenceImagesResponse.Marshal(b, m, deterministic)
 }
-func (m *ListReferenceImagesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListReferenceImagesResponse.Merge(m, src)
+func (dst *ListReferenceImagesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListReferenceImagesResponse.Merge(dst, src)
 }
 func (m *ListReferenceImagesResponse) XXX_Size() int {
 	return xxx_messageInfo_ListReferenceImagesResponse.Size(m)
@@ -1205,7 +1203,7 @@ func (m *GetReferenceImageRequest) Reset()         { *m = GetReferenceImageReque
 func (m *GetReferenceImageRequest) String() string { return proto.CompactTextString(m) }
 func (*GetReferenceImageRequest) ProtoMessage()    {}
 func (*GetReferenceImageRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{18}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{18}
 }
 func (m *GetReferenceImageRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetReferenceImageRequest.Unmarshal(m, b)
@@ -1213,8 +1211,8 @@ func (m *GetReferenceImageRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetReferenceImageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetReferenceImageRequest.Marshal(b, m, deterministic)
 }
-func (m *GetReferenceImageRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetReferenceImageRequest.Merge(m, src)
+func (dst *GetReferenceImageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetReferenceImageRequest.Merge(dst, src)
 }
 func (m *GetReferenceImageRequest) XXX_Size() int {
 	return xxx_messageInfo_GetReferenceImageRequest.Size(m)
@@ -1249,7 +1247,7 @@ func (m *DeleteReferenceImageRequest) Reset()         { *m = DeleteReferenceImag
 func (m *DeleteReferenceImageRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteReferenceImageRequest) ProtoMessage()    {}
 func (*DeleteReferenceImageRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{19}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{19}
 }
 func (m *DeleteReferenceImageRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteReferenceImageRequest.Unmarshal(m, b)
@@ -1257,8 +1255,8 @@ func (m *DeleteReferenceImageRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteReferenceImageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteReferenceImageRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteReferenceImageRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteReferenceImageRequest.Merge(m, src)
+func (dst *DeleteReferenceImageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteReferenceImageRequest.Merge(dst, src)
 }
 func (m *DeleteReferenceImageRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteReferenceImageRequest.Size(m)
@@ -1297,7 +1295,7 @@ func (m *AddProductToProductSetRequest) Reset()         { *m = AddProductToProdu
 func (m *AddProductToProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*AddProductToProductSetRequest) ProtoMessage()    {}
 func (*AddProductToProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{20}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{20}
 }
 func (m *AddProductToProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AddProductToProductSetRequest.Unmarshal(m, b)
@@ -1305,8 +1303,8 @@ func (m *AddProductToProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *AddProductToProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AddProductToProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *AddProductToProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddProductToProductSetRequest.Merge(m, src)
+func (dst *AddProductToProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddProductToProductSetRequest.Merge(dst, src)
 }
 func (m *AddProductToProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_AddProductToProductSetRequest.Size(m)
@@ -1352,7 +1350,7 @@ func (m *RemoveProductFromProductSetRequest) Reset()         { *m = RemoveProduc
 func (m *RemoveProductFromProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*RemoveProductFromProductSetRequest) ProtoMessage()    {}
 func (*RemoveProductFromProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{21}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{21}
 }
 func (m *RemoveProductFromProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RemoveProductFromProductSetRequest.Unmarshal(m, b)
@@ -1360,8 +1358,8 @@ func (m *RemoveProductFromProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *RemoveProductFromProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RemoveProductFromProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *RemoveProductFromProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RemoveProductFromProductSetRequest.Merge(m, src)
+func (dst *RemoveProductFromProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoveProductFromProductSetRequest.Merge(dst, src)
 }
 func (m *RemoveProductFromProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_RemoveProductFromProductSetRequest.Size(m)
@@ -1406,7 +1404,7 @@ func (m *ListProductsInProductSetRequest) Reset()         { *m = ListProductsInP
 func (m *ListProductsInProductSetRequest) String() string { return proto.CompactTextString(m) }
 func (*ListProductsInProductSetRequest) ProtoMessage()    {}
 func (*ListProductsInProductSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{22}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{22}
 }
 func (m *ListProductsInProductSetRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProductsInProductSetRequest.Unmarshal(m, b)
@@ -1414,8 +1412,8 @@ func (m *ListProductsInProductSetRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListProductsInProductSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListProductsInProductSetRequest.Marshal(b, m, deterministic)
 }
-func (m *ListProductsInProductSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListProductsInProductSetRequest.Merge(m, src)
+func (dst *ListProductsInProductSetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListProductsInProductSetRequest.Merge(dst, src)
 }
 func (m *ListProductsInProductSetRequest) XXX_Size() int {
 	return xxx_messageInfo_ListProductsInProductSetRequest.Size(m)
@@ -1463,7 +1461,7 @@ func (m *ListProductsInProductSetResponse) Reset()         { *m = ListProductsIn
 func (m *ListProductsInProductSetResponse) String() string { return proto.CompactTextString(m) }
 func (*ListProductsInProductSetResponse) ProtoMessage()    {}
 func (*ListProductsInProductSetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{23}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{23}
 }
 func (m *ListProductsInProductSetResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListProductsInProductSetResponse.Unmarshal(m, b)
@@ -1471,8 +1469,8 @@ func (m *ListProductsInProductSetResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListProductsInProductSetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListProductsInProductSetResponse.Marshal(b, m, deterministic)
 }
-func (m *ListProductsInProductSetResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListProductsInProductSetResponse.Merge(m, src)
+func (dst *ListProductsInProductSetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListProductsInProductSetResponse.Merge(dst, src)
 }
 func (m *ListProductsInProductSetResponse) XXX_Size() int {
 	return xxx_messageInfo_ListProductsInProductSetResponse.Size(m)
@@ -1565,7 +1563,7 @@ func (m *ImportProductSetsGcsSource) Reset()         { *m = ImportProductSetsGcs
 func (m *ImportProductSetsGcsSource) String() string { return proto.CompactTextString(m) }
 func (*ImportProductSetsGcsSource) ProtoMessage()    {}
 func (*ImportProductSetsGcsSource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{24}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{24}
 }
 func (m *ImportProductSetsGcsSource) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImportProductSetsGcsSource.Unmarshal(m, b)
@@ -1573,8 +1571,8 @@ func (m *ImportProductSetsGcsSource) XXX_Unmarshal(b []byte) error {
 func (m *ImportProductSetsGcsSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImportProductSetsGcsSource.Marshal(b, m, deterministic)
 }
-func (m *ImportProductSetsGcsSource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImportProductSetsGcsSource.Merge(m, src)
+func (dst *ImportProductSetsGcsSource) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportProductSetsGcsSource.Merge(dst, src)
 }
 func (m *ImportProductSetsGcsSource) XXX_Size() int {
 	return xxx_messageInfo_ImportProductSetsGcsSource.Size(m)
@@ -1608,7 +1606,7 @@ func (m *ImportProductSetsInputConfig) Reset()         { *m = ImportProductSetsI
 func (m *ImportProductSetsInputConfig) String() string { return proto.CompactTextString(m) }
 func (*ImportProductSetsInputConfig) ProtoMessage()    {}
 func (*ImportProductSetsInputConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{25}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{25}
 }
 func (m *ImportProductSetsInputConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImportProductSetsInputConfig.Unmarshal(m, b)
@@ -1616,8 +1614,8 @@ func (m *ImportProductSetsInputConfig) XXX_Unmarshal(b []byte) error {
 func (m *ImportProductSetsInputConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImportProductSetsInputConfig.Marshal(b, m, deterministic)
 }
-func (m *ImportProductSetsInputConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImportProductSetsInputConfig.Merge(m, src)
+func (dst *ImportProductSetsInputConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportProductSetsInputConfig.Merge(dst, src)
 }
 func (m *ImportProductSetsInputConfig) XXX_Size() int {
 	return xxx_messageInfo_ImportProductSetsInputConfig.Size(m)
@@ -1724,7 +1722,7 @@ func (m *ImportProductSetsRequest) Reset()         { *m = ImportProductSetsReque
 func (m *ImportProductSetsRequest) String() string { return proto.CompactTextString(m) }
 func (*ImportProductSetsRequest) ProtoMessage()    {}
 func (*ImportProductSetsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{26}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{26}
 }
 func (m *ImportProductSetsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImportProductSetsRequest.Unmarshal(m, b)
@@ -1732,8 +1730,8 @@ func (m *ImportProductSetsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ImportProductSetsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImportProductSetsRequest.Marshal(b, m, deterministic)
 }
-func (m *ImportProductSetsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImportProductSetsRequest.Merge(m, src)
+func (dst *ImportProductSetsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportProductSetsRequest.Merge(dst, src)
 }
 func (m *ImportProductSetsRequest) XXX_Size() int {
 	return xxx_messageInfo_ImportProductSetsRequest.Size(m)
@@ -1782,7 +1780,7 @@ func (m *ImportProductSetsResponse) Reset()         { *m = ImportProductSetsResp
 func (m *ImportProductSetsResponse) String() string { return proto.CompactTextString(m) }
 func (*ImportProductSetsResponse) ProtoMessage()    {}
 func (*ImportProductSetsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{27}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{27}
 }
 func (m *ImportProductSetsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImportProductSetsResponse.Unmarshal(m, b)
@@ -1790,8 +1788,8 @@ func (m *ImportProductSetsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ImportProductSetsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ImportProductSetsResponse.Marshal(b, m, deterministic)
 }
-func (m *ImportProductSetsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImportProductSetsResponse.Merge(m, src)
+func (dst *ImportProductSetsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportProductSetsResponse.Merge(dst, src)
 }
 func (m *ImportProductSetsResponse) XXX_Size() int {
 	return xxx_messageInfo_ImportProductSetsResponse.Size(m)
@@ -1837,7 +1835,7 @@ func (m *BatchOperationMetadata) Reset()         { *m = BatchOperationMetadata{}
 func (m *BatchOperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*BatchOperationMetadata) ProtoMessage()    {}
 func (*BatchOperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3e303776708d7396, []int{28}
+	return fileDescriptor_product_search_service_9317116d58505bed, []int{28}
 }
 func (m *BatchOperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchOperationMetadata.Unmarshal(m, b)
@@ -1845,8 +1843,8 @@ func (m *BatchOperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *BatchOperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchOperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *BatchOperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchOperationMetadata.Merge(m, src)
+func (dst *BatchOperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchOperationMetadata.Merge(dst, src)
 }
 func (m *BatchOperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_BatchOperationMetadata.Size(m)
@@ -2840,10 +2838,10 @@ var _ProductSearch_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/vision/v1p3beta1/product_search_service.proto", fileDescriptor_3e303776708d7396)
+	proto.RegisterFile("google/cloud/vision/v1p3beta1/product_search_service.proto", fileDescriptor_product_search_service_9317116d58505bed)
 }
 
-var fileDescriptor_3e303776708d7396 = []byte{
+var fileDescriptor_product_search_service_9317116d58505bed = []byte{
 	// 1867 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x59, 0xcf, 0x6f, 0xe3, 0xc6,
 	0x15, 0xce, 0xd8, 0xeb, 0x5d, 0xfb, 0xc9, 0xb2, 0xb5, 0x53, 0xd7, 0x56, 0xe4, 0x2c, 0xe2, 0xb0,

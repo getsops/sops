@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewRegionsClientWithBaseURI(baseURI string, subscriptionID string) RegionsC
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client RegionsClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string) (result RegionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegionsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -117,8 +128,8 @@ func (client RegionsClient) ListByServiceResponder(resp *http.Response) (result 
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client RegionsClient) listByServiceNextResults(lastResults RegionListResult) (result RegionListResult, err error) {
-	req, err := lastResults.regionListResultPreparer()
+func (client RegionsClient) listByServiceNextResults(ctx context.Context, lastResults RegionListResult) (result RegionListResult, err error) {
+	req, err := lastResults.regionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.RegionsClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -139,6 +150,16 @@ func (client RegionsClient) listByServiceNextResults(lastResults RegionListResul
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RegionsClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string) (result RegionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegionsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName)
 	return
 }

@@ -9,6 +9,12 @@
     "UpdateLifecyclePolicy": "<p>Updates the specified lifecycle policy.</p>"
   },
   "shapes": {
+    "CopyTags": {
+      "base": null,
+      "refs": {
+        "Schedule$CopyTags": null
+      }
+    },
     "Count": {
       "base": null,
       "refs": {

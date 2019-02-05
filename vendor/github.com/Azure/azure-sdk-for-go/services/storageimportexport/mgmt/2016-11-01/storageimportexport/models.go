@@ -18,11 +18,16 @@ package storageimportexport
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/storageimportexport/mgmt/2016-11-01/storageimportexport"
 
 // DriveState enumerates the values for drive state.
 type DriveState string
@@ -148,8 +153,8 @@ type ErrorResponseErrorDetailsItem struct {
 	Message *string `json:"message,omitempty"`
 }
 
-// Export a property containing information about the blobs to be exported for an export job. This property is
-// required for export jobs, but must not be specified for import jobs.
+// Export a property containing information about the blobs to be exported for an export job. This property
+// is required for export jobs, but must not be specified for import jobs.
 type Export struct {
 	// ExportBlobList - A list of the blobs to be exported.
 	*ExportBlobList `json:"blobList,omitempty"`
@@ -287,20 +292,37 @@ type ListJobsResponseIterator struct {
 	page ListJobsResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListJobsResponseIterator) Next() error {
+func (iter *ListJobsResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListJobsResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ListJobsResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -322,6 +344,11 @@ func (iter ListJobsResponseIterator) Value() JobResponse {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ListJobsResponseIterator type.
+func NewListJobsResponseIterator(page ListJobsResponsePage) ListJobsResponseIterator {
+	return ListJobsResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ljr ListJobsResponse) IsEmpty() bool {
 	return ljr.Value == nil || len(*ljr.Value) == 0
@@ -329,11 +356,11 @@ func (ljr ListJobsResponse) IsEmpty() bool {
 
 // listJobsResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ljr ListJobsResponse) listJobsResponsePreparer() (*http.Request, error) {
+func (ljr ListJobsResponse) listJobsResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if ljr.NextLink == nil || len(to.String(ljr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ljr.NextLink)))
@@ -341,19 +368,36 @@ func (ljr ListJobsResponse) listJobsResponsePreparer() (*http.Request, error) {
 
 // ListJobsResponsePage contains a page of JobResponse values.
 type ListJobsResponsePage struct {
-	fn  func(ListJobsResponse) (ListJobsResponse, error)
+	fn  func(context.Context, ListJobsResponse) (ListJobsResponse, error)
 	ljr ListJobsResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListJobsResponsePage) Next() error {
-	next, err := page.fn(page.ljr)
+func (page *ListJobsResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListJobsResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ljr)
 	if err != nil {
 		return err
 	}
 	page.ljr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ListJobsResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -372,6 +416,11 @@ func (page ListJobsResponsePage) Values() []JobResponse {
 		return nil
 	}
 	return *page.ljr.Value
+}
+
+// Creates a new instance of the ListJobsResponsePage type.
+func NewListJobsResponsePage(getNextPage func(context.Context, ListJobsResponse) (ListJobsResponse, error)) ListJobsResponsePage {
+	return ListJobsResponsePage{fn: getNextPage}
 }
 
 // ListOperationsResponse list operations response
@@ -559,8 +608,8 @@ type OperationDisplay struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// PackageInfomation contains information about the package being shipped by the customer to the Microsoft data
-// center.
+// PackageInfomation contains information about the package being shipped by the customer to the Microsoft
+// data center.
 type PackageInfomation struct {
 	// CarrierName - The name of the carrier that is used to ship the import or export drives.
 	CarrierName *string `json:"carrierName,omitempty"`
@@ -612,7 +661,8 @@ type ReturnShipping struct {
 	CarrierAccountNumber *string `json:"carrierAccountNumber,omitempty"`
 }
 
-// ShippingInformation contains information about the Microsoft datacenter to which the drives should be shipped.
+// ShippingInformation contains information about the Microsoft datacenter to which the drives should be
+// shipped.
 type ShippingInformation struct {
 	// RecipientName - The name of the recipient who will receive the hard drives when they are returned.
 	RecipientName *string `json:"recipientName,omitempty"`
@@ -643,7 +693,9 @@ type UpdateJobParameters struct {
 // MarshalJSON is the custom marshaler for UpdateJobParameters.
 func (ujp UpdateJobParameters) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	objectMap["tags"] = ujp.Tags
+	if ujp.Tags != nil {
+		objectMap["tags"] = ujp.Tags
+	}
 	if ujp.UpdateJobParametersProperties != nil {
 		objectMap["properties"] = ujp.UpdateJobParametersProperties
 	}

@@ -18,13 +18,18 @@ package servicefabric
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go//services/preview/servicefabric/mgmt/2017-07-01-preview/servicefabric"
 
 // ClusterState enumerates the values for cluster state.
 type ClusterState string
@@ -327,7 +332,8 @@ func PossibleX509StoreNameValues() []X509StoreName {
 	return []X509StoreName{AddressBook, AuthRoot, CertificateAuthority, Disallowed, My, Root, TrustedPeople, TrustedPublisher}
 }
 
-// ApplicationDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ApplicationDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ApplicationDeleteFuture struct {
 	azure.Future
 }
@@ -349,8 +355,8 @@ func (future *ApplicationDeleteFuture) Result(client ApplicationClient) (ar auto
 	return
 }
 
-// ApplicationHealthPolicy defines a health policy used to evaluate the health of an application or one of its
-// children entities.
+// ApplicationHealthPolicy defines a health policy used to evaluate the health of an application or one of
+// its children entities.
 type ApplicationHealthPolicy struct {
 	// ConsiderWarningAsError - Indicates whether warnings are treated with the same severity as errors.
 	ConsiderWarningAsError *bool `json:"ConsiderWarningAsError,omitempty"`
@@ -363,8 +369,8 @@ type ApplicationHealthPolicy struct {
 	ServiceTypeHealthPolicyMap              *[]ServiceTypeHealthPolicyMapItem `json:"ServiceTypeHealthPolicyMap,omitempty"`
 }
 
-// ApplicationMetricDescription describes capacity information for a custom resource balancing metric. This can be
-// used to limit the total consumption of this metric by the services of this application.
+// ApplicationMetricDescription describes capacity information for a custom resource balancing metric. This
+// can be used to limit the total consumption of this metric by the services of this application.
 type ApplicationMetricDescription struct {
 	// Name - The name of the metric.
 	Name *string `json:"Name,omitempty"`
@@ -386,8 +392,8 @@ type ApplicationMetricDescription struct {
 	TotalApplicationCapacity *int64 `json:"TotalApplicationCapacity,omitempty"`
 }
 
-// ApplicationParameter describes an application parameter override to be applied when creating or upgrading an
-// application.
+// ApplicationParameter describes an application parameter override to be applied when creating or
+// upgrading an application.
 type ApplicationParameter struct {
 	// Key - The name of the parameter.
 	Key *string `json:"Key,omitempty"`
@@ -395,7 +401,8 @@ type ApplicationParameter struct {
 	Value *string `json:"Value,omitempty"`
 }
 
-// ApplicationPatchFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ApplicationPatchFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ApplicationPatchFuture struct {
 	azure.Future
 }
@@ -440,7 +447,8 @@ type ApplicationProperties struct {
 	Metrics                   *[]ApplicationMetricDescription `json:"metrics,omitempty"`
 }
 
-// ApplicationPutFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ApplicationPutFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ApplicationPutFuture struct {
 	azure.Future
 }
@@ -1064,7 +1072,8 @@ func (ccvr *ClusterCodeVersionsResult) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ClusterHealthPolicy defines a health policy used to evaluate the health of the cluster or of a cluster node.
+// ClusterHealthPolicy defines a health policy used to evaluate the health of the cluster or of a cluster
+// node.
 type ClusterHealthPolicy struct {
 	// MaxPercentUnhealthyNodes - The maximum allowed percentage of unhealthy nodes before reporting an error. For example, to allow 10% of nodes to be unhealthy, this value would be 10.
 	MaxPercentUnhealthyNodes *int32 `json:"maxPercentUnhealthyNodes,omitempty"`
@@ -1124,8 +1133,8 @@ type ClusterProperties struct {
 	AddOnFeatures *[]string `json:"addOnFeatures,omitempty"`
 }
 
-// ClusterPropertiesUpdateParameters describes the cluster resource properties that can be updated during PATCH
-// operation.
+// ClusterPropertiesUpdateParameters describes the cluster resource properties that can be updated during
+// PATCH operation.
 type ClusterPropertiesUpdateParameters struct {
 	// ReliabilityLevel - The reliability level sets the replica set size of system services. Learn about [ReliabilityLevel](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-cluster-capacity). Possible values include: 'ReliabilityLevel1Bronze', 'ReliabilityLevel1Silver', 'ReliabilityLevel1Gold'
 	ReliabilityLevel ReliabilityLevel1 `json:"reliabilityLevel,omitempty"`
@@ -1151,7 +1160,8 @@ type ClusterPropertiesUpdateParameters struct {
 	AddOnFeatures *[]string `json:"addOnFeatures,omitempty"`
 }
 
-// ClustersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ClustersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ClustersCreateFuture struct {
 	azure.Future
 }
@@ -1179,7 +1189,8 @@ func (future *ClustersCreateFuture) Result(client ClustersClient) (c Cluster, er
 	return
 }
 
-// ClustersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ClustersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ClustersUpdateFuture struct {
 	azure.Future
 }
@@ -1301,7 +1312,8 @@ type ClusterVersionDetails struct {
 	Environment Environment `json:"environment,omitempty"`
 }
 
-// DiagnosticsStorageAccountConfig the storage account information for storing Service Fabric diagnostic logs.
+// DiagnosticsStorageAccountConfig the storage account information for storing Service Fabric diagnostic
+// logs.
 type DiagnosticsStorageAccountConfig struct {
 	// StorageAccountName - The Azure storage account name.
 	StorageAccountName *string `json:"storageAccountName,omitempty"`
@@ -1382,8 +1394,8 @@ func (npsd NamedPartitionSchemeDescription) AsBasicPartitionSchemeDescription() 
 	return &npsd, true
 }
 
-// NodeTypeDescription describes a node type in the cluster, each node type represents sub set of nodes in the
-// cluster.
+// NodeTypeDescription describes a node type in the cluster, each node type represents sub set of nodes in
+// the cluster.
 type NodeTypeDescription struct {
 	// Name - The name of the node type.
 	Name *string `json:"name,omitempty"`
@@ -1463,20 +1475,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1505,11 +1534,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -1517,19 +1546,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of OperationResult values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1719,7 +1765,8 @@ type ServiceCorrelationDescription struct {
 	ServiceName *string `json:"ServiceName,omitempty"`
 }
 
-// ServiceDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServiceDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServiceDeleteFuture struct {
 	azure.Future
 }
@@ -2353,8 +2400,8 @@ type ServiceTypeDeltaHealthPolicy struct {
 	MaxPercentDeltaUnhealthyServices *int32 `json:"maxPercentDeltaUnhealthyServices,omitempty"`
 }
 
-// ServiceTypeHealthPolicy represents the health policy used to evaluate the health of services belonging to a
-// service type.
+// ServiceTypeHealthPolicy represents the health policy used to evaluate the health of services belonging
+// to a service type.
 type ServiceTypeHealthPolicy struct {
 	// MaxPercentUnhealthyPartitionsPerService - The maximum allowed percentage of unhealthy partitions per service. Allowed values are Byte values from zero to 100
 	// The percentage represents the maximum tolerated percentage of partitions that can be unhealthy before the service is considered in error.
@@ -3377,8 +3424,8 @@ func (ssup *StatelessServiceUpdateProperties) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// UniformInt64RangePartitionSchemeDescription describes a partitioning scheme where an integer range is allocated
-// evenly across a number of partitions.
+// UniformInt64RangePartitionSchemeDescription describes a partitioning scheme where an integer range is
+// allocated evenly across a number of partitions.
 type UniformInt64RangePartitionSchemeDescription struct {
 	// Count - The number of partitions.
 	Count *int32 `json:"Count,omitempty"`
@@ -3436,7 +3483,8 @@ func (ui6rpsd UniformInt64RangePartitionSchemeDescription) AsBasicPartitionSchem
 	return &ui6rpsd, true
 }
 
-// VersionDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// VersionDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VersionDeleteFuture struct {
 	azure.Future
 }

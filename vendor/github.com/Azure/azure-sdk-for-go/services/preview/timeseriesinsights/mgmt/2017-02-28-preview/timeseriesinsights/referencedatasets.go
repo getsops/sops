@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewReferenceDataSetsClientWithBaseURI(baseURI string, subscriptionID string
 // referenceDataSetName - name of the reference data set.
 // parameters - parameters for creating a reference data set.
 func (client ReferenceDataSetsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, environmentName string, referenceDataSetName string, parameters ReferenceDataSetCreateOrUpdateParameters) (result ReferenceDataSetResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReferenceDataSetsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: referenceDataSetName,
 			Constraints: []validation.Constraint{{Target: "referenceDataSetName", Name: validation.MaxLength, Rule: 63, Chain: nil},
@@ -133,6 +144,16 @@ func (client ReferenceDataSetsClient) CreateOrUpdateResponder(resp *http.Respons
 // referenceDataSetName - the name of the Time Series Insights reference data set associated with the specified
 // environment.
 func (client ReferenceDataSetsClient) Delete(ctx context.Context, resourceGroupName string, environmentName string, referenceDataSetName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReferenceDataSetsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, environmentName, referenceDataSetName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.ReferenceDataSetsClient", "Delete", nil, "Failure preparing request")
@@ -203,6 +224,16 @@ func (client ReferenceDataSetsClient) DeleteResponder(resp *http.Response) (resu
 // referenceDataSetName - the name of the Time Series Insights reference data set associated with the specified
 // environment.
 func (client ReferenceDataSetsClient) Get(ctx context.Context, resourceGroupName string, environmentName string, referenceDataSetName string) (result ReferenceDataSetResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReferenceDataSetsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, environmentName, referenceDataSetName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.ReferenceDataSetsClient", "Get", nil, "Failure preparing request")
@@ -273,6 +304,16 @@ func (client ReferenceDataSetsClient) GetResponder(resp *http.Response) (result 
 // environmentName - the name of the Time Series Insights environment associated with the specified resource
 // group.
 func (client ReferenceDataSetsClient) ListByEnvironment(ctx context.Context, resourceGroupName string, environmentName string) (result ReferenceDataSetListResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReferenceDataSetsClient.ListByEnvironment")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByEnvironmentPreparer(ctx, resourceGroupName, environmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.ReferenceDataSetsClient", "ListByEnvironment", nil, "Failure preparing request")
@@ -346,6 +387,16 @@ func (client ReferenceDataSetsClient) ListByEnvironmentResponder(resp *http.Resp
 // referenceDataSetUpdateParameters - request object that contains the updated information for the reference
 // data set.
 func (client ReferenceDataSetsClient) Update(ctx context.Context, resourceGroupName string, environmentName string, referenceDataSetName string, referenceDataSetUpdateParameters ReferenceDataSetUpdateParameters) (result ReferenceDataSetResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReferenceDataSetsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, environmentName, referenceDataSetName, referenceDataSetUpdateParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.ReferenceDataSetsClient", "Update", nil, "Failure preparing request")

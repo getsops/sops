@@ -46,7 +46,7 @@ func (m *DroppedLabels) Reset()         { *m = DroppedLabels{} }
 func (m *DroppedLabels) String() string { return proto.CompactTextString(m) }
 func (*DroppedLabels) ProtoMessage()    {}
 func (*DroppedLabels) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15749142c06d7f43, []int{0}
+	return fileDescriptor_dropped_labels_bce6164464203600, []int{0}
 }
 func (m *DroppedLabels) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DroppedLabels.Unmarshal(m, b)
@@ -54,8 +54,8 @@ func (m *DroppedLabels) XXX_Unmarshal(b []byte) error {
 func (m *DroppedLabels) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DroppedLabels.Marshal(b, m, deterministic)
 }
-func (m *DroppedLabels) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DroppedLabels.Merge(m, src)
+func (dst *DroppedLabels) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DroppedLabels.Merge(dst, src)
 }
 func (m *DroppedLabels) XXX_Size() int {
 	return xxx_messageInfo_DroppedLabels.Size(m)
@@ -79,10 +79,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/monitoring/v3/dropped_labels.proto", fileDescriptor_15749142c06d7f43)
+	proto.RegisterFile("google/monitoring/v3/dropped_labels.proto", fileDescriptor_dropped_labels_bce6164464203600)
 }
 
-var fileDescriptor_15749142c06d7f43 = []byte{
+var fileDescriptor_dropped_labels_bce6164464203600 = []byte{
 	// 219 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x4c, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0xcf, 0xcd, 0xcf, 0xcb, 0x2c, 0xc9, 0x2f, 0xca, 0xcc, 0x4b, 0xd7, 0x2f, 0x33,

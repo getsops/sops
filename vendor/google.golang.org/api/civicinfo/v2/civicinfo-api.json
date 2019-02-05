@@ -6,7 +6,7 @@
   "description": "Provides polling places, early vote locations, contest data, election officials, and government representatives for U.S. residential addresses.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/civic-information",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/32MsfDdh5Y5InGMtliFDu8JpRXU\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/UBGbvHxl5b0nTEIbQKoQKowlxXY\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -322,6 +322,7 @@
       }
     }
   },
+  "revision": "20181017",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AdministrationRegion": {
@@ -1052,6 +1053,16 @@
         "id": {
           "description": "An ID for this object. IDs may change in future requests and should not be cached. Access to this field requires special access that can be requested from the Request more link on the Quotas page.",
           "type": "string"
+        },
+        "latitude": {
+          "description": "Latitude of the location, in degrees north of the equator. Only some locations -- generally, ballot drop boxes for vote-by-mail elections -- will have this set; for others, use a geocoding service like the Google Maps API to resolve the address to a geographic point.",
+          "format": "double",
+          "type": "number"
+        },
+        "longitude": {
+          "description": "Longitude of the location, in degrees east of the Prime Meridian. Only some locations -- generally, ballot drop boxes for vote-by-mail elections -- will have this set; for others, use a geocoding service like the Google Maps API to resolve the address to a geographic point.",
+          "format": "double",
+          "type": "number"
         },
         "name": {
           "description": "The name of the early vote site or drop off location. This field is not populated for polling locations.",

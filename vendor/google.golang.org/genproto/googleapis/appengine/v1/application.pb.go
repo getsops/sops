@@ -85,7 +85,7 @@ func (m *Application) Reset()         { *m = Application{} }
 func (m *Application) String() string { return proto.CompactTextString(m) }
 func (*Application) ProtoMessage()    {}
 func (*Application) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd91fbd11f8d8d62, []int{0}
+	return fileDescriptor_application_d5f9ae7b7e94b936, []int{0}
 }
 func (m *Application) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Application.Unmarshal(m, b)
@@ -93,8 +93,8 @@ func (m *Application) XXX_Unmarshal(b []byte) error {
 func (m *Application) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Application.Marshal(b, m, deterministic)
 }
-func (m *Application) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Application.Merge(m, src)
+func (dst *Application) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Application.Merge(dst, src)
 }
 func (m *Application) XXX_Size() int {
 	return xxx_messageInfo_Application.Size(m)
@@ -193,7 +193,7 @@ func (m *UrlDispatchRule) Reset()         { *m = UrlDispatchRule{} }
 func (m *UrlDispatchRule) String() string { return proto.CompactTextString(m) }
 func (*UrlDispatchRule) ProtoMessage()    {}
 func (*UrlDispatchRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fd91fbd11f8d8d62, []int{1}
+	return fileDescriptor_application_d5f9ae7b7e94b936, []int{1}
 }
 func (m *UrlDispatchRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UrlDispatchRule.Unmarshal(m, b)
@@ -201,8 +201,8 @@ func (m *UrlDispatchRule) XXX_Unmarshal(b []byte) error {
 func (m *UrlDispatchRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UrlDispatchRule.Marshal(b, m, deterministic)
 }
-func (m *UrlDispatchRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UrlDispatchRule.Merge(m, src)
+func (dst *UrlDispatchRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UrlDispatchRule.Merge(dst, src)
 }
 func (m *UrlDispatchRule) XXX_Size() int {
 	return xxx_messageInfo_UrlDispatchRule.Size(m)
@@ -240,10 +240,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/appengine/v1/application.proto", fileDescriptor_fd91fbd11f8d8d62)
+	proto.RegisterFile("google/appengine/v1/application.proto", fileDescriptor_application_d5f9ae7b7e94b936)
 }
 
-var fileDescriptor_fd91fbd11f8d8d62 = []byte{
+var fileDescriptor_application_d5f9ae7b7e94b936 = []byte{
 	// 409 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0x5f, 0x6b, 0xdb, 0x30,
 	0x14, 0xc5, 0x71, 0x3c, 0x92, 0x45, 0x5e, 0xfe, 0xa0, 0xc1, 0xa2, 0x84, 0xb1, 0x85, 0xb0, 0x40,

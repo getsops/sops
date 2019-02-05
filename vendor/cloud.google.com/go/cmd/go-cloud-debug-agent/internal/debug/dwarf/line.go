@@ -437,7 +437,7 @@ func (m *lineMachine) evalCompilationUnit(b *buf, f func(m *lineMachine) (cont b
 		case lineStdSetISA:
 			m.isa = b.uint()
 		case lineStdConstAddPC:
-			// Update the the address and op_index registers.
+			// Update the address and op_index registers.
 			m.specialOpcodeStep2(255)
 		default:
 			panic("not reached")

@@ -15,6 +15,7 @@
 package firestore
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -22,13 +23,10 @@ import (
 	"reflect"
 	"time"
 
-	"golang.org/x/net/context"
-
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
 	"cloud.google.com/go/internal/btree"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/api/iterator"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 )
 
 // Query represents a Firestore query.
@@ -37,7 +35,8 @@ import (
 // a new Query; it does not modify the old.
 type Query struct {
 	c                      *Client
-	parentPath             string // path of the collection's parent
+	path                   string // path to query (collection)
+	parentPath             string // path of the collection's parent (document)
 	collectionID           string
 	selection              []FieldPath
 	filters                []filter
@@ -48,10 +47,6 @@ type Query struct {
 	startDoc, endDoc       *DocumentSnapshot
 	startBefore, endBefore bool
 	err                    error
-}
-
-func (q *Query) collectionPath() string {
-	return q.parentPath + "/documents/" + q.collectionID
 }
 
 // DocumentID is the special field name representing the ID of a document
@@ -171,8 +166,10 @@ func (q Query) Limit(n int) Query {
 // StartAt returns a new Query that specifies that results should start at
 // the document with the given field values.
 //
-// If StartAt is called with a single DocumentSnapshot, its field values are used.
-// The DocumentSnapshot must have all the fields mentioned in the OrderBy clauses.
+// StartAt may be called with a single DocumentSnapshot, representing an
+// existing document within the query. The document must be a direct child of
+// the location being queried (not a parent document, or document in a
+// different collection, or a grandchild document, for example).
 //
 // Otherwise, StartAt should be called with one field value for each OrderBy clause,
 // in the order that they appear. For example, in
@@ -242,6 +239,16 @@ func (q Query) toProto() (*pb.StructuredQuery, error) {
 	}
 	if q.collectionID == "" {
 		return nil, errors.New("firestore: query created without CollectionRef")
+	}
+	if q.startBefore {
+		if len(q.startVals) == 0 && q.startDoc == nil {
+			return nil, errors.New("firestore: StartAt/StartAfter must be called with at least one value")
+		}
+	}
+	if q.endBefore {
+		if len(q.endVals) == 0 && q.endDoc == nil {
+			return nil, errors.New("firestore: EndAt/EndBefore must be called with at least one value")
+		}
 	}
 	p := &pb.StructuredQuery{
 		From:   []*pb.StructuredQuery_CollectionSelector{{CollectionId: q.collectionID}},
@@ -367,7 +374,7 @@ func (q *Query) fieldValuesToCursorValues(fieldValues []interface{}) ([]*pb.Valu
 			if !ok {
 				return nil, fmt.Errorf("firestore: expected doc ID for DocumentID field, got %T", fval)
 			}
-			vals[i] = &pb.Value{ValueType: &pb.Value_ReferenceValue{q.collectionPath() + "/" + docID}}
+			vals[i] = &pb.Value{ValueType: &pb.Value_ReferenceValue{q.path + "/" + docID}}
 		} else {
 			var sawTransform bool
 			vals[i], sawTransform, err = toProtoValue(reflect.ValueOf(fval))
@@ -375,7 +382,7 @@ func (q *Query) fieldValuesToCursorValues(fieldValues []interface{}) ([]*pb.Valu
 				return nil, err
 			}
 			if sawTransform {
-				return nil, errors.New("firestore: ServerTimestamp disallowed in query value")
+				return nil, errors.New("firestore: transforms disallowed in query value")
 			}
 		}
 	}
@@ -387,7 +394,7 @@ func (q *Query) docSnapshotToCursorValues(ds *DocumentSnapshot, orders []order) 
 	vals := make([]*pb.Value, len(orders))
 	for i, ord := range orders {
 		if ord.isDocumentID() {
-			dp, qp := ds.Ref.Parent.Path, q.collectionPath()
+			dp, qp := ds.Ref.Parent.Path, q.path
 			if dp != qp {
 				return nil, fmt.Errorf("firestore: document snapshot for %s passed to query on %s", dp, qp)
 			}
@@ -475,6 +482,8 @@ func (f filter) toProto() (*pb.StructuredQuery_Filter, error) {
 		op = pb.StructuredQuery_FieldFilter_GREATER_THAN_OR_EQUAL
 	case "==":
 		op = pb.StructuredQuery_FieldFilter_EQUAL
+	case "array-contains":
+		op = pb.StructuredQuery_FieldFilter_ARRAY_CONTAINS
 	default:
 		return nil, fmt.Errorf("firestore: invalid operator %q", f.op)
 	}
@@ -483,7 +492,7 @@ func (f filter) toProto() (*pb.StructuredQuery_Filter, error) {
 		return nil, err
 	}
 	if sawTransform {
-		return nil, errors.New("firestore: ServerTimestamp disallowed in query value")
+		return nil, errors.New("firestore: transforms disallowed in query value")
 	}
 	return &pb.StructuredQuery_Filter{
 		FilterType: &pb.StructuredQuery_Filter_FieldFilter{
@@ -552,7 +561,6 @@ func trunc32(i int) int32 {
 func (q Query) Documents(ctx context.Context) *DocumentIterator {
 	return &DocumentIterator{
 		iter: newQueryDocumentIterator(withResourceHeader(ctx, q.c.path()), &q, nil),
-		err:  checkTransaction(ctx),
 	}
 }
 
@@ -739,7 +747,9 @@ func (it *QuerySnapshotIterator) Next() (*QuerySnapshot, error) {
 // a QuerySnapshotIterator, to free up resources. It is not safe to call Stop
 // concurrently with Next.
 func (it *QuerySnapshotIterator) Stop() {
-	it.ws.stop()
+	if it.ws != nil {
+		it.ws.stop()
+	}
 }
 
 // A QuerySnapshot is a snapshot of query results. It is returned by

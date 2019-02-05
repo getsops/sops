@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"AWS Direct Connect",
+    "serviceId":"Direct Connect",
     "signatureVersion":"v4",
     "targetPrefix":"OvertureService",
     "uid":"directconnect-2012-10-25"
@@ -586,6 +587,19 @@
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
+    },
+    "UpdateVirtualInterfaceAttributes":{
+      "name":"UpdateVirtualInterfaceAttributes",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateVirtualInterfaceAttributesRequest"},
+      "output":{"shape":"VirtualInterface"},
+      "errors":[
+        {"shape":"DirectConnectServerException"},
+        {"shape":"DirectConnectClientException"}
+      ]
     }
   },
   "shapes":{
@@ -700,6 +714,7 @@
     "BGPPeer":{
       "type":"structure",
       "members":{
+        "bgpPeerId":{"shape":"BGPPeerId"},
         "asn":{"shape":"ASN"},
         "authKey":{"shape":"BGPAuthKey"},
         "addressFamily":{"shape":"AddressFamily"},
@@ -710,6 +725,7 @@
         "awsDeviceV2":{"shape":"AwsDeviceV2"}
       }
     },
+    "BGPPeerId":{"type":"string"},
     "BGPPeerList":{
       "type":"list",
       "member":{"shape":"BGPPeer"}
@@ -790,7 +806,9 @@
         "loaIssueTime":{"shape":"LoaIssueTime"},
         "lagId":{"shape":"LagId"},
         "awsDevice":{"shape":"AwsDevice"},
-        "awsDeviceV2":{"shape":"AwsDeviceV2"}
+        "jumboFrameCapable":{"shape":"JumboFrameCapable"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"},
+        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"}
       }
     },
     "ConnectionId":{"type":"string"},
@@ -935,7 +953,8 @@
       "members":{
         "virtualInterfaceId":{"shape":"VirtualInterfaceId"},
         "asn":{"shape":"ASN"},
-        "customerAddress":{"shape":"CustomerAddress"}
+        "customerAddress":{"shape":"CustomerAddress"},
+        "bgpPeerId":{"shape":"BGPPeerId"}
       }
     },
     "DeleteBGPPeerResponse":{
@@ -1258,6 +1277,14 @@
       "exception":true
     },
     "ErrorMessage":{"type":"string"},
+    "HasLogicalRedundancy":{
+      "type":"string",
+      "enum":[
+        "unknown",
+        "yes",
+        "no"
+      ]
+    },
     "Interconnect":{
       "type":"structure",
       "members":{
@@ -1270,7 +1297,9 @@
         "loaIssueTime":{"shape":"LoaIssueTime"},
         "lagId":{"shape":"LagId"},
         "awsDevice":{"shape":"AwsDevice"},
-        "awsDeviceV2":{"shape":"AwsDeviceV2"}
+        "jumboFrameCapable":{"shape":"JumboFrameCapable"},
+        "awsDeviceV2":{"shape":"AwsDeviceV2"},
+        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"}
       }
     },
     "InterconnectId":{"type":"string"},
@@ -1296,6 +1325,7 @@
         "interconnects":{"shape":"InterconnectList"}
       }
     },
+    "JumboFrameCapable":{"type":"boolean"},
     "Lag":{
       "type":"structure",
       "members":{
@@ -1311,7 +1341,9 @@
         "awsDevice":{"shape":"AwsDevice"},
         "awsDeviceV2":{"shape":"AwsDeviceV2"},
         "connections":{"shape":"ConnectionList"},
-        "allowsHostedConnections":{"shape":"BooleanFlag"}
+        "allowsHostedConnections":{"shape":"BooleanFlag"},
+        "jumboFrameCapable":{"shape":"JumboFrameCapable"},
+        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"}
       }
     },
     "LagId":{"type":"string"},
@@ -1371,6 +1403,7 @@
       }
     },
     "LongAsn":{"type":"long"},
+    "MTU":{"type":"integer"},
     "MaxResultSetSize":{
       "type":"integer",
       "box":true
@@ -1396,6 +1429,7 @@
         "virtualInterfaceName":{"shape":"VirtualInterfaceName"},
         "vlan":{"shape":"VLAN"},
         "asn":{"shape":"ASN"},
+        "mtu":{"shape":"MTU"},
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
@@ -1415,6 +1449,7 @@
         "virtualInterfaceName":{"shape":"VirtualInterfaceName"},
         "vlan":{"shape":"VLAN"},
         "asn":{"shape":"ASN"},
+        "mtu":{"shape":"MTU"},
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "addressFamily":{"shape":"AddressFamily"},
@@ -1566,6 +1601,14 @@
         "minimumLinks":{"shape":"Count"}
       }
     },
+    "UpdateVirtualInterfaceAttributesRequest":{
+      "type":"structure",
+      "required":["virtualInterfaceId"],
+      "members":{
+        "virtualInterfaceId":{"shape":"VirtualInterfaceId"},
+        "mtu":{"shape":"MTU"}
+      }
+    },
     "VLAN":{"type":"integer"},
     "VirtualGateway":{
       "type":"structure",
@@ -1605,6 +1648,8 @@
         "addressFamily":{"shape":"AddressFamily"},
         "virtualInterfaceState":{"shape":"VirtualInterfaceState"},
         "customerRouterConfig":{"shape":"RouterConfig"},
+        "mtu":{"shape":"MTU"},
+        "jumboFrameCapable":{"shape":"JumboFrameCapable"},
         "virtualGatewayId":{"shape":"VirtualGatewayId"},
         "directConnectGatewayId":{"shape":"DirectConnectGatewayId"},
         "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"},

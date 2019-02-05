@@ -15,7 +15,7 @@ const opDeletePlaybackConfiguration = "DeletePlaybackConfiguration"
 // DeletePlaybackConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePlaybackConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -49,8 +49,7 @@ func (c *MediaTailor) DeletePlaybackConfigurationRequest(input *DeletePlaybackCo
 
 	output = &DeletePlaybackConfigurationOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -91,7 +90,7 @@ const opGetPlaybackConfiguration = "GetPlaybackConfiguration"
 // GetPlaybackConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetPlaybackConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -165,7 +164,7 @@ const opListPlaybackConfigurations = "ListPlaybackConfigurations"
 // ListPlaybackConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPlaybackConfigurations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -243,7 +242,7 @@ const opPutPlaybackConfiguration = "PutPlaybackConfiguration"
 // PutPlaybackConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the PutPlaybackConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -355,6 +354,69 @@ func (s *CdnConfiguration) SetContentSegmentUrlPrefix(v string) *CdnConfiguratio
 	return s
 }
 
+// The configuration object for dash content.
+type DashConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The URL that is used to initiate a playback session for devices that support
+	// DASH.
+	ManifestEndpointPrefix *string `type:"string"`
+
+	// The setting that controls whether MediaTailor includes the Location tag in
+	// DASH Manifests. MediaTailor populates the Location tag with the URL for manifest
+	// update requests, to be used by players that don't support sticky redirects.
+	// Disable this if you have CDN routing rules set up for accessing MediaTailor
+	// manifests and you are either using client-side reporting or your players
+	// support sticky HTTP redirects. Valid values are DISABLED and EMT_DEFAULT.
+	// The EMT_DEFAULT setting enables the inclusion of the tag and is the default
+	// value.
+	MpdLocation *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DashConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DashConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetManifestEndpointPrefix sets the ManifestEndpointPrefix field's value.
+func (s *DashConfiguration) SetManifestEndpointPrefix(v string) *DashConfiguration {
+	s.ManifestEndpointPrefix = &v
+	return s
+}
+
+// SetMpdLocation sets the MpdLocation field's value.
+func (s *DashConfiguration) SetMpdLocation(v string) *DashConfiguration {
+	s.MpdLocation = &v
+	return s
+}
+
+type DashConfigurationForPut struct {
+	_ struct{} `type:"structure"`
+
+	MpdLocation *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DashConfigurationForPut) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DashConfigurationForPut) GoString() string {
+	return s.String()
+}
+
+// SetMpdLocation sets the MpdLocation field's value.
+func (s *DashConfigurationForPut) SetMpdLocation(v string) *DashConfigurationForPut {
+	s.MpdLocation = &v
+	return s
+}
+
 type DeletePlaybackConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -377,6 +439,9 @@ func (s *DeletePlaybackConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeletePlaybackConfigurationInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -428,6 +493,9 @@ func (s *GetPlaybackConfigurationInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -455,6 +523,9 @@ type GetPlaybackConfigurationOutput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// The configuration object for dash content.
+	DashConfiguration *DashConfiguration `type:"structure"`
+
 	// The configuration for HLS content.
 	HlsConfiguration *HlsConfiguration `type:"structure"`
 
@@ -476,6 +547,11 @@ type GetPlaybackConfigurationOutput struct {
 	// it in the slots designated for dynamic ad content. The slate must be a high-quality
 	// asset that contains both audio and video.
 	SlateAdUrl *string `type:"string"`
+
+	// Associate this playbackConfiguration with a custom transcode profile, overriding
+	// MediaTailor's dynamic transcoding defaults. Do not include this field if
+	// you have not setup custom profiles with the MediaTailor service team.
+	TranscodeProfileName *string `type:"string"`
 
 	// The URL prefix for the master playlist for the stream, minus the asset ID.
 	// The maximum length is 512 characters.
@@ -501,6 +577,12 @@ func (s *GetPlaybackConfigurationOutput) SetAdDecisionServerUrl(v string) *GetPl
 // SetCdnConfiguration sets the CdnConfiguration field's value.
 func (s *GetPlaybackConfigurationOutput) SetCdnConfiguration(v *CdnConfiguration) *GetPlaybackConfigurationOutput {
 	s.CdnConfiguration = v
+	return s
+}
+
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *GetPlaybackConfigurationOutput) SetDashConfiguration(v *DashConfiguration) *GetPlaybackConfigurationOutput {
+	s.DashConfiguration = v
 	return s
 }
 
@@ -531,6 +613,12 @@ func (s *GetPlaybackConfigurationOutput) SetSessionInitializationEndpointPrefix(
 // SetSlateAdUrl sets the SlateAdUrl field's value.
 func (s *GetPlaybackConfigurationOutput) SetSlateAdUrl(v string) *GetPlaybackConfigurationOutput {
 	s.SlateAdUrl = &v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *GetPlaybackConfigurationOutput) SetTranscodeProfileName(v string) *GetPlaybackConfigurationOutput {
+	s.TranscodeProfileName = &v
 	return s
 }
 
@@ -713,6 +801,8 @@ type PutPlaybackConfigurationInput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	DashConfiguration *DashConfigurationForPut `type:"structure"`
+
 	// The identifier for the configuration.
 	Name *string `type:"string"`
 
@@ -723,6 +813,11 @@ type PutPlaybackConfigurationInput struct {
 	// provides it in the slots that are designated for dynamic ad content. The
 	// slate must be a high-quality asset that contains both audio and video.
 	SlateAdUrl *string `type:"string"`
+
+	// Associate this playbackConfiguration with a custom transcode profile, overriding
+	// MediaTailor's dynamic transcoding defaults. Do not include this field if
+	// you have not setup custom profiles with the MediaTailor service team.
+	TranscodeProfileName *string `type:"string"`
 
 	// The URL prefix for the master playlist for the stream, minus the asset ID.
 	// The maximum length is 512 characters.
@@ -751,6 +846,12 @@ func (s *PutPlaybackConfigurationInput) SetCdnConfiguration(v *CdnConfiguration)
 	return s
 }
 
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *PutPlaybackConfigurationInput) SetDashConfiguration(v *DashConfigurationForPut) *PutPlaybackConfigurationInput {
+	s.DashConfiguration = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *PutPlaybackConfigurationInput) SetName(v string) *PutPlaybackConfigurationInput {
 	s.Name = &v
@@ -760,6 +861,12 @@ func (s *PutPlaybackConfigurationInput) SetName(v string) *PutPlaybackConfigurat
 // SetSlateAdUrl sets the SlateAdUrl field's value.
 func (s *PutPlaybackConfigurationInput) SetSlateAdUrl(v string) *PutPlaybackConfigurationInput {
 	s.SlateAdUrl = &v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *PutPlaybackConfigurationInput) SetTranscodeProfileName(v string) *PutPlaybackConfigurationInput {
+	s.TranscodeProfileName = &v
 	return s
 }
 
@@ -778,6 +885,9 @@ type PutPlaybackConfigurationOutput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// The configuration object for dash content.
+	DashConfiguration *DashConfiguration `type:"structure"`
+
 	// The configuration for HLS content.
 	HlsConfiguration *HlsConfiguration `type:"structure"`
 
@@ -788,6 +898,8 @@ type PutPlaybackConfigurationOutput struct {
 	SessionInitializationEndpointPrefix *string `type:"string"`
 
 	SlateAdUrl *string `type:"string"`
+
+	TranscodeProfileName *string `type:"string"`
 
 	VideoContentSourceUrl *string `type:"string"`
 }
@@ -811,6 +923,12 @@ func (s *PutPlaybackConfigurationOutput) SetAdDecisionServerUrl(v string) *PutPl
 // SetCdnConfiguration sets the CdnConfiguration field's value.
 func (s *PutPlaybackConfigurationOutput) SetCdnConfiguration(v *CdnConfiguration) *PutPlaybackConfigurationOutput {
 	s.CdnConfiguration = v
+	return s
+}
+
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *PutPlaybackConfigurationOutput) SetDashConfiguration(v *DashConfiguration) *PutPlaybackConfigurationOutput {
+	s.DashConfiguration = v
 	return s
 }
 
@@ -841,6 +959,12 @@ func (s *PutPlaybackConfigurationOutput) SetSessionInitializationEndpointPrefix(
 // SetSlateAdUrl sets the SlateAdUrl field's value.
 func (s *PutPlaybackConfigurationOutput) SetSlateAdUrl(v string) *PutPlaybackConfigurationOutput {
 	s.SlateAdUrl = &v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *PutPlaybackConfigurationOutput) SetTranscodeProfileName(v string) *PutPlaybackConfigurationOutput {
+	s.TranscodeProfileName = &v
 	return s
 }
 

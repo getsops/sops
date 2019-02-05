@@ -432,6 +432,10 @@ type CognitoIdentityProviderAPI interface {
 	UpdateUserPoolClientWithContext(aws.Context, *cognitoidentityprovider.UpdateUserPoolClientInput, ...request.Option) (*cognitoidentityprovider.UpdateUserPoolClientOutput, error)
 	UpdateUserPoolClientRequest(*cognitoidentityprovider.UpdateUserPoolClientInput) (*request.Request, *cognitoidentityprovider.UpdateUserPoolClientOutput)
 
+	UpdateUserPoolDomain(*cognitoidentityprovider.UpdateUserPoolDomainInput) (*cognitoidentityprovider.UpdateUserPoolDomainOutput, error)
+	UpdateUserPoolDomainWithContext(aws.Context, *cognitoidentityprovider.UpdateUserPoolDomainInput, ...request.Option) (*cognitoidentityprovider.UpdateUserPoolDomainOutput, error)
+	UpdateUserPoolDomainRequest(*cognitoidentityprovider.UpdateUserPoolDomainInput) (*request.Request, *cognitoidentityprovider.UpdateUserPoolDomainOutput)
+
 	VerifySoftwareToken(*cognitoidentityprovider.VerifySoftwareTokenInput) (*cognitoidentityprovider.VerifySoftwareTokenOutput, error)
 	VerifySoftwareTokenWithContext(aws.Context, *cognitoidentityprovider.VerifySoftwareTokenInput, ...request.Option) (*cognitoidentityprovider.VerifySoftwareTokenOutput, error)
 	VerifySoftwareTokenRequest(*cognitoidentityprovider.VerifySoftwareTokenInput) (*request.Request, *cognitoidentityprovider.VerifySoftwareTokenOutput)

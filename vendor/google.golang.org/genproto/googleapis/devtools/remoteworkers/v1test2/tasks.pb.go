@@ -59,7 +59,7 @@ func (m *Task) Reset()         { *m = Task{} }
 func (m *Task) String() string { return proto.CompactTextString(m) }
 func (*Task) ProtoMessage()    {}
 func (*Task) Descriptor() ([]byte, []int) {
-	return fileDescriptor_164aeca5668e3481, []int{0}
+	return fileDescriptor_tasks_667ae2bf8892e2d4, []int{0}
 }
 func (m *Task) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Task.Unmarshal(m, b)
@@ -67,8 +67,8 @@ func (m *Task) XXX_Unmarshal(b []byte) error {
 func (m *Task) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Task.Marshal(b, m, deterministic)
 }
-func (m *Task) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Task.Merge(m, src)
+func (dst *Task) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Task.Merge(dst, src)
 }
 func (m *Task) XXX_Size() int {
 	return xxx_messageInfo_Task.Size(m)
@@ -133,7 +133,7 @@ func (m *TaskResult) Reset()         { *m = TaskResult{} }
 func (m *TaskResult) String() string { return proto.CompactTextString(m) }
 func (*TaskResult) ProtoMessage()    {}
 func (*TaskResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_164aeca5668e3481, []int{1}
+	return fileDescriptor_tasks_667ae2bf8892e2d4, []int{1}
 }
 func (m *TaskResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskResult.Unmarshal(m, b)
@@ -141,8 +141,8 @@ func (m *TaskResult) XXX_Unmarshal(b []byte) error {
 func (m *TaskResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TaskResult.Marshal(b, m, deterministic)
 }
-func (m *TaskResult) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TaskResult.Merge(m, src)
+func (dst *TaskResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TaskResult.Merge(dst, src)
 }
 func (m *TaskResult) XXX_Size() int {
 	return xxx_messageInfo_TaskResult.Size(m)
@@ -201,7 +201,7 @@ func (m *GetTaskRequest) Reset()         { *m = GetTaskRequest{} }
 func (m *GetTaskRequest) String() string { return proto.CompactTextString(m) }
 func (*GetTaskRequest) ProtoMessage()    {}
 func (*GetTaskRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_164aeca5668e3481, []int{2}
+	return fileDescriptor_tasks_667ae2bf8892e2d4, []int{2}
 }
 func (m *GetTaskRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetTaskRequest.Unmarshal(m, b)
@@ -209,8 +209,8 @@ func (m *GetTaskRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetTaskRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetTaskRequest.Marshal(b, m, deterministic)
 }
-func (m *GetTaskRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetTaskRequest.Merge(m, src)
+func (dst *GetTaskRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetTaskRequest.Merge(dst, src)
 }
 func (m *GetTaskRequest) XXX_Size() int {
 	return xxx_messageInfo_GetTaskRequest.Size(m)
@@ -249,7 +249,7 @@ func (m *UpdateTaskResultRequest) Reset()         { *m = UpdateTaskResultRequest
 func (m *UpdateTaskResultRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateTaskResultRequest) ProtoMessage()    {}
 func (*UpdateTaskResultRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_164aeca5668e3481, []int{3}
+	return fileDescriptor_tasks_667ae2bf8892e2d4, []int{3}
 }
 func (m *UpdateTaskResultRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateTaskResultRequest.Unmarshal(m, b)
@@ -257,8 +257,8 @@ func (m *UpdateTaskResultRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateTaskResultRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateTaskResultRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateTaskResultRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateTaskResultRequest.Merge(m, src)
+func (dst *UpdateTaskResultRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateTaskResultRequest.Merge(dst, src)
 }
 func (m *UpdateTaskResultRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateTaskResultRequest.Size(m)
@@ -312,7 +312,7 @@ func (m *AddTaskLogRequest) Reset()         { *m = AddTaskLogRequest{} }
 func (m *AddTaskLogRequest) String() string { return proto.CompactTextString(m) }
 func (*AddTaskLogRequest) ProtoMessage()    {}
 func (*AddTaskLogRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_164aeca5668e3481, []int{4}
+	return fileDescriptor_tasks_667ae2bf8892e2d4, []int{4}
 }
 func (m *AddTaskLogRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AddTaskLogRequest.Unmarshal(m, b)
@@ -320,8 +320,8 @@ func (m *AddTaskLogRequest) XXX_Unmarshal(b []byte) error {
 func (m *AddTaskLogRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AddTaskLogRequest.Marshal(b, m, deterministic)
 }
-func (m *AddTaskLogRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddTaskLogRequest.Merge(m, src)
+func (dst *AddTaskLogRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddTaskLogRequest.Merge(dst, src)
 }
 func (m *AddTaskLogRequest) XXX_Size() int {
 	return xxx_messageInfo_AddTaskLogRequest.Size(m)
@@ -359,7 +359,7 @@ func (m *AddTaskLogResponse) Reset()         { *m = AddTaskLogResponse{} }
 func (m *AddTaskLogResponse) String() string { return proto.CompactTextString(m) }
 func (*AddTaskLogResponse) ProtoMessage()    {}
 func (*AddTaskLogResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_164aeca5668e3481, []int{5}
+	return fileDescriptor_tasks_667ae2bf8892e2d4, []int{5}
 }
 func (m *AddTaskLogResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AddTaskLogResponse.Unmarshal(m, b)
@@ -367,8 +367,8 @@ func (m *AddTaskLogResponse) XXX_Unmarshal(b []byte) error {
 func (m *AddTaskLogResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AddTaskLogResponse.Marshal(b, m, deterministic)
 }
-func (m *AddTaskLogResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddTaskLogResponse.Merge(m, src)
+func (dst *AddTaskLogResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddTaskLogResponse.Merge(dst, src)
 }
 func (m *AddTaskLogResponse) XXX_Size() int {
 	return xxx_messageInfo_AddTaskLogResponse.Size(m)
@@ -557,10 +557,10 @@ var _Tasks_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/remoteworkers/v1test2/tasks.proto", fileDescriptor_164aeca5668e3481)
+	proto.RegisterFile("google/devtools/remoteworkers/v1test2/tasks.proto", fileDescriptor_tasks_667ae2bf8892e2d4)
 }
 
-var fileDescriptor_164aeca5668e3481 = []byte{
+var fileDescriptor_tasks_667ae2bf8892e2d4 = []byte{
 	// 682 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x6b, 0x13, 0x41,
 	0x14, 0x66, 0x92, 0x34, 0x36, 0x2f, 0x20, 0x75, 0xa8, 0x36, 0x2e, 0x3d, 0xc4, 0xc5, 0x4a, 0x4c,

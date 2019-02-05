@@ -847,6 +847,12 @@
         "AssetAttributes$ipv4Addresses": "<p>The list of IP v4 addresses of the EC2 instance where the finding is generated.</p>"
       }
     },
+    "Ipv6Addresses": {
+      "base": null,
+      "refs": {
+        "NetworkInterface$ipv6Addresses": "<p>The IP addresses associated with the network interface.</p>"
+      }
+    },
     "KernelVersion": {
       "base": null,
       "refs": {
@@ -1029,6 +1035,18 @@
         "AssessmentTemplateFilter$namePattern": "<p>For a record to match a filter, an explicit value or a string that contains a wildcard that is specified for this data type property must match the value of the <b>assessmentTemplateName</b> property of the <a>AssessmentTemplate</a> data type.</p>"
       }
     },
+    "NetworkInterface": {
+      "base": "<p>Contains information about the network interfaces interacting with an EC2 instance. This data type is used as one of the elements of the <a>AssetAttributes</a> data type.</p>",
+      "refs": {
+        "NetworkInterfaces$member": null
+      }
+    },
+    "NetworkInterfaces": {
+      "base": null,
+      "refs": {
+        "AssetAttributes$networkInterfaces": "<p>An array of the network interfaces interacting with the EC2 instance where the finding is generated.</p>"
+      }
+    },
     "NoSuchEntityErrorCode": {
       "base": null,
       "refs": {
@@ -1110,6 +1128,18 @@
       "base": null,
       "refs": {
         "GetExclusionsPreviewResponse$previewStatus": "<p>Specifies the status of the request to generate an exclusions preview.</p>"
+      }
+    },
+    "PrivateIp": {
+      "base": "<p>Contains information about a private IP address associated with a network interface. This data type is used as a response element in the <a>DescribeFindings</a> action.</p>",
+      "refs": {
+        "PrivateIpAddresses$member": null
+      }
+    },
+    "PrivateIpAddresses": {
+      "base": null,
+      "refs": {
+        "NetworkInterface$privateIpAddresses": "<p>A list of the private IP addresses associated with the network interface. Includes the privateDnsName and privateIpAddress.</p>"
       }
     },
     "ProviderName": {
@@ -1231,6 +1261,18 @@
         "Scope$value": "<p>The resource identifier for the specified scope type.</p>"
       }
     },
+    "SecurityGroup": {
+      "base": "<p>Contains information about a security group associated with a network interface. This data type is used as one of the elements of the <a>NetworkInterface</a> data type.</p>",
+      "refs": {
+        "SecurityGroups$member": null
+      }
+    },
+    "SecurityGroups": {
+      "base": null,
+      "refs": {
+        "NetworkInterface$securityGroups": "<p>A list of the security groups associated with the network interface. Includes the groupId and groupName.</p>"
+      }
+    },
     "ServiceName": {
       "base": null,
       "refs": {
@@ -1302,7 +1344,8 @@
     "Tag": {
       "base": "<p>A key and value pair. This data type is used as a request parameter in the <a>SetTagsForResource</a> action and a response element in the <a>ListTagsForResource</a> action.</p>",
       "refs": {
-        "TagList$member": null
+        "TagList$member": null,
+        "Tags$member": null
       }
     },
     "TagKey": {
@@ -1324,6 +1367,12 @@
       "refs": {
         "ResourceGroupTag$value": "<p>The value assigned to a tag key.</p>",
         "Tag$value": "<p>A value assigned to a tag key.</p>"
+      }
+    },
+    "Tags": {
+      "base": null,
+      "refs": {
+        "AssetAttributes$tags": "<p>The tags related to the EC2 instance where the finding is generated.</p>"
       }
     },
     "TelemetryMetadata": {
@@ -1351,7 +1400,19 @@
         "Finding$title": "<p>The name of the finding.</p>",
         "Finding$description": "<p>The description of the finding.</p>",
         "Finding$recommendation": "<p>The recommendation for the finding.</p>",
-        "RulesPackage$description": "<p>The description of the rules package.</p>"
+        "Ipv6Addresses$member": null,
+        "NetworkInterface$networkInterfaceId": "<p>The ID of the network interface.</p>",
+        "NetworkInterface$subnetId": "<p>The ID of a subnet associated with the network interface.</p>",
+        "NetworkInterface$vpcId": "<p>The ID of a VPC associated with the network interface.</p>",
+        "NetworkInterface$privateDnsName": "<p>The name of a private DNS associated with the network interface.</p>",
+        "NetworkInterface$privateIpAddress": "<p>The private IP address associated with the network interface.</p>",
+        "NetworkInterface$publicDnsName": "<p>The name of a public DNS associated with the network interface.</p>",
+        "NetworkInterface$publicIp": "<p>The public IP address from which the network interface is reachable.</p>",
+        "PrivateIp$privateDnsName": "<p>The DNS name of the private IP address.</p>",
+        "PrivateIp$privateIpAddress": "<p>The full IP address of the network inteface.</p>",
+        "RulesPackage$description": "<p>The description of the rules package.</p>",
+        "SecurityGroup$groupName": "<p>The name of the security group.</p>",
+        "SecurityGroup$groupId": "<p>The ID of the security group.</p>"
       }
     },
     "Timestamp": {

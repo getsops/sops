@@ -23,6 +23,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewDiagnosticsClientWithBaseURI(baseURI string, subscriptionID string) Diag
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) ExecuteSiteAnalysis(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, analysisName string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DiagnosticAnalysis, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ExecuteSiteAnalysis")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -145,6 +156,16 @@ func (client DiagnosticsClient) ExecuteSiteAnalysisResponder(resp *http.Response
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) ExecuteSiteAnalysisSlot(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, analysisName string, slot string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DiagnosticAnalysis, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ExecuteSiteAnalysisSlot")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -239,6 +260,16 @@ func (client DiagnosticsClient) ExecuteSiteAnalysisSlotResponder(resp *http.Resp
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) ExecuteSiteDetector(ctx context.Context, resourceGroupName string, siteName string, detectorName string, diagnosticCategory string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DiagnosticDetectorResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ExecuteSiteDetector")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -333,6 +364,16 @@ func (client DiagnosticsClient) ExecuteSiteDetectorResponder(resp *http.Response
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) ExecuteSiteDetectorSlot(ctx context.Context, resourceGroupName string, siteName string, detectorName string, diagnosticCategory string, slot string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DiagnosticDetectorResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ExecuteSiteDetectorSlot")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -426,6 +467,16 @@ func (client DiagnosticsClient) ExecuteSiteDetectorSlotResponder(resp *http.Resp
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) GetHostingEnvironmentDetectorResponse(ctx context.Context, resourceGroupName string, name string, detectorName string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DetectorResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetHostingEnvironmentDetectorResponse")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -515,6 +566,16 @@ func (client DiagnosticsClient) GetHostingEnvironmentDetectorResponseResponder(r
 // diagnosticCategory - diagnostic Category
 // analysisName - analysis Name
 func (client DiagnosticsClient) GetSiteAnalysis(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, analysisName string) (result DiagnosticAnalysis, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteAnalysis")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -595,6 +656,16 @@ func (client DiagnosticsClient) GetSiteAnalysisResponder(resp *http.Response) (r
 // analysisName - analysis Name
 // slot - slot - optional
 func (client DiagnosticsClient) GetSiteAnalysisSlot(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, analysisName string, slot string) (result DiagnosticAnalysis, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteAnalysisSlot")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -675,6 +746,16 @@ func (client DiagnosticsClient) GetSiteAnalysisSlotResponder(resp *http.Response
 // diagnosticCategory - diagnostic Category
 // detectorName - detector Name
 func (client DiagnosticsClient) GetSiteDetector(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, detectorName string) (result DiagnosticDetectorCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDetector")
+		defer func() {
+			sc := -1
+			if result.ddc.Response.Response != nil {
+				sc = result.ddc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -749,8 +830,8 @@ func (client DiagnosticsClient) GetSiteDetectorResponder(resp *http.Response) (r
 }
 
 // getSiteDetectorNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) getSiteDetectorNextResults(lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
-	req, err := lastResults.diagnosticDetectorCollectionPreparer()
+func (client DiagnosticsClient) getSiteDetectorNextResults(ctx context.Context, lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
+	req, err := lastResults.diagnosticDetectorCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "getSiteDetectorNextResults", nil, "Failure preparing next results request")
 	}
@@ -771,6 +852,16 @@ func (client DiagnosticsClient) getSiteDetectorNextResults(lastResults Diagnosti
 
 // GetSiteDetectorComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) GetSiteDetectorComplete(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, detectorName string) (result DiagnosticDetectorCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDetector")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetSiteDetector(ctx, resourceGroupName, siteName, diagnosticCategory, detectorName)
 	return
 }
@@ -784,6 +875,16 @@ func (client DiagnosticsClient) GetSiteDetectorComplete(ctx context.Context, res
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) GetSiteDetectorResponse(ctx context.Context, resourceGroupName string, siteName string, detectorName string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DetectorResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDetectorResponse")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -876,6 +977,16 @@ func (client DiagnosticsClient) GetSiteDetectorResponseResponder(resp *http.Resp
 // endTime - end Time
 // timeGrain - time Grain
 func (client DiagnosticsClient) GetSiteDetectorResponseSlot(ctx context.Context, resourceGroupName string, siteName string, detectorName string, slot string, startTime *date.Time, endTime *date.Time, timeGrain string) (result DetectorResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDetectorResponseSlot")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -967,6 +1078,16 @@ func (client DiagnosticsClient) GetSiteDetectorResponseSlotResponder(resp *http.
 // detectorName - detector Name
 // slot - slot Name
 func (client DiagnosticsClient) GetSiteDetectorSlot(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, detectorName string, slot string) (result DiagnosticDetectorCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDetectorSlot")
+		defer func() {
+			sc := -1
+			if result.ddc.Response.Response != nil {
+				sc = result.ddc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1042,8 +1163,8 @@ func (client DiagnosticsClient) GetSiteDetectorSlotResponder(resp *http.Response
 }
 
 // getSiteDetectorSlotNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) getSiteDetectorSlotNextResults(lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
-	req, err := lastResults.diagnosticDetectorCollectionPreparer()
+func (client DiagnosticsClient) getSiteDetectorSlotNextResults(ctx context.Context, lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
+	req, err := lastResults.diagnosticDetectorCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "getSiteDetectorSlotNextResults", nil, "Failure preparing next results request")
 	}
@@ -1064,6 +1185,16 @@ func (client DiagnosticsClient) getSiteDetectorSlotNextResults(lastResults Diagn
 
 // GetSiteDetectorSlotComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) GetSiteDetectorSlotComplete(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, detectorName string, slot string) (result DiagnosticDetectorCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDetectorSlot")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetSiteDetectorSlot(ctx, resourceGroupName, siteName, diagnosticCategory, detectorName, slot)
 	return
 }
@@ -1074,6 +1205,16 @@ func (client DiagnosticsClient) GetSiteDetectorSlotComplete(ctx context.Context,
 // siteName - site Name
 // diagnosticCategory - diagnostic Category
 func (client DiagnosticsClient) GetSiteDiagnosticCategory(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string) (result DiagnosticCategory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDiagnosticCategory")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1152,6 +1293,16 @@ func (client DiagnosticsClient) GetSiteDiagnosticCategoryResponder(resp *http.Re
 // diagnosticCategory - diagnostic Category
 // slot - slot Name
 func (client DiagnosticsClient) GetSiteDiagnosticCategorySlot(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, slot string) (result DiagnosticCategory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.GetSiteDiagnosticCategorySlot")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1229,6 +1380,16 @@ func (client DiagnosticsClient) GetSiteDiagnosticCategorySlotResponder(resp *htt
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - site Name
 func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponses(ctx context.Context, resourceGroupName string, name string) (result DetectorResponseCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListHostingEnvironmentDetectorResponses")
+		defer func() {
+			sc := -1
+			if result.drc.Response.Response != nil {
+				sc = result.drc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1301,8 +1462,8 @@ func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesResponder
 }
 
 // listHostingEnvironmentDetectorResponsesNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listHostingEnvironmentDetectorResponsesNextResults(lastResults DetectorResponseCollection) (result DetectorResponseCollection, err error) {
-	req, err := lastResults.detectorResponseCollectionPreparer()
+func (client DiagnosticsClient) listHostingEnvironmentDetectorResponsesNextResults(ctx context.Context, lastResults DetectorResponseCollection) (result DetectorResponseCollection, err error) {
+	req, err := lastResults.detectorResponseCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listHostingEnvironmentDetectorResponsesNextResults", nil, "Failure preparing next results request")
 	}
@@ -1323,6 +1484,16 @@ func (client DiagnosticsClient) listHostingEnvironmentDetectorResponsesNextResul
 
 // ListHostingEnvironmentDetectorResponsesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesComplete(ctx context.Context, resourceGroupName string, name string) (result DetectorResponseCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListHostingEnvironmentDetectorResponses")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListHostingEnvironmentDetectorResponses(ctx, resourceGroupName, name)
 	return
 }
@@ -1333,6 +1504,16 @@ func (client DiagnosticsClient) ListHostingEnvironmentDetectorResponsesComplete(
 // siteName - site Name
 // diagnosticCategory - diagnostic Category
 func (client DiagnosticsClient) ListSiteAnalyses(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string) (result DiagnosticAnalysisCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteAnalyses")
+		defer func() {
+			sc := -1
+			if result.dac.Response.Response != nil {
+				sc = result.dac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1406,8 +1587,8 @@ func (client DiagnosticsClient) ListSiteAnalysesResponder(resp *http.Response) (
 }
 
 // listSiteAnalysesNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteAnalysesNextResults(lastResults DiagnosticAnalysisCollection) (result DiagnosticAnalysisCollection, err error) {
-	req, err := lastResults.diagnosticAnalysisCollectionPreparer()
+func (client DiagnosticsClient) listSiteAnalysesNextResults(ctx context.Context, lastResults DiagnosticAnalysisCollection) (result DiagnosticAnalysisCollection, err error) {
+	req, err := lastResults.diagnosticAnalysisCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteAnalysesNextResults", nil, "Failure preparing next results request")
 	}
@@ -1428,6 +1609,16 @@ func (client DiagnosticsClient) listSiteAnalysesNextResults(lastResults Diagnost
 
 // ListSiteAnalysesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteAnalysesComplete(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string) (result DiagnosticAnalysisCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteAnalyses")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteAnalyses(ctx, resourceGroupName, siteName, diagnosticCategory)
 	return
 }
@@ -1439,6 +1630,16 @@ func (client DiagnosticsClient) ListSiteAnalysesComplete(ctx context.Context, re
 // diagnosticCategory - diagnostic Category
 // slot - slot Name
 func (client DiagnosticsClient) ListSiteAnalysesSlot(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, slot string) (result DiagnosticAnalysisCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteAnalysesSlot")
+		defer func() {
+			sc := -1
+			if result.dac.Response.Response != nil {
+				sc = result.dac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1513,8 +1714,8 @@ func (client DiagnosticsClient) ListSiteAnalysesSlotResponder(resp *http.Respons
 }
 
 // listSiteAnalysesSlotNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteAnalysesSlotNextResults(lastResults DiagnosticAnalysisCollection) (result DiagnosticAnalysisCollection, err error) {
-	req, err := lastResults.diagnosticAnalysisCollectionPreparer()
+func (client DiagnosticsClient) listSiteAnalysesSlotNextResults(ctx context.Context, lastResults DiagnosticAnalysisCollection) (result DiagnosticAnalysisCollection, err error) {
+	req, err := lastResults.diagnosticAnalysisCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteAnalysesSlotNextResults", nil, "Failure preparing next results request")
 	}
@@ -1535,6 +1736,16 @@ func (client DiagnosticsClient) listSiteAnalysesSlotNextResults(lastResults Diag
 
 // ListSiteAnalysesSlotComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteAnalysesSlotComplete(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, slot string) (result DiagnosticAnalysisCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteAnalysesSlot")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteAnalysesSlot(ctx, resourceGroupName, siteName, diagnosticCategory, slot)
 	return
 }
@@ -1544,6 +1755,16 @@ func (client DiagnosticsClient) ListSiteAnalysesSlotComplete(ctx context.Context
 // resourceGroupName - name of the resource group to which the resource belongs.
 // siteName - site Name
 func (client DiagnosticsClient) ListSiteDetectorResponses(ctx context.Context, resourceGroupName string, siteName string) (result DetectorResponseCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectorResponses")
+		defer func() {
+			sc := -1
+			if result.drc.Response.Response != nil {
+				sc = result.drc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1616,8 +1837,8 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesResponder(resp *http.Re
 }
 
 // listSiteDetectorResponsesNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteDetectorResponsesNextResults(lastResults DetectorResponseCollection) (result DetectorResponseCollection, err error) {
-	req, err := lastResults.detectorResponseCollectionPreparer()
+func (client DiagnosticsClient) listSiteDetectorResponsesNextResults(ctx context.Context, lastResults DetectorResponseCollection) (result DetectorResponseCollection, err error) {
+	req, err := lastResults.detectorResponseCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteDetectorResponsesNextResults", nil, "Failure preparing next results request")
 	}
@@ -1638,6 +1859,16 @@ func (client DiagnosticsClient) listSiteDetectorResponsesNextResults(lastResults
 
 // ListSiteDetectorResponsesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteDetectorResponsesComplete(ctx context.Context, resourceGroupName string, siteName string) (result DetectorResponseCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectorResponses")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteDetectorResponses(ctx, resourceGroupName, siteName)
 	return
 }
@@ -1648,6 +1879,16 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesComplete(ctx context.Co
 // siteName - site Name
 // slot - slot Name
 func (client DiagnosticsClient) ListSiteDetectorResponsesSlot(ctx context.Context, resourceGroupName string, siteName string, slot string) (result DetectorResponseCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectorResponsesSlot")
+		defer func() {
+			sc := -1
+			if result.drc.Response.Response != nil {
+				sc = result.drc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1721,8 +1962,8 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesSlotResponder(resp *htt
 }
 
 // listSiteDetectorResponsesSlotNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteDetectorResponsesSlotNextResults(lastResults DetectorResponseCollection) (result DetectorResponseCollection, err error) {
-	req, err := lastResults.detectorResponseCollectionPreparer()
+func (client DiagnosticsClient) listSiteDetectorResponsesSlotNextResults(ctx context.Context, lastResults DetectorResponseCollection) (result DetectorResponseCollection, err error) {
+	req, err := lastResults.detectorResponseCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteDetectorResponsesSlotNextResults", nil, "Failure preparing next results request")
 	}
@@ -1743,6 +1984,16 @@ func (client DiagnosticsClient) listSiteDetectorResponsesSlotNextResults(lastRes
 
 // ListSiteDetectorResponsesSlotComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteDetectorResponsesSlotComplete(ctx context.Context, resourceGroupName string, siteName string, slot string) (result DetectorResponseCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectorResponsesSlot")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteDetectorResponsesSlot(ctx, resourceGroupName, siteName, slot)
 	return
 }
@@ -1753,6 +2004,16 @@ func (client DiagnosticsClient) ListSiteDetectorResponsesSlotComplete(ctx contex
 // siteName - site Name
 // diagnosticCategory - diagnostic Category
 func (client DiagnosticsClient) ListSiteDetectors(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string) (result DiagnosticDetectorCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectors")
+		defer func() {
+			sc := -1
+			if result.ddc.Response.Response != nil {
+				sc = result.ddc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1826,8 +2087,8 @@ func (client DiagnosticsClient) ListSiteDetectorsResponder(resp *http.Response) 
 }
 
 // listSiteDetectorsNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteDetectorsNextResults(lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
-	req, err := lastResults.diagnosticDetectorCollectionPreparer()
+func (client DiagnosticsClient) listSiteDetectorsNextResults(ctx context.Context, lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
+	req, err := lastResults.diagnosticDetectorCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteDetectorsNextResults", nil, "Failure preparing next results request")
 	}
@@ -1848,6 +2109,16 @@ func (client DiagnosticsClient) listSiteDetectorsNextResults(lastResults Diagnos
 
 // ListSiteDetectorsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteDetectorsComplete(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string) (result DiagnosticDetectorCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectors")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteDetectors(ctx, resourceGroupName, siteName, diagnosticCategory)
 	return
 }
@@ -1859,6 +2130,16 @@ func (client DiagnosticsClient) ListSiteDetectorsComplete(ctx context.Context, r
 // diagnosticCategory - diagnostic Category
 // slot - slot Name
 func (client DiagnosticsClient) ListSiteDetectorsSlot(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, slot string) (result DiagnosticDetectorCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectorsSlot")
+		defer func() {
+			sc := -1
+			if result.ddc.Response.Response != nil {
+				sc = result.ddc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1933,8 +2214,8 @@ func (client DiagnosticsClient) ListSiteDetectorsSlotResponder(resp *http.Respon
 }
 
 // listSiteDetectorsSlotNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteDetectorsSlotNextResults(lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
-	req, err := lastResults.diagnosticDetectorCollectionPreparer()
+func (client DiagnosticsClient) listSiteDetectorsSlotNextResults(ctx context.Context, lastResults DiagnosticDetectorCollection) (result DiagnosticDetectorCollection, err error) {
+	req, err := lastResults.diagnosticDetectorCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteDetectorsSlotNextResults", nil, "Failure preparing next results request")
 	}
@@ -1955,6 +2236,16 @@ func (client DiagnosticsClient) listSiteDetectorsSlotNextResults(lastResults Dia
 
 // ListSiteDetectorsSlotComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteDetectorsSlotComplete(ctx context.Context, resourceGroupName string, siteName string, diagnosticCategory string, slot string) (result DiagnosticDetectorCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDetectorsSlot")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteDetectorsSlot(ctx, resourceGroupName, siteName, diagnosticCategory, slot)
 	return
 }
@@ -1964,6 +2255,16 @@ func (client DiagnosticsClient) ListSiteDetectorsSlotComplete(ctx context.Contex
 // resourceGroupName - name of the resource group to which the resource belongs.
 // siteName - site Name
 func (client DiagnosticsClient) ListSiteDiagnosticCategories(ctx context.Context, resourceGroupName string, siteName string) (result DiagnosticCategoryCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDiagnosticCategories")
+		defer func() {
+			sc := -1
+			if result.dcc.Response.Response != nil {
+				sc = result.dcc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -2036,8 +2337,8 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesResponder(resp *http
 }
 
 // listSiteDiagnosticCategoriesNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteDiagnosticCategoriesNextResults(lastResults DiagnosticCategoryCollection) (result DiagnosticCategoryCollection, err error) {
-	req, err := lastResults.diagnosticCategoryCollectionPreparer()
+func (client DiagnosticsClient) listSiteDiagnosticCategoriesNextResults(ctx context.Context, lastResults DiagnosticCategoryCollection) (result DiagnosticCategoryCollection, err error) {
+	req, err := lastResults.diagnosticCategoryCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteDiagnosticCategoriesNextResults", nil, "Failure preparing next results request")
 	}
@@ -2058,6 +2359,16 @@ func (client DiagnosticsClient) listSiteDiagnosticCategoriesNextResults(lastResu
 
 // ListSiteDiagnosticCategoriesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesComplete(ctx context.Context, resourceGroupName string, siteName string) (result DiagnosticCategoryCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDiagnosticCategories")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteDiagnosticCategories(ctx, resourceGroupName, siteName)
 	return
 }
@@ -2068,6 +2379,16 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesComplete(ctx context
 // siteName - site Name
 // slot - slot Name
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlot(ctx context.Context, resourceGroupName string, siteName string, slot string) (result DiagnosticCategoryCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDiagnosticCategoriesSlot")
+		defer func() {
+			sc := -1
+			if result.dcc.Response.Response != nil {
+				sc = result.dcc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -2141,8 +2462,8 @@ func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlotResponder(resp *
 }
 
 // listSiteDiagnosticCategoriesSlotNextResults retrieves the next set of results, if any.
-func (client DiagnosticsClient) listSiteDiagnosticCategoriesSlotNextResults(lastResults DiagnosticCategoryCollection) (result DiagnosticCategoryCollection, err error) {
-	req, err := lastResults.diagnosticCategoryCollectionPreparer()
+func (client DiagnosticsClient) listSiteDiagnosticCategoriesSlotNextResults(ctx context.Context, lastResults DiagnosticCategoryCollection) (result DiagnosticCategoryCollection, err error) {
+	req, err := lastResults.diagnosticCategoryCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.DiagnosticsClient", "listSiteDiagnosticCategoriesSlotNextResults", nil, "Failure preparing next results request")
 	}
@@ -2163,6 +2484,16 @@ func (client DiagnosticsClient) listSiteDiagnosticCategoriesSlotNextResults(last
 
 // ListSiteDiagnosticCategoriesSlotComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DiagnosticsClient) ListSiteDiagnosticCategoriesSlotComplete(ctx context.Context, resourceGroupName string, siteName string, slot string) (result DiagnosticCategoryCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DiagnosticsClient.ListSiteDiagnosticCategoriesSlot")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSiteDiagnosticCategoriesSlot(ctx, resourceGroupName, siteName, slot)
 	return
 }

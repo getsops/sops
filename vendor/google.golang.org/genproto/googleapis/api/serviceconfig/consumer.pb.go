@@ -41,7 +41,6 @@ var Property_PropertyType_name = map[int32]string{
 	3: "STRING",
 	4: "DOUBLE",
 }
-
 var Property_PropertyType_value = map[string]int32{
 	"UNSPECIFIED": 0,
 	"INT64":       1,
@@ -53,9 +52,8 @@ var Property_PropertyType_value = map[string]int32{
 func (x Property_PropertyType) String() string {
 	return proto.EnumName(Property_PropertyType_name, int32(x))
 }
-
 func (Property_PropertyType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_bec5e69370b3104e, []int{1, 0}
+	return fileDescriptor_consumer_f6466e3bd2853ce5, []int{1, 0}
 }
 
 // A descriptor for defining project properties for a service. One service may
@@ -86,7 +84,7 @@ func (m *ProjectProperties) Reset()         { *m = ProjectProperties{} }
 func (m *ProjectProperties) String() string { return proto.CompactTextString(m) }
 func (*ProjectProperties) ProtoMessage()    {}
 func (*ProjectProperties) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bec5e69370b3104e, []int{0}
+	return fileDescriptor_consumer_f6466e3bd2853ce5, []int{0}
 }
 func (m *ProjectProperties) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProjectProperties.Unmarshal(m, b)
@@ -94,8 +92,8 @@ func (m *ProjectProperties) XXX_Unmarshal(b []byte) error {
 func (m *ProjectProperties) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProjectProperties.Marshal(b, m, deterministic)
 }
-func (m *ProjectProperties) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProjectProperties.Merge(m, src)
+func (dst *ProjectProperties) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProjectProperties.Merge(dst, src)
 }
 func (m *ProjectProperties) XXX_Size() int {
 	return xxx_messageInfo_ProjectProperties.Size(m)
@@ -139,7 +137,7 @@ func (m *Property) Reset()         { *m = Property{} }
 func (m *Property) String() string { return proto.CompactTextString(m) }
 func (*Property) ProtoMessage()    {}
 func (*Property) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bec5e69370b3104e, []int{1}
+	return fileDescriptor_consumer_f6466e3bd2853ce5, []int{1}
 }
 func (m *Property) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Property.Unmarshal(m, b)
@@ -147,8 +145,8 @@ func (m *Property) XXX_Unmarshal(b []byte) error {
 func (m *Property) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Property.Marshal(b, m, deterministic)
 }
-func (m *Property) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Property.Merge(m, src)
+func (dst *Property) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Property.Merge(dst, src)
 }
 func (m *Property) XXX_Size() int {
 	return xxx_messageInfo_Property.Size(m)
@@ -186,9 +184,9 @@ func init() {
 	proto.RegisterEnum("google.api.Property_PropertyType", Property_PropertyType_name, Property_PropertyType_value)
 }
 
-func init() { proto.RegisterFile("google/api/consumer.proto", fileDescriptor_bec5e69370b3104e) }
+func init() { proto.RegisterFile("google/api/consumer.proto", fileDescriptor_consumer_f6466e3bd2853ce5) }
 
-var fileDescriptor_bec5e69370b3104e = []byte{
+var fileDescriptor_consumer_f6466e3bd2853ce5 = []byte{
 	// 299 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0x4f, 0x4f, 0xf2, 0x40,
 	0x10, 0xc6, 0xdf, 0x85, 0xbe, 0x04, 0x06, 0xc5, 0xba, 0xf1, 0x50, 0x6f, 0x95, 0x13, 0xa7, 0x36,

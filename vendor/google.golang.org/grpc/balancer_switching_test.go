@@ -19,17 +19,17 @@
 package grpc
 
 import (
+	"context"
 	"fmt"
 	"math"
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/connectivity"
 	_ "google.golang.org/grpc/grpclog/glogger"
-	"google.golang.org/grpc/internal/leakcheck"
+	"google.golang.org/grpc/internal"
 	"google.golang.org/grpc/resolver"
 	"google.golang.org/grpc/resolver/manual"
 )
@@ -128,12 +128,11 @@ func checkRoundRobin(cc *ClientConn, servers []*server) error {
 	return nil
 }
 
-func TestSwitchBalancer(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestSwitchBalancer(t *testing.T) {
 	r, rcleanup := manual.GenerateAndRegisterManualResolver()
 	defer rcleanup()
 
-	numServers := 2
+	const numServers = 2
 	servers, _, scleanup := startServers(t, numServers, math.MaxInt32)
 	defer scleanup()
 
@@ -160,12 +159,11 @@ func TestSwitchBalancer(t *testing.T) {
 }
 
 // Test that balancer specified by dial option will not be overridden.
-func TestBalancerDialOption(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestBalancerDialOption(t *testing.T) {
 	r, rcleanup := manual.GenerateAndRegisterManualResolver()
 	defer rcleanup()
 
-	numServers := 2
+	const numServers = 2
 	servers, _, scleanup := startServers(t, numServers, math.MaxInt32)
 	defer scleanup()
 
@@ -188,8 +186,7 @@ func TestBalancerDialOption(t *testing.T) {
 }
 
 // First addr update contains grpclb.
-func TestSwitchBalancerGRPCLBFirst(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestSwitchBalancerGRPCLBFirst(t *testing.T) {
 	r, rcleanup := manual.GenerateAndRegisterManualResolver()
 	defer rcleanup()
 
@@ -250,8 +247,7 @@ func TestSwitchBalancerGRPCLBFirst(t *testing.T) {
 }
 
 // First addr update does not contain grpclb.
-func TestSwitchBalancerGRPCLBSecond(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestSwitchBalancerGRPCLBSecond(t *testing.T) {
 	r, rcleanup := manual.GenerateAndRegisterManualResolver()
 	defer rcleanup()
 
@@ -328,8 +324,7 @@ func TestSwitchBalancerGRPCLBSecond(t *testing.T) {
 // Test that if the current balancer is roundrobin, after switching to grpclb,
 // when the resolved address doesn't contain grpclb addresses, balancer will be
 // switched back to roundrobin.
-func TestSwitchBalancerGRPCLBRoundRobin(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestSwitchBalancerGRPCLBRoundRobin(t *testing.T) {
 	r, rcleanup := manual.GenerateAndRegisterManualResolver()
 	defer rcleanup()
 
@@ -392,8 +387,7 @@ func TestSwitchBalancerGRPCLBRoundRobin(t *testing.T) {
 // Test that if resolved address list contains grpclb, the balancer option in
 // service config won't take effect. But when there's no grpclb address in a new
 // resolved address list, balancer will be switched to the new one.
-func TestSwitchBalancerGRPCLBServiceConfig(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestSwitchBalancerGRPCLBServiceConfig(t *testing.T) {
 	r, rcleanup := manual.GenerateAndRegisterManualResolver()
 	defer rcleanup()
 
@@ -465,5 +459,53 @@ func TestSwitchBalancerGRPCLBServiceConfig(t *testing.T) {
 	}
 	if !isRoundRobin {
 		t.Fatalf("after 5 second, cc.balancer is of type %v, not round_robin", cc.curBalancerName)
+	}
+}
+
+// Test that when switching to grpclb fails because grpclb is not registered,
+// the fallback balancer will only get backend addresses, not the grpclb server
+// address.
+//
+// The tests sends 3 server addresses (all backends) as resolved addresses, but
+// claim the first one is grpclb server. The all RPCs should all be send to the
+// other addresses, not the first one.
+func (s) TestSwitchBalancerGRPCLBWithGRPCLBNotRegistered(t *testing.T) {
+	internal.BalancerUnregister("grpclb")
+	defer balancer.Register(&magicalLB{})
+
+	r, rcleanup := manual.GenerateAndRegisterManualResolver()
+	defer rcleanup()
+
+	const numServers = 3
+	servers, _, scleanup := startServers(t, numServers, math.MaxInt32)
+	defer scleanup()
+
+	cc, err := Dial(r.Scheme()+":///test.server", WithInsecure(), WithCodec(testCodec{}))
+	if err != nil {
+		t.Fatalf("failed to dial: %v", err)
+	}
+	defer cc.Close()
+	r.NewAddress([]resolver.Address{{Addr: servers[1].addr}, {Addr: servers[2].addr}})
+	// The default balancer is pickfirst.
+	if err := checkPickFirst(cc, servers[1:]); err != nil {
+		t.Fatalf("check pickfirst returned non-nil error: %v", err)
+	}
+	// Try switching to grpclb by sending servers[0] as grpclb address. It's
+	// expected that servers[0] will be filtered out, so it will not be used by
+	// the balancer.
+	//
+	// If the filtering failed, servers[0] will be used for RPCs and the RPCs
+	// will succeed. The following checks will catch this and fail.
+	r.NewAddress([]resolver.Address{
+		{Addr: servers[0].addr, Type: resolver.GRPCLB},
+		{Addr: servers[1].addr}, {Addr: servers[2].addr}})
+	// Still check for pickfirst, but only with server[1] and server[2].
+	if err := checkPickFirst(cc, servers[1:]); err != nil {
+		t.Fatalf("check pickfirst returned non-nil error: %v", err)
+	}
+	// Switch to roundrobin, anc check against server[1] and server[2].
+	cc.handleServiceConfig(`{"loadBalancingPolicy": "round_robin"}`)
+	if err := checkRoundRobin(cc, servers[1:]); err != nil {
+		t.Fatalf("check roundrobin returned non-nil error: %v", err)
 	}
 }

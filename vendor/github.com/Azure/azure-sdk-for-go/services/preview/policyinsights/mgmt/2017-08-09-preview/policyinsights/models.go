@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/policyinsights/mgmt/2017-08-09-preview/policyinsights"
+
 // PolicyStatesResource enumerates the values for policy states resource.
 type PolicyStatesResource string
 
@@ -141,7 +144,7 @@ type PolicyEventsQueryResultsTableColumns struct {
 	PolicySetDefinitionCategory *Column `json:"PolicySetDefinitionCategory,omitempty"`
 	// PolicySetDefinitionParameters - Policy set definition parameters, if the policy assignment is for a policy set.
 	PolicySetDefinitionParameters *Column `json:"PolicySetDefinitionParameters,omitempty"`
-	// ManagementGroupIds - Comma seperated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
+	// ManagementGroupIds - Comma separated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
 	ManagementGroupIds *Column `json:"ManagementGroupIds,omitempty"`
 	// PolicyDefinitionReferenceID - Reference ID for the policy definition inside the policy set, if the policy assignment is for a policy set.
 	PolicyDefinitionReferenceID *Column `json:"PolicyDefinitionReferenceId,omitempty"`
@@ -241,6 +244,276 @@ func (peqrt PolicyEventsQueryResultsTableColumns) MarshalJSON() ([]byte, error) 
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for PolicyEventsQueryResultsTableColumns struct.
+func (peqrt *PolicyEventsQueryResultsTableColumns) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if peqrt.AdditionalProperties == nil {
+					peqrt.AdditionalProperties = make(map[string]interface{})
+				}
+				peqrt.AdditionalProperties[k] = additionalProperties
+			}
+		case "Timestamp":
+			if v != nil {
+				var timestamp Column
+				err = json.Unmarshal(*v, &timestamp)
+				if err != nil {
+					return err
+				}
+				peqrt.Timestamp = &timestamp
+			}
+		case "ResourceId":
+			if v != nil {
+				var resourceID Column
+				err = json.Unmarshal(*v, &resourceID)
+				if err != nil {
+					return err
+				}
+				peqrt.ResourceID = &resourceID
+			}
+		case "PolicyAssignmentId":
+			if v != nil {
+				var policyAssignmentID Column
+				err = json.Unmarshal(*v, &policyAssignmentID)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyAssignmentID = &policyAssignmentID
+			}
+		case "PolicyDefinitionId":
+			if v != nil {
+				var policyDefinitionID Column
+				err = json.Unmarshal(*v, &policyDefinitionID)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyDefinitionID = &policyDefinitionID
+			}
+		case "EffectiveParameters":
+			if v != nil {
+				var effectiveParameters Column
+				err = json.Unmarshal(*v, &effectiveParameters)
+				if err != nil {
+					return err
+				}
+				peqrt.EffectiveParameters = &effectiveParameters
+			}
+		case "IsCompliant":
+			if v != nil {
+				var isCompliant Column
+				err = json.Unmarshal(*v, &isCompliant)
+				if err != nil {
+					return err
+				}
+				peqrt.IsCompliant = &isCompliant
+			}
+		case "SubscriptionId":
+			if v != nil {
+				var subscriptionID Column
+				err = json.Unmarshal(*v, &subscriptionID)
+				if err != nil {
+					return err
+				}
+				peqrt.SubscriptionID = &subscriptionID
+			}
+		case "ResourceType":
+			if v != nil {
+				var resourceType Column
+				err = json.Unmarshal(*v, &resourceType)
+				if err != nil {
+					return err
+				}
+				peqrt.ResourceType = &resourceType
+			}
+		case "ResourceLocation":
+			if v != nil {
+				var resourceLocation Column
+				err = json.Unmarshal(*v, &resourceLocation)
+				if err != nil {
+					return err
+				}
+				peqrt.ResourceLocation = &resourceLocation
+			}
+		case "ResourceGroup":
+			if v != nil {
+				var resourceGroup Column
+				err = json.Unmarshal(*v, &resourceGroup)
+				if err != nil {
+					return err
+				}
+				peqrt.ResourceGroup = &resourceGroup
+			}
+		case "ResourceTags":
+			if v != nil {
+				var resourceTags Column
+				err = json.Unmarshal(*v, &resourceTags)
+				if err != nil {
+					return err
+				}
+				peqrt.ResourceTags = &resourceTags
+			}
+		case "PolicyAssignmentName":
+			if v != nil {
+				var policyAssignmentName Column
+				err = json.Unmarshal(*v, &policyAssignmentName)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyAssignmentName = &policyAssignmentName
+			}
+		case "PolicyAssignmentOwner":
+			if v != nil {
+				var policyAssignmentOwner Column
+				err = json.Unmarshal(*v, &policyAssignmentOwner)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyAssignmentOwner = &policyAssignmentOwner
+			}
+		case "PolicyAssignmentParameters":
+			if v != nil {
+				var policyAssignmentParameters Column
+				err = json.Unmarshal(*v, &policyAssignmentParameters)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyAssignmentParameters = &policyAssignmentParameters
+			}
+		case "PolicyAssignmentScope":
+			if v != nil {
+				var policyAssignmentScope Column
+				err = json.Unmarshal(*v, &policyAssignmentScope)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyAssignmentScope = &policyAssignmentScope
+			}
+		case "PolicyDefinitionName":
+			if v != nil {
+				var policyDefinitionName Column
+				err = json.Unmarshal(*v, &policyDefinitionName)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyDefinitionName = &policyDefinitionName
+			}
+		case "PolicyDefinitionAction":
+			if v != nil {
+				var policyDefinitionAction Column
+				err = json.Unmarshal(*v, &policyDefinitionAction)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyDefinitionAction = &policyDefinitionAction
+			}
+		case "PolicyDefinitionCategory":
+			if v != nil {
+				var policyDefinitionCategory Column
+				err = json.Unmarshal(*v, &policyDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyDefinitionCategory = &policyDefinitionCategory
+			}
+		case "PolicySetDefinitionId":
+			if v != nil {
+				var policySetDefinitionID Column
+				err = json.Unmarshal(*v, &policySetDefinitionID)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicySetDefinitionID = &policySetDefinitionID
+			}
+		case "PolicySetDefinitionName":
+			if v != nil {
+				var policySetDefinitionName Column
+				err = json.Unmarshal(*v, &policySetDefinitionName)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicySetDefinitionName = &policySetDefinitionName
+			}
+		case "PolicySetDefinitionOwner":
+			if v != nil {
+				var policySetDefinitionOwner Column
+				err = json.Unmarshal(*v, &policySetDefinitionOwner)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicySetDefinitionOwner = &policySetDefinitionOwner
+			}
+		case "PolicySetDefinitionCategory":
+			if v != nil {
+				var policySetDefinitionCategory Column
+				err = json.Unmarshal(*v, &policySetDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicySetDefinitionCategory = &policySetDefinitionCategory
+			}
+		case "PolicySetDefinitionParameters":
+			if v != nil {
+				var policySetDefinitionParameters Column
+				err = json.Unmarshal(*v, &policySetDefinitionParameters)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicySetDefinitionParameters = &policySetDefinitionParameters
+			}
+		case "ManagementGroupIds":
+			if v != nil {
+				var managementGroupIds Column
+				err = json.Unmarshal(*v, &managementGroupIds)
+				if err != nil {
+					return err
+				}
+				peqrt.ManagementGroupIds = &managementGroupIds
+			}
+		case "PolicyDefinitionReferenceId":
+			if v != nil {
+				var policyDefinitionReferenceID Column
+				err = json.Unmarshal(*v, &policyDefinitionReferenceID)
+				if err != nil {
+					return err
+				}
+				peqrt.PolicyDefinitionReferenceID = &policyDefinitionReferenceID
+			}
+		case "TenantId":
+			if v != nil {
+				var tenantID Column
+				err = json.Unmarshal(*v, &tenantID)
+				if err != nil {
+					return err
+				}
+				peqrt.TenantID = &tenantID
+			}
+		case "PrincipalOid":
+			if v != nil {
+				var principalOid Column
+				err = json.Unmarshal(*v, &principalOid)
+				if err != nil {
+					return err
+				}
+				peqrt.PrincipalOid = &principalOid
+			}
+		}
+	}
+
+	return nil
+}
+
 // PolicyEventsQueryResultsTableMetadata metadata about the query results.
 type PolicyEventsQueryResultsTableMetadata struct {
 	// GeneratedQuery - Internal query generated. Used for diagnostics purposes.
@@ -314,7 +587,7 @@ type PolicyStatesQueryResultsTableColumns struct {
 	PolicySetDefinitionCategory *Column `json:"PolicySetDefinitionCategory,omitempty"`
 	// PolicySetDefinitionParameters - Policy set definition parameters, if the policy assignment is for a policy set.
 	PolicySetDefinitionParameters *Column `json:"PolicySetDefinitionParameters,omitempty"`
-	// ManagementGroupIds - Comma seperated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
+	// ManagementGroupIds - Comma separated list of management group IDs, which represent the hierarchy of the management groups the resource is under.
 	ManagementGroupIds *Column `json:"ManagementGroupIds,omitempty"`
 	// PolicyDefinitionReferenceID - Reference ID for the policy definition inside the policy set, if the policy assignment is for a policy set.
 	PolicyDefinitionReferenceID *Column `json:"PolicyDefinitionReferenceId,omitempty"`
@@ -402,6 +675,258 @@ func (psqrt PolicyStatesQueryResultsTableColumns) MarshalJSON() ([]byte, error) 
 		objectMap[k] = v
 	}
 	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for PolicyStatesQueryResultsTableColumns struct.
+func (psqrt *PolicyStatesQueryResultsTableColumns) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if psqrt.AdditionalProperties == nil {
+					psqrt.AdditionalProperties = make(map[string]interface{})
+				}
+				psqrt.AdditionalProperties[k] = additionalProperties
+			}
+		case "Timestamp":
+			if v != nil {
+				var timestamp Column
+				err = json.Unmarshal(*v, &timestamp)
+				if err != nil {
+					return err
+				}
+				psqrt.Timestamp = &timestamp
+			}
+		case "ResourceId":
+			if v != nil {
+				var resourceID Column
+				err = json.Unmarshal(*v, &resourceID)
+				if err != nil {
+					return err
+				}
+				psqrt.ResourceID = &resourceID
+			}
+		case "PolicyAssignmentId":
+			if v != nil {
+				var policyAssignmentID Column
+				err = json.Unmarshal(*v, &policyAssignmentID)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyAssignmentID = &policyAssignmentID
+			}
+		case "PolicyDefinitionId":
+			if v != nil {
+				var policyDefinitionID Column
+				err = json.Unmarshal(*v, &policyDefinitionID)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyDefinitionID = &policyDefinitionID
+			}
+		case "EffectiveParameters":
+			if v != nil {
+				var effectiveParameters Column
+				err = json.Unmarshal(*v, &effectiveParameters)
+				if err != nil {
+					return err
+				}
+				psqrt.EffectiveParameters = &effectiveParameters
+			}
+		case "IsCompliant":
+			if v != nil {
+				var isCompliant Column
+				err = json.Unmarshal(*v, &isCompliant)
+				if err != nil {
+					return err
+				}
+				psqrt.IsCompliant = &isCompliant
+			}
+		case "SubscriptionId":
+			if v != nil {
+				var subscriptionID Column
+				err = json.Unmarshal(*v, &subscriptionID)
+				if err != nil {
+					return err
+				}
+				psqrt.SubscriptionID = &subscriptionID
+			}
+		case "ResourceType":
+			if v != nil {
+				var resourceType Column
+				err = json.Unmarshal(*v, &resourceType)
+				if err != nil {
+					return err
+				}
+				psqrt.ResourceType = &resourceType
+			}
+		case "ResourceLocation":
+			if v != nil {
+				var resourceLocation Column
+				err = json.Unmarshal(*v, &resourceLocation)
+				if err != nil {
+					return err
+				}
+				psqrt.ResourceLocation = &resourceLocation
+			}
+		case "ResourceGroup":
+			if v != nil {
+				var resourceGroup Column
+				err = json.Unmarshal(*v, &resourceGroup)
+				if err != nil {
+					return err
+				}
+				psqrt.ResourceGroup = &resourceGroup
+			}
+		case "ResourceTags":
+			if v != nil {
+				var resourceTags Column
+				err = json.Unmarshal(*v, &resourceTags)
+				if err != nil {
+					return err
+				}
+				psqrt.ResourceTags = &resourceTags
+			}
+		case "PolicyAssignmentName":
+			if v != nil {
+				var policyAssignmentName Column
+				err = json.Unmarshal(*v, &policyAssignmentName)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyAssignmentName = &policyAssignmentName
+			}
+		case "PolicyAssignmentOwner":
+			if v != nil {
+				var policyAssignmentOwner Column
+				err = json.Unmarshal(*v, &policyAssignmentOwner)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyAssignmentOwner = &policyAssignmentOwner
+			}
+		case "PolicyAssignmentParameters":
+			if v != nil {
+				var policyAssignmentParameters Column
+				err = json.Unmarshal(*v, &policyAssignmentParameters)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyAssignmentParameters = &policyAssignmentParameters
+			}
+		case "PolicyAssignmentScope":
+			if v != nil {
+				var policyAssignmentScope Column
+				err = json.Unmarshal(*v, &policyAssignmentScope)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyAssignmentScope = &policyAssignmentScope
+			}
+		case "PolicyDefinitionName":
+			if v != nil {
+				var policyDefinitionName Column
+				err = json.Unmarshal(*v, &policyDefinitionName)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyDefinitionName = &policyDefinitionName
+			}
+		case "PolicyDefinitionAction":
+			if v != nil {
+				var policyDefinitionAction Column
+				err = json.Unmarshal(*v, &policyDefinitionAction)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyDefinitionAction = &policyDefinitionAction
+			}
+		case "PolicyDefinitionCategory":
+			if v != nil {
+				var policyDefinitionCategory Column
+				err = json.Unmarshal(*v, &policyDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyDefinitionCategory = &policyDefinitionCategory
+			}
+		case "PolicySetDefinitionId":
+			if v != nil {
+				var policySetDefinitionID Column
+				err = json.Unmarshal(*v, &policySetDefinitionID)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicySetDefinitionID = &policySetDefinitionID
+			}
+		case "PolicySetDefinitionName":
+			if v != nil {
+				var policySetDefinitionName Column
+				err = json.Unmarshal(*v, &policySetDefinitionName)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicySetDefinitionName = &policySetDefinitionName
+			}
+		case "PolicySetDefinitionOwner":
+			if v != nil {
+				var policySetDefinitionOwner Column
+				err = json.Unmarshal(*v, &policySetDefinitionOwner)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicySetDefinitionOwner = &policySetDefinitionOwner
+			}
+		case "PolicySetDefinitionCategory":
+			if v != nil {
+				var policySetDefinitionCategory Column
+				err = json.Unmarshal(*v, &policySetDefinitionCategory)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicySetDefinitionCategory = &policySetDefinitionCategory
+			}
+		case "PolicySetDefinitionParameters":
+			if v != nil {
+				var policySetDefinitionParameters Column
+				err = json.Unmarshal(*v, &policySetDefinitionParameters)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicySetDefinitionParameters = &policySetDefinitionParameters
+			}
+		case "ManagementGroupIds":
+			if v != nil {
+				var managementGroupIds Column
+				err = json.Unmarshal(*v, &managementGroupIds)
+				if err != nil {
+					return err
+				}
+				psqrt.ManagementGroupIds = &managementGroupIds
+			}
+		case "PolicyDefinitionReferenceId":
+			if v != nil {
+				var policyDefinitionReferenceID Column
+				err = json.Unmarshal(*v, &policyDefinitionReferenceID)
+				if err != nil {
+					return err
+				}
+				psqrt.PolicyDefinitionReferenceID = &policyDefinitionReferenceID
+			}
+		}
+	}
+
+	return nil
 }
 
 // PolicyStatesQueryResultsTableMetadata metadata about the query results.

@@ -82,10 +82,29 @@
         }
       }
     },
-    "HlsConfiguration": {
+    "HlsConfiguration" : {
       "type" : "structure",
       "members" : {
         "ManifestEndpointPrefix" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "DashConfiguration" : {
+      "type" : "structure",
+      "members" : {
+        "ManifestEndpointPrefix" : {
+          "shape" : "__string"
+        },
+        "MpdLocation" : {
+          "shape" : "__string"
+        }
+      }
+    },
+    "DashConfigurationForPut" : {
+      "type" : "structure",
+      "members" : {
+        "MpdLocation" : {
           "shape" : "__string"
         }
       }
@@ -121,6 +140,9 @@
         "CdnConfiguration" : {
           "shape" : "CdnConfiguration"
         },
+        "DashConfiguration" : {
+          "shape" : "DashConfiguration"
+        },
         "HlsConfiguration" : {
           "shape" : "HlsConfiguration"
         },
@@ -134,6 +156,9 @@
           "shape" : "__string"
         },
         "SlateAdUrl" : {
+          "shape" : "__string"
+        },
+        "TranscodeProfileName" : {
           "shape" : "__string"
         },
         "VideoContentSourceUrl" : {
@@ -196,10 +221,16 @@
         "CdnConfiguration" : {
           "shape" : "CdnConfiguration"
         },
+        "DashConfiguration" : {
+          "shape" : "DashConfigurationForPut"
+        },
         "Name" : {
           "shape" : "__string"
         },
         "SlateAdUrl" : {
+          "shape" : "__string"
+        },
+        "TranscodeProfileName" : {
           "shape" : "__string"
         },
         "VideoContentSourceUrl" : {
@@ -216,6 +247,9 @@
         "CdnConfiguration" : {
           "shape" : "CdnConfiguration"
         },
+        "DashConfiguration" : {
+          "shape" : "DashConfiguration"
+        },
         "HlsConfiguration" : {
           "shape" : "HlsConfiguration"
         },
@@ -229,6 +263,9 @@
           "shape" : "__string"
         },
         "SlateAdUrl" : {
+          "shape" : "__string"
+        },
+        "TranscodeProfileName" : {
           "shape" : "__string"
         },
         "VideoContentSourceUrl" : {
@@ -261,6 +298,14 @@
       "type": "integer",
       "min": 1,
       "max": 100
+    },
+    "__timestampIso8601" : {
+      "type" : "timestamp",
+      "timestampFormat" : "iso8601"
+    },
+    "__timestampUnix" : {
+      "type" : "timestamp",
+      "timestampFormat" : "unixTimestamp"
     }
   }
 }

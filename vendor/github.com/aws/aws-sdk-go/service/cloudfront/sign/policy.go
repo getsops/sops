@@ -7,7 +7,6 @@ import (
 	"crypto/rsa"
 	"crypto/sha1"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/url"
@@ -169,11 +168,10 @@ func NewCannedPolicy(resource string, expires time.Time) *Policy {
 
 // encodePolicy encodes the Policy as JSON and also base 64 encodes it.
 func encodePolicy(p *Policy) (b64Policy, jsonPolicy []byte, err error) {
-	jsonPolicy, err = json.Marshal(p)
+	jsonPolicy, err = encodePolicyJSON(p)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to encode policy, %s", err.Error())
 	}
-
 	// Remove leading and trailing white space, JSON encoding will note include
 	// whitespace within the encoding.
 	jsonPolicy = bytes.TrimSpace(jsonPolicy)

@@ -25,6 +25,7 @@
 package logging
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -43,7 +44,6 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	structpb "github.com/golang/protobuf/ptypes/struct"
 	tspb "github.com/golang/protobuf/ptypes/timestamp"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/api/support/bundler"
 	mrpb "google.golang.org/genproto/googleapis/api/monitoredres"
@@ -52,13 +52,13 @@ import (
 )
 
 const (
-	// Scope for reading from the logging service.
+	// ReadScope is the scope for reading from the logging service.
 	ReadScope = "https://www.googleapis.com/auth/logging.read"
 
-	// Scope for writing to the logging service.
+	// WriteScope is the scope for writing to the logging service.
 	WriteScope = "https://www.googleapis.com/auth/logging.write"
 
-	// Scope for administrative actions on the logging service.
+	// AdminScope is the scope for administrative actions on the logging service.
 	AdminScope = "https://www.googleapis.com/auth/logging.admin"
 )
 
@@ -233,7 +233,7 @@ type Logger struct {
 	// Options
 	commonResource *mrpb.MonitoredResource
 	commonLabels   map[string]string
-	writeTimeout   time.Duration
+	ctxFunc        func() (context.Context, func())
 }
 
 // A LoggerOption is a configuration option for a Logger.
@@ -397,6 +397,23 @@ type bufferedByteLimit int
 
 func (b bufferedByteLimit) set(l *Logger) { l.bundler.BufferedByteLimit = int(b) }
 
+// ContextFunc is a function that will be called to obtain a context.Context for the
+// WriteLogEntries RPC executed in the background for calls to Logger.Log. The
+// default is a function that always returns context.Background. The second return
+// value of the function is a function to call after the RPC completes.
+//
+// The function is not used for calls to Logger.LogSync, since the caller can pass
+// in the context directly.
+//
+// This option is EXPERIMENTAL. It may be changed or removed.
+func ContextFunc(f func() (ctx context.Context, afterCall func())) LoggerOption {
+	return contextFunc(f)
+}
+
+type contextFunc func() (ctx context.Context, afterCall func())
+
+func (c contextFunc) set(l *Logger) { l.ctxFunc = c }
+
 // Logger returns a Logger that will write entries with the given log ID, such as
 // "syslog". A log ID must be less than 512 characters long and can only
 // include the following characters: upper and lower case alphanumeric
@@ -411,6 +428,7 @@ func (c *Client) Logger(logID string, opts ...LoggerOption) *Logger {
 		client:         c,
 		logName:        internal.LogPath(c.parent, logID),
 		commonResource: r,
+		ctxFunc:        func() (context.Context, func()) { return context.Background(), nil },
 	}
 	l.bundler = bundler.NewBundler(&logpb.LogEntry{}, func(entries interface{}) {
 		l.writeLogEntries(entries.([]*logpb.LogEntry))
@@ -577,6 +595,10 @@ type Entry struct {
 	// if any. If it contains a relative resource name, the name is assumed to
 	// be relative to //tracing.googleapis.com.
 	Trace string
+
+	// ID of the span within the trace associated with the log entry.
+	// The ID is a 16-character hexadecimal encoding of an 8-byte array.
+	SpanID string
 
 	// Optional. Source code location information associated with the log entry,
 	// if any.
@@ -759,11 +781,15 @@ func (l *Logger) writeLogEntries(entries []*logpb.LogEntry) {
 		Labels:   l.commonLabels,
 		Entries:  entries,
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), defaultWriteTimeout)
+	ctx, afterCall := l.ctxFunc()
+	ctx, cancel := context.WithTimeout(ctx, defaultWriteTimeout)
 	defer cancel()
 	_, err := l.client.client.WriteLogEntries(ctx, req)
 	if err != nil {
 		l.client.error(err)
+	}
+	if afterCall != nil {
+		afterCall()
 	}
 }
 
@@ -802,6 +828,7 @@ func (l *Logger) toLogEntry(e Entry) (*logpb.LogEntry, error) {
 		Operation:      e.Operation,
 		Labels:         e.Labels,
 		Trace:          e.Trace,
+		SpanId:         e.SpanID,
 		Resource:       e.Resource,
 		SourceLocation: e.SourceLocation,
 	}

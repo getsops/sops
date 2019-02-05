@@ -37,7 +37,6 @@ var Table_TimestampGranularity_name = map[int32]string{
 	0: "TIMESTAMP_GRANULARITY_UNSPECIFIED",
 	1: "MILLIS",
 }
-
 var Table_TimestampGranularity_value = map[string]int32{
 	"TIMESTAMP_GRANULARITY_UNSPECIFIED": 0,
 	"MILLIS":                            1,
@@ -46,9 +45,8 @@ var Table_TimestampGranularity_value = map[string]int32{
 func (x Table_TimestampGranularity) String() string {
 	return proto.EnumName(Table_TimestampGranularity_name, int32(x))
 }
-
 func (Table_TimestampGranularity) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{0, 0}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{0, 0}
 }
 
 // Defines a view over a table's fields.
@@ -75,7 +73,6 @@ var Table_View_name = map[int32]string{
 	3: "REPLICATION_VIEW",
 	4: "FULL",
 }
-
 var Table_View_value = map[string]int32{
 	"VIEW_UNSPECIFIED": 0,
 	"NAME_ONLY":        1,
@@ -87,9 +84,8 @@ var Table_View_value = map[string]int32{
 func (x Table_View) String() string {
 	return proto.EnumName(Table_View_name, int32(x))
 }
-
 func (Table_View) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{0, 1}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{0, 1}
 }
 
 // Table replication states.
@@ -121,7 +117,6 @@ var Table_ClusterState_ReplicationState_name = map[int32]string{
 	3: "UNPLANNED_MAINTENANCE",
 	4: "READY",
 }
-
 var Table_ClusterState_ReplicationState_value = map[string]int32{
 	"STATE_NOT_KNOWN":       0,
 	"INITIALIZING":          1,
@@ -133,9 +128,8 @@ var Table_ClusterState_ReplicationState_value = map[string]int32{
 func (x Table_ClusterState_ReplicationState) String() string {
 	return proto.EnumName(Table_ClusterState_ReplicationState_name, int32(x))
 }
-
 func (Table_ClusterState_ReplicationState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{0, 0, 0}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{0, 0, 0}
 }
 
 // Possible states of a snapshot.
@@ -157,7 +151,6 @@ var Snapshot_State_name = map[int32]string{
 	1: "READY",
 	2: "CREATING",
 }
-
 var Snapshot_State_value = map[string]int32{
 	"STATE_NOT_KNOWN": 0,
 	"READY":           1,
@@ -167,9 +160,8 @@ var Snapshot_State_value = map[string]int32{
 func (x Snapshot_State) String() string {
 	return proto.EnumName(Snapshot_State_name, int32(x))
 }
-
 func (Snapshot_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{3, 0}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{3, 0}
 }
 
 // A collection of user data indexed by row, column, and timestamp.
@@ -206,7 +198,7 @@ func (m *Table) Reset()         { *m = Table{} }
 func (m *Table) String() string { return proto.CompactTextString(m) }
 func (*Table) ProtoMessage()    {}
 func (*Table) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{0}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{0}
 }
 func (m *Table) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Table.Unmarshal(m, b)
@@ -214,8 +206,8 @@ func (m *Table) XXX_Unmarshal(b []byte) error {
 func (m *Table) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Table.Marshal(b, m, deterministic)
 }
-func (m *Table) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Table.Merge(m, src)
+func (dst *Table) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Table.Merge(dst, src)
 }
 func (m *Table) XXX_Size() int {
 	return xxx_messageInfo_Table.Size(m)
@@ -268,7 +260,7 @@ func (m *Table_ClusterState) Reset()         { *m = Table_ClusterState{} }
 func (m *Table_ClusterState) String() string { return proto.CompactTextString(m) }
 func (*Table_ClusterState) ProtoMessage()    {}
 func (*Table_ClusterState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{0, 0}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{0, 0}
 }
 func (m *Table_ClusterState) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Table_ClusterState.Unmarshal(m, b)
@@ -276,8 +268,8 @@ func (m *Table_ClusterState) XXX_Unmarshal(b []byte) error {
 func (m *Table_ClusterState) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Table_ClusterState.Marshal(b, m, deterministic)
 }
-func (m *Table_ClusterState) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Table_ClusterState.Merge(m, src)
+func (dst *Table_ClusterState) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Table_ClusterState.Merge(dst, src)
 }
 func (m *Table_ClusterState) XXX_Size() int {
 	return xxx_messageInfo_Table_ClusterState.Size(m)
@@ -313,7 +305,7 @@ func (m *ColumnFamily) Reset()         { *m = ColumnFamily{} }
 func (m *ColumnFamily) String() string { return proto.CompactTextString(m) }
 func (*ColumnFamily) ProtoMessage()    {}
 func (*ColumnFamily) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{1}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{1}
 }
 func (m *ColumnFamily) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ColumnFamily.Unmarshal(m, b)
@@ -321,8 +313,8 @@ func (m *ColumnFamily) XXX_Unmarshal(b []byte) error {
 func (m *ColumnFamily) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ColumnFamily.Marshal(b, m, deterministic)
 }
-func (m *ColumnFamily) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ColumnFamily.Merge(m, src)
+func (dst *ColumnFamily) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ColumnFamily.Merge(dst, src)
 }
 func (m *ColumnFamily) XXX_Size() int {
 	return xxx_messageInfo_ColumnFamily.Size(m)
@@ -359,7 +351,7 @@ func (m *GcRule) Reset()         { *m = GcRule{} }
 func (m *GcRule) String() string { return proto.CompactTextString(m) }
 func (*GcRule) ProtoMessage()    {}
 func (*GcRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{2}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{2}
 }
 func (m *GcRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcRule.Unmarshal(m, b)
@@ -367,8 +359,8 @@ func (m *GcRule) XXX_Unmarshal(b []byte) error {
 func (m *GcRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcRule.Marshal(b, m, deterministic)
 }
-func (m *GcRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcRule.Merge(m, src)
+func (dst *GcRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcRule.Merge(dst, src)
 }
 func (m *GcRule) XXX_Size() int {
 	return xxx_messageInfo_GcRule.Size(m)
@@ -562,7 +554,7 @@ func (m *GcRule_Intersection) Reset()         { *m = GcRule_Intersection{} }
 func (m *GcRule_Intersection) String() string { return proto.CompactTextString(m) }
 func (*GcRule_Intersection) ProtoMessage()    {}
 func (*GcRule_Intersection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{2, 0}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{2, 0}
 }
 func (m *GcRule_Intersection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcRule_Intersection.Unmarshal(m, b)
@@ -570,8 +562,8 @@ func (m *GcRule_Intersection) XXX_Unmarshal(b []byte) error {
 func (m *GcRule_Intersection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcRule_Intersection.Marshal(b, m, deterministic)
 }
-func (m *GcRule_Intersection) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcRule_Intersection.Merge(m, src)
+func (dst *GcRule_Intersection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcRule_Intersection.Merge(dst, src)
 }
 func (m *GcRule_Intersection) XXX_Size() int {
 	return xxx_messageInfo_GcRule_Intersection.Size(m)
@@ -602,7 +594,7 @@ func (m *GcRule_Union) Reset()         { *m = GcRule_Union{} }
 func (m *GcRule_Union) String() string { return proto.CompactTextString(m) }
 func (*GcRule_Union) ProtoMessage()    {}
 func (*GcRule_Union) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{2, 1}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{2, 1}
 }
 func (m *GcRule_Union) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GcRule_Union.Unmarshal(m, b)
@@ -610,8 +602,8 @@ func (m *GcRule_Union) XXX_Unmarshal(b []byte) error {
 func (m *GcRule_Union) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GcRule_Union.Marshal(b, m, deterministic)
 }
-func (m *GcRule_Union) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GcRule_Union.Merge(m, src)
+func (dst *GcRule_Union) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GcRule_Union.Merge(dst, src)
 }
 func (m *GcRule_Union) XXX_Size() int {
 	return xxx_messageInfo_GcRule_Union.Size(m)
@@ -673,7 +665,7 @@ func (m *Snapshot) Reset()         { *m = Snapshot{} }
 func (m *Snapshot) String() string { return proto.CompactTextString(m) }
 func (*Snapshot) ProtoMessage()    {}
 func (*Snapshot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea1666be9e81bb35, []int{3}
+	return fileDescriptor_table_ed23c9c8618cc2b8, []int{3}
 }
 func (m *Snapshot) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Snapshot.Unmarshal(m, b)
@@ -681,8 +673,8 @@ func (m *Snapshot) XXX_Unmarshal(b []byte) error {
 func (m *Snapshot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Snapshot.Marshal(b, m, deterministic)
 }
-func (m *Snapshot) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Snapshot.Merge(m, src)
+func (dst *Snapshot) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Snapshot.Merge(dst, src)
 }
 func (m *Snapshot) XXX_Size() int {
 	return xxx_messageInfo_Snapshot.Size(m)
@@ -759,10 +751,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/bigtable/admin/v2/table.proto", fileDescriptor_ea1666be9e81bb35)
+	proto.RegisterFile("google/bigtable/admin/v2/table.proto", fileDescriptor_table_ed23c9c8618cc2b8)
 }
 
-var fileDescriptor_ea1666be9e81bb35 = []byte{
+var fileDescriptor_table_ed23c9c8618cc2b8 = []byte{
 	// 965 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0xff, 0x6e, 0xdb, 0x54,
 	0x18, 0xad, 0xe3, 0x38, 0x6d, 0xbf, 0xa4, 0xad, 0xb9, 0x1d, 0x22, 0x8b, 0xa6, 0x2d, 0x44, 0x30,

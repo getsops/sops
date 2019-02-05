@@ -65,7 +65,6 @@ var Queue_State_name = map[int32]string{
 	2: "PAUSED",
 	3: "DISABLED",
 }
-
 var Queue_State_value = map[string]int32{
 	"STATE_UNSPECIFIED": 0,
 	"RUNNING":           1,
@@ -76,9 +75,8 @@ var Queue_State_value = map[string]int32{
 func (x Queue_State) String() string {
 	return proto.EnumName(Queue_State_name, int32(x))
 }
-
 func (Queue_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_b86070a8ff200176, []int{0, 0}
+	return fileDescriptor_queue_c4ed304f84e85348, []int{0, 0}
 }
 
 // A queue is a container of related tasks. Queues are configured to manage
@@ -170,7 +168,7 @@ func (m *Queue) Reset()         { *m = Queue{} }
 func (m *Queue) String() string { return proto.CompactTextString(m) }
 func (*Queue) ProtoMessage()    {}
 func (*Queue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b86070a8ff200176, []int{0}
+	return fileDescriptor_queue_c4ed304f84e85348, []int{0}
 }
 func (m *Queue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Queue.Unmarshal(m, b)
@@ -178,8 +176,8 @@ func (m *Queue) XXX_Unmarshal(b []byte) error {
 func (m *Queue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Queue.Marshal(b, m, deterministic)
 }
-func (m *Queue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Queue.Merge(m, src)
+func (dst *Queue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Queue.Merge(dst, src)
 }
 func (m *Queue) XXX_Size() int {
 	return xxx_messageInfo_Queue.Size(m)
@@ -421,7 +419,7 @@ func (m *RateLimits) Reset()         { *m = RateLimits{} }
 func (m *RateLimits) String() string { return proto.CompactTextString(m) }
 func (*RateLimits) ProtoMessage()    {}
 func (*RateLimits) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b86070a8ff200176, []int{1}
+	return fileDescriptor_queue_c4ed304f84e85348, []int{1}
 }
 func (m *RateLimits) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RateLimits.Unmarshal(m, b)
@@ -429,8 +427,8 @@ func (m *RateLimits) XXX_Unmarshal(b []byte) error {
 func (m *RateLimits) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RateLimits.Marshal(b, m, deterministic)
 }
-func (m *RateLimits) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RateLimits.Merge(m, src)
+func (dst *RateLimits) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimits.Merge(dst, src)
 }
 func (m *RateLimits) XXX_Size() int {
 	return xxx_messageInfo_RateLimits.Size(m)
@@ -571,7 +569,7 @@ func (m *RetryConfig) Reset()         { *m = RetryConfig{} }
 func (m *RetryConfig) String() string { return proto.CompactTextString(m) }
 func (*RetryConfig) ProtoMessage()    {}
 func (*RetryConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_b86070a8ff200176, []int{2}
+	return fileDescriptor_queue_c4ed304f84e85348, []int{2}
 }
 func (m *RetryConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RetryConfig.Unmarshal(m, b)
@@ -579,8 +577,8 @@ func (m *RetryConfig) XXX_Unmarshal(b []byte) error {
 func (m *RetryConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RetryConfig.Marshal(b, m, deterministic)
 }
-func (m *RetryConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RetryConfig.Merge(m, src)
+func (dst *RetryConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RetryConfig.Merge(dst, src)
 }
 func (m *RetryConfig) XXX_Size() int {
 	return xxx_messageInfo_RetryConfig.Size(m)
@@ -732,10 +730,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/tasks/v2beta2/queue.proto", fileDescriptor_b86070a8ff200176)
+	proto.RegisterFile("google/cloud/tasks/v2beta2/queue.proto", fileDescriptor_queue_c4ed304f84e85348)
 }
 
-var fileDescriptor_b86070a8ff200176 = []byte{
+var fileDescriptor_queue_c4ed304f84e85348 = []byte{
 	// 702 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x94, 0xcb, 0x6e, 0xdb, 0x3a,
 	0x10, 0x86, 0xad, 0x24, 0xca, 0x65, 0xe4, 0x04, 0x0e, 0xcf, 0x05, 0x3e, 0x3e, 0x45, 0x62, 0x38,

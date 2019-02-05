@@ -15,6 +15,7 @@
 package bigtable
 
 import (
+	"context"
 	"fmt"
 	"math"
 	"sort"
@@ -24,7 +25,6 @@ import (
 
 	"cloud.google.com/go/internal/testutil"
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 	btapb "google.golang.org/genproto/googleapis/bigtable/admin/v2"
 )
@@ -173,7 +173,7 @@ func TestAdminIntegration(t *testing.T) {
 
 	var gotRowCount int
 	must(tbl.ReadRows(ctx, RowRange{}, func(row Row) bool {
-		gotRowCount += 1
+		gotRowCount++
 		if !strings.HasPrefix(row.Key(), "b") {
 			t.Errorf("Invalid row after dropping range: %v", row)
 		}

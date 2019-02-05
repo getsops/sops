@@ -37,7 +37,6 @@ var StructuredQuery_Direction_name = map[int32]string{
 	1: "ASCENDING",
 	2: "DESCENDING",
 }
-
 var StructuredQuery_Direction_value = map[string]int32{
 	"DIRECTION_UNSPECIFIED": 0,
 	"ASCENDING":             1,
@@ -47,9 +46,8 @@ var StructuredQuery_Direction_value = map[string]int32{
 func (x StructuredQuery_Direction) String() string {
 	return proto.EnumName(StructuredQuery_Direction_name, int32(x))
 }
-
 func (StructuredQuery_Direction) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 0}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 0}
 }
 
 // A composite filter operator.
@@ -66,7 +64,6 @@ var StructuredQuery_CompositeFilter_Operator_name = map[int32]string{
 	0: "OPERATOR_UNSPECIFIED",
 	1: "AND",
 }
-
 var StructuredQuery_CompositeFilter_Operator_value = map[string]int32{
 	"OPERATOR_UNSPECIFIED": 0,
 	"AND":                  1,
@@ -75,9 +72,8 @@ var StructuredQuery_CompositeFilter_Operator_value = map[string]int32{
 func (x StructuredQuery_CompositeFilter_Operator) String() string {
 	return proto.EnumName(StructuredQuery_CompositeFilter_Operator_name, int32(x))
 }
-
 func (StructuredQuery_CompositeFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 2, 0}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 2, 0}
 }
 
 // A field filter operator.
@@ -110,7 +106,6 @@ var StructuredQuery_FieldFilter_Operator_name = map[int32]string{
 	5: "EQUAL",
 	7: "ARRAY_CONTAINS",
 }
-
 var StructuredQuery_FieldFilter_Operator_value = map[string]int32{
 	"OPERATOR_UNSPECIFIED":  0,
 	"LESS_THAN":             1,
@@ -124,9 +119,8 @@ var StructuredQuery_FieldFilter_Operator_value = map[string]int32{
 func (x StructuredQuery_FieldFilter_Operator) String() string {
 	return proto.EnumName(StructuredQuery_FieldFilter_Operator_name, int32(x))
 }
-
 func (StructuredQuery_FieldFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 3, 0}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 3, 0}
 }
 
 // A unary operator.
@@ -146,7 +140,6 @@ var StructuredQuery_UnaryFilter_Operator_name = map[int32]string{
 	2: "IS_NAN",
 	3: "IS_NULL",
 }
-
 var StructuredQuery_UnaryFilter_Operator_value = map[string]int32{
 	"OPERATOR_UNSPECIFIED": 0,
 	"IS_NAN":               2,
@@ -156,9 +149,8 @@ var StructuredQuery_UnaryFilter_Operator_value = map[string]int32{
 func (x StructuredQuery_UnaryFilter_Operator) String() string {
 	return proto.EnumName(StructuredQuery_UnaryFilter_Operator_name, int32(x))
 }
-
 func (StructuredQuery_UnaryFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 4, 0}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 4, 0}
 }
 
 // A Firestore query.
@@ -211,7 +203,7 @@ func (m *StructuredQuery) Reset()         { *m = StructuredQuery{} }
 func (m *StructuredQuery) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery) ProtoMessage()    {}
 func (*StructuredQuery) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0}
 }
 func (m *StructuredQuery) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery.Unmarshal(m, b)
@@ -219,8 +211,8 @@ func (m *StructuredQuery) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery.Merge(m, src)
+func (dst *StructuredQuery) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery.Merge(dst, src)
 }
 func (m *StructuredQuery) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery.Size(m)
@@ -305,7 +297,7 @@ func (m *StructuredQuery_CollectionSelector) Reset()         { *m = StructuredQu
 func (m *StructuredQuery_CollectionSelector) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_CollectionSelector) ProtoMessage()    {}
 func (*StructuredQuery_CollectionSelector) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 0}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 0}
 }
 func (m *StructuredQuery_CollectionSelector) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_CollectionSelector.Unmarshal(m, b)
@@ -313,8 +305,8 @@ func (m *StructuredQuery_CollectionSelector) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_CollectionSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_CollectionSelector.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_CollectionSelector) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_CollectionSelector.Merge(m, src)
+func (dst *StructuredQuery_CollectionSelector) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_CollectionSelector.Merge(dst, src)
 }
 func (m *StructuredQuery_CollectionSelector) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_CollectionSelector.Size(m)
@@ -357,7 +349,7 @@ func (m *StructuredQuery_Filter) Reset()         { *m = StructuredQuery_Filter{}
 func (m *StructuredQuery_Filter) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_Filter) ProtoMessage()    {}
 func (*StructuredQuery_Filter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 1}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 1}
 }
 func (m *StructuredQuery_Filter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_Filter.Unmarshal(m, b)
@@ -365,8 +357,8 @@ func (m *StructuredQuery_Filter) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_Filter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_Filter.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_Filter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_Filter.Merge(m, src)
+func (dst *StructuredQuery_Filter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_Filter.Merge(dst, src)
 }
 func (m *StructuredQuery_Filter) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_Filter.Size(m)
@@ -536,7 +528,7 @@ func (m *StructuredQuery_CompositeFilter) Reset()         { *m = StructuredQuery
 func (m *StructuredQuery_CompositeFilter) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_CompositeFilter) ProtoMessage()    {}
 func (*StructuredQuery_CompositeFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 2}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 2}
 }
 func (m *StructuredQuery_CompositeFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_CompositeFilter.Unmarshal(m, b)
@@ -544,8 +536,8 @@ func (m *StructuredQuery_CompositeFilter) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_CompositeFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_CompositeFilter.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_CompositeFilter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_CompositeFilter.Merge(m, src)
+func (dst *StructuredQuery_CompositeFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_CompositeFilter.Merge(dst, src)
 }
 func (m *StructuredQuery_CompositeFilter) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_CompositeFilter.Size(m)
@@ -587,7 +579,7 @@ func (m *StructuredQuery_FieldFilter) Reset()         { *m = StructuredQuery_Fie
 func (m *StructuredQuery_FieldFilter) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_FieldFilter) ProtoMessage()    {}
 func (*StructuredQuery_FieldFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 3}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 3}
 }
 func (m *StructuredQuery_FieldFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_FieldFilter.Unmarshal(m, b)
@@ -595,8 +587,8 @@ func (m *StructuredQuery_FieldFilter) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_FieldFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_FieldFilter.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_FieldFilter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_FieldFilter.Merge(m, src)
+func (dst *StructuredQuery_FieldFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_FieldFilter.Merge(dst, src)
 }
 func (m *StructuredQuery_FieldFilter) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_FieldFilter.Size(m)
@@ -646,7 +638,7 @@ func (m *StructuredQuery_UnaryFilter) Reset()         { *m = StructuredQuery_Una
 func (m *StructuredQuery_UnaryFilter) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_UnaryFilter) ProtoMessage()    {}
 func (*StructuredQuery_UnaryFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 4}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 4}
 }
 func (m *StructuredQuery_UnaryFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_UnaryFilter.Unmarshal(m, b)
@@ -654,8 +646,8 @@ func (m *StructuredQuery_UnaryFilter) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_UnaryFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_UnaryFilter.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_UnaryFilter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_UnaryFilter.Merge(m, src)
+func (dst *StructuredQuery_UnaryFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_UnaryFilter.Merge(dst, src)
 }
 func (m *StructuredQuery_UnaryFilter) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_UnaryFilter.Size(m)
@@ -767,7 +759,7 @@ func (m *StructuredQuery_Order) Reset()         { *m = StructuredQuery_Order{} }
 func (m *StructuredQuery_Order) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_Order) ProtoMessage()    {}
 func (*StructuredQuery_Order) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 5}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 5}
 }
 func (m *StructuredQuery_Order) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_Order.Unmarshal(m, b)
@@ -775,8 +767,8 @@ func (m *StructuredQuery_Order) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_Order) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_Order.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_Order) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_Order.Merge(m, src)
+func (dst *StructuredQuery_Order) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_Order.Merge(dst, src)
 }
 func (m *StructuredQuery_Order) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_Order.Size(m)
@@ -813,7 +805,7 @@ func (m *StructuredQuery_FieldReference) Reset()         { *m = StructuredQuery_
 func (m *StructuredQuery_FieldReference) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_FieldReference) ProtoMessage()    {}
 func (*StructuredQuery_FieldReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 6}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 6}
 }
 func (m *StructuredQuery_FieldReference) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_FieldReference.Unmarshal(m, b)
@@ -821,8 +813,8 @@ func (m *StructuredQuery_FieldReference) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_FieldReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_FieldReference.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_FieldReference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_FieldReference.Merge(m, src)
+func (dst *StructuredQuery_FieldReference) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_FieldReference.Merge(dst, src)
 }
 func (m *StructuredQuery_FieldReference) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_FieldReference.Size(m)
@@ -856,7 +848,7 @@ func (m *StructuredQuery_Projection) Reset()         { *m = StructuredQuery_Proj
 func (m *StructuredQuery_Projection) String() string { return proto.CompactTextString(m) }
 func (*StructuredQuery_Projection) ProtoMessage()    {}
 func (*StructuredQuery_Projection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{0, 7}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{0, 7}
 }
 func (m *StructuredQuery_Projection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_StructuredQuery_Projection.Unmarshal(m, b)
@@ -864,8 +856,8 @@ func (m *StructuredQuery_Projection) XXX_Unmarshal(b []byte) error {
 func (m *StructuredQuery_Projection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_StructuredQuery_Projection.Marshal(b, m, deterministic)
 }
-func (m *StructuredQuery_Projection) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StructuredQuery_Projection.Merge(m, src)
+func (dst *StructuredQuery_Projection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StructuredQuery_Projection.Merge(dst, src)
 }
 func (m *StructuredQuery_Projection) XXX_Size() int {
 	return xxx_messageInfo_StructuredQuery_Projection.Size(m)
@@ -902,7 +894,7 @@ func (m *Cursor) Reset()         { *m = Cursor{} }
 func (m *Cursor) String() string { return proto.CompactTextString(m) }
 func (*Cursor) ProtoMessage()    {}
 func (*Cursor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1ae4429ffd6f5a03, []int{1}
+	return fileDescriptor_query_aa3d8d54536831bd, []int{1}
 }
 func (m *Cursor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Cursor.Unmarshal(m, b)
@@ -910,8 +902,8 @@ func (m *Cursor) XXX_Unmarshal(b []byte) error {
 func (m *Cursor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Cursor.Marshal(b, m, deterministic)
 }
-func (m *Cursor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Cursor.Merge(m, src)
+func (dst *Cursor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Cursor.Merge(dst, src)
 }
 func (m *Cursor) XXX_Size() int {
 	return xxx_messageInfo_Cursor.Size(m)
@@ -954,10 +946,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/firestore/v1beta1/query.proto", fileDescriptor_1ae4429ffd6f5a03)
+	proto.RegisterFile("google/firestore/v1beta1/query.proto", fileDescriptor_query_aa3d8d54536831bd)
 }
 
-var fileDescriptor_1ae4429ffd6f5a03 = []byte{
+var fileDescriptor_query_aa3d8d54536831bd = []byte{
 	// 985 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0xdd, 0x6e, 0xe3, 0x44,
 	0x14, 0xc7, 0x6b, 0xa7, 0xf9, 0x3a, 0x69, 0xd3, 0x30, 0x82, 0x95, 0x09, 0xcb, 0x52, 0x05, 0xa4,

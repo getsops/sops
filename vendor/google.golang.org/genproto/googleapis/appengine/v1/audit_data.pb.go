@@ -39,7 +39,7 @@ func (m *AuditData) Reset()         { *m = AuditData{} }
 func (m *AuditData) String() string { return proto.CompactTextString(m) }
 func (*AuditData) ProtoMessage()    {}
 func (*AuditData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7c735bfd5270b805, []int{0}
+	return fileDescriptor_audit_data_b5f7af765ea2d3aa, []int{0}
 }
 func (m *AuditData) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuditData.Unmarshal(m, b)
@@ -47,8 +47,8 @@ func (m *AuditData) XXX_Unmarshal(b []byte) error {
 func (m *AuditData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuditData.Marshal(b, m, deterministic)
 }
-func (m *AuditData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuditData.Merge(m, src)
+func (dst *AuditData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuditData.Merge(dst, src)
 }
 func (m *AuditData) XXX_Size() int {
 	return xxx_messageInfo_AuditData.Size(m)
@@ -183,7 +183,7 @@ func (m *UpdateServiceMethod) Reset()         { *m = UpdateServiceMethod{} }
 func (m *UpdateServiceMethod) String() string { return proto.CompactTextString(m) }
 func (*UpdateServiceMethod) ProtoMessage()    {}
 func (*UpdateServiceMethod) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7c735bfd5270b805, []int{1}
+	return fileDescriptor_audit_data_b5f7af765ea2d3aa, []int{1}
 }
 func (m *UpdateServiceMethod) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateServiceMethod.Unmarshal(m, b)
@@ -191,8 +191,8 @@ func (m *UpdateServiceMethod) XXX_Unmarshal(b []byte) error {
 func (m *UpdateServiceMethod) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateServiceMethod.Marshal(b, m, deterministic)
 }
-func (m *UpdateServiceMethod) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateServiceMethod.Merge(m, src)
+func (dst *UpdateServiceMethod) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateServiceMethod.Merge(dst, src)
 }
 func (m *UpdateServiceMethod) XXX_Size() int {
 	return xxx_messageInfo_UpdateServiceMethod.Size(m)
@@ -223,7 +223,7 @@ func (m *CreateVersionMethod) Reset()         { *m = CreateVersionMethod{} }
 func (m *CreateVersionMethod) String() string { return proto.CompactTextString(m) }
 func (*CreateVersionMethod) ProtoMessage()    {}
 func (*CreateVersionMethod) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7c735bfd5270b805, []int{2}
+	return fileDescriptor_audit_data_b5f7af765ea2d3aa, []int{2}
 }
 func (m *CreateVersionMethod) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateVersionMethod.Unmarshal(m, b)
@@ -231,8 +231,8 @@ func (m *CreateVersionMethod) XXX_Unmarshal(b []byte) error {
 func (m *CreateVersionMethod) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateVersionMethod.Marshal(b, m, deterministic)
 }
-func (m *CreateVersionMethod) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateVersionMethod.Merge(m, src)
+func (dst *CreateVersionMethod) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateVersionMethod.Merge(dst, src)
 }
 func (m *CreateVersionMethod) XXX_Size() int {
 	return xxx_messageInfo_CreateVersionMethod.Size(m)
@@ -257,10 +257,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/appengine/v1/audit_data.proto", fileDescriptor_7c735bfd5270b805)
+	proto.RegisterFile("google/appengine/v1/audit_data.proto", fileDescriptor_audit_data_b5f7af765ea2d3aa)
 }
 
-var fileDescriptor_7c735bfd5270b805 = []byte{
+var fileDescriptor_audit_data_b5f7af765ea2d3aa = []byte{
 	// 290 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0xb1, 0x4e, 0xc3, 0x30,
 	0x10, 0x86, 0x09, 0x43, 0x01, 0x23, 0x3a, 0xa4, 0x03, 0x55, 0x07, 0x84, 0x0a, 0x43, 0x59, 0x1c,

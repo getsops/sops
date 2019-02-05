@@ -15,7 +15,7 @@
   "baseUrl": "https://cloudresourcemanager.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud Resource Manager",
-  "description": "The Google Cloud Resource Manager API provides methods for creating, reading, and updating project metadata.",
+  "description": "Creates, reads, and updates metadata for Google Cloud Platform resource containers.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/resource-manager",
   "fullyEncodeReservedExpansion": true,
@@ -449,7 +449,7 @@
       }
     }
   },
-  "revision": "20180815",
+  "revision": "20181015",
   "rootUrl": "https://cloudresourcemanager.googleapis.com/",
   "schemas": {
     "AuditConfig": {

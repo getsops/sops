@@ -55,7 +55,7 @@ func (m *PartitionId) Reset()         { *m = PartitionId{} }
 func (m *PartitionId) String() string { return proto.CompactTextString(m) }
 func (*PartitionId) ProtoMessage()    {}
 func (*PartitionId) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66499b178484a7ed, []int{0}
+	return fileDescriptor_entity_01235876269a0b39, []int{0}
 }
 func (m *PartitionId) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PartitionId.Unmarshal(m, b)
@@ -63,8 +63,8 @@ func (m *PartitionId) XXX_Unmarshal(b []byte) error {
 func (m *PartitionId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PartitionId.Marshal(b, m, deterministic)
 }
-func (m *PartitionId) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PartitionId.Merge(m, src)
+func (dst *PartitionId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PartitionId.Merge(dst, src)
 }
 func (m *PartitionId) XXX_Size() int {
 	return xxx_messageInfo_PartitionId.Size(m)
@@ -124,7 +124,7 @@ func (m *Key) Reset()         { *m = Key{} }
 func (m *Key) String() string { return proto.CompactTextString(m) }
 func (*Key) ProtoMessage()    {}
 func (*Key) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66499b178484a7ed, []int{1}
+	return fileDescriptor_entity_01235876269a0b39, []int{1}
 }
 func (m *Key) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Key.Unmarshal(m, b)
@@ -132,8 +132,8 @@ func (m *Key) XXX_Unmarshal(b []byte) error {
 func (m *Key) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Key.Marshal(b, m, deterministic)
 }
-func (m *Key) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Key.Merge(m, src)
+func (dst *Key) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Key.Merge(dst, src)
 }
 func (m *Key) XXX_Size() int {
 	return xxx_messageInfo_Key.Size(m)
@@ -183,7 +183,7 @@ func (m *Key_PathElement) Reset()         { *m = Key_PathElement{} }
 func (m *Key_PathElement) String() string { return proto.CompactTextString(m) }
 func (*Key_PathElement) ProtoMessage()    {}
 func (*Key_PathElement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66499b178484a7ed, []int{1, 0}
+	return fileDescriptor_entity_01235876269a0b39, []int{1, 0}
 }
 func (m *Key_PathElement) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Key_PathElement.Unmarshal(m, b)
@@ -191,8 +191,8 @@ func (m *Key_PathElement) XXX_Unmarshal(b []byte) error {
 func (m *Key_PathElement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Key_PathElement.Marshal(b, m, deterministic)
 }
-func (m *Key_PathElement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Key_PathElement.Merge(m, src)
+func (dst *Key_PathElement) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Key_PathElement.Merge(dst, src)
 }
 func (m *Key_PathElement) XXX_Size() int {
 	return xxx_messageInfo_Key_PathElement.Size(m)
@@ -327,7 +327,7 @@ func (m *ArrayValue) Reset()         { *m = ArrayValue{} }
 func (m *ArrayValue) String() string { return proto.CompactTextString(m) }
 func (*ArrayValue) ProtoMessage()    {}
 func (*ArrayValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66499b178484a7ed, []int{2}
+	return fileDescriptor_entity_01235876269a0b39, []int{2}
 }
 func (m *ArrayValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ArrayValue.Unmarshal(m, b)
@@ -335,8 +335,8 @@ func (m *ArrayValue) XXX_Unmarshal(b []byte) error {
 func (m *ArrayValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ArrayValue.Marshal(b, m, deterministic)
 }
-func (m *ArrayValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ArrayValue.Merge(m, src)
+func (dst *ArrayValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ArrayValue.Merge(dst, src)
 }
 func (m *ArrayValue) XXX_Size() int {
 	return xxx_messageInfo_ArrayValue.Size(m)
@@ -386,7 +386,7 @@ func (m *Value) Reset()         { *m = Value{} }
 func (m *Value) String() string { return proto.CompactTextString(m) }
 func (*Value) ProtoMessage()    {}
 func (*Value) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66499b178484a7ed, []int{3}
+	return fileDescriptor_entity_01235876269a0b39, []int{3}
 }
 func (m *Value) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Value.Unmarshal(m, b)
@@ -394,8 +394,8 @@ func (m *Value) XXX_Unmarshal(b []byte) error {
 func (m *Value) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Value.Marshal(b, m, deterministic)
 }
-func (m *Value) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Value.Merge(m, src)
+func (dst *Value) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Value.Merge(dst, src)
 }
 func (m *Value) XXX_Size() int {
 	return xxx_messageInfo_Value.Size(m)
@@ -824,7 +824,7 @@ func (m *Entity) Reset()         { *m = Entity{} }
 func (m *Entity) String() string { return proto.CompactTextString(m) }
 func (*Entity) ProtoMessage()    {}
 func (*Entity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66499b178484a7ed, []int{4}
+	return fileDescriptor_entity_01235876269a0b39, []int{4}
 }
 func (m *Entity) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Entity.Unmarshal(m, b)
@@ -832,8 +832,8 @@ func (m *Entity) XXX_Unmarshal(b []byte) error {
 func (m *Entity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Entity.Marshal(b, m, deterministic)
 }
-func (m *Entity) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Entity.Merge(m, src)
+func (dst *Entity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Entity.Merge(dst, src)
 }
 func (m *Entity) XXX_Size() int {
 	return xxx_messageInfo_Entity.Size(m)
@@ -869,10 +869,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/datastore/v1beta3/entity.proto", fileDescriptor_66499b178484a7ed)
+	proto.RegisterFile("google/datastore/v1beta3/entity.proto", fileDescriptor_entity_01235876269a0b39)
 }
 
-var fileDescriptor_66499b178484a7ed = []byte{
+var fileDescriptor_entity_01235876269a0b39 = []byte{
 	// 789 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x95, 0xdf, 0x8e, 0xdb, 0x44,
 	0x14, 0xc6, 0xed, 0x64, 0xb3, 0x5d, 0x1f, 0xbb, 0xbb, 0x65, 0xda, 0x0b, 0x2b, 0x6a, 0xd9, 0x10,

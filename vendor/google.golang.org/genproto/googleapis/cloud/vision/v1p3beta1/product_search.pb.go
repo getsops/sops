@@ -37,7 +37,6 @@ var ProductSearchCategory_name = map[int32]string{
 	1: "SHOES",
 	2: "BAGS",
 }
-
 var ProductSearchCategory_value = map[string]int32{
 	"PRODUCT_SEARCH_CATEGORY_UNSPECIFIED": 0,
 	"SHOES":                               1,
@@ -47,9 +46,8 @@ var ProductSearchCategory_value = map[string]int32{
 func (x ProductSearchCategory) String() string {
 	return proto.EnumName(ProductSearchCategory_name, int32(x))
 }
-
 func (ProductSearchCategory) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_39c225061f094f0f, []int{0}
+	return fileDescriptor_product_search_5afe37c43a5f30cd, []int{0}
 }
 
 // Specifies the fields to include in product search results.
@@ -68,7 +66,6 @@ var ProductSearchResultsView_name = map[int32]string{
 	0: "BASIC",
 	1: "FULL",
 }
-
 var ProductSearchResultsView_value = map[string]int32{
 	"BASIC": 0,
 	"FULL":  1,
@@ -77,9 +74,8 @@ var ProductSearchResultsView_value = map[string]int32{
 func (x ProductSearchResultsView) String() string {
 	return proto.EnumName(ProductSearchResultsView_name, int32(x))
 }
-
 func (ProductSearchResultsView) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_39c225061f094f0f, []int{1}
+	return fileDescriptor_product_search_5afe37c43a5f30cd, []int{1}
 }
 
 // Parameters for a product search request.
@@ -132,7 +128,7 @@ func (m *ProductSearchParams) Reset()         { *m = ProductSearchParams{} }
 func (m *ProductSearchParams) String() string { return proto.CompactTextString(m) }
 func (*ProductSearchParams) ProtoMessage()    {}
 func (*ProductSearchParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39c225061f094f0f, []int{0}
+	return fileDescriptor_product_search_5afe37c43a5f30cd, []int{0}
 }
 func (m *ProductSearchParams) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProductSearchParams.Unmarshal(m, b)
@@ -140,8 +136,8 @@ func (m *ProductSearchParams) XXX_Unmarshal(b []byte) error {
 func (m *ProductSearchParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProductSearchParams.Marshal(b, m, deterministic)
 }
-func (m *ProductSearchParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProductSearchParams.Merge(m, src)
+func (dst *ProductSearchParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProductSearchParams.Merge(dst, src)
 }
 func (m *ProductSearchParams) XXX_Size() int {
 	return xxx_messageInfo_ProductSearchParams.Size(m)
@@ -240,7 +236,7 @@ func (m *ProductSearchResults) Reset()         { *m = ProductSearchResults{} }
 func (m *ProductSearchResults) String() string { return proto.CompactTextString(m) }
 func (*ProductSearchResults) ProtoMessage()    {}
 func (*ProductSearchResults) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39c225061f094f0f, []int{1}
+	return fileDescriptor_product_search_5afe37c43a5f30cd, []int{1}
 }
 func (m *ProductSearchResults) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProductSearchResults.Unmarshal(m, b)
@@ -248,8 +244,8 @@ func (m *ProductSearchResults) XXX_Unmarshal(b []byte) error {
 func (m *ProductSearchResults) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProductSearchResults.Marshal(b, m, deterministic)
 }
-func (m *ProductSearchResults) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProductSearchResults.Merge(m, src)
+func (dst *ProductSearchResults) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProductSearchResults.Merge(dst, src)
 }
 func (m *ProductSearchResults) XXX_Size() int {
 	return xxx_messageInfo_ProductSearchResults.Size(m)
@@ -319,7 +315,7 @@ func (m *ProductSearchResults_ProductInfo) Reset()         { *m = ProductSearchR
 func (m *ProductSearchResults_ProductInfo) String() string { return proto.CompactTextString(m) }
 func (*ProductSearchResults_ProductInfo) ProtoMessage()    {}
 func (*ProductSearchResults_ProductInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39c225061f094f0f, []int{1, 0}
+	return fileDescriptor_product_search_5afe37c43a5f30cd, []int{1, 0}
 }
 func (m *ProductSearchResults_ProductInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProductSearchResults_ProductInfo.Unmarshal(m, b)
@@ -327,8 +323,8 @@ func (m *ProductSearchResults_ProductInfo) XXX_Unmarshal(b []byte) error {
 func (m *ProductSearchResults_ProductInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProductSearchResults_ProductInfo.Marshal(b, m, deterministic)
 }
-func (m *ProductSearchResults_ProductInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProductSearchResults_ProductInfo.Merge(m, src)
+func (dst *ProductSearchResults_ProductInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProductSearchResults_ProductInfo.Merge(dst, src)
 }
 func (m *ProductSearchResults_ProductInfo) XXX_Size() int {
 	return xxx_messageInfo_ProductSearchResults_ProductInfo.Size(m)
@@ -382,7 +378,7 @@ func (m *ProductSearchResults_Result) Reset()         { *m = ProductSearchResult
 func (m *ProductSearchResults_Result) String() string { return proto.CompactTextString(m) }
 func (*ProductSearchResults_Result) ProtoMessage()    {}
 func (*ProductSearchResults_Result) Descriptor() ([]byte, []int) {
-	return fileDescriptor_39c225061f094f0f, []int{1, 1}
+	return fileDescriptor_product_search_5afe37c43a5f30cd, []int{1, 1}
 }
 func (m *ProductSearchResults_Result) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ProductSearchResults_Result.Unmarshal(m, b)
@@ -390,8 +386,8 @@ func (m *ProductSearchResults_Result) XXX_Unmarshal(b []byte) error {
 func (m *ProductSearchResults_Result) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ProductSearchResults_Result.Marshal(b, m, deterministic)
 }
-func (m *ProductSearchResults_Result) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProductSearchResults_Result.Merge(m, src)
+func (dst *ProductSearchResults_Result) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProductSearchResults_Result.Merge(dst, src)
 }
 func (m *ProductSearchResults_Result) XXX_Size() int {
 	return xxx_messageInfo_ProductSearchResults_Result.Size(m)
@@ -433,10 +429,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/vision/v1p3beta1/product_search.proto", fileDescriptor_39c225061f094f0f)
+	proto.RegisterFile("google/cloud/vision/v1p3beta1/product_search.proto", fileDescriptor_product_search_5afe37c43a5f30cd)
 }
 
-var fileDescriptor_39c225061f094f0f = []byte{
+var fileDescriptor_product_search_5afe37c43a5f30cd = []byte{
 	// 698 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x94, 0xdf, 0x6e, 0xd3, 0x30,
 	0x14, 0xc6, 0x97, 0xfe, 0x5b, 0x73, 0x3a, 0xa0, 0x98, 0x31, 0x45, 0x85, 0x69, 0xdd, 0x90, 0xa0,

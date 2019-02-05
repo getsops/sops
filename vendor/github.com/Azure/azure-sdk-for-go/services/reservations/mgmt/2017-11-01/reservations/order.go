@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewOrderClientWithBaseURI(baseURI string) OrderClient {
 // Parameters:
 // reservationOrderID - order Id of the reservation
 func (client OrderClient) Get(ctx context.Context, reservationOrderID string) (result OrderResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OrderClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, reservationOrderID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "reservations.OrderClient", "Get", nil, "Failure preparing request")
@@ -105,6 +116,16 @@ func (client OrderClient) GetResponder(resp *http.Response) (result OrderRespons
 
 // List list of all the `ReservationOrder`s that the user has access to in the current tenant.
 func (client OrderClient) List(ctx context.Context) (result OrderListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OrderClient.List")
+		defer func() {
+			sc := -1
+			if result.ol.Response.Response != nil {
+				sc = result.ol.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -163,8 +184,8 @@ func (client OrderClient) ListResponder(resp *http.Response) (result OrderList, 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client OrderClient) listNextResults(lastResults OrderList) (result OrderList, err error) {
-	req, err := lastResults.orderListPreparer()
+func (client OrderClient) listNextResults(ctx context.Context, lastResults OrderList) (result OrderList, err error) {
+	req, err := lastResults.orderListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "reservations.OrderClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -185,6 +206,16 @@ func (client OrderClient) listNextResults(lastResults OrderList) (result OrderLi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OrderClient) ListComplete(ctx context.Context) (result OrderListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OrderClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

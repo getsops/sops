@@ -12,61 +12,48 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package proxy
 
 import (
-	"io/ioutil"
 	"net/http"
-	"strings"
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-	"github.com/google/go-cmp/cmp"
 )
 
-func TestRequestBody(t *testing.T) {
-	req1 := &http.Request{
-		Header: http.Header{"Content-Type": {"multipart/mixed; boundary=foo"}},
-		Body: ioutil.NopCloser(strings.NewReader(
+func TestParseRequestBody(t *testing.T) {
+	wantMediaType := "multipart/mixed"
+	wantParts := [][]byte{
+		[]byte("A section"),
+		[]byte("And another"),
+	}
+	for i, test := range []struct {
+		contentType, body string
+	}{
+		{
+			wantMediaType + "; boundary=foo",
 			"--foo\r\nFoo: one\r\n\r\nA section\r\n" +
 				"--foo\r\nFoo: two\r\n\r\nAnd another\r\n" +
-				"--foo--\r\n")),
-	}
-	rb1, err := newRequestBodyFromHTTP(req1)
-	if err != nil {
-		t.Fatal(err)
-	}
-	want := &requestBody{
-		mediaType: "multipart/mixed",
-		parts: [][]byte{
-			[]byte("A section"),
-			[]byte("And another"),
+				"--foo--\r\n",
 		},
-	}
-	if diff := testutil.Diff(rb1, want, cmp.AllowUnexported(requestBody{})); diff != "" {
-		t.Error(diff)
-	}
-
-	// Same contents, different boundary.
-	req2 := &http.Request{
-		Header: http.Header{"Content-Type": {"multipart/mixed; boundary=bar"}},
-		Body: ioutil.NopCloser(strings.NewReader(
+		// Same contents, different boundary.
+		{
+			wantMediaType + "; boundary=bar",
 			"--bar\r\nFoo: one\r\n\r\nA section\r\n" +
 				"--bar\r\nFoo: two\r\n\r\nAnd another\r\n" +
-				"--bar--\r\n")),
-	}
-	rb2, err := newRequestBodyFromHTTP(req2)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if diff := testutil.Diff(rb1, want, cmp.AllowUnexported(requestBody{})); diff != "" {
-		t.Error(diff)
-	}
-
-	if !rb1.equal(rb2) {
-		t.Error("equal returned false, want true")
+				"--bar--\r\n",
+		},
+	} {
+		gotMediaType, gotParts, err := parseRequestBody(test.contentType, []byte(test.body))
+		if err != nil {
+			t.Fatalf("#%d: %v", i, err)
+		}
+		if gotMediaType != wantMediaType {
+			t.Errorf("#%d: got %q, want %q", i, gotMediaType, wantMediaType)
+		}
+		if diff := testutil.Diff(gotParts, wantParts); diff != "" {
+			t.Errorf("#%d: %s", i, diff)
+		}
 	}
 }
 

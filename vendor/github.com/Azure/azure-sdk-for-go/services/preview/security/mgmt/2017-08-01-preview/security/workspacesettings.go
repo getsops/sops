@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewWorkspaceSettingsClientWithBaseURI(baseURI string, subscriptionID string
 // workspaceSettingName - name of the security setting
 // workspaceSetting - security data setting object
 func (client WorkspaceSettingsClient) Create(ctx context.Context, workspaceSettingName string, workspaceSetting WorkspaceSetting) (result WorkspaceSetting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceSettingsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}},
@@ -123,6 +134,16 @@ func (client WorkspaceSettingsClient) CreateResponder(resp *http.Response) (resu
 // Parameters:
 // workspaceSettingName - name of the security setting
 func (client WorkspaceSettingsClient) Delete(ctx context.Context, workspaceSettingName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceSettingsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -189,10 +210,21 @@ func (client WorkspaceSettingsClient) DeleteResponder(resp *http.Response) (resu
 	return
 }
 
-// Get settings about where we should store your security data and logs
+// Get settings about where we should store your security data and logs. If the result is empty, it means that no
+// custom-workspace configuration was set
 // Parameters:
 // workspaceSettingName - name of the security setting
 func (client WorkspaceSettingsClient) Get(ctx context.Context, workspaceSettingName string) (result WorkspaceSetting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -260,8 +292,19 @@ func (client WorkspaceSettingsClient) GetResponder(resp *http.Response) (result 
 	return
 }
 
-// List settings about where we should store your security data and logs
+// List settings about where we should store your security data and logs. If the result is empty, it means that no
+// custom-workspace configuration was set
 func (client WorkspaceSettingsClient) List(ctx context.Context) (result WorkspaceSettingListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceSettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.wsl.Response.Response != nil {
+				sc = result.wsl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -330,8 +373,8 @@ func (client WorkspaceSettingsClient) ListResponder(resp *http.Response) (result
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkspaceSettingsClient) listNextResults(lastResults WorkspaceSettingList) (result WorkspaceSettingList, err error) {
-	req, err := lastResults.workspaceSettingListPreparer()
+func (client WorkspaceSettingsClient) listNextResults(ctx context.Context, lastResults WorkspaceSettingList) (result WorkspaceSettingList, err error) {
+	req, err := lastResults.workspaceSettingListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.WorkspaceSettingsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -352,6 +395,16 @@ func (client WorkspaceSettingsClient) listNextResults(lastResults WorkspaceSetti
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkspaceSettingsClient) ListComplete(ctx context.Context) (result WorkspaceSettingListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceSettingsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -361,6 +414,16 @@ func (client WorkspaceSettingsClient) ListComplete(ctx context.Context) (result 
 // workspaceSettingName - name of the security setting
 // workspaceSetting - security data setting object
 func (client WorkspaceSettingsClient) Update(ctx context.Context, workspaceSettingName string, workspaceSetting WorkspaceSetting) (result WorkspaceSetting, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceSettingsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {

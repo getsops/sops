@@ -21,10 +21,11 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// AddsServicesReplicationStatusClient is the REST APIs for Azure Active Drectory Connect Health
+// AddsServicesReplicationStatusClient is the REST APIs for Azure Active Directory Connect Health
 type AddsServicesReplicationStatusClient struct {
 	BaseClient
 }
@@ -45,6 +46,16 @@ func NewAddsServicesReplicationStatusClientWithBaseURI(baseURI string) AddsServi
 // Parameters:
 // serviceName - the name of the service.
 func (client AddsServicesReplicationStatusClient) Get(ctx context.Context, serviceName string) (result ReplicationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServicesReplicationStatusClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServicesReplicationStatusClient", "Get", nil, "Failure preparing request")

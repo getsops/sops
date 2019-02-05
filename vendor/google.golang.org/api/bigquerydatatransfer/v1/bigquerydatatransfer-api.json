@@ -441,6 +441,7 @@
                     "$ref": "Empty"
                   },
                   "scopes": [
+                    "https://www.googleapis.com/auth/bigquery",
                     "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 },
@@ -530,7 +531,7 @@
                       "type": "string"
                     },
                     "name": {
-                      "description": "The resource name of the transfer config.\nTransfer config names have the form\n`projects/{project_id}/transferConfigs/{config_id}`.\nWhere `config_id` is usually a uuid, even though it is not\nguaranteed or required. The name is ignored when creating a transfer\nconfig.",
+                      "description": "The resource name of the transfer config.\nTransfer config names have the form of\n`projects/{project_id}/locations/{region}/transferConfigs/{config_id}`.\nThe name is automatically generated based on the config_id specified in\nCreateTransferConfigRequest along with project_id and region. If config_id\nis not provided, usually a uuid, even though it is not guaranteed or\nrequired, will be generated for config_id.",
                       "location": "path",
                       "pattern": "^projects/[^/]+/locations/[^/]+/transferConfigs/[^/]+$",
                       "required": true,
@@ -820,6 +821,7 @@
                 "$ref": "Empty"
               },
               "scopes": [
+                "https://www.googleapis.com/auth/bigquery",
                 "https://www.googleapis.com/auth/cloud-platform"
               ]
             },
@@ -909,7 +911,7 @@
                   "type": "string"
                 },
                 "name": {
-                  "description": "The resource name of the transfer config.\nTransfer config names have the form\n`projects/{project_id}/transferConfigs/{config_id}`.\nWhere `config_id` is usually a uuid, even though it is not\nguaranteed or required. The name is ignored when creating a transfer\nconfig.",
+                  "description": "The resource name of the transfer config.\nTransfer config names have the form of\n`projects/{project_id}/locations/{region}/transferConfigs/{config_id}`.\nThe name is automatically generated based on the config_id specified in\nCreateTransferConfigRequest along with project_id and region. If config_id\nis not provided, usually a uuid, even though it is not guaranteed or\nrequired, will be generated for config_id.",
                   "location": "path",
                   "pattern": "^projects/[^/]+/transferConfigs/[^/]+$",
                   "required": true,
@@ -1143,7 +1145,7 @@
       }
     }
   },
-  "revision": "20180715",
+  "revision": "20190119",
   "rootUrl": "https://bigquerydatatransfer.googleapis.com/",
   "schemas": {
     "CheckValidCredsRequest": {
@@ -1504,6 +1506,27 @@
       },
       "type": "object"
     },
+    "ScheduleOptions": {
+      "description": "Options customizing the data transfer schedule.",
+      "id": "ScheduleOptions",
+      "properties": {
+        "disableAutoScheduling": {
+          "description": "If true, automatic scheduling of data transfer runs for this configuration\nwill be disabled. The runs can be started on ad-hoc basis using\nStartManualTransferRuns API. When automatic scheduling is disabled, the\nTransferConfig.schedule field will be ignored.",
+          "type": "boolean"
+        },
+        "endTime": {
+          "description": "Defines time to stop scheduling transfer runs. A transfer run cannot be\nscheduled at or after the end time. The end time can be changed at any\nmoment. The time when a data transfer can be trigerred manually is not\nlimited by this option.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "startTime": {
+          "description": "Specifies time to start scheduling transfer runs. The first run will be\nscheduled at or after the start time according to a recurrence pattern\ndefined in the schedule string. The start time can be changed at any\nmoment. The time when a data transfer can be trigerred manually is not\nlimited by this option.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ScheduleTransferRunsRequest": {
       "description": "A request to schedule transfer runs for a time range.",
       "id": "ScheduleTransferRunsRequest",
@@ -1592,7 +1615,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The resource name of the transfer config.\nTransfer config names have the form\n`projects/{project_id}/transferConfigs/{config_id}`.\nWhere `config_id` is usually a uuid, even though it is not\nguaranteed or required. The name is ignored when creating a transfer\nconfig.",
+          "description": "The resource name of the transfer config.\nTransfer config names have the form of\n`projects/{project_id}/locations/{region}/transferConfigs/{config_id}`.\nThe name is automatically generated based on the config_id specified in\nCreateTransferConfigRequest along with project_id and region. If config_id\nis not provided, usually a uuid, even though it is not guaranteed or\nrequired, will be generated for config_id.",
           "type": "string"
         },
         "nextRunTime": {
@@ -1612,6 +1635,10 @@
           "description": "Data transfer schedule.\nIf the data source does not support a custom schedule, this should be\nempty. If it is empty, the default value for the data source will be\nused.\nThe specified times are in UTC.\nExamples of valid format:\n`1st,3rd monday of month 15:30`,\n`every wed,fri of jan,jun 13:15`, and\n`first sunday of quarter 00:00`.\nSee more explanation about the format here:\nhttps://cloud.google.com/appengine/docs/flexible/python/scheduling-jobs-with-cron-yaml#the_schedule_format\nNOTE: the granularity should be at least 8 hours, or less frequent.",
           "type": "string"
         },
+        "scheduleOptions": {
+          "$ref": "ScheduleOptions",
+          "description": "Options customizing the data transfer schedule."
+        },
         "state": {
           "description": "Output only. State of the most recently updated transfer run.",
           "enum": [
@@ -1626,7 +1653,7 @@
             "State placeholder.",
             "Data transfer is scheduled and is waiting to be picked up by\ndata transfer backend.",
             "Data transfer is in progress.",
-            "Data transfer completed successsfully.",
+            "Data transfer completed successfully.",
             "Data transfer failed.",
             "Data transfer is cancelled."
           ],
@@ -1638,7 +1665,7 @@
           "type": "string"
         },
         "userId": {
-          "description": "Output only. Unique ID of the user on whose behalf transfer is done.\nApplicable only to data sources that do not support service accounts.\nWhen set to 0, the data source service account credentials are used.\nMay be negative. Note, that this identifier is not stable.\nIt may change over time even for the same user.",
+          "description": "Deprecated. Unique ID of the user on whose behalf transfer is done.",
           "format": "int64",
           "type": "string"
         }
@@ -1743,7 +1770,7 @@
             "State placeholder.",
             "Data transfer is scheduled and is waiting to be picked up by\ndata transfer backend.",
             "Data transfer is in progress.",
-            "Data transfer completed successsfully.",
+            "Data transfer completed successfully.",
             "Data transfer failed.",
             "Data transfer is cancelled."
           ],
@@ -1755,7 +1782,7 @@
           "type": "string"
         },
         "userId": {
-          "description": "Output only. Unique ID of the user on whose behalf transfer is done.\nApplicable only to data sources that do not support service accounts.\nWhen set to 0, the data source service account credentials are used.\nMay be negative. Note, that this identifier is not stable.\nIt may change over time even for the same user.",
+          "description": "Deprecated. Unique ID of the user on whose behalf transfer is done.",
           "format": "int64",
           "type": "string"
         }

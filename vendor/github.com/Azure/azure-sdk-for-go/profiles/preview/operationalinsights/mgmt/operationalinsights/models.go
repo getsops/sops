@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,132 +19,125 @@
 
 package operationalinsights
 
-import original "github.com/Azure/azure-sdk-for-go/services/operationalinsights/mgmt/2015-11-01-preview/operationalinsights"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/operationalinsights/mgmt/2015-03-20/operationalinsights"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
+type PurgeState = original.PurgeState
+
+const (
+	Completed PurgeState = original.Completed
+	Pending   PurgeState = original.Pending
+)
+
+type SearchSortEnum = original.SearchSortEnum
+
+const (
+	Asc  SearchSortEnum = original.Asc
+	Desc SearchSortEnum = original.Desc
+)
+
+type StorageInsightState = original.StorageInsightState
+
+const (
+	ERROR StorageInsightState = original.ERROR
+	OK    StorageInsightState = original.OK
+)
+
 type BaseClient = original.BaseClient
-type DataSourcesClient = original.DataSourcesClient
-type LinkedServicesClient = original.LinkedServicesClient
-type DataSourceKind = original.DataSourceKind
-
-const (
-	AzureActivityLog              DataSourceKind = original.AzureActivityLog
-	ChangeTrackingCustomRegistry  DataSourceKind = original.ChangeTrackingCustomRegistry
-	ChangeTrackingDefaultPath     DataSourceKind = original.ChangeTrackingDefaultPath
-	ChangeTrackingDefaultRegistry DataSourceKind = original.ChangeTrackingDefaultRegistry
-	ChangeTrackingPath            DataSourceKind = original.ChangeTrackingPath
-	CustomLog                     DataSourceKind = original.CustomLog
-	CustomLogCollection           DataSourceKind = original.CustomLogCollection
-	GenericDataSource             DataSourceKind = original.GenericDataSource
-	IISLogs                       DataSourceKind = original.IISLogs
-	LinuxPerformanceCollection    DataSourceKind = original.LinuxPerformanceCollection
-	LinuxPerformanceObject        DataSourceKind = original.LinuxPerformanceObject
-	LinuxSyslog                   DataSourceKind = original.LinuxSyslog
-	LinuxSyslogCollection         DataSourceKind = original.LinuxSyslogCollection
-	WindowsEvent                  DataSourceKind = original.WindowsEvent
-	WindowsPerformanceCounter     DataSourceKind = original.WindowsPerformanceCounter
-)
-
-type EntityStatus = original.EntityStatus
-
-const (
-	Canceled            EntityStatus = original.Canceled
-	Creating            EntityStatus = original.Creating
-	Deleting            EntityStatus = original.Deleting
-	Failed              EntityStatus = original.Failed
-	ProvisioningAccount EntityStatus = original.ProvisioningAccount
-	Succeeded           EntityStatus = original.Succeeded
-)
-
-type SkuNameEnum = original.SkuNameEnum
-
-const (
-	Free       SkuNameEnum = original.Free
-	PerGB2018  SkuNameEnum = original.PerGB2018
-	PerNode    SkuNameEnum = original.PerNode
-	Premium    SkuNameEnum = original.Premium
-	Standalone SkuNameEnum = original.Standalone
-	Standard   SkuNameEnum = original.Standard
-	Unlimited  SkuNameEnum = original.Unlimited
-)
-
-type DataSource = original.DataSource
-type DataSourceFilter = original.DataSourceFilter
-type DataSourceListResult = original.DataSourceListResult
-type DataSourceListResultIterator = original.DataSourceListResultIterator
-type DataSourceListResultPage = original.DataSourceListResultPage
-type IntelligencePack = original.IntelligencePack
-type LinkedService = original.LinkedService
-type LinkedServiceListResult = original.LinkedServiceListResult
-type LinkedServiceProperties = original.LinkedServiceProperties
-type ListIntelligencePack = original.ListIntelligencePack
-type ManagementGroup = original.ManagementGroup
-type ManagementGroupProperties = original.ManagementGroupProperties
-type MetricName = original.MetricName
+type CoreSummary = original.CoreSummary
+type LinkTarget = original.LinkTarget
+type ListLinkTarget = original.ListLinkTarget
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
-type OperationListResultIterator = original.OperationListResultIterator
-type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type ProxyResource = original.ProxyResource
 type Resource = original.Resource
+type SavedSearch = original.SavedSearch
+type SavedSearchProperties = original.SavedSearchProperties
+type SavedSearchesClient = original.SavedSearchesClient
+type SavedSearchesListResult = original.SavedSearchesListResult
+type SearchError = original.SearchError
+type SearchGetSchemaResponse = original.SearchGetSchemaResponse
+type SearchHighlight = original.SearchHighlight
+type SearchMetadata = original.SearchMetadata
+type SearchMetadataSchema = original.SearchMetadataSchema
+type SearchParameters = original.SearchParameters
+type SearchResultsResponse = original.SearchResultsResponse
+type SearchSchemaValue = original.SearchSchemaValue
+type SearchSort = original.SearchSort
 type SharedKeys = original.SharedKeys
-type Sku = original.Sku
-type UsageMetric = original.UsageMetric
-type Workspace = original.Workspace
-type WorkspaceListManagementGroupsResult = original.WorkspaceListManagementGroupsResult
-type WorkspaceListResult = original.WorkspaceListResult
-type WorkspaceListUsagesResult = original.WorkspaceListUsagesResult
-type WorkspaceProperties = original.WorkspaceProperties
-type WorkspacesCreateOrUpdateFuture = original.WorkspacesCreateOrUpdateFuture
-type OperationsClient = original.OperationsClient
+type StorageAccount = original.StorageAccount
+type StorageInsight = original.StorageInsight
+type StorageInsightListResult = original.StorageInsightListResult
+type StorageInsightListResultIterator = original.StorageInsightListResultIterator
+type StorageInsightListResultPage = original.StorageInsightListResultPage
+type StorageInsightProperties = original.StorageInsightProperties
+type StorageInsightStatus = original.StorageInsightStatus
+type StorageInsightsClient = original.StorageInsightsClient
+type Tag = original.Tag
+type WorkspacePurgeBody = original.WorkspacePurgeBody
+type WorkspacePurgeBodyFilters = original.WorkspacePurgeBodyFilters
+type WorkspacePurgeResponse = original.WorkspacePurgeResponse
+type WorkspacePurgeStatusResponse = original.WorkspacePurgeStatusResponse
 type WorkspacesClient = original.WorkspacesClient
+type WorkspacesGetSearchResultsFuture = original.WorkspacesGetSearchResultsFuture
 
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func New(subscriptionID string, purgeID string) BaseClient {
+	return original.New(subscriptionID, purgeID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewOperationsClient(subscriptionID string, purgeID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID, purgeID)
 }
-func NewDataSourcesClient(subscriptionID string) DataSourcesClient {
-	return original.NewDataSourcesClient(subscriptionID)
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, purgeID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, purgeID)
 }
-func NewDataSourcesClientWithBaseURI(baseURI string, subscriptionID string) DataSourcesClient {
-	return original.NewDataSourcesClientWithBaseURI(baseURI, subscriptionID)
+func NewSavedSearchesClient(subscriptionID string, purgeID string) SavedSearchesClient {
+	return original.NewSavedSearchesClient(subscriptionID, purgeID)
 }
-func NewLinkedServicesClient(subscriptionID string) LinkedServicesClient {
-	return original.NewLinkedServicesClient(subscriptionID)
+func NewSavedSearchesClientWithBaseURI(baseURI string, subscriptionID string, purgeID string) SavedSearchesClient {
+	return original.NewSavedSearchesClientWithBaseURI(baseURI, subscriptionID, purgeID)
 }
-func NewLinkedServicesClientWithBaseURI(baseURI string, subscriptionID string) LinkedServicesClient {
-	return original.NewLinkedServicesClientWithBaseURI(baseURI, subscriptionID)
+func NewStorageInsightListResultIterator(page StorageInsightListResultPage) StorageInsightListResultIterator {
+	return original.NewStorageInsightListResultIterator(page)
 }
-func PossibleDataSourceKindValues() []DataSourceKind {
-	return original.PossibleDataSourceKindValues()
+func NewStorageInsightListResultPage(getNextPage func(context.Context, StorageInsightListResult) (StorageInsightListResult, error)) StorageInsightListResultPage {
+	return original.NewStorageInsightListResultPage(getNextPage)
 }
-func PossibleEntityStatusValues() []EntityStatus {
-	return original.PossibleEntityStatusValues()
+func NewStorageInsightsClient(subscriptionID string, purgeID string) StorageInsightsClient {
+	return original.NewStorageInsightsClient(subscriptionID, purgeID)
 }
-func PossibleSkuNameEnumValues() []SkuNameEnum {
-	return original.PossibleSkuNameEnumValues()
+func NewStorageInsightsClientWithBaseURI(baseURI string, subscriptionID string, purgeID string) StorageInsightsClient {
+	return original.NewStorageInsightsClientWithBaseURI(baseURI, subscriptionID, purgeID)
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
+func NewWithBaseURI(baseURI string, subscriptionID string, purgeID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID, purgeID)
 }
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+func NewWorkspacesClient(subscriptionID string, purgeID string) WorkspacesClient {
+	return original.NewWorkspacesClient(subscriptionID, purgeID)
+}
+func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string, purgeID string) WorkspacesClient {
+	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID, purgeID)
+}
+func PossiblePurgeStateValues() []PurgeState {
+	return original.PossiblePurgeStateValues()
+}
+func PossibleSearchSortEnumValues() []SearchSortEnum {
+	return original.PossibleSearchSortEnumValues()
+}
+func PossibleStorageInsightStateValues() []StorageInsightState {
+	return original.PossibleStorageInsightStateValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewWorkspacesClient(subscriptionID string) WorkspacesClient {
-	return original.NewWorkspacesClient(subscriptionID)
-}
-func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) WorkspacesClient {
-	return original.NewWorkspacesClientWithBaseURI(baseURI, subscriptionID)
 }

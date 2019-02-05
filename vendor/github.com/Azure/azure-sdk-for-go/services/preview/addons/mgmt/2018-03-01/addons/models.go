@@ -24,6 +24,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/addons/mgmt/2018-03-01/addons"
+
 // OneTimeCharge enumerates the values for one time charge.
 type OneTimeCharge string
 
@@ -100,7 +103,7 @@ func PossibleSupportPlanTypeValues() []SupportPlanType {
 	return []SupportPlanType{SupportPlanTypeAdvanced, SupportPlanTypeEssential, SupportPlanTypeStandard}
 }
 
-// CanonicalSupportPlanInfoDefinition definition object with the properties of a camonical plan
+// CanonicalSupportPlanInfoDefinition definition object with the properties of a canonical plan
 type CanonicalSupportPlanInfoDefinition struct {
 	// SupportPlanType - Support plan type. Possible values include: 'SupportPlanTypeEssential', 'SupportPlanTypeStandard', 'SupportPlanTypeAdvanced'
 	SupportPlanType SupportPlanType `json:"supportPlanType,omitempty"`
@@ -238,8 +241,8 @@ type OperationsDisplayDefinition struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// SupportPlanTypesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// SupportPlanTypesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type SupportPlanTypesCreateOrUpdateFuture struct {
 	azure.Future
 }

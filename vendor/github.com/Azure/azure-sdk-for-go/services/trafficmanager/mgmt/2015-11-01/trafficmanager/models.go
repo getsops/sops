@@ -22,8 +22,11 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
-// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager name
-// operation.
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/trafficmanager/mgmt/2015-11-01/trafficmanager"
+
+// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager
+// name operation.
 type CheckTrafficManagerRelativeDNSNameAvailabilityParameters struct {
 	// Name - Gets or sets the name of the resource.
 	Name *string `json:"name,omitempty"`
@@ -37,7 +40,7 @@ type DNSConfig struct {
 	RelativeName *string `json:"relativeName,omitempty"`
 	// Fqdn - Gets or sets the fully-qualified domain name (FQDN) of the Traffic Manager profile.  This is formed from the concatenation of the RelativeName with the DNS domain used by Azure Traffic Manager.
 	Fqdn *string `json:"fqdn,omitempty"`
-	// TTL - Gets or sets the DNS Ttime-To-Live (TTL), in seconds.  This informs the local DNS resolvers and DNS clients how long to cache DNS responses provided by this Traffic Manager profile.
+	// TTL - Gets or sets the DNS Time-To-Live (TTL), in seconds.  This informs the local DNS resolvers and DNS clients how long to cache DNS responses provided by this Traffic Manager profile.
 	TTL *int64 `json:"ttl,omitempty"`
 }
 

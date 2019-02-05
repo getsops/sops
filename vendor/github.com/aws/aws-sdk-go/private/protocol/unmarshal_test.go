@@ -14,7 +14,6 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/query"
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 	"github.com/aws/aws-sdk-go/private/protocol/restxml"
-	"github.com/stretchr/testify/assert"
 )
 
 type mockCloser struct {
@@ -34,16 +33,24 @@ func TestUnmarshalDrainBody(t *testing.T) {
 	}}
 
 	protocol.UnmarshalDiscardBody(r)
-	assert.NoError(t, r.Error)
-	assert.Equal(t, 0, b.Len())
-	assert.True(t, b.Closed)
+	if err := r.Error; err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
+	if e, a := 0, b.Len(); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if !b.Closed {
+		t.Errorf("expect true")
+	}
 }
 
 func TestUnmarshalDrainBodyNoBody(t *testing.T) {
 	r := &request.Request{HTTPResponse: &http.Response{}}
 
 	protocol.UnmarshalDiscardBody(r)
-	assert.NoError(t, r.Error)
+	if err := r.Error; err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
 }
 
 func TestUnmarshalSeriaizationError(t *testing.T) {

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewAuthorizationServersClientWithBaseURI(baseURI string, subscriptionID str
 // authsid - identifier of the authorization server.
 // parameters - create or update parameters.
 func (client AuthorizationServersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, authsid string, parameters OAuth2AuthorizationServerContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -139,6 +150,16 @@ func (client AuthorizationServersClient) CreateOrUpdateResponder(resp *http.Resp
 // ifMatch - the entity state (Etag) version of the authentication server to delete. A value of "*" can be used
 // for If-Match to unconditionally apply the operation.
 func (client AuthorizationServersClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, authsid string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -219,6 +240,16 @@ func (client AuthorizationServersClient) DeleteResponder(resp *http.Response) (r
 // serviceName - the name of the API Management service.
 // authsid - identifier of the authorization server.
 func (client AuthorizationServersClient) Get(ctx context.Context, resourceGroupName string, serviceName string, authsid string) (result OAuth2AuthorizationServerContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -304,6 +335,16 @@ func (client AuthorizationServersClient) GetResponder(resp *http.Response) (resu
 // top - number of records to return.
 // skip - number of records to skip.
 func (client AuthorizationServersClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result AuthorizationServerCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServersClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.asc.Response.Response != nil {
+				sc = result.asc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -391,8 +432,8 @@ func (client AuthorizationServersClient) ListByServiceResponder(resp *http.Respo
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client AuthorizationServersClient) listByServiceNextResults(lastResults AuthorizationServerCollection) (result AuthorizationServerCollection, err error) {
-	req, err := lastResults.authorizationServerCollectionPreparer()
+func (client AuthorizationServersClient) listByServiceNextResults(ctx context.Context, lastResults AuthorizationServerCollection) (result AuthorizationServerCollection, err error) {
+	req, err := lastResults.authorizationServerCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.AuthorizationServersClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -413,6 +454,16 @@ func (client AuthorizationServersClient) listByServiceNextResults(lastResults Au
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AuthorizationServersClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result AuthorizationServerCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServersClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -426,6 +477,16 @@ func (client AuthorizationServersClient) ListByServiceComplete(ctx context.Conte
 // ifMatch - the entity state (Etag) version of the authorization server to update. A value of "*" can be used
 // for If-Match to unconditionally apply the operation.
 func (client AuthorizationServersClient) Update(ctx context.Context, resourceGroupName string, serviceName string, authsid string, parameters OAuth2AuthorizationServerUpdateContract, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

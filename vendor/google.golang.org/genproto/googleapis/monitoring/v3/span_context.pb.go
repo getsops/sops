@@ -43,7 +43,7 @@ func (m *SpanContext) Reset()         { *m = SpanContext{} }
 func (m *SpanContext) String() string { return proto.CompactTextString(m) }
 func (*SpanContext) ProtoMessage()    {}
 func (*SpanContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_933032e252f1c5e4, []int{0}
+	return fileDescriptor_span_context_0c1dbe9c6f1a1a54, []int{0}
 }
 func (m *SpanContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SpanContext.Unmarshal(m, b)
@@ -51,8 +51,8 @@ func (m *SpanContext) XXX_Unmarshal(b []byte) error {
 func (m *SpanContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SpanContext.Marshal(b, m, deterministic)
 }
-func (m *SpanContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SpanContext.Merge(m, src)
+func (dst *SpanContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpanContext.Merge(dst, src)
 }
 func (m *SpanContext) XXX_Size() int {
 	return xxx_messageInfo_SpanContext.Size(m)
@@ -75,10 +75,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/monitoring/v3/span_context.proto", fileDescriptor_933032e252f1c5e4)
+	proto.RegisterFile("google/monitoring/v3/span_context.proto", fileDescriptor_span_context_0c1dbe9c6f1a1a54)
 }
 
-var fileDescriptor_933032e252f1c5e4 = []byte{
+var fileDescriptor_span_context_0c1dbe9c6f1a1a54 = []byte{
 	// 197 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0x4f, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0xcf, 0xcd, 0xcf, 0xcb, 0x2c, 0xc9, 0x2f, 0xca, 0xcc, 0x4b, 0xd7, 0x2f, 0x33,

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,6 +43,16 @@ func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string, ascLoc
 
 // Get details of a specific location
 func (client LocationsClient) Get(ctx context.Context) (result AscLocation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -113,6 +124,16 @@ func (client LocationsClient) GetResponder(resp *http.Response) (result AscLocat
 // only one responsible location. The location in the response should be used to read or write other resources in ASC
 // according to their ID.
 func (client LocationsClient) List(ctx context.Context) (result AscLocationListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.List")
+		defer func() {
+			sc := -1
+			if result.all.Response.Response != nil {
+				sc = result.all.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.Pattern, Rule: `^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$`, Chain: nil}}}}); err != nil {
@@ -181,8 +202,8 @@ func (client LocationsClient) ListResponder(resp *http.Response) (result AscLoca
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client LocationsClient) listNextResults(lastResults AscLocationList) (result AscLocationList, err error) {
-	req, err := lastResults.ascLocationListPreparer()
+func (client LocationsClient) listNextResults(ctx context.Context, lastResults AscLocationList) (result AscLocationList, err error) {
+	req, err := lastResults.ascLocationListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "security.LocationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -203,6 +224,16 @@ func (client LocationsClient) listNextResults(lastResults AscLocationList) (resu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LocationsClient) ListComplete(ctx context.Context) (result AscLocationListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

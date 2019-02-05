@@ -43,7 +43,7 @@
 // is then "full" and the permutation is applied to "empty" it. This process is
 // repeated until all the input has been "absorbed". The input is then padded.
 // The digest is "squeezed" from the sponge in the same way, except that output
-// output is copied out instead of input being XORed in.
+// is copied out instead of input being XORed in.
 //
 // A sponge is parameterized by its generic security strength, which is equal
 // to half its capacity; capacity + rate is equal to the permutation's width.

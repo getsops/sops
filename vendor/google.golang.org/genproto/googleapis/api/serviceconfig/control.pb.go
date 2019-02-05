@@ -34,7 +34,7 @@ func (m *Control) Reset()         { *m = Control{} }
 func (m *Control) String() string { return proto.CompactTextString(m) }
 func (*Control) ProtoMessage()    {}
 func (*Control) Descriptor() ([]byte, []int) {
-	return fileDescriptor_74b55b5694b7f0a5, []int{0}
+	return fileDescriptor_control_f350b83573452faa, []int{0}
 }
 func (m *Control) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Control.Unmarshal(m, b)
@@ -42,8 +42,8 @@ func (m *Control) XXX_Unmarshal(b []byte) error {
 func (m *Control) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Control.Marshal(b, m, deterministic)
 }
-func (m *Control) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Control.Merge(m, src)
+func (dst *Control) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Control.Merge(dst, src)
 }
 func (m *Control) XXX_Size() int {
 	return xxx_messageInfo_Control.Size(m)
@@ -65,9 +65,9 @@ func init() {
 	proto.RegisterType((*Control)(nil), "google.api.Control")
 }
 
-func init() { proto.RegisterFile("google/api/control.proto", fileDescriptor_74b55b5694b7f0a5) }
+func init() { proto.RegisterFile("google/api/control.proto", fileDescriptor_control_f350b83573452faa) }
 
-var fileDescriptor_74b55b5694b7f0a5 = []byte{
+var fileDescriptor_control_f350b83573452faa = []byte{
 	// 165 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x48, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x4f, 0x2c, 0xc8, 0xd4, 0x4f, 0xce, 0xcf, 0x2b, 0x29, 0xca, 0xcf, 0xd1, 0x2b,

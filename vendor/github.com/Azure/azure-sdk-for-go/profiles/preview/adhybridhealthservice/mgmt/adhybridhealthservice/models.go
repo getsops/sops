@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,24 +19,16 @@
 
 package adhybridhealthservice
 
-import original "github.com/Azure/azure-sdk-for-go/services/adhybridhealthservice/mgmt/2014-01-01/adhybridhealthservice"
+import (
+	"context"
 
-type AdDomainServiceMembersClient = original.AdDomainServiceMembersClient
-type AddsServiceClient = original.AddsServiceClient
-type AddsServiceMembersClient = original.AddsServiceMembersClient
-type AddsServicesClient = original.AddsServicesClient
-type AddsServicesReplicationStatusClient = original.AddsServicesReplicationStatusClient
-type AddsServicesServiceMembersClient = original.AddsServicesServiceMembersClient
-type AddsServicesUserPreferenceClient = original.AddsServicesUserPreferenceClient
-type AlertsClient = original.AlertsClient
+	original "github.com/Azure/azure-sdk-for-go/services/adhybridhealthservice/mgmt/2014-01-01/adhybridhealthservice"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ConfigurationClient = original.ConfigurationClient
-type DimensionsClient = original.DimensionsClient
 type AlgorithmStepType = original.AlgorithmStepType
 
 const (
@@ -78,8 +70,8 @@ type DeltaOperationType = original.DeltaOperationType
 
 const (
 	DeltaOperationTypeAdd       DeltaOperationType = original.DeltaOperationTypeAdd
-	DeltaOperationTypeDeletAdd  DeltaOperationType = original.DeltaOperationTypeDeletAdd
 	DeltaOperationTypeDelete    DeltaOperationType = original.DeltaOperationTypeDelete
+	DeltaOperationTypeDeleteAdd DeltaOperationType = original.DeltaOperationTypeDeleteAdd
 	DeltaOperationTypeNone      DeltaOperationType = original.DeltaOperationTypeNone
 	DeltaOperationTypeObsolete  DeltaOperationType = original.DeltaOperationTypeObsolete
 	DeltaOperationTypeReplace   DeltaOperationType = original.DeltaOperationTypeReplace
@@ -151,28 +143,38 @@ const (
 	ValueTypeUndefined ValueType = original.ValueTypeUndefined
 )
 
+type AdDomainServiceMembersClient = original.AdDomainServiceMembersClient
 type AdditionalInformation = original.AdditionalInformation
 type AddsConfiguration = original.AddsConfiguration
 type AddsConfigurationIterator = original.AddsConfigurationIterator
 type AddsConfigurationPage = original.AddsConfigurationPage
+type AddsServiceClient = original.AddsServiceClient
 type AddsServiceMember = original.AddsServiceMember
 type AddsServiceMembers = original.AddsServiceMembers
+type AddsServiceMembersClient = original.AddsServiceMembersClient
 type AddsServiceMembersIterator = original.AddsServiceMembersIterator
 type AddsServiceMembersPage = original.AddsServiceMembersPage
+type AddsServicesClient = original.AddsServicesClient
+type AddsServicesReplicationStatusClient = original.AddsServicesReplicationStatusClient
+type AddsServicesServiceMembersClient = original.AddsServicesServiceMembersClient
+type AddsServicesUserPreferenceClient = original.AddsServicesUserPreferenceClient
 type Agent = original.Agent
 type Alert = original.Alert
 type AlertFeedback = original.AlertFeedback
 type AlertFeedbacks = original.AlertFeedbacks
 type Alerts = original.Alerts
+type AlertsClient = original.AlertsClient
 type AlertsIterator = original.AlertsIterator
 type AlertsPage = original.AlertsPage
 type AssociatedObject = original.AssociatedObject
 type AttributeDelta = original.AttributeDelta
 type AttributeMapping = original.AttributeMapping
 type AttributeMppingSource = original.AttributeMppingSource
+type BaseClient = original.BaseClient
 type ChangeNotReimported = original.ChangeNotReimported
 type ChangeNotReimportedDelta = original.ChangeNotReimportedDelta
 type ChangeNotReimportedEntry = original.ChangeNotReimportedEntry
+type ConfigurationClient = original.ConfigurationClient
 type Connector = original.Connector
 type ConnectorConnectionError = original.ConnectorConnectionError
 type ConnectorConnectionErrors = original.ConnectorConnectionErrors
@@ -184,6 +186,7 @@ type Credentials = original.Credentials
 type DataFreshnessDetails = original.DataFreshnessDetails
 type Dimension = original.Dimension
 type Dimensions = original.Dimensions
+type DimensionsClient = original.DimensionsClient
 type DimensionsIterator = original.DimensionsIterator
 type DimensionsPage = original.DimensionsPage
 type Display = original.Display
@@ -218,9 +221,9 @@ type MetricMetadata = original.MetricMetadata
 type MetricMetadataList = original.MetricMetadataList
 type MetricMetadataListIterator = original.MetricMetadataListIterator
 type MetricMetadataListPage = original.MetricMetadataListPage
-type Metrics = original.Metrics
 type MetricSet = original.MetricSet
 type MetricSets = original.MetricSets
+type Metrics = original.Metrics
 type MetricsIterator = original.MetricsIterator
 type MetricsPage = original.MetricsPage
 type ModuleConfiguration = original.ModuleConfiguration
@@ -230,6 +233,7 @@ type Operation = original.Operation
 type OperationListResponse = original.OperationListResponse
 type OperationListResponseIterator = original.OperationListResponseIterator
 type OperationListResponsePage = original.OperationListResponsePage
+type OperationsClient = original.OperationsClient
 type Partition = original.Partition
 type PartitionScope = original.PartitionScope
 type PasswordHashSyncConfiguration = original.PasswordHashSyncConfiguration
@@ -238,18 +242,22 @@ type ReplicationDetailsList = original.ReplicationDetailsList
 type ReplicationStatus = original.ReplicationStatus
 type ReplicationSummary = original.ReplicationSummary
 type ReplicationSummaryList = original.ReplicationSummaryList
+type ReportsClient = original.ReportsClient
 type Result = original.Result
 type RuleErrorInfo = original.RuleErrorInfo
 type RunProfile = original.RunProfile
 type RunProfiles = original.RunProfiles
 type RunStep = original.RunStep
+type ServiceClient = original.ServiceClient
 type ServiceConfiguration = original.ServiceConfiguration
 type ServiceMember = original.ServiceMember
 type ServiceMembers = original.ServiceMembers
+type ServiceMembersClient = original.ServiceMembersClient
 type ServiceMembersIterator = original.ServiceMembersIterator
 type ServiceMembersPage = original.ServiceMembersPage
 type ServiceProperties = original.ServiceProperties
 type Services = original.Services
+type ServicesClient = original.ServicesClient
 type ServicesIterator = original.ServicesIterator
 type ServicesPage = original.ServicesPage
 type TabularExportError = original.TabularExportError
@@ -257,17 +265,21 @@ type Tenant = original.Tenant
 type TenantOnboardingDetails = original.TenantOnboardingDetails
 type UserPreference = original.UserPreference
 type ValueDelta = original.ValueDelta
-type OperationsClient = original.OperationsClient
-type ReportsClient = original.ReportsClient
-type ServiceClient = original.ServiceClient
-type ServiceMembersClient = original.ServiceMembersClient
-type ServicesClient = original.ServicesClient
 
+func New() BaseClient {
+	return original.New()
+}
 func NewAdDomainServiceMembersClient() AdDomainServiceMembersClient {
 	return original.NewAdDomainServiceMembersClient()
 }
 func NewAdDomainServiceMembersClientWithBaseURI(baseURI string) AdDomainServiceMembersClient {
 	return original.NewAdDomainServiceMembersClientWithBaseURI(baseURI)
+}
+func NewAddsConfigurationIterator(page AddsConfigurationPage) AddsConfigurationIterator {
+	return original.NewAddsConfigurationIterator(page)
+}
+func NewAddsConfigurationPage(getNextPage func(context.Context, AddsConfiguration) (AddsConfiguration, error)) AddsConfigurationPage {
+	return original.NewAddsConfigurationPage(getNextPage)
 }
 func NewAddsServiceClient() AddsServiceClient {
 	return original.NewAddsServiceClient()
@@ -280,6 +292,12 @@ func NewAddsServiceMembersClient() AddsServiceMembersClient {
 }
 func NewAddsServiceMembersClientWithBaseURI(baseURI string) AddsServiceMembersClient {
 	return original.NewAddsServiceMembersClientWithBaseURI(baseURI)
+}
+func NewAddsServiceMembersIterator(page AddsServiceMembersPage) AddsServiceMembersIterator {
+	return original.NewAddsServiceMembersIterator(page)
+}
+func NewAddsServiceMembersPage(getNextPage func(context.Context, AddsServiceMembers) (AddsServiceMembers, error)) AddsServiceMembersPage {
+	return original.NewAddsServiceMembersPage(getNextPage)
 }
 func NewAddsServicesClient() AddsServicesClient {
 	return original.NewAddsServicesClient()
@@ -311,11 +329,11 @@ func NewAlertsClient() AlertsClient {
 func NewAlertsClientWithBaseURI(baseURI string) AlertsClient {
 	return original.NewAlertsClientWithBaseURI(baseURI)
 }
-func New() BaseClient {
-	return original.New()
+func NewAlertsIterator(page AlertsPage) AlertsIterator {
+	return original.NewAlertsIterator(page)
 }
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
+func NewAlertsPage(getNextPage func(context.Context, Alerts) (Alerts, error)) AlertsPage {
+	return original.NewAlertsPage(getNextPage)
 }
 func NewConfigurationClient() ConfigurationClient {
 	return original.NewConfigurationClient()
@@ -328,6 +346,81 @@ func NewDimensionsClient() DimensionsClient {
 }
 func NewDimensionsClientWithBaseURI(baseURI string) DimensionsClient {
 	return original.NewDimensionsClientWithBaseURI(baseURI)
+}
+func NewDimensionsIterator(page DimensionsPage) DimensionsIterator {
+	return original.NewDimensionsIterator(page)
+}
+func NewDimensionsPage(getNextPage func(context.Context, Dimensions) (Dimensions, error)) DimensionsPage {
+	return original.NewDimensionsPage(getNextPage)
+}
+func NewExportStatusesIterator(page ExportStatusesPage) ExportStatusesIterator {
+	return original.NewExportStatusesIterator(page)
+}
+func NewExportStatusesPage(getNextPage func(context.Context, ExportStatuses) (ExportStatuses, error)) ExportStatusesPage {
+	return original.NewExportStatusesPage(getNextPage)
+}
+func NewMetricMetadataListIterator(page MetricMetadataListPage) MetricMetadataListIterator {
+	return original.NewMetricMetadataListIterator(page)
+}
+func NewMetricMetadataListPage(getNextPage func(context.Context, MetricMetadataList) (MetricMetadataList, error)) MetricMetadataListPage {
+	return original.NewMetricMetadataListPage(getNextPage)
+}
+func NewMetricsIterator(page MetricsPage) MetricsIterator {
+	return original.NewMetricsIterator(page)
+}
+func NewMetricsPage(getNextPage func(context.Context, Metrics) (Metrics, error)) MetricsPage {
+	return original.NewMetricsPage(getNextPage)
+}
+func NewOperationListResponseIterator(page OperationListResponsePage) OperationListResponseIterator {
+	return original.NewOperationListResponseIterator(page)
+}
+func NewOperationListResponsePage(getNextPage func(context.Context, OperationListResponse) (OperationListResponse, error)) OperationListResponsePage {
+	return original.NewOperationListResponsePage(getNextPage)
+}
+func NewOperationsClient() OperationsClient {
+	return original.NewOperationsClient()
+}
+func NewOperationsClientWithBaseURI(baseURI string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI)
+}
+func NewReportsClient() ReportsClient {
+	return original.NewReportsClient()
+}
+func NewReportsClientWithBaseURI(baseURI string) ReportsClient {
+	return original.NewReportsClientWithBaseURI(baseURI)
+}
+func NewServiceClient() ServiceClient {
+	return original.NewServiceClient()
+}
+func NewServiceClientWithBaseURI(baseURI string) ServiceClient {
+	return original.NewServiceClientWithBaseURI(baseURI)
+}
+func NewServiceMembersClient() ServiceMembersClient {
+	return original.NewServiceMembersClient()
+}
+func NewServiceMembersClientWithBaseURI(baseURI string) ServiceMembersClient {
+	return original.NewServiceMembersClientWithBaseURI(baseURI)
+}
+func NewServiceMembersIterator(page ServiceMembersPage) ServiceMembersIterator {
+	return original.NewServiceMembersIterator(page)
+}
+func NewServiceMembersPage(getNextPage func(context.Context, ServiceMembers) (ServiceMembers, error)) ServiceMembersPage {
+	return original.NewServiceMembersPage(getNextPage)
+}
+func NewServicesClient() ServicesClient {
+	return original.NewServicesClient()
+}
+func NewServicesClientWithBaseURI(baseURI string) ServicesClient {
+	return original.NewServicesClientWithBaseURI(baseURI)
+}
+func NewServicesIterator(page ServicesPage) ServicesIterator {
+	return original.NewServicesIterator(page)
+}
+func NewServicesPage(getNextPage func(context.Context, Services) (Services, error)) ServicesPage {
+	return original.NewServicesPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string) BaseClient {
+	return original.NewWithBaseURI(baseURI)
 }
 func PossibleAlgorithmStepTypeValues() []AlgorithmStepType {
 	return original.PossibleAlgorithmStepTypeValues()
@@ -361,36 +454,6 @@ func PossibleValueDeltaOperationTypeValues() []ValueDeltaOperationType {
 }
 func PossibleValueTypeValues() []ValueType {
 	return original.PossibleValueTypeValues()
-}
-func NewOperationsClient() OperationsClient {
-	return original.NewOperationsClient()
-}
-func NewOperationsClientWithBaseURI(baseURI string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI)
-}
-func NewReportsClient() ReportsClient {
-	return original.NewReportsClient()
-}
-func NewReportsClientWithBaseURI(baseURI string) ReportsClient {
-	return original.NewReportsClientWithBaseURI(baseURI)
-}
-func NewServiceClient() ServiceClient {
-	return original.NewServiceClient()
-}
-func NewServiceClientWithBaseURI(baseURI string) ServiceClient {
-	return original.NewServiceClientWithBaseURI(baseURI)
-}
-func NewServiceMembersClient() ServiceMembersClient {
-	return original.NewServiceMembersClient()
-}
-func NewServiceMembersClientWithBaseURI(baseURI string) ServiceMembersClient {
-	return original.NewServiceMembersClientWithBaseURI(baseURI)
-}
-func NewServicesClient() ServicesClient {
-	return original.NewServicesClient()
-}
-func NewServicesClientWithBaseURI(baseURI string) ServicesClient {
-	return original.NewServicesClientWithBaseURI(baseURI)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

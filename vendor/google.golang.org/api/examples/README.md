@@ -1,6 +1,6 @@
 # Check out the new, idiomatic GCP library
 
-https://github.com/GoogleCloudPlatform/google-cloud-go
+https://github.com/googleapis/google-cloud-go
 
 https://godoc.org/cloud.google.com/go
 

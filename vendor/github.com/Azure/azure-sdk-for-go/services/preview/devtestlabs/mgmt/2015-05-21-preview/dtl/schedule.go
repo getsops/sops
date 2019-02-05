@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewScheduleClientWithBaseURI(baseURI string, subscriptionID string) Schedul
 // labName - the name of the lab.
 // name - the name of the schedule.
 func (client ScheduleClient) CreateOrUpdateResource(ctx context.Context, resourceGroupName string, labName string, name string, schedule Schedule) (result ScheduleCreateOrUpdateResourceFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.CreateOrUpdateResource")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdateResourcePreparer(ctx, resourceGroupName, labName, name, schedule)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ScheduleClient", "CreateOrUpdateResource", nil, "Failure preparing request")
@@ -93,10 +104,6 @@ func (client ScheduleClient) CreateOrUpdateResourceSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -120,6 +127,16 @@ func (client ScheduleClient) CreateOrUpdateResourceResponder(resp *http.Response
 // labName - the name of the lab.
 // name - the name of the schedule.
 func (client ScheduleClient) DeleteResource(ctx context.Context, resourceGroupName string, labName string, name string) (result ScheduleDeleteResourceFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.DeleteResource")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ScheduleClient", "DeleteResource", nil, "Failure preparing request")
@@ -166,10 +183,6 @@ func (client ScheduleClient) DeleteResourceSender(req *http.Request) (future Sch
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -192,6 +205,16 @@ func (client ScheduleClient) DeleteResourceResponder(resp *http.Response) (resul
 // labName - the name of the lab.
 // name - the name of the schedule.
 func (client ScheduleClient) Execute(ctx context.Context, resourceGroupName string, labName string, name string) (result ScheduleExecuteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.Execute")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ExecutePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ScheduleClient", "Execute", nil, "Failure preparing request")
@@ -238,10 +261,6 @@ func (client ScheduleClient) ExecuteSender(req *http.Request) (future ScheduleEx
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -264,6 +283,16 @@ func (client ScheduleClient) ExecuteResponder(resp *http.Response) (result autor
 // labName - the name of the lab.
 // name - the name of the schedule.
 func (client ScheduleClient) GetResource(ctx context.Context, resourceGroupName string, labName string, name string) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.GetResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ScheduleClient", "GetResource", nil, "Failure preparing request")
@@ -333,6 +362,16 @@ func (client ScheduleClient) GetResourceResponder(resp *http.Response) (result S
 // labName - the name of the lab.
 // filter - the filter to apply on the operation.
 func (client ScheduleClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationSchedulePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcs.Response.Response != nil {
+				sc = result.rwcs.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderBy)
 	if err != nil {
@@ -406,8 +445,8 @@ func (client ScheduleClient) ListResponder(resp *http.Response) (result Response
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ScheduleClient) listNextResults(lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
-	req, err := lastResults.responseWithContinuationSchedulePreparer()
+func (client ScheduleClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
+	req, err := lastResults.responseWithContinuationSchedulePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.ScheduleClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -428,6 +467,16 @@ func (client ScheduleClient) listNextResults(lastResults ResponseWithContinuatio
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ScheduleClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationScheduleIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderBy)
 	return
 }
@@ -438,6 +487,16 @@ func (client ScheduleClient) ListComplete(ctx context.Context, resourceGroupName
 // labName - the name of the lab.
 // name - the name of the schedule.
 func (client ScheduleClient) PatchResource(ctx context.Context, resourceGroupName string, labName string, name string, schedule Schedule) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.PatchResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchResourcePreparer(ctx, resourceGroupName, labName, name, schedule)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ScheduleClient", "PatchResource", nil, "Failure preparing request")

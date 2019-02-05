@@ -75,7 +75,7 @@ func (m *Document) Reset()         { *m = Document{} }
 func (m *Document) String() string { return proto.CompactTextString(m) }
 func (*Document) ProtoMessage()    {}
 func (*Document) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1522b475188e04d0, []int{0}
+	return fileDescriptor_document_cd57755e5c8cfbb2, []int{0}
 }
 func (m *Document) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Document.Unmarshal(m, b)
@@ -83,8 +83,8 @@ func (m *Document) XXX_Unmarshal(b []byte) error {
 func (m *Document) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Document.Marshal(b, m, deterministic)
 }
-func (m *Document) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Document.Merge(m, src)
+func (dst *Document) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Document.Merge(dst, src)
 }
 func (m *Document) XXX_Size() int {
 	return xxx_messageInfo_Document.Size(m)
@@ -149,7 +149,7 @@ func (m *Value) Reset()         { *m = Value{} }
 func (m *Value) String() string { return proto.CompactTextString(m) }
 func (*Value) ProtoMessage()    {}
 func (*Value) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1522b475188e04d0, []int{1}
+	return fileDescriptor_document_cd57755e5c8cfbb2, []int{1}
 }
 func (m *Value) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Value.Unmarshal(m, b)
@@ -157,8 +157,8 @@ func (m *Value) XXX_Unmarshal(b []byte) error {
 func (m *Value) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Value.Marshal(b, m, deterministic)
 }
-func (m *Value) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Value.Merge(m, src)
+func (dst *Value) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Value.Merge(dst, src)
 }
 func (m *Value) XXX_Size() int {
 	return xxx_messageInfo_Value.Size(m)
@@ -553,7 +553,7 @@ func (m *ArrayValue) Reset()         { *m = ArrayValue{} }
 func (m *ArrayValue) String() string { return proto.CompactTextString(m) }
 func (*ArrayValue) ProtoMessage()    {}
 func (*ArrayValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1522b475188e04d0, []int{2}
+	return fileDescriptor_document_cd57755e5c8cfbb2, []int{2}
 }
 func (m *ArrayValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ArrayValue.Unmarshal(m, b)
@@ -561,8 +561,8 @@ func (m *ArrayValue) XXX_Unmarshal(b []byte) error {
 func (m *ArrayValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ArrayValue.Marshal(b, m, deterministic)
 }
-func (m *ArrayValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ArrayValue.Merge(m, src)
+func (dst *ArrayValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ArrayValue.Merge(dst, src)
 }
 func (m *ArrayValue) XXX_Size() int {
 	return xxx_messageInfo_ArrayValue.Size(m)
@@ -598,7 +598,7 @@ func (m *MapValue) Reset()         { *m = MapValue{} }
 func (m *MapValue) String() string { return proto.CompactTextString(m) }
 func (*MapValue) ProtoMessage()    {}
 func (*MapValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1522b475188e04d0, []int{3}
+	return fileDescriptor_document_cd57755e5c8cfbb2, []int{3}
 }
 func (m *MapValue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MapValue.Unmarshal(m, b)
@@ -606,8 +606,8 @@ func (m *MapValue) XXX_Unmarshal(b []byte) error {
 func (m *MapValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MapValue.Marshal(b, m, deterministic)
 }
-func (m *MapValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MapValue.Merge(m, src)
+func (dst *MapValue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MapValue.Merge(dst, src)
 }
 func (m *MapValue) XXX_Size() int {
 	return xxx_messageInfo_MapValue.Size(m)
@@ -635,10 +635,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/firestore/v1beta1/document.proto", fileDescriptor_1522b475188e04d0)
+	proto.RegisterFile("google/firestore/v1beta1/document.proto", fileDescriptor_document_cd57755e5c8cfbb2)
 }
 
-var fileDescriptor_1522b475188e04d0 = []byte{
+var fileDescriptor_document_cd57755e5c8cfbb2 = []byte{
 	// 655 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x94, 0xcf, 0x6e, 0xd3, 0x4c,
 	0x14, 0xc5, 0xe3, 0x24, 0x8d, 0x92, 0xeb, 0xb4, 0xfd, 0x3e, 0xb3, 0x89, 0xa2, 0x8a, 0x86, 0x00,

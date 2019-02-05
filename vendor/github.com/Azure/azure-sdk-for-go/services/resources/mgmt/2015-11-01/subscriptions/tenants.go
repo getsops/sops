@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewTenantsClientWithBaseURI(baseURI string) TenantsClient {
 
 // List gets a list of the tenantIds.
 func (client TenantsClient) List(ctx context.Context) (result TenantListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantsClient.List")
+		defer func() {
+			sc := -1
+			if result.tlr.Response.Response != nil {
+				sc = result.tlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -99,8 +110,8 @@ func (client TenantsClient) ListResponder(resp *http.Response) (result TenantLis
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TenantsClient) listNextResults(lastResults TenantListResult) (result TenantListResult, err error) {
-	req, err := lastResults.tenantListResultPreparer()
+func (client TenantsClient) listNextResults(ctx context.Context, lastResults TenantListResult) (result TenantListResult, err error) {
+	req, err := lastResults.tenantListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "subscriptions.TenantsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -121,6 +132,16 @@ func (client TenantsClient) listNextResults(lastResults TenantListResult) (resul
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TenantsClient) ListComplete(ctx context.Context) (result TenantListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

@@ -1,4 +1,4 @@
-// +build !linux appengine !go1.7
+// +build !linux appengine
 
 /*
  *
@@ -20,7 +20,12 @@
 
 package syscall
 
-import "google.golang.org/grpc/grpclog"
+import (
+	"net"
+	"time"
+
+	"google.golang.org/grpc/grpclog"
+)
 
 func init() {
 	grpclog.Info("CPU time info is unavailable on non-linux or appengine environment.")
@@ -44,4 +49,15 @@ func GetRusage() (rusage *Rusage) {
 // between two Rusage structs. It a no-op function for non-linux or appengine environment.
 func CPUTimeDiff(first *Rusage, latest *Rusage) (float64, float64) {
 	return 0, 0
+}
+
+// SetTCPUserTimeout is a no-op function under non-linux or appengine environments
+func SetTCPUserTimeout(conn net.Conn, timeout time.Duration) error {
+	return nil
+}
+
+// GetTCPUserTimeout is a no-op function under non-linux or appengine environments
+// a negative return value indicates the operation is not supported
+func GetTCPUserTimeout(conn net.Conn) (int, error) {
+	return -1, nil
 }

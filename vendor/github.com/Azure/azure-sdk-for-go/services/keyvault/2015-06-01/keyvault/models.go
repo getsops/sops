@@ -18,12 +18,17 @@ package keyvault
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/keyvault/2015-06-01/keyvault"
 
 // ActionType enumerates the values for action type.
 type ActionType string
@@ -165,7 +170,7 @@ type AdministratorDetails struct {
 	FirstName *string `json:"first_name,omitempty"`
 	// LastName - Last name.
 	LastName *string `json:"last_name,omitempty"`
-	// EmailAddress - Email addresss.
+	// EmailAddress - Email address.
 	EmailAddress *string `json:"email,omitempty"`
 	// Phone - Phone number.
 	Phone *string `json:"phone,omitempty"`
@@ -339,26 +344,44 @@ type CertificateIssuerListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// CertificateIssuerListResultIterator provides access to a complete listing of CertificateIssuerItem values.
+// CertificateIssuerListResultIterator provides access to a complete listing of CertificateIssuerItem
+// values.
 type CertificateIssuerListResultIterator struct {
 	i    int
 	page CertificateIssuerListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CertificateIssuerListResultIterator) Next() error {
+func (iter *CertificateIssuerListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateIssuerListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *CertificateIssuerListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -380,6 +403,11 @@ func (iter CertificateIssuerListResultIterator) Value() CertificateIssuerItem {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the CertificateIssuerListResultIterator type.
+func NewCertificateIssuerListResultIterator(page CertificateIssuerListResultPage) CertificateIssuerListResultIterator {
+	return CertificateIssuerListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (cilr CertificateIssuerListResult) IsEmpty() bool {
 	return cilr.Value == nil || len(*cilr.Value) == 0
@@ -387,11 +415,11 @@ func (cilr CertificateIssuerListResult) IsEmpty() bool {
 
 // certificateIssuerListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (cilr CertificateIssuerListResult) certificateIssuerListResultPreparer() (*http.Request, error) {
+func (cilr CertificateIssuerListResult) certificateIssuerListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if cilr.NextLink == nil || len(to.String(cilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(cilr.NextLink)))
@@ -399,19 +427,36 @@ func (cilr CertificateIssuerListResult) certificateIssuerListResultPreparer() (*
 
 // CertificateIssuerListResultPage contains a page of CertificateIssuerItem values.
 type CertificateIssuerListResultPage struct {
-	fn   func(CertificateIssuerListResult) (CertificateIssuerListResult, error)
+	fn   func(context.Context, CertificateIssuerListResult) (CertificateIssuerListResult, error)
 	cilr CertificateIssuerListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CertificateIssuerListResultPage) Next() error {
-	next, err := page.fn(page.cilr)
+func (page *CertificateIssuerListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateIssuerListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.cilr)
 	if err != nil {
 		return err
 	}
 	page.cilr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *CertificateIssuerListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -430,6 +475,11 @@ func (page CertificateIssuerListResultPage) Values() []CertificateIssuerItem {
 		return nil
 	}
 	return *page.cilr.Value
+}
+
+// Creates a new instance of the CertificateIssuerListResultPage type.
+func NewCertificateIssuerListResultPage(getNextPage func(context.Context, CertificateIssuerListResult) (CertificateIssuerListResult, error)) CertificateIssuerListResultPage {
+	return CertificateIssuerListResultPage{fn: getNextPage}
 }
 
 // CertificateIssuerSetParameters the certificate issuer set parameters.
@@ -501,20 +551,37 @@ type CertificateListResultIterator struct {
 	page CertificateListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CertificateListResultIterator) Next() error {
+func (iter *CertificateListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *CertificateListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -536,6 +603,11 @@ func (iter CertificateListResultIterator) Value() CertificateItem {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the CertificateListResultIterator type.
+func NewCertificateListResultIterator(page CertificateListResultPage) CertificateListResultIterator {
+	return CertificateListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (clr CertificateListResult) IsEmpty() bool {
 	return clr.Value == nil || len(*clr.Value) == 0
@@ -543,11 +615,11 @@ func (clr CertificateListResult) IsEmpty() bool {
 
 // certificateListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (clr CertificateListResult) certificateListResultPreparer() (*http.Request, error) {
+func (clr CertificateListResult) certificateListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if clr.NextLink == nil || len(to.String(clr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(clr.NextLink)))
@@ -555,19 +627,36 @@ func (clr CertificateListResult) certificateListResultPreparer() (*http.Request,
 
 // CertificateListResultPage contains a page of CertificateItem values.
 type CertificateListResultPage struct {
-	fn  func(CertificateListResult) (CertificateListResult, error)
+	fn  func(context.Context, CertificateListResult) (CertificateListResult, error)
 	clr CertificateListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CertificateListResultPage) Next() error {
-	next, err := page.fn(page.clr)
+func (page *CertificateListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificateListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.clr)
 	if err != nil {
 		return err
 	}
 	page.clr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *CertificateListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -586,6 +675,11 @@ func (page CertificateListResultPage) Values() []CertificateItem {
 		return nil
 	}
 	return *page.clr.Value
+}
+
+// Creates a new instance of the CertificateListResultPage type.
+func NewCertificateListResultPage(getNextPage func(context.Context, CertificateListResult) (CertificateListResult, error)) CertificateListResultPage {
+	return CertificateListResultPage{fn: getNextPage}
 }
 
 // CertificateMergeParameters the certificate merge parameters
@@ -688,7 +782,7 @@ func (cup CertificateUpdateParameters) MarshalJSON() ([]byte, error) {
 
 // Contact the contact information for the vault certificates.
 type Contact struct {
-	// EmailAddress - Email addresss.
+	// EmailAddress - Email address.
 	EmailAddress *string `json:"email,omitempty"`
 	// Name - Name.
 	Name *string `json:"name,omitempty"`
@@ -941,20 +1035,37 @@ type KeyListResultIterator struct {
 	page KeyListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *KeyListResultIterator) Next() error {
+func (iter *KeyListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/KeyListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *KeyListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -976,6 +1087,11 @@ func (iter KeyListResultIterator) Value() KeyItem {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the KeyListResultIterator type.
+func NewKeyListResultIterator(page KeyListResultPage) KeyListResultIterator {
+	return KeyListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (klr KeyListResult) IsEmpty() bool {
 	return klr.Value == nil || len(*klr.Value) == 0
@@ -983,11 +1099,11 @@ func (klr KeyListResult) IsEmpty() bool {
 
 // keyListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (klr KeyListResult) keyListResultPreparer() (*http.Request, error) {
+func (klr KeyListResult) keyListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if klr.NextLink == nil || len(to.String(klr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(klr.NextLink)))
@@ -995,19 +1111,36 @@ func (klr KeyListResult) keyListResultPreparer() (*http.Request, error) {
 
 // KeyListResultPage contains a page of KeyItem values.
 type KeyListResultPage struct {
-	fn  func(KeyListResult) (KeyListResult, error)
+	fn  func(context.Context, KeyListResult) (KeyListResult, error)
 	klr KeyListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *KeyListResultPage) Next() error {
-	next, err := page.fn(page.klr)
+func (page *KeyListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/KeyListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.klr)
 	if err != nil {
 		return err
 	}
 	page.klr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *KeyListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1026,6 +1159,11 @@ func (page KeyListResultPage) Values() []KeyItem {
 		return nil
 	}
 	return *page.klr.Value
+}
+
+// Creates a new instance of the KeyListResultPage type.
+func NewKeyListResultPage(getNextPage func(context.Context, KeyListResult) (KeyListResult, error)) KeyListResultPage {
+	return KeyListResultPage{fn: getNextPage}
 }
 
 // KeyOperationResult the key operation result
@@ -1112,7 +1250,8 @@ type KeyVerifyResult struct {
 	Value *bool `json:"value,omitempty"`
 }
 
-// LifetimeAction action and its trigger that will be performed by Key Vault over the lifetime of a certificate.
+// LifetimeAction action and its trigger that will be performed by Key Vault over the lifetime of a
+// certificate.
 type LifetimeAction struct {
 	// Trigger - The condition that will execute the action.
 	Trigger *Trigger `json:"trigger,omitempty"`
@@ -1244,20 +1383,37 @@ type SecretListResultIterator struct {
 	page SecretListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *SecretListResultIterator) Next() error {
+func (iter *SecretListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SecretListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *SecretListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1279,6 +1435,11 @@ func (iter SecretListResultIterator) Value() SecretItem {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the SecretListResultIterator type.
+func NewSecretListResultIterator(page SecretListResultPage) SecretListResultIterator {
+	return SecretListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (slr SecretListResult) IsEmpty() bool {
 	return slr.Value == nil || len(*slr.Value) == 0
@@ -1286,11 +1447,11 @@ func (slr SecretListResult) IsEmpty() bool {
 
 // secretListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (slr SecretListResult) secretListResultPreparer() (*http.Request, error) {
+func (slr SecretListResult) secretListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if slr.NextLink == nil || len(to.String(slr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(slr.NextLink)))
@@ -1298,19 +1459,36 @@ func (slr SecretListResult) secretListResultPreparer() (*http.Request, error) {
 
 // SecretListResultPage contains a page of SecretItem values.
 type SecretListResultPage struct {
-	fn  func(SecretListResult) (SecretListResult, error)
+	fn  func(context.Context, SecretListResult) (SecretListResult, error)
 	slr SecretListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *SecretListResultPage) Next() error {
-	next, err := page.fn(page.slr)
+func (page *SecretListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SecretListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.slr)
 	if err != nil {
 		return err
 	}
 	page.slr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *SecretListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1329,6 +1507,11 @@ func (page SecretListResultPage) Values() []SecretItem {
 		return nil
 	}
 	return *page.slr.Value
+}
+
+// Creates a new instance of the SecretListResultPage type.
+func NewSecretListResultPage(getNextPage func(context.Context, SecretListResult) (SecretListResult, error)) SecretListResultPage {
+	return SecretListResultPage{fn: getNextPage}
 }
 
 // SecretProperties properties of the key backing a certificate.
@@ -1420,6 +1603,6 @@ type X509CertificateProperties struct {
 	SubjectAlternativeNames *SubjectAlternativeNames `json:"sans,omitempty"`
 	// KeyUsage - List of key usages.
 	KeyUsage *[]KeyUsageType `json:"key_usage,omitempty"`
-	// ValidityInMonths - The duration that the ceritifcate is valid in months.
+	// ValidityInMonths - The duration that the certificate is valid in months.
 	ValidityInMonths *int32 `json:"validity_months,omitempty"`
 }

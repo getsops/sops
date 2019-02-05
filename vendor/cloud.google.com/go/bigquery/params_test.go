@@ -15,6 +15,7 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 	"math"
 	"math/big"
@@ -22,11 +23,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
 	"cloud.google.com/go/civil"
 	"cloud.google.com/go/internal/testutil"
-	"golang.org/x/net/context"
+	"github.com/google/go-cmp/cmp"
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -62,7 +61,6 @@ type (
 	}
 	S2 struct {
 		D string
-		e int
 	}
 )
 
@@ -360,4 +358,28 @@ func paramRoundTrip(c *Client, x interface{}) (data Value, param interface{}, er
 		return nil, nil, err
 	}
 	return val[0], conf.(*QueryConfig).Parameters[0].Value, nil
+}
+
+func TestQueryParameter_toBQ(t *testing.T) {
+	tests := []struct {
+		in   QueryParameter
+		want []string
+	}{
+		{
+			in:   QueryParameter{Name: "name", Value: ""},
+			want: []string{"Value"},
+		},
+	}
+
+	for _, test := range tests {
+		q, err := test.in.toBQ()
+		if err != nil {
+			t.Fatalf("expected no error, got %v", err)
+		}
+
+		got := q.ParameterValue.ForceSendFields
+		if !cmp.Equal(test.want, got) {
+			t.Fatalf("want %v, got %v", test.want, got)
+		}
+	}
 }

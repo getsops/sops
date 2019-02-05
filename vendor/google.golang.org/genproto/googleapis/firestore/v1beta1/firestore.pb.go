@@ -61,7 +61,6 @@ var TargetChange_TargetChangeType_name = map[int32]string{
 	3: "CURRENT",
 	4: "RESET",
 }
-
 var TargetChange_TargetChangeType_value = map[string]int32{
 	"NO_CHANGE": 0,
 	"ADD":       1,
@@ -73,9 +72,8 @@ var TargetChange_TargetChangeType_value = map[string]int32{
 func (x TargetChange_TargetChangeType) String() string {
 	return proto.EnumName(TargetChange_TargetChangeType_name, int32(x))
 }
-
 func (TargetChange_TargetChangeType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{20, 0}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{20, 0}
 }
 
 // The request for [Firestore.GetDocument][google.firestore.v1beta1.Firestore.GetDocument].
@@ -104,7 +102,7 @@ func (m *GetDocumentRequest) Reset()         { *m = GetDocumentRequest{} }
 func (m *GetDocumentRequest) String() string { return proto.CompactTextString(m) }
 func (*GetDocumentRequest) ProtoMessage()    {}
 func (*GetDocumentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{0}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{0}
 }
 func (m *GetDocumentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDocumentRequest.Unmarshal(m, b)
@@ -112,8 +110,8 @@ func (m *GetDocumentRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetDocumentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetDocumentRequest.Marshal(b, m, deterministic)
 }
-func (m *GetDocumentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetDocumentRequest.Merge(m, src)
+func (dst *GetDocumentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDocumentRequest.Merge(dst, src)
 }
 func (m *GetDocumentRequest) XXX_Size() int {
 	return xxx_messageInfo_GetDocumentRequest.Size(m)
@@ -292,7 +290,7 @@ func (m *ListDocumentsRequest) Reset()         { *m = ListDocumentsRequest{} }
 func (m *ListDocumentsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListDocumentsRequest) ProtoMessage()    {}
 func (*ListDocumentsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{1}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{1}
 }
 func (m *ListDocumentsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDocumentsRequest.Unmarshal(m, b)
@@ -300,8 +298,8 @@ func (m *ListDocumentsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListDocumentsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListDocumentsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListDocumentsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListDocumentsRequest.Merge(m, src)
+func (dst *ListDocumentsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListDocumentsRequest.Merge(dst, src)
 }
 func (m *ListDocumentsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListDocumentsRequest.Size(m)
@@ -483,7 +481,7 @@ func (m *ListDocumentsResponse) Reset()         { *m = ListDocumentsResponse{} }
 func (m *ListDocumentsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListDocumentsResponse) ProtoMessage()    {}
 func (*ListDocumentsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{2}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{2}
 }
 func (m *ListDocumentsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDocumentsResponse.Unmarshal(m, b)
@@ -491,8 +489,8 @@ func (m *ListDocumentsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListDocumentsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListDocumentsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListDocumentsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListDocumentsResponse.Merge(m, src)
+func (dst *ListDocumentsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListDocumentsResponse.Merge(dst, src)
 }
 func (m *ListDocumentsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListDocumentsResponse.Size(m)
@@ -545,7 +543,7 @@ func (m *CreateDocumentRequest) Reset()         { *m = CreateDocumentRequest{} }
 func (m *CreateDocumentRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateDocumentRequest) ProtoMessage()    {}
 func (*CreateDocumentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{3}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{3}
 }
 func (m *CreateDocumentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDocumentRequest.Unmarshal(m, b)
@@ -553,8 +551,8 @@ func (m *CreateDocumentRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateDocumentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateDocumentRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateDocumentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateDocumentRequest.Merge(m, src)
+func (dst *CreateDocumentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateDocumentRequest.Merge(dst, src)
 }
 func (m *CreateDocumentRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateDocumentRequest.Size(m)
@@ -630,7 +628,7 @@ func (m *UpdateDocumentRequest) Reset()         { *m = UpdateDocumentRequest{} }
 func (m *UpdateDocumentRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateDocumentRequest) ProtoMessage()    {}
 func (*UpdateDocumentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{4}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{4}
 }
 func (m *UpdateDocumentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateDocumentRequest.Unmarshal(m, b)
@@ -638,8 +636,8 @@ func (m *UpdateDocumentRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateDocumentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateDocumentRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateDocumentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateDocumentRequest.Merge(m, src)
+func (dst *UpdateDocumentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateDocumentRequest.Merge(dst, src)
 }
 func (m *UpdateDocumentRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateDocumentRequest.Size(m)
@@ -695,7 +693,7 @@ func (m *DeleteDocumentRequest) Reset()         { *m = DeleteDocumentRequest{} }
 func (m *DeleteDocumentRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteDocumentRequest) ProtoMessage()    {}
 func (*DeleteDocumentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{5}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{5}
 }
 func (m *DeleteDocumentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteDocumentRequest.Unmarshal(m, b)
@@ -703,8 +701,8 @@ func (m *DeleteDocumentRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteDocumentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteDocumentRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteDocumentRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteDocumentRequest.Merge(m, src)
+func (dst *DeleteDocumentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteDocumentRequest.Merge(dst, src)
 }
 func (m *DeleteDocumentRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteDocumentRequest.Size(m)
@@ -761,7 +759,7 @@ func (m *BatchGetDocumentsRequest) Reset()         { *m = BatchGetDocumentsReque
 func (m *BatchGetDocumentsRequest) String() string { return proto.CompactTextString(m) }
 func (*BatchGetDocumentsRequest) ProtoMessage()    {}
 func (*BatchGetDocumentsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{6}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{6}
 }
 func (m *BatchGetDocumentsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchGetDocumentsRequest.Unmarshal(m, b)
@@ -769,8 +767,8 @@ func (m *BatchGetDocumentsRequest) XXX_Unmarshal(b []byte) error {
 func (m *BatchGetDocumentsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchGetDocumentsRequest.Marshal(b, m, deterministic)
 }
-func (m *BatchGetDocumentsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchGetDocumentsRequest.Merge(m, src)
+func (dst *BatchGetDocumentsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchGetDocumentsRequest.Merge(dst, src)
 }
 func (m *BatchGetDocumentsRequest) XXX_Size() int {
 	return xxx_messageInfo_BatchGetDocumentsRequest.Size(m)
@@ -968,7 +966,7 @@ func (m *BatchGetDocumentsResponse) Reset()         { *m = BatchGetDocumentsResp
 func (m *BatchGetDocumentsResponse) String() string { return proto.CompactTextString(m) }
 func (*BatchGetDocumentsResponse) ProtoMessage()    {}
 func (*BatchGetDocumentsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{7}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{7}
 }
 func (m *BatchGetDocumentsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BatchGetDocumentsResponse.Unmarshal(m, b)
@@ -976,8 +974,8 @@ func (m *BatchGetDocumentsResponse) XXX_Unmarshal(b []byte) error {
 func (m *BatchGetDocumentsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BatchGetDocumentsResponse.Marshal(b, m, deterministic)
 }
-func (m *BatchGetDocumentsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchGetDocumentsResponse.Merge(m, src)
+func (dst *BatchGetDocumentsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BatchGetDocumentsResponse.Merge(dst, src)
 }
 func (m *BatchGetDocumentsResponse) XXX_Size() int {
 	return xxx_messageInfo_BatchGetDocumentsResponse.Size(m)
@@ -1126,7 +1124,7 @@ func (m *BeginTransactionRequest) Reset()         { *m = BeginTransactionRequest
 func (m *BeginTransactionRequest) String() string { return proto.CompactTextString(m) }
 func (*BeginTransactionRequest) ProtoMessage()    {}
 func (*BeginTransactionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{8}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{8}
 }
 func (m *BeginTransactionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BeginTransactionRequest.Unmarshal(m, b)
@@ -1134,8 +1132,8 @@ func (m *BeginTransactionRequest) XXX_Unmarshal(b []byte) error {
 func (m *BeginTransactionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BeginTransactionRequest.Marshal(b, m, deterministic)
 }
-func (m *BeginTransactionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BeginTransactionRequest.Merge(m, src)
+func (dst *BeginTransactionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BeginTransactionRequest.Merge(dst, src)
 }
 func (m *BeginTransactionRequest) XXX_Size() int {
 	return xxx_messageInfo_BeginTransactionRequest.Size(m)
@@ -1173,7 +1171,7 @@ func (m *BeginTransactionResponse) Reset()         { *m = BeginTransactionRespon
 func (m *BeginTransactionResponse) String() string { return proto.CompactTextString(m) }
 func (*BeginTransactionResponse) ProtoMessage()    {}
 func (*BeginTransactionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{9}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{9}
 }
 func (m *BeginTransactionResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BeginTransactionResponse.Unmarshal(m, b)
@@ -1181,8 +1179,8 @@ func (m *BeginTransactionResponse) XXX_Unmarshal(b []byte) error {
 func (m *BeginTransactionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BeginTransactionResponse.Marshal(b, m, deterministic)
 }
-func (m *BeginTransactionResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BeginTransactionResponse.Merge(m, src)
+func (dst *BeginTransactionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BeginTransactionResponse.Merge(dst, src)
 }
 func (m *BeginTransactionResponse) XXX_Size() int {
 	return xxx_messageInfo_BeginTransactionResponse.Size(m)
@@ -1220,7 +1218,7 @@ func (m *CommitRequest) Reset()         { *m = CommitRequest{} }
 func (m *CommitRequest) String() string { return proto.CompactTextString(m) }
 func (*CommitRequest) ProtoMessage()    {}
 func (*CommitRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{10}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{10}
 }
 func (m *CommitRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CommitRequest.Unmarshal(m, b)
@@ -1228,8 +1226,8 @@ func (m *CommitRequest) XXX_Unmarshal(b []byte) error {
 func (m *CommitRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CommitRequest.Marshal(b, m, deterministic)
 }
-func (m *CommitRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommitRequest.Merge(m, src)
+func (dst *CommitRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommitRequest.Merge(dst, src)
 }
 func (m *CommitRequest) XXX_Size() int {
 	return xxx_messageInfo_CommitRequest.Size(m)
@@ -1279,7 +1277,7 @@ func (m *CommitResponse) Reset()         { *m = CommitResponse{} }
 func (m *CommitResponse) String() string { return proto.CompactTextString(m) }
 func (*CommitResponse) ProtoMessage()    {}
 func (*CommitResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{11}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{11}
 }
 func (m *CommitResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CommitResponse.Unmarshal(m, b)
@@ -1287,8 +1285,8 @@ func (m *CommitResponse) XXX_Unmarshal(b []byte) error {
 func (m *CommitResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CommitResponse.Marshal(b, m, deterministic)
 }
-func (m *CommitResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommitResponse.Merge(m, src)
+func (dst *CommitResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommitResponse.Merge(dst, src)
 }
 func (m *CommitResponse) XXX_Size() int {
 	return xxx_messageInfo_CommitResponse.Size(m)
@@ -1329,7 +1327,7 @@ func (m *RollbackRequest) Reset()         { *m = RollbackRequest{} }
 func (m *RollbackRequest) String() string { return proto.CompactTextString(m) }
 func (*RollbackRequest) ProtoMessage()    {}
 func (*RollbackRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{12}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{12}
 }
 func (m *RollbackRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RollbackRequest.Unmarshal(m, b)
@@ -1337,8 +1335,8 @@ func (m *RollbackRequest) XXX_Unmarshal(b []byte) error {
 func (m *RollbackRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RollbackRequest.Marshal(b, m, deterministic)
 }
-func (m *RollbackRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RollbackRequest.Merge(m, src)
+func (dst *RollbackRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RollbackRequest.Merge(dst, src)
 }
 func (m *RollbackRequest) XXX_Size() int {
 	return xxx_messageInfo_RollbackRequest.Size(m)
@@ -1394,7 +1392,7 @@ func (m *RunQueryRequest) Reset()         { *m = RunQueryRequest{} }
 func (m *RunQueryRequest) String() string { return proto.CompactTextString(m) }
 func (*RunQueryRequest) ProtoMessage()    {}
 func (*RunQueryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{13}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{13}
 }
 func (m *RunQueryRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RunQueryRequest.Unmarshal(m, b)
@@ -1402,8 +1400,8 @@ func (m *RunQueryRequest) XXX_Unmarshal(b []byte) error {
 func (m *RunQueryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RunQueryRequest.Marshal(b, m, deterministic)
 }
-func (m *RunQueryRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RunQueryRequest.Merge(m, src)
+func (dst *RunQueryRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RunQueryRequest.Merge(dst, src)
 }
 func (m *RunQueryRequest) XXX_Size() int {
 	return xxx_messageInfo_RunQueryRequest.Size(m)
@@ -1645,7 +1643,7 @@ func (m *RunQueryResponse) Reset()         { *m = RunQueryResponse{} }
 func (m *RunQueryResponse) String() string { return proto.CompactTextString(m) }
 func (*RunQueryResponse) ProtoMessage()    {}
 func (*RunQueryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{14}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{14}
 }
 func (m *RunQueryResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RunQueryResponse.Unmarshal(m, b)
@@ -1653,8 +1651,8 @@ func (m *RunQueryResponse) XXX_Unmarshal(b []byte) error {
 func (m *RunQueryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RunQueryResponse.Marshal(b, m, deterministic)
 }
-func (m *RunQueryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RunQueryResponse.Merge(m, src)
+func (dst *RunQueryResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RunQueryResponse.Merge(dst, src)
 }
 func (m *RunQueryResponse) XXX_Size() int {
 	return xxx_messageInfo_RunQueryResponse.Size(m)
@@ -1745,7 +1743,7 @@ func (m *WriteRequest) Reset()         { *m = WriteRequest{} }
 func (m *WriteRequest) String() string { return proto.CompactTextString(m) }
 func (*WriteRequest) ProtoMessage()    {}
 func (*WriteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{15}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{15}
 }
 func (m *WriteRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WriteRequest.Unmarshal(m, b)
@@ -1753,8 +1751,8 @@ func (m *WriteRequest) XXX_Unmarshal(b []byte) error {
 func (m *WriteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WriteRequest.Marshal(b, m, deterministic)
 }
-func (m *WriteRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WriteRequest.Merge(m, src)
+func (dst *WriteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WriteRequest.Merge(dst, src)
 }
 func (m *WriteRequest) XXX_Size() int {
 	return xxx_messageInfo_WriteRequest.Size(m)
@@ -1826,7 +1824,7 @@ func (m *WriteResponse) Reset()         { *m = WriteResponse{} }
 func (m *WriteResponse) String() string { return proto.CompactTextString(m) }
 func (*WriteResponse) ProtoMessage()    {}
 func (*WriteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{16}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{16}
 }
 func (m *WriteResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_WriteResponse.Unmarshal(m, b)
@@ -1834,8 +1832,8 @@ func (m *WriteResponse) XXX_Unmarshal(b []byte) error {
 func (m *WriteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_WriteResponse.Marshal(b, m, deterministic)
 }
-func (m *WriteResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WriteResponse.Merge(m, src)
+func (dst *WriteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WriteResponse.Merge(dst, src)
 }
 func (m *WriteResponse) XXX_Size() int {
 	return xxx_messageInfo_WriteResponse.Size(m)
@@ -1896,7 +1894,7 @@ func (m *ListenRequest) Reset()         { *m = ListenRequest{} }
 func (m *ListenRequest) String() string { return proto.CompactTextString(m) }
 func (*ListenRequest) ProtoMessage()    {}
 func (*ListenRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{17}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{17}
 }
 func (m *ListenRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListenRequest.Unmarshal(m, b)
@@ -1904,8 +1902,8 @@ func (m *ListenRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListenRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListenRequest.Marshal(b, m, deterministic)
 }
-func (m *ListenRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListenRequest.Merge(m, src)
+func (dst *ListenRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListenRequest.Merge(dst, src)
 }
 func (m *ListenRequest) XXX_Size() int {
 	return xxx_messageInfo_ListenRequest.Size(m)
@@ -2056,7 +2054,7 @@ func (m *ListenResponse) Reset()         { *m = ListenResponse{} }
 func (m *ListenResponse) String() string { return proto.CompactTextString(m) }
 func (*ListenResponse) ProtoMessage()    {}
 func (*ListenResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{18}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{18}
 }
 func (m *ListenResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListenResponse.Unmarshal(m, b)
@@ -2064,8 +2062,8 @@ func (m *ListenResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListenResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListenResponse.Marshal(b, m, deterministic)
 }
-func (m *ListenResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListenResponse.Merge(m, src)
+func (dst *ListenResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListenResponse.Merge(dst, src)
 }
 func (m *ListenResponse) XXX_Size() int {
 	return xxx_messageInfo_ListenResponse.Size(m)
@@ -2320,7 +2318,7 @@ func (m *Target) Reset()         { *m = Target{} }
 func (m *Target) String() string { return proto.CompactTextString(m) }
 func (*Target) ProtoMessage()    {}
 func (*Target) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{19}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{19}
 }
 func (m *Target) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Target.Unmarshal(m, b)
@@ -2328,8 +2326,8 @@ func (m *Target) XXX_Unmarshal(b []byte) error {
 func (m *Target) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Target.Marshal(b, m, deterministic)
 }
-func (m *Target) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Target.Merge(m, src)
+func (dst *Target) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Target.Merge(dst, src)
 }
 func (m *Target) XXX_Size() int {
 	return xxx_messageInfo_Target.Size(m)
@@ -2564,7 +2562,7 @@ func (m *Target_DocumentsTarget) Reset()         { *m = Target_DocumentsTarget{}
 func (m *Target_DocumentsTarget) String() string { return proto.CompactTextString(m) }
 func (*Target_DocumentsTarget) ProtoMessage()    {}
 func (*Target_DocumentsTarget) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{19, 0}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{19, 0}
 }
 func (m *Target_DocumentsTarget) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Target_DocumentsTarget.Unmarshal(m, b)
@@ -2572,8 +2570,8 @@ func (m *Target_DocumentsTarget) XXX_Unmarshal(b []byte) error {
 func (m *Target_DocumentsTarget) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Target_DocumentsTarget.Marshal(b, m, deterministic)
 }
-func (m *Target_DocumentsTarget) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Target_DocumentsTarget.Merge(m, src)
+func (dst *Target_DocumentsTarget) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Target_DocumentsTarget.Merge(dst, src)
 }
 func (m *Target_DocumentsTarget) XXX_Size() int {
 	return xxx_messageInfo_Target_DocumentsTarget.Size(m)
@@ -2614,7 +2612,7 @@ func (m *Target_QueryTarget) Reset()         { *m = Target_QueryTarget{} }
 func (m *Target_QueryTarget) String() string { return proto.CompactTextString(m) }
 func (*Target_QueryTarget) ProtoMessage()    {}
 func (*Target_QueryTarget) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{19, 1}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{19, 1}
 }
 func (m *Target_QueryTarget) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Target_QueryTarget.Unmarshal(m, b)
@@ -2622,8 +2620,8 @@ func (m *Target_QueryTarget) XXX_Unmarshal(b []byte) error {
 func (m *Target_QueryTarget) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Target_QueryTarget.Marshal(b, m, deterministic)
 }
-func (m *Target_QueryTarget) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Target_QueryTarget.Merge(m, src)
+func (dst *Target_QueryTarget) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Target_QueryTarget.Merge(dst, src)
 }
 func (m *Target_QueryTarget) XXX_Size() int {
 	return xxx_messageInfo_Target_QueryTarget.Size(m)
@@ -2761,7 +2759,7 @@ func (m *TargetChange) Reset()         { *m = TargetChange{} }
 func (m *TargetChange) String() string { return proto.CompactTextString(m) }
 func (*TargetChange) ProtoMessage()    {}
 func (*TargetChange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{20}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{20}
 }
 func (m *TargetChange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TargetChange.Unmarshal(m, b)
@@ -2769,8 +2767,8 @@ func (m *TargetChange) XXX_Unmarshal(b []byte) error {
 func (m *TargetChange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TargetChange.Marshal(b, m, deterministic)
 }
-func (m *TargetChange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TargetChange.Merge(m, src)
+func (dst *TargetChange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TargetChange.Merge(dst, src)
 }
 func (m *TargetChange) XXX_Size() int {
 	return xxx_messageInfo_TargetChange.Size(m)
@@ -2837,7 +2835,7 @@ func (m *ListCollectionIdsRequest) Reset()         { *m = ListCollectionIdsReque
 func (m *ListCollectionIdsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListCollectionIdsRequest) ProtoMessage()    {}
 func (*ListCollectionIdsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{21}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{21}
 }
 func (m *ListCollectionIdsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCollectionIdsRequest.Unmarshal(m, b)
@@ -2845,8 +2843,8 @@ func (m *ListCollectionIdsRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListCollectionIdsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCollectionIdsRequest.Marshal(b, m, deterministic)
 }
-func (m *ListCollectionIdsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCollectionIdsRequest.Merge(m, src)
+func (dst *ListCollectionIdsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCollectionIdsRequest.Merge(dst, src)
 }
 func (m *ListCollectionIdsRequest) XXX_Size() int {
 	return xxx_messageInfo_ListCollectionIdsRequest.Size(m)
@@ -2893,7 +2891,7 @@ func (m *ListCollectionIdsResponse) Reset()         { *m = ListCollectionIdsResp
 func (m *ListCollectionIdsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListCollectionIdsResponse) ProtoMessage()    {}
 func (*ListCollectionIdsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9bc8b30a28454f4b, []int{22}
+	return fileDescriptor_firestore_0cb2a504439d3030, []int{22}
 }
 func (m *ListCollectionIdsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListCollectionIdsResponse.Unmarshal(m, b)
@@ -2901,8 +2899,8 @@ func (m *ListCollectionIdsResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListCollectionIdsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListCollectionIdsResponse.Marshal(b, m, deterministic)
 }
-func (m *ListCollectionIdsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListCollectionIdsResponse.Merge(m, src)
+func (dst *ListCollectionIdsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListCollectionIdsResponse.Merge(dst, src)
 }
 func (m *ListCollectionIdsResponse) XXX_Size() int {
 	return xxx_messageInfo_ListCollectionIdsResponse.Size(m)
@@ -3578,10 +3576,10 @@ var _Firestore_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/firestore/v1beta1/firestore.proto", fileDescriptor_9bc8b30a28454f4b)
+	proto.RegisterFile("google/firestore/v1beta1/firestore.proto", fileDescriptor_firestore_0cb2a504439d3030)
 }
 
-var fileDescriptor_9bc8b30a28454f4b = []byte{
+var fileDescriptor_firestore_0cb2a504439d3030 = []byte{
 	// 2214 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x5a, 0xcd, 0x8f, 0x1b, 0x49,
 	0x15, 0x77, 0xb5, 0x3f, 0xc6, 0x7e, 0xfe, 0x18, 0x6f, 0x91, 0x64, 0x1d, 0x27, 0x4b, 0x86, 0x5e,

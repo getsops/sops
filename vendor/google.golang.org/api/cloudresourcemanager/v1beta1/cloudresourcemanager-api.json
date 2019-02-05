@@ -15,7 +15,7 @@
   "baseUrl": "https://cloudresourcemanager.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud Resource Manager",
-  "description": "The Google Cloud Resource Manager API provides methods for creating, reading, and updating project metadata.",
+  "description": "Creates, reads, and updates metadata for Google Cloud Platform resource containers.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/resource-manager",
   "fullyEncodeReservedExpansion": true,
@@ -119,7 +119,7 @@
           ],
           "parameters": {
             "name": {
-              "description": "The resource name of the Organization to fetch, e.g. \"organizations/1234\".",
+              "description": "The resource name of the Organization to fetch. This is the organization's\nrelative path in the API, formatted as \"organizations/[organizationId]\".\nFor example, \"organizations/1234\".",
               "location": "path",
               "pattern": "^organizations/[^/]+$",
               "required": true,
@@ -565,7 +565,7 @@
       }
     }
   },
-  "revision": "20180730",
+  "revision": "20190128",
   "rootUrl": "https://cloudresourcemanager.googleapis.com/",
   "schemas": {
     "Ancestor": {
@@ -905,7 +905,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "The labels associated with this Project.\n\nLabel keys must be between 1 and 63 characters long and must conform\nto the following regular expression: \\[a-z\\](\\[-a-z0-9\\]*\\[a-z0-9\\])?.\n\nLabel values must be between 0 and 63 characters long and must conform\nto the regular expression (\\[a-z\\](\\[-a-z0-9\\]*\\[a-z0-9\\])?)?.\n\nNo more than 256 labels can be associated with a given resource.\n\nClients should store labels in a representation such as JSON that does not\ndepend on specific characters being disallowed.\n\nExample: \u003ccode\u003e\"environment\" : \"dev\"\u003c/code\u003e\nRead-write.",
+          "description": "The labels associated with this Project.\n\nLabel keys must be between 1 and 63 characters long and must conform\nto the following regular expression: \\[a-z\\](\\[-a-z0-9\\]*\\[a-z0-9\\])?.\n\nLabel values must be between 0 and 63 characters long and must conform\nto the regular expression (\\[a-z\\](\\[-a-z0-9\\]*\\[a-z0-9\\])?)?. A label\nvalue can be empty.\n\nNo more than 256 labels can be associated with a given resource.\n\nClients should store labels in a representation such as JSON that does not\ndepend on specific characters being disallowed.\n\nExample: \u003ccode\u003e\"environment\" : \"dev\"\u003c/code\u003e\nRead-write.",
           "type": "object"
         },
         "lifecycleState": {

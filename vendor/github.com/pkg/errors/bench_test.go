@@ -25,7 +25,7 @@ func yesErrors(at, depth int) error {
 
 // GlobalE is an exported global to store the result of benchmark results,
 // preventing the compiler from optimising the benchmark functions away.
-var GlobalE error
+var GlobalE interface{}
 
 func BenchmarkErrors(b *testing.B) {
 	type run struct {
@@ -60,4 +60,51 @@ func BenchmarkErrors(b *testing.B) {
 			GlobalE = err
 		})
 	}
+}
+
+func BenchmarkStackFormatting(b *testing.B) {
+	type run struct {
+		stack  int
+		format string
+	}
+	runs := []run{
+		{10, "%s"},
+		{10, "%v"},
+		{10, "%+v"},
+		{30, "%s"},
+		{30, "%v"},
+		{30, "%+v"},
+		{60, "%s"},
+		{60, "%v"},
+		{60, "%+v"},
+	}
+
+	var stackStr string
+	for _, r := range runs {
+		name := fmt.Sprintf("%s-stack-%d", r.format, r.stack)
+		b.Run(name, func(b *testing.B) {
+			err := yesErrors(0, r.stack)
+			b.ReportAllocs()
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				stackStr = fmt.Sprintf(r.format, err)
+			}
+			b.StopTimer()
+		})
+	}
+
+	for _, r := range runs {
+		name := fmt.Sprintf("%s-stacktrace-%d", r.format, r.stack)
+		b.Run(name, func(b *testing.B) {
+			err := yesErrors(0, r.stack)
+			st := err.(*fundamental).stack.StackTrace()
+			b.ReportAllocs()
+			b.ResetTimer()
+			for i := 0; i < b.N; i++ {
+				stackStr = fmt.Sprintf(r.format, st)
+			}
+			b.StopTimer()
+		})
+	}
+	GlobalE = stackStr
 }

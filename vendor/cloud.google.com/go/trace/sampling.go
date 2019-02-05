@@ -25,6 +25,9 @@ import (
 	"golang.org/x/time/rate"
 )
 
+// SamplingPolicy provides an interface for sampling.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 type SamplingPolicy interface {
 	// Sample returns a Decision.
 	// If Trace is false in the returned Decision, then the Decision should be
@@ -33,11 +36,15 @@ type SamplingPolicy interface {
 }
 
 // Parameters contains the values passed to a SamplingPolicy's Sample method.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 type Parameters struct {
 	HasTraceHeader bool // whether the incoming request has a valid X-Cloud-Trace-Context header.
 }
 
 // Decision is the value returned by a call to a SamplingPolicy's Sample method.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 type Decision struct {
 	Trace  bool    // Whether to trace the request.
 	Sample bool    // Whether the trace is included in the random sample.
@@ -53,6 +60,7 @@ type sampler struct {
 	sync.Mutex
 }
 
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *sampler) Sample(p Parameters) Decision {
 	s.Lock()
 	x := s.Float64()
@@ -89,6 +97,8 @@ func (s *sampler) sample(p Parameters, now time.Time, x float64) (d Decision) {
 // fraction of requests.  It also enforces a limit on the number of traces per
 // second.  It tries to trace every request with a trace header, but will not
 // exceed the qps limit to do it.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func NewLimitedSampler(fraction, maxqps float64) (SamplingPolicy, error) {
 	if !(fraction >= 0) {
 		return nil, fmt.Errorf("invalid fraction %f", fraction)

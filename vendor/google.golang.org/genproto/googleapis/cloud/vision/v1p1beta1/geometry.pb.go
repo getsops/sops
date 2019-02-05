@@ -34,7 +34,7 @@ func (m *Vertex) Reset()         { *m = Vertex{} }
 func (m *Vertex) String() string { return proto.CompactTextString(m) }
 func (*Vertex) ProtoMessage()    {}
 func (*Vertex) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a110c700536b1e95, []int{0}
+	return fileDescriptor_geometry_9a7190aad6b30813, []int{0}
 }
 func (m *Vertex) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Vertex.Unmarshal(m, b)
@@ -42,8 +42,8 @@ func (m *Vertex) XXX_Unmarshal(b []byte) error {
 func (m *Vertex) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Vertex.Marshal(b, m, deterministic)
 }
-func (m *Vertex) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Vertex.Merge(m, src)
+func (dst *Vertex) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Vertex.Merge(dst, src)
 }
 func (m *Vertex) XXX_Size() int {
 	return xxx_messageInfo_Vertex.Size(m)
@@ -81,7 +81,7 @@ func (m *BoundingPoly) Reset()         { *m = BoundingPoly{} }
 func (m *BoundingPoly) String() string { return proto.CompactTextString(m) }
 func (*BoundingPoly) ProtoMessage()    {}
 func (*BoundingPoly) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a110c700536b1e95, []int{1}
+	return fileDescriptor_geometry_9a7190aad6b30813, []int{1}
 }
 func (m *BoundingPoly) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BoundingPoly.Unmarshal(m, b)
@@ -89,8 +89,8 @@ func (m *BoundingPoly) XXX_Unmarshal(b []byte) error {
 func (m *BoundingPoly) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BoundingPoly.Marshal(b, m, deterministic)
 }
-func (m *BoundingPoly) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BoundingPoly.Merge(m, src)
+func (dst *BoundingPoly) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BoundingPoly.Merge(dst, src)
 }
 func (m *BoundingPoly) XXX_Size() int {
 	return xxx_messageInfo_BoundingPoly.Size(m)
@@ -127,7 +127,7 @@ func (m *Position) Reset()         { *m = Position{} }
 func (m *Position) String() string { return proto.CompactTextString(m) }
 func (*Position) ProtoMessage()    {}
 func (*Position) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a110c700536b1e95, []int{2}
+	return fileDescriptor_geometry_9a7190aad6b30813, []int{2}
 }
 func (m *Position) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Position.Unmarshal(m, b)
@@ -135,8 +135,8 @@ func (m *Position) XXX_Unmarshal(b []byte) error {
 func (m *Position) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Position.Marshal(b, m, deterministic)
 }
-func (m *Position) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Position.Merge(m, src)
+func (dst *Position) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Position.Merge(dst, src)
 }
 func (m *Position) XXX_Size() int {
 	return xxx_messageInfo_Position.Size(m)
@@ -175,10 +175,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/vision/v1p1beta1/geometry.proto", fileDescriptor_a110c700536b1e95)
+	proto.RegisterFile("google/cloud/vision/v1p1beta1/geometry.proto", fileDescriptor_geometry_9a7190aad6b30813)
 }
 
-var fileDescriptor_a110c700536b1e95 = []byte{
+var fileDescriptor_geometry_9a7190aad6b30813 = []byte{
 	// 243 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x90, 0xb1, 0x4b, 0xc3, 0x40,
 	0x14, 0x87, 0x79, 0x29, 0x96, 0x72, 0xd6, 0x25, 0x53, 0x16, 0xa1, 0x06, 0x85, 0x0e, 0x72, 0x47,

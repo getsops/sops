@@ -14,34 +14,39 @@
 
 package rpcreplay_test
 
+import (
+	"cloud.google.com/go/rpcreplay"
+	"google.golang.org/grpc"
+)
+
 var serverAddress string
 
-// func Example_NewRecorder() {
-// 	rec, err := rpcreplay.NewRecorder("service.replay", nil)
-// 	if err != nil {
-// 		// TODO: Handle error.
-// 	}
-// 	defer func() {
-// 		if err := rec.Close(); err != nil {
-// 			// TODO: Handle error.
-// 		}
-// 	}()
-// 	conn, err := grpc.Dial(serverAddress, rec.DialOptions()...)
-// 	if err != nil {
-// 		// TODO: Handle error.
-// 	}
-// 	_ = conn // TODO: use connection
-// }
+func Example_NewRecorder() {
+	rec, err := rpcreplay.NewRecorder("service.replay", nil)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer func() {
+		if err := rec.Close(); err != nil {
+			// TODO: Handle error.
+		}
+	}()
+	conn, err := grpc.Dial(serverAddress, rec.DialOptions()...)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	_ = conn // TODO: use connection
+}
 
-// func Example_NewReplayer() {
-// 	rep, err := rpcreplay.NewReplayer("service.replay")
-// 	if err != nil {
-// 		// TODO: Handle error.
-// 	}
-// 	defer rep.Close()
-// 	conn, err := grpc.Dial(serverAddress, rep.DialOptions()...)
-// 	if err != nil {
-// 		// TODO: Handle error.
-// 	}
-// 	_ = conn // TODO: use connection
-// }
+func Example_NewReplayer() {
+	rep, err := rpcreplay.NewReplayer("service.replay")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer rep.Close()
+	conn, err := grpc.Dial(serverAddress, rep.DialOptions()...)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	_ = conn // TODO: use connection
+}

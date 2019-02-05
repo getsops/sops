@@ -313,11 +313,613 @@
           ]
         }
       }
+    },
+    "projects": {
+      "resources": {
+        "locations": {
+          "resources": {
+            "productSets": {
+              "methods": {
+                "addProduct": {
+                  "description": "Adds a Product to the specified ProductSet. If the Product is already\npresent, no change is made.\n\nOne Product can be added to at most 100 ProductSets.\n\nPossible errors:\n\n* Returns NOT_FOUND if the Product or the ProductSet doesn't exist.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets/{productSetsId}:addProduct",
+                  "httpMethod": "POST",
+                  "id": "vision.projects.locations.productSets.addProduct",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "The resource name for the ProductSet to modify.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/productSets/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}:addProduct",
+                  "request": {
+                    "$ref": "AddProductToProductSetRequest"
+                  },
+                  "response": {
+                    "$ref": "Empty"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "create": {
+                  "description": "Creates and returns a new ProductSet resource.\n\nPossible errors:\n\n* Returns INVALID_ARGUMENT if display_name is missing, or is longer than\n  4096 characters.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets",
+                  "httpMethod": "POST",
+                  "id": "vision.projects.locations.productSets.create",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The project in which the ProductSet should be created.\n\nFormat is `projects/PROJECT_ID/locations/LOC_ID`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "productSetId": {
+                      "description": "A user-supplied resource id for this ProductSet. If set, the server will\nattempt to use this value as the resource id. If it is already in use, an\nerror is returned with code ALREADY_EXISTS. Must be at most 128 characters\nlong. It cannot contain the character `/`.",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/productSets",
+                  "request": {
+                    "$ref": "ProductSet"
+                  },
+                  "response": {
+                    "$ref": "ProductSet"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "delete": {
+                  "description": "Permanently deletes a ProductSet. Products and ReferenceImages in the\nProductSet are not deleted.\n\nThe actual image files are not deleted from Google Cloud Storage.\n\nPossible errors:\n\n* Returns NOT_FOUND if the ProductSet does not exist.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets/{productSetsId}",
+                  "httpMethod": "DELETE",
+                  "id": "vision.projects.locations.productSets.delete",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Resource name of the ProductSet to delete.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/productSets/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "Empty"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "get": {
+                  "description": "Gets information associated with a ProductSet.\n\nPossible errors:\n\n* Returns NOT_FOUND if the ProductSet does not exist.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets/{productSetsId}",
+                  "httpMethod": "GET",
+                  "id": "vision.projects.locations.productSets.get",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Resource name of the ProductSet to get.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOG_ID/productSets/PRODUCT_SET_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/productSets/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "ProductSet"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "import": {
+                  "description": "Asynchronous API that imports a list of reference images to specified\nproduct sets based on a list of image information.\n\nThe google.longrunning.Operation API can be used to keep track of the\nprogress and results of the request.\n`Operation.metadata` contains `BatchOperationMetadata`. (progress)\n`Operation.response` contains `ImportProductSetsResponse`. (results)\n\nThe input source of this method is a csv file on Google Cloud Storage.\nFor the format of the csv file please see\nImportProductSetsGcsSource.csv_file_uri.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets:import",
+                  "httpMethod": "POST",
+                  "id": "vision.projects.locations.productSets.import",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The project in which the ProductSets should be imported.\n\nFormat is `projects/PROJECT_ID/locations/LOC_ID`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/productSets:import",
+                  "request": {
+                    "$ref": "ImportProductSetsRequest"
+                  },
+                  "response": {
+                    "$ref": "Operation"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "list": {
+                  "description": "Lists ProductSets in an unspecified order.\n\nPossible errors:\n\n* Returns INVALID_ARGUMENT if page_size is greater than 100, or less\n  than 1.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets",
+                  "httpMethod": "GET",
+                  "id": "vision.projects.locations.productSets.list",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "pageSize": {
+                      "description": "The maximum number of items to return. Default 10, maximum 100.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
+                    "pageToken": {
+                      "description": "The next_page_token returned from a previous List request, if any.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "parent": {
+                      "description": "The project from which ProductSets should be listed.\n\nFormat is `projects/PROJECT_ID/locations/LOC_ID`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/productSets",
+                  "response": {
+                    "$ref": "ListProductSetsResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "patch": {
+                  "description": "Makes changes to a ProductSet resource.\nOnly display_name can be updated currently.\n\nPossible errors:\n\n* Returns NOT_FOUND if the ProductSet does not exist.\n* Returns INVALID_ARGUMENT if display_name is present in update_mask but\n  missing from the request or longer than 4096 characters.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets/{productSetsId}",
+                  "httpMethod": "PATCH",
+                  "id": "vision.projects.locations.productSets.patch",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "The resource name of the ProductSet.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`.\n\nThis field is ignored when creating a ProductSet.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/productSets/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "updateMask": {
+                      "description": "The FieldMask that specifies which fields to\nupdate.\nIf update_mask isn't specified, all mutable fields are to be updated.\nValid mask path is `display_name`.",
+                      "format": "google-fieldmask",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "request": {
+                    "$ref": "ProductSet"
+                  },
+                  "response": {
+                    "$ref": "ProductSet"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "removeProduct": {
+                  "description": "Removes a Product from the specified ProductSet.\n\nPossible errors:\n\n* Returns NOT_FOUND If the Product is not found under the ProductSet.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets/{productSetsId}:removeProduct",
+                  "httpMethod": "POST",
+                  "id": "vision.projects.locations.productSets.removeProduct",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "The resource name for the ProductSet to modify.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/productSets/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}:removeProduct",
+                  "request": {
+                    "$ref": "RemoveProductFromProductSetRequest"
+                  },
+                  "response": {
+                    "$ref": "Empty"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                }
+              },
+              "resources": {
+                "products": {
+                  "methods": {
+                    "list": {
+                      "description": "Lists the Products in a ProductSet, in an unspecified order. If the\nProductSet does not exist, the products field of the response will be\nempty.\n\nPossible errors:\n\n* Returns INVALID_ARGUMENT if page_size is greater than 100 or less than 1.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/productSets/{productSetsId}/products",
+                      "httpMethod": "GET",
+                      "id": "vision.projects.locations.productSets.products.list",
+                      "parameterOrder": [
+                        "name"
+                      ],
+                      "parameters": {
+                        "name": {
+                          "description": "The ProductSet resource for which to retrieve Products.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/productSets/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "pageSize": {
+                          "description": "The maximum number of items to return. Default 10, maximum 100.",
+                          "format": "int32",
+                          "location": "query",
+                          "type": "integer"
+                        },
+                        "pageToken": {
+                          "description": "The next_page_token returned from a previous List request, if any.",
+                          "location": "query",
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+name}/products",
+                      "response": {
+                        "$ref": "ListProductsInProductSetResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloud-vision"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "products": {
+              "methods": {
+                "create": {
+                  "description": "Creates and returns a new product resource.\n\nPossible errors:\n\n* Returns INVALID_ARGUMENT if display_name is missing or longer than 4096\n  characters.\n* Returns INVALID_ARGUMENT if description is longer than 4096 characters.\n* Returns INVALID_ARGUMENT if product_category is missing or invalid.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products",
+                  "httpMethod": "POST",
+                  "id": "vision.projects.locations.products.create",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The project in which the Product should be created.\n\nFormat is\n`projects/PROJECT_ID/locations/LOC_ID`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "productId": {
+                      "description": "A user-supplied resource id for this Product. If set, the server will\nattempt to use this value as the resource id. If it is already in use, an\nerror is returned with code ALREADY_EXISTS. Must be at most 128 characters\nlong. It cannot contain the character `/`.",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/products",
+                  "request": {
+                    "$ref": "Product"
+                  },
+                  "response": {
+                    "$ref": "Product"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "delete": {
+                  "description": "Permanently deletes a product and its reference images.\n\nMetadata of the product and all its images will be deleted right away, but\nsearch queries against ProductSets containing the product may still work\nuntil all related caches are refreshed.\n\nPossible errors:\n\n* Returns NOT_FOUND if the product does not exist.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}",
+                  "httpMethod": "DELETE",
+                  "id": "vision.projects.locations.products.delete",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Resource name of product to delete.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "Empty"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "get": {
+                  "description": "Gets information associated with a Product.\n\nPossible errors:\n\n* Returns NOT_FOUND if the Product does not exist.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}",
+                  "httpMethod": "GET",
+                  "id": "vision.projects.locations.products.get",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Resource name of the Product to get.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "Product"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "list": {
+                  "description": "Lists products in an unspecified order.\n\nPossible errors:\n\n* Returns INVALID_ARGUMENT if page_size is greater than 100 or less than 1.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products",
+                  "httpMethod": "GET",
+                  "id": "vision.projects.locations.products.list",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "pageSize": {
+                      "description": "The maximum number of items to return. Default 10, maximum 100.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
+                    "pageToken": {
+                      "description": "The next_page_token returned from a previous List request, if any.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "parent": {
+                      "description": "The project OR ProductSet from which Products should be listed.\n\nFormat:\n`projects/PROJECT_ID/locations/LOC_ID`",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/products",
+                  "response": {
+                    "$ref": "ListProductsResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                },
+                "patch": {
+                  "description": "Makes changes to a Product resource.\nOnly the `display_name`, `description`, and `labels` fields can be updated\nright now.\n\nIf labels are updated, the change will not be reflected in queries until\nthe next index time.\n\nPossible errors:\n\n* Returns NOT_FOUND if the Product does not exist.\n* Returns INVALID_ARGUMENT if display_name is present in update_mask but is\n  missing from the request or longer than 4096 characters.\n* Returns INVALID_ARGUMENT if description is present in update_mask but is\n  longer than 4096 characters.\n* Returns INVALID_ARGUMENT if product_category is present in update_mask.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}",
+                  "httpMethod": "PATCH",
+                  "id": "vision.projects.locations.products.patch",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "updateMask": {
+                      "description": "The FieldMask that specifies which fields\nto update.\nIf update_mask isn't specified, all mutable fields are to be updated.\nValid mask paths include `product_labels`, `display_name`, and\n`description`.",
+                      "format": "google-fieldmask",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "request": {
+                    "$ref": "Product"
+                  },
+                  "response": {
+                    "$ref": "Product"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-vision"
+                  ]
+                }
+              },
+              "resources": {
+                "referenceImages": {
+                  "methods": {
+                    "create": {
+                      "description": "Creates and returns a new ReferenceImage resource.\n\nThe `bounding_poly` field is optional. If `bounding_poly` is not specified,\nthe system will try to detect regions of interest in the image that are\ncompatible with the product_category on the parent product. If it is\nspecified, detection is ALWAYS skipped. The system converts polygons into\nnon-rotated rectangles.\n\nNote that the pipeline will resize the image if the image resolution is too\nlarge to process (above 50MP).\n\nPossible errors:\n\n* Returns INVALID_ARGUMENT if the image_uri is missing or longer than 4096\n  characters.\n* Returns INVALID_ARGUMENT if the product does not exist.\n* Returns INVALID_ARGUMENT if bounding_poly is not provided, and nothing\n  compatible with the parent product's product_category is detected.\n* Returns INVALID_ARGUMENT if bounding_poly contains more than 10 polygons.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}/referenceImages",
+                      "httpMethod": "POST",
+                      "id": "vision.projects.locations.products.referenceImages.create",
+                      "parameterOrder": [
+                        "parent"
+                      ],
+                      "parameters": {
+                        "parent": {
+                          "description": "Resource name of the product in which to create the reference image.\n\nFormat is\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "referenceImageId": {
+                          "description": "A user-supplied resource id for the ReferenceImage to be added. If set,\nthe server will attempt to use this value as the resource id. If it is\nalready in use, an error is returned with code ALREADY_EXISTS. Must be at\nmost 128 characters long. It cannot contain the character `/`.",
+                          "location": "query",
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+parent}/referenceImages",
+                      "request": {
+                        "$ref": "ReferenceImage"
+                      },
+                      "response": {
+                        "$ref": "ReferenceImage"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloud-vision"
+                      ]
+                    },
+                    "delete": {
+                      "description": "Permanently deletes a reference image.\n\nThe image metadata will be deleted right away, but search queries\nagainst ProductSets containing the image may still work until all related\ncaches are refreshed.\n\nThe actual image files are not deleted from Google Cloud Storage.\n\nPossible errors:\n\n* Returns NOT_FOUND if the reference image does not exist.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}/referenceImages/{referenceImagesId}",
+                      "httpMethod": "DELETE",
+                      "id": "vision.projects.locations.products.referenceImages.delete",
+                      "parameterOrder": [
+                        "name"
+                      ],
+                      "parameters": {
+                        "name": {
+                          "description": "The resource name of the reference image to delete.\n\nFormat is:\n\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID/referenceImages/IMAGE_ID`",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+/referenceImages/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+name}",
+                      "response": {
+                        "$ref": "Empty"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloud-vision"
+                      ]
+                    },
+                    "get": {
+                      "description": "Gets information associated with a ReferenceImage.\n\nPossible errors:\n\n* Returns NOT_FOUND if the specified image does not exist.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}/referenceImages/{referenceImagesId}",
+                      "httpMethod": "GET",
+                      "id": "vision.projects.locations.products.referenceImages.get",
+                      "parameterOrder": [
+                        "name"
+                      ],
+                      "parameters": {
+                        "name": {
+                          "description": "The resource name of the ReferenceImage to get.\n\nFormat is:\n\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID/referenceImages/IMAGE_ID`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+/referenceImages/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+name}",
+                      "response": {
+                        "$ref": "ReferenceImage"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloud-vision"
+                      ]
+                    },
+                    "list": {
+                      "description": "Lists reference images.\n\nPossible errors:\n\n* Returns NOT_FOUND if the parent product does not exist.\n* Returns INVALID_ARGUMENT if the page_size is greater than 100, or less\n  than 1.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/products/{productsId}/referenceImages",
+                      "httpMethod": "GET",
+                      "id": "vision.projects.locations.products.referenceImages.list",
+                      "parameterOrder": [
+                        "parent"
+                      ],
+                      "parameters": {
+                        "pageSize": {
+                          "description": "The maximum number of items to return. Default 10, maximum 100.",
+                          "format": "int32",
+                          "location": "query",
+                          "type": "integer"
+                        },
+                        "pageToken": {
+                          "description": "A token identifying a page of results to be returned. This is the value\nof `nextPageToken` returned in a previous reference image list request.\n\nDefaults to the first page if not specified.",
+                          "location": "query",
+                          "type": "string"
+                        },
+                        "parent": {
+                          "description": "Resource name of the product containing the reference images.\n\nFormat is\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/products/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+parent}/referenceImages",
+                      "response": {
+                        "$ref": "ListReferenceImagesResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloud-vision"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
-  "revision": "20180809",
+  "revision": "20190119",
   "rootUrl": "https://vision.googleapis.com/",
   "schemas": {
+    "AddProductToProductSetRequest": {
+      "description": "Request message for the `AddProductToProductSet` method.",
+      "id": "AddProductToProductSetRequest",
+      "properties": {
+        "product": {
+          "description": "The resource name for the Product to be added to this ProductSet.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "AnnotateFileResponse": {
       "description": "Response to a single file annotation request. A file may contain one or more\nimages, which individually have their own responses.",
       "id": "AnnotateFileResponse",
@@ -403,12 +1005,23 @@
           },
           "type": "array"
         },
+        "localizedObjectAnnotations": {
+          "description": "If present, localized object detection has completed successfully.\nThis will be sorted descending by confidence score.",
+          "items": {
+            "$ref": "LocalizedObjectAnnotation"
+          },
+          "type": "array"
+        },
         "logoAnnotations": {
           "description": "If present, logo detection has completed successfully.",
           "items": {
             "$ref": "EntityAnnotation"
           },
           "type": "array"
+        },
+        "productSearchResults": {
+          "$ref": "ProductSearchResults",
+          "description": "If present, product search has completed successfully."
         },
         "safeSearchAnnotation": {
           "$ref": "SafeSearchAnnotation",
@@ -521,6 +1134,41 @@
       },
       "type": "object"
     },
+    "BatchOperationMetadata": {
+      "description": "Metadata for the batch operations such as the current state.\n\nThis is included in the `metadata` field of the `Operation` returned by the\n`GetOperation` call of the `google::longrunning::Operations` service.",
+      "id": "BatchOperationMetadata",
+      "properties": {
+        "endTime": {
+          "description": "The time when the batch request is finished and\ngoogle.longrunning.Operation.done is set to true.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "state": {
+          "description": "The current state of the batch operation.",
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "PROCESSING",
+            "SUCCESSFUL",
+            "FAILED",
+            "CANCELLED"
+          ],
+          "enumDescriptions": [
+            "Invalid.",
+            "Request is actively being processed.",
+            "The request is done and at least one item has been successfully\nprocessed.",
+            "The request is done and no item has been successfully processed.",
+            "The request is done after the longrunning.Operations.CancelOperation has\nbeen called by the user.  Any records that were processed before the\ncancel command are output as specified in the request."
+          ],
+          "type": "string"
+        },
+        "submitTime": {
+          "description": "The time when the batch request was submitted to the server.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Block": {
       "description": "Logical element on the page.",
       "id": "Block",
@@ -533,7 +1181,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -541,13 +1190,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -649,7 +1299,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -858,7 +1508,7 @@
         },
         "boundingPoly": {
           "$ref": "BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -1025,7 +1675,9 @@
             "SAFE_SEARCH_DETECTION",
             "IMAGE_PROPERTIES",
             "CROP_HINTS",
-            "WEB_DETECTION"
+            "WEB_DETECTION",
+            "PRODUCT_SEARCH",
+            "OBJECT_LOCALIZATION"
           ],
           "enumDescriptions": [
             "Unspecified feature type.",
@@ -1038,7 +1690,9 @@
             "Run Safe Search to detect potentially unsafe\nor undesirable content.",
             "Compute a set of image properties, such as the\nimage's dominant colors.",
             "Run crop hints.",
-            "Run web detection."
+            "Run web detection.",
+            "Run Product Search.",
+            "Run localizer for object detection."
           ],
           "type": "string"
         }
@@ -1130,12 +1784,23 @@
           },
           "type": "array"
         },
+        "localizedObjectAnnotations": {
+          "description": "If present, localized object detection has completed successfully.\nThis will be sorted descending by confidence score.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1LocalizedObjectAnnotation"
+          },
+          "type": "array"
+        },
         "logoAnnotations": {
           "description": "If present, logo detection has completed successfully.",
           "items": {
             "$ref": "GoogleCloudVisionV1p1beta1EntityAnnotation"
           },
           "type": "array"
+        },
+        "productSearchResults": {
+          "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResults",
+          "description": "If present, product search has completed successfully."
         },
         "safeSearchAnnotation": {
           "$ref": "GoogleCloudVisionV1p1beta1SafeSearchAnnotation",
@@ -1192,7 +1857,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -1200,13 +1866,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -1231,6 +1898,13 @@
       "description": "A bounding polygon for the detected image annotation.",
       "id": "GoogleCloudVisionV1p1beta1BoundingPoly",
       "properties": {
+        "normalizedVertices": {
+          "description": "The bounding polygon normalized vertices.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1NormalizedVertex"
+          },
+          "type": "array"
+        },
         "vertices": {
           "description": "The bounding polygon vertices.",
           "items": {
@@ -1268,7 +1942,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -1409,7 +2083,7 @@
         },
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -1703,6 +2377,34 @@
       },
       "type": "object"
     },
+    "GoogleCloudVisionV1p1beta1LocalizedObjectAnnotation": {
+      "description": "Set of detected objects with bounding boxes.",
+      "id": "GoogleCloudVisionV1p1beta1LocalizedObjectAnnotation",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
+          "description": "Image region to which this object belongs. This must be populated."
+        },
+        "languageCode": {
+          "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.",
+          "type": "string"
+        },
+        "mid": {
+          "description": "Object ID that should align with EntityAnnotation mid.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name, expressed in its `language_code` language.",
+          "type": "string"
+        },
+        "score": {
+          "description": "Score of the result. Range [0, 1].",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudVisionV1p1beta1LocationInfo": {
       "description": "Detected entity location information.",
       "id": "GoogleCloudVisionV1p1beta1LocationInfo",
@@ -1710,6 +2412,23 @@
         "latLng": {
           "$ref": "LatLng",
           "description": "lat/long location coordinates."
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1NormalizedVertex": {
+      "description": "A vertex represents a 2D point in the image.\nNOTE: the normalized vertex coordinates are relative to the original image\nand range from 0 to 1.",
+      "id": "GoogleCloudVisionV1p1beta1NormalizedVertex",
+      "properties": {
+        "x": {
+          "description": "X coordinate.",
+          "format": "float",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinate.",
+          "format": "float",
+          "type": "number"
         }
       },
       "type": "object"
@@ -1804,7 +2523,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -1841,6 +2560,115 @@
         },
         "z": {
           "description": "Z coordinate (or depth).",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1Product": {
+      "description": "A Product contains ReferenceImages.",
+      "id": "GoogleCloudVisionV1p1beta1Product",
+      "properties": {
+        "description": {
+          "description": "User-provided metadata to be stored with this product. Must be at most 4096\ncharacters long.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "The user-provided name for this Product. Must not be empty. Must be at most\n4096 characters long.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+          "type": "string"
+        },
+        "productCategory": {
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
+          "type": "string"
+        },
+        "productLabels": {
+          "description": "Key-value pairs that can be attached to a product. At query time,\nconstraints can be specified based on the product_labels.\n\nNote that integer values can be provided as strings, e.g. \"1199\". Only\nstrings with integer values can match a range-based restriction which is\nto be supported soon.\n\nMultiple values can be assigned to the same key. One product may have up to\n100 product_labels.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductKeyValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductKeyValue": {
+      "description": "A product label represented as a key-value pair.",
+      "id": "GoogleCloudVisionV1p1beta1ProductKeyValue",
+      "properties": {
+        "key": {
+          "description": "The key of the label attached to the product. Cannot be empty and cannot\nexceed 128 bytes.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the label attached to the product. Cannot be empty and\ncannot exceed 128 bytes.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductSearchResults": {
+      "description": "Results for a product search request.",
+      "id": "GoogleCloudVisionV1p1beta1ProductSearchResults",
+      "properties": {
+        "indexTime": {
+          "description": "Timestamp of the index which provided these results. Changes made after\nthis time are not reflected in the current results.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResultsGroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductSearchResultsGroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GoogleCloudVisionV1p1beta1ProductSearchResultsGroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductSearchResultsResult": {
+      "description": "Information about a product.",
+      "id": "GoogleCloudVisionV1p1beta1ProductSearchResultsResult",
+      "properties": {
+        "image": {
+          "description": "The resource name of the image from the product that is the closest match\nto the query.",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "GoogleCloudVisionV1p1beta1Product",
+          "description": "The Product."
+        },
+        "score": {
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
           "format": "float",
           "type": "number"
         }
@@ -2238,7 +3066,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",
@@ -2322,12 +3150,23 @@
           },
           "type": "array"
         },
+        "localizedObjectAnnotations": {
+          "description": "If present, localized object detection has completed successfully.\nThis will be sorted descending by confidence score.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1LocalizedObjectAnnotation"
+          },
+          "type": "array"
+        },
         "logoAnnotations": {
           "description": "If present, logo detection has completed successfully.",
           "items": {
             "$ref": "GoogleCloudVisionV1p2beta1EntityAnnotation"
           },
           "type": "array"
+        },
+        "productSearchResults": {
+          "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResults",
+          "description": "If present, product search has completed successfully."
         },
         "safeSearchAnnotation": {
           "$ref": "GoogleCloudVisionV1p2beta1SafeSearchAnnotation",
@@ -2384,7 +3223,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -2392,13 +3232,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -2467,7 +3308,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -2608,7 +3449,7 @@
         },
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -2902,6 +3743,34 @@
       },
       "type": "object"
     },
+    "GoogleCloudVisionV1p2beta1LocalizedObjectAnnotation": {
+      "description": "Set of detected objects with bounding boxes.",
+      "id": "GoogleCloudVisionV1p2beta1LocalizedObjectAnnotation",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
+          "description": "Image region to which this object belongs. This must be populated."
+        },
+        "languageCode": {
+          "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.",
+          "type": "string"
+        },
+        "mid": {
+          "description": "Object ID that should align with EntityAnnotation mid.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name, expressed in its `language_code` language.",
+          "type": "string"
+        },
+        "score": {
+          "description": "Score of the result. Range [0, 1].",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudVisionV1p2beta1LocationInfo": {
       "description": "Detected entity location information.",
       "id": "GoogleCloudVisionV1p2beta1LocationInfo",
@@ -3020,7 +3889,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -3057,6 +3926,115 @@
         },
         "z": {
           "description": "Z coordinate (or depth).",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1Product": {
+      "description": "A Product contains ReferenceImages.",
+      "id": "GoogleCloudVisionV1p2beta1Product",
+      "properties": {
+        "description": {
+          "description": "User-provided metadata to be stored with this product. Must be at most 4096\ncharacters long.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "The user-provided name for this Product. Must not be empty. Must be at most\n4096 characters long.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+          "type": "string"
+        },
+        "productCategory": {
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
+          "type": "string"
+        },
+        "productLabels": {
+          "description": "Key-value pairs that can be attached to a product. At query time,\nconstraints can be specified based on the product_labels.\n\nNote that integer values can be provided as strings, e.g. \"1199\". Only\nstrings with integer values can match a range-based restriction which is\nto be supported soon.\n\nMultiple values can be assigned to the same key. One product may have up to\n100 product_labels.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductKeyValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductKeyValue": {
+      "description": "A product label represented as a key-value pair.",
+      "id": "GoogleCloudVisionV1p2beta1ProductKeyValue",
+      "properties": {
+        "key": {
+          "description": "The key of the label attached to the product. Cannot be empty and cannot\nexceed 128 bytes.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the label attached to the product. Cannot be empty and\ncannot exceed 128 bytes.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchResults": {
+      "description": "Results for a product search request.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchResults",
+      "properties": {
+        "indexTime": {
+          "description": "Timestamp of the index which provided these results. Changes made after\nthis time are not reflected in the current results.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResultsGroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchResultsGroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchResultsGroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchResultsResult": {
+      "description": "Information about a product.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchResultsResult",
+      "properties": {
+        "image": {
+          "description": "The resource name of the image from the product that is the closest match\nto the query.",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "GoogleCloudVisionV1p2beta1Product",
+          "description": "The Product."
+        },
+        "score": {
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
           "format": "float",
           "type": "number"
         }
@@ -3454,7 +4432,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",
@@ -3646,7 +4624,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -3654,13 +4633,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -3729,7 +4709,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -3870,7 +4850,7 @@
         },
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -4331,7 +5311,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -4391,7 +5371,7 @@
           "type": "string"
         },
         "productCategory": {
-          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\" or \"apparel\".\n\nThis field is immutable.",
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
           "type": "string"
         },
         "productLabels": {
@@ -4428,6 +5408,31 @@
           "format": "google-datetime",
           "type": "string"
         },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p3beta1ProductSearchResultsGroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p3beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p3beta1ProductSearchResultsGroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GoogleCloudVisionV1p3beta1ProductSearchResultsGroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
         "results": {
           "description": "List of results, one for each product match.",
           "items": {
@@ -4451,7 +5456,7 @@
           "description": "The Product."
         },
         "score": {
-          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).\n\nThis field is returned only if `view` is set to `FULL` in\nthe request.",
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
           "format": "float",
           "type": "number"
         }
@@ -4871,7 +5876,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",
@@ -4886,6 +5891,24 @@
           "description": "List of symbols in the word.\nThe order of the symbols follows the natural reading order.",
           "items": {
             "$ref": "GoogleCloudVisionV1p3beta1Symbol"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "Result"
           },
           "type": "array"
         }
@@ -4943,6 +5966,10 @@
           "$ref": "LatLongRect",
           "description": "Not used."
         },
+        "productSearchParams": {
+          "$ref": "ProductSearchParams",
+          "description": "Parameters for product search."
+        },
         "webDetectionParams": {
           "$ref": "WebDetectionParams",
           "description": "Parameters for web detection."
@@ -4976,6 +6003,60 @@
       },
       "type": "object"
     },
+    "ImportProductSetsGcsSource": {
+      "description": "The Google Cloud Storage location for a csv file which preserves a list of\nImportProductSetRequests in each line.",
+      "id": "ImportProductSetsGcsSource",
+      "properties": {
+        "csvFileUri": {
+          "description": "The Google Cloud Storage URI of the input csv file.\n\nThe URI must start with `gs://`.\n\nThe format of the input csv file should be one image per line.\nIn each line, there are 8 columns.\n\n1.  image-uri\n2.  image-id\n3.  product-set-id\n4.  product-id\n5.  product-category\n6.  product-display-name\n7.  labels\n8.  bounding-poly\n\nThe `image-uri`, `product-set-id`, `product-id`, and `product-category`\ncolumns are required. All other columns are optional.\n\nIf the `ProductSet` or `Product` specified by the `product-set-id` and\n`product-id` values does not exist, then the system will create a new\n`ProductSet` or `Product` for the image. In this case, the\n`product-display-name` column refers to\ndisplay_name, the\n`product-category` column refers to\nproduct_category, and the\n`labels` column refers to product_labels.\n\nThe `image-id` column is optional but must be unique if provided. If it is\nempty, the system will automatically assign a unique id to the image.\n\nThe `product-display-name` column is optional. If it is empty, the system\nsets the display_name field for the product to a\nspace (\" \"). You can update the `display_name` later by using the API.\n\nIf a `Product` with the specified `product-id` already exists, then the\nsystem ignores the `product-display-name`, `product-category`, and `labels`\ncolumns.\n\nThe `labels` column (optional) is a line containing a list of\ncomma-separated key-value pairs, in the following format:\n\n    \"key_1=value_1,key_2=value_2,...,key_n=value_n\"\n\nThe `bounding-poly` column (optional) identifies one region of\ninterest from the image in the same manner as `CreateReferenceImage`. If\nyou do not specify the `bounding-poly` column, then the system will try to\ndetect regions of interest automatically.\n\nAt most one `bounding-poly` column is allowed per line. If the image\ncontains multiple regions of interest, add a line to the CSV file that\nincludes the same product information, and the `bounding-poly` values for\neach region of interest.\n\nThe `bounding-poly` column must contain an even number of comma-separated\nnumbers, in the format \"p1_x,p1_y,p2_x,p2_y,...,pn_x,pn_y\". Use\nnon-negative integers for absolute bounding polygons, and float values\nin [0, 1] for normalized bounding polygons.\n\nThe system will resize the image if the image resolution is too\nlarge to process (larger than 20MP).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ImportProductSetsInputConfig": {
+      "description": "The input content for the `ImportProductSets` method.",
+      "id": "ImportProductSetsInputConfig",
+      "properties": {
+        "gcsSource": {
+          "$ref": "ImportProductSetsGcsSource",
+          "description": "The Google Cloud Storage location for a csv file which preserves a list\nof ImportProductSetRequests in each line."
+        }
+      },
+      "type": "object"
+    },
+    "ImportProductSetsRequest": {
+      "description": "Request message for the `ImportProductSets` method.",
+      "id": "ImportProductSetsRequest",
+      "properties": {
+        "inputConfig": {
+          "$ref": "ImportProductSetsInputConfig",
+          "description": "The input content for the list of requests."
+        }
+      },
+      "type": "object"
+    },
+    "ImportProductSetsResponse": {
+      "description": "Response message for the `ImportProductSets` method.\n\nThis message is returned by the\ngoogle.longrunning.Operations.GetOperation method in the returned\ngoogle.longrunning.Operation.response field.",
+      "id": "ImportProductSetsResponse",
+      "properties": {
+        "referenceImages": {
+          "description": "The list of reference_images that are imported successfully.",
+          "items": {
+            "$ref": "ReferenceImage"
+          },
+          "type": "array"
+        },
+        "statuses": {
+          "description": "The rpc status for each ImportProductSet request, including both successes\nand errors.\n\nThe number of statuses here matches the number of lines in the csv file,\nand statuses[i] stores the success or failure status of processing the i-th\nline of the csv, starting from line 0.",
+          "items": {
+            "$ref": "Status"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "InputConfig": {
       "description": "The desired input location and metadata.",
       "id": "InputConfig",
@@ -4986,6 +6067,21 @@
         },
         "mimeType": {
           "description": "The type of the file. Currently only \"application/pdf\" and \"image/tiff\"\nare supported. Wildcards are not supported.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "KeyValue": {
+      "description": "A product label represented as a key-value pair.",
+      "id": "KeyValue",
+      "properties": {
+        "key": {
+          "description": "The key of the label attached to the product. Cannot be empty and cannot\nexceed 128 bytes.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the label attached to the product. Cannot be empty and\ncannot exceed 128 bytes.",
           "type": "string"
         }
       },
@@ -5126,6 +6222,111 @@
             "$ref": "Operation"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ListProductSetsResponse": {
+      "description": "Response message for the `ListProductSets` method.",
+      "id": "ListProductSetsResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to retrieve the next page of results, or empty if there are no more\nresults in the list.",
+          "type": "string"
+        },
+        "productSets": {
+          "description": "List of ProductSets.",
+          "items": {
+            "$ref": "ProductSet"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ListProductsInProductSetResponse": {
+      "description": "Response message for the `ListProductsInProductSet` method.",
+      "id": "ListProductsInProductSetResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to retrieve the next page of results, or empty if there are no more\nresults in the list.",
+          "type": "string"
+        },
+        "products": {
+          "description": "The list of Products.",
+          "items": {
+            "$ref": "Product"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ListProductsResponse": {
+      "description": "Response message for the `ListProducts` method.",
+      "id": "ListProductsResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to retrieve the next page of results, or empty if there are no more\nresults in the list.",
+          "type": "string"
+        },
+        "products": {
+          "description": "List of products.",
+          "items": {
+            "$ref": "Product"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ListReferenceImagesResponse": {
+      "description": "Response message for the `ListReferenceImages` method.",
+      "id": "ListReferenceImagesResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "The next_page_token returned from a previous List request, if any.",
+          "type": "string"
+        },
+        "pageSize": {
+          "description": "The maximum number of items to return. Default 10, maximum 100.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "referenceImages": {
+          "description": "The list of reference images.",
+          "items": {
+            "$ref": "ReferenceImage"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "LocalizedObjectAnnotation": {
+      "description": "Set of detected objects with bounding boxes.",
+      "id": "LocalizedObjectAnnotation",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "BoundingPoly",
+          "description": "Image region to which this object belongs. This must be populated."
+        },
+        "languageCode": {
+          "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.",
+          "type": "string"
+        },
+        "mid": {
+          "description": "Object ID that should align with EntityAnnotation mid.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name, expressed in its `language_code` language.",
+          "type": "string"
+        },
+        "score": {
+          "description": "Score of the result. Range [0, 1].",
+          "format": "float",
+          "type": "number"
         }
       },
       "type": "object"
@@ -5283,7 +6484,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -5326,6 +6527,112 @@
       },
       "type": "object"
     },
+    "Product": {
+      "description": "A Product contains ReferenceImages.",
+      "id": "Product",
+      "properties": {
+        "description": {
+          "description": "User-provided metadata to be stored with this product. Must be at most 4096\ncharacters long.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "The user-provided name for this Product. Must not be empty. Must be at most\n4096 characters long.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+          "type": "string"
+        },
+        "productCategory": {
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
+          "type": "string"
+        },
+        "productLabels": {
+          "description": "Key-value pairs that can be attached to a product. At query time,\nconstraints can be specified based on the product_labels.\n\nNote that integer values can be provided as strings, e.g. \"1199\". Only\nstrings with integer values can match a range-based restriction which is\nto be supported soon.\n\nMultiple values can be assigned to the same key. One product may have up to\n100 product_labels.",
+          "items": {
+            "$ref": "KeyValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ProductSearchParams": {
+      "description": "Parameters for a product search request.",
+      "id": "ProductSearchParams",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "BoundingPoly",
+          "description": "The bounding polygon around the area of interest in the image.\nOptional. If it is not specified, system discretion will be applied."
+        },
+        "filter": {
+          "description": "The filtering expression. This can be used to restrict search results based\non Product labels. We currently support an AND of OR of key-value\nexpressions, where each expression within an OR must have the same key.\n\nFor example, \"(color = red OR color = blue) AND brand = Google\" is\nacceptable, but not \"(color = red OR brand = Google)\" or \"color: red\".",
+          "type": "string"
+        },
+        "productCategories": {
+          "description": "The list of product categories to search in. Currently, we only consider\nthe first category, and either \"homegoods\", \"apparel\", or \"toys\" should be\nspecified.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "productSet": {
+          "description": "The resource name of a ProductSet to be searched for similar images.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ProductSearchResults": {
+      "description": "Results for a product search request.",
+      "id": "ProductSearchResults",
+      "properties": {
+        "indexTime": {
+          "description": "Timestamp of the index which provided these results. Changes made after\nthis time are not reflected in the current results.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "Result"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ProductSet": {
+      "description": "A ProductSet contains Products. A ProductSet can contain a maximum of 1\nmillion reference images. If the limit is exceeded, periodic indexing will\nfail.",
+      "id": "ProductSet",
+      "properties": {
+        "displayName": {
+          "description": "The user-provided name for this ProductSet. Must not be empty. Must be at\nmost 4096 characters long.",
+          "type": "string"
+        },
+        "indexError": {
+          "$ref": "Status",
+          "description": "Output only. If there was an error with indexing the product set, the field\nis populated.\n\nThis field is ignored when creating a ProductSet."
+        },
+        "indexTime": {
+          "description": "Output only. The time at which this ProductSet was last indexed. Query\nresults will reflect all updates before this time. If this ProductSet has\nnever been indexed, this timestamp is the default value\n\"1970-01-01T00:00:00Z\".\n\nThis field is ignored when creating a ProductSet.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the ProductSet.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`.\n\nThis field is ignored when creating a ProductSet.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Property": {
       "description": "A `Property` consists of a user-supplied name/value pair.",
       "id": "Property",
@@ -5342,6 +6649,59 @@
         "value": {
           "description": "Value of the property.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ReferenceImage": {
+      "description": "A `ReferenceImage` represents a product image and its associated metadata,\nsuch as bounding boxes.",
+      "id": "ReferenceImage",
+      "properties": {
+        "boundingPolys": {
+          "description": "Bounding polygons around the areas of interest in the reference image.\nOptional. If this field is empty, the system will try to detect regions of\ninterest. At most 10 bounding polygons will be used.\n\nThe provided shape is converted into a non-rotated rectangle. Once\nconverted, the small edge of the rectangle must be greater than or equal\nto 300 pixels. The aspect ratio must be 1:4 or less (i.e. 1:3 is ok; 1:5\nis not).",
+          "items": {
+            "$ref": "BoundingPoly"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "The resource name of the reference image.\n\nFormat is:\n\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID/referenceImages/IMAGE_ID`.\n\nThis field is ignored when creating a reference image.",
+          "type": "string"
+        },
+        "uri": {
+          "description": "The Google Cloud Storage URI of the reference image.\n\nThe URI must start with `gs://`.\n\nRequired.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RemoveProductFromProductSetRequest": {
+      "description": "Request message for the `RemoveProductFromProductSet` method.",
+      "id": "RemoveProductFromProductSetRequest",
+      "properties": {
+        "product": {
+          "description": "The resource name for the Product to be removed from this ProductSet.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Result": {
+      "description": "Information about a product.",
+      "id": "Result",
+      "properties": {
+        "image": {
+          "description": "The resource name of the image from the product that is the closest match\nto the query.",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "Product",
+          "description": "The Product."
+        },
+        "score": {
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
+          "format": "float",
+          "type": "number"
         }
       },
       "type": "object"
@@ -5708,7 +7068,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",

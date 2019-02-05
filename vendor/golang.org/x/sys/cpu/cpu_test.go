@@ -26,3 +26,29 @@ func TestAVX2hasAVX(t *testing.T) {
 		}
 	}
 }
+
+func TestARM64minimalFeatures(t *testing.T) {
+	if runtime.GOARCH != "arm64" || runtime.GOOS != "linux" {
+		return
+	}
+	if !cpu.ARM64.HasASIMD {
+		t.Fatal("HasASIMD expected true, got false")
+	}
+	if !cpu.ARM64.HasFP {
+		t.Fatal("HasFP expected true, got false")
+	}
+}
+
+// On ppc64x, the ISA bit for POWER8 should always be set on POWER8 and beyond.
+func TestPPC64minimalFeatures(t *testing.T) {
+	// Do not run this with gccgo on ppc64, as it doesn't have POWER8 as a minimum
+	// requirement.
+	if runtime.Compiler == "gccgo" && runtime.GOARCH == "ppc64" {
+		t.Skip("gccgo does not require POWER8 on ppc64; skipping")
+	}
+	if runtime.GOARCH == "ppc64" || runtime.GOARCH == "ppc64le" {
+		if !cpu.PPC64.IsPOWER8 {
+			t.Fatal("IsPOWER8 expected true, got false")
+		}
+	}
+}

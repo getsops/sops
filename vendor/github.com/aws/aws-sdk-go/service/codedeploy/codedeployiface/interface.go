@@ -80,6 +80,10 @@ type CodeDeployAPI interface {
 	BatchGetDeploymentInstancesWithContext(aws.Context, *codedeploy.BatchGetDeploymentInstancesInput, ...request.Option) (*codedeploy.BatchGetDeploymentInstancesOutput, error)
 	BatchGetDeploymentInstancesRequest(*codedeploy.BatchGetDeploymentInstancesInput) (*request.Request, *codedeploy.BatchGetDeploymentInstancesOutput)
 
+	BatchGetDeploymentTargets(*codedeploy.BatchGetDeploymentTargetsInput) (*codedeploy.BatchGetDeploymentTargetsOutput, error)
+	BatchGetDeploymentTargetsWithContext(aws.Context, *codedeploy.BatchGetDeploymentTargetsInput, ...request.Option) (*codedeploy.BatchGetDeploymentTargetsOutput, error)
+	BatchGetDeploymentTargetsRequest(*codedeploy.BatchGetDeploymentTargetsInput) (*request.Request, *codedeploy.BatchGetDeploymentTargetsOutput)
+
 	BatchGetDeployments(*codedeploy.BatchGetDeploymentsInput) (*codedeploy.BatchGetDeploymentsOutput, error)
 	BatchGetDeploymentsWithContext(aws.Context, *codedeploy.BatchGetDeploymentsInput, ...request.Option) (*codedeploy.BatchGetDeploymentsOutput, error)
 	BatchGetDeploymentsRequest(*codedeploy.BatchGetDeploymentsInput) (*request.Request, *codedeploy.BatchGetDeploymentsOutput)
@@ -152,6 +156,10 @@ type CodeDeployAPI interface {
 	GetDeploymentInstanceWithContext(aws.Context, *codedeploy.GetDeploymentInstanceInput, ...request.Option) (*codedeploy.GetDeploymentInstanceOutput, error)
 	GetDeploymentInstanceRequest(*codedeploy.GetDeploymentInstanceInput) (*request.Request, *codedeploy.GetDeploymentInstanceOutput)
 
+	GetDeploymentTarget(*codedeploy.GetDeploymentTargetInput) (*codedeploy.GetDeploymentTargetOutput, error)
+	GetDeploymentTargetWithContext(aws.Context, *codedeploy.GetDeploymentTargetInput, ...request.Option) (*codedeploy.GetDeploymentTargetOutput, error)
+	GetDeploymentTargetRequest(*codedeploy.GetDeploymentTargetInput) (*request.Request, *codedeploy.GetDeploymentTargetOutput)
+
 	GetOnPremisesInstance(*codedeploy.GetOnPremisesInstanceInput) (*codedeploy.GetOnPremisesInstanceOutput, error)
 	GetOnPremisesInstanceWithContext(aws.Context, *codedeploy.GetOnPremisesInstanceInput, ...request.Option) (*codedeploy.GetOnPremisesInstanceOutput, error)
 	GetOnPremisesInstanceRequest(*codedeploy.GetOnPremisesInstanceInput) (*request.Request, *codedeploy.GetOnPremisesInstanceOutput)
@@ -190,6 +198,10 @@ type CodeDeployAPI interface {
 
 	ListDeploymentInstancesPages(*codedeploy.ListDeploymentInstancesInput, func(*codedeploy.ListDeploymentInstancesOutput, bool) bool) error
 	ListDeploymentInstancesPagesWithContext(aws.Context, *codedeploy.ListDeploymentInstancesInput, func(*codedeploy.ListDeploymentInstancesOutput, bool) bool, ...request.Option) error
+
+	ListDeploymentTargets(*codedeploy.ListDeploymentTargetsInput) (*codedeploy.ListDeploymentTargetsOutput, error)
+	ListDeploymentTargetsWithContext(aws.Context, *codedeploy.ListDeploymentTargetsInput, ...request.Option) (*codedeploy.ListDeploymentTargetsOutput, error)
+	ListDeploymentTargetsRequest(*codedeploy.ListDeploymentTargetsInput) (*request.Request, *codedeploy.ListDeploymentTargetsOutput)
 
 	ListDeployments(*codedeploy.ListDeploymentsInput) (*codedeploy.ListDeploymentsOutput, error)
 	ListDeploymentsWithContext(aws.Context, *codedeploy.ListDeploymentsInput, ...request.Option) (*codedeploy.ListDeploymentsOutput, error)

@@ -242,7 +242,7 @@ cloud.google.com/go/vision/apiv1 instead.
 
 - trace: several changes to the surface. See the link below.
 
-[Code changes required from v0.9.0.](https://github.com/GoogleCloudPlatform/google-cloud-go/blob/master/MIGRATION.md)
+[Code changes required from v0.9.0.](https://github.com/googleapis/google-cloud-go/blob/master/MIGRATION.md)
 
 
 _March 17, 2017_

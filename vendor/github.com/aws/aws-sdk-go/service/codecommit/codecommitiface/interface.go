@@ -84,6 +84,10 @@ type CodeCommitAPI interface {
 	DeleteCommentContentWithContext(aws.Context, *codecommit.DeleteCommentContentInput, ...request.Option) (*codecommit.DeleteCommentContentOutput, error)
 	DeleteCommentContentRequest(*codecommit.DeleteCommentContentInput) (*request.Request, *codecommit.DeleteCommentContentOutput)
 
+	DeleteFile(*codecommit.DeleteFileInput) (*codecommit.DeleteFileOutput, error)
+	DeleteFileWithContext(aws.Context, *codecommit.DeleteFileInput, ...request.Option) (*codecommit.DeleteFileOutput, error)
+	DeleteFileRequest(*codecommit.DeleteFileInput) (*request.Request, *codecommit.DeleteFileOutput)
+
 	DeleteRepository(*codecommit.DeleteRepositoryInput) (*codecommit.DeleteRepositoryOutput, error)
 	DeleteRepositoryWithContext(aws.Context, *codecommit.DeleteRepositoryInput, ...request.Option) (*codecommit.DeleteRepositoryOutput, error)
 	DeleteRepositoryRequest(*codecommit.DeleteRepositoryInput) (*request.Request, *codecommit.DeleteRepositoryOutput)
@@ -131,6 +135,14 @@ type CodeCommitAPI interface {
 
 	GetDifferencesPages(*codecommit.GetDifferencesInput, func(*codecommit.GetDifferencesOutput, bool) bool) error
 	GetDifferencesPagesWithContext(aws.Context, *codecommit.GetDifferencesInput, func(*codecommit.GetDifferencesOutput, bool) bool, ...request.Option) error
+
+	GetFile(*codecommit.GetFileInput) (*codecommit.GetFileOutput, error)
+	GetFileWithContext(aws.Context, *codecommit.GetFileInput, ...request.Option) (*codecommit.GetFileOutput, error)
+	GetFileRequest(*codecommit.GetFileInput) (*request.Request, *codecommit.GetFileOutput)
+
+	GetFolder(*codecommit.GetFolderInput) (*codecommit.GetFolderOutput, error)
+	GetFolderWithContext(aws.Context, *codecommit.GetFolderInput, ...request.Option) (*codecommit.GetFolderOutput, error)
+	GetFolderRequest(*codecommit.GetFolderInput) (*request.Request, *codecommit.GetFolderOutput)
 
 	GetMergeConflicts(*codecommit.GetMergeConflictsInput) (*codecommit.GetMergeConflictsOutput, error)
 	GetMergeConflictsWithContext(aws.Context, *codecommit.GetMergeConflictsInput, ...request.Option) (*codecommit.GetMergeConflictsOutput, error)

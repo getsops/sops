@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewGalleryImageClientWithBaseURI(baseURI string, subscriptionID string) Gal
 // labName - the name of the lab.
 // filter - the filter to apply on the operation.
 func (client GalleryImageClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationGalleryImagePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GalleryImageClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcgi.Response.Response != nil {
+				sc = result.rwcgi.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderBy)
 	if err != nil {
@@ -118,8 +129,8 @@ func (client GalleryImageClient) ListResponder(resp *http.Response) (result Resp
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client GalleryImageClient) listNextResults(lastResults ResponseWithContinuationGalleryImage) (result ResponseWithContinuationGalleryImage, err error) {
-	req, err := lastResults.responseWithContinuationGalleryImagePreparer()
+func (client GalleryImageClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationGalleryImage) (result ResponseWithContinuationGalleryImage, err error) {
+	req, err := lastResults.responseWithContinuationGalleryImagePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.GalleryImageClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -140,6 +151,16 @@ func (client GalleryImageClient) listNextResults(lastResults ResponseWithContinu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GalleryImageClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationGalleryImageIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GalleryImageClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderBy)
 	return
 }

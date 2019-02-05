@@ -17,25 +17,20 @@
 package cmd
 
 import (
-	"io"
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/Azure/azure-sdk-for-go/tools/profileBuilder/model"
-	"github.com/marstr/randname"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
-
-var listFlags = viper.New()
 
 const (
 	inputLongName    = "input"
 	inputShortName   = "i"
-	inputDefault     = "<stdin>"
-	inputDescription = "Specify a file to read for the list of packages, instead of stdin."
+	inputDescription = "Specify the input JSON file to read for the list of packages."
 )
 
 // listCmd represents the list command
@@ -54,65 +49,50 @@ $> ../model/testdata/smallProfile.txt > profileBuilder list --name small_profile
 	Args: cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		logWriter := ioutil.Discard
-		if viper.GetBool("verbose") {
+		if verboseFlag {
 			logWriter = os.Stdout
 		}
 
 		outputLog := log.New(logWriter, "[STATUS] ", 0)
 		errLog := log.New(os.Stderr, "[ERROR] ", 0)
 
-		outputLog.Printf("Output-Location set to: %s", viper.GetString(outputLocationLongName))
+		if !filepath.IsAbs(outputRootDir) {
+			abs, err := filepath.Abs(outputRootDir)
+			if err != nil {
+				errLog.Fatalf("failed to convert to absolute path: %v", err)
+			}
+			outputRootDir = abs
+		}
+		outputLog.Printf("Output-Location set to: %s", outputRootDir)
 
-		var input io.Reader
-
-		if _, ok := listFlags.Get(inputLongName).(int); ok {
-			input = os.Stdin
-		} else if fileHandle, err := os.Open(listFlags.GetString(inputLongName)); err == nil {
-			input = fileHandle
-		} else {
-			errLog.Printf("Fatal! Unable to open file %q", listFlags.GetString(inputLongName))
-			return
+		inputFile, err := cmd.Flags().GetString(inputLongName)
+		if err != nil {
+			errLog.Fatalf("failed to get %s: %v", inputLongName, err)
 		}
 
-		deleteLoc := path.Join(listFlags.GetString(outputLocationLongName), listFlags.GetString(nameLongName))
-		if viper.GetBool("clear-output") {
-			if err := model.DeleteChildDirs(deleteLoc); err != nil {
-				errLog.Print("Fatal! Unable to clear output-folder:", err)
-				return
+		data, err := ioutil.ReadFile(inputFile)
+		if err != nil {
+			errLog.Fatalf("failed to read list: %v", err)
+		}
+
+		var listDef model.ListDefinition
+		err = json.Unmarshal(data, &listDef)
+		if err != nil {
+			errLog.Fatalf("failed to unmarshal JSON: %v", err)
+		}
+
+		if clearOutputFlag {
+			if err := model.DeleteChildDirs(outputRootDir); err != nil {
+				errLog.Fatalf("Unable to clear output-folder: %v", err)
 			}
 		}
 
-		model.BuildProfile(
-			&model.ListStrategy{Reader: input},
-			listFlags.GetString(nameLongName),
-			listFlags.GetString(outputLocationLongName),
-			outputLog,
-			errLog)
+		model.BuildProfile(listDef, profileName, outputRootDir, outputLog, errLog)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	listCmd.Flags().StringP(outputLocationLongName, outputLocationShortName, outputLocationDefault, outputLocationDescription)
-	listCmd.Flags().StringP(nameLongName, nameShortName, nameDefault, nameDescription)
-	listCmd.Flags().StringP(inputLongName, inputShortName, inputDefault, inputDescription)
-
-	listFlags.BindPFlags(listCmd.Flags())
-
-	listFlags.SetDefault(nameLongName, randname.Generate())
-
-	// To work around the fact that cobra's default and viper's default are going to step on eachother's toes,
-	// set the viper default to an int. That way we can check based on type, instead of having a special case string.
-	listFlags.SetDefault(inputLongName, 0)
+	listCmd.Flags().StringP(inputLongName, inputShortName, "", inputDescription)
+	listCmd.MarkFlagRequired(inputLongName)
 }

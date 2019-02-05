@@ -488,7 +488,7 @@
       }
     }
   },
-  "revision": "20180806",
+  "revision": "20190114",
   "rootUrl": "https://cloudbilling.googleapis.com/",
   "schemas": {
     "AggregationInfo": {
@@ -888,6 +888,10 @@
       "description": "Encapsulates a single service in Google Cloud Platform.",
       "id": "Service",
       "properties": {
+        "businessEntityName": {
+          "description": "The business under which the service is offered.\nEx. \"businessEntities/GCP\", \"businessEntities/Maps\"",
+          "type": "string"
+        },
         "displayName": {
           "description": "A human readable display name for this service.",
           "type": "string"

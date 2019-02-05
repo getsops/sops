@@ -15,9 +15,10 @@
 package cloud_test
 
 import (
+	"context"
+
 	"cloud.google.com/go/datastore"
 	"cloud.google.com/go/pubsub"
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 )

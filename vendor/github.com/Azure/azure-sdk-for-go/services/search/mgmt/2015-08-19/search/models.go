@@ -24,6 +24,9 @@ import (
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/search/mgmt/2015-08-19/search"
+
 // AdminKeyKind enumerates the values for admin key kind.
 type AdminKeyKind string
 
@@ -130,7 +133,8 @@ func PossibleUnavailableNameReasonValues() []UnavailableNameReason {
 	return []UnavailableNameReason{AlreadyExists, Invalid}
 }
 
-// AdminKeyResult response containing the primary and secondary admin API keys for a given Azure Search service.
+// AdminKeyResult response containing the primary and secondary admin API keys for a given Azure Search
+// service.
 type AdminKeyResult struct {
 	autorest.Response `json:"-"`
 	// PrimaryKey - The primary admin API key of the Search service.
@@ -166,7 +170,7 @@ type CloudError struct {
 
 // CloudErrorBody describes a particular API error with an error code and a message.
 type CloudErrorBody struct {
-	// Code - An error code that describes the error condition more precisely than an HTTP status code. Can be used to programatically handle specific error cases.
+	// Code - An error code that describes the error condition more precisely than an HTTP status code. Can be used to programmatically handle specific error cases.
 	Code *string `json:"code,omitempty"`
 	// Message - A message that describes the error in detail and provides debugging information.
 	Message *string `json:"message,omitempty"`
@@ -213,8 +217,8 @@ type OperationDisplay struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// OperationListResult the result of the request to list REST API operations. It contains a list of operations and
-// a URL  to get the next set of results.
+// OperationListResult the result of the request to list REST API operations. It contains a list of
+// operations and a URL  to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of operations supported by the resource provider.
@@ -223,7 +227,8 @@ type OperationListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// QueryKey describes an API key for a given Azure Search service that has permissions for query operations only.
+// QueryKey describes an API key for a given Azure Search service that has permissions for query operations
+// only.
 type QueryKey struct {
 	autorest.Response `json:"-"`
 	// Name - The name of the query API key; may be empty.

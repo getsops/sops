@@ -80,7 +80,6 @@ var Layer_Directive_name = map[int32]string{
 	16: "HEALTHCHECK",
 	17: "SHELL",
 }
-
 var Layer_Directive_value = map[string]int32{
 	"DIRECTIVE_UNSPECIFIED": 0,
 	"MAINTAINER":            1,
@@ -105,9 +104,8 @@ var Layer_Directive_value = map[string]int32{
 func (x Layer_Directive) String() string {
 	return proto.EnumName(Layer_Directive_name, int32(x))
 }
-
 func (Layer_Directive) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_ab0486c83d3ae0f1, []int{0, 0}
+	return fileDescriptor_image_7b7d3df7358e6057, []int{0, 0}
 }
 
 // Layer holds metadata specific to a layer of a Docker image.
@@ -125,7 +123,7 @@ func (m *Layer) Reset()         { *m = Layer{} }
 func (m *Layer) String() string { return proto.CompactTextString(m) }
 func (*Layer) ProtoMessage()    {}
 func (*Layer) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab0486c83d3ae0f1, []int{0}
+	return fileDescriptor_image_7b7d3df7358e6057, []int{0}
 }
 func (m *Layer) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Layer.Unmarshal(m, b)
@@ -133,8 +131,8 @@ func (m *Layer) XXX_Unmarshal(b []byte) error {
 func (m *Layer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Layer.Marshal(b, m, deterministic)
 }
-func (m *Layer) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Layer.Merge(m, src)
+func (dst *Layer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Layer.Merge(dst, src)
 }
 func (m *Layer) XXX_Size() int {
 	return xxx_messageInfo_Layer.Size(m)
@@ -179,7 +177,7 @@ func (m *Fingerprint) Reset()         { *m = Fingerprint{} }
 func (m *Fingerprint) String() string { return proto.CompactTextString(m) }
 func (*Fingerprint) ProtoMessage()    {}
 func (*Fingerprint) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab0486c83d3ae0f1, []int{1}
+	return fileDescriptor_image_7b7d3df7358e6057, []int{1}
 }
 func (m *Fingerprint) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Fingerprint.Unmarshal(m, b)
@@ -187,8 +185,8 @@ func (m *Fingerprint) XXX_Unmarshal(b []byte) error {
 func (m *Fingerprint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Fingerprint.Marshal(b, m, deterministic)
 }
-func (m *Fingerprint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Fingerprint.Merge(m, src)
+func (dst *Fingerprint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Fingerprint.Merge(dst, src)
 }
 func (m *Fingerprint) XXX_Size() int {
 	return xxx_messageInfo_Fingerprint.Size(m)
@@ -240,7 +238,7 @@ func (m *Basis) Reset()         { *m = Basis{} }
 func (m *Basis) String() string { return proto.CompactTextString(m) }
 func (*Basis) ProtoMessage()    {}
 func (*Basis) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab0486c83d3ae0f1, []int{2}
+	return fileDescriptor_image_7b7d3df7358e6057, []int{2}
 }
 func (m *Basis) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Basis.Unmarshal(m, b)
@@ -248,8 +246,8 @@ func (m *Basis) XXX_Unmarshal(b []byte) error {
 func (m *Basis) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Basis.Marshal(b, m, deterministic)
 }
-func (m *Basis) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Basis.Merge(m, src)
+func (dst *Basis) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Basis.Merge(dst, src)
 }
 func (m *Basis) XXX_Size() int {
 	return xxx_messageInfo_Basis.Size(m)
@@ -287,7 +285,7 @@ func (m *Details) Reset()         { *m = Details{} }
 func (m *Details) String() string { return proto.CompactTextString(m) }
 func (*Details) ProtoMessage()    {}
 func (*Details) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab0486c83d3ae0f1, []int{3}
+	return fileDescriptor_image_7b7d3df7358e6057, []int{3}
 }
 func (m *Details) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Details.Unmarshal(m, b)
@@ -295,8 +293,8 @@ func (m *Details) XXX_Unmarshal(b []byte) error {
 func (m *Details) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Details.Marshal(b, m, deterministic)
 }
-func (m *Details) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Details.Merge(m, src)
+func (dst *Details) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Details.Merge(dst, src)
 }
 func (m *Details) XXX_Size() int {
 	return xxx_messageInfo_Details.Size(m)
@@ -339,7 +337,7 @@ func (m *Derived) Reset()         { *m = Derived{} }
 func (m *Derived) String() string { return proto.CompactTextString(m) }
 func (*Derived) ProtoMessage()    {}
 func (*Derived) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab0486c83d3ae0f1, []int{4}
+	return fileDescriptor_image_7b7d3df7358e6057, []int{4}
 }
 func (m *Derived) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Derived.Unmarshal(m, b)
@@ -347,8 +345,8 @@ func (m *Derived) XXX_Unmarshal(b []byte) error {
 func (m *Derived) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Derived.Marshal(b, m, deterministic)
 }
-func (m *Derived) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Derived.Merge(m, src)
+func (dst *Derived) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Derived.Merge(dst, src)
 }
 func (m *Derived) XXX_Size() int {
 	return xxx_messageInfo_Derived.Size(m)
@@ -397,10 +395,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/image/image.proto", fileDescriptor_ab0486c83d3ae0f1)
+	proto.RegisterFile("google/devtools/containeranalysis/v1beta1/image/image.proto", fileDescriptor_image_7b7d3df7358e6057)
 }
 
-var fileDescriptor_ab0486c83d3ae0f1 = []byte{
+var fileDescriptor_image_7b7d3df7358e6057 = []byte{
 	// 613 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0xcf, 0x6e, 0xda, 0x40,
 	0x10, 0xc6, 0x6b, 0x08, 0x10, 0x8f, 0xf3, 0x67, 0xb3, 0x52, 0x54, 0x5a, 0x45, 0x15, 0xe5, 0x50,

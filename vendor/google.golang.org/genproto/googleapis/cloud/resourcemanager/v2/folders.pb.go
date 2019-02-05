@@ -45,7 +45,6 @@ var Folder_LifecycleState_name = map[int32]string{
 	1: "ACTIVE",
 	2: "DELETE_REQUESTED",
 }
-
 var Folder_LifecycleState_value = map[string]int32{
 	"LIFECYCLE_STATE_UNSPECIFIED": 0,
 	"ACTIVE":                      1,
@@ -55,9 +54,8 @@ var Folder_LifecycleState_value = map[string]int32{
 func (x Folder_LifecycleState) String() string {
 	return proto.EnumName(Folder_LifecycleState_name, int32(x))
 }
-
 func (Folder_LifecycleState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{0, 0}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{0, 0}
 }
 
 // The type of operation that failed.
@@ -77,7 +75,6 @@ var FolderOperation_OperationType_name = map[int32]string{
 	1: "CREATE",
 	2: "MOVE",
 }
-
 var FolderOperation_OperationType_value = map[string]int32{
 	"OPERATION_TYPE_UNSPECIFIED": 0,
 	"CREATE":                     1,
@@ -87,9 +84,8 @@ var FolderOperation_OperationType_value = map[string]int32{
 func (x FolderOperation_OperationType) String() string {
 	return proto.EnumName(FolderOperation_OperationType_name, int32(x))
 }
-
 func (FolderOperation_OperationType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{11, 0}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{11, 0}
 }
 
 // A Folder in an Organization's resource hierarchy, used to
@@ -126,7 +122,7 @@ func (m *Folder) Reset()         { *m = Folder{} }
 func (m *Folder) String() string { return proto.CompactTextString(m) }
 func (*Folder) ProtoMessage()    {}
 func (*Folder) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{0}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{0}
 }
 func (m *Folder) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Folder.Unmarshal(m, b)
@@ -134,8 +130,8 @@ func (m *Folder) XXX_Unmarshal(b []byte) error {
 func (m *Folder) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Folder.Marshal(b, m, deterministic)
 }
-func (m *Folder) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Folder.Merge(m, src)
+func (dst *Folder) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Folder.Merge(dst, src)
 }
 func (m *Folder) XXX_Size() int {
 	return xxx_messageInfo_Folder.Size(m)
@@ -215,7 +211,7 @@ func (m *ListFoldersRequest) Reset()         { *m = ListFoldersRequest{} }
 func (m *ListFoldersRequest) String() string { return proto.CompactTextString(m) }
 func (*ListFoldersRequest) ProtoMessage()    {}
 func (*ListFoldersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{1}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{1}
 }
 func (m *ListFoldersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListFoldersRequest.Unmarshal(m, b)
@@ -223,8 +219,8 @@ func (m *ListFoldersRequest) XXX_Unmarshal(b []byte) error {
 func (m *ListFoldersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListFoldersRequest.Marshal(b, m, deterministic)
 }
-func (m *ListFoldersRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFoldersRequest.Merge(m, src)
+func (dst *ListFoldersRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListFoldersRequest.Merge(dst, src)
 }
 func (m *ListFoldersRequest) XXX_Size() int {
 	return xxx_messageInfo_ListFoldersRequest.Size(m)
@@ -281,7 +277,7 @@ func (m *ListFoldersResponse) Reset()         { *m = ListFoldersResponse{} }
 func (m *ListFoldersResponse) String() string { return proto.CompactTextString(m) }
 func (*ListFoldersResponse) ProtoMessage()    {}
 func (*ListFoldersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{2}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{2}
 }
 func (m *ListFoldersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListFoldersResponse.Unmarshal(m, b)
@@ -289,8 +285,8 @@ func (m *ListFoldersResponse) XXX_Unmarshal(b []byte) error {
 func (m *ListFoldersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ListFoldersResponse.Marshal(b, m, deterministic)
 }
-func (m *ListFoldersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListFoldersResponse.Merge(m, src)
+func (dst *ListFoldersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListFoldersResponse.Merge(dst, src)
 }
 func (m *ListFoldersResponse) XXX_Size() int {
 	return xxx_messageInfo_ListFoldersResponse.Size(m)
@@ -350,7 +346,7 @@ func (m *SearchFoldersRequest) Reset()         { *m = SearchFoldersRequest{} }
 func (m *SearchFoldersRequest) String() string { return proto.CompactTextString(m) }
 func (*SearchFoldersRequest) ProtoMessage()    {}
 func (*SearchFoldersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{3}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{3}
 }
 func (m *SearchFoldersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SearchFoldersRequest.Unmarshal(m, b)
@@ -358,8 +354,8 @@ func (m *SearchFoldersRequest) XXX_Unmarshal(b []byte) error {
 func (m *SearchFoldersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SearchFoldersRequest.Marshal(b, m, deterministic)
 }
-func (m *SearchFoldersRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SearchFoldersRequest.Merge(m, src)
+func (dst *SearchFoldersRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchFoldersRequest.Merge(dst, src)
 }
 func (m *SearchFoldersRequest) XXX_Size() int {
 	return xxx_messageInfo_SearchFoldersRequest.Size(m)
@@ -409,7 +405,7 @@ func (m *SearchFoldersResponse) Reset()         { *m = SearchFoldersResponse{} }
 func (m *SearchFoldersResponse) String() string { return proto.CompactTextString(m) }
 func (*SearchFoldersResponse) ProtoMessage()    {}
 func (*SearchFoldersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{4}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{4}
 }
 func (m *SearchFoldersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SearchFoldersResponse.Unmarshal(m, b)
@@ -417,8 +413,8 @@ func (m *SearchFoldersResponse) XXX_Unmarshal(b []byte) error {
 func (m *SearchFoldersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SearchFoldersResponse.Marshal(b, m, deterministic)
 }
-func (m *SearchFoldersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SearchFoldersResponse.Merge(m, src)
+func (dst *SearchFoldersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SearchFoldersResponse.Merge(dst, src)
 }
 func (m *SearchFoldersResponse) XXX_Size() int {
 	return xxx_messageInfo_SearchFoldersResponse.Size(m)
@@ -457,7 +453,7 @@ func (m *GetFolderRequest) Reset()         { *m = GetFolderRequest{} }
 func (m *GetFolderRequest) String() string { return proto.CompactTextString(m) }
 func (*GetFolderRequest) ProtoMessage()    {}
 func (*GetFolderRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{5}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{5}
 }
 func (m *GetFolderRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetFolderRequest.Unmarshal(m, b)
@@ -465,8 +461,8 @@ func (m *GetFolderRequest) XXX_Unmarshal(b []byte) error {
 func (m *GetFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_GetFolderRequest.Marshal(b, m, deterministic)
 }
-func (m *GetFolderRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetFolderRequest.Merge(m, src)
+func (dst *GetFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetFolderRequest.Merge(dst, src)
 }
 func (m *GetFolderRequest) XXX_Size() int {
 	return xxx_messageInfo_GetFolderRequest.Size(m)
@@ -501,7 +497,7 @@ func (m *CreateFolderRequest) Reset()         { *m = CreateFolderRequest{} }
 func (m *CreateFolderRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateFolderRequest) ProtoMessage()    {}
 func (*CreateFolderRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{6}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{6}
 }
 func (m *CreateFolderRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateFolderRequest.Unmarshal(m, b)
@@ -509,8 +505,8 @@ func (m *CreateFolderRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateFolderRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateFolderRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateFolderRequest.Merge(m, src)
+func (dst *CreateFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateFolderRequest.Merge(dst, src)
 }
 func (m *CreateFolderRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateFolderRequest.Size(m)
@@ -553,7 +549,7 @@ func (m *MoveFolderRequest) Reset()         { *m = MoveFolderRequest{} }
 func (m *MoveFolderRequest) String() string { return proto.CompactTextString(m) }
 func (*MoveFolderRequest) ProtoMessage()    {}
 func (*MoveFolderRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{7}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{7}
 }
 func (m *MoveFolderRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MoveFolderRequest.Unmarshal(m, b)
@@ -561,8 +557,8 @@ func (m *MoveFolderRequest) XXX_Unmarshal(b []byte) error {
 func (m *MoveFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_MoveFolderRequest.Marshal(b, m, deterministic)
 }
-func (m *MoveFolderRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MoveFolderRequest.Merge(m, src)
+func (dst *MoveFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MoveFolderRequest.Merge(dst, src)
 }
 func (m *MoveFolderRequest) XXX_Size() int {
 	return xxx_messageInfo_MoveFolderRequest.Size(m)
@@ -605,7 +601,7 @@ func (m *UpdateFolderRequest) Reset()         { *m = UpdateFolderRequest{} }
 func (m *UpdateFolderRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateFolderRequest) ProtoMessage()    {}
 func (*UpdateFolderRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{8}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{8}
 }
 func (m *UpdateFolderRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateFolderRequest.Unmarshal(m, b)
@@ -613,8 +609,8 @@ func (m *UpdateFolderRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateFolderRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateFolderRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateFolderRequest.Merge(m, src)
+func (dst *UpdateFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateFolderRequest.Merge(dst, src)
 }
 func (m *UpdateFolderRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateFolderRequest.Size(m)
@@ -656,7 +652,7 @@ func (m *DeleteFolderRequest) Reset()         { *m = DeleteFolderRequest{} }
 func (m *DeleteFolderRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteFolderRequest) ProtoMessage()    {}
 func (*DeleteFolderRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{9}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{9}
 }
 func (m *DeleteFolderRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteFolderRequest.Unmarshal(m, b)
@@ -664,8 +660,8 @@ func (m *DeleteFolderRequest) XXX_Unmarshal(b []byte) error {
 func (m *DeleteFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_DeleteFolderRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteFolderRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteFolderRequest.Merge(m, src)
+func (dst *DeleteFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteFolderRequest.Merge(dst, src)
 }
 func (m *DeleteFolderRequest) XXX_Size() int {
 	return xxx_messageInfo_DeleteFolderRequest.Size(m)
@@ -704,7 +700,7 @@ func (m *UndeleteFolderRequest) Reset()         { *m = UndeleteFolderRequest{} }
 func (m *UndeleteFolderRequest) String() string { return proto.CompactTextString(m) }
 func (*UndeleteFolderRequest) ProtoMessage()    {}
 func (*UndeleteFolderRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{10}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{10}
 }
 func (m *UndeleteFolderRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UndeleteFolderRequest.Unmarshal(m, b)
@@ -712,8 +708,8 @@ func (m *UndeleteFolderRequest) XXX_Unmarshal(b []byte) error {
 func (m *UndeleteFolderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UndeleteFolderRequest.Marshal(b, m, deterministic)
 }
-func (m *UndeleteFolderRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UndeleteFolderRequest.Merge(m, src)
+func (dst *UndeleteFolderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UndeleteFolderRequest.Merge(dst, src)
 }
 func (m *UndeleteFolderRequest) XXX_Size() int {
 	return xxx_messageInfo_UndeleteFolderRequest.Size(m)
@@ -752,7 +748,7 @@ func (m *FolderOperation) Reset()         { *m = FolderOperation{} }
 func (m *FolderOperation) String() string { return proto.CompactTextString(m) }
 func (*FolderOperation) ProtoMessage()    {}
 func (*FolderOperation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe78511a4713776e, []int{11}
+	return fileDescriptor_folders_6c4bd17feec38232, []int{11}
 }
 func (m *FolderOperation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FolderOperation.Unmarshal(m, b)
@@ -760,8 +756,8 @@ func (m *FolderOperation) XXX_Unmarshal(b []byte) error {
 func (m *FolderOperation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_FolderOperation.Marshal(b, m, deterministic)
 }
-func (m *FolderOperation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FolderOperation.Merge(m, src)
+func (dst *FolderOperation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FolderOperation.Merge(dst, src)
 }
 func (m *FolderOperation) XXX_Size() int {
 	return xxx_messageInfo_FolderOperation.Size(m)
@@ -1428,10 +1424,10 @@ var _Folders_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/resourcemanager/v2/folders.proto", fileDescriptor_fe78511a4713776e)
+	proto.RegisterFile("google/cloud/resourcemanager/v2/folders.proto", fileDescriptor_folders_6c4bd17feec38232)
 }
 
-var fileDescriptor_fe78511a4713776e = []byte{
+var fileDescriptor_folders_6c4bd17feec38232 = []byte{
 	// 1235 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x57, 0x5d, 0x6f, 0xdb, 0xd4,
 	0x1b, 0xff, 0x9f, 0xac, 0xcb, 0xba, 0x27, 0x2f, 0xcd, 0x4e, 0xdb, 0xfd, 0x4b, 0xba, 0xbe, 0x70,

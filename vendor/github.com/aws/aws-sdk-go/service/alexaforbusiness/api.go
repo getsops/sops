@@ -9,14 +9,104 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
+
+const opApproveSkill = "ApproveSkill"
+
+// ApproveSkillRequest generates a "aws/request.Request" representing the
+// client's request for the ApproveSkill operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ApproveSkill for more information on using the ApproveSkill
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ApproveSkillRequest method.
+//    req, resp := client.ApproveSkillRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ApproveSkill
+func (c *AlexaForBusiness) ApproveSkillRequest(input *ApproveSkillInput) (req *request.Request, output *ApproveSkillOutput) {
+	op := &request.Operation{
+		Name:       opApproveSkill,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ApproveSkillInput{}
+	}
+
+	output = &ApproveSkillOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// ApproveSkill API operation for Alexa For Business.
+//
+// Associates a skill with the organization under the customer's AWS account.
+// If a skill is private, the user implicitly accepts access to this skill during
+// enablement.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ApproveSkill for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You are performing an action that would put you beyond your account's limits.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ApproveSkill
+func (c *AlexaForBusiness) ApproveSkill(input *ApproveSkillInput) (*ApproveSkillOutput, error) {
+	req, out := c.ApproveSkillRequest(input)
+	return out, req.Send()
+}
+
+// ApproveSkillWithContext is the same as ApproveSkill with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ApproveSkill for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ApproveSkillWithContext(ctx aws.Context, input *ApproveSkillInput, opts ...request.Option) (*ApproveSkillOutput, error) {
+	req, out := c.ApproveSkillRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
 
 const opAssociateContactWithAddressBook = "AssociateContactWithAddressBook"
 
 // AssociateContactWithAddressBookRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateContactWithAddressBook operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -50,6 +140,7 @@ func (c *AlexaForBusiness) AssociateContactWithAddressBookRequest(input *Associa
 
 	output = &AssociateContactWithAddressBookOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -67,7 +158,6 @@ func (c *AlexaForBusiness) AssociateContactWithAddressBookRequest(input *Associa
 // Returned Error Codes:
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/AssociateContactWithAddressBook
 func (c *AlexaForBusiness) AssociateContactWithAddressBook(input *AssociateContactWithAddressBookInput) (*AssociateContactWithAddressBookOutput, error) {
@@ -96,7 +186,7 @@ const opAssociateDeviceWithRoom = "AssociateDeviceWithRoom"
 // AssociateDeviceWithRoomRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateDeviceWithRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -130,6 +220,7 @@ func (c *AlexaForBusiness) AssociateDeviceWithRoomRequest(input *AssociateDevice
 
 	output = &AssociateDeviceWithRoomOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -150,7 +241,9 @@ func (c *AlexaForBusiness) AssociateDeviceWithRoomRequest(input *AssociateDevice
 // Returned Error Codes:
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 //   * ErrCodeDeviceNotRegisteredException "DeviceNotRegisteredException"
 //   The request failed because this device is no longer registered and therefore
@@ -183,7 +276,7 @@ const opAssociateSkillGroupWithRoom = "AssociateSkillGroupWithRoom"
 // AssociateSkillGroupWithRoomRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateSkillGroupWithRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -217,6 +310,7 @@ func (c *AlexaForBusiness) AssociateSkillGroupWithRoomRequest(input *AssociateSk
 
 	output = &AssociateSkillGroupWithRoomOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -231,6 +325,11 @@ func (c *AlexaForBusiness) AssociateSkillGroupWithRoomRequest(input *AssociateSk
 //
 // See the AWS API reference guide for Alexa For Business's
 // API operation AssociateSkillGroupWithRoom for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/AssociateSkillGroupWithRoom
 func (c *AlexaForBusiness) AssociateSkillGroupWithRoom(input *AssociateSkillGroupWithRoomInput) (*AssociateSkillGroupWithRoomOutput, error) {
 	req, out := c.AssociateSkillGroupWithRoomRequest(input)
@@ -253,12 +352,178 @@ func (c *AlexaForBusiness) AssociateSkillGroupWithRoomWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
+const opAssociateSkillWithSkillGroup = "AssociateSkillWithSkillGroup"
+
+// AssociateSkillWithSkillGroupRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateSkillWithSkillGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateSkillWithSkillGroup for more information on using the AssociateSkillWithSkillGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateSkillWithSkillGroupRequest method.
+//    req, resp := client.AssociateSkillWithSkillGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/AssociateSkillWithSkillGroup
+func (c *AlexaForBusiness) AssociateSkillWithSkillGroupRequest(input *AssociateSkillWithSkillGroupInput) (req *request.Request, output *AssociateSkillWithSkillGroupOutput) {
+	op := &request.Operation{
+		Name:       opAssociateSkillWithSkillGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateSkillWithSkillGroupInput{}
+	}
+
+	output = &AssociateSkillWithSkillGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociateSkillWithSkillGroup API operation for Alexa For Business.
+//
+// Associates a skill with a skill group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation AssociateSkillWithSkillGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+//   * ErrCodeSkillNotLinkedException "SkillNotLinkedException"
+//   The skill must be linked to a third-party account.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/AssociateSkillWithSkillGroup
+func (c *AlexaForBusiness) AssociateSkillWithSkillGroup(input *AssociateSkillWithSkillGroupInput) (*AssociateSkillWithSkillGroupOutput, error) {
+	req, out := c.AssociateSkillWithSkillGroupRequest(input)
+	return out, req.Send()
+}
+
+// AssociateSkillWithSkillGroupWithContext is the same as AssociateSkillWithSkillGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateSkillWithSkillGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) AssociateSkillWithSkillGroupWithContext(ctx aws.Context, input *AssociateSkillWithSkillGroupInput, opts ...request.Option) (*AssociateSkillWithSkillGroupOutput, error) {
+	req, out := c.AssociateSkillWithSkillGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opAssociateSkillWithUsers = "AssociateSkillWithUsers"
+
+// AssociateSkillWithUsersRequest generates a "aws/request.Request" representing the
+// client's request for the AssociateSkillWithUsers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AssociateSkillWithUsers for more information on using the AssociateSkillWithUsers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AssociateSkillWithUsersRequest method.
+//    req, resp := client.AssociateSkillWithUsersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/AssociateSkillWithUsers
+func (c *AlexaForBusiness) AssociateSkillWithUsersRequest(input *AssociateSkillWithUsersInput) (req *request.Request, output *AssociateSkillWithUsersOutput) {
+	op := &request.Operation{
+		Name:       opAssociateSkillWithUsers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AssociateSkillWithUsersInput{}
+	}
+
+	output = &AssociateSkillWithUsersOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AssociateSkillWithUsers API operation for Alexa For Business.
+//
+// Makes a private skill available for enrolled users to enable on their devices.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation AssociateSkillWithUsers for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/AssociateSkillWithUsers
+func (c *AlexaForBusiness) AssociateSkillWithUsers(input *AssociateSkillWithUsersInput) (*AssociateSkillWithUsersOutput, error) {
+	req, out := c.AssociateSkillWithUsersRequest(input)
+	return out, req.Send()
+}
+
+// AssociateSkillWithUsersWithContext is the same as AssociateSkillWithUsers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AssociateSkillWithUsers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) AssociateSkillWithUsersWithContext(ctx aws.Context, input *AssociateSkillWithUsersInput, opts ...request.Option) (*AssociateSkillWithUsersOutput, error) {
+	req, out := c.AssociateSkillWithUsersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateAddressBook = "CreateAddressBook"
 
 // CreateAddressBookRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAddressBook operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -308,11 +573,10 @@ func (c *AlexaForBusiness) CreateAddressBookRequest(input *CreateAddressBookInpu
 //
 // Returned Error Codes:
 //   * ErrCodeAlreadyExistsException "AlreadyExistsException"
-//   The resource being created already exists. HTTP Status Code: 400
+//   The resource being created already exists.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateAddressBook
 func (c *AlexaForBusiness) CreateAddressBook(input *CreateAddressBookInput) (*CreateAddressBookOutput, error) {
@@ -336,12 +600,171 @@ func (c *AlexaForBusiness) CreateAddressBookWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opCreateBusinessReportSchedule = "CreateBusinessReportSchedule"
+
+// CreateBusinessReportScheduleRequest generates a "aws/request.Request" representing the
+// client's request for the CreateBusinessReportSchedule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateBusinessReportSchedule for more information on using the CreateBusinessReportSchedule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateBusinessReportScheduleRequest method.
+//    req, resp := client.CreateBusinessReportScheduleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateBusinessReportSchedule
+func (c *AlexaForBusiness) CreateBusinessReportScheduleRequest(input *CreateBusinessReportScheduleInput) (req *request.Request, output *CreateBusinessReportScheduleOutput) {
+	op := &request.Operation{
+		Name:       opCreateBusinessReportSchedule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateBusinessReportScheduleInput{}
+	}
+
+	output = &CreateBusinessReportScheduleOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateBusinessReportSchedule API operation for Alexa For Business.
+//
+// Creates a recurring schedule for usage reports to deliver to the specified
+// S3 location with a specified daily or weekly interval.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation CreateBusinessReportSchedule for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+//   The resource being created already exists.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateBusinessReportSchedule
+func (c *AlexaForBusiness) CreateBusinessReportSchedule(input *CreateBusinessReportScheduleInput) (*CreateBusinessReportScheduleOutput, error) {
+	req, out := c.CreateBusinessReportScheduleRequest(input)
+	return out, req.Send()
+}
+
+// CreateBusinessReportScheduleWithContext is the same as CreateBusinessReportSchedule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateBusinessReportSchedule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) CreateBusinessReportScheduleWithContext(ctx aws.Context, input *CreateBusinessReportScheduleInput, opts ...request.Option) (*CreateBusinessReportScheduleOutput, error) {
+	req, out := c.CreateBusinessReportScheduleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateConferenceProvider = "CreateConferenceProvider"
+
+// CreateConferenceProviderRequest generates a "aws/request.Request" representing the
+// client's request for the CreateConferenceProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateConferenceProvider for more information on using the CreateConferenceProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateConferenceProviderRequest method.
+//    req, resp := client.CreateConferenceProviderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateConferenceProvider
+func (c *AlexaForBusiness) CreateConferenceProviderRequest(input *CreateConferenceProviderInput) (req *request.Request, output *CreateConferenceProviderOutput) {
+	op := &request.Operation{
+		Name:       opCreateConferenceProvider,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateConferenceProviderInput{}
+	}
+
+	output = &CreateConferenceProviderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateConferenceProvider API operation for Alexa For Business.
+//
+// Adds a new conference provider under the user's AWS account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation CreateConferenceProvider for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+//   The resource being created already exists.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateConferenceProvider
+func (c *AlexaForBusiness) CreateConferenceProvider(input *CreateConferenceProviderInput) (*CreateConferenceProviderOutput, error) {
+	req, out := c.CreateConferenceProviderRequest(input)
+	return out, req.Send()
+}
+
+// CreateConferenceProviderWithContext is the same as CreateConferenceProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateConferenceProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) CreateConferenceProviderWithContext(ctx aws.Context, input *CreateConferenceProviderInput, opts ...request.Option) (*CreateConferenceProviderOutput, error) {
+	req, out := c.CreateConferenceProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateContact = "CreateContact"
 
 // CreateContactRequest generates a "aws/request.Request" representing the
 // client's request for the CreateContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -391,11 +814,10 @@ func (c *AlexaForBusiness) CreateContactRequest(input *CreateContactInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeAlreadyExistsException "AlreadyExistsException"
-//   The resource being created already exists. HTTP Status Code: 400
+//   The resource being created already exists.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateContact
 func (c *AlexaForBusiness) CreateContact(input *CreateContactInput) (*CreateContactOutput, error) {
@@ -424,7 +846,7 @@ const opCreateProfile = "CreateProfile"
 // CreateProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CreateProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -475,10 +897,12 @@ func (c *AlexaForBusiness) CreateProfileRequest(input *CreateProfileInput) (req 
 // Returned Error Codes:
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
 //
 //   * ErrCodeAlreadyExistsException "AlreadyExistsException"
-//   The resource being created already exists. HTTP Status Code: 400
+//   The resource being created already exists.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateProfile
 func (c *AlexaForBusiness) CreateProfile(input *CreateProfileInput) (*CreateProfileOutput, error) {
@@ -507,7 +931,7 @@ const opCreateRoom = "CreateRoom"
 // CreateRoomRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -557,11 +981,10 @@ func (c *AlexaForBusiness) CreateRoomRequest(input *CreateRoomInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeAlreadyExistsException "AlreadyExistsException"
-//   The resource being created already exists. HTTP Status Code: 400
+//   The resource being created already exists.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateRoom
 func (c *AlexaForBusiness) CreateRoom(input *CreateRoomInput) (*CreateRoomOutput, error) {
@@ -590,7 +1013,7 @@ const opCreateSkillGroup = "CreateSkillGroup"
 // CreateSkillGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSkillGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -640,11 +1063,13 @@ func (c *AlexaForBusiness) CreateSkillGroupRequest(input *CreateSkillGroupInput)
 //
 // Returned Error Codes:
 //   * ErrCodeAlreadyExistsException "AlreadyExistsException"
-//   The resource being created already exists. HTTP Status Code: 400
+//   The resource being created already exists.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateSkillGroup
 func (c *AlexaForBusiness) CreateSkillGroup(input *CreateSkillGroupInput) (*CreateSkillGroupOutput, error) {
@@ -673,7 +1098,7 @@ const opCreateUser = "CreateUser"
 // CreateUserRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -723,11 +1148,13 @@ func (c *AlexaForBusiness) CreateUserRequest(input *CreateUserInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeResourceInUseException "ResourceInUseException"
-//   The resource in the request is already in use. HTTP Status Code: 400
+//   The resource in the request is already in use.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   You are performing an action that would put you beyond your account's limits.
-//   HTTP Status Code: 400
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/CreateUser
 func (c *AlexaForBusiness) CreateUser(input *CreateUserInput) (*CreateUserOutput, error) {
@@ -756,7 +1183,7 @@ const opDeleteAddressBook = "DeleteAddressBook"
 // DeleteAddressBookRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAddressBook operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -790,6 +1217,7 @@ func (c *AlexaForBusiness) DeleteAddressBookRequest(input *DeleteAddressBookInpu
 
 	output = &DeleteAddressBookOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -806,7 +1234,10 @@ func (c *AlexaForBusiness) DeleteAddressBookRequest(input *DeleteAddressBookInpu
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteAddressBook
 func (c *AlexaForBusiness) DeleteAddressBook(input *DeleteAddressBookInput) (*DeleteAddressBookOutput, error) {
@@ -830,12 +1261,176 @@ func (c *AlexaForBusiness) DeleteAddressBookWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opDeleteBusinessReportSchedule = "DeleteBusinessReportSchedule"
+
+// DeleteBusinessReportScheduleRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteBusinessReportSchedule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteBusinessReportSchedule for more information on using the DeleteBusinessReportSchedule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteBusinessReportScheduleRequest method.
+//    req, resp := client.DeleteBusinessReportScheduleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteBusinessReportSchedule
+func (c *AlexaForBusiness) DeleteBusinessReportScheduleRequest(input *DeleteBusinessReportScheduleInput) (req *request.Request, output *DeleteBusinessReportScheduleOutput) {
+	op := &request.Operation{
+		Name:       opDeleteBusinessReportSchedule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteBusinessReportScheduleInput{}
+	}
+
+	output = &DeleteBusinessReportScheduleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteBusinessReportSchedule API operation for Alexa For Business.
+//
+// Deletes the recurring report delivery schedule with the specified schedule
+// ARN.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation DeleteBusinessReportSchedule for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteBusinessReportSchedule
+func (c *AlexaForBusiness) DeleteBusinessReportSchedule(input *DeleteBusinessReportScheduleInput) (*DeleteBusinessReportScheduleOutput, error) {
+	req, out := c.DeleteBusinessReportScheduleRequest(input)
+	return out, req.Send()
+}
+
+// DeleteBusinessReportScheduleWithContext is the same as DeleteBusinessReportSchedule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteBusinessReportSchedule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) DeleteBusinessReportScheduleWithContext(ctx aws.Context, input *DeleteBusinessReportScheduleInput, opts ...request.Option) (*DeleteBusinessReportScheduleOutput, error) {
+	req, out := c.DeleteBusinessReportScheduleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteConferenceProvider = "DeleteConferenceProvider"
+
+// DeleteConferenceProviderRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteConferenceProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteConferenceProvider for more information on using the DeleteConferenceProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteConferenceProviderRequest method.
+//    req, resp := client.DeleteConferenceProviderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteConferenceProvider
+func (c *AlexaForBusiness) DeleteConferenceProviderRequest(input *DeleteConferenceProviderInput) (req *request.Request, output *DeleteConferenceProviderOutput) {
+	op := &request.Operation{
+		Name:       opDeleteConferenceProvider,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteConferenceProviderInput{}
+	}
+
+	output = &DeleteConferenceProviderOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteConferenceProvider API operation for Alexa For Business.
+//
+// Deletes a conference provider.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation DeleteConferenceProvider for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteConferenceProvider
+func (c *AlexaForBusiness) DeleteConferenceProvider(input *DeleteConferenceProviderInput) (*DeleteConferenceProviderOutput, error) {
+	req, out := c.DeleteConferenceProviderRequest(input)
+	return out, req.Send()
+}
+
+// DeleteConferenceProviderWithContext is the same as DeleteConferenceProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteConferenceProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) DeleteConferenceProviderWithContext(ctx aws.Context, input *DeleteConferenceProviderInput, opts ...request.Option) (*DeleteConferenceProviderOutput, error) {
+	req, out := c.DeleteConferenceProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteContact = "DeleteContact"
 
 // DeleteContactRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -869,6 +1464,7 @@ func (c *AlexaForBusiness) DeleteContactRequest(input *DeleteContactInput) (req 
 
 	output = &DeleteContactOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -885,7 +1481,10 @@ func (c *AlexaForBusiness) DeleteContactRequest(input *DeleteContactInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteContact
 func (c *AlexaForBusiness) DeleteContact(input *DeleteContactInput) (*DeleteContactOutput, error) {
@@ -909,12 +1508,98 @@ func (c *AlexaForBusiness) DeleteContactWithContext(ctx aws.Context, input *Dele
 	return out, req.Send()
 }
 
+const opDeleteDevice = "DeleteDevice"
+
+// DeleteDeviceRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteDevice operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteDevice for more information on using the DeleteDevice
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteDeviceRequest method.
+//    req, resp := client.DeleteDeviceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteDevice
+func (c *AlexaForBusiness) DeleteDeviceRequest(input *DeleteDeviceInput) (req *request.Request, output *DeleteDeviceOutput) {
+	op := &request.Operation{
+		Name:       opDeleteDevice,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteDeviceInput{}
+	}
+
+	output = &DeleteDeviceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteDevice API operation for Alexa For Business.
+//
+// Removes a device from Alexa For Business.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation DeleteDevice for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+//   * ErrCodeInvalidCertificateAuthorityException "InvalidCertificateAuthorityException"
+//   The Certificate Authority can't issue or revoke a certificate.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteDevice
+func (c *AlexaForBusiness) DeleteDevice(input *DeleteDeviceInput) (*DeleteDeviceOutput, error) {
+	req, out := c.DeleteDeviceRequest(input)
+	return out, req.Send()
+}
+
+// DeleteDeviceWithContext is the same as DeleteDevice with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteDevice for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) DeleteDeviceWithContext(ctx aws.Context, input *DeleteDeviceInput, opts ...request.Option) (*DeleteDeviceOutput, error) {
+	req, out := c.DeleteDeviceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteProfile = "DeleteProfile"
 
 // DeleteProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -948,6 +1633,7 @@ func (c *AlexaForBusiness) DeleteProfileRequest(input *DeleteProfileInput) (req 
 
 	output = &DeleteProfileOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -964,7 +1650,10 @@ func (c *AlexaForBusiness) DeleteProfileRequest(input *DeleteProfileInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteProfile
 func (c *AlexaForBusiness) DeleteProfile(input *DeleteProfileInput) (*DeleteProfileOutput, error) {
@@ -993,7 +1682,7 @@ const opDeleteRoom = "DeleteRoom"
 // DeleteRoomRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1027,6 +1716,7 @@ func (c *AlexaForBusiness) DeleteRoomRequest(input *DeleteRoomInput) (req *reque
 
 	output = &DeleteRoomOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1043,7 +1733,10 @@ func (c *AlexaForBusiness) DeleteRoomRequest(input *DeleteRoomInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteRoom
 func (c *AlexaForBusiness) DeleteRoom(input *DeleteRoomInput) (*DeleteRoomOutput, error) {
@@ -1072,7 +1765,7 @@ const opDeleteRoomSkillParameter = "DeleteRoomSkillParameter"
 // DeleteRoomSkillParameterRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRoomSkillParameter operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1106,6 +1799,7 @@ func (c *AlexaForBusiness) DeleteRoomSkillParameterRequest(input *DeleteRoomSkil
 
 	output = &DeleteRoomSkillParameterOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1119,6 +1813,11 @@ func (c *AlexaForBusiness) DeleteRoomSkillParameterRequest(input *DeleteRoomSkil
 //
 // See the AWS API reference guide for Alexa For Business's
 // API operation DeleteRoomSkillParameter for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteRoomSkillParameter
 func (c *AlexaForBusiness) DeleteRoomSkillParameter(input *DeleteRoomSkillParameterInput) (*DeleteRoomSkillParameterOutput, error) {
 	req, out := c.DeleteRoomSkillParameterRequest(input)
@@ -1141,12 +1840,95 @@ func (c *AlexaForBusiness) DeleteRoomSkillParameterWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
+const opDeleteSkillAuthorization = "DeleteSkillAuthorization"
+
+// DeleteSkillAuthorizationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteSkillAuthorization operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteSkillAuthorization for more information on using the DeleteSkillAuthorization
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteSkillAuthorizationRequest method.
+//    req, resp := client.DeleteSkillAuthorizationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteSkillAuthorization
+func (c *AlexaForBusiness) DeleteSkillAuthorizationRequest(input *DeleteSkillAuthorizationInput) (req *request.Request, output *DeleteSkillAuthorizationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteSkillAuthorization,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteSkillAuthorizationInput{}
+	}
+
+	output = &DeleteSkillAuthorizationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteSkillAuthorization API operation for Alexa For Business.
+//
+// Unlinks a third-party account from a skill.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation DeleteSkillAuthorization for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteSkillAuthorization
+func (c *AlexaForBusiness) DeleteSkillAuthorization(input *DeleteSkillAuthorizationInput) (*DeleteSkillAuthorizationOutput, error) {
+	req, out := c.DeleteSkillAuthorizationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteSkillAuthorizationWithContext is the same as DeleteSkillAuthorization with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteSkillAuthorization for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) DeleteSkillAuthorizationWithContext(ctx aws.Context, input *DeleteSkillAuthorizationInput, opts ...request.Option) (*DeleteSkillAuthorizationOutput, error) {
+	req, out := c.DeleteSkillAuthorizationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteSkillGroup = "DeleteSkillGroup"
 
 // DeleteSkillGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSkillGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1180,6 +1962,7 @@ func (c *AlexaForBusiness) DeleteSkillGroupRequest(input *DeleteSkillGroupInput)
 
 	output = &DeleteSkillGroupOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1196,7 +1979,10 @@ func (c *AlexaForBusiness) DeleteSkillGroupRequest(input *DeleteSkillGroupInput)
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteSkillGroup
 func (c *AlexaForBusiness) DeleteSkillGroup(input *DeleteSkillGroupInput) (*DeleteSkillGroupOutput, error) {
@@ -1225,7 +2011,7 @@ const opDeleteUser = "DeleteUser"
 // DeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1259,6 +2045,7 @@ func (c *AlexaForBusiness) DeleteUserRequest(input *DeleteUserInput) (req *reque
 
 	output = &DeleteUserOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1275,7 +2062,10 @@ func (c *AlexaForBusiness) DeleteUserRequest(input *DeleteUserInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DeleteUser
 func (c *AlexaForBusiness) DeleteUser(input *DeleteUserInput) (*DeleteUserOutput, error) {
@@ -1304,7 +2094,7 @@ const opDisassociateContactFromAddressBook = "DisassociateContactFromAddressBook
 // DisassociateContactFromAddressBookRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateContactFromAddressBook operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1338,6 +2128,7 @@ func (c *AlexaForBusiness) DisassociateContactFromAddressBookRequest(input *Disa
 
 	output = &DisassociateContactFromAddressBookOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1378,7 +2169,7 @@ const opDisassociateDeviceFromRoom = "DisassociateDeviceFromRoom"
 // DisassociateDeviceFromRoomRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateDeviceFromRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1412,6 +2203,7 @@ func (c *AlexaForBusiness) DisassociateDeviceFromRoomRequest(input *Disassociate
 
 	output = &DisassociateDeviceFromRoomOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1429,6 +2221,9 @@ func (c *AlexaForBusiness) DisassociateDeviceFromRoomRequest(input *Disassociate
 // API operation DisassociateDeviceFromRoom for usage and error information.
 //
 // Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
 //   * ErrCodeDeviceNotRegisteredException "DeviceNotRegisteredException"
 //   The request failed because this device is no longer registered and therefore
 //   no longer managed by this account.
@@ -1455,12 +2250,176 @@ func (c *AlexaForBusiness) DisassociateDeviceFromRoomWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
+const opDisassociateSkillFromSkillGroup = "DisassociateSkillFromSkillGroup"
+
+// DisassociateSkillFromSkillGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateSkillFromSkillGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateSkillFromSkillGroup for more information on using the DisassociateSkillFromSkillGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateSkillFromSkillGroupRequest method.
+//    req, resp := client.DisassociateSkillFromSkillGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DisassociateSkillFromSkillGroup
+func (c *AlexaForBusiness) DisassociateSkillFromSkillGroupRequest(input *DisassociateSkillFromSkillGroupInput) (req *request.Request, output *DisassociateSkillFromSkillGroupOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateSkillFromSkillGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateSkillFromSkillGroupInput{}
+	}
+
+	output = &DisassociateSkillFromSkillGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociateSkillFromSkillGroup API operation for Alexa For Business.
+//
+// Disassociates a skill from a skill group.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation DisassociateSkillFromSkillGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DisassociateSkillFromSkillGroup
+func (c *AlexaForBusiness) DisassociateSkillFromSkillGroup(input *DisassociateSkillFromSkillGroupInput) (*DisassociateSkillFromSkillGroupOutput, error) {
+	req, out := c.DisassociateSkillFromSkillGroupRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateSkillFromSkillGroupWithContext is the same as DisassociateSkillFromSkillGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateSkillFromSkillGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) DisassociateSkillFromSkillGroupWithContext(ctx aws.Context, input *DisassociateSkillFromSkillGroupInput, opts ...request.Option) (*DisassociateSkillFromSkillGroupOutput, error) {
+	req, out := c.DisassociateSkillFromSkillGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDisassociateSkillFromUsers = "DisassociateSkillFromUsers"
+
+// DisassociateSkillFromUsersRequest generates a "aws/request.Request" representing the
+// client's request for the DisassociateSkillFromUsers operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisassociateSkillFromUsers for more information on using the DisassociateSkillFromUsers
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DisassociateSkillFromUsersRequest method.
+//    req, resp := client.DisassociateSkillFromUsersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DisassociateSkillFromUsers
+func (c *AlexaForBusiness) DisassociateSkillFromUsersRequest(input *DisassociateSkillFromUsersInput) (req *request.Request, output *DisassociateSkillFromUsersOutput) {
+	op := &request.Operation{
+		Name:       opDisassociateSkillFromUsers,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisassociateSkillFromUsersInput{}
+	}
+
+	output = &DisassociateSkillFromUsersOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DisassociateSkillFromUsers API operation for Alexa For Business.
+//
+// Makes a private skill unavailable for enrolled users and prevents them from
+// enabling it on their devices.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation DisassociateSkillFromUsers for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DisassociateSkillFromUsers
+func (c *AlexaForBusiness) DisassociateSkillFromUsers(input *DisassociateSkillFromUsersInput) (*DisassociateSkillFromUsersOutput, error) {
+	req, out := c.DisassociateSkillFromUsersRequest(input)
+	return out, req.Send()
+}
+
+// DisassociateSkillFromUsersWithContext is the same as DisassociateSkillFromUsers with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisassociateSkillFromUsers for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) DisassociateSkillFromUsersWithContext(ctx aws.Context, input *DisassociateSkillFromUsersInput, opts ...request.Option) (*DisassociateSkillFromUsersOutput, error) {
+	req, out := c.DisassociateSkillFromUsersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDisassociateSkillGroupFromRoom = "DisassociateSkillGroupFromRoom"
 
 // DisassociateSkillGroupFromRoomRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateSkillGroupFromRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1494,6 +2453,7 @@ func (c *AlexaForBusiness) DisassociateSkillGroupFromRoomRequest(input *Disassoc
 
 	output = &DisassociateSkillGroupFromRoomOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1508,6 +2468,11 @@ func (c *AlexaForBusiness) DisassociateSkillGroupFromRoomRequest(input *Disassoc
 //
 // See the AWS API reference guide for Alexa For Business's
 // API operation DisassociateSkillGroupFromRoom for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/DisassociateSkillGroupFromRoom
 func (c *AlexaForBusiness) DisassociateSkillGroupFromRoom(input *DisassociateSkillGroupFromRoomInput) (*DisassociateSkillGroupFromRoomOutput, error) {
 	req, out := c.DisassociateSkillGroupFromRoomRequest(input)
@@ -1530,12 +2495,92 @@ func (c *AlexaForBusiness) DisassociateSkillGroupFromRoomWithContext(ctx aws.Con
 	return out, req.Send()
 }
 
+const opForgetSmartHomeAppliances = "ForgetSmartHomeAppliances"
+
+// ForgetSmartHomeAppliancesRequest generates a "aws/request.Request" representing the
+// client's request for the ForgetSmartHomeAppliances operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ForgetSmartHomeAppliances for more information on using the ForgetSmartHomeAppliances
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ForgetSmartHomeAppliancesRequest method.
+//    req, resp := client.ForgetSmartHomeAppliancesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ForgetSmartHomeAppliances
+func (c *AlexaForBusiness) ForgetSmartHomeAppliancesRequest(input *ForgetSmartHomeAppliancesInput) (req *request.Request, output *ForgetSmartHomeAppliancesOutput) {
+	op := &request.Operation{
+		Name:       opForgetSmartHomeAppliances,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ForgetSmartHomeAppliancesInput{}
+	}
+
+	output = &ForgetSmartHomeAppliancesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// ForgetSmartHomeAppliances API operation for Alexa For Business.
+//
+// Forgets smart home appliances associated to a room.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ForgetSmartHomeAppliances for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ForgetSmartHomeAppliances
+func (c *AlexaForBusiness) ForgetSmartHomeAppliances(input *ForgetSmartHomeAppliancesInput) (*ForgetSmartHomeAppliancesOutput, error) {
+	req, out := c.ForgetSmartHomeAppliancesRequest(input)
+	return out, req.Send()
+}
+
+// ForgetSmartHomeAppliancesWithContext is the same as ForgetSmartHomeAppliances with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ForgetSmartHomeAppliances for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ForgetSmartHomeAppliancesWithContext(ctx aws.Context, input *ForgetSmartHomeAppliancesInput, opts ...request.Option) (*ForgetSmartHomeAppliancesOutput, error) {
+	req, out := c.ForgetSmartHomeAppliancesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetAddressBook = "GetAddressBook"
 
 // GetAddressBookRequest generates a "aws/request.Request" representing the
 // client's request for the GetAddressBook operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1585,7 +2630,7 @@ func (c *AlexaForBusiness) GetAddressBookRequest(input *GetAddressBookInput) (re
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetAddressBook
 func (c *AlexaForBusiness) GetAddressBook(input *GetAddressBookInput) (*GetAddressBookOutput, error) {
@@ -1609,12 +2654,170 @@ func (c *AlexaForBusiness) GetAddressBookWithContext(ctx aws.Context, input *Get
 	return out, req.Send()
 }
 
+const opGetConferencePreference = "GetConferencePreference"
+
+// GetConferencePreferenceRequest generates a "aws/request.Request" representing the
+// client's request for the GetConferencePreference operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetConferencePreference for more information on using the GetConferencePreference
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetConferencePreferenceRequest method.
+//    req, resp := client.GetConferencePreferenceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetConferencePreference
+func (c *AlexaForBusiness) GetConferencePreferenceRequest(input *GetConferencePreferenceInput) (req *request.Request, output *GetConferencePreferenceOutput) {
+	op := &request.Operation{
+		Name:       opGetConferencePreference,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetConferencePreferenceInput{}
+	}
+
+	output = &GetConferencePreferenceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetConferencePreference API operation for Alexa For Business.
+//
+// Retrieves the existing conference preferences.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation GetConferencePreference for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetConferencePreference
+func (c *AlexaForBusiness) GetConferencePreference(input *GetConferencePreferenceInput) (*GetConferencePreferenceOutput, error) {
+	req, out := c.GetConferencePreferenceRequest(input)
+	return out, req.Send()
+}
+
+// GetConferencePreferenceWithContext is the same as GetConferencePreference with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetConferencePreference for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) GetConferencePreferenceWithContext(ctx aws.Context, input *GetConferencePreferenceInput, opts ...request.Option) (*GetConferencePreferenceOutput, error) {
+	req, out := c.GetConferencePreferenceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetConferenceProvider = "GetConferenceProvider"
+
+// GetConferenceProviderRequest generates a "aws/request.Request" representing the
+// client's request for the GetConferenceProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetConferenceProvider for more information on using the GetConferenceProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetConferenceProviderRequest method.
+//    req, resp := client.GetConferenceProviderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetConferenceProvider
+func (c *AlexaForBusiness) GetConferenceProviderRequest(input *GetConferenceProviderInput) (req *request.Request, output *GetConferenceProviderOutput) {
+	op := &request.Operation{
+		Name:       opGetConferenceProvider,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetConferenceProviderInput{}
+	}
+
+	output = &GetConferenceProviderOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetConferenceProvider API operation for Alexa For Business.
+//
+// Gets details about a specific conference provider.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation GetConferenceProvider for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetConferenceProvider
+func (c *AlexaForBusiness) GetConferenceProvider(input *GetConferenceProviderInput) (*GetConferenceProviderOutput, error) {
+	req, out := c.GetConferenceProviderRequest(input)
+	return out, req.Send()
+}
+
+// GetConferenceProviderWithContext is the same as GetConferenceProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetConferenceProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) GetConferenceProviderWithContext(ctx aws.Context, input *GetConferenceProviderInput, opts ...request.Option) (*GetConferenceProviderOutput, error) {
+	req, out := c.GetConferenceProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetContact = "GetContact"
 
 // GetContactRequest generates a "aws/request.Request" representing the
 // client's request for the GetContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1664,7 +2867,7 @@ func (c *AlexaForBusiness) GetContactRequest(input *GetContactInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetContact
 func (c *AlexaForBusiness) GetContact(input *GetContactInput) (*GetContactOutput, error) {
@@ -1693,7 +2896,7 @@ const opGetDevice = "GetDevice"
 // GetDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the GetDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1743,7 +2946,7 @@ func (c *AlexaForBusiness) GetDeviceRequest(input *GetDeviceInput) (req *request
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetDevice
 func (c *AlexaForBusiness) GetDevice(input *GetDeviceInput) (*GetDeviceOutput, error) {
@@ -1772,7 +2975,7 @@ const opGetProfile = "GetProfile"
 // GetProfileRequest generates a "aws/request.Request" representing the
 // client's request for the GetProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1822,7 +3025,7 @@ func (c *AlexaForBusiness) GetProfileRequest(input *GetProfileInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetProfile
 func (c *AlexaForBusiness) GetProfile(input *GetProfileInput) (*GetProfileOutput, error) {
@@ -1851,7 +3054,7 @@ const opGetRoom = "GetRoom"
 // GetRoomRequest generates a "aws/request.Request" representing the
 // client's request for the GetRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1901,7 +3104,7 @@ func (c *AlexaForBusiness) GetRoomRequest(input *GetRoomInput) (req *request.Req
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetRoom
 func (c *AlexaForBusiness) GetRoom(input *GetRoomInput) (*GetRoomOutput, error) {
@@ -1930,7 +3133,7 @@ const opGetRoomSkillParameter = "GetRoomSkillParameter"
 // GetRoomSkillParameterRequest generates a "aws/request.Request" representing the
 // client's request for the GetRoomSkillParameter operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1980,7 +3183,7 @@ func (c *AlexaForBusiness) GetRoomSkillParameterRequest(input *GetRoomSkillParam
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetRoomSkillParameter
 func (c *AlexaForBusiness) GetRoomSkillParameter(input *GetRoomSkillParameterInput) (*GetRoomSkillParameterOutput, error) {
@@ -2009,7 +3212,7 @@ const opGetSkillGroup = "GetSkillGroup"
 // GetSkillGroupRequest generates a "aws/request.Request" representing the
 // client's request for the GetSkillGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2059,7 +3262,7 @@ func (c *AlexaForBusiness) GetSkillGroupRequest(input *GetSkillGroupInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/GetSkillGroup
 func (c *AlexaForBusiness) GetSkillGroup(input *GetSkillGroupInput) (*GetSkillGroupOutput, error) {
@@ -2083,12 +3286,272 @@ func (c *AlexaForBusiness) GetSkillGroupWithContext(ctx aws.Context, input *GetS
 	return out, req.Send()
 }
 
+const opListBusinessReportSchedules = "ListBusinessReportSchedules"
+
+// ListBusinessReportSchedulesRequest generates a "aws/request.Request" representing the
+// client's request for the ListBusinessReportSchedules operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListBusinessReportSchedules for more information on using the ListBusinessReportSchedules
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListBusinessReportSchedulesRequest method.
+//    req, resp := client.ListBusinessReportSchedulesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListBusinessReportSchedules
+func (c *AlexaForBusiness) ListBusinessReportSchedulesRequest(input *ListBusinessReportSchedulesInput) (req *request.Request, output *ListBusinessReportSchedulesOutput) {
+	op := &request.Operation{
+		Name:       opListBusinessReportSchedules,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListBusinessReportSchedulesInput{}
+	}
+
+	output = &ListBusinessReportSchedulesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListBusinessReportSchedules API operation for Alexa For Business.
+//
+// Lists the details of the schedules that a user configured.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ListBusinessReportSchedules for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListBusinessReportSchedules
+func (c *AlexaForBusiness) ListBusinessReportSchedules(input *ListBusinessReportSchedulesInput) (*ListBusinessReportSchedulesOutput, error) {
+	req, out := c.ListBusinessReportSchedulesRequest(input)
+	return out, req.Send()
+}
+
+// ListBusinessReportSchedulesWithContext is the same as ListBusinessReportSchedules with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListBusinessReportSchedules for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListBusinessReportSchedulesWithContext(ctx aws.Context, input *ListBusinessReportSchedulesInput, opts ...request.Option) (*ListBusinessReportSchedulesOutput, error) {
+	req, out := c.ListBusinessReportSchedulesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListBusinessReportSchedulesPages iterates over the pages of a ListBusinessReportSchedules operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListBusinessReportSchedules method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListBusinessReportSchedules operation.
+//    pageNum := 0
+//    err := client.ListBusinessReportSchedulesPages(params,
+//        func(page *ListBusinessReportSchedulesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AlexaForBusiness) ListBusinessReportSchedulesPages(input *ListBusinessReportSchedulesInput, fn func(*ListBusinessReportSchedulesOutput, bool) bool) error {
+	return c.ListBusinessReportSchedulesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListBusinessReportSchedulesPagesWithContext same as ListBusinessReportSchedulesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListBusinessReportSchedulesPagesWithContext(ctx aws.Context, input *ListBusinessReportSchedulesInput, fn func(*ListBusinessReportSchedulesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListBusinessReportSchedulesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListBusinessReportSchedulesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListBusinessReportSchedulesOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
+const opListConferenceProviders = "ListConferenceProviders"
+
+// ListConferenceProvidersRequest generates a "aws/request.Request" representing the
+// client's request for the ListConferenceProviders operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListConferenceProviders for more information on using the ListConferenceProviders
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListConferenceProvidersRequest method.
+//    req, resp := client.ListConferenceProvidersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListConferenceProviders
+func (c *AlexaForBusiness) ListConferenceProvidersRequest(input *ListConferenceProvidersInput) (req *request.Request, output *ListConferenceProvidersOutput) {
+	op := &request.Operation{
+		Name:       opListConferenceProviders,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListConferenceProvidersInput{}
+	}
+
+	output = &ListConferenceProvidersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListConferenceProviders API operation for Alexa For Business.
+//
+// Lists conference providers under a specific AWS account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ListConferenceProviders for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListConferenceProviders
+func (c *AlexaForBusiness) ListConferenceProviders(input *ListConferenceProvidersInput) (*ListConferenceProvidersOutput, error) {
+	req, out := c.ListConferenceProvidersRequest(input)
+	return out, req.Send()
+}
+
+// ListConferenceProvidersWithContext is the same as ListConferenceProviders with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListConferenceProviders for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListConferenceProvidersWithContext(ctx aws.Context, input *ListConferenceProvidersInput, opts ...request.Option) (*ListConferenceProvidersOutput, error) {
+	req, out := c.ListConferenceProvidersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListConferenceProvidersPages iterates over the pages of a ListConferenceProviders operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListConferenceProviders method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListConferenceProviders operation.
+//    pageNum := 0
+//    err := client.ListConferenceProvidersPages(params,
+//        func(page *ListConferenceProvidersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AlexaForBusiness) ListConferenceProvidersPages(input *ListConferenceProvidersInput, fn func(*ListConferenceProvidersOutput, bool) bool) error {
+	return c.ListConferenceProvidersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListConferenceProvidersPagesWithContext same as ListConferenceProvidersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListConferenceProvidersPagesWithContext(ctx aws.Context, input *ListConferenceProvidersInput, fn func(*ListConferenceProvidersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListConferenceProvidersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListConferenceProvidersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListConferenceProvidersOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListDeviceEvents = "ListDeviceEvents"
 
 // ListDeviceEventsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2145,7 +3608,7 @@ func (c *AlexaForBusiness) ListDeviceEventsRequest(input *ListDeviceEventsInput)
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListDeviceEvents
 func (c *AlexaForBusiness) ListDeviceEvents(input *ListDeviceEventsInput) (*ListDeviceEventsOutput, error) {
@@ -2224,7 +3687,7 @@ const opListSkills = "ListSkills"
 // ListSkillsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSkills operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2349,12 +3812,407 @@ func (c *AlexaForBusiness) ListSkillsPagesWithContext(ctx aws.Context, input *Li
 	return p.Err()
 }
 
+const opListSkillsStoreCategories = "ListSkillsStoreCategories"
+
+// ListSkillsStoreCategoriesRequest generates a "aws/request.Request" representing the
+// client's request for the ListSkillsStoreCategories operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSkillsStoreCategories for more information on using the ListSkillsStoreCategories
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSkillsStoreCategoriesRequest method.
+//    req, resp := client.ListSkillsStoreCategoriesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListSkillsStoreCategories
+func (c *AlexaForBusiness) ListSkillsStoreCategoriesRequest(input *ListSkillsStoreCategoriesInput) (req *request.Request, output *ListSkillsStoreCategoriesOutput) {
+	op := &request.Operation{
+		Name:       opListSkillsStoreCategories,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSkillsStoreCategoriesInput{}
+	}
+
+	output = &ListSkillsStoreCategoriesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSkillsStoreCategories API operation for Alexa For Business.
+//
+// Lists all categories in the Alexa skill store.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ListSkillsStoreCategories for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListSkillsStoreCategories
+func (c *AlexaForBusiness) ListSkillsStoreCategories(input *ListSkillsStoreCategoriesInput) (*ListSkillsStoreCategoriesOutput, error) {
+	req, out := c.ListSkillsStoreCategoriesRequest(input)
+	return out, req.Send()
+}
+
+// ListSkillsStoreCategoriesWithContext is the same as ListSkillsStoreCategories with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSkillsStoreCategories for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListSkillsStoreCategoriesWithContext(ctx aws.Context, input *ListSkillsStoreCategoriesInput, opts ...request.Option) (*ListSkillsStoreCategoriesOutput, error) {
+	req, out := c.ListSkillsStoreCategoriesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSkillsStoreCategoriesPages iterates over the pages of a ListSkillsStoreCategories operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSkillsStoreCategories method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSkillsStoreCategories operation.
+//    pageNum := 0
+//    err := client.ListSkillsStoreCategoriesPages(params,
+//        func(page *ListSkillsStoreCategoriesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AlexaForBusiness) ListSkillsStoreCategoriesPages(input *ListSkillsStoreCategoriesInput, fn func(*ListSkillsStoreCategoriesOutput, bool) bool) error {
+	return c.ListSkillsStoreCategoriesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSkillsStoreCategoriesPagesWithContext same as ListSkillsStoreCategoriesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListSkillsStoreCategoriesPagesWithContext(ctx aws.Context, input *ListSkillsStoreCategoriesInput, fn func(*ListSkillsStoreCategoriesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSkillsStoreCategoriesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSkillsStoreCategoriesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListSkillsStoreCategoriesOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
+const opListSkillsStoreSkillsByCategory = "ListSkillsStoreSkillsByCategory"
+
+// ListSkillsStoreSkillsByCategoryRequest generates a "aws/request.Request" representing the
+// client's request for the ListSkillsStoreSkillsByCategory operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSkillsStoreSkillsByCategory for more information on using the ListSkillsStoreSkillsByCategory
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSkillsStoreSkillsByCategoryRequest method.
+//    req, resp := client.ListSkillsStoreSkillsByCategoryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListSkillsStoreSkillsByCategory
+func (c *AlexaForBusiness) ListSkillsStoreSkillsByCategoryRequest(input *ListSkillsStoreSkillsByCategoryInput) (req *request.Request, output *ListSkillsStoreSkillsByCategoryOutput) {
+	op := &request.Operation{
+		Name:       opListSkillsStoreSkillsByCategory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSkillsStoreSkillsByCategoryInput{}
+	}
+
+	output = &ListSkillsStoreSkillsByCategoryOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSkillsStoreSkillsByCategory API operation for Alexa For Business.
+//
+// Lists all skills in the Alexa skill store by category.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ListSkillsStoreSkillsByCategory for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListSkillsStoreSkillsByCategory
+func (c *AlexaForBusiness) ListSkillsStoreSkillsByCategory(input *ListSkillsStoreSkillsByCategoryInput) (*ListSkillsStoreSkillsByCategoryOutput, error) {
+	req, out := c.ListSkillsStoreSkillsByCategoryRequest(input)
+	return out, req.Send()
+}
+
+// ListSkillsStoreSkillsByCategoryWithContext is the same as ListSkillsStoreSkillsByCategory with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSkillsStoreSkillsByCategory for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListSkillsStoreSkillsByCategoryWithContext(ctx aws.Context, input *ListSkillsStoreSkillsByCategoryInput, opts ...request.Option) (*ListSkillsStoreSkillsByCategoryOutput, error) {
+	req, out := c.ListSkillsStoreSkillsByCategoryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSkillsStoreSkillsByCategoryPages iterates over the pages of a ListSkillsStoreSkillsByCategory operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSkillsStoreSkillsByCategory method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSkillsStoreSkillsByCategory operation.
+//    pageNum := 0
+//    err := client.ListSkillsStoreSkillsByCategoryPages(params,
+//        func(page *ListSkillsStoreSkillsByCategoryOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AlexaForBusiness) ListSkillsStoreSkillsByCategoryPages(input *ListSkillsStoreSkillsByCategoryInput, fn func(*ListSkillsStoreSkillsByCategoryOutput, bool) bool) error {
+	return c.ListSkillsStoreSkillsByCategoryPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSkillsStoreSkillsByCategoryPagesWithContext same as ListSkillsStoreSkillsByCategoryPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListSkillsStoreSkillsByCategoryPagesWithContext(ctx aws.Context, input *ListSkillsStoreSkillsByCategoryInput, fn func(*ListSkillsStoreSkillsByCategoryOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSkillsStoreSkillsByCategoryInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSkillsStoreSkillsByCategoryRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListSkillsStoreSkillsByCategoryOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
+const opListSmartHomeAppliances = "ListSmartHomeAppliances"
+
+// ListSmartHomeAppliancesRequest generates a "aws/request.Request" representing the
+// client's request for the ListSmartHomeAppliances operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSmartHomeAppliances for more information on using the ListSmartHomeAppliances
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSmartHomeAppliancesRequest method.
+//    req, resp := client.ListSmartHomeAppliancesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListSmartHomeAppliances
+func (c *AlexaForBusiness) ListSmartHomeAppliancesRequest(input *ListSmartHomeAppliancesInput) (req *request.Request, output *ListSmartHomeAppliancesOutput) {
+	op := &request.Operation{
+		Name:       opListSmartHomeAppliances,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSmartHomeAppliancesInput{}
+	}
+
+	output = &ListSmartHomeAppliancesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSmartHomeAppliances API operation for Alexa For Business.
+//
+// Lists all of the smart home appliances associated with a room.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation ListSmartHomeAppliances for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListSmartHomeAppliances
+func (c *AlexaForBusiness) ListSmartHomeAppliances(input *ListSmartHomeAppliancesInput) (*ListSmartHomeAppliancesOutput, error) {
+	req, out := c.ListSmartHomeAppliancesRequest(input)
+	return out, req.Send()
+}
+
+// ListSmartHomeAppliancesWithContext is the same as ListSmartHomeAppliances with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSmartHomeAppliances for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListSmartHomeAppliancesWithContext(ctx aws.Context, input *ListSmartHomeAppliancesInput, opts ...request.Option) (*ListSmartHomeAppliancesOutput, error) {
+	req, out := c.ListSmartHomeAppliancesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSmartHomeAppliancesPages iterates over the pages of a ListSmartHomeAppliances operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSmartHomeAppliances method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSmartHomeAppliances operation.
+//    pageNum := 0
+//    err := client.ListSmartHomeAppliancesPages(params,
+//        func(page *ListSmartHomeAppliancesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *AlexaForBusiness) ListSmartHomeAppliancesPages(input *ListSmartHomeAppliancesInput, fn func(*ListSmartHomeAppliancesOutput, bool) bool) error {
+	return c.ListSmartHomeAppliancesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSmartHomeAppliancesPagesWithContext same as ListSmartHomeAppliancesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) ListSmartHomeAppliancesPagesWithContext(ctx aws.Context, input *ListSmartHomeAppliancesInput, fn func(*ListSmartHomeAppliancesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSmartHomeAppliancesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSmartHomeAppliancesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListSmartHomeAppliancesOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListTags = "ListTags"
 
 // ListTagsRequest generates a "aws/request.Request" representing the
 // client's request for the ListTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2410,7 +4268,7 @@ func (c *AlexaForBusiness) ListTagsRequest(input *ListTagsInput) (req *request.R
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ListTags
 func (c *AlexaForBusiness) ListTags(input *ListTagsInput) (*ListTagsOutput, error) {
@@ -2484,12 +4342,93 @@ func (c *AlexaForBusiness) ListTagsPagesWithContext(ctx aws.Context, input *List
 	return p.Err()
 }
 
+const opPutConferencePreference = "PutConferencePreference"
+
+// PutConferencePreferenceRequest generates a "aws/request.Request" representing the
+// client's request for the PutConferencePreference operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutConferencePreference for more information on using the PutConferencePreference
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutConferencePreferenceRequest method.
+//    req, resp := client.PutConferencePreferenceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/PutConferencePreference
+func (c *AlexaForBusiness) PutConferencePreferenceRequest(input *PutConferencePreferenceInput) (req *request.Request, output *PutConferencePreferenceOutput) {
+	op := &request.Operation{
+		Name:       opPutConferencePreference,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutConferencePreferenceInput{}
+	}
+
+	output = &PutConferencePreferenceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutConferencePreference API operation for Alexa For Business.
+//
+// Sets the conference preferences on a specific conference provider at the
+// account level.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation PutConferencePreference for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/PutConferencePreference
+func (c *AlexaForBusiness) PutConferencePreference(input *PutConferencePreferenceInput) (*PutConferencePreferenceOutput, error) {
+	req, out := c.PutConferencePreferenceRequest(input)
+	return out, req.Send()
+}
+
+// PutConferencePreferenceWithContext is the same as PutConferencePreference with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutConferencePreference for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) PutConferencePreferenceWithContext(ctx aws.Context, input *PutConferencePreferenceInput, opts ...request.Option) (*PutConferencePreferenceOutput, error) {
+	req, out := c.PutConferencePreferenceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutRoomSkillParameter = "PutRoomSkillParameter"
 
 // PutRoomSkillParameterRequest generates a "aws/request.Request" representing the
 // client's request for the PutRoomSkillParameter operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2523,6 +4462,7 @@ func (c *AlexaForBusiness) PutRoomSkillParameterRequest(input *PutRoomSkillParam
 
 	output = &PutRoomSkillParameterOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2537,6 +4477,11 @@ func (c *AlexaForBusiness) PutRoomSkillParameterRequest(input *PutRoomSkillParam
 //
 // See the AWS API reference guide for Alexa For Business's
 // API operation PutRoomSkillParameter for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/PutRoomSkillParameter
 func (c *AlexaForBusiness) PutRoomSkillParameter(input *PutRoomSkillParameterInput) (*PutRoomSkillParameterOutput, error) {
 	req, out := c.PutRoomSkillParameterRequest(input)
@@ -2559,12 +4504,271 @@ func (c *AlexaForBusiness) PutRoomSkillParameterWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opPutSkillAuthorization = "PutSkillAuthorization"
+
+// PutSkillAuthorizationRequest generates a "aws/request.Request" representing the
+// client's request for the PutSkillAuthorization operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutSkillAuthorization for more information on using the PutSkillAuthorization
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutSkillAuthorizationRequest method.
+//    req, resp := client.PutSkillAuthorizationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/PutSkillAuthorization
+func (c *AlexaForBusiness) PutSkillAuthorizationRequest(input *PutSkillAuthorizationInput) (req *request.Request, output *PutSkillAuthorizationOutput) {
+	op := &request.Operation{
+		Name:       opPutSkillAuthorization,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutSkillAuthorizationInput{}
+	}
+
+	output = &PutSkillAuthorizationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutSkillAuthorization API operation for Alexa For Business.
+//
+// Links a user's account to a third-party skill provider. If this API operation
+// is called by an assumed IAM role, the skill being linked must be a private
+// skill. Also, the skill must be owned by the AWS account that assumed the
+// IAM role.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation PutSkillAuthorization for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   The caller has no permissions to operate on the resource involved in the
+//   API call.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/PutSkillAuthorization
+func (c *AlexaForBusiness) PutSkillAuthorization(input *PutSkillAuthorizationInput) (*PutSkillAuthorizationOutput, error) {
+	req, out := c.PutSkillAuthorizationRequest(input)
+	return out, req.Send()
+}
+
+// PutSkillAuthorizationWithContext is the same as PutSkillAuthorization with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutSkillAuthorization for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) PutSkillAuthorizationWithContext(ctx aws.Context, input *PutSkillAuthorizationInput, opts ...request.Option) (*PutSkillAuthorizationOutput, error) {
+	req, out := c.PutSkillAuthorizationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRegisterAVSDevice = "RegisterAVSDevice"
+
+// RegisterAVSDeviceRequest generates a "aws/request.Request" representing the
+// client's request for the RegisterAVSDevice operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RegisterAVSDevice for more information on using the RegisterAVSDevice
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RegisterAVSDeviceRequest method.
+//    req, resp := client.RegisterAVSDeviceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/RegisterAVSDevice
+func (c *AlexaForBusiness) RegisterAVSDeviceRequest(input *RegisterAVSDeviceInput) (req *request.Request, output *RegisterAVSDeviceOutput) {
+	op := &request.Operation{
+		Name:       opRegisterAVSDevice,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RegisterAVSDeviceInput{}
+	}
+
+	output = &RegisterAVSDeviceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RegisterAVSDevice API operation for Alexa For Business.
+//
+// Registers an Alexa-enabled device built by an Original Equipment Manufacturer
+// (OEM) using Alexa Voice Service (AVS).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation RegisterAVSDevice for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You are performing an action that would put you beyond your account's limits.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+//   * ErrCodeInvalidDeviceException "InvalidDeviceException"
+//   The device is in an invalid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/RegisterAVSDevice
+func (c *AlexaForBusiness) RegisterAVSDevice(input *RegisterAVSDeviceInput) (*RegisterAVSDeviceOutput, error) {
+	req, out := c.RegisterAVSDeviceRequest(input)
+	return out, req.Send()
+}
+
+// RegisterAVSDeviceWithContext is the same as RegisterAVSDevice with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RegisterAVSDevice for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) RegisterAVSDeviceWithContext(ctx aws.Context, input *RegisterAVSDeviceInput, opts ...request.Option) (*RegisterAVSDeviceOutput, error) {
+	req, out := c.RegisterAVSDeviceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRejectSkill = "RejectSkill"
+
+// RejectSkillRequest generates a "aws/request.Request" representing the
+// client's request for the RejectSkill operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RejectSkill for more information on using the RejectSkill
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RejectSkillRequest method.
+//    req, resp := client.RejectSkillRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/RejectSkill
+func (c *AlexaForBusiness) RejectSkillRequest(input *RejectSkillInput) (req *request.Request, output *RejectSkillOutput) {
+	op := &request.Operation{
+		Name:       opRejectSkill,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RejectSkillInput{}
+	}
+
+	output = &RejectSkillOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// RejectSkill API operation for Alexa For Business.
+//
+// Disassociates a skill from the organization under a user's AWS account. If
+// the skill is a private skill, it moves to an AcceptStatus of PENDING. Any
+// private or public skill that is rejected can be added later by calling the
+// ApproveSkill API.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation RejectSkill for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/RejectSkill
+func (c *AlexaForBusiness) RejectSkill(input *RejectSkillInput) (*RejectSkillOutput, error) {
+	req, out := c.RejectSkillRequest(input)
+	return out, req.Send()
+}
+
+// RejectSkillWithContext is the same as RejectSkill with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RejectSkill for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) RejectSkillWithContext(ctx aws.Context, input *RejectSkillInput, opts ...request.Option) (*RejectSkillOutput, error) {
+	req, out := c.RejectSkillRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opResolveRoom = "ResolveRoom"
 
 // ResolveRoomRequest generates a "aws/request.Request" representing the
 // client's request for the ResolveRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2615,7 +4819,7 @@ func (c *AlexaForBusiness) ResolveRoomRequest(input *ResolveRoomInput) (req *req
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/ResolveRoom
 func (c *AlexaForBusiness) ResolveRoom(input *ResolveRoomInput) (*ResolveRoomOutput, error) {
@@ -2644,7 +4848,7 @@ const opRevokeInvitation = "RevokeInvitation"
 // RevokeInvitationRequest generates a "aws/request.Request" representing the
 // client's request for the RevokeInvitation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2678,6 +4882,7 @@ func (c *AlexaForBusiness) RevokeInvitationRequest(input *RevokeInvitationInput)
 
 	output = &RevokeInvitationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2694,7 +4899,10 @@ func (c *AlexaForBusiness) RevokeInvitationRequest(input *RevokeInvitationInput)
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/RevokeInvitation
 func (c *AlexaForBusiness) RevokeInvitation(input *RevokeInvitationInput) (*RevokeInvitationOutput, error) {
@@ -2723,7 +4931,7 @@ const opSearchAddressBooks = "SearchAddressBooks"
 // SearchAddressBooksRequest generates a "aws/request.Request" representing the
 // client's request for the SearchAddressBooks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2854,7 +5062,7 @@ const opSearchContacts = "SearchContacts"
 // SearchContactsRequest generates a "aws/request.Request" representing the
 // client's request for the SearchContacts operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2984,7 +5192,7 @@ const opSearchDevices = "SearchDevices"
 // SearchDevicesRequest generates a "aws/request.Request" representing the
 // client's request for the SearchDevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3114,7 +5322,7 @@ const opSearchProfiles = "SearchProfiles"
 // SearchProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the SearchProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3244,7 +5452,7 @@ const opSearchRooms = "SearchRooms"
 // SearchRoomsRequest generates a "aws/request.Request" representing the
 // client's request for the SearchRooms operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3374,7 +5582,7 @@ const opSearchSkillGroups = "SearchSkillGroups"
 // SearchSkillGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the SearchSkillGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3505,7 +5713,7 @@ const opSearchUsers = "SearchUsers"
 // SearchUsersRequest generates a "aws/request.Request" representing the
 // client's request for the SearchUsers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3635,7 +5843,7 @@ const opSendInvitation = "SendInvitation"
 // SendInvitationRequest generates a "aws/request.Request" representing the
 // client's request for the SendInvitation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3669,6 +5877,7 @@ func (c *AlexaForBusiness) SendInvitationRequest(input *SendInvitationInput) (re
 
 	output = &SendInvitationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3686,11 +5895,13 @@ func (c *AlexaForBusiness) SendInvitationRequest(input *SendInvitationInput) (re
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 //   * ErrCodeInvalidUserStatusException "InvalidUserStatusException"
 //   The attempt to update a user is invalid due to the user's current status.
-//   HTTP Status Code: 400
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/SendInvitation
 func (c *AlexaForBusiness) SendInvitation(input *SendInvitationInput) (*SendInvitationOutput, error) {
@@ -3719,7 +5930,7 @@ const opStartDeviceSync = "StartDeviceSync"
 // StartDeviceSyncRequest generates a "aws/request.Request" representing the
 // client's request for the StartDeviceSync operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3753,6 +5964,7 @@ func (c *AlexaForBusiness) StartDeviceSyncRequest(input *StartDeviceSyncInput) (
 
 	output = &StartDeviceSyncOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3795,12 +6007,93 @@ func (c *AlexaForBusiness) StartDeviceSyncWithContext(ctx aws.Context, input *St
 	return out, req.Send()
 }
 
+const opStartSmartHomeApplianceDiscovery = "StartSmartHomeApplianceDiscovery"
+
+// StartSmartHomeApplianceDiscoveryRequest generates a "aws/request.Request" representing the
+// client's request for the StartSmartHomeApplianceDiscovery operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartSmartHomeApplianceDiscovery for more information on using the StartSmartHomeApplianceDiscovery
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartSmartHomeApplianceDiscoveryRequest method.
+//    req, resp := client.StartSmartHomeApplianceDiscoveryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/StartSmartHomeApplianceDiscovery
+func (c *AlexaForBusiness) StartSmartHomeApplianceDiscoveryRequest(input *StartSmartHomeApplianceDiscoveryInput) (req *request.Request, output *StartSmartHomeApplianceDiscoveryOutput) {
+	op := &request.Operation{
+		Name:       opStartSmartHomeApplianceDiscovery,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartSmartHomeApplianceDiscoveryInput{}
+	}
+
+	output = &StartSmartHomeApplianceDiscoveryOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// StartSmartHomeApplianceDiscovery API operation for Alexa For Business.
+//
+// Initiates the discovery of any smart home appliances associated with the
+// room.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation StartSmartHomeApplianceDiscovery for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/StartSmartHomeApplianceDiscovery
+func (c *AlexaForBusiness) StartSmartHomeApplianceDiscovery(input *StartSmartHomeApplianceDiscoveryInput) (*StartSmartHomeApplianceDiscoveryOutput, error) {
+	req, out := c.StartSmartHomeApplianceDiscoveryRequest(input)
+	return out, req.Send()
+}
+
+// StartSmartHomeApplianceDiscoveryWithContext is the same as StartSmartHomeApplianceDiscovery with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartSmartHomeApplianceDiscovery for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) StartSmartHomeApplianceDiscoveryWithContext(ctx aws.Context, input *StartSmartHomeApplianceDiscoveryInput, opts ...request.Option) (*StartSmartHomeApplianceDiscoveryOutput, error) {
+	req, out := c.StartSmartHomeApplianceDiscoveryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opTagResource = "TagResource"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the TagResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3834,6 +6127,7 @@ func (c *AlexaForBusiness) TagResourceRequest(input *TagResourceInput) (req *req
 
 	output = &TagResourceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3850,7 +6144,7 @@ func (c *AlexaForBusiness) TagResourceRequest(input *TagResourceInput) (req *req
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/TagResource
 func (c *AlexaForBusiness) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -3879,7 +6173,7 @@ const opUntagResource = "UntagResource"
 // UntagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3913,6 +6207,7 @@ func (c *AlexaForBusiness) UntagResourceRequest(input *UntagResourceInput) (req 
 
 	output = &UntagResourceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3929,7 +6224,7 @@ func (c *AlexaForBusiness) UntagResourceRequest(input *UntagResourceInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UntagResource
 func (c *AlexaForBusiness) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -3958,7 +6253,7 @@ const opUpdateAddressBook = "UpdateAddressBook"
 // UpdateAddressBookRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAddressBook operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3992,6 +6287,7 @@ func (c *AlexaForBusiness) UpdateAddressBookRequest(input *UpdateAddressBookInpu
 
 	output = &UpdateAddressBookOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4008,10 +6304,13 @@ func (c *AlexaForBusiness) UpdateAddressBookRequest(input *UpdateAddressBookInpu
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 //   * ErrCodeNameInUseException "NameInUseException"
-//   The name sent in the request is already in use. HTTP Status Code: 400
+//   The name sent in the request is already in use.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateAddressBook
 func (c *AlexaForBusiness) UpdateAddressBook(input *UpdateAddressBookInput) (*UpdateAddressBookOutput, error) {
@@ -4035,12 +6334,176 @@ func (c *AlexaForBusiness) UpdateAddressBookWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
+const opUpdateBusinessReportSchedule = "UpdateBusinessReportSchedule"
+
+// UpdateBusinessReportScheduleRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateBusinessReportSchedule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateBusinessReportSchedule for more information on using the UpdateBusinessReportSchedule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateBusinessReportScheduleRequest method.
+//    req, resp := client.UpdateBusinessReportScheduleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateBusinessReportSchedule
+func (c *AlexaForBusiness) UpdateBusinessReportScheduleRequest(input *UpdateBusinessReportScheduleInput) (req *request.Request, output *UpdateBusinessReportScheduleOutput) {
+	op := &request.Operation{
+		Name:       opUpdateBusinessReportSchedule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateBusinessReportScheduleInput{}
+	}
+
+	output = &UpdateBusinessReportScheduleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateBusinessReportSchedule API operation for Alexa For Business.
+//
+// Updates the configuration of the report delivery schedule with the specified
+// schedule ARN.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation UpdateBusinessReportSchedule for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateBusinessReportSchedule
+func (c *AlexaForBusiness) UpdateBusinessReportSchedule(input *UpdateBusinessReportScheduleInput) (*UpdateBusinessReportScheduleOutput, error) {
+	req, out := c.UpdateBusinessReportScheduleRequest(input)
+	return out, req.Send()
+}
+
+// UpdateBusinessReportScheduleWithContext is the same as UpdateBusinessReportSchedule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateBusinessReportSchedule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) UpdateBusinessReportScheduleWithContext(ctx aws.Context, input *UpdateBusinessReportScheduleInput, opts ...request.Option) (*UpdateBusinessReportScheduleOutput, error) {
+	req, out := c.UpdateBusinessReportScheduleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateConferenceProvider = "UpdateConferenceProvider"
+
+// UpdateConferenceProviderRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateConferenceProvider operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateConferenceProvider for more information on using the UpdateConferenceProvider
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateConferenceProviderRequest method.
+//    req, resp := client.UpdateConferenceProviderRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateConferenceProvider
+func (c *AlexaForBusiness) UpdateConferenceProviderRequest(input *UpdateConferenceProviderInput) (req *request.Request, output *UpdateConferenceProviderOutput) {
+	op := &request.Operation{
+		Name:       opUpdateConferenceProvider,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateConferenceProviderInput{}
+	}
+
+	output = &UpdateConferenceProviderOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateConferenceProvider API operation for Alexa For Business.
+//
+// Updates an existing conference provider's settings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Alexa For Business's
+// API operation UpdateConferenceProvider for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource is not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateConferenceProvider
+func (c *AlexaForBusiness) UpdateConferenceProvider(input *UpdateConferenceProviderInput) (*UpdateConferenceProviderOutput, error) {
+	req, out := c.UpdateConferenceProviderRequest(input)
+	return out, req.Send()
+}
+
+// UpdateConferenceProviderWithContext is the same as UpdateConferenceProvider with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateConferenceProvider for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AlexaForBusiness) UpdateConferenceProviderWithContext(ctx aws.Context, input *UpdateConferenceProviderInput, opts ...request.Option) (*UpdateConferenceProviderOutput, error) {
+	req, out := c.UpdateConferenceProviderRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateContact = "UpdateContact"
 
 // UpdateContactRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4074,6 +6537,7 @@ func (c *AlexaForBusiness) UpdateContactRequest(input *UpdateContactInput) (req 
 
 	output = &UpdateContactOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4090,7 +6554,10 @@ func (c *AlexaForBusiness) UpdateContactRequest(input *UpdateContactInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateContact
 func (c *AlexaForBusiness) UpdateContact(input *UpdateContactInput) (*UpdateContactOutput, error) {
@@ -4119,7 +6586,7 @@ const opUpdateDevice = "UpdateDevice"
 // UpdateDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4153,6 +6620,7 @@ func (c *AlexaForBusiness) UpdateDeviceRequest(input *UpdateDeviceInput) (req *r
 
 	output = &UpdateDeviceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4169,7 +6637,10 @@ func (c *AlexaForBusiness) UpdateDeviceRequest(input *UpdateDeviceInput) (req *r
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 //   * ErrCodeDeviceNotRegisteredException "DeviceNotRegisteredException"
 //   The request failed because this device is no longer registered and therefore
@@ -4202,7 +6673,7 @@ const opUpdateProfile = "UpdateProfile"
 // UpdateProfileRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4236,6 +6707,7 @@ func (c *AlexaForBusiness) UpdateProfileRequest(input *UpdateProfileInput) (req 
 
 	output = &UpdateProfileOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4252,10 +6724,13 @@ func (c *AlexaForBusiness) UpdateProfileRequest(input *UpdateProfileInput) (req 
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 //   * ErrCodeNameInUseException "NameInUseException"
-//   The name sent in the request is already in use. HTTP Status Code: 400
+//   The name sent in the request is already in use.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateProfile
 func (c *AlexaForBusiness) UpdateProfile(input *UpdateProfileInput) (*UpdateProfileOutput, error) {
@@ -4284,7 +6759,7 @@ const opUpdateRoom = "UpdateRoom"
 // UpdateRoomRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRoom operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4318,6 +6793,7 @@ func (c *AlexaForBusiness) UpdateRoomRequest(input *UpdateRoomInput) (req *reque
 
 	output = &UpdateRoomOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4334,10 +6810,10 @@ func (c *AlexaForBusiness) UpdateRoomRequest(input *UpdateRoomInput) (req *reque
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 //   * ErrCodeNameInUseException "NameInUseException"
-//   The name sent in the request is already in use. HTTP Status Code: 400
+//   The name sent in the request is already in use.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateRoom
 func (c *AlexaForBusiness) UpdateRoom(input *UpdateRoomInput) (*UpdateRoomOutput, error) {
@@ -4366,7 +6842,7 @@ const opUpdateSkillGroup = "UpdateSkillGroup"
 // UpdateSkillGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSkillGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4400,6 +6876,7 @@ func (c *AlexaForBusiness) UpdateSkillGroupRequest(input *UpdateSkillGroupInput)
 
 	output = &UpdateSkillGroupOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4416,10 +6893,13 @@ func (c *AlexaForBusiness) UpdateSkillGroupRequest(input *UpdateSkillGroupInput)
 //
 // Returned Error Codes:
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource is not found. HTTP Status Code: 400
+//   The resource is not found.
 //
 //   * ErrCodeNameInUseException "NameInUseException"
-//   The name sent in the request is already in use. HTTP Status Code: 400
+//   The name sent in the request is already in use.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Concurrent modification of resources. HTTP Status Code: 400.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/alexaforbusiness-2017-11-09/UpdateSkillGroup
 func (c *AlexaForBusiness) UpdateSkillGroup(input *UpdateSkillGroupInput) (*UpdateSkillGroupOutput, error) {
@@ -4525,6 +7005,58 @@ func (s *AddressBookData) SetDescription(v string) *AddressBookData {
 func (s *AddressBookData) SetName(v string) *AddressBookData {
 	s.Name = &v
 	return s
+}
+
+type ApproveSkillInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the skill.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ApproveSkillInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ApproveSkillInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ApproveSkillInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ApproveSkillInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *ApproveSkillInput) SetSkillId(v string) *ApproveSkillInput {
+	s.SkillId = &v
+	return s
+}
+
+type ApproveSkillOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s ApproveSkillOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ApproveSkillOutput) GoString() string {
+	return s.String()
 }
 
 type AssociateContactWithAddressBookInput struct {
@@ -4685,6 +7217,488 @@ func (s AssociateSkillGroupWithRoomOutput) GoString() string {
 	return s.String()
 }
 
+type AssociateSkillWithSkillGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the skill group to associate the skill to. Required.
+	SkillGroupArn *string `type:"string"`
+
+	// The unique identifier of the skill.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AssociateSkillWithSkillGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateSkillWithSkillGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateSkillWithSkillGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateSkillWithSkillGroupInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSkillGroupArn sets the SkillGroupArn field's value.
+func (s *AssociateSkillWithSkillGroupInput) SetSkillGroupArn(v string) *AssociateSkillWithSkillGroupInput {
+	s.SkillGroupArn = &v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *AssociateSkillWithSkillGroupInput) SetSkillId(v string) *AssociateSkillWithSkillGroupInput {
+	s.SkillId = &v
+	return s
+}
+
+type AssociateSkillWithSkillGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AssociateSkillWithSkillGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateSkillWithSkillGroupOutput) GoString() string {
+	return s.String()
+}
+
+type AssociateSkillWithUsersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the organization.
+	OrganizationArn *string `type:"string"`
+
+	// The private skill ID you want to make available to enrolled users.>
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AssociateSkillWithUsersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateSkillWithUsersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateSkillWithUsersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateSkillWithUsersInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOrganizationArn sets the OrganizationArn field's value.
+func (s *AssociateSkillWithUsersInput) SetOrganizationArn(v string) *AssociateSkillWithUsersInput {
+	s.OrganizationArn = &v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *AssociateSkillWithUsersInput) SetSkillId(v string) *AssociateSkillWithUsersInput {
+	s.SkillId = &v
+	return s
+}
+
+type AssociateSkillWithUsersOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AssociateSkillWithUsersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AssociateSkillWithUsersOutput) GoString() string {
+	return s.String()
+}
+
+// Usage report with specified parameters.
+type BusinessReport struct {
+	_ struct{} `type:"structure"`
+
+	// The time of report delivery.
+	DeliveryTime *time.Time `type:"timestamp"`
+
+	// The download link where a user can download the report.
+	DownloadUrl *string `type:"string"`
+
+	// The failure code.
+	FailureCode *string `type:"string" enum:"BusinessReportFailureCode"`
+
+	// The S3 location of the output reports.
+	S3Location *BusinessReportS3Location `type:"structure"`
+
+	// The status of the report generation execution (RUNNING, SUCCEEDED, or FAILED).
+	Status *string `type:"string" enum:"BusinessReportStatus"`
+}
+
+// String returns the string representation
+func (s BusinessReport) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BusinessReport) GoString() string {
+	return s.String()
+}
+
+// SetDeliveryTime sets the DeliveryTime field's value.
+func (s *BusinessReport) SetDeliveryTime(v time.Time) *BusinessReport {
+	s.DeliveryTime = &v
+	return s
+}
+
+// SetDownloadUrl sets the DownloadUrl field's value.
+func (s *BusinessReport) SetDownloadUrl(v string) *BusinessReport {
+	s.DownloadUrl = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *BusinessReport) SetFailureCode(v string) *BusinessReport {
+	s.FailureCode = &v
+	return s
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *BusinessReport) SetS3Location(v *BusinessReportS3Location) *BusinessReport {
+	s.S3Location = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *BusinessReport) SetStatus(v string) *BusinessReport {
+	s.Status = &v
+	return s
+}
+
+// The content range of the report.
+type BusinessReportContentRange struct {
+	_ struct{} `type:"structure"`
+
+	// The interval of the content range.
+	Interval *string `type:"string" enum:"BusinessReportInterval"`
+}
+
+// String returns the string representation
+func (s BusinessReportContentRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BusinessReportContentRange) GoString() string {
+	return s.String()
+}
+
+// SetInterval sets the Interval field's value.
+func (s *BusinessReportContentRange) SetInterval(v string) *BusinessReportContentRange {
+	s.Interval = &v
+	return s
+}
+
+// The recurrence of the reports.
+type BusinessReportRecurrence struct {
+	_ struct{} `type:"structure"`
+
+	// The start date.
+	StartDate *string `type:"string"`
+}
+
+// String returns the string representation
+func (s BusinessReportRecurrence) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BusinessReportRecurrence) GoString() string {
+	return s.String()
+}
+
+// SetStartDate sets the StartDate field's value.
+func (s *BusinessReportRecurrence) SetStartDate(v string) *BusinessReportRecurrence {
+	s.StartDate = &v
+	return s
+}
+
+// The S3 location of the output reports.
+type BusinessReportS3Location struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 bucket name of the output reports.
+	BucketName *string `type:"string"`
+
+	// The path of the business report.
+	Path *string `type:"string"`
+}
+
+// String returns the string representation
+func (s BusinessReportS3Location) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BusinessReportS3Location) GoString() string {
+	return s.String()
+}
+
+// SetBucketName sets the BucketName field's value.
+func (s *BusinessReportS3Location) SetBucketName(v string) *BusinessReportS3Location {
+	s.BucketName = &v
+	return s
+}
+
+// SetPath sets the Path field's value.
+func (s *BusinessReportS3Location) SetPath(v string) *BusinessReportS3Location {
+	s.Path = &v
+	return s
+}
+
+// The schedule of the usage report.
+type BusinessReportSchedule struct {
+	_ struct{} `type:"structure"`
+
+	// The content range of the reports.
+	ContentRange *BusinessReportContentRange `type:"structure"`
+
+	// The format of the generated report (individual CSV files or zipped files
+	// of individual files).
+	Format *string `type:"string" enum:"BusinessReportFormat"`
+
+	// The details of the last business report delivery for a specified time interval.
+	LastBusinessReport *BusinessReport `type:"structure"`
+
+	// The recurrence of the reports.
+	Recurrence *BusinessReportRecurrence `type:"structure"`
+
+	// The S3 bucket name of the output reports.
+	S3BucketName *string `type:"string"`
+
+	// The S3 key where the report is delivered.
+	S3KeyPrefix *string `type:"string"`
+
+	// The ARN of the business report schedule.
+	ScheduleArn *string `type:"string"`
+
+	// The name identifier of the schedule.
+	ScheduleName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s BusinessReportSchedule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BusinessReportSchedule) GoString() string {
+	return s.String()
+}
+
+// SetContentRange sets the ContentRange field's value.
+func (s *BusinessReportSchedule) SetContentRange(v *BusinessReportContentRange) *BusinessReportSchedule {
+	s.ContentRange = v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *BusinessReportSchedule) SetFormat(v string) *BusinessReportSchedule {
+	s.Format = &v
+	return s
+}
+
+// SetLastBusinessReport sets the LastBusinessReport field's value.
+func (s *BusinessReportSchedule) SetLastBusinessReport(v *BusinessReport) *BusinessReportSchedule {
+	s.LastBusinessReport = v
+	return s
+}
+
+// SetRecurrence sets the Recurrence field's value.
+func (s *BusinessReportSchedule) SetRecurrence(v *BusinessReportRecurrence) *BusinessReportSchedule {
+	s.Recurrence = v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *BusinessReportSchedule) SetS3BucketName(v string) *BusinessReportSchedule {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *BusinessReportSchedule) SetS3KeyPrefix(v string) *BusinessReportSchedule {
+	s.S3KeyPrefix = &v
+	return s
+}
+
+// SetScheduleArn sets the ScheduleArn field's value.
+func (s *BusinessReportSchedule) SetScheduleArn(v string) *BusinessReportSchedule {
+	s.ScheduleArn = &v
+	return s
+}
+
+// SetScheduleName sets the ScheduleName field's value.
+func (s *BusinessReportSchedule) SetScheduleName(v string) *BusinessReportSchedule {
+	s.ScheduleName = &v
+	return s
+}
+
+// The skill store category that is shown. Alexa skills are assigned a specific
+// skill category during creation, such as News, Social, and Sports.
+type Category struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the skill store category.
+	CategoryId *int64 `min:"1" type:"long"`
+
+	// The name of the skill store category.
+	CategoryName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Category) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Category) GoString() string {
+	return s.String()
+}
+
+// SetCategoryId sets the CategoryId field's value.
+func (s *Category) SetCategoryId(v int64) *Category {
+	s.CategoryId = &v
+	return s
+}
+
+// SetCategoryName sets the CategoryName field's value.
+func (s *Category) SetCategoryName(v string) *Category {
+	s.CategoryName = &v
+	return s
+}
+
+// The default conference provider that is used if no other scheduled meetings
+// are detected.
+type ConferencePreference struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the default conference provider.
+	DefaultConferenceProviderArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ConferencePreference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConferencePreference) GoString() string {
+	return s.String()
+}
+
+// SetDefaultConferenceProviderArn sets the DefaultConferenceProviderArn field's value.
+func (s *ConferencePreference) SetDefaultConferenceProviderArn(v string) *ConferencePreference {
+	s.DefaultConferenceProviderArn = &v
+	return s
+}
+
+// An entity that provides a conferencing solution. Alexa for Business acts
+// as the voice interface and mediator that connects users to their preferred
+// conference provider. Examples of conference providers include Amazon Chime,
+// Zoom, Cisco, and Polycom.
+type ConferenceProvider struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the newly created conference provider.
+	Arn *string `type:"string"`
+
+	// The IP endpoint and protocol for calling.
+	IPDialIn *IPDialIn `type:"structure"`
+
+	// The meeting settings for the conference provider.
+	MeetingSetting *MeetingSetting `type:"structure"`
+
+	// The name of the conference provider.
+	Name *string `min:"1" type:"string"`
+
+	// The information for PSTN conferencing.
+	PSTNDialIn *PSTNDialIn `type:"structure"`
+
+	// The type of conference providers.
+	Type *string `type:"string" enum:"ConferenceProviderType"`
+}
+
+// String returns the string representation
+func (s ConferenceProvider) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConferenceProvider) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ConferenceProvider) SetArn(v string) *ConferenceProvider {
+	s.Arn = &v
+	return s
+}
+
+// SetIPDialIn sets the IPDialIn field's value.
+func (s *ConferenceProvider) SetIPDialIn(v *IPDialIn) *ConferenceProvider {
+	s.IPDialIn = v
+	return s
+}
+
+// SetMeetingSetting sets the MeetingSetting field's value.
+func (s *ConferenceProvider) SetMeetingSetting(v *MeetingSetting) *ConferenceProvider {
+	s.MeetingSetting = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ConferenceProvider) SetName(v string) *ConferenceProvider {
+	s.Name = &v
+	return s
+}
+
+// SetPSTNDialIn sets the PSTNDialIn field's value.
+func (s *ConferenceProvider) SetPSTNDialIn(v *PSTNDialIn) *ConferenceProvider {
+	s.PSTNDialIn = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ConferenceProvider) SetType(v string) *ConferenceProvider {
+	s.Type = &v
+	return s
+}
+
 // A contact with attributes.
 type Contact struct {
 	_ struct{} `type:"structure"`
@@ -4702,7 +7716,7 @@ type Contact struct {
 	LastName *string `min:"1" type:"string"`
 
 	// The phone number of the contact.
-	PhoneNumber *string `type:"string"`
+	PhoneNumber *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4762,7 +7776,7 @@ type ContactData struct {
 	LastName *string `min:"1" type:"string"`
 
 	// The phone number of the contact.
-	PhoneNumber *string `type:"string"`
+	PhoneNumber *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4893,6 +7907,267 @@ func (s *CreateAddressBookOutput) SetAddressBookArn(v string) *CreateAddressBook
 	return s
 }
 
+type CreateBusinessReportScheduleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The client request token.
+	ClientRequestToken *string `min:"10" type:"string" idempotencyToken:"true"`
+
+	// The content range of the reports.
+	//
+	// ContentRange is a required field
+	ContentRange *BusinessReportContentRange `type:"structure" required:"true"`
+
+	// The format of the generated report (individual CSV files or zipped files
+	// of individual files).
+	//
+	// Format is a required field
+	Format *string `type:"string" required:"true" enum:"BusinessReportFormat"`
+
+	// The recurrence of the reports.
+	Recurrence *BusinessReportRecurrence `type:"structure"`
+
+	// The S3 bucket name of the output reports.
+	S3BucketName *string `type:"string"`
+
+	// The S3 key where the report is delivered.
+	S3KeyPrefix *string `type:"string"`
+
+	// The name identifier of the schedule.
+	ScheduleName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateBusinessReportScheduleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateBusinessReportScheduleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateBusinessReportScheduleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateBusinessReportScheduleInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 10))
+	}
+	if s.ContentRange == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContentRange"))
+	}
+	if s.Format == nil {
+		invalidParams.Add(request.NewErrParamRequired("Format"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateBusinessReportScheduleInput) SetClientRequestToken(v string) *CreateBusinessReportScheduleInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetContentRange sets the ContentRange field's value.
+func (s *CreateBusinessReportScheduleInput) SetContentRange(v *BusinessReportContentRange) *CreateBusinessReportScheduleInput {
+	s.ContentRange = v
+	return s
+}
+
+// SetFormat sets the Format field's value.
+func (s *CreateBusinessReportScheduleInput) SetFormat(v string) *CreateBusinessReportScheduleInput {
+	s.Format = &v
+	return s
+}
+
+// SetRecurrence sets the Recurrence field's value.
+func (s *CreateBusinessReportScheduleInput) SetRecurrence(v *BusinessReportRecurrence) *CreateBusinessReportScheduleInput {
+	s.Recurrence = v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *CreateBusinessReportScheduleInput) SetS3BucketName(v string) *CreateBusinessReportScheduleInput {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *CreateBusinessReportScheduleInput) SetS3KeyPrefix(v string) *CreateBusinessReportScheduleInput {
+	s.S3KeyPrefix = &v
+	return s
+}
+
+// SetScheduleName sets the ScheduleName field's value.
+func (s *CreateBusinessReportScheduleInput) SetScheduleName(v string) *CreateBusinessReportScheduleInput {
+	s.ScheduleName = &v
+	return s
+}
+
+type CreateBusinessReportScheduleOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the business report schedule.
+	ScheduleArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateBusinessReportScheduleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateBusinessReportScheduleOutput) GoString() string {
+	return s.String()
+}
+
+// SetScheduleArn sets the ScheduleArn field's value.
+func (s *CreateBusinessReportScheduleOutput) SetScheduleArn(v string) *CreateBusinessReportScheduleOutput {
+	s.ScheduleArn = &v
+	return s
+}
+
+type CreateConferenceProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// The request token of the client.
+	ClientRequestToken *string `min:"10" type:"string" idempotencyToken:"true"`
+
+	// The name of the conference provider.
+	//
+	// ConferenceProviderName is a required field
+	ConferenceProviderName *string `min:"1" type:"string" required:"true"`
+
+	// Represents a type within a list of predefined types.
+	//
+	// ConferenceProviderType is a required field
+	ConferenceProviderType *string `type:"string" required:"true" enum:"ConferenceProviderType"`
+
+	// The IP endpoint and protocol for calling.
+	IPDialIn *IPDialIn `type:"structure"`
+
+	// The meeting settings for the conference provider.
+	//
+	// MeetingSetting is a required field
+	MeetingSetting *MeetingSetting `type:"structure" required:"true"`
+
+	// The information for PSTN conferencing.
+	PSTNDialIn *PSTNDialIn `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateConferenceProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConferenceProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateConferenceProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateConferenceProviderInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 10 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 10))
+	}
+	if s.ConferenceProviderName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferenceProviderName"))
+	}
+	if s.ConferenceProviderName != nil && len(*s.ConferenceProviderName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConferenceProviderName", 1))
+	}
+	if s.ConferenceProviderType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferenceProviderType"))
+	}
+	if s.MeetingSetting == nil {
+		invalidParams.Add(request.NewErrParamRequired("MeetingSetting"))
+	}
+	if s.IPDialIn != nil {
+		if err := s.IPDialIn.Validate(); err != nil {
+			invalidParams.AddNested("IPDialIn", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MeetingSetting != nil {
+		if err := s.MeetingSetting.Validate(); err != nil {
+			invalidParams.AddNested("MeetingSetting", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PSTNDialIn != nil {
+		if err := s.PSTNDialIn.Validate(); err != nil {
+			invalidParams.AddNested("PSTNDialIn", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateConferenceProviderInput) SetClientRequestToken(v string) *CreateConferenceProviderInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetConferenceProviderName sets the ConferenceProviderName field's value.
+func (s *CreateConferenceProviderInput) SetConferenceProviderName(v string) *CreateConferenceProviderInput {
+	s.ConferenceProviderName = &v
+	return s
+}
+
+// SetConferenceProviderType sets the ConferenceProviderType field's value.
+func (s *CreateConferenceProviderInput) SetConferenceProviderType(v string) *CreateConferenceProviderInput {
+	s.ConferenceProviderType = &v
+	return s
+}
+
+// SetIPDialIn sets the IPDialIn field's value.
+func (s *CreateConferenceProviderInput) SetIPDialIn(v *IPDialIn) *CreateConferenceProviderInput {
+	s.IPDialIn = v
+	return s
+}
+
+// SetMeetingSetting sets the MeetingSetting field's value.
+func (s *CreateConferenceProviderInput) SetMeetingSetting(v *MeetingSetting) *CreateConferenceProviderInput {
+	s.MeetingSetting = v
+	return s
+}
+
+// SetPSTNDialIn sets the PSTNDialIn field's value.
+func (s *CreateConferenceProviderInput) SetPSTNDialIn(v *PSTNDialIn) *CreateConferenceProviderInput {
+	s.PSTNDialIn = v
+	return s
+}
+
+type CreateConferenceProviderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the newly-created conference provider.
+	ConferenceProviderArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateConferenceProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateConferenceProviderOutput) GoString() string {
+	return s.String()
+}
+
+// SetConferenceProviderArn sets the ConferenceProviderArn field's value.
+func (s *CreateConferenceProviderOutput) SetConferenceProviderArn(v string) *CreateConferenceProviderOutput {
+	s.ConferenceProviderArn = &v
+	return s
+}
+
 type CreateContactInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4911,9 +8186,7 @@ type CreateContactInput struct {
 	LastName *string `min:"1" type:"string"`
 
 	// The phone number of the contact in E.164 format.
-	//
-	// PhoneNumber is a required field
-	PhoneNumber *string `type:"string" required:"true"`
+	PhoneNumber *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4943,9 +8216,6 @@ func (s *CreateContactInput) Validate() error {
 	}
 	if s.LastName != nil && len(*s.LastName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("LastName", 1))
-	}
-	if s.PhoneNumber == nil {
-		invalidParams.Add(request.NewErrParamRequired("PhoneNumber"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5576,6 +8846,110 @@ func (s DeleteAddressBookOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteBusinessReportScheduleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the business report schedule.
+	//
+	// ScheduleArn is a required field
+	ScheduleArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteBusinessReportScheduleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBusinessReportScheduleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteBusinessReportScheduleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteBusinessReportScheduleInput"}
+	if s.ScheduleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScheduleArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetScheduleArn sets the ScheduleArn field's value.
+func (s *DeleteBusinessReportScheduleInput) SetScheduleArn(v string) *DeleteBusinessReportScheduleInput {
+	s.ScheduleArn = &v
+	return s
+}
+
+type DeleteBusinessReportScheduleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteBusinessReportScheduleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteBusinessReportScheduleOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteConferenceProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the conference provider.
+	//
+	// ConferenceProviderArn is a required field
+	ConferenceProviderArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteConferenceProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteConferenceProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteConferenceProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteConferenceProviderInput"}
+	if s.ConferenceProviderArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferenceProviderArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConferenceProviderArn sets the ConferenceProviderArn field's value.
+func (s *DeleteConferenceProviderInput) SetConferenceProviderArn(v string) *DeleteConferenceProviderInput {
+	s.ConferenceProviderArn = &v
+	return s
+}
+
+type DeleteConferenceProviderOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteConferenceProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteConferenceProviderOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteContactInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5625,6 +8999,58 @@ func (s DeleteContactOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteContactOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteDeviceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the device for which to request details.
+	//
+	// DeviceArn is a required field
+	DeviceArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteDeviceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDeviceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteDeviceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteDeviceInput"}
+	if s.DeviceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeviceArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDeviceArn sets the DeviceArn field's value.
+func (s *DeleteDeviceInput) SetDeviceArn(v string) *DeleteDeviceInput {
+	s.DeviceArn = &v
+	return s
+}
+
+type DeleteDeviceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteDeviceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDeviceOutput) GoString() string {
 	return s.String()
 }
 
@@ -5780,6 +9206,67 @@ func (s DeleteRoomSkillParameterOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteSkillAuthorizationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The room that the skill is authorized for.
+	RoomArn *string `type:"string"`
+
+	// The unique identifier of a skill.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteSkillAuthorizationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSkillAuthorizationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSkillAuthorizationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteSkillAuthorizationInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoomArn sets the RoomArn field's value.
+func (s *DeleteSkillAuthorizationInput) SetRoomArn(v string) *DeleteSkillAuthorizationInput {
+	s.RoomArn = &v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *DeleteSkillAuthorizationInput) SetSkillId(v string) *DeleteSkillAuthorizationInput {
+	s.SkillId = &v
+	return s
+}
+
+type DeleteSkillAuthorizationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteSkillAuthorizationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSkillAuthorizationOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteSkillGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5876,6 +9363,57 @@ func (s DeleteUserOutput) String() string {
 // GoString returns the string representation
 func (s DeleteUserOutput) GoString() string {
 	return s.String()
+}
+
+// The details about the developer that published the skill.
+type DeveloperInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the developer.
+	DeveloperName *string `type:"string"`
+
+	// The email of the developer.
+	Email *string `min:"1" type:"string"`
+
+	// The URL of the privacy policy.
+	PrivacyPolicy *string `type:"string"`
+
+	// The website of the developer.
+	Url *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DeveloperInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeveloperInfo) GoString() string {
+	return s.String()
+}
+
+// SetDeveloperName sets the DeveloperName field's value.
+func (s *DeveloperInfo) SetDeveloperName(v string) *DeveloperInfo {
+	s.DeveloperName = &v
+	return s
+}
+
+// SetEmail sets the Email field's value.
+func (s *DeveloperInfo) SetEmail(v string) *DeveloperInfo {
+	s.Email = &v
+	return s
+}
+
+// SetPrivacyPolicy sets the PrivacyPolicy field's value.
+func (s *DeveloperInfo) SetPrivacyPolicy(v string) *DeveloperInfo {
+	s.PrivacyPolicy = &v
+	return s
+}
+
+// SetUrl sets the Url field's value.
+func (s *DeveloperInfo) SetUrl(v string) *DeveloperInfo {
+	s.Url = &v
+	return s
 }
 
 // A device with attributes.
@@ -6282,6 +9820,128 @@ func (s DisassociateDeviceFromRoomOutput) GoString() string {
 	return s.String()
 }
 
+type DisassociateSkillFromSkillGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of a skill. Required.
+	SkillGroupArn *string `type:"string"`
+
+	// The ARN of a skill group to associate to a skill.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DisassociateSkillFromSkillGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateSkillFromSkillGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateSkillFromSkillGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateSkillFromSkillGroupInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSkillGroupArn sets the SkillGroupArn field's value.
+func (s *DisassociateSkillFromSkillGroupInput) SetSkillGroupArn(v string) *DisassociateSkillFromSkillGroupInput {
+	s.SkillGroupArn = &v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *DisassociateSkillFromSkillGroupInput) SetSkillId(v string) *DisassociateSkillFromSkillGroupInput {
+	s.SkillId = &v
+	return s
+}
+
+type DisassociateSkillFromSkillGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisassociateSkillFromSkillGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateSkillFromSkillGroupOutput) GoString() string {
+	return s.String()
+}
+
+type DisassociateSkillFromUsersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the organization.
+	OrganizationArn *string `type:"string"`
+
+	// The private skill ID you want to make unavailable for enrolled users.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DisassociateSkillFromUsersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateSkillFromUsersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DisassociateSkillFromUsersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DisassociateSkillFromUsersInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOrganizationArn sets the OrganizationArn field's value.
+func (s *DisassociateSkillFromUsersInput) SetOrganizationArn(v string) *DisassociateSkillFromUsersInput {
+	s.OrganizationArn = &v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *DisassociateSkillFromUsersInput) SetSkillId(v string) *DisassociateSkillFromUsersInput {
+	s.SkillId = &v
+	return s
+}
+
+type DisassociateSkillFromUsersOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DisassociateSkillFromUsersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DisassociateSkillFromUsersOutput) GoString() string {
+	return s.String()
+}
+
 type DisassociateSkillGroupFromRoomInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6385,6 +10045,58 @@ func (s *Filter) SetValues(v []*string) *Filter {
 	return s
 }
 
+type ForgetSmartHomeAppliancesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The room that the appliances are associated with.
+	//
+	// RoomArn is a required field
+	RoomArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ForgetSmartHomeAppliancesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ForgetSmartHomeAppliancesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ForgetSmartHomeAppliancesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ForgetSmartHomeAppliancesInput"}
+	if s.RoomArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoomArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoomArn sets the RoomArn field's value.
+func (s *ForgetSmartHomeAppliancesInput) SetRoomArn(v string) *ForgetSmartHomeAppliancesInput {
+	s.RoomArn = &v
+	return s
+}
+
+type ForgetSmartHomeAppliancesOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s ForgetSmartHomeAppliancesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ForgetSmartHomeAppliancesOutput) GoString() string {
+	return s.String()
+}
+
 type GetAddressBookInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6443,6 +10155,104 @@ func (s GetAddressBookOutput) GoString() string {
 // SetAddressBook sets the AddressBook field's value.
 func (s *GetAddressBookOutput) SetAddressBook(v *AddressBook) *GetAddressBookOutput {
 	s.AddressBook = v
+	return s
+}
+
+type GetConferencePreferenceInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetConferencePreferenceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConferencePreferenceInput) GoString() string {
+	return s.String()
+}
+
+type GetConferencePreferenceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The conference preference.
+	Preference *ConferencePreference `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetConferencePreferenceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConferencePreferenceOutput) GoString() string {
+	return s.String()
+}
+
+// SetPreference sets the Preference field's value.
+func (s *GetConferencePreferenceOutput) SetPreference(v *ConferencePreference) *GetConferencePreferenceOutput {
+	s.Preference = v
+	return s
+}
+
+type GetConferenceProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the newly created conference provider.
+	//
+	// ConferenceProviderArn is a required field
+	ConferenceProviderArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetConferenceProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConferenceProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConferenceProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConferenceProviderInput"}
+	if s.ConferenceProviderArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferenceProviderArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConferenceProviderArn sets the ConferenceProviderArn field's value.
+func (s *GetConferenceProviderInput) SetConferenceProviderArn(v string) *GetConferenceProviderInput {
+	s.ConferenceProviderArn = &v
+	return s
+}
+
+type GetConferenceProviderOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The conference provider.
+	ConferenceProvider *ConferenceProvider `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetConferenceProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetConferenceProviderOutput) GoString() string {
+	return s.String()
+}
+
+// SetConferenceProvider sets the ConferenceProvider field's value.
+func (s *GetConferenceProviderOutput) SetConferenceProvider(v *ConferenceProvider) *GetConferenceProviderOutput {
+	s.ConferenceProvider = v
 	return s
 }
 
@@ -6779,6 +10589,223 @@ func (s *GetSkillGroupOutput) SetSkillGroup(v *SkillGroup) *GetSkillGroupOutput 
 	return s
 }
 
+// The IP endpoint and protocol for calling.
+type IPDialIn struct {
+	_ struct{} `type:"structure"`
+
+	// The protocol, including SIP, SIPS, and H323.
+	//
+	// CommsProtocol is a required field
+	CommsProtocol *string `type:"string" required:"true" enum:"CommsProtocol"`
+
+	// The IP address.
+	//
+	// Endpoint is a required field
+	Endpoint *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s IPDialIn) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IPDialIn) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *IPDialIn) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "IPDialIn"}
+	if s.CommsProtocol == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommsProtocol"))
+	}
+	if s.Endpoint == nil {
+		invalidParams.Add(request.NewErrParamRequired("Endpoint"))
+	}
+	if s.Endpoint != nil && len(*s.Endpoint) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Endpoint", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCommsProtocol sets the CommsProtocol field's value.
+func (s *IPDialIn) SetCommsProtocol(v string) *IPDialIn {
+	s.CommsProtocol = &v
+	return s
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *IPDialIn) SetEndpoint(v string) *IPDialIn {
+	s.Endpoint = &v
+	return s
+}
+
+type ListBusinessReportSchedulesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of schedules listed in the call.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token used to list the remaining schedules from the previous API call.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListBusinessReportSchedulesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBusinessReportSchedulesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListBusinessReportSchedulesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListBusinessReportSchedulesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListBusinessReportSchedulesInput) SetMaxResults(v int64) *ListBusinessReportSchedulesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBusinessReportSchedulesInput) SetNextToken(v string) *ListBusinessReportSchedulesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListBusinessReportSchedulesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The schedule of the reports.
+	BusinessReportSchedules []*BusinessReportSchedule `type:"list"`
+
+	// The token used to list the remaining schedules from the previous API call.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListBusinessReportSchedulesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListBusinessReportSchedulesOutput) GoString() string {
+	return s.String()
+}
+
+// SetBusinessReportSchedules sets the BusinessReportSchedules field's value.
+func (s *ListBusinessReportSchedulesOutput) SetBusinessReportSchedules(v []*BusinessReportSchedule) *ListBusinessReportSchedulesOutput {
+	s.BusinessReportSchedules = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListBusinessReportSchedulesOutput) SetNextToken(v string) *ListBusinessReportSchedulesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConferenceProvidersInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of conference providers to be returned, per paginated
+	// calls.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListConferenceProvidersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConferenceProvidersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListConferenceProvidersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListConferenceProvidersInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListConferenceProvidersInput) SetMaxResults(v int64) *ListConferenceProvidersInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConferenceProvidersInput) SetNextToken(v string) *ListConferenceProvidersInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListConferenceProvidersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The conference providers.
+	ConferenceProviders []*ConferenceProvider `type:"list"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListConferenceProvidersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListConferenceProvidersOutput) GoString() string {
+	return s.String()
+}
+
+// SetConferenceProviders sets the ConferenceProviders field's value.
+func (s *ListConferenceProvidersOutput) SetConferenceProviders(v []*ConferenceProvider) *ListConferenceProvidersOutput {
+	s.ConferenceProviders = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListConferenceProvidersOutput) SetNextToken(v string) *ListConferenceProvidersOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListDeviceEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6893,19 +10920,25 @@ func (s *ListDeviceEventsOutput) SetNextToken(v string) *ListDeviceEventsOutput 
 type ListSkillsInput struct {
 	_ struct{} `type:"structure"`
 
+	// Whether the skill is enabled under the user's account, or if it requires
+	// linking to be used.
+	EnablementType *string `type:"string" enum:"EnablementTypeFilter"`
+
 	// The maximum number of results to include in the response. If more results
 	// exist than the specified MaxResults value, a token is included in the response
-	// so that the remaining results can be retrieved. Required.
+	// so that the remaining results can be retrieved.
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// An optional token returned from a prior request. Use this token for pagination
 	// of results from this action. If this parameter is specified, the response
 	// includes only results beyond the token, up to the value specified by MaxResults.
-	// Required.
 	NextToken *string `min:"1" type:"string"`
 
-	// The ARN of the skill group for which to list enabled skills. Required.
+	// The ARN of the skill group for which to list enabled skills.
 	SkillGroupArn *string `type:"string"`
+
+	// Whether the skill is publicly available or is a private skill.
+	SkillType *string `type:"string" enum:"SkillTypeFilter"`
 }
 
 // String returns the string representation
@@ -6934,6 +10967,12 @@ func (s *ListSkillsInput) Validate() error {
 	return nil
 }
 
+// SetEnablementType sets the EnablementType field's value.
+func (s *ListSkillsInput) SetEnablementType(v string) *ListSkillsInput {
+	s.EnablementType = &v
+	return s
+}
+
 // SetMaxResults sets the MaxResults field's value.
 func (s *ListSkillsInput) SetMaxResults(v int64) *ListSkillsInput {
 	s.MaxResults = &v
@@ -6949,6 +10988,12 @@ func (s *ListSkillsInput) SetNextToken(v string) *ListSkillsInput {
 // SetSkillGroupArn sets the SkillGroupArn field's value.
 func (s *ListSkillsInput) SetSkillGroupArn(v string) *ListSkillsInput {
 	s.SkillGroupArn = &v
+	return s
+}
+
+// SetSkillType sets the SkillType field's value.
+func (s *ListSkillsInput) SetSkillType(v string) *ListSkillsInput {
+	s.SkillType = &v
 	return s
 }
 
@@ -6981,6 +11026,277 @@ func (s *ListSkillsOutput) SetNextToken(v string) *ListSkillsOutput {
 // SetSkillSummaries sets the SkillSummaries field's value.
 func (s *ListSkillsOutput) SetSkillSummaries(v []*SkillSummary) *ListSkillsOutput {
 	s.SkillSummaries = v
+	return s
+}
+
+type ListSkillsStoreCategoriesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of categories returned, per paginated calls.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListSkillsStoreCategoriesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSkillsStoreCategoriesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSkillsStoreCategoriesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSkillsStoreCategoriesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSkillsStoreCategoriesInput) SetMaxResults(v int64) *ListSkillsStoreCategoriesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSkillsStoreCategoriesInput) SetNextToken(v string) *ListSkillsStoreCategoriesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSkillsStoreCategoriesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of categories.
+	CategoryList []*Category `type:"list"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListSkillsStoreCategoriesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSkillsStoreCategoriesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCategoryList sets the CategoryList field's value.
+func (s *ListSkillsStoreCategoriesOutput) SetCategoryList(v []*Category) *ListSkillsStoreCategoriesOutput {
+	s.CategoryList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSkillsStoreCategoriesOutput) SetNextToken(v string) *ListSkillsStoreCategoriesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSkillsStoreSkillsByCategoryInput struct {
+	_ struct{} `type:"structure"`
+
+	// The category ID for which the skills are being retrieved from the skill store.
+	//
+	// CategoryId is a required field
+	CategoryId *int64 `min:"1" type:"long" required:"true"`
+
+	// The maximum number of skills returned per paginated calls.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListSkillsStoreSkillsByCategoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSkillsStoreSkillsByCategoryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSkillsStoreSkillsByCategoryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSkillsStoreSkillsByCategoryInput"}
+	if s.CategoryId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CategoryId"))
+	}
+	if s.CategoryId != nil && *s.CategoryId < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("CategoryId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCategoryId sets the CategoryId field's value.
+func (s *ListSkillsStoreSkillsByCategoryInput) SetCategoryId(v int64) *ListSkillsStoreSkillsByCategoryInput {
+	s.CategoryId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSkillsStoreSkillsByCategoryInput) SetMaxResults(v int64) *ListSkillsStoreSkillsByCategoryInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSkillsStoreSkillsByCategoryInput) SetNextToken(v string) *ListSkillsStoreSkillsByCategoryInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSkillsStoreSkillsByCategoryOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+
+	// The skill store skills.
+	SkillsStoreSkills []*SkillsStoreSkill `type:"list"`
+}
+
+// String returns the string representation
+func (s ListSkillsStoreSkillsByCategoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSkillsStoreSkillsByCategoryOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSkillsStoreSkillsByCategoryOutput) SetNextToken(v string) *ListSkillsStoreSkillsByCategoryOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSkillsStoreSkills sets the SkillsStoreSkills field's value.
+func (s *ListSkillsStoreSkillsByCategoryOutput) SetSkillsStoreSkills(v []*SkillsStoreSkill) *ListSkillsStoreSkillsByCategoryOutput {
+	s.SkillsStoreSkills = v
+	return s
+}
+
+type ListSmartHomeAppliancesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of appliances to be returned, per paginated calls.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+
+	// The room that the appliances are associated with.
+	//
+	// RoomArn is a required field
+	RoomArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListSmartHomeAppliancesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSmartHomeAppliancesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSmartHomeAppliancesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSmartHomeAppliancesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.RoomArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoomArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSmartHomeAppliancesInput) SetMaxResults(v int64) *ListSmartHomeAppliancesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSmartHomeAppliancesInput) SetNextToken(v string) *ListSmartHomeAppliancesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRoomArn sets the RoomArn field's value.
+func (s *ListSmartHomeAppliancesInput) SetRoomArn(v string) *ListSmartHomeAppliancesInput {
+	s.RoomArn = &v
+	return s
+}
+
+type ListSmartHomeAppliancesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The tokens used for pagination.
+	NextToken *string `min:"1" type:"string"`
+
+	// The smart home appliances.
+	SmartHomeAppliances []*SmartHomeAppliance `type:"list"`
+}
+
+// String returns the string representation
+func (s ListSmartHomeAppliancesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSmartHomeAppliancesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSmartHomeAppliancesOutput) SetNextToken(v string) *ListSmartHomeAppliancesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSmartHomeAppliances sets the SmartHomeAppliances field's value.
+func (s *ListSmartHomeAppliancesOutput) SetSmartHomeAppliances(v []*SmartHomeAppliance) *ListSmartHomeAppliancesOutput {
+	s.SmartHomeAppliances = v
 	return s
 }
 
@@ -7082,6 +11398,144 @@ func (s *ListTagsOutput) SetTags(v []*Tag) *ListTagsOutput {
 	return s
 }
 
+// The values that indicate whether a pin is always required (YES), never required
+// (NO), or OPTIONAL.
+//
+//    * If YES, Alexa will always ask for a meeting pin.
+//
+//    * If NO, Alexa will never ask for a meeting pin.
+//
+//    * If OPTIONAL, Alexa will ask if you have a meeting pin and if the customer
+//    responds with yes, it will ask for the meeting pin.
+type MeetingSetting struct {
+	_ struct{} `type:"structure"`
+
+	// The values that indicate whether the pin is always required.
+	//
+	// RequirePin is a required field
+	RequirePin *string `type:"string" required:"true" enum:"RequirePin"`
+}
+
+// String returns the string representation
+func (s MeetingSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MeetingSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MeetingSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MeetingSetting"}
+	if s.RequirePin == nil {
+		invalidParams.Add(request.NewErrParamRequired("RequirePin"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRequirePin sets the RequirePin field's value.
+func (s *MeetingSetting) SetRequirePin(v string) *MeetingSetting {
+	s.RequirePin = &v
+	return s
+}
+
+// The information for public switched telephone network (PSTN) conferencing.
+type PSTNDialIn struct {
+	_ struct{} `type:"structure"`
+
+	// The zip code.
+	//
+	// CountryCode is a required field
+	CountryCode *string `type:"string" required:"true"`
+
+	// The delay duration before Alexa enters the conference ID with dual-tone multi-frequency
+	// (DTMF). Each number on the dial pad corresponds to a DTMF tone, which is
+	// how we send data over the telephone network.
+	//
+	// OneClickIdDelay is a required field
+	OneClickIdDelay *string `min:"1" type:"string" required:"true"`
+
+	// The delay duration before Alexa enters the conference pin with dual-tone
+	// multi-frequency (DTMF). Each number on the dial pad corresponds to a DTMF
+	// tone, which is how we send data over the telephone network.
+	//
+	// OneClickPinDelay is a required field
+	OneClickPinDelay *string `min:"1" type:"string" required:"true"`
+
+	// The phone number to call to join the conference.
+	//
+	// PhoneNumber is a required field
+	PhoneNumber *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PSTNDialIn) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PSTNDialIn) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PSTNDialIn) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PSTNDialIn"}
+	if s.CountryCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("CountryCode"))
+	}
+	if s.OneClickIdDelay == nil {
+		invalidParams.Add(request.NewErrParamRequired("OneClickIdDelay"))
+	}
+	if s.OneClickIdDelay != nil && len(*s.OneClickIdDelay) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OneClickIdDelay", 1))
+	}
+	if s.OneClickPinDelay == nil {
+		invalidParams.Add(request.NewErrParamRequired("OneClickPinDelay"))
+	}
+	if s.OneClickPinDelay != nil && len(*s.OneClickPinDelay) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OneClickPinDelay", 1))
+	}
+	if s.PhoneNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("PhoneNumber"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCountryCode sets the CountryCode field's value.
+func (s *PSTNDialIn) SetCountryCode(v string) *PSTNDialIn {
+	s.CountryCode = &v
+	return s
+}
+
+// SetOneClickIdDelay sets the OneClickIdDelay field's value.
+func (s *PSTNDialIn) SetOneClickIdDelay(v string) *PSTNDialIn {
+	s.OneClickIdDelay = &v
+	return s
+}
+
+// SetOneClickPinDelay sets the OneClickPinDelay field's value.
+func (s *PSTNDialIn) SetOneClickPinDelay(v string) *PSTNDialIn {
+	s.OneClickPinDelay = &v
+	return s
+}
+
+// SetPhoneNumber sets the PhoneNumber field's value.
+func (s *PSTNDialIn) SetPhoneNumber(v string) *PSTNDialIn {
+	s.PhoneNumber = &v
+	return s
+}
+
 // A room profile with attributes.
 type Profile struct {
 	_ struct{} `type:"structure"`
@@ -7089,8 +11543,14 @@ type Profile struct {
 	// The address of a room profile.
 	Address *string `min:"1" type:"string"`
 
+	// The ARN of the address book.
+	AddressBookArn *string `type:"string"`
+
 	// The distance unit of a room profile.
 	DistanceUnit *string `type:"string" enum:"DistanceUnit"`
+
+	// Retrieves if the profile is default or not.
+	IsDefault *bool `type:"boolean"`
 
 	// The max volume limit of a room profile.
 	MaxVolumeLimit *int64 `type:"integer"`
@@ -7133,9 +11593,21 @@ func (s *Profile) SetAddress(v string) *Profile {
 	return s
 }
 
+// SetAddressBookArn sets the AddressBookArn field's value.
+func (s *Profile) SetAddressBookArn(v string) *Profile {
+	s.AddressBookArn = &v
+	return s
+}
+
 // SetDistanceUnit sets the DistanceUnit field's value.
 func (s *Profile) SetDistanceUnit(v string) *Profile {
 	s.DistanceUnit = &v
+	return s
+}
+
+// SetIsDefault sets the IsDefault field's value.
+func (s *Profile) SetIsDefault(v bool) *Profile {
+	s.IsDefault = &v
 	return s
 }
 
@@ -7197,6 +11669,9 @@ type ProfileData struct {
 	// The distance unit of a room profile.
 	DistanceUnit *string `type:"string" enum:"DistanceUnit"`
 
+	// Retrieves if the profile data is default or not.
+	IsDefault *bool `type:"boolean"`
+
 	// The ARN of a room profile.
 	ProfileArn *string `type:"string"`
 
@@ -7235,6 +11710,12 @@ func (s *ProfileData) SetDistanceUnit(v string) *ProfileData {
 	return s
 }
 
+// SetIsDefault sets the IsDefault field's value.
+func (s *ProfileData) SetIsDefault(v bool) *ProfileData {
+	s.IsDefault = &v
+	return s
+}
+
 // SetProfileArn sets the ProfileArn field's value.
 func (s *ProfileData) SetProfileArn(v string) *ProfileData {
 	s.ProfileArn = &v
@@ -7263,6 +11744,58 @@ func (s *ProfileData) SetTimezone(v string) *ProfileData {
 func (s *ProfileData) SetWakeWord(v string) *ProfileData {
 	s.WakeWord = &v
 	return s
+}
+
+type PutConferencePreferenceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The conference preference of a specific conference provider.
+	//
+	// ConferencePreference is a required field
+	ConferencePreference *ConferencePreference `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s PutConferencePreferenceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutConferencePreferenceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutConferencePreferenceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutConferencePreferenceInput"}
+	if s.ConferencePreference == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferencePreference"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConferencePreference sets the ConferencePreference field's value.
+func (s *PutConferencePreferenceInput) SetConferencePreference(v *ConferencePreference) *PutConferencePreferenceInput {
+	s.ConferencePreference = v
+	return s
+}
+
+type PutConferencePreferenceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutConferencePreferenceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutConferencePreferenceOutput) GoString() string {
+	return s.String()
 }
 
 type PutRoomSkillParameterInput struct {
@@ -7342,6 +11875,259 @@ func (s PutRoomSkillParameterOutput) String() string {
 
 // GoString returns the string representation
 func (s PutRoomSkillParameterOutput) GoString() string {
+	return s.String()
+}
+
+type PutSkillAuthorizationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The authorization result specific to OAUTH code grant output. "Code” must
+	// be populated in the AuthorizationResult map to establish the authorization.
+	//
+	// AuthorizationResult is a required field
+	AuthorizationResult map[string]*string `type:"map" required:"true" sensitive:"true"`
+
+	// The room that the skill is authorized for.
+	RoomArn *string `type:"string"`
+
+	// The unique identifier of a skill.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PutSkillAuthorizationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutSkillAuthorizationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutSkillAuthorizationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutSkillAuthorizationInput"}
+	if s.AuthorizationResult == nil {
+		invalidParams.Add(request.NewErrParamRequired("AuthorizationResult"))
+	}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuthorizationResult sets the AuthorizationResult field's value.
+func (s *PutSkillAuthorizationInput) SetAuthorizationResult(v map[string]*string) *PutSkillAuthorizationInput {
+	s.AuthorizationResult = v
+	return s
+}
+
+// SetRoomArn sets the RoomArn field's value.
+func (s *PutSkillAuthorizationInput) SetRoomArn(v string) *PutSkillAuthorizationInput {
+	s.RoomArn = &v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *PutSkillAuthorizationInput) SetSkillId(v string) *PutSkillAuthorizationInput {
+	s.SkillId = &v
+	return s
+}
+
+type PutSkillAuthorizationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutSkillAuthorizationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutSkillAuthorizationOutput) GoString() string {
+	return s.String()
+}
+
+type RegisterAVSDeviceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The device type ID for your AVS device generated by Amazon when the OEM creates
+	// a new product on Amazon's Developer Console.
+	//
+	// AmazonId is a required field
+	AmazonId *string `type:"string" required:"true"`
+
+	// The client ID of the OEM used for code-based linking authorization on an
+	// AVS device.
+	//
+	// ClientId is a required field
+	ClientId *string `type:"string" required:"true"`
+
+	// The key generated by the OEM that uniquely identifies a specified instance
+	// of your AVS device.
+	//
+	// DeviceSerialNumber is a required field
+	DeviceSerialNumber *string `type:"string" required:"true"`
+
+	// The product ID used to identify your AVS device during authorization.
+	//
+	// ProductId is a required field
+	ProductId *string `type:"string" required:"true"`
+
+	// The code that is obtained after your AVS device has made a POST request to
+	// LWA as a part of the Device Authorization Request component of the OAuth
+	// code-based linking specification.
+	//
+	// UserCode is a required field
+	UserCode *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RegisterAVSDeviceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterAVSDeviceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RegisterAVSDeviceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RegisterAVSDeviceInput"}
+	if s.AmazonId == nil {
+		invalidParams.Add(request.NewErrParamRequired("AmazonId"))
+	}
+	if s.ClientId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ClientId"))
+	}
+	if s.DeviceSerialNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeviceSerialNumber"))
+	}
+	if s.ProductId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ProductId"))
+	}
+	if s.UserCode == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserCode"))
+	}
+	if s.UserCode != nil && len(*s.UserCode) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserCode", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAmazonId sets the AmazonId field's value.
+func (s *RegisterAVSDeviceInput) SetAmazonId(v string) *RegisterAVSDeviceInput {
+	s.AmazonId = &v
+	return s
+}
+
+// SetClientId sets the ClientId field's value.
+func (s *RegisterAVSDeviceInput) SetClientId(v string) *RegisterAVSDeviceInput {
+	s.ClientId = &v
+	return s
+}
+
+// SetDeviceSerialNumber sets the DeviceSerialNumber field's value.
+func (s *RegisterAVSDeviceInput) SetDeviceSerialNumber(v string) *RegisterAVSDeviceInput {
+	s.DeviceSerialNumber = &v
+	return s
+}
+
+// SetProductId sets the ProductId field's value.
+func (s *RegisterAVSDeviceInput) SetProductId(v string) *RegisterAVSDeviceInput {
+	s.ProductId = &v
+	return s
+}
+
+// SetUserCode sets the UserCode field's value.
+func (s *RegisterAVSDeviceInput) SetUserCode(v string) *RegisterAVSDeviceInput {
+	s.UserCode = &v
+	return s
+}
+
+type RegisterAVSDeviceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the device.
+	DeviceArn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s RegisterAVSDeviceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegisterAVSDeviceOutput) GoString() string {
+	return s.String()
+}
+
+// SetDeviceArn sets the DeviceArn field's value.
+func (s *RegisterAVSDeviceOutput) SetDeviceArn(v string) *RegisterAVSDeviceOutput {
+	s.DeviceArn = &v
+	return s
+}
+
+type RejectSkillInput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier of the skill.
+	//
+	// SkillId is a required field
+	SkillId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RejectSkillInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RejectSkillInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RejectSkillInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RejectSkillInput"}
+	if s.SkillId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SkillId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *RejectSkillInput) SetSkillId(v string) *RejectSkillInput {
+	s.SkillId = &v
+	return s
+}
+
+type RejectSkillOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RejectSkillOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RejectSkillOutput) GoString() string {
 	return s.String()
 }
 
@@ -8646,6 +13432,112 @@ func (s SendInvitationOutput) GoString() string {
 	return s.String()
 }
 
+// Granular information about the skill.
+type SkillDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The details about what the skill supports organized as bullet points.
+	BulletPoints []*string `type:"list"`
+
+	// The details about the developer that published the skill.
+	DeveloperInfo *DeveloperInfo `type:"structure"`
+
+	// The URL of the end user license agreement.
+	EndUserLicenseAgreement *string `type:"string"`
+
+	// The generic keywords associated with the skill that can be used to find a
+	// skill.
+	GenericKeywords []*string `type:"list"`
+
+	// The phrase used to trigger the skill.
+	InvocationPhrase *string `type:"string"`
+
+	// The updates added in bullet points.
+	NewInThisVersionBulletPoints []*string `type:"list"`
+
+	// The description of the product.
+	ProductDescription *string `type:"string"`
+
+	// The date when the skill was released.
+	ReleaseDate *string `type:"string"`
+
+	// The list of reviews for the skill, including Key and Value pair.
+	Reviews map[string]*string `type:"map"`
+
+	// The types of skills.
+	SkillTypes []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s SkillDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SkillDetails) GoString() string {
+	return s.String()
+}
+
+// SetBulletPoints sets the BulletPoints field's value.
+func (s *SkillDetails) SetBulletPoints(v []*string) *SkillDetails {
+	s.BulletPoints = v
+	return s
+}
+
+// SetDeveloperInfo sets the DeveloperInfo field's value.
+func (s *SkillDetails) SetDeveloperInfo(v *DeveloperInfo) *SkillDetails {
+	s.DeveloperInfo = v
+	return s
+}
+
+// SetEndUserLicenseAgreement sets the EndUserLicenseAgreement field's value.
+func (s *SkillDetails) SetEndUserLicenseAgreement(v string) *SkillDetails {
+	s.EndUserLicenseAgreement = &v
+	return s
+}
+
+// SetGenericKeywords sets the GenericKeywords field's value.
+func (s *SkillDetails) SetGenericKeywords(v []*string) *SkillDetails {
+	s.GenericKeywords = v
+	return s
+}
+
+// SetInvocationPhrase sets the InvocationPhrase field's value.
+func (s *SkillDetails) SetInvocationPhrase(v string) *SkillDetails {
+	s.InvocationPhrase = &v
+	return s
+}
+
+// SetNewInThisVersionBulletPoints sets the NewInThisVersionBulletPoints field's value.
+func (s *SkillDetails) SetNewInThisVersionBulletPoints(v []*string) *SkillDetails {
+	s.NewInThisVersionBulletPoints = v
+	return s
+}
+
+// SetProductDescription sets the ProductDescription field's value.
+func (s *SkillDetails) SetProductDescription(v string) *SkillDetails {
+	s.ProductDescription = &v
+	return s
+}
+
+// SetReleaseDate sets the ReleaseDate field's value.
+func (s *SkillDetails) SetReleaseDate(v string) *SkillDetails {
+	s.ReleaseDate = &v
+	return s
+}
+
+// SetReviews sets the Reviews field's value.
+func (s *SkillDetails) SetReviews(v map[string]*string) *SkillDetails {
+	s.Reviews = v
+	return s
+}
+
+// SetSkillTypes sets the SkillTypes field's value.
+func (s *SkillDetails) SetSkillTypes(v []*string) *SkillDetails {
+	s.SkillTypes = v
+	return s
+}
+
 // A skill group with attributes.
 type SkillGroup struct {
 	_ struct{} `type:"structure"`
@@ -8734,11 +13626,18 @@ func (s *SkillGroupData) SetSkillGroupName(v string) *SkillGroupData {
 type SkillSummary struct {
 	_ struct{} `type:"structure"`
 
+	// Whether the skill is enabled under the user's account, or if it requires
+	// linking to be used.
+	EnablementType *string `type:"string" enum:"EnablementType"`
+
 	// The ARN of the skill summary.
 	SkillId *string `type:"string"`
 
 	// The name of the skill.
 	SkillName *string `min:"1" type:"string"`
+
+	// Whether the skill is publicly available or is a private skill.
+	SkillType *string `min:"1" type:"string" enum:"SkillType"`
 
 	// Linking support for a skill.
 	SupportsLinking *bool `type:"boolean"`
@@ -8754,6 +13653,12 @@ func (s SkillSummary) GoString() string {
 	return s.String()
 }
 
+// SetEnablementType sets the EnablementType field's value.
+func (s *SkillSummary) SetEnablementType(v string) *SkillSummary {
+	s.EnablementType = &v
+	return s
+}
+
 // SetSkillId sets the SkillId field's value.
 func (s *SkillSummary) SetSkillId(v string) *SkillSummary {
 	s.SkillId = &v
@@ -8766,9 +13671,136 @@ func (s *SkillSummary) SetSkillName(v string) *SkillSummary {
 	return s
 }
 
+// SetSkillType sets the SkillType field's value.
+func (s *SkillSummary) SetSkillType(v string) *SkillSummary {
+	s.SkillType = &v
+	return s
+}
+
 // SetSupportsLinking sets the SupportsLinking field's value.
 func (s *SkillSummary) SetSupportsLinking(v bool) *SkillSummary {
 	s.SupportsLinking = &v
+	return s
+}
+
+// The detailed information about an Alexa skill.
+type SkillsStoreSkill struct {
+	_ struct{} `type:"structure"`
+
+	// The URL where the skill icon resides.
+	IconUrl *string `type:"string"`
+
+	// Sample utterances that interact with the skill.
+	SampleUtterances []*string `type:"list"`
+
+	// Short description about the skill.
+	ShortDescription *string `type:"string"`
+
+	// Information about the skill.
+	SkillDetails *SkillDetails `type:"structure"`
+
+	// The ARN of the skill.
+	SkillId *string `type:"string"`
+
+	// The name of the skill.
+	SkillName *string `min:"1" type:"string"`
+
+	// Linking support for a skill.
+	SupportsLinking *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s SkillsStoreSkill) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SkillsStoreSkill) GoString() string {
+	return s.String()
+}
+
+// SetIconUrl sets the IconUrl field's value.
+func (s *SkillsStoreSkill) SetIconUrl(v string) *SkillsStoreSkill {
+	s.IconUrl = &v
+	return s
+}
+
+// SetSampleUtterances sets the SampleUtterances field's value.
+func (s *SkillsStoreSkill) SetSampleUtterances(v []*string) *SkillsStoreSkill {
+	s.SampleUtterances = v
+	return s
+}
+
+// SetShortDescription sets the ShortDescription field's value.
+func (s *SkillsStoreSkill) SetShortDescription(v string) *SkillsStoreSkill {
+	s.ShortDescription = &v
+	return s
+}
+
+// SetSkillDetails sets the SkillDetails field's value.
+func (s *SkillsStoreSkill) SetSkillDetails(v *SkillDetails) *SkillsStoreSkill {
+	s.SkillDetails = v
+	return s
+}
+
+// SetSkillId sets the SkillId field's value.
+func (s *SkillsStoreSkill) SetSkillId(v string) *SkillsStoreSkill {
+	s.SkillId = &v
+	return s
+}
+
+// SetSkillName sets the SkillName field's value.
+func (s *SkillsStoreSkill) SetSkillName(v string) *SkillsStoreSkill {
+	s.SkillName = &v
+	return s
+}
+
+// SetSupportsLinking sets the SupportsLinking field's value.
+func (s *SkillsStoreSkill) SetSupportsLinking(v bool) *SkillsStoreSkill {
+	s.SupportsLinking = &v
+	return s
+}
+
+// A smart home appliance that can connect to a central system. Any domestic
+// device can be a smart appliance.
+type SmartHomeAppliance struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the smart home appliance.
+	Description *string `type:"string"`
+
+	// The friendly name of the smart home appliance.
+	FriendlyName *string `type:"string"`
+
+	// The name of the manufacturer of the smart home appliance.
+	ManufacturerName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s SmartHomeAppliance) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SmartHomeAppliance) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *SmartHomeAppliance) SetDescription(v string) *SmartHomeAppliance {
+	s.Description = &v
+	return s
+}
+
+// SetFriendlyName sets the FriendlyName field's value.
+func (s *SmartHomeAppliance) SetFriendlyName(v string) *SmartHomeAppliance {
+	s.FriendlyName = &v
+	return s
+}
+
+// SetManufacturerName sets the ManufacturerName field's value.
+func (s *SmartHomeAppliance) SetManufacturerName(v string) *SmartHomeAppliance {
+	s.ManufacturerName = &v
 	return s
 }
 
@@ -8898,15 +13930,71 @@ func (s StartDeviceSyncOutput) GoString() string {
 	return s.String()
 }
 
+type StartSmartHomeApplianceDiscoveryInput struct {
+	_ struct{} `type:"structure"`
+
+	// The room where smart home appliance discovery was initiated.
+	//
+	// RoomArn is a required field
+	RoomArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartSmartHomeApplianceDiscoveryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSmartHomeApplianceDiscoveryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSmartHomeApplianceDiscoveryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartSmartHomeApplianceDiscoveryInput"}
+	if s.RoomArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoomArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRoomArn sets the RoomArn field's value.
+func (s *StartSmartHomeApplianceDiscoveryInput) SetRoomArn(v string) *StartSmartHomeApplianceDiscoveryInput {
+	s.RoomArn = &v
+	return s
+}
+
+type StartSmartHomeApplianceDiscoveryOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartSmartHomeApplianceDiscoveryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSmartHomeApplianceDiscoveryOutput) GoString() string {
+	return s.String()
+}
+
 // A key-value pair that can be associated with a resource.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
 	// The key of a tag. Tag keys are case-sensitive.
-	Key *string `min:"1" type:"string"`
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
 
 	// The value of a tag. Tag values are case-sensitive and can be null.
-	Value *string `type:"string"`
+	//
+	// Value is a required field
+	Value *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -8922,8 +14010,14 @@ func (s Tag) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Tag) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
 	if s.Key != nil && len(*s.Key) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -9164,6 +14258,217 @@ func (s UpdateAddressBookOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateBusinessReportScheduleInput struct {
+	_ struct{} `type:"structure"`
+
+	// The format of the generated report (individual CSV files or zipped files
+	// of individual files).
+	Format *string `type:"string" enum:"BusinessReportFormat"`
+
+	// The recurrence of the reports.
+	Recurrence *BusinessReportRecurrence `type:"structure"`
+
+	// The S3 location of the output reports.
+	S3BucketName *string `type:"string"`
+
+	// The S3 key where the report is delivered.
+	S3KeyPrefix *string `type:"string"`
+
+	// The ARN of the business report schedule.
+	//
+	// ScheduleArn is a required field
+	ScheduleArn *string `type:"string" required:"true"`
+
+	// The name identifier of the schedule.
+	ScheduleName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateBusinessReportScheduleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateBusinessReportScheduleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateBusinessReportScheduleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateBusinessReportScheduleInput"}
+	if s.ScheduleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScheduleArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFormat sets the Format field's value.
+func (s *UpdateBusinessReportScheduleInput) SetFormat(v string) *UpdateBusinessReportScheduleInput {
+	s.Format = &v
+	return s
+}
+
+// SetRecurrence sets the Recurrence field's value.
+func (s *UpdateBusinessReportScheduleInput) SetRecurrence(v *BusinessReportRecurrence) *UpdateBusinessReportScheduleInput {
+	s.Recurrence = v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *UpdateBusinessReportScheduleInput) SetS3BucketName(v string) *UpdateBusinessReportScheduleInput {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3KeyPrefix sets the S3KeyPrefix field's value.
+func (s *UpdateBusinessReportScheduleInput) SetS3KeyPrefix(v string) *UpdateBusinessReportScheduleInput {
+	s.S3KeyPrefix = &v
+	return s
+}
+
+// SetScheduleArn sets the ScheduleArn field's value.
+func (s *UpdateBusinessReportScheduleInput) SetScheduleArn(v string) *UpdateBusinessReportScheduleInput {
+	s.ScheduleArn = &v
+	return s
+}
+
+// SetScheduleName sets the ScheduleName field's value.
+func (s *UpdateBusinessReportScheduleInput) SetScheduleName(v string) *UpdateBusinessReportScheduleInput {
+	s.ScheduleName = &v
+	return s
+}
+
+type UpdateBusinessReportScheduleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateBusinessReportScheduleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateBusinessReportScheduleOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateConferenceProviderInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the conference provider.
+	//
+	// ConferenceProviderArn is a required field
+	ConferenceProviderArn *string `type:"string" required:"true"`
+
+	// The type of the conference provider.
+	//
+	// ConferenceProviderType is a required field
+	ConferenceProviderType *string `type:"string" required:"true" enum:"ConferenceProviderType"`
+
+	// The IP endpoint and protocol for calling.
+	IPDialIn *IPDialIn `type:"structure"`
+
+	// The meeting settings for the conference provider.
+	//
+	// MeetingSetting is a required field
+	MeetingSetting *MeetingSetting `type:"structure" required:"true"`
+
+	// The information for PSTN conferencing.
+	PSTNDialIn *PSTNDialIn `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateConferenceProviderInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateConferenceProviderInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateConferenceProviderInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateConferenceProviderInput"}
+	if s.ConferenceProviderArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferenceProviderArn"))
+	}
+	if s.ConferenceProviderType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConferenceProviderType"))
+	}
+	if s.MeetingSetting == nil {
+		invalidParams.Add(request.NewErrParamRequired("MeetingSetting"))
+	}
+	if s.IPDialIn != nil {
+		if err := s.IPDialIn.Validate(); err != nil {
+			invalidParams.AddNested("IPDialIn", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.MeetingSetting != nil {
+		if err := s.MeetingSetting.Validate(); err != nil {
+			invalidParams.AddNested("MeetingSetting", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PSTNDialIn != nil {
+		if err := s.PSTNDialIn.Validate(); err != nil {
+			invalidParams.AddNested("PSTNDialIn", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConferenceProviderArn sets the ConferenceProviderArn field's value.
+func (s *UpdateConferenceProviderInput) SetConferenceProviderArn(v string) *UpdateConferenceProviderInput {
+	s.ConferenceProviderArn = &v
+	return s
+}
+
+// SetConferenceProviderType sets the ConferenceProviderType field's value.
+func (s *UpdateConferenceProviderInput) SetConferenceProviderType(v string) *UpdateConferenceProviderInput {
+	s.ConferenceProviderType = &v
+	return s
+}
+
+// SetIPDialIn sets the IPDialIn field's value.
+func (s *UpdateConferenceProviderInput) SetIPDialIn(v *IPDialIn) *UpdateConferenceProviderInput {
+	s.IPDialIn = v
+	return s
+}
+
+// SetMeetingSetting sets the MeetingSetting field's value.
+func (s *UpdateConferenceProviderInput) SetMeetingSetting(v *MeetingSetting) *UpdateConferenceProviderInput {
+	s.MeetingSetting = v
+	return s
+}
+
+// SetPSTNDialIn sets the PSTNDialIn field's value.
+func (s *UpdateConferenceProviderInput) SetPSTNDialIn(v *PSTNDialIn) *UpdateConferenceProviderInput {
+	s.PSTNDialIn = v
+	return s
+}
+
+type UpdateConferenceProviderOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateConferenceProviderOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateConferenceProviderOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateContactInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9182,7 +14487,7 @@ type UpdateContactInput struct {
 	LastName *string `min:"1" type:"string"`
 
 	// The updated phone number of the contact.
-	PhoneNumber *string `type:"string"`
+	PhoneNumber *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -9329,6 +14634,10 @@ type UpdateProfileInput struct {
 	// The updated distance unit for the room profile.
 	DistanceUnit *string `type:"string" enum:"DistanceUnit"`
 
+	// Sets the profile as default if selected. If this is missing, no update is
+	// done to the default status.
+	IsDefault *bool `type:"boolean"`
+
 	// The updated maximum volume limit for the room profile.
 	MaxVolumeLimit *int64 `type:"integer"`
 
@@ -9392,6 +14701,12 @@ func (s *UpdateProfileInput) SetAddress(v string) *UpdateProfileInput {
 // SetDistanceUnit sets the DistanceUnit field's value.
 func (s *UpdateProfileInput) SetDistanceUnit(v string) *UpdateProfileInput {
 	s.DistanceUnit = &v
+	return s
+}
+
+// SetIsDefault sets the IsDefault field's value.
+func (s *UpdateProfileInput) SetIsDefault(v bool) *UpdateProfileInput {
+	s.IsDefault = &v
 	return s
 }
 
@@ -9687,6 +15002,87 @@ func (s *UserData) SetUserArn(v string) *UserData {
 }
 
 const (
+	// BusinessReportFailureCodeAccessDenied is a BusinessReportFailureCode enum value
+	BusinessReportFailureCodeAccessDenied = "ACCESS_DENIED"
+
+	// BusinessReportFailureCodeNoSuchBucket is a BusinessReportFailureCode enum value
+	BusinessReportFailureCodeNoSuchBucket = "NO_SUCH_BUCKET"
+
+	// BusinessReportFailureCodeInternalFailure is a BusinessReportFailureCode enum value
+	BusinessReportFailureCodeInternalFailure = "INTERNAL_FAILURE"
+)
+
+const (
+	// BusinessReportFormatCsv is a BusinessReportFormat enum value
+	BusinessReportFormatCsv = "CSV"
+
+	// BusinessReportFormatCsvZip is a BusinessReportFormat enum value
+	BusinessReportFormatCsvZip = "CSV_ZIP"
+)
+
+const (
+	// BusinessReportIntervalOneDay is a BusinessReportInterval enum value
+	BusinessReportIntervalOneDay = "ONE_DAY"
+
+	// BusinessReportIntervalOneWeek is a BusinessReportInterval enum value
+	BusinessReportIntervalOneWeek = "ONE_WEEK"
+)
+
+const (
+	// BusinessReportStatusRunning is a BusinessReportStatus enum value
+	BusinessReportStatusRunning = "RUNNING"
+
+	// BusinessReportStatusSucceeded is a BusinessReportStatus enum value
+	BusinessReportStatusSucceeded = "SUCCEEDED"
+
+	// BusinessReportStatusFailed is a BusinessReportStatus enum value
+	BusinessReportStatusFailed = "FAILED"
+)
+
+const (
+	// CommsProtocolSip is a CommsProtocol enum value
+	CommsProtocolSip = "SIP"
+
+	// CommsProtocolSips is a CommsProtocol enum value
+	CommsProtocolSips = "SIPS"
+
+	// CommsProtocolH323 is a CommsProtocol enum value
+	CommsProtocolH323 = "H323"
+)
+
+const (
+	// ConferenceProviderTypeChime is a ConferenceProviderType enum value
+	ConferenceProviderTypeChime = "CHIME"
+
+	// ConferenceProviderTypeBluejeans is a ConferenceProviderType enum value
+	ConferenceProviderTypeBluejeans = "BLUEJEANS"
+
+	// ConferenceProviderTypeFuze is a ConferenceProviderType enum value
+	ConferenceProviderTypeFuze = "FUZE"
+
+	// ConferenceProviderTypeGoogleHangouts is a ConferenceProviderType enum value
+	ConferenceProviderTypeGoogleHangouts = "GOOGLE_HANGOUTS"
+
+	// ConferenceProviderTypePolycom is a ConferenceProviderType enum value
+	ConferenceProviderTypePolycom = "POLYCOM"
+
+	// ConferenceProviderTypeRingcentral is a ConferenceProviderType enum value
+	ConferenceProviderTypeRingcentral = "RINGCENTRAL"
+
+	// ConferenceProviderTypeSkypeForBusiness is a ConferenceProviderType enum value
+	ConferenceProviderTypeSkypeForBusiness = "SKYPE_FOR_BUSINESS"
+
+	// ConferenceProviderTypeWebex is a ConferenceProviderType enum value
+	ConferenceProviderTypeWebex = "WEBEX"
+
+	// ConferenceProviderTypeZoom is a ConferenceProviderType enum value
+	ConferenceProviderTypeZoom = "ZOOM"
+
+	// ConferenceProviderTypeCustom is a ConferenceProviderType enum value
+	ConferenceProviderTypeCustom = "CUSTOM"
+)
+
+const (
 	// ConnectionStatusOnline is a ConnectionStatus enum value
 	ConnectionStatusOnline = "ONLINE"
 
@@ -9733,6 +15129,22 @@ const (
 )
 
 const (
+	// EnablementTypeEnabled is a EnablementType enum value
+	EnablementTypeEnabled = "ENABLED"
+
+	// EnablementTypePending is a EnablementType enum value
+	EnablementTypePending = "PENDING"
+)
+
+const (
+	// EnablementTypeFilterEnabled is a EnablementTypeFilter enum value
+	EnablementTypeFilterEnabled = "ENABLED"
+
+	// EnablementTypeFilterPending is a EnablementTypeFilter enum value
+	EnablementTypeFilterPending = "PENDING"
+)
+
+const (
 	// EnrollmentStatusInitialized is a EnrollmentStatus enum value
 	EnrollmentStatusInitialized = "INITIALIZED"
 
@@ -9767,6 +15179,36 @@ const (
 
 	// FeatureAll is a Feature enum value
 	FeatureAll = "ALL"
+)
+
+const (
+	// RequirePinYes is a RequirePin enum value
+	RequirePinYes = "YES"
+
+	// RequirePinNo is a RequirePin enum value
+	RequirePinNo = "NO"
+
+	// RequirePinOptional is a RequirePin enum value
+	RequirePinOptional = "OPTIONAL"
+)
+
+const (
+	// SkillTypePublic is a SkillType enum value
+	SkillTypePublic = "PUBLIC"
+
+	// SkillTypePrivate is a SkillType enum value
+	SkillTypePrivate = "PRIVATE"
+)
+
+const (
+	// SkillTypeFilterPublic is a SkillTypeFilter enum value
+	SkillTypeFilterPublic = "PUBLIC"
+
+	// SkillTypeFilterPrivate is a SkillTypeFilter enum value
+	SkillTypeFilterPrivate = "PRIVATE"
+
+	// SkillTypeFilterAll is a SkillTypeFilter enum value
+	SkillTypeFilterAll = "ALL"
 )
 
 const (

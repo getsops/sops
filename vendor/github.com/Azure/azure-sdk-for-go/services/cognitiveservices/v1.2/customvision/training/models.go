@@ -23,6 +23,9 @@ import (
 	"github.com/satori/go.uuid"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.2/customvision/training"
+
 // DomainType enumerates the values for domain type.
 type DomainType string
 
@@ -484,7 +487,7 @@ type Project struct {
 	Settings *ProjectSettings `json:"settings,omitempty"`
 	// Created - Gets the date this project was created
 	Created *date.Time `json:"created,omitempty"`
-	// LastModified - Gets the date this project was last modifed
+	// LastModified - Gets the date this project was last modified
 	LastModified *date.Time `json:"lastModified,omitempty"`
 	// ThumbnailURI - Gets the thumbnail url representing the project
 	ThumbnailURI *string `json:"thumbnailUri,omitempty"`

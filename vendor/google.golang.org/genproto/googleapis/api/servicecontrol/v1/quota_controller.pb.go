@@ -52,7 +52,6 @@ var QuotaOperation_QuotaMode_name = map[int32]string{
 	2: "BEST_EFFORT",
 	3: "CHECK_ONLY",
 }
-
 var QuotaOperation_QuotaMode_value = map[string]int32{
 	"UNSPECIFIED": 0,
 	"NORMAL":      1,
@@ -63,9 +62,8 @@ var QuotaOperation_QuotaMode_value = map[string]int32{
 func (x QuotaOperation_QuotaMode) String() string {
 	return proto.EnumName(QuotaOperation_QuotaMode_name, int32(x))
 }
-
 func (QuotaOperation_QuotaMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_4401e348913df3b0, []int{1, 0}
+	return fileDescriptor_quota_controller_5358e5cb4c246776, []int{1, 0}
 }
 
 // Error codes related to project config validations are deprecated since the
@@ -100,7 +98,6 @@ var QuotaError_Code_name = map[int32]string{
 	105: "API_KEY_INVALID",
 	112: "API_KEY_EXPIRED",
 }
-
 var QuotaError_Code_value = map[string]int32{
 	"UNSPECIFIED":        0,
 	"RESOURCE_EXHAUSTED": 8,
@@ -113,9 +110,8 @@ var QuotaError_Code_value = map[string]int32{
 func (x QuotaError_Code) String() string {
 	return proto.EnumName(QuotaError_Code_name, int32(x))
 }
-
 func (QuotaError_Code) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_4401e348913df3b0, []int{3, 0}
+	return fileDescriptor_quota_controller_5358e5cb4c246776, []int{3, 0}
 }
 
 // Request message for the AllocateQuota method.
@@ -140,7 +136,7 @@ func (m *AllocateQuotaRequest) Reset()         { *m = AllocateQuotaRequest{} }
 func (m *AllocateQuotaRequest) String() string { return proto.CompactTextString(m) }
 func (*AllocateQuotaRequest) ProtoMessage()    {}
 func (*AllocateQuotaRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4401e348913df3b0, []int{0}
+	return fileDescriptor_quota_controller_5358e5cb4c246776, []int{0}
 }
 func (m *AllocateQuotaRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AllocateQuotaRequest.Unmarshal(m, b)
@@ -148,8 +144,8 @@ func (m *AllocateQuotaRequest) XXX_Unmarshal(b []byte) error {
 func (m *AllocateQuotaRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AllocateQuotaRequest.Marshal(b, m, deterministic)
 }
-func (m *AllocateQuotaRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AllocateQuotaRequest.Merge(m, src)
+func (dst *AllocateQuotaRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AllocateQuotaRequest.Merge(dst, src)
 }
 func (m *AllocateQuotaRequest) XXX_Size() int {
 	return xxx_messageInfo_AllocateQuotaRequest.Size(m)
@@ -231,7 +227,7 @@ func (m *QuotaOperation) Reset()         { *m = QuotaOperation{} }
 func (m *QuotaOperation) String() string { return proto.CompactTextString(m) }
 func (*QuotaOperation) ProtoMessage()    {}
 func (*QuotaOperation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4401e348913df3b0, []int{1}
+	return fileDescriptor_quota_controller_5358e5cb4c246776, []int{1}
 }
 func (m *QuotaOperation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QuotaOperation.Unmarshal(m, b)
@@ -239,8 +235,8 @@ func (m *QuotaOperation) XXX_Unmarshal(b []byte) error {
 func (m *QuotaOperation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QuotaOperation.Marshal(b, m, deterministic)
 }
-func (m *QuotaOperation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuotaOperation.Merge(m, src)
+func (dst *QuotaOperation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuotaOperation.Merge(dst, src)
 }
 func (m *QuotaOperation) XXX_Size() int {
 	return xxx_messageInfo_QuotaOperation.Size(m)
@@ -322,7 +318,7 @@ func (m *AllocateQuotaResponse) Reset()         { *m = AllocateQuotaResponse{} }
 func (m *AllocateQuotaResponse) String() string { return proto.CompactTextString(m) }
 func (*AllocateQuotaResponse) ProtoMessage()    {}
 func (*AllocateQuotaResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4401e348913df3b0, []int{2}
+	return fileDescriptor_quota_controller_5358e5cb4c246776, []int{2}
 }
 func (m *AllocateQuotaResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AllocateQuotaResponse.Unmarshal(m, b)
@@ -330,8 +326,8 @@ func (m *AllocateQuotaResponse) XXX_Unmarshal(b []byte) error {
 func (m *AllocateQuotaResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AllocateQuotaResponse.Marshal(b, m, deterministic)
 }
-func (m *AllocateQuotaResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AllocateQuotaResponse.Merge(m, src)
+func (dst *AllocateQuotaResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AllocateQuotaResponse.Merge(dst, src)
 }
 func (m *AllocateQuotaResponse) XXX_Size() int {
 	return xxx_messageInfo_AllocateQuotaResponse.Size(m)
@@ -389,7 +385,7 @@ func (m *QuotaError) Reset()         { *m = QuotaError{} }
 func (m *QuotaError) String() string { return proto.CompactTextString(m) }
 func (*QuotaError) ProtoMessage()    {}
 func (*QuotaError) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4401e348913df3b0, []int{3}
+	return fileDescriptor_quota_controller_5358e5cb4c246776, []int{3}
 }
 func (m *QuotaError) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QuotaError.Unmarshal(m, b)
@@ -397,8 +393,8 @@ func (m *QuotaError) XXX_Unmarshal(b []byte) error {
 func (m *QuotaError) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_QuotaError.Marshal(b, m, deterministic)
 }
-func (m *QuotaError) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuotaError.Merge(m, src)
+func (dst *QuotaError) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuotaError.Merge(dst, src)
 }
 func (m *QuotaError) XXX_Size() int {
 	return xxx_messageInfo_QuotaError.Size(m)
@@ -535,10 +531,10 @@ var _QuotaController_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/api/servicecontrol/v1/quota_controller.proto", fileDescriptor_4401e348913df3b0)
+	proto.RegisterFile("google/api/servicecontrol/v1/quota_controller.proto", fileDescriptor_quota_controller_5358e5cb4c246776)
 }
 
-var fileDescriptor_4401e348913df3b0 = []byte{
+var fileDescriptor_quota_controller_5358e5cb4c246776 = []byte{
 	// 775 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0xc1, 0x6e, 0xea, 0x46,
 	0x14, 0xed, 0x18, 0x42, 0x9b, 0xeb, 0x04, 0x9c, 0x69, 0x5a, 0x59, 0x28, 0x52, 0x28, 0x2b, 0x1a,

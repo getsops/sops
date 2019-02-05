@@ -63,7 +63,6 @@ var BotStatus_name = map[int32]string{
 	3: "HOST_REBOOTING",
 	4: "BOT_TERMINATING",
 }
-
 var BotStatus_value = map[string]int32{
 	"BOT_STATUS_UNSPECIFIED": 0,
 	"OK":                     1,
@@ -75,9 +74,8 @@ var BotStatus_value = map[string]int32{
 func (x BotStatus) String() string {
 	return proto.EnumName(BotStatus_name, int32(x))
 }
-
 func (BotStatus) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{0}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{0}
 }
 
 // The state of the lease. All leases start in the PENDING state. A bot can
@@ -110,7 +108,6 @@ var LeaseState_name = map[int32]string{
 	4: "COMPLETED",
 	5: "CANCELLED",
 }
-
 var LeaseState_value = map[string]int32{
 	"LEASE_STATE_UNSPECIFIED": 0,
 	"PENDING":                 1,
@@ -122,9 +119,8 @@ var LeaseState_value = map[string]int32{
 func (x LeaseState) String() string {
 	return proto.EnumName(LeaseState_name, int32(x))
 }
-
 func (LeaseState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{1}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{1}
 }
 
 // Possible administration actions.
@@ -154,7 +150,6 @@ var AdminTemp_Command_name = map[int32]string{
 	3: "BOT_TERMINATE",
 	4: "HOST_RESTART",
 }
-
 var AdminTemp_Command_value = map[string]int32{
 	"UNSPECIFIED":   0,
 	"BOT_UPDATE":    1,
@@ -166,9 +161,8 @@ var AdminTemp_Command_value = map[string]int32{
 func (x AdminTemp_Command) String() string {
 	return proto.EnumName(AdminTemp_Command_name, int32(x))
 }
-
 func (AdminTemp_Command) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{2, 0}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{2, 0}
 }
 
 // Types of bot events.
@@ -188,7 +182,6 @@ var PostBotEventTempRequest_Type_name = map[int32]string{
 	1: "INFO",
 	2: "ERROR",
 }
-
 var PostBotEventTempRequest_Type_value = map[string]int32{
 	"UNSPECIFIED": 0,
 	"INFO":        1,
@@ -198,9 +191,8 @@ var PostBotEventTempRequest_Type_value = map[string]int32{
 func (x PostBotEventTempRequest_Type) String() string {
 	return proto.EnumName(PostBotEventTempRequest_Type_name, int32(x))
 }
-
 func (PostBotEventTempRequest_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{5, 0}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{5, 0}
 }
 
 // A bot session represents the state of a bot while in continuous contact with
@@ -259,7 +251,7 @@ func (m *BotSession) Reset()         { *m = BotSession{} }
 func (m *BotSession) String() string { return proto.CompactTextString(m) }
 func (*BotSession) ProtoMessage()    {}
 func (*BotSession) Descriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{0}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{0}
 }
 func (m *BotSession) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BotSession.Unmarshal(m, b)
@@ -267,8 +259,8 @@ func (m *BotSession) XXX_Unmarshal(b []byte) error {
 func (m *BotSession) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_BotSession.Marshal(b, m, deterministic)
 }
-func (m *BotSession) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BotSession.Merge(m, src)
+func (dst *BotSession) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BotSession.Merge(dst, src)
 }
 func (m *BotSession) XXX_Size() int {
 	return xxx_messageInfo_BotSession.Size(m)
@@ -391,7 +383,7 @@ func (m *Lease) Reset()         { *m = Lease{} }
 func (m *Lease) String() string { return proto.CompactTextString(m) }
 func (*Lease) ProtoMessage()    {}
 func (*Lease) Descriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{1}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{1}
 }
 func (m *Lease) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Lease.Unmarshal(m, b)
@@ -399,8 +391,8 @@ func (m *Lease) XXX_Unmarshal(b []byte) error {
 func (m *Lease) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Lease.Marshal(b, m, deterministic)
 }
-func (m *Lease) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Lease.Merge(m, src)
+func (dst *Lease) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Lease.Merge(dst, src)
 }
 func (m *Lease) XXX_Size() int {
 	return xxx_messageInfo_Lease.Size(m)
@@ -502,7 +494,7 @@ func (m *AdminTemp) Reset()         { *m = AdminTemp{} }
 func (m *AdminTemp) String() string { return proto.CompactTextString(m) }
 func (*AdminTemp) ProtoMessage()    {}
 func (*AdminTemp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{2}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{2}
 }
 func (m *AdminTemp) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AdminTemp.Unmarshal(m, b)
@@ -510,8 +502,8 @@ func (m *AdminTemp) XXX_Unmarshal(b []byte) error {
 func (m *AdminTemp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AdminTemp.Marshal(b, m, deterministic)
 }
-func (m *AdminTemp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AdminTemp.Merge(m, src)
+func (dst *AdminTemp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AdminTemp.Merge(dst, src)
 }
 func (m *AdminTemp) XXX_Size() int {
 	return xxx_messageInfo_AdminTemp.Size(m)
@@ -551,7 +543,7 @@ func (m *CreateBotSessionRequest) Reset()         { *m = CreateBotSessionRequest
 func (m *CreateBotSessionRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateBotSessionRequest) ProtoMessage()    {}
 func (*CreateBotSessionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{3}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{3}
 }
 func (m *CreateBotSessionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateBotSessionRequest.Unmarshal(m, b)
@@ -559,8 +551,8 @@ func (m *CreateBotSessionRequest) XXX_Unmarshal(b []byte) error {
 func (m *CreateBotSessionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_CreateBotSessionRequest.Marshal(b, m, deterministic)
 }
-func (m *CreateBotSessionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CreateBotSessionRequest.Merge(m, src)
+func (dst *CreateBotSessionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateBotSessionRequest.Merge(dst, src)
 }
 func (m *CreateBotSessionRequest) XXX_Size() int {
 	return xxx_messageInfo_CreateBotSessionRequest.Size(m)
@@ -603,7 +595,7 @@ func (m *UpdateBotSessionRequest) Reset()         { *m = UpdateBotSessionRequest
 func (m *UpdateBotSessionRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateBotSessionRequest) ProtoMessage()    {}
 func (*UpdateBotSessionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{4}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{4}
 }
 func (m *UpdateBotSessionRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateBotSessionRequest.Unmarshal(m, b)
@@ -611,8 +603,8 @@ func (m *UpdateBotSessionRequest) XXX_Unmarshal(b []byte) error {
 func (m *UpdateBotSessionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_UpdateBotSessionRequest.Marshal(b, m, deterministic)
 }
-func (m *UpdateBotSessionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateBotSessionRequest.Merge(m, src)
+func (dst *UpdateBotSessionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateBotSessionRequest.Merge(dst, src)
 }
 func (m *UpdateBotSessionRequest) XXX_Size() int {
 	return xxx_messageInfo_UpdateBotSessionRequest.Size(m)
@@ -661,7 +653,7 @@ func (m *PostBotEventTempRequest) Reset()         { *m = PostBotEventTempRequest
 func (m *PostBotEventTempRequest) String() string { return proto.CompactTextString(m) }
 func (*PostBotEventTempRequest) ProtoMessage()    {}
 func (*PostBotEventTempRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_129e24cb0c941ff8, []int{5}
+	return fileDescriptor_bots_a76feaae86db3e89, []int{5}
 }
 func (m *PostBotEventTempRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PostBotEventTempRequest.Unmarshal(m, b)
@@ -669,8 +661,8 @@ func (m *PostBotEventTempRequest) XXX_Unmarshal(b []byte) error {
 func (m *PostBotEventTempRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_PostBotEventTempRequest.Marshal(b, m, deterministic)
 }
-func (m *PostBotEventTempRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PostBotEventTempRequest.Merge(m, src)
+func (dst *PostBotEventTempRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PostBotEventTempRequest.Merge(dst, src)
 }
 func (m *PostBotEventTempRequest) XXX_Size() int {
 	return xxx_messageInfo_PostBotEventTempRequest.Size(m)
@@ -874,10 +866,10 @@ var _Bots_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/remoteworkers/v1test2/bots.proto", fileDescriptor_129e24cb0c941ff8)
+	proto.RegisterFile("google/devtools/remoteworkers/v1test2/bots.proto", fileDescriptor_bots_a76feaae86db3e89)
 }
 
-var fileDescriptor_129e24cb0c941ff8 = []byte{
+var fileDescriptor_bots_a76feaae86db3e89 = []byte{
 	// 1075 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xdd, 0x8e, 0xdb, 0x44,
 	0x14, 0xc6, 0xce, 0x5f, 0x73, 0xd2, 0xa6, 0xee, 0x00, 0x5d, 0x93, 0x22, 0x11, 0x59, 0xaa, 0xb4,

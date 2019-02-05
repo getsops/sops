@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewRelationshipLinksClientWithBaseURI(baseURI string, subscriptionID string
 // relationshipLinkName - the name of the relationship link.
 // parameters - parameters supplied to the CreateOrUpdate relationship link operation.
 func (client RelationshipLinksClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string, parameters RelationshipLinkResourceFormat) (result RelationshipLinksCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RelationshipLinksClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: relationshipLinkName,
 			Constraints: []validation.Constraint{{Target: "relationshipLinkName", Name: validation.MaxLength, Rule: 512, Chain: nil},
@@ -112,10 +123,6 @@ func (client RelationshipLinksClient) CreateOrUpdateSender(req *http.Request) (f
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -139,6 +146,16 @@ func (client RelationshipLinksClient) CreateOrUpdateResponder(resp *http.Respons
 // hubName - the name of the hub.
 // relationshipLinkName - the name of the relationship.
 func (client RelationshipLinksClient) Delete(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string) (result RelationshipLinksDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RelationshipLinksClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, hubName, relationshipLinkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.RelationshipLinksClient", "Delete", nil, "Failure preparing request")
@@ -185,10 +202,6 @@ func (client RelationshipLinksClient) DeleteSender(req *http.Request) (future Re
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,6 +224,16 @@ func (client RelationshipLinksClient) DeleteResponder(resp *http.Response) (resu
 // hubName - the name of the hub.
 // relationshipLinkName - the name of the relationship link.
 func (client RelationshipLinksClient) Get(ctx context.Context, resourceGroupName string, hubName string, relationshipLinkName string) (result RelationshipLinkResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RelationshipLinksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hubName, relationshipLinkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.RelationshipLinksClient", "Get", nil, "Failure preparing request")
@@ -279,6 +302,16 @@ func (client RelationshipLinksClient) GetResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 func (client RelationshipLinksClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string) (result RelationshipLinkListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RelationshipLinksClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.rllr.Response.Response != nil {
+				sc = result.rllr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName)
 	if err != nil {
@@ -343,8 +376,8 @@ func (client RelationshipLinksClient) ListByHubResponder(resp *http.Response) (r
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client RelationshipLinksClient) listByHubNextResults(lastResults RelationshipLinkListResult) (result RelationshipLinkListResult, err error) {
-	req, err := lastResults.relationshipLinkListResultPreparer()
+func (client RelationshipLinksClient) listByHubNextResults(ctx context.Context, lastResults RelationshipLinkListResult) (result RelationshipLinkListResult, err error) {
+	req, err := lastResults.relationshipLinkListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.RelationshipLinksClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -365,6 +398,16 @@ func (client RelationshipLinksClient) listByHubNextResults(lastResults Relations
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RelationshipLinksClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string) (result RelationshipLinkListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RelationshipLinksClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName)
 	return
 }

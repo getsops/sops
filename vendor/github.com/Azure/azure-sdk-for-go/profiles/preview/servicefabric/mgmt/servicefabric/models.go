@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,17 +21,10 @@ package servicefabric
 
 import original "github.com/Azure/azure-sdk-for-go/services/servicefabric/mgmt/2018-02-01/servicefabric"
 
-type ApplicationsClient = original.ApplicationsClient
-type ApplicationTypesClient = original.ApplicationTypesClient
-type ApplicationTypeVersionsClient = original.ApplicationTypeVersionsClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ClustersClient = original.ClustersClient
-type ClusterVersionsClient = original.ClusterVersionsClient
 type ClusterState = original.ClusterState
 
 const (
@@ -225,21 +218,29 @@ type ApplicationResourceList = original.ApplicationResourceList
 type ApplicationResourceProperties = original.ApplicationResourceProperties
 type ApplicationResourceUpdate = original.ApplicationResourceUpdate
 type ApplicationResourceUpdateProperties = original.ApplicationResourceUpdateProperties
-type ApplicationsCreateFuture = original.ApplicationsCreateFuture
-type ApplicationsDeleteFuture = original.ApplicationsDeleteFuture
-type ApplicationsUpdateFuture = original.ApplicationsUpdateFuture
 type ApplicationTypeResource = original.ApplicationTypeResource
 type ApplicationTypeResourceList = original.ApplicationTypeResourceList
 type ApplicationTypeResourceProperties = original.ApplicationTypeResourceProperties
-type ApplicationTypesDeleteFuture = original.ApplicationTypesDeleteFuture
 type ApplicationTypeVersionResource = original.ApplicationTypeVersionResource
 type ApplicationTypeVersionResourceList = original.ApplicationTypeVersionResourceList
 type ApplicationTypeVersionResourceProperties = original.ApplicationTypeVersionResourceProperties
+type ApplicationTypeVersionsClient = original.ApplicationTypeVersionsClient
 type ApplicationTypeVersionsCreateFuture = original.ApplicationTypeVersionsCreateFuture
 type ApplicationTypeVersionsDeleteFuture = original.ApplicationTypeVersionsDeleteFuture
+type ApplicationTypesClient = original.ApplicationTypesClient
+type ApplicationTypesDeleteFuture = original.ApplicationTypesDeleteFuture
 type ApplicationUpgradePolicy = original.ApplicationUpgradePolicy
+type ApplicationsClient = original.ApplicationsClient
+type ApplicationsCreateFuture = original.ApplicationsCreateFuture
+type ApplicationsDeleteFuture = original.ApplicationsDeleteFuture
+type ApplicationsUpdateFuture = original.ApplicationsUpdateFuture
 type AvailableOperationDisplay = original.AvailableOperationDisplay
 type AzureActiveDirectory = original.AzureActiveDirectory
+type BaseClient = original.BaseClient
+type BasicPartitionSchemeDescription = original.BasicPartitionSchemeDescription
+type BasicServicePlacementPolicyDescription = original.BasicServicePlacementPolicyDescription
+type BasicServiceResourceProperties = original.BasicServiceResourceProperties
+type BasicServiceResourceUpdateProperties = original.BasicServiceResourceUpdateProperties
 type CertificateDescription = original.CertificateDescription
 type ClientCertificateCommonName = original.ClientCertificateCommonName
 type ClientCertificateThumbprint = original.ClientCertificateThumbprint
@@ -250,12 +251,14 @@ type ClusterHealthPolicy = original.ClusterHealthPolicy
 type ClusterListResult = original.ClusterListResult
 type ClusterProperties = original.ClusterProperties
 type ClusterPropertiesUpdateParameters = original.ClusterPropertiesUpdateParameters
-type ClustersCreateFuture = original.ClustersCreateFuture
-type ClustersUpdateFuture = original.ClustersUpdateFuture
 type ClusterUpdateParameters = original.ClusterUpdateParameters
 type ClusterUpgradeDeltaHealthPolicy = original.ClusterUpgradeDeltaHealthPolicy
 type ClusterUpgradePolicy = original.ClusterUpgradePolicy
 type ClusterVersionDetails = original.ClusterVersionDetails
+type ClusterVersionsClient = original.ClusterVersionsClient
+type ClustersClient = original.ClustersClient
+type ClustersCreateFuture = original.ClustersCreateFuture
+type ClustersUpdateFuture = original.ClustersUpdateFuture
 type DiagnosticsStorageAccountConfig = original.DiagnosticsStorageAccountConfig
 type EndpointRangeDescription = original.EndpointRangeDescription
 type ErrorModel = original.ErrorModel
@@ -266,7 +269,7 @@ type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
 type OperationResult = original.OperationResult
-type BasicPartitionSchemeDescription = original.BasicPartitionSchemeDescription
+type OperationsClient = original.OperationsClient
 type PartitionSchemeDescription = original.PartitionSchemeDescription
 type ProxyResource = original.ProxyResource
 type Resource = original.Resource
@@ -275,21 +278,19 @@ type ServerCertificateCommonName = original.ServerCertificateCommonName
 type ServerCertificateCommonNames = original.ServerCertificateCommonNames
 type ServiceCorrelationDescription = original.ServiceCorrelationDescription
 type ServiceLoadMetricDescription = original.ServiceLoadMetricDescription
-type BasicServicePlacementPolicyDescription = original.BasicServicePlacementPolicyDescription
 type ServicePlacementPolicyDescription = original.ServicePlacementPolicyDescription
 type ServiceResource = original.ServiceResource
 type ServiceResourceList = original.ServiceResourceList
-type BasicServiceResourceProperties = original.BasicServiceResourceProperties
 type ServiceResourceProperties = original.ServiceResourceProperties
 type ServiceResourcePropertiesBase = original.ServiceResourcePropertiesBase
 type ServiceResourceUpdate = original.ServiceResourceUpdate
-type BasicServiceResourceUpdateProperties = original.BasicServiceResourceUpdateProperties
 type ServiceResourceUpdateProperties = original.ServiceResourceUpdateProperties
+type ServiceTypeDeltaHealthPolicy = original.ServiceTypeDeltaHealthPolicy
+type ServiceTypeHealthPolicy = original.ServiceTypeHealthPolicy
+type ServicesClient = original.ServicesClient
 type ServicesCreateFuture = original.ServicesCreateFuture
 type ServicesDeleteFuture = original.ServicesDeleteFuture
 type ServicesUpdateFuture = original.ServicesUpdateFuture
-type ServiceTypeDeltaHealthPolicy = original.ServiceTypeDeltaHealthPolicy
-type ServiceTypeHealthPolicy = original.ServiceTypeHealthPolicy
 type SettingsParameterDescription = original.SettingsParameterDescription
 type SettingsSectionDescription = original.SettingsSectionDescription
 type SingletonPartitionSchemeDescription = original.SingletonPartitionSchemeDescription
@@ -298,20 +299,9 @@ type StatefulServiceUpdateProperties = original.StatefulServiceUpdateProperties
 type StatelessServiceProperties = original.StatelessServiceProperties
 type StatelessServiceUpdateProperties = original.StatelessServiceUpdateProperties
 type UniformInt64RangePartitionSchemeDescription = original.UniformInt64RangePartitionSchemeDescription
-type OperationsClient = original.OperationsClient
-type ServicesClient = original.ServicesClient
 
-func NewApplicationsClient(subscriptionID string) ApplicationsClient {
-	return original.NewApplicationsClient(subscriptionID)
-}
-func NewApplicationsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationsClient {
-	return original.NewApplicationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewApplicationTypesClient(subscriptionID string) ApplicationTypesClient {
-	return original.NewApplicationTypesClient(subscriptionID)
-}
-func NewApplicationTypesClientWithBaseURI(baseURI string, subscriptionID string) ApplicationTypesClient {
-	return original.NewApplicationTypesClientWithBaseURI(baseURI, subscriptionID)
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
 }
 func NewApplicationTypeVersionsClient(subscriptionID string) ApplicationTypeVersionsClient {
 	return original.NewApplicationTypeVersionsClient(subscriptionID)
@@ -319,11 +309,23 @@ func NewApplicationTypeVersionsClient(subscriptionID string) ApplicationTypeVers
 func NewApplicationTypeVersionsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationTypeVersionsClient {
 	return original.NewApplicationTypeVersionsClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewApplicationTypesClient(subscriptionID string) ApplicationTypesClient {
+	return original.NewApplicationTypesClient(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewApplicationTypesClientWithBaseURI(baseURI string, subscriptionID string) ApplicationTypesClient {
+	return original.NewApplicationTypesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewApplicationsClient(subscriptionID string) ApplicationsClient {
+	return original.NewApplicationsClient(subscriptionID)
+}
+func NewApplicationsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationsClient {
+	return original.NewApplicationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewClusterVersionsClient(subscriptionID string) ClusterVersionsClient {
+	return original.NewClusterVersionsClient(subscriptionID)
+}
+func NewClusterVersionsClientWithBaseURI(baseURI string, subscriptionID string) ClusterVersionsClient {
+	return original.NewClusterVersionsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewClustersClient(subscriptionID string) ClustersClient {
 	return original.NewClustersClient(subscriptionID)
@@ -331,11 +333,20 @@ func NewClustersClient(subscriptionID string) ClustersClient {
 func NewClustersClientWithBaseURI(baseURI string, subscriptionID string) ClustersClient {
 	return original.NewClustersClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewClusterVersionsClient(subscriptionID string) ClusterVersionsClient {
-	return original.NewClusterVersionsClient(subscriptionID)
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
 }
-func NewClusterVersionsClientWithBaseURI(baseURI string, subscriptionID string) ClusterVersionsClient {
-	return original.NewClusterVersionsClientWithBaseURI(baseURI, subscriptionID)
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewServicesClient(subscriptionID string) ServicesClient {
+	return original.NewServicesClient(subscriptionID)
+}
+func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) ServicesClient {
+	return original.NewServicesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleClusterStateValues() []ClusterState {
 	return original.PossibleClusterStateValues()
@@ -349,32 +360,32 @@ func PossibleEnvironmentValues() []Environment {
 func PossibleMoveCostValues() []MoveCost {
 	return original.PossibleMoveCostValues()
 }
-func PossiblePartitionSchemeValues() []PartitionScheme {
-	return original.PossiblePartitionSchemeValues()
-}
 func PossiblePartitionSchemeBasicPartitionSchemeDescriptionValues() []PartitionSchemeBasicPartitionSchemeDescription {
 	return original.PossiblePartitionSchemeBasicPartitionSchemeDescriptionValues()
+}
+func PossiblePartitionSchemeValues() []PartitionScheme {
+	return original.PossiblePartitionSchemeValues()
 }
 func PossibleProvisioningStateValues() []ProvisioningState {
 	return original.PossibleProvisioningStateValues()
 }
-func PossibleReliabilityLevelValues() []ReliabilityLevel {
-	return original.PossibleReliabilityLevelValues()
-}
 func PossibleReliabilityLevel1Values() []ReliabilityLevel1 {
 	return original.PossibleReliabilityLevel1Values()
 }
+func PossibleReliabilityLevelValues() []ReliabilityLevel {
+	return original.PossibleReliabilityLevelValues()
+}
 func PossibleServiceCorrelationSchemeValues() []ServiceCorrelationScheme {
 	return original.PossibleServiceCorrelationSchemeValues()
-}
-func PossibleServiceKindValues() []ServiceKind {
-	return original.PossibleServiceKindValues()
 }
 func PossibleServiceKindBasicServiceResourcePropertiesValues() []ServiceKindBasicServiceResourceProperties {
 	return original.PossibleServiceKindBasicServiceResourcePropertiesValues()
 }
 func PossibleServiceKindBasicServiceResourceUpdatePropertiesValues() []ServiceKindBasicServiceResourceUpdateProperties {
 	return original.PossibleServiceKindBasicServiceResourceUpdatePropertiesValues()
+}
+func PossibleServiceKindValues() []ServiceKind {
+	return original.PossibleServiceKindValues()
 }
 func PossibleServiceLoadMetricWeightValues() []ServiceLoadMetricWeight {
 	return original.PossibleServiceLoadMetricWeightValues()
@@ -385,29 +396,17 @@ func PossibleServicePlacementPolicyTypeValues() []ServicePlacementPolicyType {
 func PossibleTypeValues() []Type {
 	return original.PossibleTypeValues()
 }
-func PossibleUpgradeModeValues() []UpgradeMode {
-	return original.PossibleUpgradeModeValues()
-}
 func PossibleUpgradeMode1Values() []UpgradeMode1 {
 	return original.PossibleUpgradeMode1Values()
 }
-func PossibleX509StoreNameValues() []X509StoreName {
-	return original.PossibleX509StoreNameValues()
+func PossibleUpgradeModeValues() []UpgradeMode {
+	return original.PossibleUpgradeModeValues()
 }
 func PossibleX509StoreName1Values() []X509StoreName1 {
 	return original.PossibleX509StoreName1Values()
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewServicesClient(subscriptionID string) ServicesClient {
-	return original.NewServicesClient(subscriptionID)
-}
-func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) ServicesClient {
-	return original.NewServicesClientWithBaseURI(baseURI, subscriptionID)
+func PossibleX509StoreNameValues() []X509StoreName {
+	return original.PossibleX509StoreNameValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

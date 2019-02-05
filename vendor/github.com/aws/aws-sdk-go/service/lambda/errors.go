@@ -12,6 +12,8 @@ const (
 
 	// ErrCodeEC2AccessDeniedException for service response error code
 	// "EC2AccessDeniedException".
+	//
+	// Need additional permissions to configure VPC settings.
 	ErrCodeEC2AccessDeniedException = "EC2AccessDeniedException"
 
 	// ErrCodeEC2ThrottledException for service response error code
@@ -72,7 +74,7 @@ const (
 	// ErrCodeInvalidZipFileException for service response error code
 	// "InvalidZipFileException".
 	//
-	// AWS Lambda could not unzip the function zip file.
+	// AWS Lambda could not unzip the deployment package.
 	ErrCodeInvalidZipFileException = "InvalidZipFileException"
 
 	// ErrCodeKMSAccessDeniedException for service response error code
@@ -134,8 +136,8 @@ const (
 	// "ResourceInUseException".
 	//
 	// The operation conflicts with the resource's availability. For example, you
-	// attempted to update an EventSoure Mapping in CREATING, or tried to delete
-	// a EventSoure mapping currently in the UPDATING state.
+	// attempted to update an EventSource Mapping in CREATING, or tried to delete
+	// a EventSource mapping currently in the UPDATING state.
 	ErrCodeResourceInUseException = "ResourceInUseException"
 
 	// ErrCodeResourceNotFoundException for service response error code
@@ -160,6 +162,8 @@ const (
 
 	// ErrCodeTooManyRequestsException for service response error code
 	// "TooManyRequestsException".
+	//
+	// Request throughput limit exceeded.
 	ErrCodeTooManyRequestsException = "TooManyRequestsException"
 
 	// ErrCodeUnsupportedMediaTypeException for service response error code

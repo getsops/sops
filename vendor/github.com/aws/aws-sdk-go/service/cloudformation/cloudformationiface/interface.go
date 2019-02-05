@@ -108,6 +108,10 @@ type CloudFormationAPI interface {
 	DescribeChangeSetWithContext(aws.Context, *cloudformation.DescribeChangeSetInput, ...request.Option) (*cloudformation.DescribeChangeSetOutput, error)
 	DescribeChangeSetRequest(*cloudformation.DescribeChangeSetInput) (*request.Request, *cloudformation.DescribeChangeSetOutput)
 
+	DescribeStackDriftDetectionStatus(*cloudformation.DescribeStackDriftDetectionStatusInput) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error)
+	DescribeStackDriftDetectionStatusWithContext(aws.Context, *cloudformation.DescribeStackDriftDetectionStatusInput, ...request.Option) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error)
+	DescribeStackDriftDetectionStatusRequest(*cloudformation.DescribeStackDriftDetectionStatusInput) (*request.Request, *cloudformation.DescribeStackDriftDetectionStatusOutput)
+
 	DescribeStackEvents(*cloudformation.DescribeStackEventsInput) (*cloudformation.DescribeStackEventsOutput, error)
 	DescribeStackEventsWithContext(aws.Context, *cloudformation.DescribeStackEventsInput, ...request.Option) (*cloudformation.DescribeStackEventsOutput, error)
 	DescribeStackEventsRequest(*cloudformation.DescribeStackEventsInput) (*request.Request, *cloudformation.DescribeStackEventsOutput)
@@ -122,6 +126,13 @@ type CloudFormationAPI interface {
 	DescribeStackResource(*cloudformation.DescribeStackResourceInput) (*cloudformation.DescribeStackResourceOutput, error)
 	DescribeStackResourceWithContext(aws.Context, *cloudformation.DescribeStackResourceInput, ...request.Option) (*cloudformation.DescribeStackResourceOutput, error)
 	DescribeStackResourceRequest(*cloudformation.DescribeStackResourceInput) (*request.Request, *cloudformation.DescribeStackResourceOutput)
+
+	DescribeStackResourceDrifts(*cloudformation.DescribeStackResourceDriftsInput) (*cloudformation.DescribeStackResourceDriftsOutput, error)
+	DescribeStackResourceDriftsWithContext(aws.Context, *cloudformation.DescribeStackResourceDriftsInput, ...request.Option) (*cloudformation.DescribeStackResourceDriftsOutput, error)
+	DescribeStackResourceDriftsRequest(*cloudformation.DescribeStackResourceDriftsInput) (*request.Request, *cloudformation.DescribeStackResourceDriftsOutput)
+
+	DescribeStackResourceDriftsPages(*cloudformation.DescribeStackResourceDriftsInput, func(*cloudformation.DescribeStackResourceDriftsOutput, bool) bool) error
+	DescribeStackResourceDriftsPagesWithContext(aws.Context, *cloudformation.DescribeStackResourceDriftsInput, func(*cloudformation.DescribeStackResourceDriftsOutput, bool) bool, ...request.Option) error
 
 	DescribeStackResources(*cloudformation.DescribeStackResourcesInput) (*cloudformation.DescribeStackResourcesOutput, error)
 	DescribeStackResourcesWithContext(aws.Context, *cloudformation.DescribeStackResourcesInput, ...request.Option) (*cloudformation.DescribeStackResourcesOutput, error)
@@ -141,6 +152,14 @@ type CloudFormationAPI interface {
 
 	DescribeStacksPages(*cloudformation.DescribeStacksInput, func(*cloudformation.DescribeStacksOutput, bool) bool) error
 	DescribeStacksPagesWithContext(aws.Context, *cloudformation.DescribeStacksInput, func(*cloudformation.DescribeStacksOutput, bool) bool, ...request.Option) error
+
+	DetectStackDrift(*cloudformation.DetectStackDriftInput) (*cloudformation.DetectStackDriftOutput, error)
+	DetectStackDriftWithContext(aws.Context, *cloudformation.DetectStackDriftInput, ...request.Option) (*cloudformation.DetectStackDriftOutput, error)
+	DetectStackDriftRequest(*cloudformation.DetectStackDriftInput) (*request.Request, *cloudformation.DetectStackDriftOutput)
+
+	DetectStackResourceDrift(*cloudformation.DetectStackResourceDriftInput) (*cloudformation.DetectStackResourceDriftOutput, error)
+	DetectStackResourceDriftWithContext(aws.Context, *cloudformation.DetectStackResourceDriftInput, ...request.Option) (*cloudformation.DetectStackResourceDriftOutput, error)
+	DetectStackResourceDriftRequest(*cloudformation.DetectStackResourceDriftInput) (*request.Request, *cloudformation.DetectStackResourceDriftOutput)
 
 	EstimateTemplateCost(*cloudformation.EstimateTemplateCostInput) (*cloudformation.EstimateTemplateCostOutput, error)
 	EstimateTemplateCostWithContext(aws.Context, *cloudformation.EstimateTemplateCostInput, ...request.Option) (*cloudformation.EstimateTemplateCostOutput, error)

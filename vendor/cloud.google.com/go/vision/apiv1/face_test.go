@@ -18,7 +18,6 @@ import (
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-
 	pb "google.golang.org/genproto/googleapis/cloud/vision/v1"
 )
 

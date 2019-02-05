@@ -9,6 +9,7 @@ GENERATOR=./google-api-go-generator
 # All downloaded files are cached in $TMPDIR for reuse with 'cached' below.
 all: $(GENERATOR)
 	$(GENERATOR) -cache=false -install -api=*
+	go test . -v
 
 # Reuse cached API specifications in $TMPDIR and rebuild Go bindings.
 cached: $(GENERATOR)

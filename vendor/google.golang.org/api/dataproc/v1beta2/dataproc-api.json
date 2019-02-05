@@ -263,7 +263,7 @@
                   ],
                   "parameters": {
                     "instanceId": {
-                      "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+                      "description": "Deprecated. Please use request_id field instead.",
                       "location": "query",
                       "type": "string"
                     },
@@ -272,6 +272,11 @@
                       "location": "path",
                       "pattern": "^projects/[^/]+/locations/[^/]+$",
                       "required": true,
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+                      "location": "query",
                       "type": "string"
                     }
                   },
@@ -1469,7 +1474,7 @@
                   ],
                   "parameters": {
                     "instanceId": {
-                      "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+                      "description": "Deprecated. Please use request_id field instead.",
                       "location": "query",
                       "type": "string"
                     },
@@ -1478,6 +1483,11 @@
                       "location": "path",
                       "pattern": "^projects/[^/]+/regions/[^/]+$",
                       "required": true,
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+                      "location": "query",
                       "type": "string"
                     }
                   },
@@ -1619,7 +1629,7 @@
       }
     }
   },
-  "revision": "20180824",
+  "revision": "20181207",
   "rootUrl": "https://dataproc.googleapis.com/",
   "schemas": {
     "AcceleratorConfig": {
@@ -1634,6 +1644,39 @@
         "acceleratorTypeUri": {
           "description": "Full URL, partial URI, or short name of the accelerator type resource to expose to this instance. See Compute Engine AcceleratorTypes( /compute/docs/reference/beta/acceleratorTypes)Examples * https://www.googleapis.com/compute/beta/projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * projects/[project_id]/zones/us-east1-a/acceleratorTypes/nvidia-tesla-k80 * nvidia-tesla-k80Auto Zone Exception: If you are using the Cloud Dataproc Auto Zone Placement feature, you must use the short name of the accelerator type resource, for example, nvidia-tesla-k80.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AllocationAffinity": {
+      "description": "Allocation Affinity for consuming Zonal allocation.",
+      "id": "AllocationAffinity",
+      "properties": {
+        "consumeAllocationType": {
+          "enum": [
+            "TYPE_UNSPECIFIED",
+            "NO_ALLOCATION",
+            "ANY_ALLOCATION",
+            "SPECIFIC_ALLOCATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "Do not consume from any allocated capacity.",
+            "Consume any allocation available.",
+            "Must consume from a specific allocation. Must specify key value fields for specifying the allocations."
+          ],
+          "type": "string"
+        },
+        "key": {
+          "description": "Corresponds to the label key of Allocation resource.",
+          "type": "string"
+        },
+        "values": {
+          "description": "Corresponds to the label values of allocation resource.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2033,6 +2076,10 @@
       "description": "Common config settings for resources of Compute Engine cluster instances, applicable to all instances in the cluster.",
       "id": "GceClusterConfig",
       "properties": {
+        "allocationAffinity": {
+          "$ref": "AllocationAffinity",
+          "description": "Allocation Affinity for consuming Zonal allocation."
+        },
         "internalIpOnly": {
           "description": "Optional. If true, all instances in the cluster will only have internal IP addresses. By default, clusters are not restricted to internal IP addresses, and will have ephemeral external IP addresses assigned to each instance. This internal_ip_only restriction can only be enabled for subnetwork enabled networks, and all off-cluster dependencies must be configured to be accessible without external IP addresses.",
           "type": "boolean"
@@ -2239,7 +2286,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Optional. Map from parameter names to values that should be used for those parameters.",
+          "description": "Optional. Map from parameter names to values that should be used for those parameters. Values may not exceed 100 characters.",
           "type": "object"
         },
         "requestId": {
@@ -2274,6 +2321,10 @@
           "$ref": "HiveJob",
           "description": "Job is a Hive job."
         },
+        "jobUuid": {
+          "description": "Output only. A UUID that uniquely identifies a job within the project over time. This is in contrast to a user-settable reference.job_id that may be reused over time.",
+          "type": "string"
+        },
         "labels": {
           "additionalProperties": {
             "type": "string"
@@ -2305,6 +2356,10 @@
           "$ref": "SparkJob",
           "description": "Job is a Spark job."
         },
+        "sparkRJob": {
+          "$ref": "SparkRJob",
+          "description": "Job is a SparkR job."
+        },
         "sparkSqlJob": {
           "$ref": "SparkSqlJob",
           "description": "Job is a SparkSql job."
@@ -2319,6 +2374,10 @@
             "$ref": "JobStatus"
           },
           "type": "array"
+        },
+        "submittedBy": {
+          "description": "Output only. The email address of the user submitting the job. For jobs submitted on the cluster, the address is \u003ccode\u003eusername@hostname\u003c/code\u003e.",
+          "type": "string"
         },
         "yarnApplications": {
           "description": "Output only. The collection of YARN applications spun up by this job.Beta Feature: This report is available for testing purposes only. It may be changed before final release.",
@@ -2433,7 +2492,7 @@
       "type": "object"
     },
     "LifecycleConfig": {
-      "description": "Specifies the cluster auto delete related schedule configuration.",
+      "description": "Specifies the cluster auto-delete schedule configuration.",
       "id": "LifecycleConfig",
       "properties": {
         "autoDeleteTime": {
@@ -2442,12 +2501,12 @@
           "type": "string"
         },
         "autoDeleteTtl": {
-          "description": "Optional. The life duration of cluster, the cluster will be auto-deleted at the end of this duration.",
+          "description": "Optional. The lifetime duration of cluster. The cluster will be auto-deleted at the end of this period. Valid range: 10m, 14d.Example: \"1d\", to delete the cluster 1 day after its creation..",
           "format": "google-duration",
           "type": "string"
         },
         "idleDeleteTtl": {
-          "description": "Optional. The longest duration that cluster would keep alive while staying  idle; passing this threshold will cause cluster to be auto-deleted.",
+          "description": "Optional. The duration to keep the cluster alive while idling. Passing this threshold will cause the cluster to be deleted. Valid range: 10m, 14d.Example: \"10m\", the minimum value, to delete the cluster when it has had no jobs running for 10 minutes.",
           "format": "google-duration",
           "type": "string"
         }
@@ -2879,6 +2938,31 @@
           "description": "Optional. The version of software inside the cluster. It must be one of the supported Cloud Dataproc Versions, such as \"1.2\" (including a subminor version, such as \"1.2.29\"), or the \"preview\" version. If unspecified, it defaults to the latest version.",
           "type": "string"
         },
+        "optionalComponents": {
+          "description": "The set of optional components to activate on the cluster.",
+          "enumDescriptions": [
+            "Unspecified component.",
+            "The Jupyter Notebook.",
+            "The Hive Web HCatalog (the REST service for accessing HCatalog).",
+            "The Zeppelin notebook.",
+            "The Anaconda python distribution.",
+            "The Presto query engine.",
+            "The Kerberos security feature."
+          ],
+          "items": {
+            "enum": [
+              "COMPONENT_UNSPECIFIED",
+              "JUPYTER",
+              "HIVE_WEBHCAT",
+              "ZEPPELIN",
+              "ANACONDA",
+              "PRESTO",
+              "KERBEROS"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
         "properties": {
           "additionalProperties": {
             "type": "string"
@@ -2938,6 +3022,49 @@
             "type": "string"
           },
           "description": "Optional. A mapping of property names to values, used to configure Spark. Properties that conflict with values set by the Cloud Dataproc API may be overwritten. Can include properties set in /etc/spark/conf/spark-defaults.conf and classes in user code.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "SparkRJob": {
+      "description": "A Cloud Dataproc job for running Apache SparkR (https://spark.apache.org/docs/latest/sparkr.html) applications on YARN.",
+      "id": "SparkRJob",
+      "properties": {
+        "archiveUris": {
+          "description": "Optional. HCFS URIs of archives to be extracted in the working directory of Spark drivers and tasks. Supported file types: .jar, .tar, .tar.gz, .tgz, and .zip.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "args": {
+          "description": "Optional. The arguments to pass to the driver. Do not include arguments, such as --conf, that can be set as job properties, since a collision may occur that causes an incorrect job submission.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "fileUris": {
+          "description": "Optional. HCFS URIs of files to be copied to the working directory of R drivers and distributed tasks. Useful for naively parallel tasks.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "loggingConfig": {
+          "$ref": "LoggingConfig",
+          "description": "Optional. The runtime log config for job execution."
+        },
+        "mainRFileUri": {
+          "description": "Required. The HCFS URI of the main R file to use as the driver. Must be a .R file.",
+          "type": "string"
+        },
+        "properties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. A mapping of property names to values, used to configure SparkR. Properties that conflict with values set by the Cloud Dataproc API may be overwritten. Can include properties set in /etc/spark/conf/spark-defaults.conf and classes in user code.",
           "type": "object"
         }
       },
@@ -3034,7 +3161,7 @@
           "type": "string"
         },
         "fields": {
-          "description": "Required. Paths to all fields that the parameter replaces. A field is allowed to appear in at most one parameter's list of field paths.A field path is similar in syntax to a google.protobuf.FieldMask. For example, a field path that references the zone field of a workflow template's cluster selector would be specified as \u003ccode\u003eplacement.clusterSelector.zone\u003c/code\u003e.Also, field paths can reference fields using the following syntax:\nValues in maps can be referenced by key. Examples\u003cbr\u003e\nlabels'key'\nplacement.clusterSelector.clusterLabels'key'\nplacement.managedCluster.labels'key'\nplacement.clusterSelector.clusterLabels'key'\njobsstep-id.labels'key'\nJobs in the jobs list can be referenced by step-id. Examples:\u003cbr\u003e\njobsstep-id.hadoopJob.mainJarFileUri\njobsstep-id.hiveJob.queryFileUri\njobsstep-id.pySparkJob.mainPythonFileUri\njobsstep-id.hadoopJob.jarFileUris0\njobsstep-id.hadoopJob.archiveUris0\njobsstep-id.hadoopJob.fileUris0\njobsstep-id.pySparkJob.pythonFileUris0\nItems in repeated fields can be referenced by a zero-based index. Example:\u003cbr\u003e\njobsstep-id.sparkJob.args0\nOther examples:\njobsstep-id.hadoopJob.properties'key'\njobsstep-id.hadoopJob.args0\njobsstep-id.hiveJob.scriptVariables'key'\njobsstep-id.hadoopJob.mainJarFileUri\nplacement.clusterSelector.zoneIt may not be possible to parameterize maps and repeated fields in their entirety since only individual map values and individual items in repeated fields can be referenced. For example, the following field paths are invalid:\nplacement.clusterSelector.clusterLabels\njobsstep-id.sparkJob.args",
+          "description": "Required. Paths to all fields that the parameter replaces. A field is allowed to appear in at most one parameter's list of field paths.A field path is similar in syntax to a google.protobuf.FieldMask. For example, a field path that references the zone field of a workflow template's cluster selector would be specified as placement.clusterSelector.zone.Also, field paths can reference fields using the following syntax:\nValues in maps can be referenced by key:\nlabels'key'\nplacement.clusterSelector.clusterLabels'key'\nplacement.managedCluster.labels'key'\nplacement.clusterSelector.clusterLabels'key'\njobs'step-id'.labels'key'\nJobs in the jobs list can be referenced by step-id:\njobs'step-id'.hadoopJob.mainJarFileUri\njobs'step-id'.hiveJob.queryFileUri\njobs'step-id'.pySparkJob.mainPythonFileUri\njobs'step-id'.hadoopJob.jarFileUris0\njobs'step-id'.hadoopJob.archiveUris0\njobs'step-id'.hadoopJob.fileUris0\njobs'step-id'.pySparkJob.pythonFileUris0\nItems in repeated fields can be referenced by a zero-based index:\njobs'step-id'.sparkJob.args0\nOther examples:\njobs'step-id'.hadoopJob.properties'key'\njobs'step-id'.hadoopJob.args0\njobs'step-id'.hiveJob.scriptVariables'key'\njobs'step-id'.hadoopJob.mainJarFileUri\nplacement.clusterSelector.zoneIt may not be possible to parameterize maps and repeated fields in their entirety since only individual map values and individual items in repeated fields can be referenced. For example, the following field paths are invalid:\nplacement.clusterSelector.clusterLabels\njobs'step-id'.sparkJob.args",
           "items": {
             "type": "string"
           },
@@ -3112,7 +3239,11 @@
       "id": "WorkflowMetadata",
       "properties": {
         "clusterName": {
-          "description": "Output only. The name of the managed cluster.",
+          "description": "Output only. The name of the target cluster.",
+          "type": "string"
+        },
+        "clusterUuid": {
+          "description": "Output only. The UUID of target cluster.",
           "type": "string"
         },
         "createCluster": {
@@ -3122,6 +3253,11 @@
         "deleteCluster": {
           "$ref": "ClusterOperation",
           "description": "Output only. The delete cluster operation metadata."
+        },
+        "endTime": {
+          "description": "Output only. Workflow end time.",
+          "format": "google-datetime",
+          "type": "string"
         },
         "graph": {
           "$ref": "WorkflowGraph",
@@ -3133,6 +3269,11 @@
           },
           "description": "Map from parameter names to values that were used for those parameters.",
           "type": "object"
+        },
+        "startTime": {
+          "description": "Output only. Workflow start time.",
+          "format": "google-datetime",
+          "type": "string"
         },
         "state": {
           "description": "Output only. The workflow state.",
@@ -3218,7 +3359,7 @@
           "type": "string"
         },
         "id": {
-          "description": "Required. The template id.The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). Cannot begin or end with underscore or hyphen. Must consist of between 3 and 50 characters.",
+          "description": "Required. The template id.The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). Cannot begin or end with underscore or hyphen. Must consist of between 3 and 50 characters..",
           "type": "string"
         },
         "jobs": {

@@ -18,6 +18,7 @@
 package longrunning
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -25,10 +26,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/duration"
-	gax "github.com/googleapis/gax-go"
-
-	"golang.org/x/net/context"
-
+	gax "github.com/googleapis/gax-go/v2"
 	pb "google.golang.org/genproto/googleapis/longrunning"
 	status "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
@@ -42,7 +40,7 @@ type getterService struct {
 	// It is the running sum of the of the duration we have slept.
 	clock time.Duration
 
-	// getTimes records the the times at which GetOperation is called.
+	// getTimes records the times at which GetOperation is called.
 	getTimes []time.Duration
 
 	// results are the fake results that GetOperation should return.

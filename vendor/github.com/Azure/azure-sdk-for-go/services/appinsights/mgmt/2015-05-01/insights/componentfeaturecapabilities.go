@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,11 +41,21 @@ func NewComponentFeatureCapabilitiesClientWithBaseURI(baseURI string, subscripti
 	return ComponentFeatureCapabilitiesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// Get returns feature capabilites of the application insights component.
+// Get returns feature capabilities of the application insights component.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // resourceName - the name of the Application Insights component resource.
 func (client ComponentFeatureCapabilitiesClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result ApplicationInsightsComponentFeatureCapabilities, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentFeatureCapabilitiesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ComponentFeatureCapabilitiesClient", "Get", nil, "Failure preparing request")

@@ -257,7 +257,8 @@
       "type":"structure",
       "required":["PolicyId"],
       "members":{
-        "PolicyId":{"shape":"PolicyId"}
+        "PolicyId":{"shape":"PolicyId"},
+        "DeleteAllPolicyResources":{"shape":"Boolean"}
       }
     },
     "DependentServiceName":{

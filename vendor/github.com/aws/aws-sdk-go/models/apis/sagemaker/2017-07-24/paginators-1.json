@@ -1,5 +1,10 @@
 {
   "pagination": {
+    "ListCompilationJobs": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
     "ListEndpointConfigs": {
       "input_token": "NextToken",
       "output_token": "NextToken",
@@ -15,6 +20,16 @@
       "output_token": "NextToken",
       "limit_key": "MaxResults"
     },
+    "ListLabelingJobs": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "ListLabelingJobsForWorkteam": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
     "ListModels": {
       "input_token": "NextToken",
       "output_token": "NextToken",
@@ -26,6 +41,11 @@
       "limit_key": "MaxResults"
     },
     "ListNotebookInstances": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "ListSubscribedWorkteams": {
       "input_token": "NextToken",
       "output_token": "NextToken",
       "limit_key": "MaxResults"
@@ -46,6 +66,16 @@
       "limit_key": "MaxResults"
     },
     "ListTransformJobs": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "ListWorkteams": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
+    "Search": {
       "input_token": "NextToken",
       "output_token": "NextToken",
       "limit_key": "MaxResults"

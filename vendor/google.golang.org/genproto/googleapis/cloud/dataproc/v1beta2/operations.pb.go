@@ -40,7 +40,6 @@ var ClusterOperationStatus_State_name = map[int32]string{
 	2: "RUNNING",
 	3: "DONE",
 }
-
 var ClusterOperationStatus_State_value = map[string]int32{
 	"UNKNOWN": 0,
 	"PENDING": 1,
@@ -51,9 +50,8 @@ var ClusterOperationStatus_State_value = map[string]int32{
 func (x ClusterOperationStatus_State) String() string {
 	return proto.EnumName(ClusterOperationStatus_State_name, int32(x))
 }
-
 func (ClusterOperationStatus_State) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_e6e7a565fff113fd, []int{0, 0}
+	return fileDescriptor_operations_40b106a2248b9117, []int{0, 0}
 }
 
 // The status of the operation.
@@ -75,7 +73,7 @@ func (m *ClusterOperationStatus) Reset()         { *m = ClusterOperationStatus{}
 func (m *ClusterOperationStatus) String() string { return proto.CompactTextString(m) }
 func (*ClusterOperationStatus) ProtoMessage()    {}
 func (*ClusterOperationStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e6e7a565fff113fd, []int{0}
+	return fileDescriptor_operations_40b106a2248b9117, []int{0}
 }
 func (m *ClusterOperationStatus) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClusterOperationStatus.Unmarshal(m, b)
@@ -83,8 +81,8 @@ func (m *ClusterOperationStatus) XXX_Unmarshal(b []byte) error {
 func (m *ClusterOperationStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ClusterOperationStatus.Marshal(b, m, deterministic)
 }
-func (m *ClusterOperationStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterOperationStatus.Merge(m, src)
+func (dst *ClusterOperationStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClusterOperationStatus.Merge(dst, src)
 }
 func (m *ClusterOperationStatus) XXX_Size() int {
 	return xxx_messageInfo_ClusterOperationStatus.Size(m)
@@ -150,7 +148,7 @@ func (m *ClusterOperationMetadata) Reset()         { *m = ClusterOperationMetada
 func (m *ClusterOperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*ClusterOperationMetadata) ProtoMessage()    {}
 func (*ClusterOperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e6e7a565fff113fd, []int{1}
+	return fileDescriptor_operations_40b106a2248b9117, []int{1}
 }
 func (m *ClusterOperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClusterOperationMetadata.Unmarshal(m, b)
@@ -158,8 +156,8 @@ func (m *ClusterOperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *ClusterOperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ClusterOperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *ClusterOperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterOperationMetadata.Merge(m, src)
+func (dst *ClusterOperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClusterOperationMetadata.Merge(dst, src)
 }
 func (m *ClusterOperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_ClusterOperationMetadata.Size(m)
@@ -234,10 +232,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dataproc/v1beta2/operations.proto", fileDescriptor_e6e7a565fff113fd)
+	proto.RegisterFile("google/cloud/dataproc/v1beta2/operations.proto", fileDescriptor_operations_40b106a2248b9117)
 }
 
-var fileDescriptor_e6e7a565fff113fd = []byte{
+var fileDescriptor_operations_40b106a2248b9117 = []byte{
 	// 537 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x5f, 0x8b, 0xd3, 0x4e,
 	0x14, 0xfd, 0xa5, 0xff, 0x7b, 0xb3, 0xed, 0xaf, 0x0c, 0x22, 0x43, 0x51, 0x36, 0x5b, 0x10, 0xfa,

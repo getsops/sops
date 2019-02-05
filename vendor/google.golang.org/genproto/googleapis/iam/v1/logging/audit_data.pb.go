@@ -35,7 +35,7 @@ func (m *AuditData) Reset()         { *m = AuditData{} }
 func (m *AuditData) String() string { return proto.CompactTextString(m) }
 func (*AuditData) ProtoMessage()    {}
 func (*AuditData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fe22f7c00ab4acd5, []int{0}
+	return fileDescriptor_audit_data_2e30197e021fa53a, []int{0}
 }
 func (m *AuditData) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AuditData.Unmarshal(m, b)
@@ -43,8 +43,8 @@ func (m *AuditData) XXX_Unmarshal(b []byte) error {
 func (m *AuditData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_AuditData.Marshal(b, m, deterministic)
 }
-func (m *AuditData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuditData.Merge(m, src)
+func (dst *AuditData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AuditData.Merge(dst, src)
 }
 func (m *AuditData) XXX_Size() int {
 	return xxx_messageInfo_AuditData.Size(m)
@@ -67,10 +67,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/iam/v1/logging/audit_data.proto", fileDescriptor_fe22f7c00ab4acd5)
+	proto.RegisterFile("google/iam/v1/logging/audit_data.proto", fileDescriptor_audit_data_2e30197e021fa53a)
 }
 
-var fileDescriptor_fe22f7c00ab4acd5 = []byte{
+var fileDescriptor_audit_data_2e30197e021fa53a = []byte{
 	// 236 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0xb1, 0x4a, 0x04, 0x31,
 	0x10, 0x86, 0xd9, 0x2b, 0x04, 0x73, 0x62, 0x71, 0x20, 0x68, 0xb4, 0x10, 0x0b, 0xb1, 0x9a, 0xb0,

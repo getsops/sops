@@ -77,7 +77,7 @@ func (m *HttpRequest) Reset()         { *m = HttpRequest{} }
 func (m *HttpRequest) String() string { return proto.CompactTextString(m) }
 func (*HttpRequest) ProtoMessage()    {}
 func (*HttpRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ea45f4ec7ed7b641, []int{0}
+	return fileDescriptor_http_request_33a66c45032c6856, []int{0}
 }
 func (m *HttpRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HttpRequest.Unmarshal(m, b)
@@ -85,8 +85,8 @@ func (m *HttpRequest) XXX_Unmarshal(b []byte) error {
 func (m *HttpRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HttpRequest.Marshal(b, m, deterministic)
 }
-func (m *HttpRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HttpRequest.Merge(m, src)
+func (dst *HttpRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpRequest.Merge(dst, src)
 }
 func (m *HttpRequest) XXX_Size() int {
 	return xxx_messageInfo_HttpRequest.Size(m)
@@ -207,10 +207,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/logging/type/http_request.proto", fileDescriptor_ea45f4ec7ed7b641)
+	proto.RegisterFile("google/logging/type/http_request.proto", fileDescriptor_http_request_33a66c45032c6856)
 }
 
-var fileDescriptor_ea45f4ec7ed7b641 = []byte{
+var fileDescriptor_http_request_33a66c45032c6856 = []byte{
 	// 511 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x92, 0x5b, 0x6b, 0x14, 0x31,
 	0x18, 0x86, 0x99, 0x1e, 0xf6, 0x90, 0x3d, 0x58, 0x22, 0x68, 0xba, 0x6a, 0x5d, 0x2b, 0xca, 0x5c,

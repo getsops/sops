@@ -1,4 +1,4 @@
-// Copyright 4 Google LLC
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -310,7 +310,7 @@ func propertiesToProto(key *Key, props []Property) (*pb.Entity, error) {
 	}
 	indexedProps := 0
 	for _, p := range props {
-		// Do not send a Key value a a field to datastore.
+		// Do not send a Key value a field to datastore.
 		if p.Name == keyFieldName {
 			continue
 		}

@@ -7,15 +7,27 @@
 package ctxhttp
 
 import (
+	"context"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
+
+func TestGo17Context(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, "ok")
+	}))
+	defer ts.Close()
+	ctx := context.Background()
+	resp, err := Get(ctx, http.DefaultClient, ts.URL)
+	if resp == nil || err != nil {
+		t.Fatalf("error received from client: %v %v", err, resp)
+	}
+	resp.Body.Close()
+}
 
 const (
 	requestDuration = 100 * time.Millisecond

@@ -154,7 +154,7 @@
       }
     }
   },
-  "revision": "20180809",
+  "revision": "20190119",
   "rootUrl": "https://vision.googleapis.com/",
   "schemas": {
     "AnnotateFileResponse": {
@@ -220,12 +220,23 @@
           },
           "type": "array"
         },
+        "localizedObjectAnnotations": {
+          "description": "If present, localized object detection has completed successfully.\nThis will be sorted descending by confidence score.",
+          "items": {
+            "$ref": "LocalizedObjectAnnotation"
+          },
+          "type": "array"
+        },
         "logoAnnotations": {
           "description": "If present, logo detection has completed successfully.",
           "items": {
             "$ref": "EntityAnnotation"
           },
           "type": "array"
+        },
+        "productSearchResults": {
+          "$ref": "ProductSearchResults",
+          "description": "If present, product search has completed successfully."
         },
         "safeSearchAnnotation": {
           "$ref": "SafeSearchAnnotation",
@@ -270,6 +281,41 @@
       },
       "type": "object"
     },
+    "BatchOperationMetadata": {
+      "description": "Metadata for the batch operations such as the current state.\n\nThis is included in the `metadata` field of the `Operation` returned by the\n`GetOperation` call of the `google::longrunning::Operations` service.",
+      "id": "BatchOperationMetadata",
+      "properties": {
+        "endTime": {
+          "description": "The time when the batch request is finished and\ngoogle.longrunning.Operation.done is set to true.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "state": {
+          "description": "The current state of the batch operation.",
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "PROCESSING",
+            "SUCCESSFUL",
+            "FAILED",
+            "CANCELLED"
+          ],
+          "enumDescriptions": [
+            "Invalid.",
+            "Request is actively being processed.",
+            "The request is done and at least one item has been successfully\nprocessed.",
+            "The request is done and no item has been successfully processed.",
+            "The request is done after the longrunning.Operations.CancelOperation has\nbeen called by the user.  Any records that were processed before the\ncancel command are output as specified in the request."
+          ],
+          "type": "string"
+        },
+        "submitTime": {
+          "description": "The time when the batch request was submitted to the server.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Block": {
       "description": "Logical element on the page.",
       "id": "Block",
@@ -282,7 +328,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -290,13 +337,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -392,7 +440,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -580,7 +628,7 @@
         },
         "boundingPoly": {
           "$ref": "BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -806,12 +854,23 @@
           },
           "type": "array"
         },
+        "localizedObjectAnnotations": {
+          "description": "If present, localized object detection has completed successfully.\nThis will be sorted descending by confidence score.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1LocalizedObjectAnnotation"
+          },
+          "type": "array"
+        },
         "logoAnnotations": {
           "description": "If present, logo detection has completed successfully.",
           "items": {
             "$ref": "GoogleCloudVisionV1p1beta1EntityAnnotation"
           },
           "type": "array"
+        },
+        "productSearchResults": {
+          "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResults",
+          "description": "If present, product search has completed successfully."
         },
         "safeSearchAnnotation": {
           "$ref": "GoogleCloudVisionV1p1beta1SafeSearchAnnotation",
@@ -868,7 +927,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -876,13 +936,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -907,6 +968,13 @@
       "description": "A bounding polygon for the detected image annotation.",
       "id": "GoogleCloudVisionV1p1beta1BoundingPoly",
       "properties": {
+        "normalizedVertices": {
+          "description": "The bounding polygon normalized vertices.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1NormalizedVertex"
+          },
+          "type": "array"
+        },
         "vertices": {
           "description": "The bounding polygon vertices.",
           "items": {
@@ -944,7 +1012,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -1085,7 +1153,7 @@
         },
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -1379,6 +1447,34 @@
       },
       "type": "object"
     },
+    "GoogleCloudVisionV1p1beta1LocalizedObjectAnnotation": {
+      "description": "Set of detected objects with bounding boxes.",
+      "id": "GoogleCloudVisionV1p1beta1LocalizedObjectAnnotation",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
+          "description": "Image region to which this object belongs. This must be populated."
+        },
+        "languageCode": {
+          "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.",
+          "type": "string"
+        },
+        "mid": {
+          "description": "Object ID that should align with EntityAnnotation mid.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name, expressed in its `language_code` language.",
+          "type": "string"
+        },
+        "score": {
+          "description": "Score of the result. Range [0, 1].",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudVisionV1p1beta1LocationInfo": {
       "description": "Detected entity location information.",
       "id": "GoogleCloudVisionV1p1beta1LocationInfo",
@@ -1386,6 +1482,23 @@
         "latLng": {
           "$ref": "LatLng",
           "description": "lat/long location coordinates."
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1NormalizedVertex": {
+      "description": "A vertex represents a 2D point in the image.\nNOTE: the normalized vertex coordinates are relative to the original image\nand range from 0 to 1.",
+      "id": "GoogleCloudVisionV1p1beta1NormalizedVertex",
+      "properties": {
+        "x": {
+          "description": "X coordinate.",
+          "format": "float",
+          "type": "number"
+        },
+        "y": {
+          "description": "Y coordinate.",
+          "format": "float",
+          "type": "number"
         }
       },
       "type": "object"
@@ -1480,7 +1593,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -1517,6 +1630,115 @@
         },
         "z": {
           "description": "Z coordinate (or depth).",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1Product": {
+      "description": "A Product contains ReferenceImages.",
+      "id": "GoogleCloudVisionV1p1beta1Product",
+      "properties": {
+        "description": {
+          "description": "User-provided metadata to be stored with this product. Must be at most 4096\ncharacters long.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "The user-provided name for this Product. Must not be empty. Must be at most\n4096 characters long.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+          "type": "string"
+        },
+        "productCategory": {
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
+          "type": "string"
+        },
+        "productLabels": {
+          "description": "Key-value pairs that can be attached to a product. At query time,\nconstraints can be specified based on the product_labels.\n\nNote that integer values can be provided as strings, e.g. \"1199\". Only\nstrings with integer values can match a range-based restriction which is\nto be supported soon.\n\nMultiple values can be assigned to the same key. One product may have up to\n100 product_labels.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductKeyValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductKeyValue": {
+      "description": "A product label represented as a key-value pair.",
+      "id": "GoogleCloudVisionV1p1beta1ProductKeyValue",
+      "properties": {
+        "key": {
+          "description": "The key of the label attached to the product. Cannot be empty and cannot\nexceed 128 bytes.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the label attached to the product. Cannot be empty and\ncannot exceed 128 bytes.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductSearchResults": {
+      "description": "Results for a product search request.",
+      "id": "GoogleCloudVisionV1p1beta1ProductSearchResults",
+      "properties": {
+        "indexTime": {
+          "description": "Timestamp of the index which provided these results. Changes made after\nthis time are not reflected in the current results.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResultsGroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductSearchResultsGroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GoogleCloudVisionV1p1beta1ProductSearchResultsGroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p1beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p1beta1ProductSearchResultsResult": {
+      "description": "Information about a product.",
+      "id": "GoogleCloudVisionV1p1beta1ProductSearchResultsResult",
+      "properties": {
+        "image": {
+          "description": "The resource name of the image from the product that is the closest match\nto the query.",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "GoogleCloudVisionV1p1beta1Product",
+          "description": "The Product."
+        },
+        "score": {
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
           "format": "float",
           "type": "number"
         }
@@ -1914,7 +2136,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p1beta1BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",
@@ -2020,12 +2242,23 @@
           },
           "type": "array"
         },
+        "localizedObjectAnnotations": {
+          "description": "If present, localized object detection has completed successfully.\nThis will be sorted descending by confidence score.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1LocalizedObjectAnnotation"
+          },
+          "type": "array"
+        },
         "logoAnnotations": {
           "description": "If present, logo detection has completed successfully.",
           "items": {
             "$ref": "GoogleCloudVisionV1p2beta1EntityAnnotation"
           },
           "type": "array"
+        },
+        "productSearchResults": {
+          "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResults",
+          "description": "If present, product search has completed successfully."
         },
         "safeSearchAnnotation": {
           "$ref": "GoogleCloudVisionV1p2beta1SafeSearchAnnotation",
@@ -2150,7 +2383,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -2158,13 +2392,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -2233,7 +2468,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -2389,7 +2624,7 @@
         },
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -2645,7 +2880,9 @@
             "SAFE_SEARCH_DETECTION",
             "IMAGE_PROPERTIES",
             "CROP_HINTS",
-            "WEB_DETECTION"
+            "WEB_DETECTION",
+            "PRODUCT_SEARCH",
+            "OBJECT_LOCALIZATION"
           ],
           "enumDescriptions": [
             "Unspecified feature type.",
@@ -2658,7 +2895,9 @@
             "Run Safe Search to detect potentially unsafe\nor undesirable content.",
             "Compute a set of image properties, such as the\nimage's dominant colors.",
             "Run crop hints.",
-            "Run web detection."
+            "Run web detection.",
+            "Run Product Search.",
+            "Run localizer for object detection."
           ],
           "type": "string"
         }
@@ -2738,6 +2977,10 @@
           "$ref": "GoogleCloudVisionV1p2beta1LatLongRect",
           "description": "Not used."
         },
+        "productSearchParams": {
+          "$ref": "GoogleCloudVisionV1p2beta1ProductSearchParams",
+          "description": "Parameters for product search."
+        },
         "webDetectionParams": {
           "$ref": "GoogleCloudVisionV1p2beta1WebDetectionParams",
           "description": "Parameters for web detection."
@@ -2797,6 +3040,34 @@
         "minLatLng": {
           "$ref": "LatLng",
           "description": "Min lat/long pair."
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1LocalizedObjectAnnotation": {
+      "description": "Set of detected objects with bounding boxes.",
+      "id": "GoogleCloudVisionV1p2beta1LocalizedObjectAnnotation",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
+          "description": "Image region to which this object belongs. This must be populated."
+        },
+        "languageCode": {
+          "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.",
+          "type": "string"
+        },
+        "mid": {
+          "description": "Object ID that should align with EntityAnnotation mid.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name, expressed in its `language_code` language.",
+          "type": "string"
+        },
+        "score": {
+          "description": "Score of the result. Range [0, 1].",
+          "format": "float",
+          "type": "number"
         }
       },
       "type": "object"
@@ -2919,7 +3190,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -2956,6 +3227,141 @@
         },
         "z": {
           "description": "Z coordinate (or depth).",
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1Product": {
+      "description": "A Product contains ReferenceImages.",
+      "id": "GoogleCloudVisionV1p2beta1Product",
+      "properties": {
+        "description": {
+          "description": "User-provided metadata to be stored with this product. Must be at most 4096\ncharacters long.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "The user-provided name for this Product. Must not be empty. Must be at most\n4096 characters long.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+          "type": "string"
+        },
+        "productCategory": {
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
+          "type": "string"
+        },
+        "productLabels": {
+          "description": "Key-value pairs that can be attached to a product. At query time,\nconstraints can be specified based on the product_labels.\n\nNote that integer values can be provided as strings, e.g. \"1199\". Only\nstrings with integer values can match a range-based restriction which is\nto be supported soon.\n\nMultiple values can be assigned to the same key. One product may have up to\n100 product_labels.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductKeyValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductKeyValue": {
+      "description": "A product label represented as a key-value pair.",
+      "id": "GoogleCloudVisionV1p2beta1ProductKeyValue",
+      "properties": {
+        "key": {
+          "description": "The key of the label attached to the product. Cannot be empty and cannot\nexceed 128 bytes.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the label attached to the product. Cannot be empty and\ncannot exceed 128 bytes.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchParams": {
+      "description": "Parameters for a product search request.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchParams",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
+          "description": "The bounding polygon around the area of interest in the image.\nOptional. If it is not specified, system discretion will be applied."
+        },
+        "filter": {
+          "description": "The filtering expression. This can be used to restrict search results based\non Product labels. We currently support an AND of OR of key-value\nexpressions, where each expression within an OR must have the same key.\n\nFor example, \"(color = red OR color = blue) AND brand = Google\" is\nacceptable, but not \"(color = red OR brand = Google)\" or \"color: red\".",
+          "type": "string"
+        },
+        "productCategories": {
+          "description": "The list of product categories to search in. Currently, we only consider\nthe first category, and either \"homegoods\", \"apparel\", or \"toys\" should be\nspecified.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "productSet": {
+          "description": "The resource name of a ProductSet to be searched for similar images.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/productSets/PRODUCT_SET_ID`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchResults": {
+      "description": "Results for a product search request.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchResults",
+      "properties": {
+        "indexTime": {
+          "description": "Timestamp of the index which provided these results. Changes made after\nthis time are not reflected in the current results.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResultsGroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchResultsGroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchResultsGroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p2beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p2beta1ProductSearchResultsResult": {
+      "description": "Information about a product.",
+      "id": "GoogleCloudVisionV1p2beta1ProductSearchResultsResult",
+      "properties": {
+        "image": {
+          "description": "The resource name of the image from the product that is the closest match\nto the query.",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "GoogleCloudVisionV1p2beta1Product",
+          "description": "The Product."
+        },
+        "score": {
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
           "format": "float",
           "type": "number"
         }
@@ -3364,7 +3770,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p2beta1BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",
@@ -3556,7 +3962,8 @@
             "TABLE",
             "PICTURE",
             "RULER",
-            "BARCODE"
+            "BARCODE",
+            "KEY_VALUE_PAIR"
           ],
           "enumDescriptions": [
             "Unknown block type.",
@@ -3564,13 +3971,14 @@
             "Table block.",
             "Image block.",
             "Horizontal/vertical line box.",
-            "Barcode block."
+            "Barcode block.",
+            "A key-value pair block."
           ],
           "type": "string"
         },
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the block.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n\n* when the text is horizontal it might look like:\n\n        0----1\n        |    |\n        3----2\n\n* when it's rotated 180 degrees around the top-left corner it becomes:\n\n        2----3\n        |    |\n        1----0\n\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results on the block. Range [0, 1].",
@@ -3639,7 +4047,7 @@
       "properties": {
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale, as returned in `ImageParams`."
+          "description": "The bounding polygon for the crop region. The coordinates of the bounding\nbox are in the original image's scale."
         },
         "confidence": {
           "description": "Confidence of this being a salient region.  Range [0, 1].",
@@ -3780,7 +4188,7 @@
         },
         "boundingPoly": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale, as returned in `ImageParams`.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
+          "description": "The bounding polygon around the face. The coordinates of the bounding box\nare in the original image's scale.\nThe bounding box is computed to \"frame\" the face in accordance with human\nexpectations. It is based on the landmarker results.\nNote that one or more x and/or y coordinates may not be generated in the\n`BoundingPoly` (the polygon will be unbounded) if only a partial face\nappears in the image to be annotated."
         },
         "detectionConfidence": {
           "description": "Detection confidence. Range [0, 1].",
@@ -4241,7 +4649,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -4301,7 +4709,7 @@
           "type": "string"
         },
         "productCategory": {
-          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\" or \"apparel\".\n\nThis field is immutable.",
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
           "type": "string"
         },
         "productLabels": {
@@ -4338,6 +4746,31 @@
           "format": "google-datetime",
           "type": "string"
         },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p3beta1ProductSearchResultsGroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "GoogleCloudVisionV1p3beta1ProductSearchResultsResult"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVisionV1p3beta1ProductSearchResultsGroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GoogleCloudVisionV1p3beta1ProductSearchResultsGroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
         "results": {
           "description": "List of results, one for each product match.",
           "items": {
@@ -4361,7 +4794,7 @@
           "description": "The Product."
         },
         "score": {
-          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).\n\nThis field is returned only if `view` is set to `FULL` in\nthe request.",
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
           "format": "float",
           "type": "number"
         }
@@ -4781,7 +5214,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "GoogleCloudVisionV1p3beta1BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",
@@ -4796,6 +5229,24 @@
           "description": "List of symbols in the word.\nThe order of the symbols follows the natural reading order.",
           "items": {
             "$ref": "GoogleCloudVisionV1p3beta1Symbol"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GroupedResult": {
+      "description": "Information about the products similar to a single product in a query\nimage.",
+      "id": "GroupedResult",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "BoundingPoly",
+          "description": "The bounding polygon around the product detected in the query image."
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "Result"
           },
           "type": "array"
         }
@@ -4829,6 +5280,27 @@
       },
       "type": "object"
     },
+    "ImportProductSetsResponse": {
+      "description": "Response message for the `ImportProductSets` method.\n\nThis message is returned by the\ngoogle.longrunning.Operations.GetOperation method in the returned\ngoogle.longrunning.Operation.response field.",
+      "id": "ImportProductSetsResponse",
+      "properties": {
+        "referenceImages": {
+          "description": "The list of reference_images that are imported successfully.",
+          "items": {
+            "$ref": "ReferenceImage"
+          },
+          "type": "array"
+        },
+        "statuses": {
+          "description": "The rpc status for each ImportProductSet request, including both successes\nand errors.\n\nThe number of statuses here matches the number of lines in the csv file,\nand statuses[i] stores the success or failure status of processing the i-th\nline of the csv, starting from line 0.",
+          "items": {
+            "$ref": "Status"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "InputConfig": {
       "description": "The desired input location and metadata.",
       "id": "InputConfig",
@@ -4839,6 +5311,21 @@
         },
         "mimeType": {
           "description": "The type of the file. Currently only \"application/pdf\" and \"image/tiff\"\nare supported. Wildcards are not supported.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "KeyValue": {
+      "description": "A product label represented as a key-value pair.",
+      "id": "KeyValue",
+      "properties": {
+        "key": {
+          "description": "The key of the label attached to the product. Cannot be empty and cannot\nexceed 128 bytes.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the label attached to the product. Cannot be empty and\ncannot exceed 128 bytes.",
           "type": "string"
         }
       },
@@ -4945,6 +5432,34 @@
         "longitude": {
           "description": "The longitude in degrees. It must be in the range [-180.0, +180.0].",
           "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "LocalizedObjectAnnotation": {
+      "description": "Set of detected objects with bounding boxes.",
+      "id": "LocalizedObjectAnnotation",
+      "properties": {
+        "boundingPoly": {
+          "$ref": "BoundingPoly",
+          "description": "Image region to which this object belongs. This must be populated."
+        },
+        "languageCode": {
+          "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.",
+          "type": "string"
+        },
+        "mid": {
+          "description": "Object ID that should align with EntityAnnotation mid.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name, expressed in its `language_code` language.",
+          "type": "string"
+        },
+        "score": {
+          "description": "Score of the result. Range [0, 1].",
+          "format": "float",
           "type": "number"
         }
       },
@@ -5103,7 +5618,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "BoundingPoly",
-          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the paragraph.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the paragraph. Range [0, 1].",
@@ -5146,6 +5661,62 @@
       },
       "type": "object"
     },
+    "Product": {
+      "description": "A Product contains ReferenceImages.",
+      "id": "Product",
+      "properties": {
+        "description": {
+          "description": "User-provided metadata to be stored with this product. Must be at most 4096\ncharacters long.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "The user-provided name for this Product. Must not be empty. Must be at most\n4096 characters long.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The resource name of the product.\n\nFormat is:\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID`.\n\nThis field is ignored when creating a product.",
+          "type": "string"
+        },
+        "productCategory": {
+          "description": "The category for the product identified by the reference image. This should\nbe either \"homegoods\", \"apparel\", or \"toys\".\n\nThis field is immutable.",
+          "type": "string"
+        },
+        "productLabels": {
+          "description": "Key-value pairs that can be attached to a product. At query time,\nconstraints can be specified based on the product_labels.\n\nNote that integer values can be provided as strings, e.g. \"1199\". Only\nstrings with integer values can match a range-based restriction which is\nto be supported soon.\n\nMultiple values can be assigned to the same key. One product may have up to\n100 product_labels.",
+          "items": {
+            "$ref": "KeyValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ProductSearchResults": {
+      "description": "Results for a product search request.",
+      "id": "ProductSearchResults",
+      "properties": {
+        "indexTime": {
+          "description": "Timestamp of the index which provided these results. Changes made after\nthis time are not reflected in the current results.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "productGroupedResults": {
+          "description": "List of results grouped by products detected in the query image. Each entry\ncorresponds to one bounding polygon in the query image, and contains the\nmatching products specific to that region. There may be duplicate product\nmatches in the union of all the per-product results.",
+          "items": {
+            "$ref": "GroupedResult"
+          },
+          "type": "array"
+        },
+        "results": {
+          "description": "List of results, one for each product match.",
+          "items": {
+            "$ref": "Result"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "Property": {
       "description": "A `Property` consists of a user-supplied name/value pair.",
       "id": "Property",
@@ -5162,6 +5733,48 @@
         "value": {
           "description": "Value of the property.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ReferenceImage": {
+      "description": "A `ReferenceImage` represents a product image and its associated metadata,\nsuch as bounding boxes.",
+      "id": "ReferenceImage",
+      "properties": {
+        "boundingPolys": {
+          "description": "Bounding polygons around the areas of interest in the reference image.\nOptional. If this field is empty, the system will try to detect regions of\ninterest. At most 10 bounding polygons will be used.\n\nThe provided shape is converted into a non-rotated rectangle. Once\nconverted, the small edge of the rectangle must be greater than or equal\nto 300 pixels. The aspect ratio must be 1:4 or less (i.e. 1:3 is ok; 1:5\nis not).",
+          "items": {
+            "$ref": "BoundingPoly"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "The resource name of the reference image.\n\nFormat is:\n\n`projects/PROJECT_ID/locations/LOC_ID/products/PRODUCT_ID/referenceImages/IMAGE_ID`.\n\nThis field is ignored when creating a reference image.",
+          "type": "string"
+        },
+        "uri": {
+          "description": "The Google Cloud Storage URI of the reference image.\n\nThe URI must start with `gs://`.\n\nRequired.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Result": {
+      "description": "Information about a product.",
+      "id": "Result",
+      "properties": {
+        "image": {
+          "description": "The resource name of the image from the product that is the closest match\nto the query.",
+          "type": "string"
+        },
+        "product": {
+          "$ref": "Product",
+          "description": "The Product."
+        },
+        "score": {
+          "description": "A confidence level on the match, ranging from 0 (no confidence) to\n1 (full confidence).",
+          "format": "float",
+          "type": "number"
         }
       },
       "type": "object"
@@ -5517,7 +6130,7 @@
       "properties": {
         "boundingBox": {
           "$ref": "BoundingPoly",
-          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertice order will still be (0, 1, 2, 3)."
+          "description": "The bounding box for the word.\nThe vertices are in the order of top-left, top-right, bottom-right,\nbottom-left. When a rotation of the bounding box is detected the rotation\nis represented as around the top-left corner as defined when the text is\nread in the 'natural' orientation.\nFor example:\n  * when the text is horizontal it might look like:\n     0----1\n     |    |\n     3----2\n  * when it's rotated 180 degrees around the top-left corner it becomes:\n     2----3\n     |    |\n     1----0\n  and the vertex order will still be (0, 1, 2, 3)."
         },
         "confidence": {
           "description": "Confidence of the OCR results for the word. Range [0, 1].",

@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opCreateByteMatchSet = "CreateByteMatchSet"
@@ -16,7 +18,7 @@ const opCreateByteMatchSet = "CreateByteMatchSet"
 // CreateByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateByteMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -163,7 +165,7 @@ const opCreateGeoMatchSet = "CreateGeoMatchSet"
 // CreateGeoMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGeoMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -309,7 +311,7 @@ const opCreateIPSet = "CreateIPSet"
 // CreateIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateIPSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -348,8 +350,8 @@ func (c *WAF) CreateIPSetRequest(input *CreateIPSetInput) (req *request.Request,
 
 // CreateIPSet API operation for AWS WAF.
 //
-// Creates an IPSet, which you use to specify which web requests you want to
-// allow or block based on the IP addresses that the requests originate from.
+// Creates an IPSet, which you use to specify which web requests that you want
+// to allow or block based on the IP addresses that the requests originate from.
 // For example, if you're receiving a lot of requests from one or more individual
 // IP addresses or one or more ranges of IP addresses and you want to block
 // the requests, you can create an IPSet that contains those IP addresses and
@@ -456,7 +458,7 @@ const opCreateRateBasedRule = "CreateRateBasedRule"
 // CreateRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRateBasedRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -638,7 +640,7 @@ const opCreateRegexMatchSet = "CreateRegexMatchSet"
 // CreateRegexMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRegexMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -753,7 +755,7 @@ const opCreateRegexPatternSet = "CreateRegexPatternSet"
 // CreateRegexPatternSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRegexPatternSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -864,7 +866,7 @@ const opCreateRule = "CreateRule"
 // CreateRuleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -906,8 +908,8 @@ func (c *WAF) CreateRuleRequest(input *CreateRuleInput) (req *request.Request, o
 // Creates a Rule, which contains the IPSet objects, ByteMatchSet objects, and
 // other predicates that identify the requests that you want to block. If you
 // add more than one predicate to a Rule, a request must match all of the specifications
-// to be allowed or blocked. For example, suppose you add the following to a
-// Rule:
+// to be allowed or blocked. For example, suppose that you add the following
+// to a Rule:
 //
 //    * An IPSet that matches the IP address 192.0.2.44/32
 //
@@ -1021,7 +1023,7 @@ const opCreateRuleGroup = "CreateRuleGroup"
 // CreateRuleGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRuleGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1127,7 +1129,7 @@ const opCreateSizeConstraintSet = "CreateSizeConstraintSet"
 // CreateSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSizeConstraintSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1275,7 +1277,7 @@ const opCreateSqlInjectionMatchSet = "CreateSqlInjectionMatchSet"
 // CreateSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSqlInjectionMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1419,7 +1421,7 @@ const opCreateWebACL = "CreateWebACL"
 // CreateWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the CreateWebACL operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1575,7 +1577,7 @@ const opCreateXssMatchSet = "CreateXssMatchSet"
 // CreateXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateXssMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1720,7 +1722,7 @@ const opDeleteByteMatchSet = "DeleteByteMatchSet"
 // DeleteByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteByteMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1847,7 +1849,7 @@ const opDeleteGeoMatchSet = "DeleteGeoMatchSet"
 // DeleteGeoMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGeoMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1973,7 +1975,7 @@ const opDeleteIPSet = "DeleteIPSet"
 // DeleteIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteIPSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2099,7 +2101,7 @@ const opDeleteLoggingConfiguration = "DeleteLoggingConfiguration"
 // DeleteLoggingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLoggingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2133,6 +2135,7 @@ func (c *WAF) DeleteLoggingConfigurationRequest(input *DeleteLoggingConfiguratio
 
 	output = &DeleteLoggingConfigurationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2186,7 +2189,7 @@ const opDeletePermissionPolicy = "DeletePermissionPolicy"
 // DeletePermissionPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePermissionPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2220,6 +2223,7 @@ func (c *WAF) DeletePermissionPolicyRequest(input *DeletePermissionPolicyInput) 
 
 	output = &DeletePermissionPolicyOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2275,7 +2279,7 @@ const opDeleteRateBasedRule = "DeleteRateBasedRule"
 // DeleteRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRateBasedRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2403,7 +2407,7 @@ const opDeleteRegexMatchSet = "DeleteRegexMatchSet"
 // DeleteRegexMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRegexMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2530,7 +2534,7 @@ const opDeleteRegexPatternSet = "DeleteRegexPatternSet"
 // DeleteRegexPatternSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRegexPatternSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2645,7 +2649,7 @@ const opDeleteRule = "DeleteRule"
 // DeleteRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2771,7 +2775,7 @@ const opDeleteRuleGroup = "DeleteRuleGroup"
 // DeleteRuleGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRuleGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2910,7 +2914,7 @@ const opDeleteSizeConstraintSet = "DeleteSizeConstraintSet"
 // DeleteSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSizeConstraintSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3037,7 +3041,7 @@ const opDeleteSqlInjectionMatchSet = "DeleteSqlInjectionMatchSet"
 // DeleteSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSqlInjectionMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3165,7 +3169,7 @@ const opDeleteWebACL = "DeleteWebACL"
 // DeleteWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteWebACL operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3288,7 +3292,7 @@ const opDeleteXssMatchSet = "DeleteXssMatchSet"
 // DeleteXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteXssMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3415,7 +3419,7 @@ const opGetByteMatchSet = "GetByteMatchSet"
 // GetByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetByteMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3502,7 +3506,7 @@ const opGetChangeToken = "GetChangeToken"
 // GetChangeTokenRequest generates a "aws/request.Request" representing the
 // client's request for the GetChangeToken operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3596,7 +3600,7 @@ const opGetChangeTokenStatus = "GetChangeTokenStatus"
 // GetChangeTokenStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetChangeTokenStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3689,7 +3693,7 @@ const opGetGeoMatchSet = "GetGeoMatchSet"
 // GetGeoMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetGeoMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3776,7 +3780,7 @@ const opGetIPSet = "GetIPSet"
 // GetIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetIPSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3863,7 +3867,7 @@ const opGetLoggingConfiguration = "GetLoggingConfiguration"
 // GetLoggingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoggingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3946,7 +3950,7 @@ const opGetPermissionPolicy = "GetPermissionPolicy"
 // GetPermissionPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetPermissionPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4029,7 +4033,7 @@ const opGetRateBasedRule = "GetRateBasedRule"
 // GetRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the GetRateBasedRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4117,7 +4121,7 @@ const opGetRateBasedRuleManagedKeys = "GetRateBasedRuleManagedKeys"
 // GetRateBasedRuleManagedKeysRequest generates a "aws/request.Request" representing the
 // client's request for the GetRateBasedRuleManagedKeys operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4236,7 +4240,7 @@ const opGetRegexMatchSet = "GetRegexMatchSet"
 // GetRegexMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetRegexMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4323,7 +4327,7 @@ const opGetRegexPatternSet = "GetRegexPatternSet"
 // GetRegexPatternSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetRegexPatternSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4410,7 +4414,7 @@ const opGetRule = "GetRule"
 // GetRuleRequest generates a "aws/request.Request" representing the
 // client's request for the GetRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4498,7 +4502,7 @@ const opGetRuleGroup = "GetRuleGroup"
 // GetRuleGroupRequest generates a "aws/request.Request" representing the
 // client's request for the GetRuleGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4584,7 +4588,7 @@ const opGetSampledRequests = "GetSampledRequests"
 // GetSampledRequestsRequest generates a "aws/request.Request" representing the
 // client's request for the GetSampledRequests operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4677,7 +4681,7 @@ const opGetSizeConstraintSet = "GetSizeConstraintSet"
 // GetSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetSizeConstraintSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4764,7 +4768,7 @@ const opGetSqlInjectionMatchSet = "GetSqlInjectionMatchSet"
 // GetSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetSqlInjectionMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4851,7 +4855,7 @@ const opGetWebACL = "GetWebACL"
 // GetWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the GetWebACL operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4938,7 +4942,7 @@ const opGetXssMatchSet = "GetXssMatchSet"
 // GetXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the GetXssMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5025,7 +5029,7 @@ const opListActivatedRulesInRuleGroup = "ListActivatedRulesInRuleGroup"
 // ListActivatedRulesInRuleGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ListActivatedRulesInRuleGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5137,7 +5141,7 @@ const opListByteMatchSets = "ListByteMatchSets"
 // ListByteMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListByteMatchSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5221,7 +5225,7 @@ const opListGeoMatchSets = "ListGeoMatchSets"
 // ListGeoMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListGeoMatchSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5305,7 +5309,7 @@ const opListIPSets = "ListIPSets"
 // ListIPSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListIPSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5389,7 +5393,7 @@ const opListLoggingConfigurations = "ListLoggingConfigurations"
 // ListLoggingConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLoggingConfigurations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5501,7 +5505,7 @@ const opListRateBasedRules = "ListRateBasedRules"
 // ListRateBasedRulesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRateBasedRules operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5585,7 +5589,7 @@ const opListRegexMatchSets = "ListRegexMatchSets"
 // ListRegexMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListRegexMatchSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5669,7 +5673,7 @@ const opListRegexPatternSets = "ListRegexPatternSets"
 // ListRegexPatternSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListRegexPatternSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5753,7 +5757,7 @@ const opListRuleGroups = "ListRuleGroups"
 // ListRuleGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListRuleGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5833,7 +5837,7 @@ const opListRules = "ListRules"
 // ListRulesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRules operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5917,7 +5921,7 @@ const opListSizeConstraintSets = "ListSizeConstraintSets"
 // ListSizeConstraintSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSizeConstraintSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6001,7 +6005,7 @@ const opListSqlInjectionMatchSets = "ListSqlInjectionMatchSets"
 // ListSqlInjectionMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSqlInjectionMatchSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6085,7 +6089,7 @@ const opListSubscribedRuleGroups = "ListSubscribedRuleGroups"
 // ListSubscribedRuleGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSubscribedRuleGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6168,7 +6172,7 @@ const opListWebACLs = "ListWebACLs"
 // ListWebACLsRequest generates a "aws/request.Request" representing the
 // client's request for the ListWebACLs operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6252,7 +6256,7 @@ const opListXssMatchSets = "ListXssMatchSets"
 // ListXssMatchSetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListXssMatchSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6336,7 +6340,7 @@ const opPutLoggingConfiguration = "PutLoggingConfiguration"
 // PutLoggingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the PutLoggingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6380,16 +6384,14 @@ func (c *WAF) PutLoggingConfigurationRequest(input *PutLoggingConfigurationInput
 // You can access information about all traffic that AWS WAF inspects using
 // the following steps:
 //
-// Create an Amazon Kinesis Data Firehose delivery stream. For more information,
-// see Creating an Amazon Kinesis Data Firehose Delivery Stream (https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html).
+// Create an Amazon Kinesis Data Firehose .
 //
-// Associate that delivery stream to your web ACL using a PutLoggingConfiguration
-// request.
+// Associate that firehose to your web ACL using a PutLoggingConfiguration request.
 //
 // When you successfully enable logging using a PutLoggingConfiguration request,
 // AWS WAF will create a service linked role with the necessary permissions
-// to write logs to the Amazon Kinesis Data Firehose delivery stream. For more
-// information, see Logging Web ACL Traffic Information (http://docs.aws.amazon.com/waf/latest/developerguide/logging.html)
+// to write logs to the Amazon Kinesis Data Firehose. For more information,
+// see Logging Web ACL Traffic Information (http://docs.aws.amazon.com/waf/latest/developerguide/logging.html)
 // in the AWS WAF Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -6410,6 +6412,16 @@ func (c *WAF) PutLoggingConfigurationRequest(input *PutLoggingConfigurationInput
 //   * ErrCodeStaleDataException "WAFStaleDataException"
 //   The operation failed because you tried to create, update, or delete an object
 //   by using a change token that has already been used.
+//
+//   * ErrCodeServiceLinkedRoleErrorException "WAFServiceLinkedRoleErrorException"
+//   AWS WAF is not able to access the service linked role. This can be caused
+//   by a previous PutLoggingConfiguration request, which can lock the service
+//   linked role for about 20 seconds. Please try your request again. The service
+//   linked role can also be locked by a previous DeleteServiceLinkedRole request,
+//   which can lock the role for 15 minutes or more. If you recently made a DeleteServiceLinkedRole,
+//   wait at least 15 minutes and try the request again. If you receive this same
+//   exception again, you will have to wait additional time until the role is
+//   unlocked.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/PutLoggingConfiguration
 func (c *WAF) PutLoggingConfiguration(input *PutLoggingConfigurationInput) (*PutLoggingConfigurationOutput, error) {
@@ -6438,7 +6450,7 @@ const opPutPermissionPolicy = "PutPermissionPolicy"
 // PutPermissionPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutPermissionPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6472,6 +6484,7 @@ func (c *WAF) PutPermissionPolicyRequest(input *PutPermissionPolicyInput) (req *
 
 	output = &PutPermissionPolicyOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -6575,7 +6588,7 @@ const opUpdateByteMatchSet = "UpdateByteMatchSet"
 // UpdateByteMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateByteMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6771,7 +6784,7 @@ const opUpdateGeoMatchSet = "UpdateGeoMatchSet"
 // UpdateGeoMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGeoMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6966,7 +6979,7 @@ const opUpdateIPSet = "UpdateIPSet"
 // UpdateIPSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateIPSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7185,7 +7198,7 @@ const opUpdateRateBasedRule = "UpdateRateBasedRule"
 // UpdateRateBasedRuleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRateBasedRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7390,7 +7403,7 @@ const opUpdateRegexMatchSet = "UpdateRegexMatchSet"
 // UpdateRegexMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRegexMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7557,7 +7570,7 @@ const opUpdateRegexPatternSet = "UpdateRegexPatternSet"
 // UpdateRegexPatternSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRegexPatternSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7721,7 +7734,7 @@ const opUpdateRule = "UpdateRule"
 // UpdateRuleRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRule operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7764,7 +7777,8 @@ func (c *WAF) UpdateRuleRequest(input *UpdateRuleInput) (req *request.Request, o
 // a predicate, such as a ByteMatchSet or an IPSet, that specifies the web requests
 // that you want to allow, block, or count. If you add more than one predicate
 // to a Rule, a request must match all of the specifications to be allowed,
-// blocked, or counted. For example, suppose you add the following to a Rule:
+// blocked, or counted. For example, suppose that you add the following to a
+// Rule:
 //
 //    * A ByteMatchSet that matches the value BadBot in the User-Agent header
 //
@@ -7921,7 +7935,7 @@ const opUpdateRuleGroup = "UpdateRuleGroup"
 // UpdateRuleGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRuleGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8099,7 +8113,7 @@ const opUpdateSizeConstraintSet = "UpdateSizeConstraintSet"
 // UpdateSizeConstraintSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSizeConstraintSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8307,7 +8321,7 @@ const opUpdateSqlInjectionMatchSet = "UpdateSqlInjectionMatchSet"
 // UpdateSqlInjectionMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSqlInjectionMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8364,10 +8378,10 @@ func (c *WAF) UpdateSqlInjectionMatchSetRequest(input *UpdateSqlInjectionMatchSe
 // You can only specify a single type of TextTransformation.
 //
 // You use SqlInjectionMatchSet objects to specify which CloudFront requests
-// you want to allow, block, or count. For example, if you're receiving requests
-// that contain snippets of SQL code in the query string and you want to block
-// the requests, you can create a SqlInjectionMatchSet with the applicable settings,
-// and then configure AWS WAF to block the requests.
+// that you want to allow, block, or count. For example, if you're receiving
+// requests that contain snippets of SQL code in the query string and you want
+// to block the requests, you can create a SqlInjectionMatchSet with the applicable
+// settings, and then configure AWS WAF to block the requests.
 //
 // To create and configure a SqlInjectionMatchSet, perform the following steps:
 //
@@ -8501,7 +8515,7 @@ const opUpdateWebACL = "UpdateWebACL"
 // UpdateWebACLRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateWebACL operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8548,8 +8562,8 @@ func (c *WAF) UpdateWebACLRequest(input *UpdateWebACLInput) (req *request.Reques
 //    the default action if a request doesn't match the criteria in any of the
 //    Rules in a WebACL.
 //
-//    * The Rules that you want to add and/or delete. If you want to replace
-//    one Rule with another, you delete the existing Rule and add the new one.
+//    * The Rules that you want to add or delete. If you want to replace one
+//    Rule with another, you delete the existing Rule and add the new one.
 //
 //    * For each Rule, whether you want AWS WAF to allow requests, block requests,
 //    or count requests that match the conditions in the Rule.
@@ -8558,9 +8572,9 @@ func (c *WAF) UpdateWebACLRequest(input *UpdateWebACLInput) (req *request.Reques
 //    If you add more than one Rule to a WebACL, AWS WAF evaluates each request
 //    against the Rules in order based on the value of Priority. (The Rule that
 //    has the lowest value for Priority is evaluated first.) When a web request
-//    matches all of the predicates (such as ByteMatchSets and IPSets) in a
-//    Rule, AWS WAF immediately takes the corresponding action, allow or block,
-//    and doesn't evaluate the request against the remaining Rules in the WebACL,
+//    matches all the predicates (such as ByteMatchSets and IPSets) in a Rule,
+//    AWS WAF immediately takes the corresponding action, allow or block, and
+//    doesn't evaluate the request against the remaining Rules in the WebACL,
 //    if any.
 //
 // To create and configure a WebACL, perform the following steps:
@@ -8580,6 +8594,14 @@ func (c *WAF) UpdateWebACLRequest(input *UpdateWebACLInput) (req *request.Reques
 // Submit an UpdateWebACL request to specify the Rules that you want to include
 // in the WebACL, to specify the default action, and to associate the WebACL
 // with a CloudFront distribution.
+//
+// The ActivatedRule can be a rule group. If you specify a rule group as your
+// ActivatedRule, you can exclude specific rules from that rule group.
+//
+// If you already have a rule group associated with a web ACL and want to submit
+// an UpdateWebACL request to exclude certain rules from that rule group, you
+// must first remove the rule group from the web ACL, the re-insert it again,
+// specifying the excluded rules. For details, see ActivatedRule$ExcludedRules.
 //
 // Be aware that if you try to add a RATE_BASED rule to a web ACL without setting
 // the rule type when first creating the rule, the UpdateWebACL request will
@@ -8719,7 +8741,7 @@ const opUpdateXssMatchSet = "UpdateXssMatchSet"
 // UpdateXssMatchSetRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateXssMatchSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8762,8 +8784,8 @@ func (c *WAF) UpdateXssMatchSetRequest(input *UpdateXssMatchSetInput) (req *requ
 // each XssMatchTuple object, you specify the following values:
 //
 //    * Action: Whether to insert the object into or delete the object from
-//    the array. To change a XssMatchTuple, you delete the existing object and
-//    add a new one.
+//    the array. To change an XssMatchTuple, you delete the existing object
+//    and add a new one.
 //
 //    * FieldToMatch: The part of web requests that you want AWS WAF to inspect
 //    and, if you want AWS WAF to inspect a header or custom query parameter,
@@ -8775,11 +8797,11 @@ func (c *WAF) UpdateXssMatchSetRequest(input *UpdateXssMatchSetInput) (req *requ
 //
 // You can only specify a single type of TextTransformation.
 //
-// You use XssMatchSet objects to specify which CloudFront requests you want
-// to allow, block, or count. For example, if you're receiving requests that
-// contain cross-site scripting attacks in the request body and you want to
-// block the requests, you can create an XssMatchSet with the applicable settings,
-// and then configure AWS WAF to block the requests.
+// You use XssMatchSet objects to specify which CloudFront requests that you
+// want to allow, block, or count. For example, if you're receiving requests
+// that contain cross-site scripting attacks in the request body and you want
+// to block the requests, you can create an XssMatchSet with the applicable
+// settings, and then configure AWS WAF to block the requests.
 //
 // To create and configure an XssMatchSet, perform the following steps:
 //
@@ -8930,9 +8952,44 @@ type ActivatedRule struct {
 	//    remaining rules in the web ACL.
 	//
 	// ActivatedRule|OverrideAction applies only when updating or adding a RuleGroup
-	// to a WebACL. In this case you do not use ActivatedRule|Action. For all other
+	// to a WebACL. In this case, you do not use ActivatedRule|Action. For all other
 	// update requests, ActivatedRule|Action is used instead of ActivatedRule|OverrideAction.
 	Action *WafAction `type:"structure"`
+
+	// An array of rules to exclude from a rule group. This is applicable only when
+	// the ActivatedRule refers to a RuleGroup.
+	//
+	// Sometimes it is necessary to troubleshoot rule groups that are blocking traffic
+	// unexpectedly (false positives). One troubleshooting technique is to identify
+	// the specific rule within the rule group that is blocking the legitimate traffic
+	// and then disable (exclude) that particular rule. You can exclude rules from
+	// both your own rule groups and AWS Marketplace rule groups that have been
+	// associated with a web ACL.
+	//
+	// Specifying ExcludedRules does not remove those rules from the rule group.
+	// Rather, it changes the action for the rules to COUNT. Therefore, requests
+	// that match an ExcludedRule are counted but not blocked. The RuleGroup owner
+	// will receive COUNT metrics for each ExcludedRule.
+	//
+	// If you want to exclude rules from a rule group that is already associated
+	// with a web ACL, perform the following steps:
+	//
+	// Use the AWS WAF logs to identify the IDs of the rules that you want to exclude.
+	// For more information about the logs, see Logging Web ACL Traffic Information
+	// (http://docs.aws.amazon.com/waf/latest/developerguide/logging.html).
+	//
+	// Submit an UpdateWebACL request that has two actions:
+	//
+	// The first action deletes the existing rule group from the web ACL. That is,
+	// in the UpdateWebACL request, the first Updates:Action should be DELETE and
+	// Updates:ActivatedRule:RuleId should be the rule group that contains the rules
+	// that you want to exclude.
+	//
+	// The second action inserts the same rule group back in, but specifying the
+	// rules to exclude. That is, the second Updates:Action should be INSERT, Updates:ActivatedRule:RuleId
+	// should be the rule group that you just removed, and ExcludedRules should
+	// contain the rules that you want to exclude.
+	ExcludedRules []*ExcludedRule `type:"list"`
 
 	// Use the OverrideAction to test your RuleGroup.
 	//
@@ -9004,6 +9061,16 @@ func (s *ActivatedRule) Validate() error {
 			invalidParams.AddNested("Action", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.ExcludedRules != nil {
+		for i, v := range s.ExcludedRules {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ExcludedRules", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 	if s.OverrideAction != nil {
 		if err := s.OverrideAction.Validate(); err != nil {
 			invalidParams.AddNested("OverrideAction", err.(request.ErrInvalidParams))
@@ -9019,6 +9086,12 @@ func (s *ActivatedRule) Validate() error {
 // SetAction sets the Action field's value.
 func (s *ActivatedRule) SetAction(v *WafAction) *ActivatedRule {
 	s.Action = v
+	return s
+}
+
+// SetExcludedRules sets the ExcludedRules field's value.
+func (s *ActivatedRule) SetExcludedRules(v []*ExcludedRule) *ActivatedRule {
+	s.ExcludedRules = v
 	return s
 }
 
@@ -9320,7 +9393,7 @@ type ByteMatchTuple struct {
 	//
 	// For example, suppose the value of Type is HEADER and the value of Data is
 	// User-Agent. If you want to search the User-Agent header for the value BadBot,
-	// you base64-encode BadBot using MIME base64 encoding and include the resulting
+	// you base64-encode BadBot using MIME base64-encoding and include the resulting
 	// value, QmFkQm90, in the value of TargetString.
 	//
 	// If you're using the AWS CLI or one of the AWS SDKs
@@ -10207,7 +10280,7 @@ type CreateRuleInput struct {
 
 	// A friendly name or description for the metrics for this Rule. The name can
 	// contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain
-	// whitespace. You can't change the name of the metric after you create the
+	// white space. You can't change the name of the metric after you create the
 	// Rule.
 	//
 	// MetricName is a required field
@@ -10512,7 +10585,7 @@ type CreateWebACLInput struct {
 
 	// A friendly name or description for the metrics for this WebACL. The name
 	// can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't
-	// contain whitespace. You can't change MetricName after you create the WebACL.
+	// contain white space. You can't change MetricName after you create the WebACL.
 	//
 	// MetricName is a required field
 	MetricName *string `type:"string" required:"true"`
@@ -11843,6 +11916,50 @@ func (s DeleteXssMatchSetOutput) GoString() string {
 // SetChangeToken sets the ChangeToken field's value.
 func (s *DeleteXssMatchSetOutput) SetChangeToken(v string) *DeleteXssMatchSetOutput {
 	s.ChangeToken = &v
+	return s
+}
+
+// The rule to exclude from a rule group. This is applicable only when the ActivatedRule
+// refers to a RuleGroup. The rule must belong to the RuleGroup that is specified
+// by the ActivatedRule.
+type ExcludedRule struct {
+	_ struct{} `type:"structure"`
+
+	// The unique identifier for the rule to exclude from the rule group.
+	//
+	// RuleId is a required field
+	RuleId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ExcludedRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExcludedRule) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExcludedRule) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExcludedRule"}
+	if s.RuleId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RuleId"))
+	}
+	if s.RuleId != nil && len(*s.RuleId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RuleId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRuleId sets the RuleId field's value.
+func (s *ExcludedRule) SetRuleId(v string) *ExcludedRule {
+	s.RuleId = &v
 	return s
 }
 
@@ -15148,19 +15265,19 @@ func (s *ListXssMatchSetsOutput) SetXssMatchSets(v []*XssMatchSetSummary) *ListX
 	return s
 }
 
-// The Amazon Kinesis Data Firehose delivery streams, RedactedFields information,
-// and the web ACL Amazon Resource Name (ARN).
+// The Amazon Kinesis Data Firehose, RedactedFields information, and the web
+// ACL Amazon Resource Name (ARN).
 type LoggingConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// An array of Amazon Kinesis Data Firehose delivery stream ARNs.
+	// An array of Amazon Kinesis Data Firehose ARNs.
 	//
 	// LogDestinationConfigs is a required field
 	LogDestinationConfigs []*string `min:"1" type:"list" required:"true"`
 
 	// The parts of the request that you want redacted from the logs. For example,
-	// if you redact the cookie field, the cookie field in the delivery stream will
-	// be xxx.
+	// if you redact the cookie field, the cookie field in the firehose will be
+	// xxx.
 	RedactedFields []*FieldToMatch `type:"list"`
 
 	// The Amazon Resource Name (ARN) of the web ACL that you want to associate
@@ -15317,9 +15434,9 @@ func (s *Predicate) SetType(v string) *Predicate {
 type PutLoggingConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Kinesis Data Firehose delivery streams that contains the inspected
-	// traffic information, the redacted fields details, and the Amazon Resource
-	// Name (ARN) of the web ACL to monitor.
+	// The Amazon Kinesis Data Firehose that contains the inspected traffic information,
+	// the redacted fields details, and the Amazon Resource Name (ARN) of the web
+	// ACL to monitor.
 	//
 	// LoggingConfiguration is a required field
 	LoggingConfiguration *LoggingConfiguration `type:"structure" required:"true"`
@@ -18445,7 +18562,7 @@ type UpdateWebACLInput struct {
 	//
 	//    * ActivatedRule: Contains Action, OverrideAction, Priority, RuleId, and
 	//    Type. ActivatedRule|OverrideAction applies only when updating or adding
-	//    a RuleGroup to a WebACL. In this case you do not use ActivatedRule|Action.
+	//    a RuleGroup to a WebACL. In this case, you do not use ActivatedRule|Action.
 	//    For all other update requests, ActivatedRule|Action is used instead of
 	//    ActivatedRule|OverrideAction.
 	//
@@ -18565,7 +18682,7 @@ type UpdateXssMatchSetInput struct {
 	ChangeToken *string `min:"1" type:"string" required:"true"`
 
 	// An array of XssMatchSetUpdate objects that you want to insert into or delete
-	// from a XssMatchSet. For more information, see the applicable data types:
+	// from an XssMatchSet. For more information, see the applicable data types:
 	//
 	//    * XssMatchSetUpdate: Contains Action and XssMatchTuple
 	//
@@ -18800,6 +18917,9 @@ type WebACL struct {
 	// Rules is a required field
 	Rules []*ActivatedRule `type:"list" required:"true"`
 
+	// Tha Amazon Resource Name (ARN) of the web ACL.
+	WebACLArn *string `min:"1" type:"string"`
+
 	// A unique identifier for a WebACL. You use WebACLId to get information about
 	// a WebACL (see GetWebACL), update a WebACL (see UpdateWebACL), and delete
 	// a WebACL from AWS WAF (see DeleteWebACL).
@@ -18841,6 +18961,12 @@ func (s *WebACL) SetName(v string) *WebACL {
 // SetRules sets the Rules field's value.
 func (s *WebACL) SetRules(v []*ActivatedRule) *WebACL {
 	s.Rules = v
+	return s
+}
+
+// SetWebACLArn sets the WebACLArn field's value.
+func (s *WebACL) SetWebACLArn(v string) *WebACL {
+	s.WebACLArn = &v
 	return s
 }
 
@@ -19058,8 +19184,8 @@ func (s *XssMatchSetSummary) SetXssMatchSetId(v string) *XssMatchSetSummary {
 type XssMatchSetUpdate struct {
 	_ struct{} `type:"structure"`
 
-	// Specify INSERT to add a XssMatchSetUpdate to an XssMatchSet. Use DELETE to
-	// remove a XssMatchSetUpdate from an XssMatchSet.
+	// Specify INSERT to add an XssMatchSetUpdate to an XssMatchSet. Use DELETE
+	// to remove an XssMatchSetUpdate from an XssMatchSet.
 	//
 	// Action is a required field
 	Action *string `type:"string" required:"true" enum:"ChangeAction"`
@@ -20115,6 +20241,9 @@ const (
 
 	// ParameterExceptionFieldNextMarker is a ParameterExceptionField enum value
 	ParameterExceptionFieldNextMarker = "NEXT_MARKER"
+
+	// ParameterExceptionFieldResourceArn is a ParameterExceptionField enum value
+	ParameterExceptionFieldResourceArn = "RESOURCE_ARN"
 )
 
 const (
@@ -20123,6 +20252,9 @@ const (
 
 	// ParameterExceptionReasonIllegalCombination is a ParameterExceptionReason enum value
 	ParameterExceptionReasonIllegalCombination = "ILLEGAL_COMBINATION"
+
+	// ParameterExceptionReasonIllegalArgument is a ParameterExceptionReason enum value
+	ParameterExceptionReasonIllegalArgument = "ILLEGAL_ARGUMENT"
 )
 
 const (

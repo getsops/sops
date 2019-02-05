@@ -7,6 +7,7 @@
     "AddTagsToResource": "<p>Adds one or more tags to the specified resource. You use tags to add metadata to resources, which you can use to categorize these resources. For example, you can categorize resources by purpose, owner, environment, or team. Each tag consists of a key and a value, which you define. You can add tags to the following AWS Storage Gateway resources:</p> <ul> <li> <p>Storage gateways of all types</p> </li> </ul> <ul> <li> <p>Storage Volumes</p> </li> </ul> <ul> <li> <p>Virtual Tapes</p> </li> </ul> <p>You can create a maximum of 10 tags for each resource. Virtual tapes and storage volumes that are recovered to a new gateway maintain their tags.</p>",
     "AddUploadBuffer": "<p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>",
     "AddWorkingStorage": "<p>Configures one or more gateway local disks as working storage for a gateway. This operation is only supported in the stored volume gateway type. This operation is deprecated in cached volume API version 20120630. Use <a>AddUploadBuffer</a> instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the <a>AddUploadBuffer</a> operation to add upload buffer to a stored volume gateway.</p> </note> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add working storage, and one or more disk IDs that you want to configure as working storage.</p>",
+    "AttachVolume": "<p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>",
     "CancelArchival": "<p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated. This operation is only supported in the tape gateway type.</p>",
     "CancelRetrieval": "<p>Cancels retrieval of a virtual tape from the virtual tape shelf (VTS) to a gateway after the retrieval process is initiated. The virtual tape is returned to the VTS. This operation is only supported in the tape gateway type.</p>",
     "CreateCachediSCSIVolume": "<p>Creates a cached volume on a specified cached volume gateway. This operation is only supported in the cached volume gateway type.</p> <note> <p>Cache storage must be allocated to the gateway before you can create a cached volume. Use the <a>AddCache</a> operation to add cache storage to a gateway. </p> </note> <p>In the request, you must specify the gateway, size of the volume in bytes, the iSCSI target name, an IP address on which to expose the target, and a unique client token. In response, the gateway creates the volume and returns information about it. This information includes the volume Amazon Resource Name (ARN), its size, and the iSCSI target ARN that initiators can use to connect to the volume target.</p> <p>Optionally, you can provide the ARN for an existing volume as the <code>SourceVolumeARN</code> for this cached volume, which creates an exact copy of the existing volume’s latest recovery point. The <code>VolumeSizeInBytes</code> value must be equal to or larger than the size of the copied volume, in bytes.</p>",
@@ -42,6 +43,7 @@
     "DescribeUploadBuffer": "<p>Returns information about the upload buffer of a gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>The response includes disk IDs that are configured as upload buffer space, and it includes the amount of upload buffer space allocated and used.</p>",
     "DescribeVTLDevices": "<p>Returns a description of virtual tape library (VTL) devices for the specified tape gateway. In the response, AWS Storage Gateway returns VTL device information.</p> <p>This operation is only supported in the tape gateway type.</p>",
     "DescribeWorkingStorage": "<p>Returns information about the working storage of a gateway. This operation is only supported in the stored volumes gateway type. This operation is deprecated in cached volumes API version (20120630). Use DescribeUploadBuffer instead.</p> <note> <p>Working storage is also referred to as upload buffer. You can also use the DescribeUploadBuffer operation to add upload buffer to a stored volume gateway.</p> </note> <p>The response includes disk IDs that are configured as working storage, and it includes the amount of working storage allocated and used.</p>",
+    "DetachVolume": "<p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>",
     "DisableGateway": "<p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway type.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important>",
     "JoinDomain": "<p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>",
     "ListFileShares": "<p>Gets a list of the file shares for a specific file gateway, or the list of file shares that belong to the calling user account. This operation is only supported for file gateways.</p>",
@@ -53,7 +55,7 @@
     "ListVolumeRecoveryPoints": "<p>Lists the recovery points for a specified gateway. This operation is only supported in the cached volume gateway type.</p> <p>Each cache volume has one recovery point. A volume recovery point is a point in time at which all data of the volume is consistent and from which you can create a snapshot or clone a new cached volume from a source volume. To create a snapshot from a volume recovery point use the <a>CreateSnapshotFromVolumeRecoveryPoint</a> operation.</p>",
     "ListVolumes": "<p>Lists the iSCSI stored volumes of a gateway. Results are sorted by volume ARN. The response includes only the volume ARNs. If you want additional volume information, use the <a>DescribeStorediSCSIVolumes</a> or the <a>DescribeCachediSCSIVolumes</a> API.</p> <p>The operation supports pagination. By default, the operation returns a maximum of up to 100 volumes. You can optionally specify the <code>Limit</code> field in the body to limit the number of volumes in the response. If the number of volumes returned in the response is truncated, the response includes a Marker field. You can use this Marker value in your subsequent request to retrieve the next set of volumes. This operation is only supported in the cached volume and stored volume gateway types.</p>",
     "NotifyWhenUploaded": "<p>Sends you notification through CloudWatch Events when all files written to your NFS file share have been uploaded to Amazon S3.</p> <p>AWS Storage Gateway can send a notification through Amazon CloudWatch Events when all files written to your file share up to that point in time have been uploaded to Amazon S3. These files include files written to the NFS file share up to the time that you make a request for notification. When the upload is done, Storage Gateway sends you notification through an Amazon CloudWatch Event. You can configure CloudWatch Events to send the notification through event targets such as Amazon SNS or AWS Lambda function. This operation is only supported for file gateways.</p> <p>For more information, see Getting File Upload Notification in the Storage Gateway User Guide (https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-upload-notification). </p>",
-    "RefreshCache": "<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type.</p>",
+    "RefreshCache": "<p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href=\"https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification\">Getting Notified About File Operations</a>.</p>",
     "RemoveTagsFromResource": "<p>Removes one or more tags from the specified resource. This operation is only supported in the cached volume, stored volume and tape gateway types.</p>",
     "ResetCache": "<p>Resets all cache disks that have encountered a error and makes the disks available for reconfiguration as cache storage. If your cache disk encounters a error, the gateway prevents read and write operations on virtual tapes in the gateway. For example, an error can occur when a disk is corrupted or removed from the gateway. When a cache is reset, the gateway loses its cache storage. At this point you can reconfigure the disks as cache disks. This operation is only supported in the cached volume and tape types.</p> <important> <p>If the cache disk you are resetting contains data that has not been uploaded to Amazon S3 yet, that data can be lost. After you reset cache disks, there will be no configured cache disks left in the gateway, so you must configure at least one new cache disk for your gateway to function properly.</p> </important>",
     "RetrieveTapeArchive": "<p>Retrieves an archived virtual tape from the virtual tape shelf (VTS) to a tape gateway. Virtual tapes archived in the VTS are not associated with any gateway. However after a tape is retrieved, it is associated with a gateway, even though it is also listed in the VTS, that is, archive. This operation is only supported in the tape gateway type.</p> <p>Once a tape is successfully retrieved to a gateway, it cannot be retrieved again to another gateway. You must archive the tape again before you can retrieve it to another gateway. This operation is only supported in the tape gateway type.</p>",
@@ -129,6 +131,16 @@
       "refs": {
       }
     },
+    "AttachVolumeInput": {
+      "base": "<p>AttachVolumeInput</p>",
+      "refs": {
+      }
+    },
+    "AttachVolumeOutput": {
+      "base": "<p>AttachVolumeOutput</p>",
+      "refs": {
+      }
+    },
     "Authentication": {
       "base": "<p>The authentication method of the file share.</p> <p>Valid values are <code>ActiveDirectory</code> or <code>GuestAccess</code>. The default is <code>ActiveDirectory</code>.</p>",
       "refs": {
@@ -172,9 +184,11 @@
         "CreateTapeWithBarcodeInput$KMSEncrypted": "<p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>",
         "CreateTapesInput$KMSEncrypted": "<p>True to use Amazon S3 server side encryption with your own AWS KMS key, or false to use a key managed by Amazon S3. Optional.</p>",
         "DescribeSMBSettingsOutput$SMBGuestPasswordSet": "<p>This value is true if a password for the guest user “smbguest” is set, and otherwise false.</p>",
+        "DetachVolumeInput$ForceDetach": "<p>Set to <code>true</code> to forcibly remove the iSCSI connection of the target volume and detach the volume. The default is <code>false</code>. If this value is set to <code>false</code>, you must manually disconnect the iSCSI connection from the target volume.</p>",
         "NFSFileShareInfo$ReadOnly": "<p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>",
         "NFSFileShareInfo$GuessMIMETypeEnabled": "<p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>",
         "NFSFileShareInfo$RequesterPays": "<p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>",
+        "RefreshCacheInput$Recursive": "<p>A value that specifies whether to recursively refresh folders in the cache. The refresh includes folders that were in the cache the last time the gateway listed the folder's contents. If this value set to \"true\", each folder that is listed in <code>FolderList</code> is recursively updated. Otherwise, subfolders listed in <code>FolderList</code> are not refreshed. Only objects that are in folders listed directly under <code>FolderList</code> are found and used for the update. The default is \"true\".</p>",
         "SMBFileShareInfo$ReadOnly": "<p>A value that sets the write status of a file share. This value is true if the write status is read-only, and otherwise false.</p>",
         "SMBFileShareInfo$GuessMIMETypeEnabled": "<p>A value that enables guessing of the MIME type for uploaded objects based on file extensions. Set this value to true to enable MIME type guessing, and otherwise to false. The default value is true.</p>",
         "SMBFileShareInfo$RequesterPays": "<p>A value that sets the access control list permission for objects in the Amazon S3 bucket that a file gateway puts objects into. The default value is <code>private</code>.</p>",
@@ -601,6 +615,16 @@
         "UpdateSnapshotScheduleInput$Description": "<p>Optional description of the snapshot that overwrites the existing description.</p>"
       }
     },
+    "DetachVolumeInput": {
+      "base": "<p>AttachVolumeInput</p>",
+      "refs": {
+      }
+    },
+    "DetachVolumeOutput": {
+      "base": "<p>AttachVolumeOutput</p>",
+      "refs": {
+      }
+    },
     "DeviceType": {
       "base": null,
       "refs": {
@@ -624,22 +648,35 @@
       }
     },
     "Disk": {
-      "base": null,
+      "base": "<p>Represents a gateway's local disk.</p>",
       "refs": {
         "Disks$member": null
       }
     },
     "DiskAllocationType": {
-      "base": null,
+      "base": "<p>One of the <code>DiskAllocationType</code> enumeration values that identifies how a local disk is used. Valid values: <code>UPLOAD_BUFFER</code>, <code>CACHE_STORAGE</code> </p>",
       "refs": {
         "Disk$DiskAllocationType": null
+      }
+    },
+    "DiskAttribute": {
+      "base": null,
+      "refs": {
+        "DiskAttributeList$member": null
+      }
+    },
+    "DiskAttributeList": {
+      "base": "<p>A list of values that represents attributes of a local disk.</p>",
+      "refs": {
+        "Disk$DiskAttributeList": null
       }
     },
     "DiskId": {
       "base": null,
       "refs": {
+        "AttachVolumeInput$DiskId": "<p>The unique device ID or other distinguishing data that identifies the local disk used to create the volume. This value is only required when you are attaching a stored volume.</p>",
         "CreateStorediSCSIVolumeInput$DiskId": "<p>The unique identifier for the gateway local disk that is configured as a stored volume. Use <a href=\"http://docs.aws.amazon.com/storagegateway/latest/userguide/API_ListLocalDisks.html\">ListLocalDisks</a> to list disk IDs for a gateway.</p>",
-        "Disk$DiskId": null,
+        "Disk$DiskId": "<p>The unique device ID or other distinguishing data that identifies a local disk.</p>",
         "DiskIds$member": null,
         "StorediSCSIVolume$VolumeDiskId": "<p>The ID of the local disk that was specified in the <a>CreateStorediSCSIVolume</a> operation.</p>"
       }
@@ -706,7 +743,7 @@
         "NFSFileShareInfo$FileShareARN": null,
         "NotifyWhenUploadedInput$FileShareARN": null,
         "NotifyWhenUploadedOutput$FileShareARN": null,
-        "RefreshCacheInput$FileShareARN": null,
+        "RefreshCacheInput$FileShareARN": "<p>The Amazon Resource Name (ARN) of the file share you want to refresh.</p>",
         "RefreshCacheOutput$FileShareARN": null,
         "SMBFileShareInfo$FileShareARN": null,
         "UpdateNFSFileShareInput$FileShareARN": "<p>The Amazon Resource Name (ARN) of the file share to be updated. </p>",
@@ -781,6 +818,18 @@
         "UpdateSMBFileShareInput$InvalidUserList": "<p>A list of users or groups in the Active Directory that are not allowed to access the file share. A group must be prefixed with the @ character. For example <code>@group1</code>. Can only be set if Authentication is set to <code>ActiveDirectory</code>.</p>"
       }
     },
+    "Folder": {
+      "base": null,
+      "refs": {
+        "FolderList$member": null
+      }
+    },
+    "FolderList": {
+      "base": null,
+      "refs": {
+        "RefreshCacheInput$FolderList": "<p>A comma-separated list of the paths of folders to refresh in the cache. The default is [<code>\"/\"</code>]. The default refreshes objects and folders at the root of the Amazon S3 bucket. If <code>Recursive</code> is set to \"true\", the entire S3 bucket that the file share has access to is refreshed.</p>"
+      }
+    },
     "GatewayARN": {
       "base": "<p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>",
       "refs": {
@@ -791,6 +840,7 @@
         "AddUploadBufferOutput$GatewayARN": null,
         "AddWorkingStorageInput$GatewayARN": null,
         "AddWorkingStorageOutput$GatewayARN": null,
+        "AttachVolumeInput$GatewayARN": "<p>The Amazon Resource Name (ARN) of the gateway that you want to attach the volume to.</p>",
         "CancelArchivalInput$GatewayARN": null,
         "CancelRetrievalInput$GatewayARN": null,
         "CreateCachediSCSIVolumeInput$GatewayARN": null,
@@ -827,7 +877,7 @@
         "DisableGatewayOutput$GatewayARN": "<p>The unique Amazon Resource Name (ARN) of the disabled gateway.</p>",
         "FileShareInfo$GatewayARN": null,
         "GatewayInfo$GatewayARN": "<p>The Amazon Resource Name (ARN) of the gateway. Use the <a>ListGateways</a> operation to return a list of gateways for your account and region.</p>",
-        "JoinDomainInput$GatewayARN": "<p>The unique Amazon Resource Name (ARN) of the file gateway you want to add to the Active Directory domain. </p>",
+        "JoinDomainInput$GatewayARN": "<p>The Amazon Resource Name (ARN) of the gateway. Use the <code>ListGateways</code> operation to return a list of gateways for your account and region.</p>",
         "JoinDomainOutput$GatewayARN": "<p>The unique Amazon Resource Name (ARN) of the gateway that joined the domain.</p>",
         "ListFileSharesInput$GatewayARN": "<p>The Amazon resource Name (ARN) of the gateway whose file shares you want to list. If this field is not present, all file shares under your account are listed.</p>",
         "ListLocalDisksInput$GatewayARN": null,
@@ -915,7 +965,7 @@
     "GatewayType": {
       "base": null,
       "refs": {
-        "ActivateGatewayInput$GatewayType": "<p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>STORED</code>. </p> <p> Valid Values: \"STORED\", \"CACHED\", \"VTL\", \"FILE_S3\"</p>",
+        "ActivateGatewayInput$GatewayType": "<p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>CACHED</code>. </p> <p> Valid Values: \"STORED\", \"CACHED\", \"VTL\", \"FILE_S3\"</p>",
         "DescribeGatewayInformationOutput$GatewayType": "<p>The type of the gateway.</p>",
         "GatewayInfo$GatewayType": "<p>The type of the gateway.</p>"
       }
@@ -924,6 +974,18 @@
       "base": null,
       "refs": {
         "ListGatewaysOutput$Gateways": null
+      }
+    },
+    "Host": {
+      "base": null,
+      "refs": {
+        "Hosts$member": null
+      }
+    },
+    "Hosts": {
+      "base": null,
+      "refs": {
+        "JoinDomainInput$DomainControllers": "<p>List of IPv4 addresses, NetBIOS names, or host names of your domain server. If you need to specify the port number include it after the colon (“:”). For example, <code>mydc.mydomain.com:389</code>.</p>"
       }
     },
     "HourOfDay": {
@@ -1169,6 +1231,7 @@
     "NetworkInterfaceId": {
       "base": null,
       "refs": {
+        "AttachVolumeInput$NetworkInterfaceId": "<p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>",
         "CreateCachediSCSIVolumeInput$NetworkInterfaceId": "<p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>",
         "CreateStorediSCSIVolumeInput$NetworkInterfaceId": "<p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>",
         "DeviceiSCSIAttributes$NetworkInterfaceId": "<p>The network interface identifier of the VTL device.</p>",
@@ -1184,7 +1247,8 @@
     "NotificationId": {
       "base": "<p>The randomly generated ID of the notification that was sent. This ID is in UUID format.</p>",
       "refs": {
-        "NotifyWhenUploadedOutput$NotificationId": null
+        "NotifyWhenUploadedOutput$NotificationId": null,
+        "RefreshCacheOutput$NotificationId": null
       }
     },
     "NotifyWhenUploadedInput": {
@@ -1212,6 +1276,12 @@
         "SMBFileShareInfo$ObjectACL": null,
         "UpdateNFSFileShareInput$ObjectACL": "<p>A value that sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is \"private\".</p>",
         "UpdateSMBFileShareInput$ObjectACL": "<p>A value that sets the access control list permission for objects in the S3 bucket that a file gateway puts objects into. The default value is \"private\".</p>"
+      }
+    },
+    "OrganizationalUnit": {
+      "base": null,
+      "refs": {
+        "JoinDomainInput$OrganizationalUnit": "<p>The organizational unit (OU) is a container with an Active Directory that can hold users, groups, computers, and other OUs and this parameter specifies the OU that the gateway will join within the AD domain.</p>"
       }
     },
     "Path": {
@@ -1258,12 +1328,12 @@
       }
     },
     "RefreshCacheInput": {
-      "base": null,
+      "base": "<p>RefreshCacheInput</p>",
       "refs": {
       }
     },
     "RefreshCacheOutput": {
-      "base": null,
+      "base": "<p>RefreshCacheOutput</p>",
       "refs": {
       }
     },
@@ -1626,9 +1696,10 @@
     "TargetARN": {
       "base": null,
       "refs": {
+        "AttachVolumeOutput$TargetARN": "<p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name for the initiator that was used to connect to the target.</p>",
         "ChapInfo$TargetARN": "<p>The Amazon Resource Name (ARN) of the volume.</p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>",
-        "CreateCachediSCSIVolumeOutput$TargetARN": "<p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>",
-        "CreateStorediSCSIVolumeOutput$TargetARN": "<p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>",
+        "CreateCachediSCSIVolumeOutput$TargetARN": "<p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name that initiators can use to connect to the target.</p>",
+        "CreateStorediSCSIVolumeOutput$TargetARN": "<p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name that initiators can use to connect to the target.</p>",
         "DeleteChapCredentialsInput$TargetARN": "<p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return to retrieve the TargetARN for specified VolumeARN.</p>",
         "DeleteChapCredentialsOutput$TargetARN": "<p>The Amazon Resource Name (ARN) of the target.</p>",
         "DescribeChapCredentialsInput$TargetARN": "<p>The Amazon Resource Name (ARN) of the iSCSI volume target. Use the <a>DescribeStorediSCSIVolumes</a> operation to return to retrieve the TargetARN for specified VolumeARN.</p>",
@@ -1641,8 +1712,11 @@
     "TargetName": {
       "base": null,
       "refs": {
+        "AttachVolumeInput$TargetName": "<p>The name of the iSCSI target used by an initiator to connect to a volume and used as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume</code>. The target name must be unique across all volumes on a gateway.</p> <p>If you don't specify a value, Storage Gateway uses the value that was previously used for this volume as the new target name.</p>",
+        "CachediSCSIVolume$TargetName": "<p>The name of the iSCSI target that is used by an initiator to connect to a volume and used as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume</code>.</p>",
         "CreateCachediSCSIVolumeInput$TargetName": "<p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>",
-        "CreateStorediSCSIVolumeInput$TargetName": "<p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>"
+        "CreateStorediSCSIVolumeInput$TargetName": "<p>The name of the iSCSI target used by initiators to connect to the target and as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume. The target name must be unique across all volumes of a gateway.</p>",
+        "StorediSCSIVolume$TargetName": "<p>The name of the iSCSI target that is used by an initiator to connect to a volume and used as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume</code>.</p>"
       }
     },
     "Time": {
@@ -1793,6 +1867,8 @@
     "VolumeARN": {
       "base": null,
       "refs": {
+        "AttachVolumeInput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume to attach to the specified gateway.</p>",
+        "AttachVolumeOutput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume that was attached to the gateway.</p>",
         "CachediSCSIVolume$VolumeARN": "<p>The Amazon Resource Name (ARN) of the storage volume.</p>",
         "CreateCachediSCSIVolumeInput$SourceVolumeARN": "<p>The ARN for an existing volume. Specifying this ARN makes the new volume into an exact copy of the specified existing volume's latest recovery point. The <code>VolumeSizeInBytes</code> value for this new volume must be equal to or larger than the size of the existing volume, in bytes.</p>",
         "CreateCachediSCSIVolumeOutput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the configured volume.</p>",
@@ -1807,6 +1883,8 @@
         "DeleteVolumeOutput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the storage volume that was deleted. It is the same ARN you provided in the request.</p>",
         "DescribeSnapshotScheduleInput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>",
         "DescribeSnapshotScheduleOutput$VolumeARN": null,
+        "DetachVolumeInput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume to detach from the gateway.</p>",
+        "DetachVolumeOutput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume that was detached.</p>",
         "ListVolumeInitiatorsInput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes for the gateway.</p>",
         "StorediSCSIVolume$VolumeARN": "<p>The Amazon Resource Name (ARN) of the storage volume.</p>",
         "UpdateSnapshotScheduleInput$VolumeARN": "<p>The Amazon Resource Name (ARN) of the volume. Use the <a>ListVolumes</a> operation to return a list of gateway volumes.</p>",
@@ -1821,6 +1899,14 @@
       "refs": {
         "DescribeCachediSCSIVolumesInput$VolumeARNs": null,
         "DescribeStorediSCSIVolumesInput$VolumeARNs": "<p>An array of strings where each string represents the Amazon Resource Name (ARN) of a stored volume. All of the specified stored volumes must from the same gateway. Use <a>ListVolumes</a> to get volume ARNs for a gateway.</p>"
+      }
+    },
+    "VolumeAttachmentStatus": {
+      "base": null,
+      "refs": {
+        "CachediSCSIVolume$VolumeAttachmentStatus": "<p>A value that indicates whether a storage volume is attached to or detached from a gateway.</p>",
+        "StorediSCSIVolume$VolumeAttachmentStatus": "<p>A value that indicates whether a storage volume is attached to, detached from, or is in the process of detaching from a gateway.</p>",
+        "VolumeInfo$VolumeAttachmentStatus": null
       }
     },
     "VolumeId": {
@@ -1929,7 +2015,7 @@
         "DescribeUploadBufferOutput$UploadBufferAllocatedInBytes": null,
         "DescribeWorkingStorageOutput$WorkingStorageUsedInBytes": "<p>The total working storage in bytes in use by the gateway. If no working storage is configured for the gateway, this field returns 0.</p>",
         "DescribeWorkingStorageOutput$WorkingStorageAllocatedInBytes": "<p>The total working storage in bytes allocated for the gateway. If no working storage is configured for the gateway, this field returns 0.</p>",
-        "Disk$DiskSizeInBytes": null,
+        "Disk$DiskSizeInBytes": "<p>The local disk size in bytes.</p>",
         "StorediSCSIVolume$VolumeSizeInBytes": "<p>The size of the volume in bytes.</p>",
         "VolumeInfo$VolumeSizeInBytes": "<p>The size of the volume in bytes.</p> <p>Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>",
         "VolumeRecoveryPointInfo$VolumeSizeInBytes": null,
@@ -1941,10 +2027,10 @@
       "refs": {
         "CreateSnapshotFromVolumeRecoveryPointOutput$VolumeRecoveryPointTime": null,
         "DescribeGatewayInformationOutput$GatewayName": "<p>The name you configured for your gateway.</p>",
-        "Disk$DiskPath": null,
-        "Disk$DiskNode": null,
-        "Disk$DiskStatus": null,
-        "Disk$DiskAllocationResource": null,
+        "Disk$DiskPath": "<p>The path of a local disk in the gateway virtual machine (VM).</p>",
+        "Disk$DiskNode": "<p>The device node of a local disk as assigned by the virtualization environment.</p>",
+        "Disk$DiskStatus": "<p>A value that represents the status of a local disk.</p>",
+        "Disk$DiskAllocationResource": "<p>The iSCSI qualified name (IQN) that is defined for a disk. This field is not included in the response if the local disk is not defined as an iSCSI target. The format of this field is <i>targetIqn::LUNNumber::region-volumeId</i>. </p>",
         "GatewayInfo$GatewayName": "<p>The name of the gateway.</p>",
         "InternalServerError$message": "<p>A human-readable message describing the error that occurred.</p>",
         "InvalidGatewayRequestException$message": "<p>A human-readable message describing the error that occurred.</p>",

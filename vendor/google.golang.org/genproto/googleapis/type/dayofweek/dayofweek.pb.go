@@ -50,7 +50,6 @@ var DayOfWeek_name = map[int32]string{
 	6: "SATURDAY",
 	7: "SUNDAY",
 }
-
 var DayOfWeek_value = map[string]int32{
 	"DAY_OF_WEEK_UNSPECIFIED": 0,
 	"MONDAY":                  1,
@@ -65,18 +64,19 @@ var DayOfWeek_value = map[string]int32{
 func (x DayOfWeek) String() string {
 	return proto.EnumName(DayOfWeek_name, int32(x))
 }
-
 func (DayOfWeek) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_7d916f1831ff5ed9, []int{0}
+	return fileDescriptor_dayofweek_65556e97092f8975, []int{0}
 }
 
 func init() {
 	proto.RegisterEnum("google.type.DayOfWeek", DayOfWeek_name, DayOfWeek_value)
 }
 
-func init() { proto.RegisterFile("google/type/dayofweek.proto", fileDescriptor_7d916f1831ff5ed9) }
+func init() {
+	proto.RegisterFile("google/type/dayofweek.proto", fileDescriptor_dayofweek_65556e97092f8975)
+}
 
-var fileDescriptor_7d916f1831ff5ed9 = []byte{
+var fileDescriptor_dayofweek_65556e97092f8975 = []byte{
 	// 235 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x4e, 0xcf, 0xcf, 0x4f,
 	0xcf, 0x49, 0xd5, 0x2f, 0xa9, 0x2c, 0x48, 0xd5, 0x4f, 0x49, 0xac, 0xcc, 0x4f, 0x2b, 0x4f, 0x4d,

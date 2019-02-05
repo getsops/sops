@@ -268,7 +268,7 @@ var goGenRE = regexp.MustCompile("//go:generate[^\n]*\n")
 // copyPackage copies relevant files from a directory in x/text to the
 // destination package directory. The destination package is assumed to have
 // the same name. For each copied file go:generate lines are removed and
-// and package comments are rewritten to the new path.
+// package comments are rewritten to the new path.
 func copyPackage(dirSrc, dirDst, search, replace string) {
 	err := filepath.Walk(dirSrc, func(file string, info os.FileInfo, err error) error {
 		base := filepath.Base(file)

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -32,12 +33,7 @@ type WebClient struct {
 
 // NewWebClient creates an instance of the WebClient client.
 func NewWebClient() WebClient {
-	return NewWebClientWithBaseURI(DefaultBaseURI)
-}
-
-// NewWebClientWithBaseURI creates an instance of the WebClient client.
-func NewWebClientWithBaseURI(baseURI string) WebClient {
-	return WebClient{NewWithBaseURI(baseURI)}
+	return WebClient{New()}
 }
 
 // Search sends the search request.
@@ -190,6 +186,16 @@ func NewWebClientWithBaseURI(baseURI string) WebClient {
 // display strings that contain escapable HTML characters such as <, >, and &, if textFormat is set to HTML,
 // Bing escapes the characters as appropriate (for example, < is escaped to &lt;).
 func (client WebClient) Search(ctx context.Context, query string, acceptLanguage string, pragma string, userAgent string, clientID string, clientIP string, location string, answerCount *int32, countryCode string, count *int32, freshness Freshness, market string, offset *int32, promote []AnswerType, responseFilter []AnswerType, safeSearch SafeSearch, setLang string, textDecorations *bool, textFormat TextFormat) (result SearchResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WebClient.Search")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.SearchPreparer(ctx, query, acceptLanguage, pragma, userAgent, clientID, clientIP, location, answerCount, countryCode, count, freshness, market, offset, promote, responseFilter, safeSearch, setLang, textDecorations, textFormat)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "websearch.WebClient", "Search", nil, "Failure preparing request")
@@ -213,6 +219,10 @@ func (client WebClient) Search(ctx context.Context, query string, acceptLanguage
 
 // SearchPreparer prepares the Search request.
 func (client WebClient) SearchPreparer(ctx context.Context, query string, acceptLanguage string, pragma string, userAgent string, clientID string, clientIP string, location string, answerCount *int32, countryCode string, count *int32, freshness Freshness, market string, offset *int32, promote []AnswerType, responseFilter []AnswerType, safeSearch SafeSearch, setLang string, textDecorations *bool, textFormat TextFormat) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{
 		"q": autorest.Encode("query", query),
 	}
@@ -257,7 +267,7 @@ func (client WebClient) SearchPreparer(ctx context.Context, query string, accept
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/search"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))

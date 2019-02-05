@@ -25,8 +25,7 @@ import (
 	"time"
 
 	ts "github.com/golang/protobuf/ptypes/timestamp"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 	"google.golang.org/genproto/googleapis/type/latlng"
 )
 
@@ -74,20 +73,26 @@ func TestCreateFromProtoValue(t *testing.T) {
 		{
 			in: refval("projects/P/databases/D/documents/c/d"),
 			want: &DocumentRef{
-				ID: "d",
+				ID:        "d",
+				Path:      "projects/P/databases/D/documents/c/d",
+				shortPath: "c/d",
 				Parent: &CollectionRef{
 					ID:         "c",
-					parentPath: "projects/P/databases/D",
+					parentPath: "projects/P/databases/D/documents",
+					selfPath:   "c",
 					Path:       "projects/P/databases/D/documents/c",
-					Query:      Query{collectionID: "c", parentPath: "projects/P/databases/D"},
+					Query: Query{
+						collectionID: "c",
+						parentPath:   "projects/P/databases/D/documents",
+						path:         "projects/P/databases/D/documents/c",
+					},
 				},
-				Path: "projects/P/databases/D/documents/c/d",
 			},
 		},
 	} {
 		got, err := createFromProtoValue(test.in, nil)
 		if err != nil {
-			t.Errorf("%v: %v", test.in, err)
+			t.Errorf("%+v: %+v", test.in, err)
 			continue
 		}
 		if !testEqual(got, test.want) {
@@ -222,13 +227,13 @@ func TestSetFromProtoValueErrors(t *testing.T) {
 		in  interface{}
 		val *pb.Value
 	}{
-		{3, ival},                                     // not a pointer
-		{new(int8), intval(128)},                      // int overflow
-		{new(uint8), intval(256)},                     // uint overflow
+		{3, ival},                 // not a pointer
+		{new(int8), intval(128)},  // int overflow
+		{new(uint8), intval(256)}, // uint overflow
 		{new(float32), floatval(2 * math.MaxFloat32)}, // float overflow
-		{new(uint), ival},                             // cannot set type
-		{new(uint64), ival},                           // cannot set type
-		{new(io.Reader), ival},                        // cannot set type
+		{new(uint), ival},      // cannot set type
+		{new(uint64), ival},    // cannot set type
+		{new(io.Reader), ival}, // cannot set type
 		{new(map[int]int),
 			mapval(map[string]*pb.Value{"x": ival})}, // map key type is not string
 		// the rest are all type mismatches
@@ -498,30 +503,49 @@ func TestPathToDoc(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := &DocumentRef{
-		ID:   "d2",
-		Path: "projects/P/databases/D/documents/c1/d1/c2/d2",
+		ID:        "d2",
+		Path:      "projects/P/databases/D/documents/c1/d1/c2/d2",
+		shortPath: "c1/d1/c2/d2",
 		Parent: &CollectionRef{
 			ID:         "c2",
 			parentPath: "projects/P/databases/D/documents/c1/d1",
 			Path:       "projects/P/databases/D/documents/c1/d1/c2",
+			selfPath:   "c1/d1/c2",
 			c:          c,
-			Query:      Query{c: c, collectionID: "c2", parentPath: "projects/P/databases/D/documents/c1/d1"},
+			Query: Query{
+				c:            c,
+				collectionID: "c2",
+				parentPath:   "projects/P/databases/D/documents/c1/d1",
+				path:         "projects/P/databases/D/documents/c1/d1/c2",
+			},
 			Parent: &DocumentRef{
-				ID:   "d1",
-				Path: "projects/P/databases/D/documents/c1/d1",
+				ID:        "d1",
+				Path:      "projects/P/databases/D/documents/c1/d1",
+				shortPath: "c1/d1",
 				Parent: &CollectionRef{
 					ID:         "c1",
 					c:          c,
-					parentPath: "projects/P/databases/D",
+					parentPath: "projects/P/databases/D/documents",
 					Path:       "projects/P/databases/D/documents/c1",
+					selfPath:   "c1",
 					Parent:     nil,
-					Query:      Query{c: c, collectionID: "c1", parentPath: "projects/P/databases/D"},
+					Query: Query{
+						c:            c,
+						collectionID: "c1",
+						parentPath:   "projects/P/databases/D/documents",
+						path:         "projects/P/databases/D/documents/c1",
+					},
 				},
 			},
 		},
 	}
 	if !testEqual(got, want) {
 		t.Errorf("\ngot  %+v\nwant %+v", got, want)
+		t.Logf("\ngot.Parent  %+v\nwant.Parent %+v", got.Parent, want.Parent)
+		t.Logf("\ngot.Parent.Query  %+v\nwant.Parent.Query %+v", got.Parent.Query, want.Parent.Query)
+		t.Logf("\ngot.Parent.Parent  %+v\nwant.Parent.Parent %+v", got.Parent.Parent, want.Parent.Parent)
+		t.Logf("\ngot.Parent.Parent.Parent  %+v\nwant.Parent.Parent.Parent %+v", got.Parent.Parent.Parent, want.Parent.Parent.Parent)
+		t.Logf("\ngot.Parent.Parent.Parent.Query  %+v\nwant.Parent.Parent.Parent.Query %+v", got.Parent.Parent.Parent.Query, want.Parent.Parent.Parent.Query)
 	}
 }
 

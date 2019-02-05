@@ -17,30 +17,22 @@ limitations under the License.
 package testutil
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"sync"
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
-	"google.golang.org/grpc/status"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/empty"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	pbt "github.com/golang/protobuf/ptypes/timestamp"
-
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
-
-// Action is a mocked RPC activity that MockCloudSpannerClient will take.
-type Action struct {
-	Method string
-	Err    error
-}
 
 // MockCloudSpannerClient is a mock implementation of sppb.SpannerClient.
 type MockCloudSpannerClient struct {
@@ -50,58 +42,30 @@ type MockCloudSpannerClient struct {
 	t  *testing.T
 	// Live sessions on the client.
 	sessions map[string]bool
-	// Expected set of actions that will be executed by the client.
-	actions []Action
 	// Session ping history.
 	pings []string
-	// Injected error, will be returned by all APIs.
-	injErr map[string]error
-	// Client will not fail on any request.
-	nice bool
 	// Client will stall on any requests.
 	freezed chan struct{}
+
+	// Expected set of actions that have been executed by the client. These
+	// interfaces should be type reflected against with *Request types in sppb,
+	// such as sppb.GetSessionRequest. Buffered to a large degree.
+	ReceivedRequests chan interface{}
 }
 
 // NewMockCloudSpannerClient creates new MockCloudSpannerClient instance.
-func NewMockCloudSpannerClient(t *testing.T, acts ...Action) *MockCloudSpannerClient {
-	mc := &MockCloudSpannerClient{t: t, sessions: map[string]bool{}, injErr: map[string]error{}}
-	mc.SetActions(acts...)
+func NewMockCloudSpannerClient(t *testing.T) *MockCloudSpannerClient {
+	mc := &MockCloudSpannerClient{
+		t:                t,
+		sessions:         map[string]bool{},
+		ReceivedRequests: make(chan interface{}, 100000),
+	}
+
 	// Produce a closed channel, so the default action of ready is to not block.
 	mc.Freeze()
 	mc.Unfreeze()
+
 	return mc
-}
-
-// MakeNice makes this a nice mock which will not fail on any request.
-func (m *MockCloudSpannerClient) MakeNice() {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	m.nice = true
-}
-
-// MakeStrict makes this a strict mock which will fail on any unexpected request.
-func (m *MockCloudSpannerClient) MakeStrict() {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	m.nice = false
-}
-
-// InjectError injects a global error that will be returned by all calls to method
-// regardless of the actions array.
-func (m *MockCloudSpannerClient) InjectError(method string, err error) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	m.injErr[method] = err
-}
-
-// SetActions sets the new set of expected actions to MockCloudSpannerClient.
-func (m *MockCloudSpannerClient) SetActions(acts ...Action) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	m.actions = nil
-	for _, act := range acts {
-		m.actions = append(m.actions, act)
-	}
 }
 
 // DumpPings dumps the ping history.
@@ -125,11 +89,10 @@ func (m *MockCloudSpannerClient) DumpSessions() map[string]bool {
 // CreateSession is a placeholder for SpannerClient.CreateSession.
 func (m *MockCloudSpannerClient) CreateSession(c context.Context, r *sppb.CreateSessionRequest, opts ...grpc.CallOption) (*sppb.Session, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if err := m.injErr["CreateSession"]; err != nil {
-		return nil, err
-	}
 	s := &sppb.Session{}
 	if r.Database != "mockdb" {
 		// Reject other databases
@@ -144,11 +107,10 @@ func (m *MockCloudSpannerClient) CreateSession(c context.Context, r *sppb.Create
 // GetSession is a placeholder for SpannerClient.GetSession.
 func (m *MockCloudSpannerClient) GetSession(c context.Context, r *sppb.GetSessionRequest, opts ...grpc.CallOption) (*sppb.Session, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if err := m.injErr["GetSession"]; err != nil {
-		return nil, err
-	}
 	m.pings = append(m.pings, r.Name)
 	if _, ok := m.sessions[r.Name]; !ok {
 		return nil, status.Errorf(codes.NotFound, fmt.Sprintf("Session not found: %v", r.Name))
@@ -159,11 +121,10 @@ func (m *MockCloudSpannerClient) GetSession(c context.Context, r *sppb.GetSessio
 // DeleteSession is a placeholder for SpannerClient.DeleteSession.
 func (m *MockCloudSpannerClient) DeleteSession(c context.Context, r *sppb.DeleteSessionRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if err := m.injErr["DeleteSession"]; err != nil {
-		return nil, err
-	}
 	if _, ok := m.sessions[r.Name]; !ok {
 		// Session not found.
 		return &empty.Empty{}, status.Errorf(codes.NotFound, fmt.Sprintf("Session not found: %v", r.Name))
@@ -176,12 +137,10 @@ func (m *MockCloudSpannerClient) DeleteSession(c context.Context, r *sppb.Delete
 // ExecuteStreamingSql is a mock implementation of SpannerClient.ExecuteStreamingSql.
 func (m *MockCloudSpannerClient) ExecuteStreamingSql(c context.Context, r *sppb.ExecuteSqlRequest, opts ...grpc.CallOption) (sppb.Spanner_ExecuteStreamingSqlClient, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	act, err := m.expectAction("ExecuteStreamingSql")
-	if err != nil {
-		return nil, err
-	}
 	wantReq := &sppb.ExecuteSqlRequest{
 		Session: "mocksession",
 		Transaction: &sppb.TransactionSelector{
@@ -207,21 +166,16 @@ func (m *MockCloudSpannerClient) ExecuteStreamingSql(c context.Context, r *sppb.
 	if !proto.Equal(r, wantReq) {
 		return nil, fmt.Errorf("got query request: %v, want: %v", r, wantReq)
 	}
-	if act.Err != nil {
-		return nil, act.Err
-	}
 	return nil, errors.New("query never succeeds on mock client")
 }
 
 // StreamingRead is a placeholder for SpannerClient.StreamingRead.
 func (m *MockCloudSpannerClient) StreamingRead(c context.Context, r *sppb.ReadRequest, opts ...grpc.CallOption) (sppb.Spanner_StreamingReadClient, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	act, err := m.expectAction("StreamingRead", "StreamingReadIndex")
-	if err != nil {
-		return nil, err
-	}
 	wantReq := &sppb.ReadRequest{
 		Session: "mocksession",
 		Transaction: &sppb.TransactionSelector{
@@ -252,14 +206,8 @@ func (m *MockCloudSpannerClient) StreamingRead(c context.Context, r *sppb.ReadRe
 			All:    false,
 		},
 	}
-	if act.Method == "StreamingIndexRead" {
-		wantReq.Index = "idx1"
-	}
 	if !proto.Equal(r, wantReq) {
 		return nil, fmt.Errorf("got query request: %v, want: %v", r, wantReq)
-	}
-	if act.Err != nil {
-		return nil, act.Err
 	}
 	return nil, errors.New("read never succeeds on mock client")
 }
@@ -267,17 +215,10 @@ func (m *MockCloudSpannerClient) StreamingRead(c context.Context, r *sppb.ReadRe
 // BeginTransaction is a placeholder for SpannerClient.BeginTransaction.
 func (m *MockCloudSpannerClient) BeginTransaction(c context.Context, r *sppb.BeginTransactionRequest, opts ...grpc.CallOption) (*sppb.Transaction, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if !m.nice {
-		act, err := m.expectAction("BeginTransaction")
-		if err != nil {
-			return nil, err
-		}
-		if act.Err != nil {
-			return nil, act.Err
-		}
-	}
 	resp := &sppb.Transaction{Id: []byte("transaction-1")}
 	if _, ok := r.Options.Mode.(*sppb.TransactionOptions_ReadOnly_); ok {
 		resp.ReadTimestamp = &pbt.Timestamp{Seconds: 3, Nanos: 4}
@@ -288,67 +229,37 @@ func (m *MockCloudSpannerClient) BeginTransaction(c context.Context, r *sppb.Beg
 // Commit is a placeholder for SpannerClient.Commit.
 func (m *MockCloudSpannerClient) Commit(c context.Context, r *sppb.CommitRequest, opts ...grpc.CallOption) (*sppb.CommitResponse, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if !m.nice {
-		act, err := m.expectAction("Commit")
-		if err != nil {
-			return nil, err
-		}
-		if act.Err != nil {
-			return nil, act.Err
-		}
-	}
 	return &sppb.CommitResponse{CommitTimestamp: &pbt.Timestamp{Seconds: 1, Nanos: 2}}, nil
 }
 
 // Rollback is a placeholder for SpannerClient.Rollback.
 func (m *MockCloudSpannerClient) Rollback(c context.Context, r *sppb.RollbackRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if !m.nice {
-		act, err := m.expectAction("Rollback")
-		if err != nil {
-			return nil, err
-		}
-		if act.Err != nil {
-			return nil, act.Err
-		}
-	}
 	return nil, nil
 }
 
 // PartitionQuery is a placeholder for SpannerServer.PartitionQuery.
 func (m *MockCloudSpannerClient) PartitionQuery(ctx context.Context, r *sppb.PartitionQueryRequest, opts ...grpc.CallOption) (*sppb.PartitionResponse, error) {
 	m.ready()
+	m.ReceivedRequests <- r
+
 	return nil, errors.New("Unimplemented")
 }
 
 // PartitionRead is a placeholder for SpannerServer.PartitionRead.
 func (m *MockCloudSpannerClient) PartitionRead(ctx context.Context, r *sppb.PartitionReadRequest, opts ...grpc.CallOption) (*sppb.PartitionResponse, error) {
 	m.ready()
-	return nil, errors.New("Unimplemented")
-}
+	m.ReceivedRequests <- r
 
-func (m *MockCloudSpannerClient) expectAction(methods ...string) (Action, error) {
-	for _, me := range methods {
-		if err := m.injErr[me]; err != nil {
-			return Action{}, err
-		}
-	}
-	if len(m.actions) == 0 {
-		m.t.Fatalf("unexpected %v executed", methods)
-	}
-	act := m.actions[0]
-	m.actions = m.actions[1:]
-	for _, me := range methods {
-		if me == act.Method {
-			return act, nil
-		}
-	}
-	m.t.Fatalf("unexpected call of one of %v, want method %s", methods, act.Method)
-	return Action{}, nil
+	return nil, errors.New("Unimplemented")
 }
 
 // Freeze stalls all requests.
@@ -363,13 +274,6 @@ func (m *MockCloudSpannerClient) Unfreeze() {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	close(m.freezed)
-}
-
-// CheckActionsConsumed checks that all actions have been consumed.
-func (m *MockCloudSpannerClient) CheckActionsConsumed() {
-	if len(m.actions) != 0 {
-		m.t.Fatalf("unconsumed mock client actions: %v", m.actions)
-	}
 }
 
 // ready checks conditions before executing requests

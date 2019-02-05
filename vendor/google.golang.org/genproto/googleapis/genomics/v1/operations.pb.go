@@ -56,7 +56,7 @@ func (m *OperationMetadata) Reset()         { *m = OperationMetadata{} }
 func (m *OperationMetadata) String() string { return proto.CompactTextString(m) }
 func (*OperationMetadata) ProtoMessage()    {}
 func (*OperationMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab6c330828363542, []int{0}
+	return fileDescriptor_operations_4f155d6eb213ff75, []int{0}
 }
 func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationMetadata.Unmarshal(m, b)
@@ -64,8 +64,8 @@ func (m *OperationMetadata) XXX_Unmarshal(b []byte) error {
 func (m *OperationMetadata) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationMetadata.Marshal(b, m, deterministic)
 }
-func (m *OperationMetadata) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationMetadata.Merge(m, src)
+func (dst *OperationMetadata) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationMetadata.Merge(dst, src)
 }
 func (m *OperationMetadata) XXX_Size() int {
 	return xxx_messageInfo_OperationMetadata.Size(m)
@@ -157,7 +157,7 @@ func (m *OperationEvent) Reset()         { *m = OperationEvent{} }
 func (m *OperationEvent) String() string { return proto.CompactTextString(m) }
 func (*OperationEvent) ProtoMessage()    {}
 func (*OperationEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab6c330828363542, []int{1}
+	return fileDescriptor_operations_4f155d6eb213ff75, []int{1}
 }
 func (m *OperationEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OperationEvent.Unmarshal(m, b)
@@ -165,8 +165,8 @@ func (m *OperationEvent) XXX_Unmarshal(b []byte) error {
 func (m *OperationEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_OperationEvent.Marshal(b, m, deterministic)
 }
-func (m *OperationEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperationEvent.Merge(m, src)
+func (dst *OperationEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperationEvent.Merge(dst, src)
 }
 func (m *OperationEvent) XXX_Size() int {
 	return xxx_messageInfo_OperationEvent.Size(m)
@@ -205,10 +205,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/genomics/v1/operations.proto", fileDescriptor_ab6c330828363542)
+	proto.RegisterFile("google/genomics/v1/operations.proto", fileDescriptor_operations_4f155d6eb213ff75)
 }
 
-var fileDescriptor_ab6c330828363542 = []byte{
+var fileDescriptor_operations_4f155d6eb213ff75 = []byte{
 	// 456 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0x41, 0x6f, 0xd3, 0x30,
 	0x14, 0xc7, 0xe5, 0x76, 0x6b, 0x9b, 0x17, 0x89, 0x0d, 0x6b, 0x42, 0xa1, 0x80, 0xa8, 0xca, 0xa5,

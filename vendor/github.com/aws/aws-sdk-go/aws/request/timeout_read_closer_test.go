@@ -61,6 +61,7 @@ func TestTimeoutReadCloserSameDuration(t *testing.T) {
 
 func TestWithResponseReadTimeout(t *testing.T) {
 	r := Request{
+		HTTPRequest: &http.Request{},
 		HTTPResponse: &http.Response{
 			Body: ioutil.NopCloser(bytes.NewReader(nil)),
 		},

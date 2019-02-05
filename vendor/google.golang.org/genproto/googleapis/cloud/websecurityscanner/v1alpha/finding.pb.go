@@ -70,7 +70,6 @@ var Finding_FindingType_name = map[int32]string{
 	4: "XSS_ERROR",
 	6: "CLEAR_TEXT_PASSWORD",
 }
-
 var Finding_FindingType_value = map[string]int32{
 	"FINDING_TYPE_UNSPECIFIED": 0,
 	"MIXED_CONTENT":            1,
@@ -84,9 +83,8 @@ var Finding_FindingType_value = map[string]int32{
 func (x Finding_FindingType) String() string {
 	return proto.EnumName(Finding_FindingType_name, int32(x))
 }
-
 func (Finding_FindingType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_811918cc7b338327, []int{0, 0}
+	return fileDescriptor_finding_48bce3fbd749d4f0, []int{0, 0}
 }
 
 // A Finding resource represents a vulnerability instance identified during a
@@ -152,7 +150,7 @@ func (m *Finding) Reset()         { *m = Finding{} }
 func (m *Finding) String() string { return proto.CompactTextString(m) }
 func (*Finding) ProtoMessage()    {}
 func (*Finding) Descriptor() ([]byte, []int) {
-	return fileDescriptor_811918cc7b338327, []int{0}
+	return fileDescriptor_finding_48bce3fbd749d4f0, []int{0}
 }
 func (m *Finding) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Finding.Unmarshal(m, b)
@@ -160,8 +158,8 @@ func (m *Finding) XXX_Unmarshal(b []byte) error {
 func (m *Finding) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Finding.Marshal(b, m, deterministic)
 }
-func (m *Finding) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Finding.Merge(m, src)
+func (dst *Finding) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Finding.Merge(dst, src)
 }
 func (m *Finding) XXX_Size() int {
 	return xxx_messageInfo_Finding.Size(m)
@@ -276,10 +274,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/finding.proto", fileDescriptor_811918cc7b338327)
+	proto.RegisterFile("google/cloud/websecurityscanner/v1alpha/finding.proto", fileDescriptor_finding_48bce3fbd749d4f0)
 }
 
-var fileDescriptor_811918cc7b338327 = []byte{
+var fileDescriptor_finding_48bce3fbd749d4f0 = []byte{
 	// 631 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x5f, 0x6f, 0xd3, 0x3e,
 	0x14, 0xfd, 0x65, 0xff, 0xeb, 0x74, 0x5b, 0xe6, 0xdf, 0x10, 0xd1, 0x18, 0x5a, 0xb5, 0x17, 0x86,

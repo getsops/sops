@@ -3,10 +3,10 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/contacts": {
-          "description": "Manage your contacts"
+          "description": "See, edit, download, and permanently delete your contacts"
         },
         "https://www.googleapis.com/auth/contacts.readonly": {
-          "description": "View your contacts"
+          "description": "See and download your contacts"
         },
         "https://www.googleapis.com/auth/plus.login": {
           "description": "Know the list of people in your circles, your age range, and language"
@@ -585,7 +585,7 @@
       }
     }
   },
-  "revision": "20180601",
+  "revision": "20181128",
   "rootUrl": "https://people.googleapis.com/",
   "schemas": {
     "Address": {
@@ -881,12 +881,12 @@
       "id": "Date",
       "properties": {
         "day": {
-          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year/month where the day is not significant.",
+          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year by itself or a year and month where the day is not\nsignificant.",
           "format": "int32",
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a year without a\nmonth and day.",
           "format": "int32",
           "type": "integer"
         },

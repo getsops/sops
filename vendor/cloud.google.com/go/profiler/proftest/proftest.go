@@ -15,16 +15,12 @@
 // Package proftest contains test helpers for profiler agent integration tests.
 // This package is experimental.
 
-// golang.org/x/build/kubernetes/dialer.go imports "context" package (rather
-// than "golang.org/x/net/context") and that does not exist in Go 1.6 or
-// earlier.
-// +build go1.7
-
 package proftest
 
 import (
 	"archive/zip"
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -35,11 +31,10 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	gax "github.com/googleapis/gax-go"
+	gax "github.com/googleapis/gax-go/v2"
 	"golang.org/x/build/kubernetes"
 	k8sapi "golang.org/x/build/kubernetes/api"
 	"golang.org/x/build/kubernetes/gke"
-	"golang.org/x/net/context"
 	cloudbuild "google.golang.org/api/cloudbuild/v1"
 	compute "google.golang.org/api/compute/v1"
 	container "google.golang.org/api/container/v1"
@@ -48,7 +43,6 @@ import (
 
 const (
 	monitorWriteScope = "https://www.googleapis.com/auth/monitoring.write"
-	storageReadScope  = "https://www.googleapis.com/auth/devstorage.read_only"
 )
 
 // TestRunner has common elements used for testing profiling agents on a range
@@ -80,17 +74,21 @@ type ProfileResponse struct {
 
 // ProfileData has data of a single profile.
 type ProfileData struct {
-	Samples           []int32       `json:"samples"`
-	SampleMetrics     interface{}   `json:"sampleMetrics"`
-	DefaultMetricType string        `json:"defaultMetricType"`
-	TreeNodes         interface{}   `json:"treeNodes"`
-	Functions         functionArray `json:"functions"`
-	SourceFiles       interface{}   `json:"sourceFiles"`
+	Samples           []int32         `json:"samples"`
+	SampleMetrics     interface{}     `json:"sampleMetrics"`
+	DefaultMetricType string          `json:"defaultMetricType"`
+	TreeNodes         interface{}     `json:"treeNodes"`
+	Functions         functionArray   `json:"functions"`
+	SourceFiles       sourceFileArray `json:"sourceFiles"`
 }
 
 type functionArray struct {
 	Name       []string `json:"name"`
 	Sourcefile []int32  `json:"sourceFile"`
+}
+
+type sourceFileArray struct {
+	Name []string `json:"name"`
 }
 
 // InstanceConfig is configuration for starting single GCE instance for
@@ -116,26 +114,61 @@ type ClusterConfig struct {
 	Dockerfile      string
 }
 
+// CheckNonEmpty returns nil if the profile has a profiles and deployments
+// associated. Otherwise, returns a desciptive error.
+func (pr *ProfileResponse) CheckNonEmpty() error {
+	if pr.NumProfiles == 0 {
+		return fmt.Errorf("profile response contains zero profiles: %v", pr)
+	}
+	if len(pr.Deployments) == 0 {
+		return fmt.Errorf("profile response contains zero deployments: %v", pr)
+	}
+	return nil
+}
+
 // HasFunction returns nil if the function is present, or, if the function is
 // not present, and error providing more details why the function is not
 // present.
 func (pr *ProfileResponse) HasFunction(functionName string) error {
-	if pr.NumProfiles == 0 {
-		return fmt.Errorf("failed to find function name %s in profile: profile response contains zero profiles: %v", functionName, pr)
+	if err := pr.CheckNonEmpty(); err != nil {
+		return fmt.Errorf("failed to find function name %s in profile: %v", functionName, err)
 	}
-	if len(pr.Deployments) == 0 {
-		return fmt.Errorf("failed to find function name %s in profile: profile response contains zero deployments: %v", functionName, pr)
-	}
-	if len(pr.Profile.Functions.Name) == 0 {
-		return fmt.Errorf("failed to find function name %s in profile: profile does not have function data", functionName)
-	}
-
 	for _, name := range pr.Profile.Functions.Name {
 		if strings.Contains(name, functionName) {
 			return nil
 		}
 	}
 	return fmt.Errorf("failed to find function name %s in profile", functionName)
+}
+
+// HasFunctionInFile returns nil if function is present in the specifed file, and an
+// error if the function/file combination is not present in the profile.
+func (pr *ProfileResponse) HasFunctionInFile(functionName string, filename string) error {
+	if err := pr.CheckNonEmpty(); err != nil {
+		return fmt.Errorf("failed to find function name %s in file %s in profile: %v", functionName, filename, err)
+	}
+	for i, name := range pr.Profile.Functions.Name {
+		file := pr.Profile.SourceFiles.Name[pr.Profile.Functions.Sourcefile[i]]
+		if strings.Contains(name, functionName) && strings.HasSuffix(file, filename) {
+			return nil
+		}
+	}
+	return fmt.Errorf("failed to find function name %s in file %s in profile", functionName, filename)
+}
+
+// HasSourceFile returns nil if the file (or file where the end of the file path
+// matches the filename) is present in the profile. Or, if the filename is not
+// present, an error is returned.
+func (pr *ProfileResponse) HasSourceFile(filename string) error {
+	if err := pr.CheckNonEmpty(); err != nil {
+		return fmt.Errorf("failed to find filename %s in profile: %v", filename, err)
+	}
+	for _, name := range pr.Profile.SourceFiles.Name {
+		if strings.HasSuffix(name, filename) {
+			return nil
+		}
+	}
+	return fmt.Errorf("failed to find filename %s in profile", filename)
 }
 
 // StartInstance starts a GCE Instance with name, zone, and projectId specified
@@ -234,7 +267,7 @@ func (tr *GCETestRunner) DeleteInstance(ctx context.Context, inst *InstanceConfi
 // PollForSerialOutput polls serial port 2 of the GCE instance specified by
 // inst and returns when the finishString appears in the serial output
 // of the instance, or when the context times out.
-func (tr *GCETestRunner) PollForSerialOutput(ctx context.Context, inst *InstanceConfig, finishString string) error {
+func (tr *GCETestRunner) PollForSerialOutput(ctx context.Context, inst *InstanceConfig, finishString, errorString string) error {
 	var output string
 	defer func() {
 		log.Printf("Serial port output for %s:\n%s", inst.Name, output)
@@ -258,6 +291,9 @@ func (tr *GCETestRunner) PollForSerialOutput(ctx context.Context, inst *Instance
 			if output = resp.Contents; strings.Contains(output, finishString) {
 				return nil
 			}
+			if strings.Contains(output, errorString) {
+				return fmt.Errorf("failed to execute the prober benchmark script")
+			}
 		}
 	}
 }
@@ -270,7 +306,15 @@ func (tr *TestRunner) QueryProfiles(projectID, service, startTime, endTime, prof
 
 	queryRequest := fmt.Sprintf(queryJSONFmt, endTime, profileType, startTime, service)
 
-	resp, err := tr.Client.Post(queryURL, "application/json", strings.NewReader(queryRequest))
+	req, err := http.NewRequest("POST", queryURL, strings.NewReader(queryRequest))
+	if err != nil {
+		return ProfileResponse{}, fmt.Errorf("failed to create an API request: %v", err)
+	}
+	req.Header = map[string][]string{
+		"X-Goog-User-Project": {projectID},
+	}
+
+	resp, err := tr.Client.Do(req)
 	if err != nil {
 		return ProfileResponse{}, fmt.Errorf("failed to query API: %v", err)
 	}
@@ -335,7 +379,7 @@ func (tr *GKETestRunner) createAndPublishDockerImage(ctx context.Context, projec
 				log.Printf("Transient error getting operation (will retry): %v", err)
 				break
 			}
-			if op.Done == true {
+			if op.Done {
 				log.Printf("Published image %s to Google Container Registry.", ImageName)
 				return nil
 			}
@@ -397,45 +441,6 @@ func deleteDockerImageResource(client *http.Client, url string) error {
 		return fmt.Errorf("failed to delete resource: status code = %d", resp.StatusCode)
 	}
 	return nil
-}
-
-func (tr *GKETestRunner) createCluster(ctx context.Context, client *http.Client, projectID, zone, ClusterName string) error {
-	request := &container.CreateClusterRequest{Cluster: &container.Cluster{
-		Name:             ClusterName,
-		InitialNodeCount: 3,
-		NodeConfig: &container.NodeConfig{
-			OauthScopes: []string{
-				storageReadScope,
-			},
-		},
-	}}
-	op, err := tr.ContainerService.Projects.Zones.Clusters.Create(projectID, zone, request).Context(ctx).Do()
-	if err != nil {
-		return fmt.Errorf("failed to create cluster %s: %v", ClusterName, err)
-	}
-	opID := op.Name
-
-	// Wait for creating cluster.
-	for {
-		select {
-		case <-ctx.Done():
-			return fmt.Errorf("timed out waiting creating cluster")
-
-		case <-time.After(10 * time.Second):
-			op, err := tr.ContainerService.Projects.Zones.Operations.Get(projectID, zone, opID).Context(ctx).Do()
-			if err != nil {
-				log.Printf("Transient error getting operation (will retry): %v", err)
-				break
-			}
-			if op.Status == "DONE" {
-				log.Printf("Created cluster %s.", ClusterName)
-				return nil
-			}
-			if op.Status == "ABORTING" {
-				return fmt.Errorf("create cluster operation is aborted")
-			}
-		}
-	}
 }
 
 func (tr *GKETestRunner) deployContainer(ctx context.Context, kubernetesClient *kubernetes.Client, podName, ImageName string) error {
@@ -508,28 +513,28 @@ func (tr *GKETestRunner) DeleteClusterAndImage(ctx context.Context, cfg *Cluster
 
 // StartAndDeployCluster creates image needed for cluster, then starts and
 // deploys to cluster.
-func (tr *GKETestRunner) StartAndDeployCluster(ctx context.Context, cfg *ClusterConfig) error {
+func (tr *GKETestRunner) StartAndDeployCluster(ctx context.Context, cfg *ClusterConfig) (*kubernetes.Client, error) {
 	if err := tr.uploadImageSource(ctx, cfg.Bucket, cfg.ImageSourceName, cfg.Dockerfile); err != nil {
-		return fmt.Errorf("failed to upload image source: %v", err)
+		return nil, fmt.Errorf("failed to upload image source: %v", err)
 	}
 
 	createImageCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
 	if err := tr.createAndPublishDockerImage(createImageCtx, cfg.ProjectID, cfg.Bucket, cfg.ImageSourceName, fmt.Sprintf("gcr.io/%s", cfg.ImageName)); err != nil {
-		return fmt.Errorf("failed to create and publish docker image %s: %v", cfg.ImageName, err)
+		return nil, fmt.Errorf("failed to create and publish docker image %s: %v", cfg.ImageName, err)
 	}
 
 	kubernetesClient, err := gke.NewClient(ctx, cfg.ClusterName, gke.OptZone(cfg.Zone), gke.OptProject(cfg.ProjectID))
 	if err != nil {
-		return fmt.Errorf("failed to create new GKE client: %v", err)
+		return nil, fmt.Errorf("failed to create new GKE client: %v", err)
 	}
 
 	deployContainerCtx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
 	if err := tr.deployContainer(deployContainerCtx, kubernetesClient, cfg.PodName, cfg.ImageName); err != nil {
-		return fmt.Errorf("failed to deploy image %q to pod %q: %v", cfg.PodName, cfg.ImageName, err)
+		return nil, fmt.Errorf("failed to deploy image %q to pod %q: %v", cfg.PodName, cfg.ImageName, err)
 	}
-	return nil
+	return kubernetesClient, nil
 }
 
 // uploadImageSource uploads source code for building docker image to GCS.

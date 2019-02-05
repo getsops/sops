@@ -1,3 +1,45 @@
+# 1.3.0
+This new release introduces:
+  * Log, Logf, Logln functions for Logger and Entry that take a Level
+
+Fixes:
+  * Building prometheus node_exporter on AIX (#840)
+  * Race condition in TextFormatter (#468)
+  * Travis CI import path (#868)
+  * Remove coloured output on Windows (#862)
+  * Pointer to func as field in JSONFormatter (#870)
+  * Properly marshal Levels (#873)
+
+# 1.2.0
+This new release introduces:
+  * A new method `SetReportCaller` in the `Logger` to enable the file, line and calling function from which the trace has been issued
+  * A new trace level named `Trace` whose level is below `Debug`
+  * A configurable exit function to be called upon a Fatal trace
+  * The `Level` object now implements `encoding.TextUnmarshaler` interface
+
+# 1.1.1
+This is a bug fix release.
+  * fix the build break on Solaris
+  * don't drop a whole trace in JSONFormatter when a field param is a function pointer which can not be serialized
+
+# 1.1.0
+This new release introduces:
+  * several fixes:
+    * a fix for a race condition on entry formatting
+    * proper cleanup of previously used entries before putting them back in the pool
+    * the extra new line at the end of message in text formatter has been removed
+  * a new global public API to check if a level is activated: IsLevelEnabled
+  * the following methods have been added to the Logger object
+    * IsLevelEnabled
+    * SetFormatter
+    * SetOutput
+    * ReplaceHooks
+  * introduction of go module
+  * an indent configuration for the json formatter
+  * output colour support for windows
+  * the field sort function is now configurable for text formatter
+  * the CLICOLOR and CLICOLOR\_FORCE environment variable support in text formater
+
 # 1.0.6
 
 This new release introduces:

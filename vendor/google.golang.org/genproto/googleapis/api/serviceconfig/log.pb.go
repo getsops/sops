@@ -52,7 +52,7 @@ func (m *LogDescriptor) Reset()         { *m = LogDescriptor{} }
 func (m *LogDescriptor) String() string { return proto.CompactTextString(m) }
 func (*LogDescriptor) ProtoMessage()    {}
 func (*LogDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6010a88b9216062d, []int{0}
+	return fileDescriptor_log_43ef3b42193db0e6, []int{0}
 }
 func (m *LogDescriptor) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LogDescriptor.Unmarshal(m, b)
@@ -60,8 +60,8 @@ func (m *LogDescriptor) XXX_Unmarshal(b []byte) error {
 func (m *LogDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_LogDescriptor.Marshal(b, m, deterministic)
 }
-func (m *LogDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LogDescriptor.Merge(m, src)
+func (dst *LogDescriptor) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LogDescriptor.Merge(dst, src)
 }
 func (m *LogDescriptor) XXX_Size() int {
 	return xxx_messageInfo_LogDescriptor.Size(m)
@@ -104,9 +104,9 @@ func init() {
 	proto.RegisterType((*LogDescriptor)(nil), "google.api.LogDescriptor")
 }
 
-func init() { proto.RegisterFile("google/api/log.proto", fileDescriptor_6010a88b9216062d) }
+func init() { proto.RegisterFile("google/api/log.proto", fileDescriptor_log_43ef3b42193db0e6) }
 
-var fileDescriptor_6010a88b9216062d = []byte{
+var fileDescriptor_log_43ef3b42193db0e6 = []byte{
 	// 238 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x54, 0x8f, 0xc1, 0x4a, 0xc3, 0x40,
 	0x10, 0x86, 0x49, 0x1b, 0x8a, 0x6e, 0xd5, 0xc3, 0x22, 0x12, 0xf4, 0x12, 0x3d, 0xf5, 0xb4, 0x01,

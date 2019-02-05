@@ -37,7 +37,7 @@ func (m *Row) Reset()         { *m = Row{} }
 func (m *Row) String() string { return proto.CompactTextString(m) }
 func (*Row) ProtoMessage()    {}
 func (*Row) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{0}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{0}
 }
 func (m *Row) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Row.Unmarshal(m, b)
@@ -45,8 +45,8 @@ func (m *Row) XXX_Unmarshal(b []byte) error {
 func (m *Row) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Row.Marshal(b, m, deterministic)
 }
-func (m *Row) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Row.Merge(m, src)
+func (dst *Row) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Row.Merge(dst, src)
 }
 func (m *Row) XXX_Size() int {
 	return xxx_messageInfo_Row.Size(m)
@@ -92,7 +92,7 @@ func (m *Family) Reset()         { *m = Family{} }
 func (m *Family) String() string { return proto.CompactTextString(m) }
 func (*Family) ProtoMessage()    {}
 func (*Family) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{1}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{1}
 }
 func (m *Family) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Family.Unmarshal(m, b)
@@ -100,8 +100,8 @@ func (m *Family) XXX_Unmarshal(b []byte) error {
 func (m *Family) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Family.Marshal(b, m, deterministic)
 }
-func (m *Family) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Family.Merge(m, src)
+func (dst *Family) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Family.Merge(dst, src)
 }
 func (m *Family) XXX_Size() int {
 	return xxx_messageInfo_Family.Size(m)
@@ -146,7 +146,7 @@ func (m *Column) Reset()         { *m = Column{} }
 func (m *Column) String() string { return proto.CompactTextString(m) }
 func (*Column) ProtoMessage()    {}
 func (*Column) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{2}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{2}
 }
 func (m *Column) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Column.Unmarshal(m, b)
@@ -154,8 +154,8 @@ func (m *Column) XXX_Unmarshal(b []byte) error {
 func (m *Column) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Column.Marshal(b, m, deterministic)
 }
-func (m *Column) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Column.Merge(m, src)
+func (dst *Column) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Column.Merge(dst, src)
 }
 func (m *Column) XXX_Size() int {
 	return xxx_messageInfo_Column.Size(m)
@@ -204,7 +204,7 @@ func (m *Cell) Reset()         { *m = Cell{} }
 func (m *Cell) String() string { return proto.CompactTextString(m) }
 func (*Cell) ProtoMessage()    {}
 func (*Cell) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{3}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{3}
 }
 func (m *Cell) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Cell.Unmarshal(m, b)
@@ -212,8 +212,8 @@ func (m *Cell) XXX_Unmarshal(b []byte) error {
 func (m *Cell) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Cell.Marshal(b, m, deterministic)
 }
-func (m *Cell) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Cell.Merge(m, src)
+func (dst *Cell) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Cell.Merge(dst, src)
 }
 func (m *Cell) XXX_Size() int {
 	return xxx_messageInfo_Cell.Size(m)
@@ -270,7 +270,7 @@ func (m *RowRange) Reset()         { *m = RowRange{} }
 func (m *RowRange) String() string { return proto.CompactTextString(m) }
 func (*RowRange) ProtoMessage()    {}
 func (*RowRange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{4}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{4}
 }
 func (m *RowRange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RowRange.Unmarshal(m, b)
@@ -278,8 +278,8 @@ func (m *RowRange) XXX_Unmarshal(b []byte) error {
 func (m *RowRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RowRange.Marshal(b, m, deterministic)
 }
-func (m *RowRange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RowRange.Merge(m, src)
+func (dst *RowRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RowRange.Merge(dst, src)
 }
 func (m *RowRange) XXX_Size() int {
 	return xxx_messageInfo_RowRange.Size(m)
@@ -487,7 +487,7 @@ func (m *RowSet) Reset()         { *m = RowSet{} }
 func (m *RowSet) String() string { return proto.CompactTextString(m) }
 func (*RowSet) ProtoMessage()    {}
 func (*RowSet) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{5}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{5}
 }
 func (m *RowSet) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RowSet.Unmarshal(m, b)
@@ -495,8 +495,8 @@ func (m *RowSet) XXX_Unmarshal(b []byte) error {
 func (m *RowSet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RowSet.Marshal(b, m, deterministic)
 }
-func (m *RowSet) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RowSet.Merge(m, src)
+func (dst *RowSet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RowSet.Merge(dst, src)
 }
 func (m *RowSet) XXX_Size() int {
 	return xxx_messageInfo_RowSet.Size(m)
@@ -551,7 +551,7 @@ func (m *ColumnRange) Reset()         { *m = ColumnRange{} }
 func (m *ColumnRange) String() string { return proto.CompactTextString(m) }
 func (*ColumnRange) ProtoMessage()    {}
 func (*ColumnRange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{6}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{6}
 }
 func (m *ColumnRange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ColumnRange.Unmarshal(m, b)
@@ -559,8 +559,8 @@ func (m *ColumnRange) XXX_Unmarshal(b []byte) error {
 func (m *ColumnRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ColumnRange.Marshal(b, m, deterministic)
 }
-func (m *ColumnRange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ColumnRange.Merge(m, src)
+func (dst *ColumnRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ColumnRange.Merge(dst, src)
 }
 func (m *ColumnRange) XXX_Size() int {
 	return xxx_messageInfo_ColumnRange.Size(m)
@@ -775,7 +775,7 @@ func (m *TimestampRange) Reset()         { *m = TimestampRange{} }
 func (m *TimestampRange) String() string { return proto.CompactTextString(m) }
 func (*TimestampRange) ProtoMessage()    {}
 func (*TimestampRange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{7}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{7}
 }
 func (m *TimestampRange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TimestampRange.Unmarshal(m, b)
@@ -783,8 +783,8 @@ func (m *TimestampRange) XXX_Unmarshal(b []byte) error {
 func (m *TimestampRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TimestampRange.Marshal(b, m, deterministic)
 }
-func (m *TimestampRange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TimestampRange.Merge(m, src)
+func (dst *TimestampRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TimestampRange.Merge(dst, src)
 }
 func (m *TimestampRange) XXX_Size() int {
 	return xxx_messageInfo_TimestampRange.Size(m)
@@ -834,7 +834,7 @@ func (m *ValueRange) Reset()         { *m = ValueRange{} }
 func (m *ValueRange) String() string { return proto.CompactTextString(m) }
 func (*ValueRange) ProtoMessage()    {}
 func (*ValueRange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{8}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{8}
 }
 func (m *ValueRange) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ValueRange.Unmarshal(m, b)
@@ -842,8 +842,8 @@ func (m *ValueRange) XXX_Unmarshal(b []byte) error {
 func (m *ValueRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ValueRange.Marshal(b, m, deterministic)
 }
-func (m *ValueRange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValueRange.Merge(m, src)
+func (dst *ValueRange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValueRange.Merge(dst, src)
 }
 func (m *ValueRange) XXX_Size() int {
 	return xxx_messageInfo_ValueRange.Size(m)
@@ -1103,7 +1103,7 @@ func (m *RowFilter) Reset()         { *m = RowFilter{} }
 func (m *RowFilter) String() string { return proto.CompactTextString(m) }
 func (*RowFilter) ProtoMessage()    {}
 func (*RowFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{9}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{9}
 }
 func (m *RowFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RowFilter.Unmarshal(m, b)
@@ -1111,8 +1111,8 @@ func (m *RowFilter) XXX_Unmarshal(b []byte) error {
 func (m *RowFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RowFilter.Marshal(b, m, deterministic)
 }
-func (m *RowFilter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RowFilter.Merge(m, src)
+func (dst *RowFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RowFilter.Merge(dst, src)
 }
 func (m *RowFilter) XXX_Size() int {
 	return xxx_messageInfo_RowFilter.Size(m)
@@ -1749,7 +1749,7 @@ func (m *RowFilter_Chain) Reset()         { *m = RowFilter_Chain{} }
 func (m *RowFilter_Chain) String() string { return proto.CompactTextString(m) }
 func (*RowFilter_Chain) ProtoMessage()    {}
 func (*RowFilter_Chain) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{9, 0}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{9, 0}
 }
 func (m *RowFilter_Chain) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RowFilter_Chain.Unmarshal(m, b)
@@ -1757,8 +1757,8 @@ func (m *RowFilter_Chain) XXX_Unmarshal(b []byte) error {
 func (m *RowFilter_Chain) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RowFilter_Chain.Marshal(b, m, deterministic)
 }
-func (m *RowFilter_Chain) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RowFilter_Chain.Merge(m, src)
+func (dst *RowFilter_Chain) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RowFilter_Chain.Merge(dst, src)
 }
 func (m *RowFilter_Chain) XXX_Size() int {
 	return xxx_messageInfo_RowFilter_Chain.Size(m)
@@ -1814,7 +1814,7 @@ func (m *RowFilter_Interleave) Reset()         { *m = RowFilter_Interleave{} }
 func (m *RowFilter_Interleave) String() string { return proto.CompactTextString(m) }
 func (*RowFilter_Interleave) ProtoMessage()    {}
 func (*RowFilter_Interleave) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{9, 1}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{9, 1}
 }
 func (m *RowFilter_Interleave) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RowFilter_Interleave.Unmarshal(m, b)
@@ -1822,8 +1822,8 @@ func (m *RowFilter_Interleave) XXX_Unmarshal(b []byte) error {
 func (m *RowFilter_Interleave) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RowFilter_Interleave.Marshal(b, m, deterministic)
 }
-func (m *RowFilter_Interleave) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RowFilter_Interleave.Merge(m, src)
+func (dst *RowFilter_Interleave) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RowFilter_Interleave.Merge(dst, src)
 }
 func (m *RowFilter_Interleave) XXX_Size() int {
 	return xxx_messageInfo_RowFilter_Interleave.Size(m)
@@ -1868,7 +1868,7 @@ func (m *RowFilter_Condition) Reset()         { *m = RowFilter_Condition{} }
 func (m *RowFilter_Condition) String() string { return proto.CompactTextString(m) }
 func (*RowFilter_Condition) ProtoMessage()    {}
 func (*RowFilter_Condition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{9, 2}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{9, 2}
 }
 func (m *RowFilter_Condition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RowFilter_Condition.Unmarshal(m, b)
@@ -1876,8 +1876,8 @@ func (m *RowFilter_Condition) XXX_Unmarshal(b []byte) error {
 func (m *RowFilter_Condition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_RowFilter_Condition.Marshal(b, m, deterministic)
 }
-func (m *RowFilter_Condition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RowFilter_Condition.Merge(m, src)
+func (dst *RowFilter_Condition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RowFilter_Condition.Merge(dst, src)
 }
 func (m *RowFilter_Condition) XXX_Size() int {
 	return xxx_messageInfo_RowFilter_Condition.Size(m)
@@ -1928,7 +1928,7 @@ func (m *Mutation) Reset()         { *m = Mutation{} }
 func (m *Mutation) String() string { return proto.CompactTextString(m) }
 func (*Mutation) ProtoMessage()    {}
 func (*Mutation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{10}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{10}
 }
 func (m *Mutation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mutation.Unmarshal(m, b)
@@ -1936,8 +1936,8 @@ func (m *Mutation) XXX_Unmarshal(b []byte) error {
 func (m *Mutation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Mutation.Marshal(b, m, deterministic)
 }
-func (m *Mutation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Mutation.Merge(m, src)
+func (dst *Mutation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Mutation.Merge(dst, src)
 }
 func (m *Mutation) XXX_Size() int {
 	return xxx_messageInfo_Mutation.Size(m)
@@ -2148,7 +2148,7 @@ func (m *Mutation_SetCell) Reset()         { *m = Mutation_SetCell{} }
 func (m *Mutation_SetCell) String() string { return proto.CompactTextString(m) }
 func (*Mutation_SetCell) ProtoMessage()    {}
 func (*Mutation_SetCell) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{10, 0}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{10, 0}
 }
 func (m *Mutation_SetCell) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mutation_SetCell.Unmarshal(m, b)
@@ -2156,8 +2156,8 @@ func (m *Mutation_SetCell) XXX_Unmarshal(b []byte) error {
 func (m *Mutation_SetCell) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Mutation_SetCell.Marshal(b, m, deterministic)
 }
-func (m *Mutation_SetCell) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Mutation_SetCell.Merge(m, src)
+func (dst *Mutation_SetCell) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Mutation_SetCell.Merge(dst, src)
 }
 func (m *Mutation_SetCell) XXX_Size() int {
 	return xxx_messageInfo_Mutation_SetCell.Size(m)
@@ -2216,7 +2216,7 @@ func (m *Mutation_DeleteFromColumn) Reset()         { *m = Mutation_DeleteFromCo
 func (m *Mutation_DeleteFromColumn) String() string { return proto.CompactTextString(m) }
 func (*Mutation_DeleteFromColumn) ProtoMessage()    {}
 func (*Mutation_DeleteFromColumn) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{10, 1}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{10, 1}
 }
 func (m *Mutation_DeleteFromColumn) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mutation_DeleteFromColumn.Unmarshal(m, b)
@@ -2224,8 +2224,8 @@ func (m *Mutation_DeleteFromColumn) XXX_Unmarshal(b []byte) error {
 func (m *Mutation_DeleteFromColumn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Mutation_DeleteFromColumn.Marshal(b, m, deterministic)
 }
-func (m *Mutation_DeleteFromColumn) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Mutation_DeleteFromColumn.Merge(m, src)
+func (dst *Mutation_DeleteFromColumn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Mutation_DeleteFromColumn.Merge(dst, src)
 }
 func (m *Mutation_DeleteFromColumn) XXX_Size() int {
 	return xxx_messageInfo_Mutation_DeleteFromColumn.Size(m)
@@ -2271,7 +2271,7 @@ func (m *Mutation_DeleteFromFamily) Reset()         { *m = Mutation_DeleteFromFa
 func (m *Mutation_DeleteFromFamily) String() string { return proto.CompactTextString(m) }
 func (*Mutation_DeleteFromFamily) ProtoMessage()    {}
 func (*Mutation_DeleteFromFamily) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{10, 2}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{10, 2}
 }
 func (m *Mutation_DeleteFromFamily) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mutation_DeleteFromFamily.Unmarshal(m, b)
@@ -2279,8 +2279,8 @@ func (m *Mutation_DeleteFromFamily) XXX_Unmarshal(b []byte) error {
 func (m *Mutation_DeleteFromFamily) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Mutation_DeleteFromFamily.Marshal(b, m, deterministic)
 }
-func (m *Mutation_DeleteFromFamily) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Mutation_DeleteFromFamily.Merge(m, src)
+func (dst *Mutation_DeleteFromFamily) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Mutation_DeleteFromFamily.Merge(dst, src)
 }
 func (m *Mutation_DeleteFromFamily) XXX_Size() int {
 	return xxx_messageInfo_Mutation_DeleteFromFamily.Size(m)
@@ -2309,7 +2309,7 @@ func (m *Mutation_DeleteFromRow) Reset()         { *m = Mutation_DeleteFromRow{}
 func (m *Mutation_DeleteFromRow) String() string { return proto.CompactTextString(m) }
 func (*Mutation_DeleteFromRow) ProtoMessage()    {}
 func (*Mutation_DeleteFromRow) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{10, 3}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{10, 3}
 }
 func (m *Mutation_DeleteFromRow) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mutation_DeleteFromRow.Unmarshal(m, b)
@@ -2317,8 +2317,8 @@ func (m *Mutation_DeleteFromRow) XXX_Unmarshal(b []byte) error {
 func (m *Mutation_DeleteFromRow) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Mutation_DeleteFromRow.Marshal(b, m, deterministic)
 }
-func (m *Mutation_DeleteFromRow) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Mutation_DeleteFromRow.Merge(m, src)
+func (dst *Mutation_DeleteFromRow) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Mutation_DeleteFromRow.Merge(dst, src)
 }
 func (m *Mutation_DeleteFromRow) XXX_Size() int {
 	return xxx_messageInfo_Mutation_DeleteFromRow.Size(m)
@@ -2355,7 +2355,7 @@ func (m *ReadModifyWriteRule) Reset()         { *m = ReadModifyWriteRule{} }
 func (m *ReadModifyWriteRule) String() string { return proto.CompactTextString(m) }
 func (*ReadModifyWriteRule) ProtoMessage()    {}
 func (*ReadModifyWriteRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_343df51a8f7aa933, []int{11}
+	return fileDescriptor_data_4a4437069b4d43ba, []int{11}
 }
 func (m *ReadModifyWriteRule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadModifyWriteRule.Unmarshal(m, b)
@@ -2363,8 +2363,8 @@ func (m *ReadModifyWriteRule) XXX_Unmarshal(b []byte) error {
 func (m *ReadModifyWriteRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReadModifyWriteRule.Marshal(b, m, deterministic)
 }
-func (m *ReadModifyWriteRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReadModifyWriteRule.Merge(m, src)
+func (dst *ReadModifyWriteRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadModifyWriteRule.Merge(dst, src)
 }
 func (m *ReadModifyWriteRule) XXX_Size() int {
 	return xxx_messageInfo_ReadModifyWriteRule.Size(m)
@@ -2513,9 +2513,9 @@ func init() {
 	proto.RegisterType((*ReadModifyWriteRule)(nil), "google.bigtable.v2.ReadModifyWriteRule")
 }
 
-func init() { proto.RegisterFile("google/bigtable/v2/data.proto", fileDescriptor_343df51a8f7aa933) }
+func init() { proto.RegisterFile("google/bigtable/v2/data.proto", fileDescriptor_data_4a4437069b4d43ba) }
 
-var fileDescriptor_343df51a8f7aa933 = []byte{
+var fileDescriptor_data_4a4437069b4d43ba = []byte{
 	// 1444 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0xdb, 0x72, 0x1b, 0x45,
 	0x13, 0xd6, 0x5a, 0xb6, 0x2c, 0xf5, 0xca, 0x96, 0x32, 0x71, 0x1c, 0x45, 0x7f, 0xfc, 0xc7, 0xa5,

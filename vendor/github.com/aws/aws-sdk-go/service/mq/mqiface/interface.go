@@ -68,6 +68,10 @@ type MQAPI interface {
 	CreateConfigurationWithContext(aws.Context, *mq.CreateConfigurationRequest, ...request.Option) (*mq.CreateConfigurationResponse, error)
 	CreateConfigurationRequest(*mq.CreateConfigurationRequest) (*request.Request, *mq.CreateConfigurationResponse)
 
+	CreateTags(*mq.CreateTagsInput) (*mq.CreateTagsOutput, error)
+	CreateTagsWithContext(aws.Context, *mq.CreateTagsInput, ...request.Option) (*mq.CreateTagsOutput, error)
+	CreateTagsRequest(*mq.CreateTagsInput) (*request.Request, *mq.CreateTagsOutput)
+
 	CreateUser(*mq.CreateUserRequest) (*mq.CreateUserOutput, error)
 	CreateUserWithContext(aws.Context, *mq.CreateUserRequest, ...request.Option) (*mq.CreateUserOutput, error)
 	CreateUserRequest(*mq.CreateUserRequest) (*request.Request, *mq.CreateUserOutput)
@@ -75,6 +79,10 @@ type MQAPI interface {
 	DeleteBroker(*mq.DeleteBrokerInput) (*mq.DeleteBrokerResponse, error)
 	DeleteBrokerWithContext(aws.Context, *mq.DeleteBrokerInput, ...request.Option) (*mq.DeleteBrokerResponse, error)
 	DeleteBrokerRequest(*mq.DeleteBrokerInput) (*request.Request, *mq.DeleteBrokerResponse)
+
+	DeleteTags(*mq.DeleteTagsInput) (*mq.DeleteTagsOutput, error)
+	DeleteTagsWithContext(aws.Context, *mq.DeleteTagsInput, ...request.Option) (*mq.DeleteTagsOutput, error)
+	DeleteTagsRequest(*mq.DeleteTagsInput) (*request.Request, *mq.DeleteTagsOutput)
 
 	DeleteUser(*mq.DeleteUserInput) (*mq.DeleteUserOutput, error)
 	DeleteUserWithContext(aws.Context, *mq.DeleteUserInput, ...request.Option) (*mq.DeleteUserOutput, error)
@@ -107,6 +115,10 @@ type MQAPI interface {
 	ListConfigurations(*mq.ListConfigurationsInput) (*mq.ListConfigurationsResponse, error)
 	ListConfigurationsWithContext(aws.Context, *mq.ListConfigurationsInput, ...request.Option) (*mq.ListConfigurationsResponse, error)
 	ListConfigurationsRequest(*mq.ListConfigurationsInput) (*request.Request, *mq.ListConfigurationsResponse)
+
+	ListTags(*mq.ListTagsInput) (*mq.ListTagsOutput, error)
+	ListTagsWithContext(aws.Context, *mq.ListTagsInput, ...request.Option) (*mq.ListTagsOutput, error)
+	ListTagsRequest(*mq.ListTagsInput) (*request.Request, *mq.ListTagsOutput)
 
 	ListUsers(*mq.ListUsersInput) (*mq.ListUsersResponse, error)
 	ListUsersWithContext(aws.Context, *mq.ListUsersInput, ...request.Option) (*mq.ListUsersResponse, error)

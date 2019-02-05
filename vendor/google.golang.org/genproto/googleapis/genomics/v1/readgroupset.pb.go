@@ -57,7 +57,7 @@ func (m *ReadGroupSet) Reset()         { *m = ReadGroupSet{} }
 func (m *ReadGroupSet) String() string { return proto.CompactTextString(m) }
 func (*ReadGroupSet) ProtoMessage()    {}
 func (*ReadGroupSet) Descriptor() ([]byte, []int) {
-	return fileDescriptor_976a96d3fd28f245, []int{0}
+	return fileDescriptor_readgroupset_a1ee2d6c49daf62b, []int{0}
 }
 func (m *ReadGroupSet) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReadGroupSet.Unmarshal(m, b)
@@ -65,8 +65,8 @@ func (m *ReadGroupSet) XXX_Unmarshal(b []byte) error {
 func (m *ReadGroupSet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ReadGroupSet.Marshal(b, m, deterministic)
 }
-func (m *ReadGroupSet) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ReadGroupSet.Merge(m, src)
+func (dst *ReadGroupSet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadGroupSet.Merge(dst, src)
 }
 func (m *ReadGroupSet) XXX_Size() int {
 	return xxx_messageInfo_ReadGroupSet.Size(m)
@@ -132,10 +132,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/genomics/v1/readgroupset.proto", fileDescriptor_976a96d3fd28f245)
+	proto.RegisterFile("google/genomics/v1/readgroupset.proto", fileDescriptor_readgroupset_a1ee2d6c49daf62b)
 }
 
-var fileDescriptor_976a96d3fd28f245 = []byte{
+var fileDescriptor_readgroupset_a1ee2d6c49daf62b = []byte{
 	// 367 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x91, 0x4f, 0x8b, 0xdb, 0x30,
 	0x10, 0xc5, 0xb1, 0xf3, 0xa7, 0xcd, 0xa4, 0x84, 0x54, 0x87, 0x62, 0x4c, 0x03, 0x21, 0x50, 0x08,

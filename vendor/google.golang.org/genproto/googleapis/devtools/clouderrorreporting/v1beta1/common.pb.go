@@ -40,7 +40,7 @@ func (m *ErrorGroup) Reset()         { *m = ErrorGroup{} }
 func (m *ErrorGroup) String() string { return proto.CompactTextString(m) }
 func (*ErrorGroup) ProtoMessage()    {}
 func (*ErrorGroup) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{0}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{0}
 }
 func (m *ErrorGroup) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ErrorGroup.Unmarshal(m, b)
@@ -48,8 +48,8 @@ func (m *ErrorGroup) XXX_Unmarshal(b []byte) error {
 func (m *ErrorGroup) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ErrorGroup.Marshal(b, m, deterministic)
 }
-func (m *ErrorGroup) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ErrorGroup.Merge(m, src)
+func (dst *ErrorGroup) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ErrorGroup.Merge(dst, src)
 }
 func (m *ErrorGroup) XXX_Size() int {
 	return xxx_messageInfo_ErrorGroup.Size(m)
@@ -95,7 +95,7 @@ func (m *TrackingIssue) Reset()         { *m = TrackingIssue{} }
 func (m *TrackingIssue) String() string { return proto.CompactTextString(m) }
 func (*TrackingIssue) ProtoMessage()    {}
 func (*TrackingIssue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{1}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{1}
 }
 func (m *TrackingIssue) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TrackingIssue.Unmarshal(m, b)
@@ -103,8 +103,8 @@ func (m *TrackingIssue) XXX_Unmarshal(b []byte) error {
 func (m *TrackingIssue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_TrackingIssue.Marshal(b, m, deterministic)
 }
-func (m *TrackingIssue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TrackingIssue.Merge(m, src)
+func (dst *TrackingIssue) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TrackingIssue.Merge(dst, src)
 }
 func (m *TrackingIssue) XXX_Size() int {
 	return xxx_messageInfo_TrackingIssue.Size(m)
@@ -143,7 +143,7 @@ func (m *ErrorEvent) Reset()         { *m = ErrorEvent{} }
 func (m *ErrorEvent) String() string { return proto.CompactTextString(m) }
 func (*ErrorEvent) ProtoMessage()    {}
 func (*ErrorEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{2}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{2}
 }
 func (m *ErrorEvent) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ErrorEvent.Unmarshal(m, b)
@@ -151,8 +151,8 @@ func (m *ErrorEvent) XXX_Unmarshal(b []byte) error {
 func (m *ErrorEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ErrorEvent.Marshal(b, m, deterministic)
 }
-func (m *ErrorEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ErrorEvent.Merge(m, src)
+func (dst *ErrorEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ErrorEvent.Merge(dst, src)
 }
 func (m *ErrorEvent) XXX_Size() int {
 	return xxx_messageInfo_ErrorEvent.Size(m)
@@ -220,7 +220,7 @@ func (m *ServiceContext) Reset()         { *m = ServiceContext{} }
 func (m *ServiceContext) String() string { return proto.CompactTextString(m) }
 func (*ServiceContext) ProtoMessage()    {}
 func (*ServiceContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{3}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{3}
 }
 func (m *ServiceContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ServiceContext.Unmarshal(m, b)
@@ -228,8 +228,8 @@ func (m *ServiceContext) XXX_Unmarshal(b []byte) error {
 func (m *ServiceContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ServiceContext.Marshal(b, m, deterministic)
 }
-func (m *ServiceContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceContext.Merge(m, src)
+func (dst *ServiceContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceContext.Merge(dst, src)
 }
 func (m *ServiceContext) XXX_Size() int {
 	return xxx_messageInfo_ServiceContext.Size(m)
@@ -294,7 +294,7 @@ func (m *ErrorContext) Reset()         { *m = ErrorContext{} }
 func (m *ErrorContext) String() string { return proto.CompactTextString(m) }
 func (*ErrorContext) ProtoMessage()    {}
 func (*ErrorContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{4}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{4}
 }
 func (m *ErrorContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ErrorContext.Unmarshal(m, b)
@@ -302,8 +302,8 @@ func (m *ErrorContext) XXX_Unmarshal(b []byte) error {
 func (m *ErrorContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ErrorContext.Marshal(b, m, deterministic)
 }
-func (m *ErrorContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ErrorContext.Merge(m, src)
+func (dst *ErrorContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ErrorContext.Merge(dst, src)
 }
 func (m *ErrorContext) XXX_Size() int {
 	return xxx_messageInfo_ErrorContext.Size(m)
@@ -364,7 +364,7 @@ func (m *HttpRequestContext) Reset()         { *m = HttpRequestContext{} }
 func (m *HttpRequestContext) String() string { return proto.CompactTextString(m) }
 func (*HttpRequestContext) ProtoMessage()    {}
 func (*HttpRequestContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{5}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{5}
 }
 func (m *HttpRequestContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_HttpRequestContext.Unmarshal(m, b)
@@ -372,8 +372,8 @@ func (m *HttpRequestContext) XXX_Unmarshal(b []byte) error {
 func (m *HttpRequestContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_HttpRequestContext.Marshal(b, m, deterministic)
 }
-func (m *HttpRequestContext) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HttpRequestContext.Merge(m, src)
+func (dst *HttpRequestContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpRequestContext.Merge(dst, src)
 }
 func (m *HttpRequestContext) XXX_Size() int {
 	return xxx_messageInfo_HttpRequestContext.Size(m)
@@ -450,7 +450,7 @@ func (m *SourceLocation) Reset()         { *m = SourceLocation{} }
 func (m *SourceLocation) String() string { return proto.CompactTextString(m) }
 func (*SourceLocation) ProtoMessage()    {}
 func (*SourceLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d0e89497b32fa506, []int{6}
+	return fileDescriptor_common_dcadb19d8ee67f84, []int{6}
 }
 func (m *SourceLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SourceLocation.Unmarshal(m, b)
@@ -458,8 +458,8 @@ func (m *SourceLocation) XXX_Unmarshal(b []byte) error {
 func (m *SourceLocation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_SourceLocation.Marshal(b, m, deterministic)
 }
-func (m *SourceLocation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceLocation.Merge(m, src)
+func (dst *SourceLocation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SourceLocation.Merge(dst, src)
 }
 func (m *SourceLocation) XXX_Size() int {
 	return xxx_messageInfo_SourceLocation.Size(m)
@@ -502,10 +502,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/clouderrorreporting/v1beta1/common.proto", fileDescriptor_d0e89497b32fa506)
+	proto.RegisterFile("google/devtools/clouderrorreporting/v1beta1/common.proto", fileDescriptor_common_dcadb19d8ee67f84)
 }
 
-var fileDescriptor_d0e89497b32fa506 = []byte{
+var fileDescriptor_common_dcadb19d8ee67f84 = []byte{
 	// 705 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0xcd, 0x6e, 0x13, 0x31,
 	0x10, 0x56, 0x92, 0xfe, 0xc5, 0x69, 0x53, 0x64, 0x21, 0x14, 0x02, 0xa8, 0x25, 0xbd, 0x54, 0x42,

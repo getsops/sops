@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewReplicationStorageClassificationsClientWithBaseURI(baseURI string, subsc
 // fabricName - fabric name.
 // storageClassificationName - storage classification name.
 func (client ReplicationStorageClassificationsClient) Get(ctx context.Context, fabricName string, storageClassificationName string) (result StorageClassification, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, fabricName, storageClassificationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationsClient", "Get", nil, "Failure preparing request")
@@ -113,6 +124,16 @@ func (client ReplicationStorageClassificationsClient) GetResponder(resp *http.Re
 
 // List lists the storage classifications in the vault.
 func (client ReplicationStorageClassificationsClient) List(ctx context.Context) (result StorageClassificationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationsClient.List")
+		defer func() {
+			sc := -1
+			if result.scc.Response.Response != nil {
+				sc = result.scc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -177,8 +198,8 @@ func (client ReplicationStorageClassificationsClient) ListResponder(resp *http.R
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationStorageClassificationsClient) listNextResults(lastResults StorageClassificationCollection) (result StorageClassificationCollection, err error) {
-	req, err := lastResults.storageClassificationCollectionPreparer()
+func (client ReplicationStorageClassificationsClient) listNextResults(ctx context.Context, lastResults StorageClassificationCollection) (result StorageClassificationCollection, err error) {
+	req, err := lastResults.storageClassificationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -199,6 +220,16 @@ func (client ReplicationStorageClassificationsClient) listNextResults(lastResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationStorageClassificationsClient) ListComplete(ctx context.Context) (result StorageClassificationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -207,6 +238,16 @@ func (client ReplicationStorageClassificationsClient) ListComplete(ctx context.C
 // Parameters:
 // fabricName - site name of interest.
 func (client ReplicationStorageClassificationsClient) ListByReplicationFabrics(ctx context.Context, fabricName string) (result StorageClassificationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationsClient.ListByReplicationFabrics")
+		defer func() {
+			sc := -1
+			if result.scc.Response.Response != nil {
+				sc = result.scc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReplicationFabricsNextResults
 	req, err := client.ListByReplicationFabricsPreparer(ctx, fabricName)
 	if err != nil {
@@ -272,8 +313,8 @@ func (client ReplicationStorageClassificationsClient) ListByReplicationFabricsRe
 }
 
 // listByReplicationFabricsNextResults retrieves the next set of results, if any.
-func (client ReplicationStorageClassificationsClient) listByReplicationFabricsNextResults(lastResults StorageClassificationCollection) (result StorageClassificationCollection, err error) {
-	req, err := lastResults.storageClassificationCollectionPreparer()
+func (client ReplicationStorageClassificationsClient) listByReplicationFabricsNextResults(ctx context.Context, lastResults StorageClassificationCollection) (result StorageClassificationCollection, err error) {
+	req, err := lastResults.storageClassificationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationStorageClassificationsClient", "listByReplicationFabricsNextResults", nil, "Failure preparing next results request")
 	}
@@ -294,6 +335,16 @@ func (client ReplicationStorageClassificationsClient) listByReplicationFabricsNe
 
 // ListByReplicationFabricsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationStorageClassificationsClient) ListByReplicationFabricsComplete(ctx context.Context, fabricName string) (result StorageClassificationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationStorageClassificationsClient.ListByReplicationFabrics")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReplicationFabrics(ctx, fabricName)
 	return
 }

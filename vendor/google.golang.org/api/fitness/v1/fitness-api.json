@@ -65,7 +65,7 @@
   "description": "Stores and accesses user data in the fitness store from apps on any platform.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/fit/rest/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/LrHl832jGdFhMW8MGSdDnCVIH0w\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/4Mc3ZMTkywIuovUzWRCiWwTqc-E\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -717,7 +717,7 @@
                   "type": "boolean"
                 },
                 "pageToken": {
-                  "description": "The continuation token, which is used to page through large result sets. To get the next page of results, set this parameter to the value of nextPageToken from the previous response.",
+                  "description": "The continuation token, which is used for incremental syncing. To get the next batch of changes, set this parameter to the value of nextPageToken from the previous response. This token is treated as a timestamp (in millis since epoch). If specified, the API returns sessions modified since this time. The page token is ignored if either start or end time is specified. If none of start time, end time, and the page token is specified, sessions modified in the last 7 days are returned.",
                   "location": "query",
                   "type": "string"
                 },
@@ -802,7 +802,7 @@
       }
     }
   },
-  "revision": "20170922",
+  "revision": "20190109",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AggregateBucket": {
@@ -913,7 +913,7 @@
           "type": "string"
         },
         "filteredDataQualityStandard": {
-          "description": "A list of acceptable data quality standards. Only data points which conform to at least one of the specified data quality standards will be returned. If the list is empty, all data points are returned.",
+          "description": "DO NOT POPULATE THIS FIELD. As data quality standards are deprecated, filling it in will result in no data sources being returned. It will be removed in a future version entirely.",
           "items": {
             "enum": [
               "dataQualityBloodGlucoseIso151972003",
@@ -1071,7 +1071,7 @@
       "id": "DataPoint",
       "properties": {
         "computationTimeMillis": {
-          "description": "Used for version checking during transformation; that is, a datapoint can only replace another datapoint that has an older computation time stamp.",
+          "description": "DO NOT USE THIS FIELD. It is ignored, and not stored.",
           "format": "int64",
           "type": "string"
         },
@@ -1148,7 +1148,7 @@
           "description": "Information about an application which feeds sensor data into the platform."
         },
         "dataQualityStandard": {
-          "description": "",
+          "description": "DO NOT POPULATE THIS FIELD. It is never populated in responses from the platform, and is ignored in queries. It will be removed in a future version entirely.",
           "items": {
             "enum": [
               "dataQualityBloodGlucoseIso151972003",
@@ -1333,7 +1333,7 @@
               "fitness.users.dataSources.datasets.patch"
             ]
           },
-          "description": "The largest end time of all data points in this possibly partial representation of the dataset. Time is in nanoseconds from epoch. This should also match the first part of the dataset identifier.",
+          "description": "The largest end time of all data points in this possibly partial representation of the dataset. Time is in nanoseconds from epoch. This should also match the second part of the dataset identifier.",
           "format": "int64",
           "type": "string"
         },

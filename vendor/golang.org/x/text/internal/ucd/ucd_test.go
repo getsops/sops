@@ -22,7 +22,7 @@ C;        False;12;   -4;   0.75;
 D;        ;13;-5;1.75;
 
 @Part1   # Another part. 
-# We test part comments get removed by not commenting the the next line.
+# We test part comments get removed by not commenting the next line.
 E..10FFFF; F;   14  ; -6;   2.75;
 `
 

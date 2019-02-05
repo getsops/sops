@@ -47,7 +47,7 @@ func (m *Configuration) Reset()         { *m = Configuration{} }
 func (m *Configuration) String() string { return proto.CompactTextString(m) }
 func (*Configuration) ProtoMessage()    {}
 func (*Configuration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c7cb6c7dfd72e78e, []int{0}
+	return fileDescriptor_configuration_59cffa436ef80fe6, []int{0}
 }
 func (m *Configuration) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Configuration.Unmarshal(m, b)
@@ -55,8 +55,8 @@ func (m *Configuration) XXX_Unmarshal(b []byte) error {
 func (m *Configuration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Configuration.Marshal(b, m, deterministic)
 }
-func (m *Configuration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Configuration.Merge(m, src)
+func (dst *Configuration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Configuration.Merge(dst, src)
 }
 func (m *Configuration) XXX_Size() int {
 	return xxx_messageInfo_Configuration.Size(m)
@@ -117,7 +117,7 @@ func (m *Configuration_Id) Reset()         { *m = Configuration_Id{} }
 func (m *Configuration_Id) String() string { return proto.CompactTextString(m) }
 func (*Configuration_Id) ProtoMessage()    {}
 func (*Configuration_Id) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c7cb6c7dfd72e78e, []int{0, 0}
+	return fileDescriptor_configuration_59cffa436ef80fe6, []int{0, 0}
 }
 func (m *Configuration_Id) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Configuration_Id.Unmarshal(m, b)
@@ -125,8 +125,8 @@ func (m *Configuration_Id) XXX_Unmarshal(b []byte) error {
 func (m *Configuration_Id) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_Configuration_Id.Marshal(b, m, deterministic)
 }
-func (m *Configuration_Id) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Configuration_Id.Merge(m, src)
+func (dst *Configuration_Id) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Configuration_Id.Merge(dst, src)
 }
 func (m *Configuration_Id) XXX_Size() int {
 	return xxx_messageInfo_Configuration_Id.Size(m)
@@ -164,7 +164,7 @@ func (m *ConfigurationAttributes) Reset()         { *m = ConfigurationAttributes
 func (m *ConfigurationAttributes) String() string { return proto.CompactTextString(m) }
 func (*ConfigurationAttributes) ProtoMessage()    {}
 func (*ConfigurationAttributes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c7cb6c7dfd72e78e, []int{1}
+	return fileDescriptor_configuration_59cffa436ef80fe6, []int{1}
 }
 func (m *ConfigurationAttributes) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ConfigurationAttributes.Unmarshal(m, b)
@@ -172,8 +172,8 @@ func (m *ConfigurationAttributes) XXX_Unmarshal(b []byte) error {
 func (m *ConfigurationAttributes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	return xxx_messageInfo_ConfigurationAttributes.Marshal(b, m, deterministic)
 }
-func (m *ConfigurationAttributes) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigurationAttributes.Merge(m, src)
+func (dst *ConfigurationAttributes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigurationAttributes.Merge(dst, src)
 }
 func (m *ConfigurationAttributes) XXX_Size() int {
 	return xxx_messageInfo_ConfigurationAttributes.Size(m)
@@ -198,10 +198,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/devtools/resultstore/v2/configuration.proto", fileDescriptor_c7cb6c7dfd72e78e)
+	proto.RegisterFile("google/devtools/resultstore/v2/configuration.proto", fileDescriptor_configuration_59cffa436ef80fe6)
 }
 
-var fileDescriptor_c7cb6c7dfd72e78e = []byte{
+var fileDescriptor_configuration_59cffa436ef80fe6 = []byte{
 	// 335 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x92, 0x4f, 0x4f, 0xb3, 0x40,
 	0x10, 0xc6, 0x03, 0xbc, 0x6f, 0x93, 0x4e, 0x6d, 0xac, 0x7b, 0x29, 0xe9, 0xc1, 0x34, 0xf5, 0x82,

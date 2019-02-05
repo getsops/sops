@@ -26,6 +26,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const apiDirSuffix = "api"
+
 var packagesCmd = &cobra.Command{
 	Use:   "packages <package search dir> (<base commit> <target commit(s)>) | (<commit sequence>)",
 	Short: "Generates a report for all packages under the specified directory containing the delta between commits.",
@@ -36,6 +38,10 @@ For a commit sequence each commit N in the sequence is compared against commit N
 Commit sequences must be comma-delimited.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		rpt, err := thePackagesCmd(args)
+		if err != nil {
+			return err
+		}
+		err = printReport(rpt)
 		if err != nil {
 			return err
 		}
@@ -92,7 +98,6 @@ func thePackagesCmd(args []string) (rpt CommitPkgsReport, err error) {
 		return
 	}
 
-	err = printReport(rpt)
 	return
 }
 
@@ -116,7 +121,8 @@ func getRepoContentForCommit(wt repo.WorkingTree, dir, commit string) (r repoCon
 			}
 			hasSubDirs := false
 			for _, f := range fi {
-				if f.IsDir() {
+				// check if this is the interfaces subdir, if it is don't recurse into it
+				if f.IsDir() && f.Name() != filepath.Base(path)+apiDirSuffix {
 					hasSubDirs = true
 					break
 				}

@@ -14,12 +14,12 @@
 package clientcredentials // import "golang.org/x/oauth2/clientcredentials"
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strings"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/internal"
 )
@@ -45,16 +45,19 @@ type Config struct {
 }
 
 // Token uses client credentials to retrieve a token.
-// The HTTP client to use is derived from the context.
-// If nil, http.DefaultClient is used.
+//
+// The provided context optionally controls which HTTP client is used. See the oauth2.HTTPClient variable.
 func (c *Config) Token(ctx context.Context) (*oauth2.Token, error) {
 	return c.TokenSource(ctx).Token()
 }
 
 // Client returns an HTTP client using the provided token.
-// The token will auto-refresh as necessary. The underlying
-// HTTP transport will be obtained using the provided context.
-// The returned client and its Transport should not be modified.
+// The token will auto-refresh as necessary.
+//
+// The provided context optionally controls which HTTP client
+// is returned. See the oauth2.HTTPClient variable.
+//
+// The returned Client and its Transport should not be modified.
 func (c *Config) Client(ctx context.Context) *http.Client {
 	return oauth2.NewClient(ctx, c.TokenSource(ctx))
 }
@@ -87,7 +90,9 @@ func (c *tokenSource) Token() (*oauth2.Token, error) {
 		v.Set("scope", strings.Join(c.conf.Scopes, " "))
 	}
 	for k, p := range c.conf.EndpointParams {
-		if _, ok := v[k]; ok {
+		// Allow grant_type to be overridden to allow interoperability with
+		// non-compliant implementations.
+		if _, ok := v[k]; ok && k != "grant_type" {
 			return nil, fmt.Errorf("oauth2: cannot overwrite parameter %q", k)
 		}
 		v[k] = p

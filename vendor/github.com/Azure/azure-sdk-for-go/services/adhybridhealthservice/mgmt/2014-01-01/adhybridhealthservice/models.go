@@ -18,13 +18,18 @@ package adhybridhealthservice
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/adhybridhealthservice/mgmt/2014-01-01/adhybridhealthservice"
 
 // AlgorithmStepType enumerates the values for algorithm step type.
 type AlgorithmStepType string
@@ -109,10 +114,10 @@ type DeltaOperationType string
 const (
 	// DeltaOperationTypeAdd ...
 	DeltaOperationTypeAdd DeltaOperationType = "Add"
-	// DeltaOperationTypeDeletAdd ...
-	DeltaOperationTypeDeletAdd DeltaOperationType = "DeletAdd"
 	// DeltaOperationTypeDelete ...
 	DeltaOperationTypeDelete DeltaOperationType = "Delete"
+	// DeltaOperationTypeDeleteAdd ...
+	DeltaOperationTypeDeleteAdd DeltaOperationType = "DeleteAdd"
 	// DeltaOperationTypeNone ...
 	DeltaOperationTypeNone DeltaOperationType = "None"
 	// DeltaOperationTypeObsolete ...
@@ -127,7 +132,7 @@ const (
 
 // PossibleDeltaOperationTypeValues returns an array of possible values for the DeltaOperationType const type.
 func PossibleDeltaOperationTypeValues() []DeltaOperationType {
-	return []DeltaOperationType{DeltaOperationTypeAdd, DeltaOperationTypeDeletAdd, DeltaOperationTypeDelete, DeltaOperationTypeNone, DeltaOperationTypeObsolete, DeltaOperationTypeReplace, DeltaOperationTypeUndefined, DeltaOperationTypeUpdate}
+	return []DeltaOperationType{DeltaOperationTypeAdd, DeltaOperationTypeDelete, DeltaOperationTypeDeleteAdd, DeltaOperationTypeNone, DeltaOperationTypeObsolete, DeltaOperationTypeReplace, DeltaOperationTypeUndefined, DeltaOperationTypeUpdate}
 }
 
 // HealthStatus enumerates the values for health status.
@@ -265,13 +270,13 @@ func PossibleValueTypeValues() []ValueType {
 	return []ValueType{ValueTypeBinary, ValueTypeBoolean, ValueTypeDn, ValueTypeInteger, ValueTypeString, ValueTypeUndefined}
 }
 
-// AdditionalInformation the addtional information for a property.
+// AdditionalInformation the additional information for a property.
 type AdditionalInformation struct {
 	// TitleName - The title name for the property.
 	TitleName *string `json:"titleName,omitempty"`
 	// TitleValue - The title value for the property.
 	TitleValue *string `json:"titleValue,omitempty"`
-	// Properties - The list of properties which are included in the aditional information.
+	// Properties - The list of properties which are included in the additional information.
 	Properties interface{} `json:"properties,omitempty"`
 	// HasProperties - Indicates if properties are present or not.
 	HasProperties *bool `json:"hasProperties,omitempty"`
@@ -296,20 +301,37 @@ type AddsConfigurationIterator struct {
 	page AddsConfigurationPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AddsConfigurationIterator) Next() error {
+func (iter *AddsConfigurationIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsConfigurationIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AddsConfigurationIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -331,6 +353,11 @@ func (iter AddsConfigurationIterator) Value() Item {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AddsConfigurationIterator type.
+func NewAddsConfigurationIterator(page AddsConfigurationPage) AddsConfigurationIterator {
+	return AddsConfigurationIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ac AddsConfiguration) IsEmpty() bool {
 	return ac.Value == nil || len(*ac.Value) == 0
@@ -338,11 +365,11 @@ func (ac AddsConfiguration) IsEmpty() bool {
 
 // addsConfigurationPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ac AddsConfiguration) addsConfigurationPreparer() (*http.Request, error) {
+func (ac AddsConfiguration) addsConfigurationPreparer(ctx context.Context) (*http.Request, error) {
 	if ac.NextLink == nil || len(to.String(ac.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ac.NextLink)))
@@ -350,19 +377,36 @@ func (ac AddsConfiguration) addsConfigurationPreparer() (*http.Request, error) {
 
 // AddsConfigurationPage contains a page of Item values.
 type AddsConfigurationPage struct {
-	fn func(AddsConfiguration) (AddsConfiguration, error)
+	fn func(context.Context, AddsConfiguration) (AddsConfiguration, error)
 	ac AddsConfiguration
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AddsConfigurationPage) Next() error {
-	next, err := page.fn(page.ac)
+func (page *AddsConfigurationPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsConfigurationPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ac)
 	if err != nil {
 		return err
 	}
 	page.ac = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AddsConfigurationPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -381,6 +425,11 @@ func (page AddsConfigurationPage) Values() []Item {
 		return nil
 	}
 	return *page.ac.Value
+}
+
+// Creates a new instance of the AddsConfigurationPage type.
+func NewAddsConfigurationPage(getNextPage func(context.Context, AddsConfiguration) (AddsConfiguration, error)) AddsConfigurationPage {
+	return AddsConfigurationPage{fn: getNextPage}
 }
 
 // AddsServiceMember the server details for ADDS service.
@@ -411,7 +460,7 @@ type AddsServiceMember struct {
 	ActiveAlerts *int32 `json:"activeAlerts,omitempty"`
 	// AdditionalInformation - The additional information, if any, for the server.
 	AdditionalInformation *string `json:"additionalInformation,omitempty"`
-	// CreatedDate - The date time , in UTC, when the server was onboaraded to Azure Active Directory Connect Health.
+	// CreatedDate - The date time , in UTC, when the server was onboarded to Azure Active Directory Connect Health.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// Dimensions - The server specific configuration related dimensions.
 	Dimensions *[]Item `json:"dimensions,omitempty"`
@@ -427,7 +476,7 @@ type AddsServiceMember struct {
 	LastReboot *date.Time `json:"lastReboot,omitempty"`
 	// LastServerReportedMonitoringLevelChange - The date and time, in UTC, when the server's data monitoring configuration was last changed.
 	LastServerReportedMonitoringLevelChange *date.Time `json:"lastServerReportedMonitoringLevelChange,omitempty"`
-	// LastUpdated - The date and time, in UTC, when the server proeprties were last updated.
+	// LastUpdated - The date and time, in UTC, when the server properties were last updated.
 	LastUpdated *date.Time `json:"lastUpdated,omitempty"`
 	// MachineID - The id of the machine.
 	MachineID *string `json:"machineId,omitempty"`
@@ -474,20 +523,37 @@ type AddsServiceMembersIterator struct {
 	page AddsServiceMembersPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AddsServiceMembersIterator) Next() error {
+func (iter *AddsServiceMembersIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AddsServiceMembersIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -509,6 +575,11 @@ func (iter AddsServiceMembersIterator) Value() AddsServiceMember {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AddsServiceMembersIterator type.
+func NewAddsServiceMembersIterator(page AddsServiceMembersPage) AddsServiceMembersIterator {
+	return AddsServiceMembersIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (asm AddsServiceMembers) IsEmpty() bool {
 	return asm.Value == nil || len(*asm.Value) == 0
@@ -516,11 +587,11 @@ func (asm AddsServiceMembers) IsEmpty() bool {
 
 // addsServiceMembersPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (asm AddsServiceMembers) addsServiceMembersPreparer() (*http.Request, error) {
+func (asm AddsServiceMembers) addsServiceMembersPreparer(ctx context.Context) (*http.Request, error) {
 	if asm.NextLink == nil || len(to.String(asm.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(asm.NextLink)))
@@ -528,19 +599,36 @@ func (asm AddsServiceMembers) addsServiceMembersPreparer() (*http.Request, error
 
 // AddsServiceMembersPage contains a page of AddsServiceMember values.
 type AddsServiceMembersPage struct {
-	fn  func(AddsServiceMembers) (AddsServiceMembers, error)
+	fn  func(context.Context, AddsServiceMembers) (AddsServiceMembers, error)
 	asm AddsServiceMembers
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AddsServiceMembersPage) Next() error {
-	next, err := page.fn(page.asm)
+func (page *AddsServiceMembersPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServiceMembersPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.asm)
 	if err != nil {
 		return err
 	}
 	page.asm = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AddsServiceMembersPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -559,6 +647,11 @@ func (page AddsServiceMembersPage) Values() []AddsServiceMember {
 		return nil
 	}
 	return *page.asm.Value
+}
+
+// Creates a new instance of the AddsServiceMembersPage type.
+func NewAddsServiceMembersPage(getNextPage func(context.Context, AddsServiceMembers) (AddsServiceMembers, error)) AddsServiceMembersPage {
+	return AddsServiceMembersPage{fn: getNextPage}
 }
 
 // Agent the agent details.
@@ -585,7 +678,7 @@ type Alert struct {
 	AlertID *uuid.UUID `json:"alertId,omitempty"`
 	// Level - The alert level which indicates the severity of the alert. Possible values include: 'LevelWarning', 'LevelError', 'LevelPreWarning'
 	Level Level `json:"level,omitempty"`
-	// State - The alert state which can be either active or resolved with multile resolution types. Possible values include: 'Active', 'ResolvedByPositiveResult', 'ResolvedManually', 'ResolvedByTimer', 'ResolvedByStateChange'
+	// State - The alert state which can be either active or resolved with multiple resolution types. Possible values include: 'Active', 'ResolvedByPositiveResult', 'ResolvedManually', 'ResolvedByTimer', 'ResolvedByStateChange'
 	State State `json:"state,omitempty"`
 	// ShortName - The alert short name.
 	ShortName *string `json:"shortName,omitempty"`
@@ -626,7 +719,7 @@ type AlertFeedback struct {
 	autorest.Response `json:"-"`
 	// Level - The alert level which indicates the severity of the alert.
 	Level *string `json:"level,omitempty"`
-	// State - The alert state which can be either active or resolved with multile resolution types.
+	// State - The alert state which can be either active or resolved with multiple resolution types.
 	State *string `json:"state,omitempty"`
 	// ShortName - The alert short name.
 	ShortName *string `json:"shortName,omitempty"`
@@ -668,20 +761,37 @@ type AlertsIterator struct {
 	page AlertsPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AlertsIterator) Next() error {
+func (iter *AlertsIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AlertsIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -703,6 +813,11 @@ func (iter AlertsIterator) Value() Alert {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AlertsIterator type.
+func NewAlertsIterator(page AlertsPage) AlertsIterator {
+	return AlertsIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (a Alerts) IsEmpty() bool {
 	return a.Value == nil || len(*a.Value) == 0
@@ -710,11 +825,11 @@ func (a Alerts) IsEmpty() bool {
 
 // alertsPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (a Alerts) alertsPreparer() (*http.Request, error) {
+func (a Alerts) alertsPreparer(ctx context.Context) (*http.Request, error) {
 	if a.NextLink == nil || len(to.String(a.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(a.NextLink)))
@@ -722,19 +837,36 @@ func (a Alerts) alertsPreparer() (*http.Request, error) {
 
 // AlertsPage contains a page of Alert values.
 type AlertsPage struct {
-	fn func(Alerts) (Alerts, error)
+	fn func(context.Context, Alerts) (Alerts, error)
 	a  Alerts
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AlertsPage) Next() error {
-	next, err := page.fn(page.a)
+func (page *AlertsPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.a)
 	if err != nil {
 		return err
 	}
 	page.a = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AlertsPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -753,6 +885,11 @@ func (page AlertsPage) Values() []Alert {
 		return nil
 	}
 	return *page.a.Value
+}
+
+// Creates a new instance of the AlertsPage type.
+func NewAlertsPage(getNextPage func(context.Context, Alerts) (Alerts, error)) AlertsPage {
+	return AlertsPage{fn: getNextPage}
 }
 
 // AssociatedObject object that hold sync object details.
@@ -837,7 +974,7 @@ type ChangeNotReimportedDelta struct {
 	DnAttributes *[]AttributeDelta `json:"dnAttributes,omitempty"`
 	// Attributes - The attributes.
 	Attributes *[]AttributeDelta `json:"attributes,omitempty"`
-	// OperationType - The operation type. Possible values include: 'DeltaOperationTypeUndefined', 'DeltaOperationTypeNone', 'DeltaOperationTypeAdd', 'DeltaOperationTypeReplace', 'DeltaOperationTypeUpdate', 'DeltaOperationTypeDelete', 'DeltaOperationTypeObsolete', 'DeltaOperationTypeDeletAdd'
+	// OperationType - The operation type. Possible values include: 'DeltaOperationTypeUndefined', 'DeltaOperationTypeNone', 'DeltaOperationTypeAdd', 'DeltaOperationTypeReplace', 'DeltaOperationTypeUpdate', 'DeltaOperationTypeDelete', 'DeltaOperationTypeObsolete', 'DeltaOperationTypeDeleteAdd'
 	OperationType DeltaOperationType `json:"operationType,omitempty"`
 }
 
@@ -849,7 +986,7 @@ type ChangeNotReimportedEntry struct {
 	ParentAnchor *string `json:"parentAnchor,omitempty"`
 	// PrimaryObjectClass - The primary object class.
 	PrimaryObjectClass *string `json:"primaryObjectClass,omitempty"`
-	// ObjectClasses - The olist of object classes.
+	// ObjectClasses - The list of object classes.
 	ObjectClasses *[]string `json:"objectClasses,omitempty"`
 	// DnAttributes - The delta attributes for distinguished names.
 	DnAttributes *[]AttributeDelta `json:"dnAttributes,omitempty"`
@@ -907,7 +1044,7 @@ type ConnectorConnectionError struct {
 	ErrorCode *string `json:"errorCode,omitempty"`
 	// Message - The message for the connection error.
 	Message *string `json:"message,omitempty"`
-	// TimeOccured - The time when the connection error occured.
+	// TimeOccured - The time when the connection error occurred.
 	TimeOccured *date.Time `json:"timeOccured,omitempty"`
 	// Server - The server where the connection error happened.
 	Server *string `json:"server,omitempty"`
@@ -933,13 +1070,13 @@ type ConnectorObjectError struct {
 	ErrorCode *string `json:"errorCode,omitempty"`
 	// Message - The message for the object error.
 	Message *string `json:"message,omitempty"`
-	// EntryNumber - The entry number for object error occured.
+	// EntryNumber - The entry number for object error occurred.
 	EntryNumber *int32 `json:"entryNumber,omitempty"`
 	// LineNumber - The line number for the object error.
 	LineNumber *int32 `json:"lineNumber,omitempty"`
 	// ColumnNumber - The column number for the object error.
 	ColumnNumber *int32 `json:"columnNumber,omitempty"`
-	// Dn - The distingished name of the object.
+	// Dn - The distinguished name of the object.
 	Dn *string `json:"dn,omitempty"`
 	// Anchor - The name for the anchor of the object.
 	Anchor *string `json:"anchor,omitempty"`
@@ -1029,20 +1166,37 @@ type DimensionsIterator struct {
 	page DimensionsPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DimensionsIterator) Next() error {
+func (iter *DimensionsIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DimensionsIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DimensionsIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1064,6 +1218,11 @@ func (iter DimensionsIterator) Value() Dimension {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DimensionsIterator type.
+func NewDimensionsIterator(page DimensionsPage) DimensionsIterator {
+	return DimensionsIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (d Dimensions) IsEmpty() bool {
 	return d.Value == nil || len(*d.Value) == 0
@@ -1071,11 +1230,11 @@ func (d Dimensions) IsEmpty() bool {
 
 // dimensionsPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (d Dimensions) dimensionsPreparer() (*http.Request, error) {
+func (d Dimensions) dimensionsPreparer(ctx context.Context) (*http.Request, error) {
 	if d.NextLink == nil || len(to.String(d.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(d.NextLink)))
@@ -1083,19 +1242,36 @@ func (d Dimensions) dimensionsPreparer() (*http.Request, error) {
 
 // DimensionsPage contains a page of Dimension values.
 type DimensionsPage struct {
-	fn func(Dimensions) (Dimensions, error)
+	fn func(context.Context, Dimensions) (Dimensions, error)
 	d  Dimensions
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DimensionsPage) Next() error {
-	next, err := page.fn(page.d)
+func (page *DimensionsPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DimensionsPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.d)
 	if err != nil {
 		return err
 	}
 	page.d = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DimensionsPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1114,6 +1290,11 @@ func (page DimensionsPage) Values() []Dimension {
 		return nil
 	}
 	return *page.d.Value
+}
+
+// Creates a new instance of the DimensionsPage type.
+func NewDimensionsPage(getNextPage func(context.Context, Dimensions) (Dimensions, error)) DimensionsPage {
+	return DimensionsPage{fn: getNextPage}
 }
 
 // Display displays the details related to operations supported by Azure Active Directory Connect Health.
@@ -1194,7 +1375,7 @@ type ExportError struct {
 	Message *string `json:"message,omitempty"`
 	// ServerErrorDetail - The server error detail.
 	ServerErrorDetail *string `json:"serverErrorDetail,omitempty"`
-	// TimeFirstOccured - The date and time when the export error first occured.
+	// TimeFirstOccured - The date and time when the export error first occurred.
 	TimeFirstOccured *date.Time `json:"timeFirstOccured,omitempty"`
 	// RetryCount - The retry count.
 	RetryCount *int32 `json:"retryCount,omitempty"`
@@ -1234,7 +1415,7 @@ type ExportError struct {
 	AdDistinguishedName *string `json:"adDistinguishedName,omitempty"`
 	// AdMail - The email for the AD object.
 	AdMail *string `json:"adMail,omitempty"`
-	// TimeOccured - The date and time of occurance.
+	// TimeOccured - The date and time of occurrence.
 	TimeOccured *date.Time `json:"timeOccured,omitempty"`
 	// AadObjectType - The AAD side object type.
 	AadObjectType *string `json:"aadObjectType,omitempty"`
@@ -1246,13 +1427,13 @@ type ExportError struct {
 	AadSourceOfAuthority *string `json:"aadSourceOfAuthority,omitempty"`
 	// AadUserPrincipalName - The AAD side user principal name.
 	AadUserPrincipalName *string `json:"aadUserPrincipalName,omitempty"`
-	// AadDistringuishedName - The AAD side distinguished name for the object.
-	AadDistringuishedName *string `json:"aadDistringuishedName,omitempty"`
+	// AadDistinguishedName - The AAD side distinguished name for the object.
+	AadDistinguishedName *string `json:"aadDistinguishedName,omitempty"`
 	// AadMail - The AAD side email for the object.
 	AadMail *string `json:"aadMail,omitempty"`
 	// LastDirSyncTime - The date and time of last sync run.
 	LastDirSyncTime *date.Time `json:"lastDirSyncTime,omitempty"`
-	// ModifiedAttributeValue - The modified atttribute value.
+	// ModifiedAttributeValue - The modified attribute value.
 	ModifiedAttributeValue *string `json:"modifiedAttributeValue,omitempty"`
 }
 
@@ -1293,20 +1474,37 @@ type ExportStatusesIterator struct {
 	page ExportStatusesPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ExportStatusesIterator) Next() error {
+func (iter *ExportStatusesIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportStatusesIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ExportStatusesIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1328,6 +1526,11 @@ func (iter ExportStatusesIterator) Value() ExportStatus {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ExportStatusesIterator type.
+func NewExportStatusesIterator(page ExportStatusesPage) ExportStatusesIterator {
+	return ExportStatusesIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (es ExportStatuses) IsEmpty() bool {
 	return es.Value == nil || len(*es.Value) == 0
@@ -1335,11 +1538,11 @@ func (es ExportStatuses) IsEmpty() bool {
 
 // exportStatusesPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (es ExportStatuses) exportStatusesPreparer() (*http.Request, error) {
+func (es ExportStatuses) exportStatusesPreparer(ctx context.Context) (*http.Request, error) {
 	if es.NextLink == nil || len(to.String(es.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(es.NextLink)))
@@ -1347,19 +1550,36 @@ func (es ExportStatuses) exportStatusesPreparer() (*http.Request, error) {
 
 // ExportStatusesPage contains a page of ExportStatus values.
 type ExportStatusesPage struct {
-	fn func(ExportStatuses) (ExportStatuses, error)
+	fn func(context.Context, ExportStatuses) (ExportStatuses, error)
 	es ExportStatuses
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ExportStatusesPage) Next() error {
-	next, err := page.fn(page.es)
+func (page *ExportStatusesPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportStatusesPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.es)
 	if err != nil {
 		return err
 	}
 	page.es = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ExportStatusesPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1378,6 +1598,11 @@ func (page ExportStatusesPage) Values() []ExportStatus {
 		return nil
 	}
 	return *page.es.Value
+}
+
+// Creates a new instance of the ExportStatusesPage type.
+func NewExportStatusesPage(getNextPage func(context.Context, ExportStatuses) (ExportStatuses, error)) ExportStatusesPage {
+	return ExportStatusesPage{fn: getNextPage}
 }
 
 // ExtensionErrorInfo the extension error details.
@@ -1494,7 +1719,7 @@ type ImportErrors struct {
 type InboundReplicationNeighbor struct {
 	// SourceDomainController - The name of the source domain controller.
 	SourceDomainController *string `json:"sourceDomainController,omitempty"`
-	// ConsecutiveFailureCount - The number of consecutive faulire counts.
+	// ConsecutiveFailureCount - The number of consecutive failure counts.
 	ConsecutiveFailureCount *int32 `json:"consecutiveFailureCount,omitempty"`
 	// NamingContext - The naming context.
 	NamingContext *string `json:"namingContext,omitempty"`
@@ -1569,7 +1794,7 @@ type MergedExportError struct {
 	IncomingObject *AssociatedObject `json:"incomingObject,omitempty"`
 	// ExistingObject - The existing object
 	ExistingObject *AssociatedObject `json:"existingObject,omitempty"`
-	// ModifiedOrRemovedAttributeValue - The modified or removed attribute vlaue.
+	// ModifiedOrRemovedAttributeValue - The modified or removed attribute value.
 	ModifiedOrRemovedAttributeValue *string `json:"modifiedOrRemovedAttributeValue,omitempty"`
 	// RunStepResultID - The run step result Id.
 	RunStepResultID *uuid.UUID `json:"runStepResultId,omitempty"`
@@ -1619,7 +1844,7 @@ type MetricMetadata struct {
 	DisplayName *string `json:"displayName,omitempty"`
 	// ValueKind - Indicates if the metrics is a rate,value, percent or duration type.
 	ValueKind *string `json:"valueKind,omitempty"`
-	// MinValue - The minimun value.
+	// MinValue - The minimum value.
 	MinValue *int32 `json:"minValue,omitempty"`
 	// MaxValue - The maximum value.
 	MaxValue *int32 `json:"maxValue,omitempty"`
@@ -1652,20 +1877,37 @@ type MetricMetadataListIterator struct {
 	page MetricMetadataListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *MetricMetadataListIterator) Next() error {
+func (iter *MetricMetadataListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MetricMetadataListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *MetricMetadataListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1687,6 +1929,11 @@ func (iter MetricMetadataListIterator) Value() MetricMetadata {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the MetricMetadataListIterator type.
+func NewMetricMetadataListIterator(page MetricMetadataListPage) MetricMetadataListIterator {
+	return MetricMetadataListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (mml MetricMetadataList) IsEmpty() bool {
 	return mml.Value == nil || len(*mml.Value) == 0
@@ -1694,11 +1941,11 @@ func (mml MetricMetadataList) IsEmpty() bool {
 
 // metricMetadataListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (mml MetricMetadataList) metricMetadataListPreparer() (*http.Request, error) {
+func (mml MetricMetadataList) metricMetadataListPreparer(ctx context.Context) (*http.Request, error) {
 	if mml.NextLink == nil || len(to.String(mml.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(mml.NextLink)))
@@ -1706,19 +1953,36 @@ func (mml MetricMetadataList) metricMetadataListPreparer() (*http.Request, error
 
 // MetricMetadataListPage contains a page of MetricMetadata values.
 type MetricMetadataListPage struct {
-	fn  func(MetricMetadataList) (MetricMetadataList, error)
+	fn  func(context.Context, MetricMetadataList) (MetricMetadataList, error)
 	mml MetricMetadataList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *MetricMetadataListPage) Next() error {
-	next, err := page.fn(page.mml)
+func (page *MetricMetadataListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MetricMetadataListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.mml)
 	if err != nil {
 		return err
 	}
 	page.mml = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *MetricMetadataListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1737,6 +2001,11 @@ func (page MetricMetadataListPage) Values() []MetricMetadata {
 		return nil
 	}
 	return *page.mml.Value
+}
+
+// Creates a new instance of the MetricMetadataListPage type.
+func NewMetricMetadataListPage(getNextPage func(context.Context, MetricMetadataList) (MetricMetadataList, error)) MetricMetadataListPage {
+	return MetricMetadataListPage{fn: getNextPage}
 }
 
 // Metrics the list of metric items.
@@ -1776,20 +2045,37 @@ type MetricsIterator struct {
 	page MetricsPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *MetricsIterator) Next() error {
+func (iter *MetricsIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MetricsIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *MetricsIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1811,6 +2097,11 @@ func (iter MetricsIterator) Value() Item {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the MetricsIterator type.
+func NewMetricsIterator(page MetricsPage) MetricsIterator {
+	return MetricsIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (mVar Metrics) IsEmpty() bool {
 	return mVar.Value == nil || len(*mVar.Value) == 0
@@ -1818,11 +2109,11 @@ func (mVar Metrics) IsEmpty() bool {
 
 // metricsPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (mVar Metrics) metricsPreparer() (*http.Request, error) {
+func (mVar Metrics) metricsPreparer(ctx context.Context) (*http.Request, error) {
 	if mVar.NextLink == nil || len(to.String(mVar.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(mVar.NextLink)))
@@ -1830,19 +2121,36 @@ func (mVar Metrics) metricsPreparer() (*http.Request, error) {
 
 // MetricsPage contains a page of Item values.
 type MetricsPage struct {
-	fn   func(Metrics) (Metrics, error)
+	fn   func(context.Context, Metrics) (Metrics, error)
 	mVar Metrics
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *MetricsPage) Next() error {
-	next, err := page.fn(page.mVar)
+func (page *MetricsPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MetricsPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.mVar)
 	if err != nil {
 		return err
 	}
 	page.mVar = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *MetricsPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1861,6 +2169,11 @@ func (page MetricsPage) Values() []Item {
 		return nil
 	}
 	return *page.mVar.Value
+}
+
+// Creates a new instance of the MetricsPage type.
+func NewMetricsPage(getNextPage func(context.Context, Metrics) (Metrics, error)) MetricsPage {
+	return MetricsPage{fn: getNextPage}
 }
 
 // ModuleConfiguration the module configuration as required by the Agent service.
@@ -1894,7 +2207,7 @@ type ModuleConfigurations struct {
 	Value *[]ModuleConfiguration `json:"value,omitempty"`
 }
 
-// ObjectWithSyncError the objects withg sync errors.
+// ObjectWithSyncError the objects with sync errors.
 type ObjectWithSyncError struct {
 	// SourceOfAuthority - The source of authority.
 	SourceOfAuthority *string `json:"sourceOfAuthority,omitempty"`
@@ -1912,7 +2225,7 @@ type ObjectWithSyncError struct {
 	UserPrincipalName *string `json:"userPrincipalName,omitempty"`
 	// ObjectGUID - The object guid.
 	ObjectGUID *string `json:"objectGuid,omitempty"`
-	// AttributeMultiValues - Indicates if the atttibute is multi-valued or not.
+	// AttributeMultiValues - Indicates if the attribute is multi-valued or not.
 	AttributeMultiValues *bool `json:"attributeMultiValues,omitempty"`
 	// MinLimit - The minimum limit.
 	MinLimit *string `json:"minLimit,omitempty"`
@@ -1922,7 +2235,7 @@ type ObjectWithSyncError struct {
 	DistinguishedName *string `json:"distinguishedName,omitempty"`
 	// Mail - The email.
 	Mail *string `json:"mail,omitempty"`
-	// TimeOccured - The date and time of occurance.
+	// TimeOccured - The date and time of occurrence.
 	TimeOccured *date.Time `json:"timeOccured,omitempty"`
 	// ErrorType - The error type.
 	ErrorType *string `json:"errorType,omitempty"`
@@ -1938,14 +2251,15 @@ type Operation struct {
 	Display interface{} `json:"display,omitempty"`
 }
 
-// OperationListResponse lists all of the available REST API operations for Azure Active Directory Connect Health.
+// OperationListResponse lists all of the available REST API operations for Azure Active Directory Connect
+// Health.
 type OperationListResponse struct {
 	autorest.Response `json:"-"`
 	// NextLink - URL to get the next set of operation list results if there are any.
 	NextLink *string `json:"nextLink,omitempty"`
-	// Value - List of operations supported by the Microsoft.ADHybridhHealthService resource provider.
+	// Value - List of operations supported by the Microsoft.ADHybridHealthService resource provider.
 	Value *[]Operation `json:"value,omitempty"`
-	// TotalCount - The total count of opertaions.
+	// TotalCount - The total count of operations.
 	TotalCount *int32 `json:"totalCount,omitempty"`
 	// ContinuationToken - The continuation token to get next set of operations.
 	ContinuationToken *string `json:"continuationToken,omitempty"`
@@ -1957,20 +2271,37 @@ type OperationListResponseIterator struct {
 	page OperationListResponsePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResponseIterator) Next() error {
+func (iter *OperationListResponseIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResponseIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResponseIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1992,6 +2323,11 @@ func (iter OperationListResponseIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResponseIterator type.
+func NewOperationListResponseIterator(page OperationListResponsePage) OperationListResponseIterator {
+	return OperationListResponseIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResponse) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -1999,11 +2335,11 @@ func (olr OperationListResponse) IsEmpty() bool {
 
 // operationListResponsePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResponse) operationListResponsePreparer() (*http.Request, error) {
+func (olr OperationListResponse) operationListResponsePreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -2011,19 +2347,36 @@ func (olr OperationListResponse) operationListResponsePreparer() (*http.Request,
 
 // OperationListResponsePage contains a page of Operation values.
 type OperationListResponsePage struct {
-	fn  func(OperationListResponse) (OperationListResponse, error)
+	fn  func(context.Context, OperationListResponse) (OperationListResponse, error)
 	olr OperationListResponse
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResponsePage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResponsePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResponsePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResponsePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2042,6 +2395,11 @@ func (page OperationListResponsePage) Values() []Operation {
 		return nil
 	}
 	return *page.olr.Value
+}
+
+// Creates a new instance of the OperationListResponsePage type.
+func NewOperationListResponsePage(getNextPage func(context.Context, OperationListResponse) (OperationListResponse, error)) OperationListResponsePage {
+	return OperationListResponsePage{fn: getNextPage}
 }
 
 // Partition describes the partition in Synchronization service.
@@ -2094,7 +2452,7 @@ type PasswordManagementSettings struct {
 	ExtensionFilePath *string `json:"extensionFilePath,omitempty"`
 	// ConnectTo - Connection point of password management.
 	ConnectTo *string `json:"connectTo,omitempty"`
-	// ConnectionTimeout - Connection timeoit for password extension.
+	// ConnectionTimeout - Connection timeout for password extension.
 	ConnectionTimeout *int32 `json:"connectionTimeout,omitempty"`
 	// User - User to execute password extension.
 	User *string `json:"user,omitempty"`
@@ -2106,7 +2464,7 @@ type PasswordManagementSettings struct {
 	RetryIntervalInSeconds *int32 `json:"retryIntervalInSeconds,omitempty"`
 	// RequiresSecureConnection - Indicates if a secure connection is required for password management.
 	RequiresSecureConnection *bool `json:"requiresSecureConnection,omitempty"`
-	// UnlockAccount - Indicates if accounts should be unloacked when resetting password.
+	// UnlockAccount - Indicates if accounts should be unlocked when resetting password.
 	UnlockAccount *bool `json:"unlockAccount,omitempty"`
 }
 
@@ -2128,7 +2486,7 @@ type ReplicationStatus struct {
 	autorest.Response `json:"-"`
 	// ForestName - The forest name.
 	ForestName *string `json:"forestName,omitempty"`
-	// TotalDcCount - The total numbe of domain controllers for a given forest.
+	// TotalDcCount - The total number of domain controllers for a given forest.
 	TotalDcCount *int32 `json:"totalDcCount,omitempty"`
 	// ErrorDcCount - The total number of domain controllers with error in a given forest.
 	ErrorDcCount *int32 `json:"errorDcCount,omitempty"`
@@ -2200,13 +2558,13 @@ type RunProfiles struct {
 type RunStep struct {
 	// BatchSize - The batch size used by the run step.
 	BatchSize *int32 `json:"batchSize,omitempty"`
-	// ObjectProcessLimit - The obect processing limit.
+	// ObjectProcessLimit - The object processing limit.
 	ObjectProcessLimit *int32 `json:"objectProcessLimit,omitempty"`
 	// ObjectDeleteLimit - The object deletion limit.
 	ObjectDeleteLimit *int32 `json:"objectDeleteLimit,omitempty"`
 	// PageSize - The page size of the run step.
 	PageSize *int32 `json:"pageSize,omitempty"`
-	// PartitionID - The Id of the partition that a current run setp operation is executing.
+	// PartitionID - The Id of the partition that a current run step operation is executing.
 	PartitionID *string `json:"partitionId,omitempty"`
 	// OperationType - The run step operation types.
 	OperationType *int32 `json:"operationType,omitempty"`
@@ -2250,7 +2608,7 @@ type ServiceMember struct {
 	ActiveAlerts *int32 `json:"activeAlerts,omitempty"`
 	// AdditionalInformation - The additional information, if any, for the server.
 	AdditionalInformation *string `json:"additionalInformation,omitempty"`
-	// CreatedDate - The date time , in UTC, when the server was onboaraded to Azure Active Directory Connect Health.
+	// CreatedDate - The date time , in UTC, when the server was onboarded to Azure Active Directory Connect Health.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// Dimensions - The server specific configuration related dimensions.
 	Dimensions interface{} `json:"dimensions,omitempty"`
@@ -2266,7 +2624,7 @@ type ServiceMember struct {
 	LastReboot *date.Time `json:"lastReboot,omitempty"`
 	// LastServerReportedMonitoringLevelChange - The date and time, in UTC, when the server's data monitoring configuration was last changed.
 	LastServerReportedMonitoringLevelChange *date.Time `json:"lastServerReportedMonitoringLevelChange,omitempty"`
-	// LastUpdated - The date and time, in UTC, when the server proeprties were last updated.
+	// LastUpdated - The date and time, in UTC, when the server properties were last updated.
 	LastUpdated *date.Time `json:"lastUpdated,omitempty"`
 	// MachineID - The id of the machine.
 	MachineID *string `json:"machineId,omitempty"`
@@ -2313,20 +2671,37 @@ type ServiceMembersIterator struct {
 	page ServiceMembersPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceMembersIterator) Next() error {
+func (iter *ServiceMembersIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceMembersIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceMembersIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2348,6 +2723,11 @@ func (iter ServiceMembersIterator) Value() ServiceMember {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceMembersIterator type.
+func NewServiceMembersIterator(page ServiceMembersPage) ServiceMembersIterator {
+	return ServiceMembersIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (sm ServiceMembers) IsEmpty() bool {
 	return sm.Value == nil || len(*sm.Value) == 0
@@ -2355,11 +2735,11 @@ func (sm ServiceMembers) IsEmpty() bool {
 
 // serviceMembersPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sm ServiceMembers) serviceMembersPreparer() (*http.Request, error) {
+func (sm ServiceMembers) serviceMembersPreparer(ctx context.Context) (*http.Request, error) {
 	if sm.NextLink == nil || len(to.String(sm.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sm.NextLink)))
@@ -2367,19 +2747,36 @@ func (sm ServiceMembers) serviceMembersPreparer() (*http.Request, error) {
 
 // ServiceMembersPage contains a page of ServiceMember values.
 type ServiceMembersPage struct {
-	fn func(ServiceMembers) (ServiceMembers, error)
+	fn func(context.Context, ServiceMembers) (ServiceMembers, error)
 	sm ServiceMembers
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceMembersPage) Next() error {
-	next, err := page.fn(page.sm)
+func (page *ServiceMembersPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceMembersPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sm)
 	if err != nil {
 		return err
 	}
 	page.sm = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceMembersPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2400,6 +2797,11 @@ func (page ServiceMembersPage) Values() []ServiceMember {
 	return *page.sm.Value
 }
 
+// Creates a new instance of the ServiceMembersPage type.
+func NewServiceMembersPage(getNextPage func(context.Context, ServiceMembers) (ServiceMembers, error)) ServiceMembersPage {
+	return ServiceMembersPage{fn: getNextPage}
+}
+
 // ServiceProperties the service properties for a given service.
 type ServiceProperties struct {
 	autorest.Response `json:"-"`
@@ -2411,7 +2813,7 @@ type ServiceProperties struct {
 	AdditionalInformation *string `json:"additionalInformation,omitempty"`
 	// CreatedDate - The date and time, in UTC, when the service was onboarded to Azure Active Directory Connect Health.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
-	// CustomNotificationEmails - The list of additional emails that are configured to recieve notifications about the service.
+	// CustomNotificationEmails - The list of additional emails that are configured to receive notifications about the service.
 	CustomNotificationEmails *[]string `json:"customNotificationEmails,omitempty"`
 	// Disabled - Indicates if the service is disabled or not.
 	Disabled *bool `json:"disabled,omitempty"`
@@ -2472,20 +2874,37 @@ type ServicesIterator struct {
 	page ServicesPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServicesIterator) Next() error {
+func (iter *ServicesIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServicesIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2507,6 +2926,11 @@ func (iter ServicesIterator) Value() ServiceProperties {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServicesIterator type.
+func NewServicesIterator(page ServicesPage) ServicesIterator {
+	return ServicesIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (s Services) IsEmpty() bool {
 	return s.Value == nil || len(*s.Value) == 0
@@ -2514,11 +2938,11 @@ func (s Services) IsEmpty() bool {
 
 // servicesPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (s Services) servicesPreparer() (*http.Request, error) {
+func (s Services) servicesPreparer(ctx context.Context) (*http.Request, error) {
 	if s.NextLink == nil || len(to.String(s.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(s.NextLink)))
@@ -2526,19 +2950,36 @@ func (s Services) servicesPreparer() (*http.Request, error) {
 
 // ServicesPage contains a page of ServiceProperties values.
 type ServicesPage struct {
-	fn func(Services) (Services, error)
+	fn func(context.Context, Services) (Services, error)
 	s  Services
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServicesPage) Next() error {
-	next, err := page.fn(page.s)
+func (page *ServicesPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.s)
 	if err != nil {
 		return err
 	}
 	page.s = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServicesPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2557,6 +2998,11 @@ func (page ServicesPage) Values() []ServiceProperties {
 		return nil
 	}
 	return *page.s.Value
+}
+
+// Creates a new instance of the ServicesPage type.
+func NewServicesPage(getNextPage func(context.Context, Services) (Services, error)) ServicesPage {
+	return ServicesPage{fn: getNextPage}
 }
 
 // TabularExportError the details for export error.
@@ -2582,7 +3028,7 @@ type Tenant struct {
 	AadPremium *bool `json:"aadPremium,omitempty"`
 	// AgentAutoUpdate - Indicates if the tenant is configured to automatically receive updates for Azure Active Directory Connect Health client side features.
 	AgentAutoUpdate *bool `json:"agentAutoUpdate,omitempty"`
-	// AlertSuppressionTimeInMins - The time in minutues after which an alert will be autosupressed.
+	// AlertSuppressionTimeInMins - The time in minutes after which an alert will be auto-suppressed.
 	AlertSuppressionTimeInMins *int32 `json:"alertSuppressionTimeInMins,omitempty"`
 	// ConsentedToMicrosoftDevOps - Indicates if the tenant data can be seen by Microsoft through Azure portal.
 	ConsentedToMicrosoftDevOps *bool `json:"consentedToMicrosoftDevOps,omitempty"`
@@ -2596,8 +3042,8 @@ type Tenant struct {
 	Disabled *bool `json:"disabled,omitempty"`
 	// DisabledReason - The reason due to which the tenant was disabled in Azure Active Directory Connect Health.
 	DisabledReason *int32 `json:"disabledReason,omitempty"`
-	// GlobalAdminsEmail - The list of golbal administrators for the tenant.
-	GlobalAdminsEmail interface{} `json:"globalAdminsEmail,omitempty"`
+	// GlobalAdminsEmail - The list of global administrators for the tenant.
+	GlobalAdminsEmail *[]string `json:"globalAdminsEmail,omitempty"`
 	// InitialDomain - The initial domain of the tenant.
 	InitialDomain *string `json:"initialDomain,omitempty"`
 	// LastDisabled - The date and time, in UTC, when the tenant was last disabled in Azure Active Directory Connect Health.

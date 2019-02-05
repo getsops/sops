@@ -18,13 +18,18 @@ package account
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datalake/analytics/mgmt/2015-10-01-preview/account"
 
 // DataLakeAnalyticsAccountState enumerates the values for data lake analytics account state.
 type DataLakeAnalyticsAccountState string
@@ -100,13 +105,13 @@ type AddStorageAccountParameters struct {
 }
 
 // AzureAsyncOperationResult the response body contains the status of the specified asynchronous operation,
-// indicating whether it has succeeded, is inprogress, or has failed. Note that this status is distinct from the
-// HTTP status code returned for the Get Operation Status operation itself. If the asynchronous operation
-// succeeded, the response body includes the HTTP status code for the successful request. If the asynchronous
-// operation failed, the response body includes the HTTP status code for the failed request and error information
-// regarding the failure.
+// indicating whether it has succeeded, is inprogress, or has failed. Note that this status is distinct
+// from the HTTP status code returned for the Get Operation Status operation itself. If the asynchronous
+// operation succeeded, the response body includes the HTTP status code for the successful request. If the
+// asynchronous operation failed, the response body includes the HTTP status code for the failed request
+// and error information regarding the failure.
 type AzureAsyncOperationResult struct {
-	// Status - the status of the AzureAsuncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
+	// Status - the status of the AzureAsyncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
 	Status OperationStatus `json:"status,omitempty"`
 	Error  *Error          `json:"error,omitempty"`
 }
@@ -158,8 +163,8 @@ func (future *CreateFuture) Result(client Client) (dlaa DataLakeAnalyticsAccount
 	return
 }
 
-// DataLakeAnalyticsAccount a Data Lake Analytics account object, containing all information associated with the
-// named Data Lake Analytics account.
+// DataLakeAnalyticsAccount a Data Lake Analytics account object, containing all information associated
+// with the named Data Lake Analytics account.
 type DataLakeAnalyticsAccount struct {
 	autorest.Response `json:"-"`
 	// Location - the account regional location.
@@ -218,20 +223,37 @@ type DataLakeAnalyticsAccountListDataLakeStoreResultIterator struct {
 	page DataLakeAnalyticsAccountListDataLakeStoreResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeAnalyticsAccountListDataLakeStoreResultIterator) Next() error {
+func (iter *DataLakeAnalyticsAccountListDataLakeStoreResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeAnalyticsAccountListDataLakeStoreResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DataLakeAnalyticsAccountListDataLakeStoreResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -253,6 +275,11 @@ func (iter DataLakeAnalyticsAccountListDataLakeStoreResultIterator) Value() Data
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DataLakeAnalyticsAccountListDataLakeStoreResultIterator type.
+func NewDataLakeAnalyticsAccountListDataLakeStoreResultIterator(page DataLakeAnalyticsAccountListDataLakeStoreResultPage) DataLakeAnalyticsAccountListDataLakeStoreResultIterator {
+	return DataLakeAnalyticsAccountListDataLakeStoreResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlaaldlsr DataLakeAnalyticsAccountListDataLakeStoreResult) IsEmpty() bool {
 	return dlaaldlsr.Value == nil || len(*dlaaldlsr.Value) == 0
@@ -260,11 +287,11 @@ func (dlaaldlsr DataLakeAnalyticsAccountListDataLakeStoreResult) IsEmpty() bool 
 
 // dataLakeAnalyticsAccountListDataLakeStoreResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlaaldlsr DataLakeAnalyticsAccountListDataLakeStoreResult) dataLakeAnalyticsAccountListDataLakeStoreResultPreparer() (*http.Request, error) {
+func (dlaaldlsr DataLakeAnalyticsAccountListDataLakeStoreResult) dataLakeAnalyticsAccountListDataLakeStoreResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlaaldlsr.NextLink == nil || len(to.String(dlaaldlsr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlaaldlsr.NextLink)))
@@ -272,19 +299,36 @@ func (dlaaldlsr DataLakeAnalyticsAccountListDataLakeStoreResult) dataLakeAnalyti
 
 // DataLakeAnalyticsAccountListDataLakeStoreResultPage contains a page of DataLakeStoreAccountInfo values.
 type DataLakeAnalyticsAccountListDataLakeStoreResultPage struct {
-	fn        func(DataLakeAnalyticsAccountListDataLakeStoreResult) (DataLakeAnalyticsAccountListDataLakeStoreResult, error)
+	fn        func(context.Context, DataLakeAnalyticsAccountListDataLakeStoreResult) (DataLakeAnalyticsAccountListDataLakeStoreResult, error)
 	dlaaldlsr DataLakeAnalyticsAccountListDataLakeStoreResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeAnalyticsAccountListDataLakeStoreResultPage) Next() error {
-	next, err := page.fn(page.dlaaldlsr)
+func (page *DataLakeAnalyticsAccountListDataLakeStoreResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeAnalyticsAccountListDataLakeStoreResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlaaldlsr)
 	if err != nil {
 		return err
 	}
 	page.dlaaldlsr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DataLakeAnalyticsAccountListDataLakeStoreResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -305,6 +349,11 @@ func (page DataLakeAnalyticsAccountListDataLakeStoreResultPage) Values() []DataL
 	return *page.dlaaldlsr.Value
 }
 
+// Creates a new instance of the DataLakeAnalyticsAccountListDataLakeStoreResultPage type.
+func NewDataLakeAnalyticsAccountListDataLakeStoreResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListDataLakeStoreResult) (DataLakeAnalyticsAccountListDataLakeStoreResult, error)) DataLakeAnalyticsAccountListDataLakeStoreResultPage {
+	return DataLakeAnalyticsAccountListDataLakeStoreResultPage{fn: getNextPage}
+}
+
 // DataLakeAnalyticsAccountListResult dataLakeAnalytics Account list information.
 type DataLakeAnalyticsAccountListResult struct {
 	autorest.Response `json:"-"`
@@ -314,27 +363,44 @@ type DataLakeAnalyticsAccountListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DataLakeAnalyticsAccountListResultIterator provides access to a complete listing of DataLakeAnalyticsAccount
-// values.
+// DataLakeAnalyticsAccountListResultIterator provides access to a complete listing of
+// DataLakeAnalyticsAccount values.
 type DataLakeAnalyticsAccountListResultIterator struct {
 	i    int
 	page DataLakeAnalyticsAccountListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeAnalyticsAccountListResultIterator) Next() error {
+func (iter *DataLakeAnalyticsAccountListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeAnalyticsAccountListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DataLakeAnalyticsAccountListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -356,6 +422,11 @@ func (iter DataLakeAnalyticsAccountListResultIterator) Value() DataLakeAnalytics
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DataLakeAnalyticsAccountListResultIterator type.
+func NewDataLakeAnalyticsAccountListResultIterator(page DataLakeAnalyticsAccountListResultPage) DataLakeAnalyticsAccountListResultIterator {
+	return DataLakeAnalyticsAccountListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlaalr DataLakeAnalyticsAccountListResult) IsEmpty() bool {
 	return dlaalr.Value == nil || len(*dlaalr.Value) == 0
@@ -363,11 +434,11 @@ func (dlaalr DataLakeAnalyticsAccountListResult) IsEmpty() bool {
 
 // dataLakeAnalyticsAccountListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlaalr DataLakeAnalyticsAccountListResult) dataLakeAnalyticsAccountListResultPreparer() (*http.Request, error) {
+func (dlaalr DataLakeAnalyticsAccountListResult) dataLakeAnalyticsAccountListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlaalr.NextLink == nil || len(to.String(dlaalr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlaalr.NextLink)))
@@ -375,19 +446,36 @@ func (dlaalr DataLakeAnalyticsAccountListResult) dataLakeAnalyticsAccountListRes
 
 // DataLakeAnalyticsAccountListResultPage contains a page of DataLakeAnalyticsAccount values.
 type DataLakeAnalyticsAccountListResultPage struct {
-	fn     func(DataLakeAnalyticsAccountListResult) (DataLakeAnalyticsAccountListResult, error)
+	fn     func(context.Context, DataLakeAnalyticsAccountListResult) (DataLakeAnalyticsAccountListResult, error)
 	dlaalr DataLakeAnalyticsAccountListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeAnalyticsAccountListResultPage) Next() error {
-	next, err := page.fn(page.dlaalr)
+func (page *DataLakeAnalyticsAccountListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeAnalyticsAccountListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlaalr)
 	if err != nil {
 		return err
 	}
 	page.dlaalr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DataLakeAnalyticsAccountListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -408,6 +496,11 @@ func (page DataLakeAnalyticsAccountListResultPage) Values() []DataLakeAnalyticsA
 	return *page.dlaalr.Value
 }
 
+// Creates a new instance of the DataLakeAnalyticsAccountListResultPage type.
+func NewDataLakeAnalyticsAccountListResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListResult) (DataLakeAnalyticsAccountListResult, error)) DataLakeAnalyticsAccountListResultPage {
+	return DataLakeAnalyticsAccountListResultPage{fn: getNextPage}
+}
+
 // DataLakeAnalyticsAccountListStorageAccountsResult azure Storage Account list information.
 type DataLakeAnalyticsAccountListStorageAccountsResult struct {
 	autorest.Response `json:"-"`
@@ -426,20 +519,37 @@ type DataLakeAnalyticsAccountListStorageAccountsResultIterator struct {
 	page DataLakeAnalyticsAccountListStorageAccountsResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeAnalyticsAccountListStorageAccountsResultIterator) Next() error {
+func (iter *DataLakeAnalyticsAccountListStorageAccountsResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeAnalyticsAccountListStorageAccountsResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DataLakeAnalyticsAccountListStorageAccountsResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -461,6 +571,11 @@ func (iter DataLakeAnalyticsAccountListStorageAccountsResultIterator) Value() St
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DataLakeAnalyticsAccountListStorageAccountsResultIterator type.
+func NewDataLakeAnalyticsAccountListStorageAccountsResultIterator(page DataLakeAnalyticsAccountListStorageAccountsResultPage) DataLakeAnalyticsAccountListStorageAccountsResultIterator {
+	return DataLakeAnalyticsAccountListStorageAccountsResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlaalsar DataLakeAnalyticsAccountListStorageAccountsResult) IsEmpty() bool {
 	return dlaalsar.Value == nil || len(*dlaalsar.Value) == 0
@@ -468,11 +583,11 @@ func (dlaalsar DataLakeAnalyticsAccountListStorageAccountsResult) IsEmpty() bool
 
 // dataLakeAnalyticsAccountListStorageAccountsResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlaalsar DataLakeAnalyticsAccountListStorageAccountsResult) dataLakeAnalyticsAccountListStorageAccountsResultPreparer() (*http.Request, error) {
+func (dlaalsar DataLakeAnalyticsAccountListStorageAccountsResult) dataLakeAnalyticsAccountListStorageAccountsResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlaalsar.NextLink == nil || len(to.String(dlaalsar.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlaalsar.NextLink)))
@@ -480,19 +595,36 @@ func (dlaalsar DataLakeAnalyticsAccountListStorageAccountsResult) dataLakeAnalyt
 
 // DataLakeAnalyticsAccountListStorageAccountsResultPage contains a page of StorageAccountInfo values.
 type DataLakeAnalyticsAccountListStorageAccountsResultPage struct {
-	fn       func(DataLakeAnalyticsAccountListStorageAccountsResult) (DataLakeAnalyticsAccountListStorageAccountsResult, error)
+	fn       func(context.Context, DataLakeAnalyticsAccountListStorageAccountsResult) (DataLakeAnalyticsAccountListStorageAccountsResult, error)
 	dlaalsar DataLakeAnalyticsAccountListStorageAccountsResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeAnalyticsAccountListStorageAccountsResultPage) Next() error {
-	next, err := page.fn(page.dlaalsar)
+func (page *DataLakeAnalyticsAccountListStorageAccountsResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeAnalyticsAccountListStorageAccountsResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlaalsar)
 	if err != nil {
 		return err
 	}
 	page.dlaalsar = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DataLakeAnalyticsAccountListStorageAccountsResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -513,8 +645,13 @@ func (page DataLakeAnalyticsAccountListStorageAccountsResultPage) Values() []Sto
 	return *page.dlaalsar.Value
 }
 
-// DataLakeAnalyticsAccountProperties the account specific properties that are associated with an underlying Data
-// Lake Analytics account.
+// Creates a new instance of the DataLakeAnalyticsAccountListStorageAccountsResultPage type.
+func NewDataLakeAnalyticsAccountListStorageAccountsResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListStorageAccountsResult) (DataLakeAnalyticsAccountListStorageAccountsResult, error)) DataLakeAnalyticsAccountListStorageAccountsResultPage {
+	return DataLakeAnalyticsAccountListStorageAccountsResultPage{fn: getNextPage}
+}
+
+// DataLakeAnalyticsAccountProperties the account specific properties that are associated with an
+// underlying Data Lake Analytics account.
 type DataLakeAnalyticsAccountProperties struct {
 	// ProvisioningState - the provisioning status of the Data Lake Analytics account. Possible values include: 'Failed', 'Creating', 'Running', 'Succeeded', 'Patching', 'Suspending', 'Resuming', 'Deleting', 'Deleted'
 	ProvisioningState DataLakeAnalyticsAccountStatus `json:"provisioningState,omitempty"`
@@ -607,8 +744,8 @@ type InnerError struct {
 	Context *string `json:"context,omitempty"`
 }
 
-// ListBlobContainersResult the list of blob containers associated with the storage account attached to the Data
-// Lake Analytics account.
+// ListBlobContainersResult the list of blob containers associated with the storage account attached to the
+// Data Lake Analytics account.
 type ListBlobContainersResult struct {
 	autorest.Response `json:"-"`
 	// Value - the results of the list operation
@@ -623,20 +760,37 @@ type ListBlobContainersResultIterator struct {
 	page ListBlobContainersResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListBlobContainersResultIterator) Next() error {
+func (iter *ListBlobContainersResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListBlobContainersResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ListBlobContainersResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -658,6 +812,11 @@ func (iter ListBlobContainersResultIterator) Value() BlobContainer {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ListBlobContainersResultIterator type.
+func NewListBlobContainersResultIterator(page ListBlobContainersResultPage) ListBlobContainersResultIterator {
+	return ListBlobContainersResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (lbcr ListBlobContainersResult) IsEmpty() bool {
 	return lbcr.Value == nil || len(*lbcr.Value) == 0
@@ -665,11 +824,11 @@ func (lbcr ListBlobContainersResult) IsEmpty() bool {
 
 // listBlobContainersResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lbcr ListBlobContainersResult) listBlobContainersResultPreparer() (*http.Request, error) {
+func (lbcr ListBlobContainersResult) listBlobContainersResultPreparer(ctx context.Context) (*http.Request, error) {
 	if lbcr.NextLink == nil || len(to.String(lbcr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lbcr.NextLink)))
@@ -677,19 +836,36 @@ func (lbcr ListBlobContainersResult) listBlobContainersResultPreparer() (*http.R
 
 // ListBlobContainersResultPage contains a page of BlobContainer values.
 type ListBlobContainersResultPage struct {
-	fn   func(ListBlobContainersResult) (ListBlobContainersResult, error)
+	fn   func(context.Context, ListBlobContainersResult) (ListBlobContainersResult, error)
 	lbcr ListBlobContainersResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListBlobContainersResultPage) Next() error {
-	next, err := page.fn(page.lbcr)
+func (page *ListBlobContainersResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListBlobContainersResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.lbcr)
 	if err != nil {
 		return err
 	}
 	page.lbcr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ListBlobContainersResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -710,8 +886,13 @@ func (page ListBlobContainersResultPage) Values() []BlobContainer {
 	return *page.lbcr.Value
 }
 
-// ListSasTokensResult the SAS response that contains the storage account, container and associated SAS token for
-// connection use.
+// Creates a new instance of the ListBlobContainersResultPage type.
+func NewListBlobContainersResultPage(getNextPage func(context.Context, ListBlobContainersResult) (ListBlobContainersResult, error)) ListBlobContainersResultPage {
+	return ListBlobContainersResultPage{fn: getNextPage}
+}
+
+// ListSasTokensResult the SAS response that contains the storage account, container and associated SAS
+// token for connection use.
 type ListSasTokensResult struct {
 	autorest.Response `json:"-"`
 	Value             *[]SasTokenInfo `json:"value,omitempty"`
@@ -725,20 +906,37 @@ type ListSasTokensResultIterator struct {
 	page ListSasTokensResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListSasTokensResultIterator) Next() error {
+func (iter *ListSasTokensResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListSasTokensResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ListSasTokensResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -760,6 +958,11 @@ func (iter ListSasTokensResultIterator) Value() SasTokenInfo {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ListSasTokensResultIterator type.
+func NewListSasTokensResultIterator(page ListSasTokensResultPage) ListSasTokensResultIterator {
+	return ListSasTokensResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (lstr ListSasTokensResult) IsEmpty() bool {
 	return lstr.Value == nil || len(*lstr.Value) == 0
@@ -767,11 +970,11 @@ func (lstr ListSasTokensResult) IsEmpty() bool {
 
 // listSasTokensResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lstr ListSasTokensResult) listSasTokensResultPreparer() (*http.Request, error) {
+func (lstr ListSasTokensResult) listSasTokensResultPreparer(ctx context.Context) (*http.Request, error) {
 	if lstr.NextLink == nil || len(to.String(lstr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lstr.NextLink)))
@@ -779,19 +982,36 @@ func (lstr ListSasTokensResult) listSasTokensResultPreparer() (*http.Request, er
 
 // ListSasTokensResultPage contains a page of SasTokenInfo values.
 type ListSasTokensResultPage struct {
-	fn   func(ListSasTokensResult) (ListSasTokensResult, error)
+	fn   func(context.Context, ListSasTokensResult) (ListSasTokensResult, error)
 	lstr ListSasTokensResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListSasTokensResultPage) Next() error {
-	next, err := page.fn(page.lstr)
+func (page *ListSasTokensResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListSasTokensResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.lstr)
 	if err != nil {
 		return err
 	}
 	page.lstr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ListSasTokensResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -810,6 +1030,11 @@ func (page ListSasTokensResultPage) Values() []SasTokenInfo {
 		return nil
 	}
 	return *page.lstr.Value
+}
+
+// Creates a new instance of the ListSasTokensResultPage type.
+func NewListSasTokensResultPage(getNextPage func(context.Context, ListSasTokensResult) (ListSasTokensResult, error)) ListSasTokensResultPage {
+	return ListSasTokensResultPage{fn: getNextPage}
 }
 
 // SasTokenInfo SAS token information.

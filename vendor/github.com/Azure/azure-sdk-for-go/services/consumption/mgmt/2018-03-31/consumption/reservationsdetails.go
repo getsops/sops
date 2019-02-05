@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewReservationsDetailsClientWithBaseURI(baseURI string, subscriptionID stri
 // filter - filter reservation details by date range. The properties/UsageDate for start date and end date. The
 // filter supports 'le' and  'ge'
 func (client ReservationsDetailsClient) ListByReservationOrder(ctx context.Context, reservationOrderID string, filter string) (result ReservationDetailsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationsDetailsClient.ListByReservationOrder")
+		defer func() {
+			sc := -1
+			if result.rdlr.Response.Response != nil {
+				sc = result.rdlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReservationOrderNextResults
 	req, err := client.ListByReservationOrderPreparer(ctx, reservationOrderID, filter)
 	if err != nil {
@@ -109,8 +120,8 @@ func (client ReservationsDetailsClient) ListByReservationOrderResponder(resp *ht
 }
 
 // listByReservationOrderNextResults retrieves the next set of results, if any.
-func (client ReservationsDetailsClient) listByReservationOrderNextResults(lastResults ReservationDetailsListResult) (result ReservationDetailsListResult, err error) {
-	req, err := lastResults.reservationDetailsListResultPreparer()
+func (client ReservationsDetailsClient) listByReservationOrderNextResults(ctx context.Context, lastResults ReservationDetailsListResult) (result ReservationDetailsListResult, err error) {
+	req, err := lastResults.reservationDetailsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.ReservationsDetailsClient", "listByReservationOrderNextResults", nil, "Failure preparing next results request")
 	}
@@ -131,6 +142,16 @@ func (client ReservationsDetailsClient) listByReservationOrderNextResults(lastRe
 
 // ListByReservationOrderComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReservationsDetailsClient) ListByReservationOrderComplete(ctx context.Context, reservationOrderID string, filter string) (result ReservationDetailsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationsDetailsClient.ListByReservationOrder")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReservationOrder(ctx, reservationOrderID, filter)
 	return
 }
@@ -142,6 +163,16 @@ func (client ReservationsDetailsClient) ListByReservationOrderComplete(ctx conte
 // filter - filter reservation details by date range. The properties/UsageDate for start date and end date. The
 // filter supports 'le' and  'ge'
 func (client ReservationsDetailsClient) ListByReservationOrderAndReservation(ctx context.Context, reservationOrderID string, reservationID string, filter string) (result ReservationDetailsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationsDetailsClient.ListByReservationOrderAndReservation")
+		defer func() {
+			sc := -1
+			if result.rdlr.Response.Response != nil {
+				sc = result.rdlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReservationOrderAndReservationNextResults
 	req, err := client.ListByReservationOrderAndReservationPreparer(ctx, reservationOrderID, reservationID, filter)
 	if err != nil {
@@ -206,8 +237,8 @@ func (client ReservationsDetailsClient) ListByReservationOrderAndReservationResp
 }
 
 // listByReservationOrderAndReservationNextResults retrieves the next set of results, if any.
-func (client ReservationsDetailsClient) listByReservationOrderAndReservationNextResults(lastResults ReservationDetailsListResult) (result ReservationDetailsListResult, err error) {
-	req, err := lastResults.reservationDetailsListResultPreparer()
+func (client ReservationsDetailsClient) listByReservationOrderAndReservationNextResults(ctx context.Context, lastResults ReservationDetailsListResult) (result ReservationDetailsListResult, err error) {
+	req, err := lastResults.reservationDetailsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.ReservationsDetailsClient", "listByReservationOrderAndReservationNextResults", nil, "Failure preparing next results request")
 	}
@@ -228,6 +259,16 @@ func (client ReservationsDetailsClient) listByReservationOrderAndReservationNext
 
 // ListByReservationOrderAndReservationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReservationsDetailsClient) ListByReservationOrderAndReservationComplete(ctx context.Context, reservationOrderID string, reservationID string, filter string) (result ReservationDetailsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationsDetailsClient.ListByReservationOrderAndReservation")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReservationOrderAndReservation(ctx, reservationOrderID, reservationID, filter)
 	return
 }

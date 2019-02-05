@@ -18,8 +18,6 @@
 // To get the CA certificate of the proxy, issue a GET to http://localhost:CP/authority.cer, where
 // CP is the control port.
 
-// +build go1.8
-
 package main
 
 import (

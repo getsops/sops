@@ -250,6 +250,20 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "DescribeQueries":{
+      "name":"DescribeQueries",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeQueriesRequest"},
+      "output":{"shape":"DescribeQueriesResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
     "DescribeResourcePolicies":{
       "name":"DescribeResourcePolicies",
       "http":{
@@ -313,6 +327,50 @@
       },
       "input":{"shape":"GetLogEventsRequest"},
       "output":{"shape":"GetLogEventsResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "GetLogGroupFields":{
+      "name":"GetLogGroupFields",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetLogGroupFieldsRequest"},
+      "output":{"shape":"GetLogGroupFieldsResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "GetLogRecord":{
+      "name":"GetLogRecord",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetLogRecordRequest"},
+      "output":{"shape":"GetLogRecordResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "GetQueryResults":{
+      "name":"GetQueryResults",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetQueryResultsRequest"},
+      "output":{"shape":"GetQueryResultsResponse"},
       "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"ResourceNotFoundException"},
@@ -431,6 +489,36 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"OperationAbortedException"},
         {"shape":"LimitExceededException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "StartQuery":{
+      "name":"StartQuery",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartQueryRequest"},
+      "output":{"shape":"StartQueryResponse"},
+      "errors":[
+        {"shape":"MalformedQueryException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "StopQuery":{
+      "name":"StopQuery",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StopQueryRequest"},
+      "output":{"shape":"StopQueryResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
         {"shape":"ServiceUnavailableException"}
       ]
     },
@@ -697,6 +785,27 @@
         "nextToken":{"shape":"NextToken"}
       }
     },
+    "DescribeQueriesMaxResults":{
+      "type":"integer",
+      "max":1000,
+      "min":1
+    },
+    "DescribeQueriesRequest":{
+      "type":"structure",
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "status":{"shape":"QueryStatus"},
+        "maxResults":{"shape":"DescribeQueriesMaxResults"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeQueriesResponse":{
+      "type":"structure",
+      "members":{
+        "queries":{"shape":"QueryInfoList"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
     "DescribeResourcePoliciesRequest":{
       "type":"structure",
       "members":{
@@ -843,6 +952,7 @@
       "key":{"shape":"Token"},
       "value":{"shape":"Value"}
     },
+    "Field":{"type":"string"},
     "FilterCount":{"type":"integer"},
     "FilterLogEventsRequest":{
       "type":"structure",
@@ -914,6 +1024,48 @@
         "events":{"shape":"OutputLogEvents"},
         "nextForwardToken":{"shape":"NextToken"},
         "nextBackwardToken":{"shape":"NextToken"}
+      }
+    },
+    "GetLogGroupFieldsRequest":{
+      "type":"structure",
+      "required":["logGroupName"],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "time":{"shape":"Timestamp"}
+      }
+    },
+    "GetLogGroupFieldsResponse":{
+      "type":"structure",
+      "members":{
+        "logGroupFields":{"shape":"LogGroupFieldList"}
+      }
+    },
+    "GetLogRecordRequest":{
+      "type":"structure",
+      "required":["logRecordPointer"],
+      "members":{
+        "logRecordPointer":{"shape":"LogRecordPointer"}
+      }
+    },
+    "GetLogRecordResponse":{
+      "type":"structure",
+      "members":{
+        "logRecord":{"shape":"LogRecord"}
+      }
+    },
+    "GetQueryResultsRequest":{
+      "type":"structure",
+      "required":["queryId"],
+      "members":{
+        "queryId":{"shape":"QueryId"}
+      }
+    },
+    "GetQueryResultsResponse":{
+      "type":"structure",
+      "members":{
+        "results":{"shape":"QueryResults"},
+        "statistics":{"shape":"QueryStatistics"},
+        "status":{"shape":"QueryStatus"}
       }
     },
     "InputLogEvent":{
@@ -995,6 +1147,17 @@
         "kmsKeyId":{"shape":"KmsKeyId"}
       }
     },
+    "LogGroupField":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"Field"},
+        "percent":{"shape":"Percentage"}
+      }
+    },
+    "LogGroupFieldList":{
+      "type":"list",
+      "member":{"shape":"LogGroupField"}
+    },
     "LogGroupName":{
       "type":"string",
       "max":512,
@@ -1005,6 +1168,12 @@
       "type":"list",
       "member":{"shape":"LogGroup"}
     },
+    "LogRecord":{
+      "type":"map",
+      "key":{"shape":"Field"},
+      "value":{"shape":"Value"}
+    },
+    "LogRecordPointer":{"type":"string"},
     "LogStream":{
       "type":"structure",
       "members":{
@@ -1029,6 +1198,14 @@
       "type":"list",
       "member":{"shape":"LogStream"}
     },
+    "MalformedQueryException":{
+      "type":"structure",
+      "members":{
+        "queryCompileError":{"shape":"QueryCompileError"}
+      },
+      "exception":true
+    },
+    "Message":{"type":"string"},
     "MetricFilter":{
       "type":"structure",
       "members":{
@@ -1117,6 +1294,11 @@
     "OutputLogEvents":{
       "type":"list",
       "member":{"shape":"OutputLogEvent"}
+    },
+    "Percentage":{
+      "type":"integer",
+      "max":100,
+      "min":0
     },
     "PolicyDocument":{
       "type":"string",
@@ -1231,6 +1413,67 @@
         "distribution":{"shape":"Distribution"}
       }
     },
+    "QueryCharOffset":{"type":"integer"},
+    "QueryCompileError":{
+      "type":"structure",
+      "members":{
+        "location":{"shape":"QueryCompileErrorLocation"},
+        "message":{"shape":"Message"}
+      }
+    },
+    "QueryCompileErrorLocation":{
+      "type":"structure",
+      "members":{
+        "startCharOffset":{"shape":"QueryCharOffset"},
+        "endCharOffset":{"shape":"QueryCharOffset"}
+      }
+    },
+    "QueryId":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
+    "QueryInfo":{
+      "type":"structure",
+      "members":{
+        "queryId":{"shape":"QueryId"},
+        "queryString":{"shape":"QueryString"},
+        "status":{"shape":"QueryStatus"},
+        "createTime":{"shape":"Timestamp"},
+        "logGroupName":{"shape":"LogGroupName"}
+      }
+    },
+    "QueryInfoList":{
+      "type":"list",
+      "member":{"shape":"QueryInfo"}
+    },
+    "QueryResults":{
+      "type":"list",
+      "member":{"shape":"ResultRows"}
+    },
+    "QueryStatistics":{
+      "type":"structure",
+      "members":{
+        "recordsMatched":{"shape":"StatsValue"},
+        "recordsScanned":{"shape":"StatsValue"},
+        "bytesScanned":{"shape":"StatsValue"}
+      }
+    },
+    "QueryStatus":{
+      "type":"string",
+      "enum":[
+        "Scheduled",
+        "Running",
+        "Complete",
+        "Failed",
+        "Cancelled"
+      ]
+    },
+    "QueryString":{
+      "type":"string",
+      "max":2048,
+      "min":0
+    },
     "RejectedLogEventsInfo":{
       "type":"structure",
       "members":{
@@ -1263,6 +1506,17 @@
         "lastUpdatedTime":{"shape":"Timestamp"}
       }
     },
+    "ResultField":{
+      "type":"structure",
+      "members":{
+        "field":{"shape":"Field"},
+        "value":{"shape":"Value"}
+      }
+    },
+    "ResultRows":{
+      "type":"list",
+      "member":{"shape":"ResultField"}
+    },
     "RoleArn":{
       "type":"string",
       "min":1
@@ -1290,6 +1544,42 @@
       "fault":true
     },
     "StartFromHead":{"type":"boolean"},
+    "StartQueryRequest":{
+      "type":"structure",
+      "required":[
+        "logGroupName",
+        "startTime",
+        "endTime",
+        "queryString"
+      ],
+      "members":{
+        "logGroupName":{"shape":"LogGroupName"},
+        "startTime":{"shape":"Timestamp"},
+        "endTime":{"shape":"Timestamp"},
+        "queryString":{"shape":"QueryString"},
+        "limit":{"shape":"EventsLimit"}
+      }
+    },
+    "StartQueryResponse":{
+      "type":"structure",
+      "members":{
+        "queryId":{"shape":"QueryId"}
+      }
+    },
+    "StatsValue":{"type":"double"},
+    "StopQueryRequest":{
+      "type":"structure",
+      "required":["queryId"],
+      "members":{
+        "queryId":{"shape":"QueryId"}
+      }
+    },
+    "StopQueryResponse":{
+      "type":"structure",
+      "members":{
+        "success":{"shape":"Success"}
+      }
+    },
     "StoredBytes":{
       "type":"long",
       "min":0
@@ -1310,6 +1600,7 @@
       "type":"list",
       "member":{"shape":"SubscriptionFilter"}
     },
+    "Success":{"type":"boolean"},
     "TagKey":{
       "type":"string",
       "max":128,

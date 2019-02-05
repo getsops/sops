@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"CodePipeline",
     "serviceFullName":"AWS CodePipeline",
+    "serviceId":"CodePipeline",
     "signatureVersion":"v4",
     "targetPrefix":"CodePipeline_20150709",
     "uid":"codepipeline-2015-07-09"
@@ -456,6 +457,11 @@
     }
   },
   "shapes":{
+    "AWSRegionName":{
+      "type":"string",
+      "max":30,
+      "min":4
+    },
     "AWSSessionCredentials":{
       "type":"structure",
       "required":[
@@ -599,7 +605,8 @@
         "configuration":{"shape":"ActionConfigurationMap"},
         "outputArtifacts":{"shape":"OutputArtifactList"},
         "inputArtifacts":{"shape":"InputArtifactList"},
-        "roleArn":{"shape":"RoleArn"}
+        "roleArn":{"shape":"RoleArn"},
+        "region":{"shape":"AWSRegionName"}
       }
     },
     "ActionExecution":{
@@ -838,6 +845,11 @@
       "min":3,
       "pattern":"[a-zA-Z0-9\\-\\.]+"
     },
+    "ArtifactStoreMap":{
+      "type":"map",
+      "key":{"shape":"AWSRegionName"},
+      "value":{"shape":"ArtifactStore"}
+    },
     "ArtifactStoreType":{
       "type":"string",
       "enum":["S3"]
@@ -866,6 +878,12 @@
     "ClientId":{
       "type":"string",
       "pattern":"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    },
+    "ClientRequestToken":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^[a-zA-Z0-9-]+$"
     },
     "ClientToken":{
       "type":"string",
@@ -1464,13 +1482,13 @@
       "required":[
         "name",
         "roleArn",
-        "artifactStore",
         "stages"
       ],
       "members":{
         "name":{"shape":"PipelineName"},
         "roleArn":{"shape":"RoleArn"},
         "artifactStore":{"shape":"ArtifactStore"},
+        "artifactStores":{"shape":"ArtifactStoreMap"},
         "stages":{"shape":"PipelineStageDeclarationList"},
         "version":{"shape":"PipelineVersion"}
       }
@@ -1885,7 +1903,11 @@
       "type":"structure",
       "required":["name"],
       "members":{
-        "name":{"shape":"PipelineName"}
+        "name":{"shape":"PipelineName"},
+        "clientRequestToken":{
+          "shape":"ClientRequestToken",
+          "idempotencyToken":true
+        }
       }
     },
     "StartPipelineExecutionOutput":{

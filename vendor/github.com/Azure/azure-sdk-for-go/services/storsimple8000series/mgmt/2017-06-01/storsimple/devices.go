@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewDevicesClientWithBaseURI(baseURI string, subscriptionID string) DevicesC
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) AuthorizeForServiceEncryptionKeyRollover(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.AuthorizeForServiceEncryptionKeyRollover")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -121,6 +132,16 @@ func (client DevicesClient) AuthorizeForServiceEncryptionKeyRolloverResponder(re
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) Configure(ctx context.Context, parameters ConfigureDeviceRequest, resourceGroupName string, managerName string) (result DevicesConfigureFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.Configure")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ConfigureDeviceRequestProperties", Name: validation.Null, Rule: true,
@@ -181,10 +202,6 @@ func (client DevicesClient) ConfigureSender(req *http.Request) (future DevicesCo
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -207,6 +224,16 @@ func (client DevicesClient) ConfigureResponder(resp *http.Response) (result auto
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) Deactivate(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result DevicesDeactivateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.Deactivate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -260,10 +287,6 @@ func (client DevicesClient) DeactivateSender(req *http.Request) (future DevicesD
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -286,6 +309,16 @@ func (client DevicesClient) DeactivateResponder(resp *http.Response) (result aut
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) Delete(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result DevicesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -339,10 +372,6 @@ func (client DevicesClient) DeleteSender(req *http.Request) (future DevicesDelet
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -367,6 +396,16 @@ func (client DevicesClient) DeleteResponder(resp *http.Response) (result autores
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) Failover(ctx context.Context, sourceDeviceName string, parameters FailoverRequest, resourceGroupName string, managerName string) (result DevicesFailoverFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.Failover")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -422,10 +461,6 @@ func (client DevicesClient) FailoverSender(req *http.Request) (future DevicesFai
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -451,6 +486,16 @@ func (client DevicesClient) FailoverResponder(resp *http.Response) (result autor
 // $expand=rolloverdetails to populate additional fields related to the service data encryption key rollover on
 // device
 func (client DevicesClient) Get(ctx context.Context, deviceName string, resourceGroupName string, managerName string, expand string) (result Device, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -530,6 +575,16 @@ func (client DevicesClient) GetResponder(resp *http.Response) (result Device, er
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) GetUpdateSummary(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result Updates, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.GetUpdateSummary")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -606,6 +661,16 @@ func (client DevicesClient) GetUpdateSummaryResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) InstallUpdates(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result DevicesInstallUpdatesFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.InstallUpdates")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -659,10 +724,6 @@ func (client DevicesClient) InstallUpdatesSender(req *http.Request) (future Devi
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -687,6 +748,16 @@ func (client DevicesClient) InstallUpdatesResponder(resp *http.Response) (result
 // $expand=rolloverdetails to populate additional fields related to the service data encryption key rollover on
 // device
 func (client DevicesClient) ListByManager(ctx context.Context, resourceGroupName string, managerName string, expand string) (result DeviceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.ListByManager")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -767,6 +838,16 @@ func (client DevicesClient) ListByManagerResponder(resp *http.Response) (result 
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) ListFailoverSets(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result FailoverSetsList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.ListFailoverSets")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -845,6 +926,16 @@ func (client DevicesClient) ListFailoverSetsResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) ListFailoverTargets(ctx context.Context, sourceDeviceName string, parameters ListFailoverTargetsRequest, resourceGroupName string, managerName string) (result FailoverTargetsList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.ListFailoverTargets")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -923,6 +1014,16 @@ func (client DevicesClient) ListFailoverTargetsResponder(resp *http.Response) (r
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) ListMetricDefinition(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result MetricDefinitionList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.ListMetricDefinition")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1000,6 +1101,16 @@ func (client DevicesClient) ListMetricDefinitionResponder(resp *http.Response) (
 // managerName - the manager name
 // filter - oData Filter options
 func (client DevicesClient) ListMetrics(ctx context.Context, deviceName string, resourceGroupName string, managerName string, filter string) (result MetricList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.ListMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1077,6 +1188,16 @@ func (client DevicesClient) ListMetricsResponder(resp *http.Response) (result Me
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) ScanForUpdates(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result DevicesScanForUpdatesFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.ScanForUpdates")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -1130,10 +1251,6 @@ func (client DevicesClient) ScanForUpdatesSender(req *http.Request) (future Devi
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1157,6 +1274,16 @@ func (client DevicesClient) ScanForUpdatesResponder(resp *http.Response) (result
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DevicesClient) Update(ctx context.Context, deviceName string, parameters DevicePatch, resourceGroupName string, managerName string) (result Device, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DevicesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},

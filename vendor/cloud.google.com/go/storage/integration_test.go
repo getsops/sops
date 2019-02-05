@@ -17,6 +17,7 @@ package storage
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/md5"
 	"crypto/sha256"
 	"encoding/base64"
@@ -38,14 +39,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
-	"golang.org/x/net/context"
-
 	"cloud.google.com/go/httpreplay"
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/internal/uid"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	itesting "google.golang.org/api/iterator/testing"
@@ -1792,11 +1791,11 @@ func TestIntegration_PublicBucket(t *testing.T) {
 	}
 
 	errCode := func(err error) int {
-		if err, ok := err.(*googleapi.Error); !ok {
+		err2, ok := err.(*googleapi.Error)
+		if !ok {
 			return -1
-		} else {
-			return err.Code
 		}
+		return err2.Code
 	}
 
 	// Reading from or writing to a non-public bucket fails.
@@ -1827,9 +1826,8 @@ func TestIntegration_ReadCRC(t *testing.T) {
 		uncompressedBucket = "gcp-public-data-landsat"
 		uncompressedObject = "LC08/PRE/044/034/LC80440342016259LGN00/LC80440342016259LGN00_MTL.txt"
 
-		gzippedBucket   = "storage-library-test-bucket"
-		gzippedObject   = "gzipped-text.txt"
-		gzippedContents = "hello world" // uncompressed contents of the file
+		gzippedBucket = "storage-library-test-bucket"
+		gzippedObject = "gzipped-text.txt"
 	)
 	ctx := context.Background()
 	client, err := newTestClient(ctx, option.WithoutAuthentication())
@@ -2035,6 +2033,129 @@ func TestIntegration_UpdateCORS(t *testing.T) {
 	}
 }
 
+func TestIntegration_UpdateDefaultEventBasedHold(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{})
+	defer h.mustDeleteBucket(bkt)
+	attrs := h.mustBucketAttrs(bkt)
+	if attrs.DefaultEventBasedHold != false {
+		t.Errorf("got=%v, want=%v", attrs.DefaultEventBasedHold, false)
+	}
+
+	h.mustUpdateBucket(bkt, BucketAttrsToUpdate{DefaultEventBasedHold: true})
+	attrs = h.mustBucketAttrs(bkt)
+	if attrs.DefaultEventBasedHold != true {
+		t.Errorf("got=%v, want=%v", attrs.DefaultEventBasedHold, true)
+	}
+
+	// Omitting it should leave the value unchanged.
+	h.mustUpdateBucket(bkt, BucketAttrsToUpdate{RequesterPays: true})
+	attrs = h.mustBucketAttrs(bkt)
+	if attrs.DefaultEventBasedHold != true {
+		t.Errorf("got=%v, want=%v", attrs.DefaultEventBasedHold, true)
+	}
+}
+
+func TestIntegration_UpdateEventBasedHold(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{})
+	obj := bkt.Object("some-obj")
+	h.mustWrite(obj.NewWriter(ctx), randomContents())
+
+	defer func() {
+		h.mustUpdateObject(obj, ObjectAttrsToUpdate{EventBasedHold: false})
+		h.mustDeleteObject(obj)
+		h.mustDeleteBucket(bkt)
+	}()
+
+	attrs := h.mustObjectAttrs(obj)
+	if attrs.EventBasedHold != false {
+		t.Fatalf("got=%v, want=%v", attrs.EventBasedHold, false)
+	}
+
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{EventBasedHold: true})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.EventBasedHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.EventBasedHold, true)
+	}
+
+	// Omitting it should leave the value unchanged.
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{ContentType: "foo"})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.EventBasedHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.EventBasedHold, true)
+	}
+}
+
+func TestIntegration_UpdateTemporaryHold(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{})
+	obj := bkt.Object("some-obj")
+	h.mustWrite(obj.NewWriter(ctx), randomContents())
+
+	defer func() {
+		h.mustUpdateObject(obj, ObjectAttrsToUpdate{TemporaryHold: false})
+		h.mustDeleteObject(obj)
+		h.mustDeleteBucket(bkt)
+	}()
+
+	attrs := h.mustObjectAttrs(obj)
+	if attrs.TemporaryHold != false {
+		t.Fatalf("got=%v, want=%v", attrs.TemporaryHold, false)
+	}
+
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{TemporaryHold: true})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.TemporaryHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.TemporaryHold, true)
+	}
+
+	// Omitting it should leave the value unchanged.
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{ContentType: "foo"})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.TemporaryHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.TemporaryHold, true)
+	}
+}
+
+func TestIntegration_UpdateRetentionExpirationTime(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour}})
+	obj := bkt.Object("some-obj")
+	h.mustWrite(obj.NewWriter(ctx), randomContents())
+
+	defer func() {
+		h.mustUpdateBucket(bkt, BucketAttrsToUpdate{RetentionPolicy: &RetentionPolicy{RetentionPeriod: 0}})
+		h.mustDeleteObject(obj)
+		h.mustDeleteBucket(bkt)
+	}()
+
+	attrs := h.mustObjectAttrs(obj)
+	if attrs.RetentionExpirationTime == (time.Time{}) {
+		t.Fatalf("got=%v, wanted a non-zero value", attrs.RetentionExpirationTime)
+	}
+}
+
 func TestIntegration_UpdateRetentionPolicy(t *testing.T) {
 	ctx := context.Background()
 	client := testConfig(ctx, t)
@@ -2116,9 +2237,17 @@ func TestIntegration_LockBucket(t *testing.T) {
 	bkt := client.Bucket(uidSpace.New())
 	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour * 25}})
 	attrs := h.mustBucketAttrs(bkt)
+	if attrs.RetentionPolicy.IsLocked {
+		t.Fatal("Expected bucket to begin unlocked, but it was not")
+	}
 	err := bkt.If(BucketConditions{MetagenerationMatch: attrs.MetaGeneration}).LockRetentionPolicy(ctx)
 	if err != nil {
 		t.Fatal("could not lock", err)
+	}
+
+	attrs = h.mustBucketAttrs(bkt)
+	if !attrs.RetentionPolicy.IsLocked {
+		t.Fatal("Expected bucket to be locked, but it was not")
 	}
 
 	_, err = bkt.Update(ctx, BucketAttrsToUpdate{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour}})
@@ -2336,6 +2465,49 @@ func TestIntegration_ServiceAccount(t *testing.T) {
 	want := "@gs-project-accounts.iam.gserviceaccount.com"
 	if !strings.Contains(s, want) {
 		t.Fatalf("got %v, want to contain %v", s, want)
+	}
+}
+
+func TestIntegration_ReaderAttrs(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	bkt := client.Bucket(bucketName)
+
+	const defaultType = "text/plain"
+	obj := "some-object"
+	c := randomContents()
+	if err := writeObject(ctx, bkt.Object(obj), defaultType, c); err != nil {
+		t.Errorf("Write for %v failed with %v", obj, err)
+	}
+	oh := bkt.Object(obj)
+
+	rc, err := oh.NewReader(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	attrs, err := oh.Attrs(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := rc.Attrs
+	want := ReaderObjectAttrs{
+		Size:            attrs.Size,
+		ContentType:     attrs.ContentType,
+		ContentEncoding: attrs.ContentEncoding,
+		CacheControl:    attrs.CacheControl,
+		LastModified:    got.LastModified, // ignored, tested separately
+		Generation:      attrs.Generation,
+		Metageneration:  attrs.Metageneration,
+	}
+	if got != want {
+		t.Fatalf("got %v, wanted %v", got, want)
+	}
+
+	if got.LastModified.IsZero() {
+		t.Fatal("LastModified is 0, should be >0")
 	}
 }
 
