@@ -314,6 +314,6 @@ func lookupAnyEditor(editorNames ...string) (editorPath string, err error) {
 			return editorPath, nil
 		}
 	}
-	err = fmt.Errorf("no editor available: sops supports %s", strings.Join(editorNames, ", "))
+	return "", fmt.Errorf("no editor available: sops attempts to use the editor defined in the EDITOR environment variable, and if that's not set defaults to any of %s, but none of them could be found", strings.Join(editorNames, ", "))
 	return "", err
 }
