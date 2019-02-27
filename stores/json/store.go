@@ -52,6 +52,10 @@ func (store BinaryStore) EmitValue(v interface{}) ([]byte, error) {
 	return nil, fmt.Errorf("Binary files are not structured and extracting a single value is not possible")
 }
 
+func (store BinaryStore) EmitExample() []byte {
+	return []byte("Welcome to SOPS! Edit this file as you please!")
+}
+
 func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error) {
 	var slice []interface{}
 	for {
@@ -281,4 +285,12 @@ func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 		return nil, err
 	}
 	return store.reindentJSON(s)
+}
+
+func (store *Store) EmitExample() []byte {
+	bytes, err := store.EmitPlainFile(stores.ExampleComplexTree.Branches)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
 }

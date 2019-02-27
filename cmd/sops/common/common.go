@@ -17,6 +17,16 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
+type ExampleFileEmitter interface {
+	EmitExample() []byte
+}
+
+type Store interface {
+	sops.Store
+	ExampleFileEmitter
+}
+
+
 // DecryptTreeOpts are the options needed to decrypt a tree
 type DecryptTreeOpts struct {
 	// Tree is the tree to be decrypted
@@ -114,7 +124,7 @@ func IsIniFile(path string) bool {
 	return strings.HasSuffix(path, ".ini")
 }
 
-func DefaultStoreForPath(path string) sops.Store {
+func DefaultStoreForPath(path string) Store {
 	if IsYAMLFile(path) {
 		return &yaml.Store{}
 	} else if IsJSONFile(path) {

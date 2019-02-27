@@ -125,6 +125,14 @@ func (Store) EmitValue(v interface{}) ([]byte, error) {
 	return nil, fmt.Errorf("the dotenv store only supports emitting strings, got %T", v)
 }
 
+func (store *Store) EmitExample() []byte {
+	bytes, err := store.EmitPlainFile(stores.ExampleFlatTree.Branches)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
+}
+
 func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
 	var mdMap map[string]interface{}
 	inrec, err := json.Marshal(md)

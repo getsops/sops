@@ -691,7 +691,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	return
 }
 
-func inputStore(context *cli.Context, path string) sops.Store {
+func inputStore(context *cli.Context, path string) common.Store {
 	switch context.String("input-type") {
 	case "yaml":
 		return &yamlstores.Store{}
@@ -708,7 +708,7 @@ func inputStore(context *cli.Context, path string) sops.Store {
 	}
 }
 
-func outputStore(context *cli.Context, path string) sops.Store {
+func outputStore(context *cli.Context, path string) common.Store {
 	switch context.String("output-type") {
 	case "yaml":
 		return &yamlstores.Store{}

@@ -308,3 +308,80 @@ func (pgpKey *pgpkey) toInternal() (*pgp.MasterKey, error) {
 		Fingerprint:  pgpKey.Fingerprint,
 	}, nil
 }
+
+var ExampleComplexTree = sops.Tree{
+	Branches: sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "hello",
+				Value: `Welcome to SOPS! Edit this file as you please!`,
+			},
+			sops.TreeItem{
+				Key:   "example_key",
+				Value: "example_value",
+			},
+			sops.TreeItem{
+				Key:   sops.Comment{Value: " Example comment"},
+				Value: nil,
+			},
+			sops.TreeItem{
+				Key: "example_array",
+				Value: []interface{}{
+					"example_value1",
+					"example_value2",
+				},
+			},
+			sops.TreeItem{
+				Key:   "example_number",
+				Value: 1234.56789,
+			},
+			sops.TreeItem{
+				Key:   "example_booleans",
+				Value: []interface{}{true, false},
+			},
+		},
+	},
+}
+
+var ExampleSimpleTree = sops.Tree{
+	Branches: sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key: "Welcome!",
+				Value: sops.TreeBranch{
+					sops.TreeItem{
+						Key:   sops.Comment{Value: " This is an example file."},
+						Value: nil,
+					},
+					sops.TreeItem{
+						Key:   "hello",
+						Value: "Welcome to SOPS! Edit this file as you please!",
+					},
+					sops.TreeItem{
+						Key:   "example_key",
+						Value: "example_value",
+					},
+				},
+			},
+		},
+	},
+}
+
+var ExampleFlatTree = sops.Tree{
+	Branches: sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   sops.Comment{Value: " This is an example file."},
+				Value: nil,
+			},
+			sops.TreeItem{
+				Key:   "hello",
+				Value: "Welcome to SOPS! Edit this file as you please!",
+			},
+			sops.TreeItem{
+				Key:   "example_key",
+				Value: "example_value",
+			},
+		},
+	},
+}

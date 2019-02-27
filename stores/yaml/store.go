@@ -186,3 +186,11 @@ func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	v = store.treeValueToYamlValue(v)
 	return (&yaml.YAMLMarshaler{Indent: 4}).Marshal(v)
 }
+
+func (store *Store) EmitExample() []byte {
+	bytes, err := store.EmitPlainFile(stores.ExampleComplexTree.Branches)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
+}
