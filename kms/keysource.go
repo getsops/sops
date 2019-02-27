@@ -187,7 +187,13 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	if matches == nil {
 		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
-	config := aws.Config{Region: aws.String(matches[1]), Credentials: credentials.NewSharedCredentials("", key.AwsProfile)}
+
+	config := aws.Config{Region: aws.String(matches[1])}
+
+	if key.AwsProfile != "" {
+		config.Credentials = credentials.NewSharedCredentials("", key.AwsProfile)
+	}
+
 	opts := session.Options{
 		Config:                  config,
 		AssumeRoleTokenProvider: stscreds.StdinTokenProvider,
