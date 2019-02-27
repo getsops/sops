@@ -287,7 +287,7 @@ func runEditor(path string) error {
 	editor := os.Getenv("EDITOR")
 	var cmd *exec.Cmd
 	if editor == "" {
-		editor, err := lookupAnyEditor("vim", "nano")
+		editor, err := lookupAnyEditor("vim", "nano", "vi")
 		if err != nil {
 			return err
 		}
