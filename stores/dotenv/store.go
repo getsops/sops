@@ -25,12 +25,18 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	var resultBranch sops.TreeBranch
 	mdMap := make(map[string]interface{})
 	for _, item := range branches[0] {
-		s := item.Key.(string)
-		if strings.HasPrefix(s, SopsPrefix) {
-			s = s[len(SopsPrefix):]
-			mdMap[s] = item.Value
-		} else {
+		switch key := item.Key.(type) {
+		case string:
+			if strings.HasPrefix(key, SopsPrefix) {
+				key = key[len(SopsPrefix):]
+				mdMap[key] = item.Value
+			} else {
+				resultBranch = append(resultBranch, item)
+			}
+		case sops.Comment:
 			resultBranch = append(resultBranch, item)
+		default:
+			panic(fmt.Sprintf("Unexpected type: %T (value %#v)", key, key))
 		}
 	}
 
@@ -59,14 +65,21 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 		if len(line) == 0 {
 			continue
 		}
-		pos := bytes.Index(line, []byte("="))
-		if pos == -1 {
-			return nil, fmt.Errorf("invalid dotenv input line: %s", line)
+		if line[0] == '#' {
+			branch = append(branch, sops.TreeItem{
+				Key: sops.Comment{string(line[1:])},
+				Value: nil,
+			})
+		} else {
+			pos := bytes.Index(line, []byte("="))
+			if pos == -1 {
+				return nil, fmt.Errorf("invalid dotenv input line: %s", line)
+			}
+			branch = append(branch, sops.TreeItem{
+				Key:   string(line[:pos]),
+				Value: string(line[pos+1:]),
+			})
 		}
-		branch = append(branch, sops.TreeItem{
-			Key:   string(line[:pos]),
-			Value: string(line[pos+1:]),
-		})
 	}
 
 	branches = append(branches, branch)
@@ -94,7 +107,12 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 		if isComplexValue(item.Value) {
 			return nil, fmt.Errorf("cannot use complex value in dotenv file: %s", item.Value)
 		}
-		line := fmt.Sprintf("%s=%s\n", item.Key, item.Value)
+		var line string
+		if comment, ok := item.Key.(sops.Comment); ok {
+			line = fmt.Sprintf("#%s\n", comment.Value)
+		} else {
+			line = fmt.Sprintf("%s=%s\n", item.Key, item.Value)
+		}
 		buffer.WriteString(line)
 	}
 	return buffer.Bytes(), nil

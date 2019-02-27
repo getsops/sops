@@ -11,6 +11,7 @@ import (
 var PLAIN = []byte(strings.TrimLeft(`
 VAR1=val1
 VAR2=val2
+#comment
 VAR3_unencrypted=val3
 `, "\n"))
 
@@ -22,6 +23,10 @@ var BRANCH = sops.TreeBranch{
 	sops.TreeItem{
 		Key:   "VAR2",
 		Value: "val2",
+	},
+	sops.TreeItem{
+		Key: sops.Comment{"comment"},
+		Value: nil,
 	},
 	sops.TreeItem{
 		Key:   "VAR3_unencrypted",
