@@ -29,11 +29,11 @@ import (
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/dotenv"
+	"go.mozilla.org/sops/stores/ini"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
-	"go.mozilla.org/sops/stores/ini"
 )
 
 var log *logrus.Logger

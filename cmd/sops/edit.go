@@ -238,16 +238,15 @@ func runEditor(path string) error {
 	editor := os.Getenv("EDITOR")
 	var cmd *exec.Cmd
 	if editor == "" {
-		cmd = exec.Command("which", "vim", "nano")
-		out, err := cmd.Output()
+		editor, err := lookupAnyEditor("vim", "nano", "vi")
 		if err != nil {
-			panic("Could not find any editors")
+			return err
 		}
-		cmd = exec.Command(strings.Split(string(out), "\n")[0], path)
+		cmd = exec.Command(editor, path)
 	} else {
 		parts, err := shlex.Split(editor)
 		if err != nil {
-			return fmt.Errorf("Invalid $EDITOR: %s", editor)
+			return fmt.Errorf("invalid $EDITOR: %s", editor)
 		}
 		parts = append(parts, path)
 		cmd = exec.Command(parts[0], parts[1:]...)
@@ -257,4 +256,14 @@ func runEditor(path string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+func lookupAnyEditor(editorNames ...string) (editorPath string, err error) {
+	for _, editorName := range editorNames {
+		editorPath, err = exec.LookPath(editorName)
+		if err == nil {
+			return editorPath, nil
+		}
+	}
+	return "", fmt.Errorf("no editor available: sops attempts to use the editor defined in the EDITOR environment variable, and if that's not set defaults to any of %s, but none of them could be found", strings.Join(editorNames, ", "))
 }
