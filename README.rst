@@ -45,7 +45,7 @@ Or whatever variation of the above fits your system and shell.
 
 To use **sops** as a library, take a look at the `decrypt package <https://godoc.org/go.mozilla.org/sops/decrypt>`_.
 
-**Questions?** ping "ulfr" in ``#security`` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
+**Questions?** ping "ulfr" and "autrilla" in ``#security`` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
 (use a web client like `mibbit <https://chat.mibbit.com>`_ ).
 
 **What happened to Python Sops?** We rewrote Sops in Go to solve a number of
@@ -59,6 +59,11 @@ but we strongly recommend you use the Go version instead.
 Usage
 -----
 
+For a quick presentation of Sops, check out this Youtube tutorial:
+
+.. image:: https://img.youtube.com/vi/V2PRhxphH2w/0.jpg
+   :target: https://www.youtube.com/watch?v=V2PRhxphH2w
+   
 If you're using AWS KMS, create one or multiple master keys in the IAM console
 and export them, comma separated, in the **SOPS_KMS_ARN** env variable. It is
 recommended to use at least two master keys in different regions.
@@ -1337,7 +1342,7 @@ By commit count:
 Credits
 -------
 
-`sops` is inspired by `hiera-eyaml <https://github.com/TomPoulton/hiera-eyaml>`_,
+`sops` was inspired by `hiera-eyaml <https://github.com/TomPoulton/hiera-eyaml>`_,
 `credstash <https://github.com/LuminalOSS/credstash>`_ ,
 `sneaker <https://github.com/codahale/sneaker>`_,
 `password store <http://www.passwordstore.org/>`_ and too many years managing
