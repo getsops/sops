@@ -533,8 +533,9 @@ Example: place the following in your ``~/.bashrc``
 Specify a different GPG key server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, ``sops`` uses the key server ``gpg.mozilla.org`` to retrieve GPG keys.
-To specify a different GPG key server, set the ``SOPS_GPG_KEYSERVER`` environment
+By default, ``sops`` uses the key server ``gpg.mozilla.org`` to retrieve the GPG
+keys that are not present in the local keyring.
+To use a different GPG key server, set the ``SOPS_GPG_KEYSERVER`` environment
 variable.
 
 Example: place the following in your ``~/.bashrc``
