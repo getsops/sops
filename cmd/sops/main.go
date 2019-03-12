@@ -96,6 +96,7 @@ func main() {
    the "add-{kms,pgp,gcp-kms,azure-kv}" and "rm-{kms,pgp,gcp-kms,azure-kv}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
+   To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
 
    To select a different editor than the default (vim), set EDITOR.
 
