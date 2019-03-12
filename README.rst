@@ -529,6 +529,22 @@ Example: place the following in your ``~/.bashrc``
 
 	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
 
+
+Specify a different GPG key server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, ``sops`` uses the key server ``gpg.mozilla.org`` to retrieve the GPG
+keys that are not present in the local keyring.
+To use a different GPG key server, set the ``SOPS_GPG_KEYSERVER`` environment
+variable.
+
+Example: place the following in your ``~/.bashrc``
+
+.. code:: bash
+
+	SOPS_GPG_KEYSERVER = 'gpg.example.com'
+
+
 Key groups
 ~~~~~~~~~~
 
