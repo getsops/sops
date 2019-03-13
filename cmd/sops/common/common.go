@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	wordwrap "github.com/mitchellh/go-wordwrap"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/keyservice"
@@ -17,6 +18,7 @@ import (
 	"go.mozilla.org/sops/stores/json"
 	"go.mozilla.org/sops/stores/yaml"
 	"go.mozilla.org/sops/version"
+	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -28,7 +30,6 @@ type Store interface {
 	sops.Store
 	ExampleFileEmitter
 }
-
 
 // DecryptTreeOpts are the options needed to decrypt a tree
 type DecryptTreeOpts struct {
@@ -191,9 +192,15 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 		return nil, err
 	}
 	if encCtxBug {
-		// TODO: Explain bug and fix
-		//			- explain that they may need to run it more than once
-		fmt.Println("---")
+		// TODO - Finalize messaging here.
+		message := "Up until version 3.3.0 of sops there was a bug surrounding the " +
+			"use of encryption context with AWS KMS."
+		fmt.Println(wordwrap.WrapString(message, 75))
+
+		if !terminal.IsTerminal(int(os.Stdout.Fd())) {
+			return nil, NewExitError("Need to run this from a tty to resolve this issue.", codes.TTYRequired)
+		}
+
 		var response string
 		for response != "y" && response != "n" {
 			fmt.Println("Would you like sops to automatically fix this issue? (y/n): ")
@@ -203,9 +210,7 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 			}
 		}
 		if response == "n" {
-			// TODO - Polish
-			fmt.Println("Exitting...")
-			return nil, fmt.Errorf("User responded no.")
+			return nil, fmt.Errorf("Exiting. User responded no.")
 		}
 
 		kgndx, kndx, originalKey := GetKMSKeyWithEncryptionCtx(tree)
@@ -263,10 +268,9 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 					return nil, NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 				}
 
-				// TODO - move to common, also used in main.go
 				file, err := os.Create(opts.InputPath)
 				if err != nil {
-					return nil, NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					return nil, NewExitError(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
 				}
 				_, err = file.Write(encryptedFile)
 				if err != nil {
@@ -274,6 +278,8 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 					return nil, err
 				}
 				file.Close()
+
+				break
 			}
 		}
 

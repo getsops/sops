@@ -28,4 +28,5 @@ const (
 	NoEditorFound                          int = 201
 	FailedToCompareVersions                int = 202
 	FileAlreadyEncrypted                   int = 203
+	TTYRequired                            int = 204
 )
