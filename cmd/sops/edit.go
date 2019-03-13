@@ -22,6 +22,7 @@ import (
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/version"
 )
 
 type editOpts struct {
@@ -66,7 +67,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
 			EncryptedSuffix:   opts.EncryptedSuffix,
-			Version:           version,
+			Version:           version.Version,
 			ShamirThreshold:   opts.GroupThreshold,
 		},
 		FilePath: path,
@@ -83,7 +84,13 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 
 func edit(opts editOpts) ([]byte, error) {
 	// Load the file
-	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
+		Cipher:      opts.Cipher,
+		InputStore:  opts.InputStore,
+		InputPath:   opts.InputPath,
+		IgnoreMAC:   opts.IgnoreMAC,
+		KeyServices: opts.KeyServices,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -201,12 +208,12 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			opts.Tree = &t
 		}
 		opts.Tree.Branches = newBranches
-		needVersionUpdated, err := AIsNewerThanB(version, opts.Tree.Metadata.Version)
+		needVersionUpdated, err := version.AIsNewerThanB(version.Version, opts.Tree.Metadata.Version)
 		if err != nil {
-			return common.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version, err), codes.FailedToCompareVersions)
+			return common.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version.Version, err), codes.FailedToCompareVersions)
 		}
 		if needVersionUpdated {
-			opts.Tree.Metadata.Version = version
+			opts.Tree.Metadata.Version = version.Version
 		}
 		if opts.Tree.Metadata.MasterKeyCount() == 0 {
 			log.Error("No master keys were provided, so sops can't " +

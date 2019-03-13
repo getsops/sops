@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -10,10 +11,12 @@ import (
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/stores/json"
-	"go.mozilla.org/sops/stores/yaml"
+	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/ini"
+	"go.mozilla.org/sops/stores/json"
+	"go.mozilla.org/sops/stores/yaml"
+	"go.mozilla.org/sops/version"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -135,4 +138,154 @@ func DefaultStoreForPath(path string) Store {
 		return &ini.Store{}
 	}
 	return &json.BinaryStore{}
+}
+
+const KMS_ENC_CTX_BUG_FIXED_VERSION = "3.3.0"
+
+func DetectKMSEncryptionContextBug(tree *sops.Tree) (bool, error) {
+	versionCheck, err := version.AIsNewerThanB(KMS_ENC_CTX_BUG_FIXED_VERSION, tree.Metadata.Version)
+	if err != nil {
+		return false, err
+	}
+
+	if versionCheck {
+		_, _, key := GetKMSKeyWithEncryptionCtx(tree)
+		if key != nil {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (kgndx int, keyndx int, key *kms.MasterKey) {
+	for i, kg := range tree.Metadata.KeyGroups {
+		for n, k := range kg {
+			kmsKey, ok := k.(*kms.MasterKey)
+			if ok {
+				if kmsKey.EncryptionContext != nil && len(kmsKey.EncryptionContext) >= 2 {
+					return i, n, kmsKey
+				}
+			}
+		}
+	}
+	return 0, 0, nil
+}
+
+type GenericDecryptOpts struct {
+	Cipher      sops.Cipher
+	InputStore  sops.Store
+	InputPath   string
+	IgnoreMAC   bool
+	KeyServices []keyservice.KeyServiceClient
+}
+
+func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) {
+	tree, err := LoadEncryptedFile(opts.InputStore, opts.InputPath)
+	if err != nil {
+		return nil, err
+	}
+
+	encCtxBug, err := DetectKMSEncryptionContextBug(tree)
+	if err != nil {
+		return nil, err
+	}
+	if encCtxBug {
+		// TODO: Explain bug and fix
+		//			- explain that they may need to run it more than once
+		fmt.Println("---")
+		var response string
+		for response != "y" && response != "n" {
+			fmt.Println("Would you like sops to automatically fix this issue? (y/n): ")
+			_, err := fmt.Scanln(&response)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if response == "n" {
+			// TODO - Polish
+			fmt.Println("Exitting...")
+			return nil, fmt.Errorf("User responded no.")
+		}
+
+		kgndx, kndx, originalKey := GetKMSKeyWithEncryptionCtx(tree)
+
+		keyToEdit := *originalKey
+
+		encCtxVals := []string{}
+		for _, v := range keyToEdit.EncryptionContext {
+			encCtxVals = append(encCtxVals, *v)
+		}
+
+		encCtxVariations := []map[string]*string{}
+		for _, ctxVal := range encCtxVals {
+			encCtxVariation := map[string]*string{}
+			for key := range keyToEdit.EncryptionContext {
+				val := ctxVal
+				encCtxVariation[key] = &val
+			}
+			encCtxVariations = append(encCtxVariations, encCtxVariation)
+		}
+
+		success := false
+		for _, encCtxVar := range encCtxVariations {
+			keyToEdit.EncryptionContext = encCtxVar
+			tree.Metadata.KeyGroups[kgndx][kndx] = &keyToEdit
+			_, err = DecryptTree(DecryptTreeOpts{
+				Cipher:      opts.Cipher,
+				IgnoreMac:   opts.IgnoreMAC,
+				Tree:        tree,
+				KeyServices: opts.KeyServices,
+			})
+			if err == nil {
+				success = true
+
+				tree.Metadata.KeyGroups[kgndx][kndx] = originalKey
+				tree.Metadata.Version = version.Version
+
+				dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
+				if len(errs) > 0 {
+					err = fmt.Errorf("Could not generate data key: %s", errs)
+					return nil, err
+				}
+
+				err = EncryptTree(EncryptTreeOpts{
+					DataKey: dataKey,
+					Tree:    tree,
+					Cipher:  opts.Cipher,
+				})
+				if err != nil {
+					return nil, err
+				}
+
+				encryptedFile, err := opts.InputStore.EmitEncryptedFile(*tree)
+				if err != nil {
+					return nil, NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+				}
+
+				// TODO - move to common, also used in main.go
+				file, err := os.Create(opts.InputPath)
+				if err != nil {
+					return nil, NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+				}
+				_, err = file.Write(encryptedFile)
+				if err != nil {
+					file.Close()
+					return nil, err
+				}
+				file.Close()
+			}
+		}
+
+		if !success {
+			return nil, NewExitError("Failed to correct encryption context.", codes.ErrorDecryptingTree)
+		}
+
+		tree, err = LoadEncryptedFile(opts.InputStore, opts.InputPath)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return tree, nil
 }

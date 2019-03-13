@@ -31,7 +31,8 @@ func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) 
 func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) {
 	ctx := make(map[string]*string)
 	for k, v := range key.Context {
-		ctx[k] = &v
+		value := v
+		ctx[k] = &value
 	}
 	kmsKey := kms.MasterKey{
 		Arn:               key.Arn,
@@ -80,7 +81,8 @@ func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error)
 func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error) {
 	ctx := make(map[string]*string)
 	for k, v := range key.Context {
-		ctx[k] = &v
+		value := v
+		ctx[k] = &value
 	}
 	kmsKey := kms.MasterKey{
 		Arn:               key.Arn,
