@@ -1338,6 +1338,7 @@ Authors
 -------
 
 The core team is composed of:
+
 * Adrian Utrilla @autrilla
 * Julien Vehent @jvehent
 * AJ Banhken @ajvb
