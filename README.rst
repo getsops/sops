@@ -1337,23 +1337,12 @@ Mozilla Public License Version 2.0
 Authors
 -------
 
-By commit count:
+The core team is composed of:
+* Adrian Utrilla @autrilla
+* Julien Vehent @jvehent
+* AJ Banhken @ajvb
 
-* Julien Vehent
-* Adrian Utrilla
-* Jeremiah Orem
-* Rémy HUBSCHER
-* Daniel Thorn
-* Dick Tang
-* Alexis Métaireau
-* Brian Hourigan
-* Todd Wolfson
-* Chris Kolosiwsky
-* Boris Kourtoukov
-* Elliot Murphy
-* Ivan Malopinsky
-* Jonathan Barratt
-
+And a whole bunch of [contributors](https://github.com/mozilla/sops/graphs/contributors)
 
 Credits
 -------
