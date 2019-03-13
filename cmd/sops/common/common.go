@@ -213,79 +213,89 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 			return nil, fmt.Errorf("Exiting. User responded no.")
 		}
 
-		kgndx, kndx, originalKey := GetKMSKeyWithEncryptionCtx(tree)
-
-		keyToEdit := *originalKey
-
-		encCtxVals := []string{}
-		for _, v := range keyToEdit.EncryptionContext {
-			encCtxVals = append(encCtxVals, *v)
-		}
-
-		encCtxVariations := []map[string]*string{}
-		for _, ctxVal := range encCtxVals {
-			encCtxVariation := map[string]*string{}
-			for key := range keyToEdit.EncryptionContext {
-				val := ctxVal
-				encCtxVariation[key] = &val
-			}
-			encCtxVariations = append(encCtxVariations, encCtxVariation)
-		}
-
 		success := false
-		for _, encCtxVar := range encCtxVariations {
-			keyToEdit.EncryptionContext = encCtxVar
-			tree.Metadata.KeyGroups[kgndx][kndx] = &keyToEdit
-			_, err = DecryptTree(DecryptTreeOpts{
-				Cipher:      opts.Cipher,
-				IgnoreMac:   opts.IgnoreMAC,
-				Tree:        tree,
-				KeyServices: opts.KeyServices,
-			})
-			if err == nil {
-				success = true
+		// If there is another key, then we should be able to just decrypt
+		// without having to try different variations of the encryption context.
+		_, err = DecryptTree(DecryptTreeOpts{
+			Cipher:      opts.Cipher,
+			IgnoreMac:   opts.IgnoreMAC,
+			Tree:        tree,
+			KeyServices: opts.KeyServices,
+		})
+		if err != nil {
+			kgndx, kndx, originalKey := GetKMSKeyWithEncryptionCtx(tree)
 
-				tree.Metadata.KeyGroups[kgndx][kndx] = originalKey
-				tree.Metadata.Version = version.Version
+			keyToEdit := *originalKey
 
-				dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
-				if len(errs) > 0 {
-					err = fmt.Errorf("Could not generate data key: %s", errs)
-					return nil, err
-				}
-
-				err = EncryptTree(EncryptTreeOpts{
-					DataKey: dataKey,
-					Tree:    tree,
-					Cipher:  opts.Cipher,
-				})
-				if err != nil {
-					return nil, err
-				}
-
-				encryptedFile, err := opts.InputStore.EmitEncryptedFile(*tree)
-				if err != nil {
-					return nil, NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
-				}
-
-				file, err := os.Create(opts.InputPath)
-				if err != nil {
-					return nil, NewExitError(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
-				}
-				_, err = file.Write(encryptedFile)
-				if err != nil {
-					file.Close()
-					return nil, err
-				}
-				file.Close()
-
-				break
+			encCtxVals := []string{}
+			for _, v := range keyToEdit.EncryptionContext {
+				encCtxVals = append(encCtxVals, *v)
 			}
+
+			encCtxVariations := []map[string]*string{}
+			for _, ctxVal := range encCtxVals {
+				encCtxVariation := map[string]*string{}
+				for key := range keyToEdit.EncryptionContext {
+					val := ctxVal
+					encCtxVariation[key] = &val
+				}
+				encCtxVariations = append(encCtxVariations, encCtxVariation)
+			}
+
+			for _, encCtxVar := range encCtxVariations {
+				keyToEdit.EncryptionContext = encCtxVar
+				tree.Metadata.KeyGroups[kgndx][kndx] = &keyToEdit
+				_, err = DecryptTree(DecryptTreeOpts{
+					Cipher:      opts.Cipher,
+					IgnoreMac:   opts.IgnoreMAC,
+					Tree:        tree,
+					KeyServices: opts.KeyServices,
+				})
+				if err == nil {
+					success = true
+					tree.Metadata.KeyGroups[kgndx][kndx] = originalKey
+					tree.Metadata.Version = version.Version
+					break
+				}
+			}
+		} else {
+			success = true
 		}
 
 		if !success {
-			return nil, NewExitError("Failed to correct encryption context.", codes.ErrorDecryptingTree)
+			return nil, NewExitError("Failed to decrypt, meaning there is likely another problem from the encryption context bug.", codes.ErrorDecryptingTree)
 		}
+
+		dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
+		if len(errs) > 0 {
+			err = fmt.Errorf("Could not generate data key: %s", errs)
+			return nil, err
+		}
+
+		err = EncryptTree(EncryptTreeOpts{
+			DataKey: dataKey,
+			Tree:    tree,
+			Cipher:  opts.Cipher,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		encryptedFile, err := opts.InputStore.EmitEncryptedFile(*tree)
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		}
+
+		file, err := os.Create(opts.InputPath)
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
+		}
+		_, err = file.Write(encryptedFile)
+		if err != nil {
+			file.Close()
+			return nil, err
+		}
+		file.Close()
 
 		tree, err = LoadEncryptedFile(opts.InputStore, opts.InputPath)
 		if err != nil {
