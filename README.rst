@@ -1343,7 +1343,7 @@ The core team is composed of:
 * Julien Vehent @jvehent
 * AJ Banhken @ajvb
 
-And a whole bunch of _`contributors <https://github.com/mozilla/sops/graphs/contributors>`_
+And a whole bunch of `contributors <https://github.com/mozilla/sops/graphs/contributors>`_
 
 Credits
 -------
