@@ -54,9 +54,9 @@ func AIsNewerThanB(A, B string) (bool, error) {
 	return false, nil
 }
 
-// retrieveLatestVersionFromUpstream gets the latest version from the source code at Github
+// RetrieveLatestVersionFromUpstream gets the latest version from the source code at Github
 func RetrieveLatestVersionFromUpstream() (string, error) {
-	resp, err := http.Get("https://raw.githubusercontent.com/mozilla/sops/master/cmd/sops/version.go")
+	resp, err := http.Get("https://raw.githubusercontent.com/mozilla/sops/master/version/version.go")
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +64,7 @@ func RetrieveLatestVersionFromUpstream() (string, error) {
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.HasPrefix(line, `const version = "`) {
+		if strings.HasPrefix(line, `const Version = "`) {
 			comps := strings.Split(line, `"`)
 			if len(comps) < 2 {
 				return "", fmt.Errorf("Failed to parse version from upstream source")
