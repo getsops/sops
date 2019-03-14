@@ -213,10 +213,11 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 			return nil, fmt.Errorf("Exiting. User responded no.")
 		}
 
+		dataKey := []byte{}
 		success := false
 		// If there is another key, then we should be able to just decrypt
 		// without having to try different variations of the encryption context.
-		_, err = DecryptTree(DecryptTreeOpts{
+		dataKey, err = DecryptTree(DecryptTreeOpts{
 			Cipher:      opts.Cipher,
 			IgnoreMac:   opts.IgnoreMAC,
 			Tree:        tree,
@@ -245,7 +246,7 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 			for _, encCtxVar := range encCtxVariations {
 				keyToEdit.EncryptionContext = encCtxVar
 				tree.Metadata.KeyGroups[kgndx][kndx] = &keyToEdit
-				_, err = DecryptTree(DecryptTreeOpts{
+				dataKey, err = DecryptTree(DecryptTreeOpts{
 					Cipher:      opts.Cipher,
 					IgnoreMac:   opts.IgnoreMAC,
 					Tree:        tree,
@@ -266,9 +267,9 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 			return nil, NewExitError("Failed to decrypt, meaning there is likely another problem from the encryption context bug.", codes.ErrorDecryptingTree)
 		}
 
-		dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
+		errs := tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
 		if len(errs) > 0 {
-			err = fmt.Errorf("Could not generate data key: %s", errs)
+			err = fmt.Errorf("Could not re-encrypt data key: %s", errs)
 			return nil, err
 		}
 
