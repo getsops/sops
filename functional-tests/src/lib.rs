@@ -76,7 +76,7 @@ mod tests {
 
     #[test]
     fn encrypt_json_file_kms() {
-        let file_path = prepare_temp_file("test_encrypt.json",
+        let file_path = prepare_temp_file("test_encrypt_kms.json",
                                           b"{
     \"foo\": 2,
     \"bar\": \"baz\"
