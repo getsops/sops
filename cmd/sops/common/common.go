@@ -159,13 +159,19 @@ func DetectKMSEncryptionContextBug(tree *sops.Tree) (bool, error) {
 	return false, nil
 }
 
-func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (kgndx int, keyndx int, key *kms.MasterKey) {
+func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex int, key *kms.MasterKey) {
 	for i, kg := range tree.Metadata.KeyGroups {
 		for n, k := range kg {
 			kmsKey, ok := k.(*kms.MasterKey)
 			if ok {
 				if kmsKey.EncryptionContext != nil && len(kmsKey.EncryptionContext) >= 2 {
-					return i, n, kmsKey
+					duplicateValues := map[string]int{}
+					for _, v := range kmsKey.EncryptionContext {
+						duplicateValues[*v] = duplicateValues[*v] + 1
+					}
+					if len(duplicateValues) > 1 {
+						return i, n, kmsKey
+					}
 				}
 			}
 		}
@@ -181,6 +187,8 @@ type GenericDecryptOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
+// LoadEncryptedFileWithBugFixes is a wrapper around LoadEncryptedFile which includes
+// check for the issue described in https://github.com/mozilla/sops/pull/435
 func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) {
 	tree, err := LoadEncryptedFile(opts.InputStore, opts.InputPath)
 	if err != nil {
@@ -201,30 +209,37 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 	return tree, nil
 }
 
+// FixAWSKMSEncryptionContextBug is used to fix the issue described in https://github.com/mozilla/sops/pull/435
 func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*sops.Tree, error) {
-	// TODO - Finalize messaging here.
 	message := "Up until version 3.3.0 of sops there was a bug surrounding the " +
-		"use of encryption context with AWS KMS."
+		"use of encryption context with AWS KMS." +
+		"\nYou can read the full description of the issue here:" +
+		"\nhttps://github.com/mozilla/sops/pull/435" +
+		"\n\nIf a TTY is detected, sops will ask you if you'd like for this issue to be " +
+		"automatically fixed, which will require re-encrypting the data keys used by " +
+		"each key." +
+		"\n\nIf you are not using a TTY, sops will fix the issue for this run.\n\n"
 	fmt.Println(wordwrap.WrapString(message, 75))
 
-	if !terminal.IsTerminal(int(os.Stdout.Fd())) {
-		return nil, NewExitError("Need to run this from a tty to resolve this issue.", codes.TTYRequired)
-	}
+	persistFix := false
 
-	var response string
-	for response != "y" && response != "n" {
-		fmt.Println("Would you like sops to automatically fix this issue? (y/n): ")
-		_, err := fmt.Scanln(&response)
-		if err != nil {
-			return nil, err
+	if terminal.IsTerminal(int(os.Stdout.Fd())) {
+		var response string
+		for response != "y" && response != "n" {
+			fmt.Println("Would you like sops to automatically fix this issue? (y/n): ")
+			_, err := fmt.Scanln(&response)
+			if err != nil {
+				return nil, err
+			}
 		}
-	}
-	if response == "n" {
-		return nil, fmt.Errorf("Exiting. User responded no.")
+		if response == "n" {
+			return nil, fmt.Errorf("Exiting. User responded no.")
+		} else {
+			persistFix = true
+		}
 	}
 
 	dataKey := []byte{}
-	success := false
 	// If there is another key, then we should be able to just decrypt
 	// without having to try different variations of the encryption context.
 	dataKey, err := DecryptTree(DecryptTreeOpts{
@@ -234,46 +249,10 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {
-		kgndx, kndx, originalKey := GetKMSKeyWithEncryptionCtx(tree)
-
-		keyToEdit := *originalKey
-
-		encCtxVals := []string{}
-		for _, v := range keyToEdit.EncryptionContext {
-			encCtxVals = append(encCtxVals, *v)
-		}
-
-		encCtxVariations := []map[string]*string{}
-		for _, ctxVal := range encCtxVals {
-			encCtxVariation := map[string]*string{}
-			for key := range keyToEdit.EncryptionContext {
-				val := ctxVal
-				encCtxVariation[key] = &val
-			}
-			encCtxVariations = append(encCtxVariations, encCtxVariation)
-		}
-
-		for _, encCtxVar := range encCtxVariations {
-			keyToEdit.EncryptionContext = encCtxVar
-			tree.Metadata.KeyGroups[kgndx][kndx] = &keyToEdit
-			dataKey, err = DecryptTree(DecryptTreeOpts{
-				Cipher:      opts.Cipher,
-				IgnoreMac:   opts.IgnoreMAC,
-				Tree:        tree,
-				KeyServices: opts.KeyServices,
-			})
-			if err == nil {
-				success = true
-				tree.Metadata.KeyGroups[kgndx][kndx] = originalKey
-				tree.Metadata.Version = version.Version
-				break
-			}
-		}
-	} else {
-		success = true
+		dataKey = RecoverDataKeyFromBuggyKMS(opts, tree)
 	}
 
-	if !success {
+	if dataKey == nil {
 		return nil, NewExitError("Failed to decrypt, meaning there is likely another problem from the encryption context bug.", codes.ErrorDecryptingTree)
 	}
 
@@ -290,6 +269,11 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	// If we are not going to persist the fix, just return the re-encrypted tree.
+	if !persistFix {
+		return tree, nil
 	}
 
 	encryptedFile, err := opts.InputStore.EmitEncryptedFile(*tree)
@@ -314,4 +298,45 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	}
 
 	return newTree, nil
+}
+
+// RecoverDataKeyFromBuggyKMS loops through variations on Encryption Context to
+// recover the datakey. This is used to fix the issue described in https://github.com/mozilla/sops/pull/435
+func RecoverDataKeyFromBuggyKMS(opts GenericDecryptOpts, tree *sops.Tree) []byte {
+	kgndx, kndx, originalKey := GetKMSKeyWithEncryptionCtx(tree)
+
+	keyToEdit := *originalKey
+
+	encCtxVals := map[string]interface{}{}
+	for _, v := range keyToEdit.EncryptionContext {
+		encCtxVals[*v] = ""
+	}
+
+	encCtxVariations := []map[string]*string{}
+	for ctxVal := range encCtxVals {
+		encCtxVariation := map[string]*string{}
+		for key := range keyToEdit.EncryptionContext {
+			val := ctxVal
+			encCtxVariation[key] = &val
+		}
+		encCtxVariations = append(encCtxVariations, encCtxVariation)
+	}
+
+	for _, encCtxVar := range encCtxVariations {
+		keyToEdit.EncryptionContext = encCtxVar
+		tree.Metadata.KeyGroups[kgndx][kndx] = &keyToEdit
+		dataKey, err := DecryptTree(DecryptTreeOpts{
+			Cipher:      opts.Cipher,
+			IgnoreMac:   opts.IgnoreMAC,
+			Tree:        tree,
+			KeyServices: opts.KeyServices,
+		})
+		if err == nil {
+			tree.Metadata.KeyGroups[kgndx][kndx] = originalKey
+			tree.Metadata.Version = version.Version
+			return dataKey
+		}
+	}
+
+	return nil
 }
