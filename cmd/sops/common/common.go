@@ -253,7 +253,7 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	}
 
 	if dataKey == nil {
-		return nil, NewExitError("Failed to decrypt, meaning there is likely another problem from the encryption context bug.", codes.ErrorDecryptingTree)
+		return nil, NewExitError(fmt.Sprintf("Failed to decrypt, meaning there is likely another problem from the encryption context bug: %s", err), codes.ErrorDecryptingTree)
 	}
 
 	errs := tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
