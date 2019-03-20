@@ -76,16 +76,19 @@ mod tests {
 
     #[test]
     fn encrypt_json_file_kms() {
+	let kms_arn = match env::var(KMS_KEY) {
+	    Ok(val) => val,
+	    _ => "".to_string(),
+	};
+        if kms_arn == "" {
+            return;
+        }
+
         let file_path = prepare_temp_file("test_encrypt_kms.json",
                                           b"{
     \"foo\": 2,
     \"bar\": \"baz\"
 }");
-
-	let kms_arn = match env::var(KMS_KEY) {
-	    Ok(val) => val,
-	    Err(e) => panic!("couldn't interpret {}: {}", KMS_KEY, e),
-	};
 
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("--kms")
@@ -448,16 +451,19 @@ b: ba"#
 
     #[test]
     fn roundtrip_kms_encryption_context() {
+	let kms_arn = match env::var(KMS_KEY) {
+	    Ok(val) => val,
+	    _ => "".to_string(),
+	};
+        if kms_arn == "" {
+            return;
+        }
+
         let file_path = prepare_temp_file("test_roundtrip_kms_encryption_context.json",
                                           b"{
     \"foo\": 2,
     \"bar\": \"baz\"
 }");
-
-	let kms_arn = match env::var(KMS_KEY) {
-	    Ok(val) => val,
-	    Err(e) => panic!("couldn't interpret {}: {}", KMS_KEY, e),
-	};
 
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("--kms")
