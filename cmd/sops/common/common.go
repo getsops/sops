@@ -282,11 +282,11 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	}
 
 	file, err := os.Create(opts.InputPath)
+	defer file.Close()
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
 	}
 	_, err = file.Write(encryptedFile)
-	file.Close()
 	if err != nil {
 		return nil, err
 	}
