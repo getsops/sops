@@ -1,4 +1,4 @@
-package main
+package version
 
 import (
 	"bufio"
@@ -10,15 +10,15 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-const version = "3.2.0"
+const Version = "3.3.0"
 
-func printVersion(c *cli.Context) {
+func PrintVersion(c *cli.Context) {
 	out := fmt.Sprintf("%s %s", c.App.Name, c.App.Version)
-	upstreamVersion, err := retrieveLatestVersionFromUpstream()
+	upstreamVersion, err := RetrieveLatestVersionFromUpstream()
 	if err != nil {
 		out += fmt.Sprintf("\n[warning] failed to retrieve latest version from upstream: %v\n", err)
 	}
-	outdated, err := AIsNewerThanB(upstreamVersion, version)
+	outdated, err := AIsNewerThanB(upstreamVersion, Version)
 	if err != nil {
 		out += fmt.Sprintf("\n[warning] failed to compare current version with latest: %v\n", err)
 	}
@@ -54,9 +54,9 @@ func AIsNewerThanB(A, B string) (bool, error) {
 	return false, nil
 }
 
-// retrieveLatestVersionFromUpstream gets the latest version from the source code at Github
-func retrieveLatestVersionFromUpstream() (string, error) {
-	resp, err := http.Get("https://raw.githubusercontent.com/mozilla/sops/master/cmd/sops/version.go")
+// RetrieveLatestVersionFromUpstream gets the latest version from the source code at Github
+func RetrieveLatestVersionFromUpstream() (string, error) {
+	resp, err := http.Get("https://raw.githubusercontent.com/mozilla/sops/master/version/version.go")
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +64,7 @@ func retrieveLatestVersionFromUpstream() (string, error) {
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.HasPrefix(line, `const version = "`) {
+		if strings.HasPrefix(line, `const Version = "`) {
 			comps := strings.Split(line, `"`)
 			if len(comps) < 2 {
 				return "", fmt.Errorf("Failed to parse version from upstream source")

@@ -23,7 +23,13 @@ type rotateOpts struct {
 }
 
 func rotate(opts rotateOpts) ([]byte, error) {
-	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
+		Cipher:      opts.Cipher,
+		InputStore:  opts.InputStore,
+		InputPath:   opts.InputPath,
+		IgnoreMAC:   opts.IgnoreMAC,
+		KeyServices: opts.KeyServices,
+	})
 	if err != nil {
 		return nil, err
 	}

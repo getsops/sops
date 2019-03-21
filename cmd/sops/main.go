@@ -32,6 +32,7 @@ import (
 	"go.mozilla.org/sops/stores/ini"
 	"go.mozilla.org/sops/stores/json"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
+	"go.mozilla.org/sops/version"
 	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -43,7 +44,7 @@ func init() {
 }
 
 func main() {
-	cli.VersionPrinter = printVersion
+	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
 
 	keyserviceFlags := []cli.Flag{
@@ -59,7 +60,7 @@ func main() {
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault and GPG support"
 	app.ArgsUsage = "sops [options] file"
-	app.Version = version
+	app.Version = version.Version
 	app.Authors = []cli.Author{
 		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},

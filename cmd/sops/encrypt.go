@@ -11,6 +11,7 @@ import (
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/version"
 )
 
 type encryptOpts struct {
@@ -75,7 +76,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
 			EncryptedSuffix:   opts.EncryptedSuffix,
-			Version:           version,
+			Version:           version.Version,
 			ShamirThreshold:   opts.GroupThreshold,
 		},
 		FilePath: path,
