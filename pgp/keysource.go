@@ -99,6 +99,14 @@ func getKeyFromKeyServer(keyserver string, fingerprint string) (openpgp.Entity, 
 	return *ents[0], nil
 }
 
+func gpgKeyServer() string {
+	keyServer := "gpg.mozilla.org"
+	if envKeyServer := os.Getenv("SOPS_GPG_KEYSERVER"); envKeyServer != "" {
+		keyServer = envKeyServer
+	}
+	return keyServer
+}
+
 func (key *MasterKey) getPubKey() (openpgp.Entity, error) {
 	ring, err := key.pubRing()
 	if err == nil {
@@ -108,7 +116,8 @@ func (key *MasterKey) getPubKey() (openpgp.Entity, error) {
 			return entity, nil
 		}
 	}
-	entity, err := getKeyFromKeyServer("gpg.mozilla.org", key.Fingerprint)
+	keyServer := gpgKeyServer()
+	entity, err := getKeyFromKeyServer(keyServer, key.Fingerprint)
 	if err != nil {
 		return openpgp.Entity{},
 			fmt.Errorf("key with fingerprint %s is not available "+

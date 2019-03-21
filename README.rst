@@ -529,6 +529,22 @@ Example: place the following in your ``~/.bashrc``
 
 	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
 
+
+Specify a different GPG key server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, ``sops`` uses the key server ``gpg.mozilla.org`` to retrieve the GPG
+keys that are not present in the local keyring.
+To use a different GPG key server, set the ``SOPS_GPG_KEYSERVER`` environment
+variable.
+
+Example: place the following in your ``~/.bashrc``
+
+.. code:: bash
+
+	SOPS_GPG_KEYSERVER = 'gpg.example.com'
+
+
 Key groups
 ~~~~~~~~~~
 
@@ -1321,23 +1337,13 @@ Mozilla Public License Version 2.0
 Authors
 -------
 
-By commit count:
+The core team is composed of:
 
-* Julien Vehent
-* Adrian Utrilla
-* Jeremiah Orem
-* Rémy HUBSCHER
-* Daniel Thorn
-* Dick Tang
-* Alexis Métaireau
-* Brian Hourigan
-* Todd Wolfson
-* Chris Kolosiwsky
-* Boris Kourtoukov
-* Elliot Murphy
-* Ivan Malopinsky
-* Jonathan Barratt
+* Adrian Utrilla @autrilla
+* Julien Vehent @jvehent
+* AJ Banhken @ajvb
 
+And a whole bunch of `contributors <https://github.com/mozilla/sops/graphs/contributors>`_
 
 Credits
 -------

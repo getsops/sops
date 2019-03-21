@@ -13,6 +13,7 @@ mod tests {
     extern crate serde_json;
     extern crate serde_yaml;
 
+    use std::env;
     use std::fs::File;
     use std::io::{Write, Read};
     use tempdir::TempDir;
@@ -20,6 +21,7 @@ mod tests {
     use serde_yaml::Value;
     use std::path::Path;
     const SOPS_BINARY_PATH: &'static str = "./sops";
+    const KMS_KEY: &'static str = "FUNCTIONAL_TEST_KMS_ARN";
 
     macro_rules! assert_encrypted {
         ($object:expr, $key:expr) => {
@@ -54,6 +56,43 @@ mod tests {
     \"bar\": \"baz\"
 }");
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let json = &String::from_utf8_lossy(&output.stdout);
+        let data: Value = serde_json::from_str(json).expect("Error parsing sops's JSON output");
+        match data.into() {
+            Value::Mapping(m) => {
+                assert!(m.get(&Value::String("sops".to_owned())).is_some(),
+                        "sops metadata branch not found");
+                assert_encrypted!(&m, Value::String("foo".to_owned()));
+                assert_encrypted!(&m, Value::String("bar".to_owned()));
+            }
+            _ => panic!("sops's JSON output is not an object"),
+        }
+    }
+
+    #[test]
+    fn encrypt_json_file_kms() {
+	let kms_arn = match env::var(KMS_KEY) {
+	    Ok(val) => val,
+	    _ => "".to_string(),
+	};
+        if kms_arn == "" {
+            return;
+        }
+
+        let file_path = prepare_temp_file("test_encrypt_kms.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--kms")
+            .arg(kms_arn)
             .arg("-e")
             .arg(file_path.clone())
             .output()
@@ -408,6 +447,46 @@ b: ba"#
                     .success(),
                 "SOPS failed to decrypt a binary file");
         assert_eq!(output.stdout, data);
+    }
+
+    #[test]
+    fn roundtrip_kms_encryption_context() {
+	let kms_arn = match env::var(KMS_KEY) {
+	    Ok(val) => val,
+	    _ => "".to_string(),
+	};
+        if kms_arn == "" {
+            return;
+        }
+
+        let file_path = prepare_temp_file("test_roundtrip_kms_encryption_context.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("--kms")
+            .arg(kms_arn)
+            .arg("--encryption-context")
+            .arg("foo:bar,one:two")
+            .arg("-i")
+            .arg("-e")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status
+                    .success(),
+                "SOPS failed to decrypt a file with KMS Encryption Context");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("foo"));
+        assert!(String::from_utf8_lossy(&output.stdout).contains("baz"));
     }
 
     #[test]
