@@ -22,7 +22,6 @@ Stable release
 ~~~~~~~~~~~~~~
 Binaries and packages of the latest stable release are available at `https://github.com/mozilla/sops/releases <https://github.com/mozilla/sops/releases>`_.
 
-
 **Ubuntu/Debian**
 
 .. code:: bash
@@ -30,14 +29,12 @@ Binaries and packages of the latest stable release are available at `https://git
 	$ wget https://github.com/mozilla/sops/releases/download/3.2.0/sops_3.2.0_amd64.deb
 	$ sudo apt install ./sops_3.2.0_amd64.deb
 
-
 **RHEL/Centos**
 
 .. code:: bash
 
 	$ curl -OL https://github.com/mozilla/sops/releases/download/3.2.0/sops-3.2.0-1.x86_64.rpm
 	$ rpm -i sops-3.2.0-1.x86_64.rpm
-
 
 **Arch Linux**
 
