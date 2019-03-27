@@ -22,6 +22,46 @@ Stable release
 ~~~~~~~~~~~~~~
 Binaries and packages of the latest stable release are available at `https://github.com/mozilla/sops/releases <https://github.com/mozilla/sops/releases>`_.
 
+
+**Ubuntu/Debian**
+
+.. code:: bash
+
+	$ wget https://github.com/mozilla/sops/releases/download/3.2.0/sops_3.2.0_amd64.deb
+	$ sudo apt install ./sops_3.2.0_amd64.deb
+
+
+**RHEL/Centos**
+
+.. code:: bash
+
+	$ curl -OL https://github.com/mozilla/sops/releases/download/3.2.0/sops-3.2.0-1.x86_64.rpm
+	$ rpm -i sops-3.2.0-1.x86_64.rpm
+
+
+**Arch Linux**
+
+Available as `sops <https://aur.archlinux.org/packages/sops/>`_ in the Arch User Repository (AUR).
+
+.. code:: bash
+
+	$ yay -S sops
+
+The above example assumes `yay <https://aur.archlinux.org/packages/sops/>`_ as the tool for installing AUR packages.
+*Note*: the AUR repository is **not** controlled by the sops project maintainer. 
+
+**Mac**
+
+.. code:: bash
+
+	$ brew install sops
+
+or download the latest Darwin build from the `releases page <https://github.com/mozilla/sops/releases/download/3.2.0/sops-3.2.0.darwin>`_.
+
+**Windows**
+
+Download the `latest release <https://github.com/mozilla/sops/releases/download/3.2.0/sops-3.2.0.exe>`_.
+
 Development branch
 ~~~~~~~~~~~~~~~~~~
 For the adventurous, unstable features are available in the master branch, which you can install with:
