@@ -75,14 +75,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn encrypt_json_file_kms() {
-	let kms_arn = match env::var(KMS_KEY) {
-	    Ok(val) => val,
-	    _ => "".to_string(),
-	};
-        if kms_arn == "" {
-            return;
-        }
+        let kms_arn = env::var(KMS_KEY).expect("Expected $FUNCTIONAL_TEST_KMS_ARN env var to be set");
 
         let file_path = prepare_temp_file("test_encrypt_kms.json",
                                           b"{
@@ -450,14 +445,9 @@ b: ba"#
     }
 
     #[test]
+    #[ignore]
     fn roundtrip_kms_encryption_context() {
-	let kms_arn = match env::var(KMS_KEY) {
-	    Ok(val) => val,
-	    _ => "".to_string(),
-	};
-        if kms_arn == "" {
-            return;
-        }
+        let kms_arn = env::var(KMS_KEY).expect("Expected $FUNCTIONAL_TEST_KMS_ARN env var to be set");
 
         let file_path = prepare_temp_file("test_roundtrip_kms_encryption_context.json",
                                           b"{

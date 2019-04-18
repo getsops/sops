@@ -7,6 +7,7 @@ GO 		:= GO15VENDOREXPERIMENT=1 go
 GOLINT 		:= golint
 
 all: test vet generate install functional-tests
+origin-build: test vet generate install functional-tests-all
 
 install:
 	$(GO) install go.mozilla.org/sops/cmd/sops
@@ -39,6 +40,12 @@ generate: keyservice/keyservice.pb.go
 functional-tests:
 	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
 	cd functional-tests && cargo test
+
+# Ignored tests are ones that require external services (e.g. AWS KMS)
+# 	TODO: Once `--include-ignored` lands in rust stable, switch to that.
+functional-tests-all:
+	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
+	cd functional-tests && cargo test && cargo test -- --ignored
 
 deb-pkg: install
 	rm -rf tmppkg

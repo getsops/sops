@@ -15,7 +15,8 @@ before_install:
   - source ~/.cargo/env
 
 script:
-  - make
+  - 'if [ "$TRAVIS_REPO_SLUG" != "mozilla/sops" ]; then make; fi'
+  - 'if [ "$TRAVIS_REPO_SLUG" = "mozilla/sops" ]; then make origin-build; fi'
   - bash <(curl -s https://codecov.io/bash)
 
 before_deploy:
