@@ -29,16 +29,7 @@ func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) 
 }
 
 func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) {
-	ctx := make(map[string]*string)
-	for k, v := range key.Context {
-		ctx[k] = &v
-	}
-	kmsKey := kms.MasterKey{
-		Arn:               key.Arn,
-		Role:              key.Role,
-		EncryptionContext: ctx,
-		AwsProfile:        key.AwsProfile,
-	}
+	kmsKey := kmsKeyToMasterKey(key)
 	err := kmsKey.Encrypt(plaintext)
 	if err != nil {
 		return nil, err
@@ -78,16 +69,7 @@ func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error)
 }
 
 func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error) {
-	ctx := make(map[string]*string)
-	for k, v := range key.Context {
-		ctx[k] = &v
-	}
-	kmsKey := kms.MasterKey{
-		Arn:               key.Arn,
-		Role:              key.Role,
-		EncryptionContext: ctx,
-		AwsProfile:        key.AwsProfile,
-	}
+	kmsKey := kmsKeyToMasterKey(key)
 	kmsKey.EncryptedKey = string(ciphertext)
 	plaintext, err := kmsKey.Decrypt()
 	return []byte(plaintext), err
@@ -248,4 +230,18 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	}
 	return response, nil
+}
+
+func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {
+	ctx := make(map[string]*string)
+	for k, v := range key.Context {
+		value := v // Allocate a new string to prevent the pointer below from referring to only the last iteration value
+		ctx[k] = &value
+	}
+	return kms.MasterKey{
+		Arn:               key.Arn,
+		Role:              key.Role,
+		EncryptionContext: ctx,
+		AwsProfile:        key.AwsProfile,
+	}
 }

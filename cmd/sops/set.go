@@ -23,7 +23,13 @@ type setOpts struct {
 func set(opts setOpts) ([]byte, error) {
 	// Load the file
 	// TODO: Issue #173: if the file does not exist, create it with the contents passed in as opts.Value
-	tree, err := common.LoadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
+		Cipher:      opts.Cipher,
+		InputStore:  opts.InputStore,
+		InputPath:   opts.InputPath,
+		IgnoreMAC:   opts.IgnoreMAC,
+		KeyServices: opts.KeyServices,
+	})
 	if err != nil {
 		return nil, err
 	}
