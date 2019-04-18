@@ -1,6 +1,35 @@
 Changelog
 =========
 
+3.3.0
+-----
+
+New features:
+
+* Multi-document support for YAML files
+* Support referencing AWS KMS keys by their alias
+* Support for INI files
+* Support for AWS CLI profiles
+* Comment support in .env files
+* Added vi to the list of known editors
+* Added a way to specify the GPG key server to use through the
+  SOPS_GPG_KEYSERVER environment variable
+
+Bug fixes:
+
+* Now uses $HOME instead of ~ (which didn't work) to find the GPG home
+* Fix panic when vim was not available as an editor, but other
+  alternative editors were
+* Fix issue with AWS KMS Encryption Contexts (#445) with more than one
+  context value failing to decrypt intermittently. Includes an
+  automatic fix for old files affected by this issue.
+
+Project infrastructure changes:
+
+* Added integration tests for AWS KMS
+* Added Code of Conduct
+
+
 3.2.0
 -----
 
