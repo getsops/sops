@@ -12,7 +12,7 @@ import (
 
 // This file contains a port of the reference implementation of the
 // Bidi Parentheses Algorithm:
-// https://www.unicode.org/Public/PROGRAMS/BidiReferenceJava/BidiPBAReference.java
+// http://www.unicode.org/Public/PROGRAMS/BidiReferenceJava/BidiPBAReference.java
 //
 // The implementation in this file covers definitions BD14-BD16 and rule N0
 // of UAX#9.

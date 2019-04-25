@@ -1,6 +1,12 @@
 default:
   deps: [test]
 
+dl-deps:
+  desc: Downloads cli dependencies
+  cmds:
+    - go get -u github.com/golang/lint/golint
+    - go get -u github.com/golang/dep/cmd/dep
+
 update-deps:
   desc: Updates dependencies
   cmds:
@@ -8,16 +14,12 @@ update-deps:
     - dep ensure -update
 
 lint:
-  desc: Checks code style
+  desc: Runs golint
   cmds:
-    - gofmt -d -s *.go
-    - go vet .
+    - go fmt $(go list ./... | grep -v /vendor/)
+    - go vet $(go list ./... | grep -v /vendor/)
+    - golint $(ls *.go | grep -v "doc.go")
   silent: true
-
-lint-fix:
-  desc: Fixes code style
-  cmds:
-    - gofmt -w -s *.go
 
 test:
   desc: Runs go tests

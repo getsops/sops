@@ -1,4 +1,4 @@
-// +build !appengine,go1.7
+// +build !appengine
 
 /*
  *
@@ -23,7 +23,10 @@
 package syscall
 
 import (
+	"fmt"
+	"net"
 	"syscall"
+	"time"
 
 	"golang.org/x/sys/unix"
 	"google.golang.org/grpc/grpclog"
@@ -64,4 +67,48 @@ func CPUTimeDiff(first *Rusage, latest *Rusage) (float64, float64) {
 	sTimeElapsed := float64(stimeDiffs) + float64(stimeDiffus)*1.0e-6
 
 	return uTimeElapsed, sTimeElapsed
+}
+
+// SetTCPUserTimeout sets the TCP user timeout on a connection's socket
+func SetTCPUserTimeout(conn net.Conn, timeout time.Duration) error {
+	tcpconn, ok := conn.(*net.TCPConn)
+	if !ok {
+		// not a TCP connection. exit early
+		return nil
+	}
+	rawConn, err := tcpconn.SyscallConn()
+	if err != nil {
+		return fmt.Errorf("error getting raw connection: %v", err)
+	}
+	err = rawConn.Control(func(fd uintptr) {
+		err = syscall.SetsockoptInt(int(fd), syscall.IPPROTO_TCP, unix.TCP_USER_TIMEOUT, int(timeout/time.Millisecond))
+	})
+	if err != nil {
+		return fmt.Errorf("error setting option on socket: %v", err)
+	}
+
+	return nil
+}
+
+// GetTCPUserTimeout gets the TCP user timeout on a connection's socket
+func GetTCPUserTimeout(conn net.Conn) (opt int, err error) {
+	tcpconn, ok := conn.(*net.TCPConn)
+	if !ok {
+		err = fmt.Errorf("conn is not *net.TCPConn. got %T", conn)
+		return
+	}
+	rawConn, err := tcpconn.SyscallConn()
+	if err != nil {
+		err = fmt.Errorf("error getting raw connection: %v", err)
+		return
+	}
+	err = rawConn.Control(func(fd uintptr) {
+		opt, err = syscall.GetsockoptInt(int(fd), syscall.IPPROTO_TCP, unix.TCP_USER_TIMEOUT)
+	})
+	if err != nil {
+		err = fmt.Errorf("error getting option on socket: %v", err)
+		return
+	}
+
+	return
 }

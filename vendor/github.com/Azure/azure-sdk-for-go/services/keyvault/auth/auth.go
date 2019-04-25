@@ -29,6 +29,32 @@ import (
 // 3. Username password
 // 4. MSI
 func NewAuthorizerFromEnvironment() (autorest.Authorizer, error) {
+	res, err := getResource()
+	if err != nil {
+		return nil, err
+	}
+	return auth.NewAuthorizerFromEnvironmentWithResource(*res)
+}
+
+// NewAuthorizerFromFile creates a keyvault dataplane Authorizer configured from a configuration file
+func NewAuthorizerFromFile(baseURI string) (autorest.Authorizer, error) {
+	res, err := getResource()
+	if err != nil {
+		return nil, err
+	}
+	return auth.NewAuthorizerFromFileWithResource(*res)
+}
+
+// NewAuthorizerFromCLI creates a keyvault dataplane Authorizer configured from Azure CLI 2.0 for local development scenarios.
+func NewAuthorizerFromCLI() (autorest.Authorizer, error) {
+	res, err := getResource()
+	if err != nil {
+		return nil, err
+	}
+	return auth.NewAuthorizerFromCLIWithResource(*res)
+}
+
+func getResource() (*string, error) {
 	envName := os.Getenv("AZURE_ENVIRONMENT")
 	var env azure.Environment
 	var err error
@@ -47,5 +73,5 @@ func NewAuthorizerFromEnvironment() (autorest.Authorizer, error) {
 		resource = strings.TrimSuffix(env.KeyVaultEndpoint, "/")
 	}
 
-	return auth.NewAuthorizerFromEnvironmentWithResource(resource)
+	return &resource, nil
 }

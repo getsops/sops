@@ -1,14 +1,8 @@
 language: go
 go:
-  - "1.9.x"
-  - "1.10.x"
-  - "1.11.x"
-  - master
-
-matrix:
-  allow_failures:
-    - go: master
-fast_finish: true
+  - 1.8
+  - 1.9
+  - tip
 
 env:
   global:
@@ -20,13 +14,12 @@ before_script:
   - ./cc-test-reporter before-build
 
 install:
-  - wget https://github.com/go-task/task/releases/download/v2.0.1/task_linux_amd64.tar.gz
-  - tar xf task_linux_amd64.tar.gz
-  - mv task $HOME/gopath/bin
+- go get github.com/go-task/task/cmd/task
 
 script:
-  - diff -u <(echo -n) <(task lint)
-  - task test-coverage
+- task dl-deps
+- task lint
+- task test-coverage
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
