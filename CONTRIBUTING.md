@@ -12,8 +12,9 @@ Mozilla welcomes contributions from everyone. Here are a few guidelines and inst
 * Add your fork to git's remotes:
   * If you use SSH authentication: `git remote add <your username> git@github.com:<your username>/sops.git`.
   * Otherwise: `git remote add <your username> https://github.com/<your username>/sops.git`.
+* **Switch to the `develop` branch: `git checkout develop`**
 * Make any changes you want to sops, commit them, and push them to your fork.
-* Create a pull request, and a contributor will come by and review your code. They may ask for some changes, and hopefully your contribution will be merged to the `master` branch!
+* **Create a pull request against `develop`**, and a contributor will come by and review your code. They may ask for some changes, and hopefully your contribution will be merged to the `develop` branch!
 
 # Guidelines
 
