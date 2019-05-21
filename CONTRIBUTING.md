@@ -4,7 +4,7 @@ Mozilla welcomes contributions from everyone. Here are a few guidelines and inst
 
 # Getting started
 
-* Make sure you have Go 1.6 or greater installed. You can find information on how to install Go [here](https://golang.org/dl/)
+* Make sure you have Go 1.12 or greater installed. You can find information on how to install Go [here](https://golang.org/dl/)
 * After following the [Go installation guide](https://golang.org/doc/install), run `go get go.mozilla.org/sops`. This will automatically clone this repository.
 * Switch into sops's directory, which will be in `$GOPATH/src/go.mozilla.org/sops`.
 * Run the tests with `make test`. They should all pass.
