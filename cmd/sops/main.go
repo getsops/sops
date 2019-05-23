@@ -860,7 +860,14 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 			return nil, common.NewExitError("Invalid --set value format", codes.ErrorInvalidSetFormat)
 		}
 	}
-	return valueToInsert.(sops.TreeBranches)[0], nil
+	// Fix for #461
+	// Attempt conversion to TreeBranches to handle yaml multidoc. If conversion fails it's
+	// most likely a string value, so just return it as-is.
+	values, ok := valueToInsert.(sops.TreeBranches)
+	if !ok {
+		return valueToInsert, nil
+	}
+	return values[0], nil
 }
 
 func extractSetArguments(set string) (path []interface{}, valueToInsert interface{}, err error) {
