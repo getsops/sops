@@ -341,7 +341,7 @@ If you want to use a specific profile, you can do so with `aws_profile`:
 	sops:
 	    kms:
 	    -	arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
-            aws_profile: foo
+	        aws_profile: foo
 
 If no AWS profile is set, default credentials will be used.
 
