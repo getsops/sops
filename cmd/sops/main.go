@@ -20,6 +20,7 @@ import (
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
+	publishcmd "go.mozilla.org/sops/cmd/sops/subcommand/publish"
 	"go.mozilla.org/sops/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/gcpkms"
@@ -104,6 +105,48 @@ func main() {
    For more information, see the README at github.com/mozilla/sops`
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
+		{
+			Name:      "publish",
+			Usage:     "Publish sops file to a configured destination",
+			ArgsUsage: `file`,
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name:  "yes, y",
+					Usage: `pre-approve all changes and run non-interactively`,
+				},
+				cli.BoolFlag{
+					Name:  "verbose",
+					Usage: "Enable verbose logging output",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if c.Bool("verbose") {
+					logging.SetLevel(logrus.DebugLevel)
+				}
+				configPath, err := config.FindConfigFile(".")
+				if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				fileName := c.Args()[0]
+				inputStore := inputStore(c, fileName)
+				err = publishcmd.Run(publishcmd.Opts{
+					ConfigPath:  configPath,
+					InputPath:   fileName,
+					InputStore:  inputStore,
+					KeyServices: keyservices(c),
+					Interactive: !c.Bool("yes"),
+				})
+				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+					return cliErr
+				} else if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+				return nil
+			},
+		},
 		{
 			Name:  "keyservice",
 			Usage: "start a SOPS key service server",

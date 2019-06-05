@@ -8,6 +8,7 @@ import (
 
 	"github.com/fatih/color"
 	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/keys"
@@ -88,7 +89,7 @@ func updateFile(opts Opts) error {
 	}
 	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
 	if err != nil {
-		return fmt.Errorf("error getting data key: %s", err)
+		return common.NewExitError(err, codes.CouldNotRetrieveKey)
 	}
 	tree.Metadata.KeyGroups = conf.KeyGroups
 	if opts.GroupQuorum != 0 {
@@ -101,7 +102,7 @@ func updateFile(opts Opts) error {
 	}
 	output, err := store.EmitEncryptedFile(*tree)
 	if err != nil {
-		return fmt.Errorf("error marshaling tree: %s", err)
+		return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	outputFile, err := os.Create(opts.InputPath)
 	if err != nil {

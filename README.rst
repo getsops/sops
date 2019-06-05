@@ -768,6 +768,33 @@ By default ``sops`` just dumps all the output to the standard output. We can use
 Beware using both ``--in-place`` and ``--output`` flags will result in an error.
 
 
+Using the publish command
+~~~~~~~~~~~~~~~~~~~~~~~~~
+``sops publish $file`` publishes a file to a pre-configured destination (this lives in the sops
+config file). Additionally, support re-encryption rules that work just like the creation rules.
+
+This command requires a ``.sops.yaml`` configuration file. Below is an example:
+
+.. code:: yaml
+
+   creation_rules:
+      - pgp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+   destination_rules:
+      - s3_bucket: "sops-secrets"
+        path_regex: s3/*
+        reencryption_rule:
+           pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+      - gcs_bucket: "sops-secrets"
+        path_regex: gcs/*
+        reencryption_rule:
+           pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+
+The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets`` and
+will place all files under ``gcs/*`` into the GCS bucket ``sops-secrets``. As well, it will decrypt
+these files and re-encrypt them using the ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
+
+You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
+
 Important information on types
 ------------------------------
 
