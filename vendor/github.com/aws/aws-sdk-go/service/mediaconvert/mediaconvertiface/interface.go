@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Elemental MediaConvert.
 //    func myFunc(svc mediaconvertiface.MediaConvertAPI) bool {
-//        // Make svc.CancelJob request
+//        // Make svc.AssociateCertificate request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockMediaConvertClient struct {
 //        mediaconvertiface.MediaConvertAPI
 //    }
-//    func (m *mockMediaConvertClient) CancelJob(input *mediaconvert.CancelJobInput) (*mediaconvert.CancelJobOutput, error) {
+//    func (m *mockMediaConvertClient) AssociateCertificate(input *mediaconvert.AssociateCertificateInput) (*mediaconvert.AssociateCertificateOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type MediaConvertAPI interface {
+	AssociateCertificate(*mediaconvert.AssociateCertificateInput) (*mediaconvert.AssociateCertificateOutput, error)
+	AssociateCertificateWithContext(aws.Context, *mediaconvert.AssociateCertificateInput, ...request.Option) (*mediaconvert.AssociateCertificateOutput, error)
+	AssociateCertificateRequest(*mediaconvert.AssociateCertificateInput) (*request.Request, *mediaconvert.AssociateCertificateOutput)
+
 	CancelJob(*mediaconvert.CancelJobInput) (*mediaconvert.CancelJobOutput, error)
 	CancelJobWithContext(aws.Context, *mediaconvert.CancelJobInput, ...request.Option) (*mediaconvert.CancelJobOutput, error)
 	CancelJobRequest(*mediaconvert.CancelJobInput) (*request.Request, *mediaconvert.CancelJobOutput)
@@ -96,6 +100,13 @@ type MediaConvertAPI interface {
 	DescribeEndpointsWithContext(aws.Context, *mediaconvert.DescribeEndpointsInput, ...request.Option) (*mediaconvert.DescribeEndpointsOutput, error)
 	DescribeEndpointsRequest(*mediaconvert.DescribeEndpointsInput) (*request.Request, *mediaconvert.DescribeEndpointsOutput)
 
+	DescribeEndpointsPages(*mediaconvert.DescribeEndpointsInput, func(*mediaconvert.DescribeEndpointsOutput, bool) bool) error
+	DescribeEndpointsPagesWithContext(aws.Context, *mediaconvert.DescribeEndpointsInput, func(*mediaconvert.DescribeEndpointsOutput, bool) bool, ...request.Option) error
+
+	DisassociateCertificate(*mediaconvert.DisassociateCertificateInput) (*mediaconvert.DisassociateCertificateOutput, error)
+	DisassociateCertificateWithContext(aws.Context, *mediaconvert.DisassociateCertificateInput, ...request.Option) (*mediaconvert.DisassociateCertificateOutput, error)
+	DisassociateCertificateRequest(*mediaconvert.DisassociateCertificateInput) (*request.Request, *mediaconvert.DisassociateCertificateOutput)
+
 	GetJob(*mediaconvert.GetJobInput) (*mediaconvert.GetJobOutput, error)
 	GetJobWithContext(aws.Context, *mediaconvert.GetJobInput, ...request.Option) (*mediaconvert.GetJobOutput, error)
 	GetJobRequest(*mediaconvert.GetJobInput) (*request.Request, *mediaconvert.GetJobOutput)
@@ -116,17 +127,29 @@ type MediaConvertAPI interface {
 	ListJobTemplatesWithContext(aws.Context, *mediaconvert.ListJobTemplatesInput, ...request.Option) (*mediaconvert.ListJobTemplatesOutput, error)
 	ListJobTemplatesRequest(*mediaconvert.ListJobTemplatesInput) (*request.Request, *mediaconvert.ListJobTemplatesOutput)
 
+	ListJobTemplatesPages(*mediaconvert.ListJobTemplatesInput, func(*mediaconvert.ListJobTemplatesOutput, bool) bool) error
+	ListJobTemplatesPagesWithContext(aws.Context, *mediaconvert.ListJobTemplatesInput, func(*mediaconvert.ListJobTemplatesOutput, bool) bool, ...request.Option) error
+
 	ListJobs(*mediaconvert.ListJobsInput) (*mediaconvert.ListJobsOutput, error)
 	ListJobsWithContext(aws.Context, *mediaconvert.ListJobsInput, ...request.Option) (*mediaconvert.ListJobsOutput, error)
 	ListJobsRequest(*mediaconvert.ListJobsInput) (*request.Request, *mediaconvert.ListJobsOutput)
+
+	ListJobsPages(*mediaconvert.ListJobsInput, func(*mediaconvert.ListJobsOutput, bool) bool) error
+	ListJobsPagesWithContext(aws.Context, *mediaconvert.ListJobsInput, func(*mediaconvert.ListJobsOutput, bool) bool, ...request.Option) error
 
 	ListPresets(*mediaconvert.ListPresetsInput) (*mediaconvert.ListPresetsOutput, error)
 	ListPresetsWithContext(aws.Context, *mediaconvert.ListPresetsInput, ...request.Option) (*mediaconvert.ListPresetsOutput, error)
 	ListPresetsRequest(*mediaconvert.ListPresetsInput) (*request.Request, *mediaconvert.ListPresetsOutput)
 
+	ListPresetsPages(*mediaconvert.ListPresetsInput, func(*mediaconvert.ListPresetsOutput, bool) bool) error
+	ListPresetsPagesWithContext(aws.Context, *mediaconvert.ListPresetsInput, func(*mediaconvert.ListPresetsOutput, bool) bool, ...request.Option) error
+
 	ListQueues(*mediaconvert.ListQueuesInput) (*mediaconvert.ListQueuesOutput, error)
 	ListQueuesWithContext(aws.Context, *mediaconvert.ListQueuesInput, ...request.Option) (*mediaconvert.ListQueuesOutput, error)
 	ListQueuesRequest(*mediaconvert.ListQueuesInput) (*request.Request, *mediaconvert.ListQueuesOutput)
+
+	ListQueuesPages(*mediaconvert.ListQueuesInput, func(*mediaconvert.ListQueuesOutput, bool) bool) error
+	ListQueuesPagesWithContext(aws.Context, *mediaconvert.ListQueuesInput, func(*mediaconvert.ListQueuesOutput, bool) bool, ...request.Option) error
 
 	ListTagsForResource(*mediaconvert.ListTagsForResourceInput) (*mediaconvert.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *mediaconvert.ListTagsForResourceInput, ...request.Option) (*mediaconvert.ListTagsForResourceOutput, error)

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) Works
 // resourceGroupName - azure resource group
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 func (client WorkspacesClient) List(ctx context.Context, resourceGroupName string, workspaceCollectionName string) (result WorkspaceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, workspaceCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspacesClient", "List", nil, "Failure preparing request")

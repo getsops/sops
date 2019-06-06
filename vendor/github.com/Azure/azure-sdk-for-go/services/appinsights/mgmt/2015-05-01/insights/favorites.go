@@ -21,6 +21,8 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,12 +43,32 @@ func NewFavoritesClientWithBaseURI(baseURI string, subscriptionID string) Favori
 
 // Add adds a new favorites to an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // favoriteID - the Id of a specific favorite defined in the Application Insights component
 // favoriteProperties - properties that need to be specified to create a new favorite and add it to an
 // Application Insights component.
 func (client FavoritesClient) Add(ctx context.Context, resourceGroupName string, resourceName string, favoriteID string, favoriteProperties ApplicationInsightsComponentFavorite) (result ApplicationInsightsComponentFavorite, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FavoritesClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.FavoritesClient", "Add", err.Error())
+	}
+
 	req, err := client.AddPreparer(ctx, resourceGroupName, resourceName, favoriteID, favoriteProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.FavoritesClient", "Add", nil, "Failure preparing request")
@@ -82,6 +104,9 @@ func (client FavoritesClient) AddPreparer(ctx context.Context, resourceGroupName
 		"api-version": APIVersion,
 	}
 
+	favoriteProperties.FavoriteID = nil
+	favoriteProperties.TimeModified = nil
+	favoriteProperties.UserID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -114,10 +139,30 @@ func (client FavoritesClient) AddResponder(resp *http.Response) (result Applicat
 
 // Delete remove a favorite that is associated to an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // favoriteID - the Id of a specific favorite defined in the Application Insights component
 func (client FavoritesClient) Delete(ctx context.Context, resourceGroupName string, resourceName string, favoriteID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FavoritesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.FavoritesClient", "Delete", err.Error())
+	}
+
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName, favoriteID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.FavoritesClient", "Delete", nil, "Failure preparing request")
@@ -182,10 +227,30 @@ func (client FavoritesClient) DeleteResponder(resp *http.Response) (result autor
 
 // Get get a single favorite by its FavoriteId, defined within an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // favoriteID - the Id of a specific favorite defined in the Application Insights component
 func (client FavoritesClient) Get(ctx context.Context, resourceGroupName string, resourceName string, favoriteID string) (result ApplicationInsightsComponentFavorite, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FavoritesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.FavoritesClient", "Get", err.Error())
+	}
+
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName, favoriteID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.FavoritesClient", "Get", nil, "Failure preparing request")
@@ -251,7 +316,7 @@ func (client FavoritesClient) GetResponder(resp *http.Response) (result Applicat
 
 // List gets a list of favorites defined within an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // favoriteType - the type of favorite. Value can be either shared or user.
 // sourceType - source type of favorite to return. When left out, the source type defaults to 'other' (not
@@ -260,6 +325,26 @@ func (client FavoritesClient) GetResponder(resp *http.Response) (result Applicat
 // false, only return summary content for favorites.
 // tags - tags that must be present on each favorite returned.
 func (client FavoritesClient) List(ctx context.Context, resourceGroupName string, resourceName string, favoriteType FavoriteType, sourceType FavoriteSourceType, canFetchContent *bool, tags []string) (result ListApplicationInsightsComponentFavorite, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FavoritesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.FavoritesClient", "List", err.Error())
+	}
+
 	req, err := client.ListPreparer(ctx, resourceGroupName, resourceName, favoriteType, sourceType, canFetchContent, tags)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.FavoritesClient", "List", nil, "Failure preparing request")
@@ -338,11 +423,31 @@ func (client FavoritesClient) ListResponder(resp *http.Response) (result ListApp
 
 // Update updates a favorite that has already been added to an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // favoriteID - the Id of a specific favorite defined in the Application Insights component
 // favoriteProperties - properties that need to be specified to update the existing favorite.
 func (client FavoritesClient) Update(ctx context.Context, resourceGroupName string, resourceName string, favoriteID string, favoriteProperties ApplicationInsightsComponentFavorite) (result ApplicationInsightsComponentFavorite, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FavoritesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.FavoritesClient", "Update", err.Error())
+	}
+
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, resourceName, favoriteID, favoriteProperties)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.FavoritesClient", "Update", nil, "Failure preparing request")
@@ -378,6 +483,9 @@ func (client FavoritesClient) UpdatePreparer(ctx context.Context, resourceGroupN
 		"api-version": APIVersion,
 	}
 
+	favoriteProperties.FavoriteID = nil
+	favoriteProperties.TimeModified = nil
+	favoriteProperties.UserID = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPatch(),

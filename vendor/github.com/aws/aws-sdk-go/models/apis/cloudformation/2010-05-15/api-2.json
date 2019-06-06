@@ -197,6 +197,18 @@
         {"shape":"ChangeSetNotFoundException"}
       ]
     },
+    "DescribeStackDriftDetectionStatus":{
+      "name":"DescribeStackDriftDetectionStatus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeStackDriftDetectionStatusInput"},
+      "output":{
+        "shape":"DescribeStackDriftDetectionStatusOutput",
+        "resultWrapper":"DescribeStackDriftDetectionStatusResult"
+      }
+    },
     "DescribeStackEvents":{
       "name":"DescribeStackEvents",
       "http":{
@@ -235,6 +247,18 @@
       "output":{
         "shape":"DescribeStackResourceOutput",
         "resultWrapper":"DescribeStackResourceResult"
+      }
+    },
+    "DescribeStackResourceDrifts":{
+      "name":"DescribeStackResourceDrifts",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeStackResourceDriftsInput"},
+      "output":{
+        "shape":"DescribeStackResourceDriftsOutput",
+        "resultWrapper":"DescribeStackResourceDriftsResult"
       }
     },
     "DescribeStackResources":{
@@ -290,6 +314,30 @@
       "output":{
         "shape":"DescribeStacksOutput",
         "resultWrapper":"DescribeStacksResult"
+      }
+    },
+    "DetectStackDrift":{
+      "name":"DetectStackDrift",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DetectStackDriftInput"},
+      "output":{
+        "shape":"DetectStackDriftOutput",
+        "resultWrapper":"DetectStackDriftResult"
+      }
+    },
+    "DetectStackResourceDrift":{
+      "name":"DetectStackResourceDrift",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DetectStackResourceDriftInput"},
+      "output":{
+        "shape":"DetectStackResourceDriftOutput",
+        "resultWrapper":"DetectStackResourceDriftResult"
       }
     },
     "EstimateTemplateCost":{
@@ -649,6 +697,16 @@
       "exception":true
     },
     "Arn":{"type":"string"},
+    "BoxedInteger":{
+      "type":"integer",
+      "box":true
+    },
+    "BoxedMaxResults":{
+      "type":"integer",
+      "box":true,
+      "max":100,
+      "min":1
+    },
     "CancelUpdateStackInput":{
       "type":"structure",
       "required":["StackName"],
@@ -666,7 +724,8 @@
       "type":"string",
       "enum":[
         "CAPABILITY_IAM",
-        "CAPABILITY_NAMED_IAM"
+        "CAPABILITY_NAMED_IAM",
+        "CAPABILITY_AUTO_EXPAND"
       ]
     },
     "CausingEntity":{"type":"string"},
@@ -1020,6 +1079,31 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "DescribeStackDriftDetectionStatusInput":{
+      "type":"structure",
+      "required":["StackDriftDetectionId"],
+      "members":{
+        "StackDriftDetectionId":{"shape":"StackDriftDetectionId"}
+      }
+    },
+    "DescribeStackDriftDetectionStatusOutput":{
+      "type":"structure",
+      "required":[
+        "StackId",
+        "StackDriftDetectionId",
+        "DetectionStatus",
+        "Timestamp"
+      ],
+      "members":{
+        "StackId":{"shape":"StackId"},
+        "StackDriftDetectionId":{"shape":"StackDriftDetectionId"},
+        "StackDriftStatus":{"shape":"StackDriftStatus"},
+        "DetectionStatus":{"shape":"StackDriftDetectionStatus"},
+        "DetectionStatusReason":{"shape":"StackDriftDetectionStatusReason"},
+        "DriftedStackResourceCount":{"shape":"BoxedInteger"},
+        "Timestamp":{"shape":"Timestamp"}
+      }
+    },
     "DescribeStackEventsInput":{
       "type":"structure",
       "members":{
@@ -1051,6 +1135,24 @@
       "type":"structure",
       "members":{
         "StackInstance":{"shape":"StackInstance"}
+      }
+    },
+    "DescribeStackResourceDriftsInput":{
+      "type":"structure",
+      "required":["StackName"],
+      "members":{
+        "StackName":{"shape":"StackNameOrId"},
+        "StackResourceDriftStatusFilters":{"shape":"StackResourceDriftStatusFilters"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{"shape":"BoxedMaxResults"}
+      }
+    },
+    "DescribeStackResourceDriftsOutput":{
+      "type":"structure",
+      "required":["StackResourceDrifts"],
+      "members":{
+        "StackResourceDrifts":{"shape":"StackResourceDrifts"},
+        "NextToken":{"shape":"NextToken"}
       }
     },
     "DescribeStackResourceInput":{
@@ -1132,6 +1234,47 @@
       "type":"string",
       "max":1024,
       "min":1
+    },
+    "DetectStackDriftInput":{
+      "type":"structure",
+      "required":["StackName"],
+      "members":{
+        "StackName":{"shape":"StackNameOrId"},
+        "LogicalResourceIds":{"shape":"LogicalResourceIds"}
+      }
+    },
+    "DetectStackDriftOutput":{
+      "type":"structure",
+      "required":["StackDriftDetectionId"],
+      "members":{
+        "StackDriftDetectionId":{"shape":"StackDriftDetectionId"}
+      }
+    },
+    "DetectStackResourceDriftInput":{
+      "type":"structure",
+      "required":[
+        "StackName",
+        "LogicalResourceId"
+      ],
+      "members":{
+        "StackName":{"shape":"StackNameOrId"},
+        "LogicalResourceId":{"shape":"LogicalResourceId"}
+      }
+    },
+    "DetectStackResourceDriftOutput":{
+      "type":"structure",
+      "required":["StackResourceDrift"],
+      "members":{
+        "StackResourceDrift":{"shape":"StackResourceDrift"}
+      }
+    },
+    "DifferenceType":{
+      "type":"string",
+      "enum":[
+        "ADD",
+        "REMOVE",
+        "NOT_EQUAL"
+      ]
     },
     "DisableRollback":{"type":"boolean"},
     "EnableTerminationProtection":{"type":"boolean"},
@@ -1298,6 +1441,7 @@
       },
       "exception":true
     },
+    "Key":{"type":"string"},
     "LastUpdatedTime":{"type":"timestamp"},
     "LimitExceededException":{
       "type":"structure",
@@ -1454,6 +1598,12 @@
       }
     },
     "LogicalResourceId":{"type":"string"},
+    "LogicalResourceIds":{
+      "type":"list",
+      "member":{"shape":"LogicalResourceId"},
+      "max":200,
+      "min":1
+    },
     "MaxConcurrentCount":{
       "type":"integer",
       "min":1
@@ -1591,7 +1741,45 @@
       "member":{"shape":"Parameter"}
     },
     "PhysicalResourceId":{"type":"string"},
+    "PhysicalResourceIdContext":{
+      "type":"list",
+      "member":{"shape":"PhysicalResourceIdContextKeyValuePair"},
+      "max":5
+    },
+    "PhysicalResourceIdContextKeyValuePair":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Key":{"shape":"Key"},
+        "Value":{"shape":"Value"}
+      }
+    },
+    "Properties":{"type":"string"},
+    "PropertyDifference":{
+      "type":"structure",
+      "required":[
+        "PropertyPath",
+        "ExpectedValue",
+        "ActualValue",
+        "DifferenceType"
+      ],
+      "members":{
+        "PropertyPath":{"shape":"PropertyPath"},
+        "ExpectedValue":{"shape":"PropertyValue"},
+        "ActualValue":{"shape":"PropertyValue"},
+        "DifferenceType":{"shape":"DifferenceType"}
+      }
+    },
+    "PropertyDifferences":{
+      "type":"list",
+      "member":{"shape":"PropertyDifference"}
+    },
     "PropertyName":{"type":"string"},
+    "PropertyPath":{"type":"string"},
+    "PropertyValue":{"type":"string"},
     "Reason":{"type":"string"},
     "Region":{"type":"string"},
     "RegionList":{
@@ -1794,8 +1982,48 @@
         "Tags":{"shape":"Tags"},
         "EnableTerminationProtection":{"shape":"EnableTerminationProtection"},
         "ParentId":{"shape":"StackId"},
-        "RootId":{"shape":"StackId"}
+        "RootId":{"shape":"StackId"},
+        "DriftInformation":{"shape":"StackDriftInformation"}
       }
+    },
+    "StackDriftDetectionId":{
+      "type":"string",
+      "max":36,
+      "min":1
+    },
+    "StackDriftDetectionStatus":{
+      "type":"string",
+      "enum":[
+        "DETECTION_IN_PROGRESS",
+        "DETECTION_FAILED",
+        "DETECTION_COMPLETE"
+      ]
+    },
+    "StackDriftDetectionStatusReason":{"type":"string"},
+    "StackDriftInformation":{
+      "type":"structure",
+      "required":["StackDriftStatus"],
+      "members":{
+        "StackDriftStatus":{"shape":"StackDriftStatus"},
+        "LastCheckTimestamp":{"shape":"Timestamp"}
+      }
+    },
+    "StackDriftInformationSummary":{
+      "type":"structure",
+      "required":["StackDriftStatus"],
+      "members":{
+        "StackDriftStatus":{"shape":"StackDriftStatus"},
+        "LastCheckTimestamp":{"shape":"Timestamp"}
+      }
+    },
+    "StackDriftStatus":{
+      "type":"string",
+      "enum":[
+        "DRIFTED",
+        "IN_SYNC",
+        "UNKNOWN",
+        "NOT_CHECKED"
+      ]
     },
     "StackEvent":{
       "type":"structure",
@@ -1913,7 +2141,8 @@
         "Timestamp":{"shape":"Timestamp"},
         "ResourceStatus":{"shape":"ResourceStatus"},
         "ResourceStatusReason":{"shape":"ResourceStatusReason"},
-        "Description":{"shape":"Description"}
+        "Description":{"shape":"Description"},
+        "DriftInformation":{"shape":"StackResourceDriftInformation"}
       }
     },
     "StackResourceDetail":{
@@ -1934,8 +2163,66 @@
         "ResourceStatus":{"shape":"ResourceStatus"},
         "ResourceStatusReason":{"shape":"ResourceStatusReason"},
         "Description":{"shape":"Description"},
-        "Metadata":{"shape":"Metadata"}
+        "Metadata":{"shape":"Metadata"},
+        "DriftInformation":{"shape":"StackResourceDriftInformation"}
       }
+    },
+    "StackResourceDrift":{
+      "type":"structure",
+      "required":[
+        "StackId",
+        "LogicalResourceId",
+        "ResourceType",
+        "StackResourceDriftStatus",
+        "Timestamp"
+      ],
+      "members":{
+        "StackId":{"shape":"StackId"},
+        "LogicalResourceId":{"shape":"LogicalResourceId"},
+        "PhysicalResourceId":{"shape":"PhysicalResourceId"},
+        "PhysicalResourceIdContext":{"shape":"PhysicalResourceIdContext"},
+        "ResourceType":{"shape":"ResourceType"},
+        "ExpectedProperties":{"shape":"Properties"},
+        "ActualProperties":{"shape":"Properties"},
+        "PropertyDifferences":{"shape":"PropertyDifferences"},
+        "StackResourceDriftStatus":{"shape":"StackResourceDriftStatus"},
+        "Timestamp":{"shape":"Timestamp"}
+      }
+    },
+    "StackResourceDriftInformation":{
+      "type":"structure",
+      "required":["StackResourceDriftStatus"],
+      "members":{
+        "StackResourceDriftStatus":{"shape":"StackResourceDriftStatus"},
+        "LastCheckTimestamp":{"shape":"Timestamp"}
+      }
+    },
+    "StackResourceDriftInformationSummary":{
+      "type":"structure",
+      "required":["StackResourceDriftStatus"],
+      "members":{
+        "StackResourceDriftStatus":{"shape":"StackResourceDriftStatus"},
+        "LastCheckTimestamp":{"shape":"Timestamp"}
+      }
+    },
+    "StackResourceDriftStatus":{
+      "type":"string",
+      "enum":[
+        "IN_SYNC",
+        "MODIFIED",
+        "DELETED",
+        "NOT_CHECKED"
+      ]
+    },
+    "StackResourceDriftStatusFilters":{
+      "type":"list",
+      "member":{"shape":"StackResourceDriftStatus"},
+      "max":4,
+      "min":1
+    },
+    "StackResourceDrifts":{
+      "type":"list",
+      "member":{"shape":"StackResourceDrift"}
     },
     "StackResourceSummaries":{
       "type":"list",
@@ -1955,7 +2242,8 @@
         "ResourceType":{"shape":"ResourceType"},
         "LastUpdatedTimestamp":{"shape":"Timestamp"},
         "ResourceStatus":{"shape":"ResourceStatus"},
-        "ResourceStatusReason":{"shape":"ResourceStatusReason"}
+        "ResourceStatusReason":{"shape":"ResourceStatusReason"},
+        "DriftInformation":{"shape":"StackResourceDriftInformationSummary"}
       }
     },
     "StackResources":{
@@ -2156,7 +2444,8 @@
         "StackStatus":{"shape":"StackStatus"},
         "StackStatusReason":{"shape":"StackStatusReason"},
         "ParentId":{"shape":"StackId"},
-        "RootId":{"shape":"StackId"}
+        "RootId":{"shape":"StackId"},
+        "DriftInformation":{"shape":"StackDriftInformationSummary"}
       }
     },
     "Stacks":{
@@ -2391,6 +2680,7 @@
         "DeclaredTransforms":{"shape":"TransformsList"}
       }
     },
+    "Value":{"type":"string"},
     "Version":{"type":"string"}
   }
 }

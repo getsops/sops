@@ -57,7 +57,7 @@ func TestBROTIDRoundTrip(t *testing.T) {
 	}
 }
 
-// serdesPartition is a helper that serialize a Partition then deserialize it
+// serdesPartition is a helper that serialize a Partition then deserialize it.
 func serdesPartition(t *testing.T, i int, p1 *Partition) (p2 Partition) {
 	var (
 		data []byte

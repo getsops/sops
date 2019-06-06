@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewWorkflowRunActionsClientWithBaseURI(baseURI string, subscriptionID strin
 // runName - the workflow run name.
 // actionName - the workflow action name.
 func (client WorkflowRunActionsClient) Get(ctx context.Context, resourceGroupName string, workflowName string, runName string, actionName string) (result WorkflowRunAction, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunActionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workflowName, runName, actionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowRunActionsClient", "Get", nil, "Failure preparing request")
@@ -118,6 +129,16 @@ func (client WorkflowRunActionsClient) GetResponder(resp *http.Response) (result
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation. Options for filters include: Status.
 func (client WorkflowRunActionsClient) List(ctx context.Context, resourceGroupName string, workflowName string, runName string, top *int32, filter string) (result WorkflowRunActionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunActionsClient.List")
+		defer func() {
+			sc := -1
+			if result.wralr.Response.Response != nil {
+				sc = result.wralr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, workflowName, runName, top, filter)
 	if err != nil {
@@ -189,8 +210,8 @@ func (client WorkflowRunActionsClient) ListResponder(resp *http.Response) (resul
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkflowRunActionsClient) listNextResults(lastResults WorkflowRunActionListResult) (result WorkflowRunActionListResult, err error) {
-	req, err := lastResults.workflowRunActionListResultPreparer()
+func (client WorkflowRunActionsClient) listNextResults(ctx context.Context, lastResults WorkflowRunActionListResult) (result WorkflowRunActionListResult, err error) {
+	req, err := lastResults.workflowRunActionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowRunActionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -211,6 +232,16 @@ func (client WorkflowRunActionsClient) listNextResults(lastResults WorkflowRunAc
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowRunActionsClient) ListComplete(ctx context.Context, resourceGroupName string, workflowName string, runName string, top *int32, filter string) (result WorkflowRunActionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunActionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, workflowName, runName, top, filter)
 	return
 }
@@ -222,6 +253,16 @@ func (client WorkflowRunActionsClient) ListComplete(ctx context.Context, resourc
 // runName - the workflow run name.
 // actionName - the workflow action name.
 func (client WorkflowRunActionsClient) ListExpressionTraces(ctx context.Context, resourceGroupName string, workflowName string, runName string, actionName string) (result ExpressionTraces, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowRunActionsClient.ListExpressionTraces")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListExpressionTracesPreparer(ctx, resourceGroupName, workflowName, runName, actionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowRunActionsClient", "ListExpressionTraces", nil, "Failure preparing request")

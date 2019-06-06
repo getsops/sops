@@ -172,3 +172,53 @@ func TestCustFixAppAutoscalingChina(t *testing.T) {
 		t.Errorf("expect %v, got %v", e, a)
 	}
 }
+
+func TestCustFixAppAutoscalingUsGov(t *testing.T) {
+	const doc = `
+{
+  "version": 3,
+  "partitions": [{
+    "defaults" : {
+      "hostname" : "{service}.{region}.{dnsSuffix}",
+      "protocols" : [ "https" ],
+      "signatureVersions" : [ "v4" ]
+    },
+    "dnsSuffix" : "amazonaws.com",
+    "partition" : "aws-us-gov",
+    "partitionName" : "AWS GovCloud (US)",
+    "regionRegex" : "^us\\-gov\\-\\w+\\-\\d+$",
+    "regions" : {
+      "us-gov-east-1" : {
+        "description" : "AWS GovCloud (US-East)"
+      },
+      "us-gov-west-1" : {
+        "description" : "AWS GovCloud (US)"
+      }
+    },
+    "services" : {
+      "application-autoscaling" : {
+        "endpoints" : {
+          "us-gov-east-1" : { },
+          "us-gov-west-1" : { }
+        }
+      }
+	}
+  }]
+}`
+
+	resolver, err := DecodeModel(strings.NewReader(doc))
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+
+	endpoint, err := resolver.EndpointFor(
+		"application-autoscaling", "us-gov-west-1",
+	)
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+
+	if e, a := `https://autoscaling.us-gov-west-1.amazonaws.com`, endpoint.URL; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+}

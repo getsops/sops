@@ -15,12 +15,12 @@
 package datastore_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
 
 	"cloud.google.com/go/datastore"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 
@@ -164,6 +164,29 @@ func ExampleClient_GetMulti() {
 	posts := make([]Post, 3)
 	if err := client.GetMulti(ctx, keys, posts); err != nil {
 		// TODO: Handle error.
+	}
+}
+
+func ExampleMultiError() {
+	ctx := context.Background()
+	client, err := datastore.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	keys := []*datastore.Key{
+		datastore.NameKey("bad-key", "bad-key", nil),
+	}
+	posts := make([]Post, 1)
+	if err := client.GetMulti(ctx, keys, posts); err != nil {
+		if merr, ok := err.(datastore.MultiError); ok {
+			for _, err := range merr {
+				// TODO: Handle error.
+				_ = err
+			}
+		} else {
+			// TODO: Handle error.
+		}
 	}
 }
 

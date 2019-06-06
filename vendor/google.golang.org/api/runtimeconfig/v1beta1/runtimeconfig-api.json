@@ -798,7 +798,7 @@
       }
     }
   },
-  "revision": "20180730",
+  "revision": "20190506",
   "rootUrl": "https://runtimeconfig.googleapis.com/",
   "schemas": {
     "Binding": {
@@ -807,10 +807,10 @@
       "properties": {
         "condition": {
           "$ref": "Expr",
-          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+          "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -824,7 +824,7 @@
       "type": "object"
     },
     "Cardinality": {
-      "description": "A Cardinality condition for the Waiter resource. A cardinality condition is\nmet when the number of variables under a specified path prefix reaches a\npredefined number. For example, if you set a Cardinality condition where\nthe `path` is set to `/foo` and the number of paths is set to 2, the\nfollowing variables would meet the condition in a RuntimeConfig resource:\n\n+ `/foo/variable1 = \"value1\"`\n+ `/foo/variable2 = \"value2\"`\n+ `/bar/variable3 = \"value3\"`\n\nIt would not would not satisify the same condition with the `number` set to\n3, however, because there is only 2 paths that start with `/foo`.\nCardinality conditions are recursive; all subtrees under the specific\npath prefix are counted.",
+      "description": "A Cardinality condition for the Waiter resource. A cardinality condition is\nmet when the number of variables under a specified path prefix reaches a\npredefined number. For example, if you set a Cardinality condition where\nthe `path` is set to `/foo` and the number of paths is set to `2`, the\nfollowing variables would meet the condition in a RuntimeConfig resource:\n\n+ `/foo/variable1 = \"value1\"`\n+ `/foo/variable2 = \"value2\"`\n+ `/bar/variable3 = \"value3\"`\n\nIt would not satisfy the same condition with the `number` set to\n`3`, however, because there is only 2 paths that start with `/foo`.\nCardinality conditions are recursive; all subtrees under the specific\npath prefix are counted.",
       "id": "Cardinality",
       "properties": {
         "number": {
@@ -954,7 +954,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -1019,7 +1019,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {
@@ -1078,11 +1078,11 @@
       "id": "Variable",
       "properties": {
         "name": {
-          "description": "The name of the variable resource, in the format:\n\n    projects/[PROJECT_ID]/configs/[CONFIG_NAME]/variables/[VARIABLE_NAME]\n\nThe `[PROJECT_ID]` must be a valid project ID, `[CONFIG_NAME]` must be a\nvalid RuntimeConfig reource and `[VARIABLE_NAME]` follows Unix file system\nfile path naming.\n\nThe `[VARIABLE_NAME]` can contain ASCII letters, numbers, slashes and\ndashes. Slashes are used as path element separators and are not part of the\n`[VARIABLE_NAME]` itself, so `[VARIABLE_NAME]` must contain at least one\nnon-slash character. Multiple slashes are coalesced into single slash\ncharacter. Each path segment should match\n[0-9A-Za-z](?:[_.A-Za-z0-9-]{0,62}[_.A-Za-z0-9])? regular expression.\nThe length of a `[VARIABLE_NAME]` must be less than 256 characters.\n\nOnce you create a variable, you cannot change the variable name.",
+          "description": "The name of the variable resource, in the format:\n\n    projects/[PROJECT_ID]/configs/[CONFIG_NAME]/variables/[VARIABLE_NAME]\n\nThe `[PROJECT_ID]` must be a valid project ID, `[CONFIG_NAME]` must be a\nvalid RuntimeConfig resource and `[VARIABLE_NAME]` follows Unix file system\nfile path naming.\n\nThe `[VARIABLE_NAME]` can contain ASCII letters, numbers, slashes and\ndashes. Slashes are used as path element separators and are not part of the\n`[VARIABLE_NAME]` itself, so `[VARIABLE_NAME]` must contain at least one\nnon-slash character. Multiple slashes are coalesced into single slash\ncharacter. Each path segment should match\n[0-9A-Za-z](?:[_.A-Za-z0-9-]{0,62}[_.A-Za-z0-9])? regular expression.\nThe length of a `[VARIABLE_NAME]` must be less than 256 characters.\n\nOnce you create a variable, you cannot change the variable name.",
           "type": "string"
         },
         "state": {
-          "description": "[Ouput only] The current state of the variable. The variable state indicates\nthe outcome of the `variables().watch` call and is visible through the\n`get` and `list` calls.",
+          "description": "Output only. The current state of the variable. The variable state\nindicates the outcome of the `variables().watch` call and is visible\nthrough the `get` and `list` calls.",
           "enum": [
             "VARIABLE_STATE_UNSPECIFIED",
             "UPDATED",
@@ -1100,12 +1100,12 @@
           "type": "string"
         },
         "updateTime": {
-          "description": "Output only. The time of the last variable update.",
+          "description": "Output only. The time of the last variable update.\nTimestamp will be UTC timestamp.",
           "format": "google-datetime",
           "type": "string"
         },
         "value": {
-          "description": "The binary value of the variable. The length of the value must be less\nthan 4096 bytes. Empty values are also accepted. The value must be\nbase64 encoded. Only one of `value` or `text` can be set.",
+          "description": "The binary value of the variable. The length of the value must be less\nthan 4096 bytes. Empty values are also accepted. The value must be\nbase64 encoded, and must comply with IETF RFC4648\n(https://www.ietf.org/rfc/rfc4648.txt). Only one of `value` or `text`\ncan be set.",
           "format": "byte",
           "type": "string"
         }
@@ -1113,7 +1113,7 @@
       "type": "object"
     },
     "Waiter": {
-      "description": "A Waiter resource waits for some end condition within a RuntimeConfig resource\nto be met before it returns. For example, assume you have a distributed\nsystem where each node writes to a Variable resource indicating the node's\nreadiness as part of the startup process.\n\nYou then configure a Waiter resource with the success condition set to wait\nuntil some number of nodes have checked in. Afterwards, your application\nruns some arbitrary code after the condition has been met and the waiter\nreturns successfully.\n\nOnce created, a Waiter resource is immutable.\n\nTo learn more about using waiters, read the\n[Creating a Waiter](/deployment-manager/runtime-configurator/creating-a-waiter)\ndocumentation.",
+      "description": "A Waiter resource waits for some end condition within a RuntimeConfig\nresource to be met before it returns. For example, assume you have a\ndistributed system where each node writes to a Variable resource indicating\nthe node's readiness as part of the startup process.\n\nYou then configure a Waiter resource with the success condition set to wait\nuntil some number of nodes have checked in. Afterwards, your application\nruns some arbitrary code after the condition has been met and the waiter\nreturns successfully.\n\nOnce created, a Waiter resource is immutable.\n\nTo learn more about using waiters, read the\n[Creating a\nWaiter](/deployment-manager/runtime-configurator/creating-a-waiter)\ndocumentation.",
       "id": "Waiter",
       "properties": {
         "createTime": {
@@ -1139,7 +1139,7 @@
         },
         "success": {
           "$ref": "EndCondition",
-          "description": "[Required] The success condition. If this condition is met, `done` will be\nset to `true` and the `error` value will remain unset. The failure condition\ntakes precedence over the success condition. If both conditions are met, a\nfailure will be indicated."
+          "description": "[Required] The success condition. If this condition is met, `done` will be\nset to `true` and the `error` value will remain unset. The failure\ncondition takes precedence over the success condition. If both conditions\nare met, a failure will be indicated."
         },
         "timeout": {
           "description": "[Required] Specifies the timeout of the waiter in seconds, beginning from\nthe instant that `waiters().create` method is called. If this time elapses\nbefore the success or failure conditions are met, the waiter fails and sets\nthe `error` code to `DEADLINE_EXCEEDED`.",

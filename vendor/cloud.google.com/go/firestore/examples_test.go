@@ -17,11 +17,10 @@
 package firestore_test
 
 import (
+	"context"
 	"fmt"
 
 	"cloud.google.com/go/firestore"
-	"golang.org/x/net/context"
-
 	"google.golang.org/api/iterator"
 )
 
@@ -464,7 +463,7 @@ func ExampleQuery_Snapshots() {
 	}
 	defer client.Close()
 
-	q := client.Collection("States").Select("pop").
+	q := client.Collection("States").
 		Where("pop", ">", 10).
 		OrderBy("pop", firestore.Desc).
 		Limit(10)
@@ -553,4 +552,84 @@ func ExampleClient_RunTransaction() {
 	if err != nil {
 		// TODO: Handle error.
 	}
+}
+
+func ExampleArrayUnion_create() {
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer client.Close()
+
+	wr, err := client.Doc("States/Colorado").Create(ctx, map[string]interface{}{
+		"cities": firestore.ArrayUnion("Denver", "Golden", "Boulder"),
+		"pop":    5.5,
+	})
+	if err != nil {
+		// TODO: Handle error.
+	}
+	fmt.Println(wr.UpdateTime)
+}
+
+func ExampleArrayUnion_update() {
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer client.Close()
+
+	co := client.Doc("States/Colorado")
+	wr, err := co.Update(ctx, []firestore.Update{
+		{Path: "cities", Value: firestore.ArrayUnion("Broomfield")},
+	})
+	if err != nil {
+		// TODO: Handle error.
+	}
+	fmt.Println(wr.UpdateTime)
+}
+
+func ExampleArrayRemove_update() {
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer client.Close()
+
+	co := client.Doc("States/Colorado")
+	wr, err := co.Update(ctx, []firestore.Update{
+		{Path: "cities", Value: firestore.ArrayRemove("Denver")},
+	})
+	if err != nil {
+		// TODO: Handle error.
+	}
+	fmt.Println(wr.UpdateTime)
+}
+
+func ExampleCollectionGroup() {
+	// Given:
+	// France/Cities/Paris = {population: 100}
+	// Canada/Cities/Montreal = {population: 95}
+
+	ctx := context.Background()
+	client, err := firestore.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer client.Close()
+
+	// Query for ANY city with >95 pop, regardless of country.
+	docs, err := client.CollectionGroup("Cities").
+		Where("pop", ">", 95).
+		OrderBy("pop", firestore.Desc).
+		Limit(10).
+		Documents(ctx).
+		GetAll()
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	_ = docs // TODO: Use docs.
 }

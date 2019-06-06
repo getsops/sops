@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewAssessmentOptionsClientWithBaseURI(baseURI string, subscriptionID string
 // Parameters:
 // locationName - azure region in which the project is created.
 func (client AssessmentOptionsClient) Get(ctx context.Context, locationName string) (result AssessmentOptionsResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssessmentOptionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, locationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.AssessmentOptionsClient", "Get", nil, "Failure preparing request")

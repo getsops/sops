@@ -45,7 +45,9 @@ func main() {
 		}
 	}()
 
-	if err := endpoints.CodeGenModel(modelFile, outFile); err != nil {
+	if err := endpoints.CodeGenModel(modelFile, outFile, func(o *endpoints.CodeGenOptions) {
+		o.DisableGenerateServiceIDs = true
+	}); err != nil {
 		exitErrorf("failed to codegen model, %v", err)
 	}
 }

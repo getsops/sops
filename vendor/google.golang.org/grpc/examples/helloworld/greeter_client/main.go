@@ -16,14 +16,15 @@
  *
  */
 
+// Package main implements a client for Greeter service.
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"time"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )

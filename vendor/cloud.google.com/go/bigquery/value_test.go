@@ -22,11 +22,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
 	"cloud.google.com/go/civil"
 	"cloud.google.com/go/internal/testutil"
-
+	"github.com/google/go-cmp/cmp"
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -38,6 +36,7 @@ func TestConvertBasicValues(t *testing.T) {
 		{Type: BooleanFieldType},
 		{Type: BytesFieldType},
 		{Type: NumericFieldType},
+		{Type: GeographyFieldType},
 	}
 	row := &bq.TableRow{
 		F: []*bq.TableCell{
@@ -47,6 +46,7 @@ func TestConvertBasicValues(t *testing.T) {
 			{V: "true"},
 			{V: base64.StdEncoding.EncodeToString([]byte("foo"))},
 			{V: "123.123456789"},
+			{V: testGeography},
 		},
 	}
 	got, err := convertRow(row, schema)
@@ -54,7 +54,7 @@ func TestConvertBasicValues(t *testing.T) {
 		t.Fatalf("error converting: %v", err)
 	}
 
-	want := []Value{"a", int64(1), 1.2, true, []byte("foo"), big.NewRat(123123456789, 1e9)}
+	want := []Value{"a", int64(1), 1.2, true, []byte("foo"), big.NewRat(123123456789, 1e9), testGeography}
 	if !testutil.Equal(got, want) {
 		t.Errorf("converting basic values: got:\n%v\nwant:\n%v", got, want)
 	}
@@ -406,6 +406,7 @@ func TestValuesSaverConvertsToMap(t *testing.T) {
 					{Name: "strField", Type: StringFieldType},
 					{Name: "dtField", Type: DateTimeFieldType},
 					{Name: "nField", Type: NumericFieldType},
+					{Name: "geoField", Type: GeographyFieldType},
 				},
 				InsertID: "iid",
 				Row: []Value{1, "a",
@@ -413,6 +414,7 @@ func TestValuesSaverConvertsToMap(t *testing.T) {
 						Date: civil.Date{Year: 1, Month: 2, Day: 3},
 						Time: civil.Time{Hour: 4, Minute: 5, Second: 6, Nanosecond: 7000}},
 					big.NewRat(123456789000, 1e9),
+					testGeography,
 				},
 			},
 			wantInsertID: "iid",
@@ -421,6 +423,7 @@ func TestValuesSaverConvertsToMap(t *testing.T) {
 				"strField": "a",
 				"dtField":  "0001-02-03 04:05:06.000007",
 				"nField":   "123.456789000",
+				"geoField": testGeography,
 			},
 		},
 		{
@@ -539,6 +542,8 @@ func TestStructSaver(t *testing.T) {
 		{Name: "p", Type: IntegerFieldType, Required: false},
 		{Name: "n", Type: NumericFieldType, Required: false},
 		{Name: "nr", Type: NumericFieldType, Repeated: true},
+		{Name: "g", Type: GeographyFieldType, Required: false},
+		{Name: "gr", Type: GeographyFieldType, Repeated: true},
 	}
 
 	type (
@@ -553,6 +558,8 @@ func TestStructSaver(t *testing.T) {
 			P       NullInt64
 			N       *big.Rat
 			NR      []*big.Rat
+			G       NullGeography
+			GR      []string // Repeated Geography
 		}
 	)
 
@@ -586,6 +593,8 @@ func TestStructSaver(t *testing.T) {
 		P:       NullInt64{Valid: true, Int64: 17},
 		N:       big.NewRat(123456, 1000),
 		NR:      []*big.Rat{big.NewRat(3, 1), big.NewRat(56789, 1e5)},
+		G:       NullGeography{Valid: true, GeographyVal: "POINT(-122.350220 47.649154)"},
+		GR:      []string{"POINT(-122.350220 47.649154)", "POINT(-122.198939 47.669865)"},
 	}
 	want := map[string]Value{
 		"s":       "x",
@@ -597,10 +606,12 @@ func TestStructSaver(t *testing.T) {
 		"p":       NullInt64{Valid: true, Int64: 17},
 		"n":       "123.456000000",
 		"nr":      []string{"3.000000000", "0.567890000"},
+		"g":       NullGeography{Valid: true, GeographyVal: "POINT(-122.350220 47.649154)"},
+		"gr":      []string{"POINT(-122.350220 47.649154)", "POINT(-122.198939 47.669865)"},
 	}
 	check("all values", in, want)
 	check("all values, ptr", &in, want)
-	check("empty struct", T{}, map[string]Value{"s": "", "t": "00:00:00", "p": NullInt64{}})
+	check("empty struct", T{}, map[string]Value{"s": "", "t": "00:00:00", "p": NullInt64{}, "g": NullGeography{}})
 
 	// Missing and extra fields ignored.
 	type T2 struct {
@@ -615,7 +626,17 @@ func TestStructSaver(t *testing.T) {
 			"s":       "",
 			"t":       "00:00:00",
 			"p":       NullInt64{},
+			"g":       NullGeography{},
 			"rnested": []Value{map[string]Value{"b": true}, map[string]Value(nil), map[string]Value{"b": false}},
+		})
+
+	check("zero-length repeated", T{Rnested: []*N{}},
+		map[string]Value{
+			"rnested": []Value{},
+			"s":       "",
+			"t":       "00:00:00",
+			"p":       NullInt64{},
+			"g":       NullGeography{},
 		})
 }
 
@@ -629,20 +650,20 @@ func TestStructSaverErrors(t *testing.T) {
 	)
 
 	for i, test := range []struct {
-		struct_ interface{}
-		schema  Schema
+		inputStruct interface{}
+		schema      Schema
 	}{
-		{0, nil},                                              // not a struct
-		{&badField{}, nil},                                    // bad field name
+		{0, nil},           // not a struct
+		{&badField{}, nil}, // bad field name
 		{&badR{}, Schema{{Name: "r", Repeated: true}}},        // repeated field has bad type
 		{&badR{}, Schema{{Name: "r", Type: RecordFieldType}}}, // nested field has bad type
 		{&badRN{[]int{0}}, // nested repeated field has bad type
 			Schema{{Name: "r", Type: RecordFieldType, Repeated: true}}},
 	} {
-		ss := &StructSaver{Struct: test.struct_, Schema: test.schema}
+		ss := &StructSaver{Struct: test.inputStruct, Schema: test.schema}
 		_, _, err := ss.Save()
 		if err == nil {
-			t.Errorf("#%d, %v, %v: got nil, want error", i, test.struct_, test.schema)
+			t.Errorf("#%d, %v, %v: got nil, want error", i, test.inputStruct, test.schema)
 		}
 	}
 }
@@ -671,6 +692,7 @@ func TestConvertRows(t *testing.T) {
 		{Type: IntegerFieldType},
 		{Type: FloatFieldType},
 		{Type: BooleanFieldType},
+		{Type: GeographyFieldType},
 	}
 	rows := []*bq.TableRow{
 		{F: []*bq.TableCell{
@@ -678,17 +700,19 @@ func TestConvertRows(t *testing.T) {
 			{V: "1"},
 			{V: "1.2"},
 			{V: "true"},
+			{V: "POINT(-122.350220 47.649154)"},
 		}},
 		{F: []*bq.TableCell{
 			{V: "b"},
 			{V: "2"},
 			{V: "2.2"},
 			{V: "false"},
+			{V: "POINT(-122.198939 47.669865)"},
 		}},
 	}
 	want := [][]Value{
-		{"a", int64(1), 1.2, true},
-		{"b", int64(2), 2.2, false},
+		{"a", int64(1), 1.2, true, "POINT(-122.350220 47.649154)"},
+		{"b", int64(2), 2.2, false, "POINT(-122.198939 47.669865)"},
 	}
 	got, err := convertRows(rows, schema)
 	if err != nil {
@@ -724,7 +748,7 @@ func TestValueList(t *testing.T) {
 	}
 
 	// Load truncates, not appends.
-	// https://github.com/GoogleCloudPlatform/google-cloud-go/issues/437
+	// https://github.com/googleapis/google-cloud-go/issues/437
 	if err := vl.Load(want, schema); err != nil {
 		t.Fatal(err)
 	}
@@ -802,6 +826,7 @@ var (
 		{Name: "T", Type: TimeFieldType},
 		{Name: "DT", Type: DateTimeFieldType},
 		{Name: "N", Type: NumericFieldType},
+		{Name: "G", Type: GeographyFieldType},
 		{Name: "nested", Type: RecordFieldType, Schema: Schema{
 			{Name: "nestS", Type: StringFieldType},
 			{Name: "nestI", Type: IntegerFieldType},
@@ -814,9 +839,11 @@ var (
 	testTime      = civil.Time{Hour: 7, Minute: 50, Second: 22, Nanosecond: 8}
 	testDateTime  = civil.DateTime{Date: testDate, Time: testTime}
 	testNumeric   = big.NewRat(123, 456)
+	// testGeography is a WKT string representing a single point.
+	testGeography = "POINT(-122.350220 47.649154)"
 
 	testValues = []Value{"x", "y", []byte{1, 2, 3}, int64(7), int64(8), 3.14, true,
-		testTimestamp, testDate, testTime, testDateTime, testNumeric,
+		testTimestamp, testDate, testTime, testDateTime, testNumeric, testGeography,
 		[]Value{"nested", int64(17)}, "z"}
 )
 
@@ -828,9 +855,9 @@ type testStruct1 struct {
 	S      string
 	S2     String
 	By     []byte
-	s      string
 	F      float64
 	N      *big.Rat
+	G      string
 	Nested nested
 	Tagged string `bigquery:"t"`
 }
@@ -864,6 +891,7 @@ func TestStructLoader(t *testing.T) {
 		S2:     "y",
 		By:     []byte{1, 2, 3},
 		N:      big.NewRat(123, 456),
+		G:      testGeography,
 		Nested: nested{NestS: "nested", NestI: 17},
 		Tagged: "z",
 	}
@@ -964,6 +992,7 @@ type testStructNullable struct {
 	Time      NullTime
 	DateTime  NullDateTime
 	Numeric   *big.Rat
+	Geography NullGeography
 	Record    *subNullable
 }
 
@@ -982,6 +1011,7 @@ var testStructNullableSchema = Schema{
 	{Name: "Time", Type: TimeFieldType, Required: false},
 	{Name: "DateTime", Type: DateTimeFieldType, Required: false},
 	{Name: "Numeric", Type: NumericFieldType, Required: false},
+	{Name: "Geography", Type: GeographyFieldType, Required: false},
 	{Name: "Record", Type: RecordFieldType, Required: false, Schema: Schema{
 		{Name: "X", Type: IntegerFieldType, Required: false},
 	}},
@@ -997,7 +1027,7 @@ func TestStructLoaderNullable(t *testing.T) {
 	}
 
 	nonnilVals := []Value{"x", []byte{1, 2, 3}, int64(1), 2.3, true, testTimestamp, testDate, testTime,
-		testDateTime, big.NewRat(1, 2), []Value{int64(4)}}
+		testDateTime, big.NewRat(1, 2), testGeography, []Value{int64(4)}}
 
 	// All ts fields are nil. Loading non-nil values will cause them all to
 	// be allocated.
@@ -1013,6 +1043,7 @@ func TestStructLoaderNullable(t *testing.T) {
 		Time:      NullTime{Time: testTime, Valid: true},
 		DateTime:  NullDateTime{DateTime: testDateTime, Valid: true},
 		Numeric:   big.NewRat(1, 2),
+		Geography: NullGeography{GeographyVal: testGeography, Valid: true},
 		Record:    &subNullable{X: NullInt64{Int64: 4, Valid: true}},
 	}
 	if diff := testutil.Diff(ts, want); diff != "" {
@@ -1022,7 +1053,7 @@ func TestStructLoaderNullable(t *testing.T) {
 	// Struct pointers are reused, byte slices are not.
 	want = ts
 	want.Bytes = []byte{17}
-	vals2 := []Value{nil, []byte{17}, nil, nil, nil, nil, nil, nil, nil, nil, []Value{int64(7)}}
+	vals2 := []Value{nil, []byte{17}, nil, nil, nil, nil, nil, nil, nil, nil, nil, []Value{int64(7)}}
 	mustLoad(t, &ts, testStructNullableSchema, vals2)
 	if ts.Record != want.Record {
 		t.Error("record pointers not identical")
@@ -1158,7 +1189,6 @@ func TestStructLoaderErrors(t *testing.T) {
 		I int
 		times
 		S    string
-		s    string
 		Nums []int
 	}
 

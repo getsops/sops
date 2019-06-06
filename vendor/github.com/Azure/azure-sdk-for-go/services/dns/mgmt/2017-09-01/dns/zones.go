@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,10 +47,20 @@ func NewZonesClientWithBaseURI(baseURI string, subscriptionID string) ZonesClien
 // zoneName - the name of the DNS zone (without a terminating dot).
 // parameters - parameters supplied to the CreateOrUpdate operation.
 // ifMatch - the etag of the DNS zone. Omit this value to always overwrite the current zone. Specify the
-// last-seen etag value to prevent accidentally overwritting any concurrent changes.
+// last-seen etag value to prevent accidentally overwriting any concurrent changes.
 // ifNoneMatch - set to '*' to allow a new DNS zone to be created, but to prevent updating an existing zone.
 // Other values will be ignored.
 func (client ZonesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, zoneName string, parameters Zone, ifMatch string, ifNoneMatch string) (result Zone, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -140,6 +151,16 @@ func (client ZonesClient) CreateOrUpdateResponder(resp *http.Response) (result Z
 // ifMatch - the etag of the DNS zone. Omit this value to always delete the current zone. Specify the last-seen
 // etag value to prevent accidentally deleting any concurrent changes.
 func (client ZonesClient) Delete(ctx context.Context, resourceGroupName string, zoneName string, ifMatch string) (result ZonesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -199,10 +220,6 @@ func (client ZonesClient) DeleteSender(req *http.Request) (future ZonesDeleteFut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -224,6 +241,16 @@ func (client ZonesClient) DeleteResponder(resp *http.Response) (result autorest.
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 // zoneName - the name of the DNS zone (without a terminating dot).
 func (client ZonesClient) Get(ctx context.Context, resourceGroupName string, zoneName string) (result Zone, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -300,6 +327,16 @@ func (client ZonesClient) GetResponder(resp *http.Response) (result Zone, err er
 // Parameters:
 // top - the maximum number of DNS zones to return. If not specified, returns up to 100 zones.
 func (client ZonesClient) List(ctx context.Context, top *int32) (result ZoneListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.List")
+		defer func() {
+			sc := -1
+			if result.zlr.Response.Response != nil {
+				sc = result.zlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: client.SubscriptionID,
 			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
@@ -371,8 +408,8 @@ func (client ZonesClient) ListResponder(resp *http.Response) (result ZoneListRes
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ZonesClient) listNextResults(lastResults ZoneListResult) (result ZoneListResult, err error) {
-	req, err := lastResults.zoneListResultPreparer()
+func (client ZonesClient) listNextResults(ctx context.Context, lastResults ZoneListResult) (result ZoneListResult, err error) {
+	req, err := lastResults.zoneListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dns.ZonesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -393,6 +430,16 @@ func (client ZonesClient) listNextResults(lastResults ZoneListResult) (result Zo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ZonesClient) ListComplete(ctx context.Context, top *int32) (result ZoneListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, top)
 	return
 }
@@ -402,6 +449,16 @@ func (client ZonesClient) ListComplete(ctx context.Context, top *int32) (result 
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 // top - the maximum number of record sets to return. If not specified, returns up to 100 record sets.
 func (client ZonesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, top *int32) (result ZoneListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.zlr.Response.Response != nil {
+				sc = result.zlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -478,8 +535,8 @@ func (client ZonesClient) ListByResourceGroupResponder(resp *http.Response) (res
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ZonesClient) listByResourceGroupNextResults(lastResults ZoneListResult) (result ZoneListResult, err error) {
-	req, err := lastResults.zoneListResultPreparer()
+func (client ZonesClient) listByResourceGroupNextResults(ctx context.Context, lastResults ZoneListResult) (result ZoneListResult, err error) {
+	req, err := lastResults.zoneListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dns.ZonesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -500,6 +557,16 @@ func (client ZonesClient) listByResourceGroupNextResults(lastResults ZoneListRes
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ZonesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, top *int32) (result ZoneListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ZonesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, top)
 	return
 }

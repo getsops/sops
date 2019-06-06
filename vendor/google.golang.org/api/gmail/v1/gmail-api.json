@@ -3,7 +3,7 @@
     "oauth2": {
       "scopes": {
         "https://mail.google.com/": {
-          "description": "Read, send, delete, and manage your email"
+          "description": "Read, compose, send, and permanently delete all your email from Gmail"
         },
         "https://www.googleapis.com/auth/gmail.compose": {
           "description": "Manage drafts and send emails"
@@ -41,7 +41,7 @@
   "description": "Access Gmail mailboxes including sending user email.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/gmail/api/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/6MVOLkrACdE8trspKIAVVfI4jS8\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/ZNI6Av8P0l2j-PsYHy6hLrQxEjY\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/googlemail-16.png",
     "x32": "https://www.google.com/images/icons/product/googlemail-32.png"
@@ -1322,6 +1322,33 @@
                 "https://www.googleapis.com/auth/gmail.settings.basic"
               ]
             },
+            "getLanguage": {
+              "description": "Gets language settings.",
+              "httpMethod": "GET",
+              "id": "gmail.users.settings.getLanguage",
+              "parameterOrder": [
+                "userId"
+              ],
+              "parameters": {
+                "userId": {
+                  "default": "me",
+                  "description": "User's email address. The special value \"me\" can be used to indicate the authenticated user.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "{userId}/settings/language",
+              "response": {
+                "$ref": "LanguageSettings"
+              },
+              "scopes": [
+                "https://mail.google.com/",
+                "https://www.googleapis.com/auth/gmail.modify",
+                "https://www.googleapis.com/auth/gmail.readonly",
+                "https://www.googleapis.com/auth/gmail.settings.basic"
+              ]
+            },
             "getPop": {
               "description": "Gets POP settings.",
               "httpMethod": "GET",
@@ -1425,6 +1452,33 @@
               },
               "response": {
                 "$ref": "ImapSettings"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/gmail.settings.basic"
+              ]
+            },
+            "updateLanguage": {
+              "description": "Updates language settings.\n\nIf successful, the return object contains the displayLanguage that was saved for the user, which may differ from the value passed into the request. This is because the requested displayLanguage may not be directly supported by Gmail but have a close variant that is, and so the variant may be chosen and saved instead.",
+              "httpMethod": "PUT",
+              "id": "gmail.users.settings.updateLanguage",
+              "parameterOrder": [
+                "userId"
+              ],
+              "parameters": {
+                "userId": {
+                  "default": "me",
+                  "description": "User's email address. The special value \"me\" can be used to indicate the authenticated user.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "{userId}/settings/language",
+              "request": {
+                "$ref": "LanguageSettings"
+              },
+              "response": {
+                "$ref": "LanguageSettings"
               },
               "scopes": [
                 "https://www.googleapis.com/auth/gmail.settings.basic"
@@ -2502,7 +2556,7 @@
       }
     }
   },
-  "revision": "20180821",
+  "revision": "20190422",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AutoForwarding": {
@@ -2579,7 +2633,7 @@
       "type": "object"
     },
     "Delegate": {
-      "description": "Settings for a delegate. Delegates can read, send, and delete messages, as well as manage contacts, for the delegator's account. See \"Set up mail delegation\" for more information about delegates.",
+      "description": "Settings for a delegate. Delegates can read, send, and delete messages, as well as view and add contacts, for the delegator's account. See \"Set up mail delegation\" for more information about delegates.",
       "id": "Delegate",
       "properties": {
         "delegateEmail": {
@@ -2997,6 +3051,17 @@
       },
       "type": "object"
     },
+    "LanguageSettings": {
+      "description": "Language settings for an account. These settings correspond to the \"Language settings\" feature in the web interface.",
+      "id": "LanguageSettings",
+      "properties": {
+        "displayLanguage": {
+          "description": "The language to display Gmail in, formatted as an RFC 3066 Language Tag (for example en-GB, fr or ja for British English, French, or Japanese respectively).\n\nThe set of languages supported by Gmail evolves over time, so please refer to the \"Language\" dropdown in the Gmail settings  for all available options, as described in the language settings help article. A table of sample values is also provided in the Managing Language Settings guide \n\nNot all Gmail clients can display the same set of languages. In the case that a user's display language is not available for use on a particular client, said client automatically chooses to display in the closest supported variant (or a reasonable default).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ListDelegatesResponse": {
       "description": "Response for the ListDelegates method.",
       "id": "ListDelegatesResponse",
@@ -3100,7 +3165,7 @@
       "id": "ListMessagesResponse",
       "properties": {
         "messages": {
-          "description": "List of messages.",
+          "description": "List of messages. Note that each message resource contains only an id and a threadId. Additional message details can be fetched using the messages.get method.",
           "items": {
             "$ref": "Message"
           },
@@ -3158,7 +3223,7 @@
           "type": "integer"
         },
         "threads": {
-          "description": "List of threads.",
+          "description": "List of threads. Note that each thread resource does not contain a list of messages. The list of messages for a given thread can be fetched using the threads.get method.",
           "items": {
             "$ref": "Thread"
           },

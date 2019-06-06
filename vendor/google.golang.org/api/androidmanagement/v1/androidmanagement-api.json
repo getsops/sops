@@ -701,6 +701,158 @@
             }
           }
         },
+        "webApps": {
+          "methods": {
+            "create": {
+              "description": "Creates a web app.",
+              "flatPath": "v1/enterprises/{enterprisesId}/webApps",
+              "httpMethod": "POST",
+              "id": "androidmanagement.enterprises.webApps.create",
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "parent": {
+                  "description": "The name of the enterprise in the form enterprises/{enterpriseId}.",
+                  "location": "path",
+                  "pattern": "^enterprises/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+parent}/webApps",
+              "request": {
+                "$ref": "WebApp"
+              },
+              "response": {
+                "$ref": "WebApp"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidmanagement"
+              ]
+            },
+            "delete": {
+              "description": "Deletes a web app.",
+              "flatPath": "v1/enterprises/{enterprisesId}/webApps/{webAppsId}",
+              "httpMethod": "DELETE",
+              "id": "androidmanagement.enterprises.webApps.delete",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "The name of the web app in the form enterprises/{enterpriseId}/webApps/{packageName}.",
+                  "location": "path",
+                  "pattern": "^enterprises/[^/]+/webApps/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+name}",
+              "response": {
+                "$ref": "Empty"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidmanagement"
+              ]
+            },
+            "get": {
+              "description": "Gets a web app.",
+              "flatPath": "v1/enterprises/{enterprisesId}/webApps/{webAppsId}",
+              "httpMethod": "GET",
+              "id": "androidmanagement.enterprises.webApps.get",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "The name of the web app in the form enterprises/{enterpriseId}/webApp/{packageName}.",
+                  "location": "path",
+                  "pattern": "^enterprises/[^/]+/webApps/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+name}",
+              "response": {
+                "$ref": "WebApp"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidmanagement"
+              ]
+            },
+            "list": {
+              "description": "Lists web apps for a given enterprise.",
+              "flatPath": "v1/enterprises/{enterprisesId}/webApps",
+              "httpMethod": "GET",
+              "id": "androidmanagement.enterprises.webApps.list",
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "pageSize": {
+                  "description": "The requested page size. The actual page size may be fixed to a min or max value.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "A token identifying a page of results returned by the server.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "parent": {
+                  "description": "The name of the enterprise in the form enterprises/{enterpriseId}.",
+                  "location": "path",
+                  "pattern": "^enterprises/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+parent}/webApps",
+              "response": {
+                "$ref": "ListWebAppsResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidmanagement"
+              ]
+            },
+            "patch": {
+              "description": "Updates a web app.",
+              "flatPath": "v1/enterprises/{enterprisesId}/webApps/{webAppsId}",
+              "httpMethod": "PATCH",
+              "id": "androidmanagement.enterprises.webApps.patch",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "The name of the web app in the form enterprises/{enterpriseId}/webApps/{packageName}.",
+                  "location": "path",
+                  "pattern": "^enterprises/[^/]+/webApps/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                },
+                "updateMask": {
+                  "description": "The field mask indicating the fields to update. If not set, all modifiable fields will be modified.",
+                  "format": "google-fieldmask",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+name}",
+              "request": {
+                "$ref": "WebApp"
+              },
+              "response": {
+                "$ref": "WebApp"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidmanagement"
+              ]
+            }
+          }
+        },
         "webTokens": {
           "methods": {
             "create": {
@@ -766,7 +918,7 @@
       }
     }
   },
-  "revision": "20180829",
+  "revision": "20190514",
   "rootUrl": "https://androidmanagement.googleapis.com/",
   "schemas": {
     "AlwaysOnVpnPackage": {
@@ -938,14 +1090,16 @@
             "PREINSTALLED",
             "FORCE_INSTALLED",
             "BLOCKED",
-            "AVAILABLE"
+            "AVAILABLE",
+            "REQUIRED_FOR_SETUP"
           ],
           "enumDescriptions": [
             "Unspecified. Defaults to AVAILABLE.",
             "The app is automatically installed and can be removed by the user.",
             "The app is automatically installed and can't be removed by the user.",
             "The app is blocked and can't be installed. If the app was installed under a previous policy, it will be uninstalled.",
-            "The app is available to install."
+            "The app is available to install.",
+            "The app is automatically installed and can't be removed by the user and will prevent setup from completion until installation is complete."
           ],
           "type": "string"
         },
@@ -960,6 +1114,10 @@
           },
           "description": "Managed configuration applied to the app. The format for the configuration is dictated by the ManagedProperty values supported by the app. Each field name in the managed configuration must match the key field of the ManagedProperty. The field value must be compatible with the type of the ManagedProperty: \u003ctable\u003e \u003ctr\u003e\u003ctd\u003e\u003ci\u003etype\u003c/i\u003e\u003c/td\u003e\u003ctd\u003e\u003ci\u003eJSON value\u003c/i\u003e\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eBOOL\u003c/td\u003e\u003ctd\u003etrue or false\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eSTRING\u003c/td\u003e\u003ctd\u003estring\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eINTEGER\u003c/td\u003e\u003ctd\u003enumber\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eCHOICE\u003c/td\u003e\u003ctd\u003estring\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eMULTISELECT\u003c/td\u003e\u003ctd\u003earray of strings\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eHIDDEN\u003c/td\u003e\u003ctd\u003estring\u003c/td\u003e\u003c/tr\u003e \u003ctr\u003e\u003ctd\u003eBUNDLE_ARRAY\u003c/td\u003e\u003ctd\u003earray of objects\u003c/td\u003e\u003c/tr\u003e \u003c/table\u003e",
           "type": "object"
+        },
+        "managedConfigurationTemplate": {
+          "$ref": "ManagedConfigurationTemplate",
+          "description": "The managed configurations template for the app, saved from the managed configurations iframe. This field is ignored if managed_configuration is set."
         },
         "minimumVersionCode": {
           "description": "The minimum version of the app that runs on the device. If set, the device attempts to update the app to at least this version code. If the app is not up-to-date, the device will contain a NonComplianceDetail with non_compliance_reason set to APP_NOT_UPDATED. The app must already be published to Google Play with a version code greater than or equal to this value. At most 20 apps may specify a minimum version code per policy.",
@@ -1015,6 +1173,13 @@
           "description": "The package name of the app that installed this app.",
           "type": "string"
         },
+        "keyedAppStates": {
+          "description": "List of keyed app states reported by the app.",
+          "items": {
+            "$ref": "KeyedAppState"
+          },
+          "type": "array"
+        },
         "packageName": {
           "description": "Package name of the app.",
           "type": "string"
@@ -1050,6 +1215,29 @@
         "versionName": {
           "description": "The app version as displayed to the user.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ApplicationReportingSettings": {
+      "description": "Settings controlling the behavior of application reports.",
+      "id": "ApplicationReportingSettings",
+      "properties": {
+        "includeRemovedApps": {
+          "description": "Whether removed apps are included in application reports.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "BlockAction": {
+      "description": "An action to block access to apps and data on a fully managed device or in a work profile. This action also triggers a device or work profile to displays a user-facing notification with information (where possible) on how to correct the compliance issue. Note: wipeAction must also be specified.",
+      "id": "BlockAction",
+      "properties": {
+        "blockAfterDays": {
+          "description": "Number of days the policy is non-compliant before the device or work profile is blocked. To block access immediately, set to 0. blockAfterDays must be less than wipeAfterDays.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1220,7 +1408,7 @@
             "This value is disallowed.",
             "The device is active.",
             "The device is disabled.",
-            "The device was deleted. This state will never be returned by an API call, but is used in the final policy compliance report published to Cloud Pub/Sub when the device acknowledges the deletion.",
+            "The device was deleted. This state will never be returned by an API call, but is used in the final status report published to Cloud Pub/Sub when the device acknowledges the deletion.",
             "The device is being provisioned. Newly enrolled devices are in this state until they have a policy applied."
           ],
           "type": "string"
@@ -1358,10 +1546,17 @@
             "This value is disallowed.",
             "The device is active.",
             "The device is disabled.",
-            "The device was deleted. This state will never be returned by an API call, but is used in the final policy compliance report published to Cloud Pub/Sub when the device acknowledges the deletion.",
+            "The device was deleted. This state will never be returned by an API call, but is used in the final status report published to Cloud Pub/Sub when the device acknowledges the deletion.",
             "The device is being provisioned. Newly enrolled devices are in this state until they have a policy applied."
           ],
           "type": "string"
+        },
+        "systemProperties": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Map of selected system properties name and value related to the device.",
+          "type": "object"
         },
         "user": {
           "$ref": "User",
@@ -1582,6 +1777,13 @@
           "description": "The topic that Cloud Pub/Sub notifications are published to, in the form projects/{project}/topics/{topic}. This field is only required if Pub/Sub notifications are enabled.",
           "type": "string"
         },
+        "signinDetails": {
+          "description": "Sign-in details of the enterprise. Maximum of 1 SigninDetail is supported.",
+          "items": {
+            "$ref": "SigninDetail"
+          },
+          "type": "array"
+        },
         "termsAndConditions": {
           "description": "Terms and conditions that must be accepted when provisioning a device for this enterprise. A page of terms is generated for each value in this list.",
           "items": {
@@ -1762,6 +1964,60 @@
       },
       "type": "object"
     },
+    "KeyedAppState": {
+      "description": "Keyed app state reported by the app.",
+      "id": "KeyedAppState",
+      "properties": {
+        "createTime": {
+          "description": "The creation time of the app state on the device.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "data": {
+          "description": "Optionally, a machine-readable value to be read by the EMM. For example, setting values that the admin can choose to query against in the EMM console (e.g. “notify me if the battery_warning data \u003c 10”).",
+          "type": "string"
+        },
+        "key": {
+          "description": "The key for the app state. Acts as a point of reference for what the app is providing state for. For example, when providing managed configuration feedback, this key could be the managed configuration key.",
+          "type": "string"
+        },
+        "lastUpdateTime": {
+          "description": "The time the app state was most recently updated.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "message": {
+          "description": "Optionally, a free-form message string to explain the app state. If the state was triggered by a particular value (e.g. a managed configuration value), it should be included in the message.",
+          "type": "string"
+        },
+        "severity": {
+          "description": "The severity of the app state.",
+          "enum": [
+            "SEVERITY_UNSPECIFIED",
+            "INFO",
+            "ERROR"
+          ],
+          "enumDescriptions": [
+            "Unspecified severity level.",
+            "Information severity level.",
+            "Error severity level. This should only be set for genuine error conditions that a management organization needs to take action to fix."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LaunchAppAction": {
+      "description": "An action to launch an app.",
+      "id": "LaunchAppAction",
+      "properties": {
+        "packageName": {
+          "description": "Package name of app to be launched",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ListDevicesResponse": {
       "description": "Response to a request to list devices for a given enterprise.",
       "id": "ListDevicesResponse",
@@ -1812,6 +2068,42 @@
             "$ref": "Policy"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ListWebAppsResponse": {
+      "description": "Response to a request to list web apps for a given enterprise.",
+      "id": "ListWebAppsResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "If there are more results, a token to retrieve next page of results.",
+          "type": "string"
+        },
+        "webApps": {
+          "description": "The list of web apps.",
+          "items": {
+            "$ref": "WebApp"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ManagedConfigurationTemplate": {
+      "description": "The managed configurations template for the app, saved from the managed configurations iframe.",
+      "id": "ManagedConfigurationTemplate",
+      "properties": {
+        "configurationVariables": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional, a map containing \u003ckey, value\u003e configuration variables defined for the configuration.",
+          "type": "object"
+        },
+        "templateId": {
+          "description": "The ID of the managed configurations template.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2118,7 +2410,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the name should have the format of operations/some/unique/name.",
+          "description": "The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the name should be a resource name ending with operations/{unique_id}.",
           "type": "string"
         },
         "response": {
@@ -2221,6 +2513,20 @@
             "The password must contain alphabetic (or symbol) characters.",
             "The password must contain both numeric and alphabetic (or symbol) characters.",
             "The password must contain at least a letter, a numerical digit and a special symbol. Other password constraints, for example, password_minimum_letters are enforced."
+          ],
+          "type": "string"
+        },
+        "passwordScope": {
+          "description": "The scope that the password requirement applies to.",
+          "enum": [
+            "SCOPE_UNSPECIFIED",
+            "SCOPE_DEVICE",
+            "SCOPE_PROFILE"
+          ],
+          "enumDescriptions": [
+            "The scope is unspecified. The password requirements are applied to the work profile for work profile devices and the whole device for fully managed or dedicated devices.",
+            "The password requirements are only applied to the device.",
+            "The password requirements are only applied to the work profile."
           ],
           "type": "string"
         }
@@ -2380,7 +2686,7 @@
           "type": "array"
         },
         "complianceRules": {
-          "description": "Rules declaring which mitigating actions to take when a device is not compliant with its policy. When the conditions for multiple rules are satisfied, all of the mitigating actions for the rules are taken. There is a maximum limit of 100 rules.",
+          "description": "Rules declaring which mitigating actions to take when a device is not compliant with its policy. When the conditions for multiple rules are satisfied, all of the mitigating actions for the rules are taken. There is a maximum limit of 100 rules. Use policy enforcement rules instead.",
           "items": {
             "$ref": "ComplianceRule"
           },
@@ -2525,6 +2831,11 @@
           "format": "int64",
           "type": "string"
         },
+        "minimumApiLevel": {
+          "description": "The minimum allowed Android API level.",
+          "format": "int32",
+          "type": "integer"
+        },
         "mobileNetworksConfigDisabled": {
           "description": "Whether configuring mobile networks is disabled.",
           "type": "boolean"
@@ -2565,9 +2876,16 @@
           "description": "Whether outgoing calls are disabled.",
           "type": "boolean"
         },
+        "passwordPolicies": {
+          "description": "Password requirement policies. Different policies can be set for work profile or fully managed devices by setting the password_scope field in the policy.",
+          "items": {
+            "$ref": "PasswordRequirements"
+          },
+          "type": "array"
+        },
         "passwordRequirements": {
           "$ref": "PasswordRequirements",
-          "description": "Password requirements."
+          "description": "Password requirements. DEPRECATED - Use password_policies"
         },
         "permissionGrants": {
           "description": "Explicit permission or group grants or denials for all apps. These values override the default_permission_policy.",
@@ -2597,9 +2915,16 @@
           "enumDescriptions": [
             "Unspecified. Defaults to WHITELIST.",
             "Only apps that are in the policy are available and any app not in the policy will be automatically uninstalled from the device.",
-            "All apps are available and any app that should not be on the device should be explicitly markeds as 'BLOCKED' in the applications policy."
+            "All apps are available and any app that should not be on the device should be explicitly marked as 'BLOCKED' in the applications policy."
           ],
           "type": "string"
+        },
+        "policyEnforcementRules": {
+          "description": "Rules that define the behavior when a particular policy can not be applied on device",
+          "items": {
+            "$ref": "PolicyEnforcementRule"
+          },
+          "type": "array"
         },
         "privateKeySelectionEnabled": {
           "description": "Allows showing UI on a device for a user to choose a private key alias if there are no matching rules in ChoosePrivateKeyRules. For devices below Android P, setting this may leave enterprise keys vulnerable.",
@@ -2628,6 +2953,13 @@
         "setWallpaperDisabled": {
           "description": "Whether changing the wallpaper is disabled.",
           "type": "boolean"
+        },
+        "setupActions": {
+          "description": "Actions to take during the setup process.",
+          "items": {
+            "$ref": "SetupAction"
+          },
+          "type": "array"
         },
         "shareLocationDisabled": {
           "description": "Whether location sharing is disabled.",
@@ -2693,7 +3025,7 @@
           "type": "boolean"
         },
         "usbMassStorageEnabled": {
-          "description": "Whether USB storage is enabled.",
+          "description": "Whether USB storage is enabled. Deprecated.",
           "type": "boolean"
         },
         "version": {
@@ -2710,8 +3042,27 @@
           "type": "boolean"
         },
         "wifiConfigsLockdownEnabled": {
-          "description": "Whether Wi-Fi networks defined in Open Network Configuration are locked so they can't be edited by the user.",
+          "description": "DEPRECATED - Use wifi_config_disabled.",
           "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "PolicyEnforcementRule": {
+      "description": "A rule that defines the actions to take if a device or work profile is not compliant with the policy specified in settingName.",
+      "id": "PolicyEnforcementRule",
+      "properties": {
+        "blockAction": {
+          "$ref": "BlockAction",
+          "description": "An action to block access to apps and data on a fully managed device or in a work profile. This action also triggers a user-facing notification with information (where possible) on how to correct the compliance issue. Note: wipeAction must also be specified."
+        },
+        "settingName": {
+          "description": "The top-level policy to enforce. For example, applications or passwordPolicies.",
+          "type": "string"
+        },
+        "wipeAction": {
+          "$ref": "WipeAction",
+          "description": "An action to reset a fully managed device or delete a work profile. Note: blockAction must also be specified."
         }
       },
       "type": "object"
@@ -2780,6 +3131,44 @@
           "description": "The port of the direct proxy.",
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "SetupAction": {
+      "description": "An action executed during setup.",
+      "id": "SetupAction",
+      "properties": {
+        "description": {
+          "$ref": "UserFacingMessage",
+          "description": "Description of this action."
+        },
+        "launchApp": {
+          "$ref": "LaunchAppAction",
+          "description": "An action to launch an app."
+        },
+        "title": {
+          "$ref": "UserFacingMessage",
+          "description": "Title of this action."
+        }
+      },
+      "type": "object"
+    },
+    "SigninDetail": {
+      "description": "A resource containing sign in details for an enterprise.",
+      "id": "SigninDetail",
+      "properties": {
+        "qrCode": {
+          "description": "A JSON string whose UTF-8 representation can be used to generate a QR code to enroll a device with this enrollment token. To enroll a device using NFC, the NFC record must contain a serialized java.util.Properties representation of the properties in the JSON. This is a read-only field generated by the server.",
+          "type": "string"
+        },
+        "signinEnrollmentToken": {
+          "description": "An enterprise wide enrollment token used to trigger custom sign-in flow. This is a read-only field generated by the server.",
+          "type": "string"
+        },
+        "signinUrl": {
+          "description": "Sign-in URL for authentication when device is provisioned with a sign-in enrollment token. The sign-in endpoint should finish authentication flow with a URL in the form of https://enterprise.google.com/android/enroll?et=\u003ctoken\u003e for a successful login, or https://enterprise.google.com/android/enroll/invalid for a failed login.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2879,6 +3268,10 @@
       "description": "Settings controlling the behavior of status reports.",
       "id": "StatusReportingSettings",
       "properties": {
+        "applicationReportingSettings": {
+          "$ref": "ApplicationReportingSettings",
+          "description": "Application reporting settings. Only applicable if application_reports_enabled is true."
+        },
         "applicationReportsEnabled": {
           "description": "Whether app reports are enabled.",
           "type": "boolean"
@@ -2991,6 +3384,64 @@
       },
       "type": "object"
     },
+    "WebApp": {
+      "description": "A web app.",
+      "id": "WebApp",
+      "properties": {
+        "displayMode": {
+          "description": "The display mode of the web app.",
+          "enum": [
+            "DISPLAY_MODE_UNSPECIFIED",
+            "MINIMAL_UI",
+            "STANDALONE",
+            "FULL_SCREEN"
+          ],
+          "enumDescriptions": [
+            "Not used.",
+            "Opens the web app with a minimal set of browser UI elements for controlling navigation and viewing the page URL.",
+            "Opens the web app to look and feel like a standalone native application. The browser UI elements and page URL are not visible, however the system status bar and back button are visible.",
+            "Opens the web app in full screen without any visible controls. The browser UI elements, page URL, system status bar and back button are not visible, and the web app takes up the entirety of the available display area."
+          ],
+          "type": "string"
+        },
+        "icons": {
+          "description": "A list of icons for the web app. Must have at least one element.",
+          "items": {
+            "$ref": "WebAppIcon"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "The name of the web app, which is generated by the server during creation in the form enterprises/{enterpriseId}/webApps/{packageName}.",
+          "type": "string"
+        },
+        "startUrl": {
+          "description": "The start URL, i.e. the URL that should load when the user opens the application.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the web app as displayed to the user (e.g., amongst a list of other applications, or as a label for an icon).",
+          "type": "string"
+        },
+        "versionCode": {
+          "description": "The current version of the app.\u003cp\u003eNote that the version can automatically increase during the lifetime of the web app, while Google does internal housekeeping to keep the web app up-to-date.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WebAppIcon": {
+      "description": "An icon for a web app. Supported formats are: png, jpg and webp.",
+      "id": "WebAppIcon",
+      "properties": {
+        "imageData": {
+          "description": "The actual bytes of the image in a base64url encoded string (c.f. RFC4648, section 5 \"Base 64 Encoding with URL and Filename Safe Alphabet\"). \u003cul\u003e \u003cli\u003eThe image type can be png or jpg. \u003cli\u003eThe image should ideally be square. \u003cli\u003eThe image should ideally have a size of 512x512. \u003c/ul\u003e",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "WebToken": {
       "description": "A web token used to access the managed Google Play iframe.",
       "id": "WebToken",
@@ -3021,6 +3472,22 @@
         "value": {
           "description": "The token value which is used in the hosting page to generate the iframe with the embedded UI. This is a read-only field generated by the server.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WipeAction": {
+      "description": "An action to reset a fully managed device or delete a work profile. Note: blockAction must also be specified.",
+      "id": "WipeAction",
+      "properties": {
+        "preserveFrp": {
+          "description": "Whether the factory-reset protection data is preserved on the device. This setting doesn’t apply to work profiles.",
+          "type": "boolean"
+        },
+        "wipeAfterDays": {
+          "description": "Number of days the policy is non-compliant before the device or work profile is wiped. wipeAfterDays must be greater than blockAfterDays.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"

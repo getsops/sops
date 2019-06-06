@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opCreateScalingPlan = "CreateScalingPlan"
@@ -16,7 +18,7 @@ const opCreateScalingPlan = "CreateScalingPlan"
 // CreateScalingPlanRequest generates a "aws/request.Request" representing the
 // client's request for the CreateScalingPlan operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -56,11 +58,6 @@ func (c *AutoScalingPlans) CreateScalingPlanRequest(input *CreateScalingPlanInpu
 // CreateScalingPlan API operation for AWS Auto Scaling Plans.
 //
 // Creates a scaling plan.
-//
-// A scaling plan contains a set of instructions used to configure dynamic scaling
-// for the scalable resources in your application. AWS Auto Scaling creates
-// target tracking scaling policies based on the scaling instructions in your
-// scaling plan.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -111,7 +108,7 @@ const opDeleteScalingPlan = "DeleteScalingPlan"
 // DeleteScalingPlanRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteScalingPlan operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -145,12 +142,19 @@ func (c *AutoScalingPlans) DeleteScalingPlanRequest(input *DeleteScalingPlanInpu
 
 	output = &DeleteScalingPlanOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeleteScalingPlan API operation for AWS Auto Scaling Plans.
 //
 // Deletes the specified scaling plan.
+//
+// Deleting a scaling plan deletes the underlying ScalingInstruction for all
+// of the scalable resources that are covered by the plan.
+//
+// If the plan has launched resources or has scaling activities in progress,
+// you must delete those resources separately.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -200,7 +204,7 @@ const opDescribeScalingPlanResources = "DescribeScalingPlanResources"
 // DescribeScalingPlanResourcesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeScalingPlanResources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -289,7 +293,7 @@ const opDescribeScalingPlans = "DescribeScalingPlans"
 // DescribeScalingPlansRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeScalingPlans operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -328,7 +332,7 @@ func (c *AutoScalingPlans) DescribeScalingPlansRequest(input *DescribeScalingPla
 
 // DescribeScalingPlans API operation for AWS Auto Scaling Plans.
 //
-// Describes the specified scaling plans or all of your scaling plans.
+// Describes one or more of your scaling plans.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -373,12 +377,98 @@ func (c *AutoScalingPlans) DescribeScalingPlansWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opGetScalingPlanResourceForecastData = "GetScalingPlanResourceForecastData"
+
+// GetScalingPlanResourceForecastDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetScalingPlanResourceForecastData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetScalingPlanResourceForecastData for more information on using the GetScalingPlanResourceForecastData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetScalingPlanResourceForecastDataRequest method.
+//    req, resp := client.GetScalingPlanResourceForecastDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/autoscaling-plans-2018-01-06/GetScalingPlanResourceForecastData
+func (c *AutoScalingPlans) GetScalingPlanResourceForecastDataRequest(input *GetScalingPlanResourceForecastDataInput) (req *request.Request, output *GetScalingPlanResourceForecastDataOutput) {
+	op := &request.Operation{
+		Name:       opGetScalingPlanResourceForecastData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetScalingPlanResourceForecastDataInput{}
+	}
+
+	output = &GetScalingPlanResourceForecastDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetScalingPlanResourceForecastData API operation for AWS Auto Scaling Plans.
+//
+// Retrieves the forecast data for a scalable resource.
+//
+// Capacity forecasts are represented as predicted values, or data points, that
+// are calculated using historical data points from a specified CloudWatch load
+// metric. Data points are available for up to 56 days.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Auto Scaling Plans's
+// API operation GetScalingPlanResourceForecastData for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
+//   An exception was thrown for a validation issue. Review the parameters provided.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an internal error.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/autoscaling-plans-2018-01-06/GetScalingPlanResourceForecastData
+func (c *AutoScalingPlans) GetScalingPlanResourceForecastData(input *GetScalingPlanResourceForecastDataInput) (*GetScalingPlanResourceForecastDataOutput, error) {
+	req, out := c.GetScalingPlanResourceForecastDataRequest(input)
+	return out, req.Send()
+}
+
+// GetScalingPlanResourceForecastDataWithContext is the same as GetScalingPlanResourceForecastData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetScalingPlanResourceForecastData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AutoScalingPlans) GetScalingPlanResourceForecastDataWithContext(ctx aws.Context, input *GetScalingPlanResourceForecastDataInput, opts ...request.Option) (*GetScalingPlanResourceForecastDataOutput, error) {
+	req, out := c.GetScalingPlanResourceForecastDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateScalingPlan = "UpdateScalingPlan"
 
 // UpdateScalingPlanRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateScalingPlan operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -412,12 +502,13 @@ func (c *AutoScalingPlans) UpdateScalingPlanRequest(input *UpdateScalingPlanInpu
 
 	output = &UpdateScalingPlanOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // UpdateScalingPlan API operation for AWS Auto Scaling Plans.
 //
-// Updates the scaling plan for the specified scaling plan.
+// Updates the specified scaling plan.
 //
 // You cannot update a scaling plan if it is in the process of being created,
 // updated, or deleted.
@@ -469,7 +560,7 @@ func (c *AutoScalingPlans) UpdateScalingPlanWithContext(ctx aws.Context, input *
 type ApplicationSource struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of a CloudFormation stack.
+	// The Amazon Resource Name (ARN) of a AWS CloudFormation stack.
 	CloudFormationStackARN *string `type:"string"`
 
 	// A set of tags (up to 50).
@@ -607,7 +698,9 @@ func (s *CreateScalingPlanInput) SetScalingPlanName(v string) *CreateScalingPlan
 type CreateScalingPlanOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The version of the scaling plan. This value is always 1.
+	// The version number of the scaling plan. This value is always 1.
+	//
+	// Currently, you cannot specify multiple scaling plan versions.
 	//
 	// ScalingPlanVersion is a required field
 	ScalingPlanVersion *int64 `type:"long" required:"true"`
@@ -629,11 +722,148 @@ func (s *CreateScalingPlanOutput) SetScalingPlanVersion(v int64) *CreateScalingP
 	return s
 }
 
-// Represents a customized metric for a target tracking policy.
+// Represents a CloudWatch metric of your choosing that can be used for predictive
+// scaling.
+//
+// For predictive scaling to work with a customized load metric specification,
+// AWS Auto Scaling needs access to the Sum and Average statistics that CloudWatch
+// computes from metric data. Statistics are calculations used to aggregate
+// data over specified time periods.
+//
+// When you choose a load metric, make sure that the required Sum and Average
+// statistics for your metric are available in CloudWatch and that they provide
+// relevant data for predictive scaling. The Sum statistic must represent the
+// total load on the resource, and the Average statistic must represent the
+// average load per capacity unit of the resource. For example, there is a metric
+// that counts the number of requests processed by your Auto Scaling group.
+// If the Sum statistic represents the total request count processed by the
+// group, then the Average statistic for the specified metric must represent
+// the average request count processed by each instance of the group.
+//
+// For information about terminology, available metrics, or how to publish new
+// metrics, see Amazon CloudWatch Concepts (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html)
+// in the Amazon CloudWatch User Guide.
+type CustomizedLoadMetricSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The dimensions of the metric.
+	//
+	// Conditional: If you published your metric with dimensions, you must specify
+	// the same dimensions in your customized load metric specification.
+	Dimensions []*MetricDimension `type:"list"`
+
+	// The name of the metric.
+	//
+	// MetricName is a required field
+	MetricName *string `type:"string" required:"true"`
+
+	// The namespace of the metric.
+	//
+	// Namespace is a required field
+	Namespace *string `type:"string" required:"true"`
+
+	// The statistic of the metric. Currently, the value must always be Sum.
+	//
+	// Statistic is a required field
+	Statistic *string `type:"string" required:"true" enum:"MetricStatistic"`
+
+	// The unit of the metric.
+	Unit *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CustomizedLoadMetricSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CustomizedLoadMetricSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomizedLoadMetricSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomizedLoadMetricSpecification"}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.Namespace == nil {
+		invalidParams.Add(request.NewErrParamRequired("Namespace"))
+	}
+	if s.Statistic == nil {
+		invalidParams.Add(request.NewErrParamRequired("Statistic"))
+	}
+	if s.Dimensions != nil {
+		for i, v := range s.Dimensions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Dimensions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *CustomizedLoadMetricSpecification) SetDimensions(v []*MetricDimension) *CustomizedLoadMetricSpecification {
+	s.Dimensions = v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *CustomizedLoadMetricSpecification) SetMetricName(v string) *CustomizedLoadMetricSpecification {
+	s.MetricName = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *CustomizedLoadMetricSpecification) SetNamespace(v string) *CustomizedLoadMetricSpecification {
+	s.Namespace = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *CustomizedLoadMetricSpecification) SetStatistic(v string) *CustomizedLoadMetricSpecification {
+	s.Statistic = &v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *CustomizedLoadMetricSpecification) SetUnit(v string) *CustomizedLoadMetricSpecification {
+	s.Unit = &v
+	return s
+}
+
+// Represents a CloudWatch metric of your choosing that can be used for dynamic
+// scaling as part of a target tracking scaling policy.
+//
+// To create your customized scaling metric specification:
+//
+//    * Add values for each required parameter from CloudWatch. You can use
+//    an existing metric, or a new metric that you create. To use your own metric,
+//    you must first publish the metric to CloudWatch. For more information,
+//    see Publish Custom Metrics (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html)
+//    in the Amazon CloudWatch User Guide.
+//
+//    * Choose a metric that changes proportionally with capacity. The value
+//    of the metric should increase or decrease in inverse proportion to the
+//    number of capacity units. That is, the value of the metric should decrease
+//    when capacity increases.
+//
+// For more information about CloudWatch, see Amazon CloudWatch Concepts (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html).
 type CustomizedScalingMetricSpecification struct {
 	_ struct{} `type:"structure"`
 
 	// The dimensions of the metric.
+	//
+	// Conditional: If you published your metric with dimensions, you must specify
+	// the same dimensions in your customized scaling metric specification.
 	Dimensions []*MetricDimension `type:"list"`
 
 	// The name of the metric.
@@ -724,6 +954,39 @@ func (s *CustomizedScalingMetricSpecification) SetUnit(v string) *CustomizedScal
 	return s
 }
 
+// Represents a single value in the forecast data used for predictive scaling.
+type Datapoint struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp for the data point in UTC format.
+	Timestamp *time.Time `type:"timestamp"`
+
+	// The value of the data point.
+	Value *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s Datapoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Datapoint) GoString() string {
+	return s.String()
+}
+
+// SetTimestamp sets the Timestamp field's value.
+func (s *Datapoint) SetTimestamp(v time.Time) *Datapoint {
+	s.Timestamp = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Datapoint) SetValue(v float64) *Datapoint {
+	s.Value = &v
+	return s
+}
+
 type DeleteScalingPlanInput struct {
 	_ struct{} `type:"structure"`
 
@@ -732,7 +995,7 @@ type DeleteScalingPlanInput struct {
 	// ScalingPlanName is a required field
 	ScalingPlanName *string `min:"1" type:"string" required:"true"`
 
-	// The version of the scaling plan.
+	// The version number of the scaling plan.
 	//
 	// ScalingPlanVersion is a required field
 	ScalingPlanVersion *int64 `type:"long" required:"true"`
@@ -796,7 +1059,7 @@ func (s DeleteScalingPlanOutput) GoString() string {
 type DescribeScalingPlanResourcesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum number of scalable resources to return. This value can be between
+	// The maximum number of scalable resources to return. The value must be between
 	// 1 and 50. The default value is 50.
 	MaxResults *int64 `type:"integer"`
 
@@ -808,7 +1071,7 @@ type DescribeScalingPlanResourcesInput struct {
 	// ScalingPlanName is a required field
 	ScalingPlanName *string `min:"1" type:"string" required:"true"`
 
-	// The version of the scaling plan.
+	// The version number of the scaling plan.
 	//
 	// ScalingPlanVersion is a required field
 	ScalingPlanVersion *int64 `type:"long" required:"true"`
@@ -918,8 +1181,8 @@ type DescribeScalingPlansInput struct {
 	// you cannot specify scaling plan names.
 	ScalingPlanNames []*string `type:"list"`
 
-	// The version of the scaling plan. If you specify a scaling plan version, you
-	// must also specify a scaling plan name.
+	// The version number of the scaling plan. If you specify a scaling plan version,
+	// you must also specify a scaling plan name.
 	ScalingPlanVersion *int64 `type:"long"`
 }
 
@@ -1016,6 +1279,207 @@ func (s *DescribeScalingPlansOutput) SetScalingPlans(v []*ScalingPlan) *Describe
 	return s
 }
 
+type GetScalingPlanResourceForecastDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The exclusive end time of the time range for the forecast data to get. The
+	// maximum time duration between the start and end time is seven days.
+	//
+	// Although this parameter can accept a date and time that is more than two
+	// days in the future, the availability of forecast data has limits. AWS Auto
+	// Scaling only issues forecasts for periods of two days in advance.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `type:"timestamp" required:"true"`
+
+	// The type of forecast data to get.
+	//
+	//    * LoadForecast: The load metric forecast.
+	//
+	//    * CapacityForecast: The capacity forecast.
+	//
+	//    * ScheduledActionMinCapacity: The minimum capacity for each scheduled
+	//    scaling action. This data is calculated as the larger of two values: the
+	//    capacity forecast or the minimum capacity in the scaling instruction.
+	//
+	//    * ScheduledActionMaxCapacity: The maximum capacity for each scheduled
+	//    scaling action. The calculation used is determined by the predictive scaling
+	//    maximum capacity behavior setting in the scaling instruction.
+	//
+	// ForecastDataType is a required field
+	ForecastDataType *string `type:"string" required:"true" enum:"ForecastDataType"`
+
+	// The ID of the resource. This string consists of the resource type and unique
+	// identifier.
+	//
+	//    * Auto Scaling group - The resource type is autoScalingGroup and the unique
+	//    identifier is the name of the Auto Scaling group. Example: autoScalingGroup/my-asg.
+	//
+	//    * ECS service - The resource type is service and the unique identifier
+	//    is the cluster name and service name. Example: service/default/sample-webapp.
+	//
+	//    * Spot Fleet request - The resource type is spot-fleet-request and the
+	//    unique identifier is the Spot Fleet request ID. Example: spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE.
+	//
+	//    * DynamoDB table - The resource type is table and the unique identifier
+	//    is the resource ID. Example: table/my-table.
+	//
+	//    * DynamoDB global secondary index - The resource type is index and the
+	//    unique identifier is the resource ID. Example: table/my-table/index/my-table-index.
+	//
+	//    * Aurora DB cluster - The resource type is cluster and the unique identifier
+	//    is the cluster name. Example: cluster:my-db-cluster.
+	//
+	// ResourceId is a required field
+	ResourceId *string `type:"string" required:"true"`
+
+	// The scalable dimension for the resource.
+	//
+	// ScalableDimension is a required field
+	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
+
+	// The name of the scaling plan.
+	//
+	// ScalingPlanName is a required field
+	ScalingPlanName *string `min:"1" type:"string" required:"true"`
+
+	// The version number of the scaling plan.
+	//
+	// ScalingPlanVersion is a required field
+	ScalingPlanVersion *int64 `type:"long" required:"true"`
+
+	// The namespace of the AWS service.
+	//
+	// ServiceNamespace is a required field
+	ServiceNamespace *string `type:"string" required:"true" enum:"ServiceNamespace"`
+
+	// The inclusive start time of the time range for the forecast data to get.
+	// The date and time can be at most 56 days before the current date and time.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation
+func (s GetScalingPlanResourceForecastDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetScalingPlanResourceForecastDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetScalingPlanResourceForecastDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetScalingPlanResourceForecastDataInput"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.ForecastDataType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ForecastDataType"))
+	}
+	if s.ResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceId"))
+	}
+	if s.ScalableDimension == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScalableDimension"))
+	}
+	if s.ScalingPlanName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScalingPlanName"))
+	}
+	if s.ScalingPlanName != nil && len(*s.ScalingPlanName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ScalingPlanName", 1))
+	}
+	if s.ScalingPlanVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScalingPlanVersion"))
+	}
+	if s.ServiceNamespace == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceNamespace"))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetEndTime(v time.Time) *GetScalingPlanResourceForecastDataInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetForecastDataType sets the ForecastDataType field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetForecastDataType(v string) *GetScalingPlanResourceForecastDataInput {
+	s.ForecastDataType = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetResourceId(v string) *GetScalingPlanResourceForecastDataInput {
+	s.ResourceId = &v
+	return s
+}
+
+// SetScalableDimension sets the ScalableDimension field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetScalableDimension(v string) *GetScalingPlanResourceForecastDataInput {
+	s.ScalableDimension = &v
+	return s
+}
+
+// SetScalingPlanName sets the ScalingPlanName field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetScalingPlanName(v string) *GetScalingPlanResourceForecastDataInput {
+	s.ScalingPlanName = &v
+	return s
+}
+
+// SetScalingPlanVersion sets the ScalingPlanVersion field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetScalingPlanVersion(v int64) *GetScalingPlanResourceForecastDataInput {
+	s.ScalingPlanVersion = &v
+	return s
+}
+
+// SetServiceNamespace sets the ServiceNamespace field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetServiceNamespace(v string) *GetScalingPlanResourceForecastDataInput {
+	s.ServiceNamespace = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *GetScalingPlanResourceForecastDataInput) SetStartTime(v time.Time) *GetScalingPlanResourceForecastDataInput {
+	s.StartTime = &v
+	return s
+}
+
+type GetScalingPlanResourceForecastDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The data points to return.
+	//
+	// Datapoints is a required field
+	Datapoints []*Datapoint `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s GetScalingPlanResourceForecastDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetScalingPlanResourceForecastDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetDatapoints sets the Datapoints field's value.
+func (s *GetScalingPlanResourceForecastDataOutput) SetDatapoints(v []*Datapoint) *GetScalingPlanResourceForecastDataOutput {
+	s.Datapoints = v
+	return s
+}
+
 // Represents a dimension for a customized metric.
 type MetricDimension struct {
 	_ struct{} `type:"structure"`
@@ -1069,12 +1533,76 @@ func (s *MetricDimension) SetValue(v string) *MetricDimension {
 	return s
 }
 
-// Represents a predefined metric for a target tracking policy.
+// Represents a predefined metric that can be used for predictive scaling.
+type PredefinedLoadMetricSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The metric type.
+	//
+	// PredefinedLoadMetricType is a required field
+	PredefinedLoadMetricType *string `type:"string" required:"true" enum:"LoadMetricType"`
+
+	// Identifies the resource associated with the metric type. You can't specify
+	// a resource label unless the metric type is ALBRequestCountPerTarget and there
+	// is a target group for an Application Load Balancer attached to the Auto Scaling
+	// group.
+	//
+	// The format is app/<load-balancer-name>/<load-balancer-id>/targetgroup/<target-group-name>/<target-group-id>,
+	// where:
+	//
+	//    * app/<load-balancer-name>/<load-balancer-id> is the final portion of
+	//    the load balancer ARN.
+	//
+	//    * targetgroup/<target-group-name>/<target-group-id> is the final portion
+	//    of the target group ARN.
+	ResourceLabel *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PredefinedLoadMetricSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PredefinedLoadMetricSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PredefinedLoadMetricSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PredefinedLoadMetricSpecification"}
+	if s.PredefinedLoadMetricType == nil {
+		invalidParams.Add(request.NewErrParamRequired("PredefinedLoadMetricType"))
+	}
+	if s.ResourceLabel != nil && len(*s.ResourceLabel) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceLabel", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetPredefinedLoadMetricType sets the PredefinedLoadMetricType field's value.
+func (s *PredefinedLoadMetricSpecification) SetPredefinedLoadMetricType(v string) *PredefinedLoadMetricSpecification {
+	s.PredefinedLoadMetricType = &v
+	return s
+}
+
+// SetResourceLabel sets the ResourceLabel field's value.
+func (s *PredefinedLoadMetricSpecification) SetResourceLabel(v string) *PredefinedLoadMetricSpecification {
+	s.ResourceLabel = &v
+	return s
+}
+
+// Represents a predefined metric that can be used for dynamic scaling as part
+// of a target tracking scaling policy.
 type PredefinedScalingMetricSpecification struct {
 	_ struct{} `type:"structure"`
 
 	// The metric type. The ALBRequestCountPerTarget metric type applies only to
-	// Auto Scaling groups, Sport Fleet requests, and ECS services.
+	// Auto Scaling groups, Spot Fleet requests, and ECS services.
 	//
 	// PredefinedScalingMetricType is a required field
 	PredefinedScalingMetricType *string `type:"string" required:"true" enum:"ScalingMetricType"`
@@ -1088,7 +1616,7 @@ type PredefinedScalingMetricSpecification struct {
 	// where:
 	//
 	//    * app/<load-balancer-name>/<load-balancer-id> is the final portion of
-	//    the load balancer ARN
+	//    the load balancer ARN.
 	//
 	//    * targetgroup/<target-group-name>/<target-group-id> is the final portion
 	//    of the target group ARN.
@@ -1133,19 +1661,101 @@ func (s *PredefinedScalingMetricSpecification) SetResourceLabel(v string) *Prede
 	return s
 }
 
-// Specifies the scaling configuration for a scalable resource.
+// Describes a scaling instruction for a scalable resource.
+//
+// The scaling instruction is used in combination with a scaling plan, which
+// is a set of instructions for configuring dynamic scaling and predictive scaling
+// for the scalable resources in your application. Each scaling instruction
+// applies to one resource.
+//
+// AWS Auto Scaling creates target tracking scaling policies based on the scaling
+// instructions. Target tracking scaling policies adjust the capacity of your
+// scalable resource as required to maintain resource utilization at the target
+// value that you specified.
+//
+// AWS Auto Scaling also configures predictive scaling for your Amazon EC2 Auto
+// Scaling groups using a subset of parameters, including the load metric, the
+// scaling metric, the target value for the scaling metric, the predictive scaling
+// mode (forecast and scale or forecast only), and the desired behavior when
+// the forecast capacity exceeds the maximum capacity of the resource. With
+// predictive scaling, AWS Auto Scaling generates forecasts with traffic predictions
+// for the two days ahead and schedules scaling actions that proactively add
+// and remove resource capacity to match the forecast.
+//
+// We recommend waiting a minimum of 24 hours after creating an Auto Scaling
+// group to configure predictive scaling. At minimum, there must be 24 hours
+// of historical data to generate a forecast.
+//
+// For more information, see Getting Started with AWS Auto Scaling (https://docs.aws.amazon.com/autoscaling/plans/userguide/auto-scaling-getting-started.html).
 type ScalingInstruction struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum value to scale to in response to a scale out event.
+	// The customized load metric to use for predictive scaling. This parameter
+	// or a PredefinedLoadMetricSpecification is required when configuring predictive
+	// scaling, and cannot be used otherwise.
+	CustomizedLoadMetricSpecification *CustomizedLoadMetricSpecification `type:"structure"`
+
+	// Controls whether dynamic scaling by AWS Auto Scaling is disabled. When dynamic
+	// scaling is enabled, AWS Auto Scaling creates target tracking scaling policies
+	// based on the specified target tracking configurations.
+	//
+	// The default is enabled (false).
+	DisableDynamicScaling *bool `type:"boolean"`
+
+	// The maximum capacity of the resource. The exception to this upper limit is
+	// if you specify a non-default setting for PredictiveScalingMaxCapacityBehavior.
 	//
 	// MaxCapacity is a required field
 	MaxCapacity *int64 `type:"integer" required:"true"`
 
-	// The minimum value to scale to in response to a scale in event.
+	// The minimum capacity of the resource.
 	//
 	// MinCapacity is a required field
 	MinCapacity *int64 `type:"integer" required:"true"`
+
+	// The predefined load metric to use for predictive scaling. This parameter
+	// or a CustomizedLoadMetricSpecification is required when configuring predictive
+	// scaling, and cannot be used otherwise.
+	PredefinedLoadMetricSpecification *PredefinedLoadMetricSpecification `type:"structure"`
+
+	// Defines the behavior that should be applied if the forecast capacity approaches
+	// or exceeds the maximum capacity specified for the resource. The default value
+	// is SetForecastCapacityToMaxCapacity.
+	//
+	// The following are possible values:
+	//
+	//    * SetForecastCapacityToMaxCapacity - AWS Auto Scaling cannot scale resource
+	//    capacity higher than the maximum capacity. The maximum capacity is enforced
+	//    as a hard limit.
+	//
+	//    * SetMaxCapacityToForecastCapacity - AWS Auto Scaling may scale resource
+	//    capacity higher than the maximum capacity to equal but not exceed forecast
+	//    capacity.
+	//
+	//    * SetMaxCapacityAboveForecastCapacity - AWS Auto Scaling may scale resource
+	//    capacity higher than the maximum capacity by a specified buffer value.
+	//    The intention is to give the target tracking scaling policy extra capacity
+	//    if unexpected traffic occurs.
+	//
+	// Only valid when configuring predictive scaling.
+	PredictiveScalingMaxCapacityBehavior *string `type:"string" enum:"PredictiveScalingMaxCapacityBehavior"`
+
+	// The size of the capacity buffer to use when the forecast capacity is close
+	// to or exceeds the maximum capacity. The value is specified as a percentage
+	// relative to the forecast capacity. For example, if the buffer is 10, this
+	// means a 10 percent buffer, such that if the forecast capacity is 50, and
+	// the maximum capacity is 40, then the effective maximum capacity is 55.
+	//
+	// Only valid when configuring predictive scaling. Required if the PredictiveScalingMaxCapacityBehavior
+	// is set to SetMaxCapacityAboveForecastCapacity, and cannot be used otherwise.
+	//
+	// The range is 1-100.
+	PredictiveScalingMaxCapacityBuffer *int64 `type:"integer"`
+
+	// The predictive scaling mode. The default value is ForecastAndScale. Otherwise,
+	// AWS Auto Scaling forecasts capacity but does not create any scheduled scaling
+	// actions based on the capacity forecast.
+	PredictiveScalingMode *string `type:"string" enum:"PredictiveScalingMode"`
 
 	// The ID of the resource. This string consists of the resource type and unique
 	// identifier.
@@ -1156,8 +1766,8 @@ type ScalingInstruction struct {
 	//    * ECS service - The resource type is service and the unique identifier
 	//    is the cluster name and service name. Example: service/default/sample-webapp.
 	//
-	//    * Spot fleet request - The resource type is spot-fleet-request and the
-	//    unique identifier is the Spot fleet request ID. Example: spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE.
+	//    * Spot Fleet request - The resource type is spot-fleet-request and the
+	//    unique identifier is the Spot Fleet request ID. Example: spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE.
 	//
 	//    * DynamoDB table - The resource type is table and the unique identifier
 	//    is the resource ID. Example: table/my-table.
@@ -1179,7 +1789,7 @@ type ScalingInstruction struct {
 	//    * ecs:service:DesiredCount - The desired task count of an ECS service.
 	//
 	//    * ec2:spot-fleet-request:TargetCapacity - The target capacity of a Spot
-	//    fleet request.
+	//    Fleet request.
 	//
 	//    * dynamodb:table:ReadCapacityUnits - The provisioned read capacity for
 	//    a DynamoDB table.
@@ -1194,17 +1804,55 @@ type ScalingInstruction struct {
 	//    a DynamoDB global secondary index.
 	//
 	//    * rds:cluster:ReadReplicaCount - The count of Aurora Replicas in an Aurora
-	//    DB cluster. Available for Aurora MySQL-compatible edition.
+	//    DB cluster. Available for Aurora MySQL-compatible edition and Aurora PostgreSQL-compatible
+	//    edition.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
+
+	// Controls whether a resource's externally created scaling policies are kept
+	// or replaced.
+	//
+	// The default value is KeepExternalPolicies. If the parameter is set to ReplaceExternalPolicies,
+	// any scaling policies that are external to AWS Auto Scaling are deleted and
+	// new target tracking scaling policies created.
+	//
+	// Only valid when configuring dynamic scaling.
+	//
+	// Condition: The number of existing policies to be replaced must be less than
+	// or equal to 50. If there are more than 50 policies to be replaced, AWS Auto
+	// Scaling keeps all existing policies and does not create new ones.
+	ScalingPolicyUpdateBehavior *string `type:"string" enum:"ScalingPolicyUpdateBehavior"`
+
+	// The amount of time, in seconds, to buffer the run time of scheduled scaling
+	// actions when scaling out. For example, if the forecast says to add capacity
+	// at 10:00 AM, and the buffer time is 5 minutes, then the run time of the corresponding
+	// scheduled scaling action will be 9:55 AM. The intention is to give resources
+	// time to be provisioned. For example, it can take a few minutes to launch
+	// an EC2 instance. The actual amount of time required depends on several factors,
+	// such as the size of the instance and whether there are startup scripts to
+	// complete.
+	//
+	// The value must be less than the forecast interval duration of 3600 seconds
+	// (60 minutes). The default is 300 seconds.
+	//
+	// Only valid when configuring predictive scaling.
+	ScheduledActionBufferTime *int64 `type:"integer"`
 
 	// The namespace of the AWS service.
 	//
 	// ServiceNamespace is a required field
 	ServiceNamespace *string `type:"string" required:"true" enum:"ServiceNamespace"`
 
-	// The target tracking scaling policies (up to 10).
+	// The structure that defines new target tracking configurations (up to 10).
+	// Each of these structures includes a specific scaling metric and a target
+	// value for the metric, along with various parameters to use with dynamic scaling.
+	//
+	// With predictive scaling and dynamic scaling, the resource scales based on
+	// the target tracking configuration that provides the largest capacity for
+	// both scale in and scale out.
+	//
+	// Condition: The scaling metric must be unique across target tracking configurations.
 	//
 	// TargetTrackingConfigurations is a required field
 	TargetTrackingConfigurations []*TargetTrackingConfiguration `type:"list" required:"true"`
@@ -1244,6 +1892,16 @@ func (s *ScalingInstruction) Validate() error {
 	if s.TargetTrackingConfigurations == nil {
 		invalidParams.Add(request.NewErrParamRequired("TargetTrackingConfigurations"))
 	}
+	if s.CustomizedLoadMetricSpecification != nil {
+		if err := s.CustomizedLoadMetricSpecification.Validate(); err != nil {
+			invalidParams.AddNested("CustomizedLoadMetricSpecification", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.PredefinedLoadMetricSpecification != nil {
+		if err := s.PredefinedLoadMetricSpecification.Validate(); err != nil {
+			invalidParams.AddNested("PredefinedLoadMetricSpecification", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.TargetTrackingConfigurations != nil {
 		for i, v := range s.TargetTrackingConfigurations {
 			if v == nil {
@@ -1261,6 +1919,18 @@ func (s *ScalingInstruction) Validate() error {
 	return nil
 }
 
+// SetCustomizedLoadMetricSpecification sets the CustomizedLoadMetricSpecification field's value.
+func (s *ScalingInstruction) SetCustomizedLoadMetricSpecification(v *CustomizedLoadMetricSpecification) *ScalingInstruction {
+	s.CustomizedLoadMetricSpecification = v
+	return s
+}
+
+// SetDisableDynamicScaling sets the DisableDynamicScaling field's value.
+func (s *ScalingInstruction) SetDisableDynamicScaling(v bool) *ScalingInstruction {
+	s.DisableDynamicScaling = &v
+	return s
+}
+
 // SetMaxCapacity sets the MaxCapacity field's value.
 func (s *ScalingInstruction) SetMaxCapacity(v int64) *ScalingInstruction {
 	s.MaxCapacity = &v
@@ -1273,6 +1943,30 @@ func (s *ScalingInstruction) SetMinCapacity(v int64) *ScalingInstruction {
 	return s
 }
 
+// SetPredefinedLoadMetricSpecification sets the PredefinedLoadMetricSpecification field's value.
+func (s *ScalingInstruction) SetPredefinedLoadMetricSpecification(v *PredefinedLoadMetricSpecification) *ScalingInstruction {
+	s.PredefinedLoadMetricSpecification = v
+	return s
+}
+
+// SetPredictiveScalingMaxCapacityBehavior sets the PredictiveScalingMaxCapacityBehavior field's value.
+func (s *ScalingInstruction) SetPredictiveScalingMaxCapacityBehavior(v string) *ScalingInstruction {
+	s.PredictiveScalingMaxCapacityBehavior = &v
+	return s
+}
+
+// SetPredictiveScalingMaxCapacityBuffer sets the PredictiveScalingMaxCapacityBuffer field's value.
+func (s *ScalingInstruction) SetPredictiveScalingMaxCapacityBuffer(v int64) *ScalingInstruction {
+	s.PredictiveScalingMaxCapacityBuffer = &v
+	return s
+}
+
+// SetPredictiveScalingMode sets the PredictiveScalingMode field's value.
+func (s *ScalingInstruction) SetPredictiveScalingMode(v string) *ScalingInstruction {
+	s.PredictiveScalingMode = &v
+	return s
+}
+
 // SetResourceId sets the ResourceId field's value.
 func (s *ScalingInstruction) SetResourceId(v string) *ScalingInstruction {
 	s.ResourceId = &v
@@ -1282,6 +1976,18 @@ func (s *ScalingInstruction) SetResourceId(v string) *ScalingInstruction {
 // SetScalableDimension sets the ScalableDimension field's value.
 func (s *ScalingInstruction) SetScalableDimension(v string) *ScalingInstruction {
 	s.ScalableDimension = &v
+	return s
+}
+
+// SetScalingPolicyUpdateBehavior sets the ScalingPolicyUpdateBehavior field's value.
+func (s *ScalingInstruction) SetScalingPolicyUpdateBehavior(v string) *ScalingInstruction {
+	s.ScalingPolicyUpdateBehavior = &v
+	return s
+}
+
+// SetScheduledActionBufferTime sets the ScheduledActionBufferTime field's value.
+func (s *ScalingInstruction) SetScheduledActionBufferTime(v int64) *ScalingInstruction {
+	s.ScheduledActionBufferTime = &v
 	return s
 }
 
@@ -1306,7 +2012,7 @@ type ScalingPlan struct {
 	// ApplicationSource is a required field
 	ApplicationSource *ApplicationSource `type:"structure" required:"true"`
 
-	// The Unix timestamp when the scaling plan was created.
+	// The Unix time stamp when the scaling plan was created.
 	CreationTime *time.Time `type:"timestamp"`
 
 	// The scaling instructions.
@@ -1319,7 +2025,7 @@ type ScalingPlan struct {
 	// ScalingPlanName is a required field
 	ScalingPlanName *string `min:"1" type:"string" required:"true"`
 
-	// The version of the scaling plan.
+	// The version number of the scaling plan.
 	//
 	// ScalingPlanVersion is a required field
 	ScalingPlanVersion *int64 `type:"long" required:"true"`
@@ -1339,13 +2045,17 @@ type ScalingPlan struct {
 	//
 	//    * DeletionFailed - The scaling plan could not be deleted.
 	//
+	//    * UpdateInProgress - The scaling plan is being updated.
+	//
+	//    * UpdateFailed - The scaling plan could not be updated.
+	//
 	// StatusCode is a required field
 	StatusCode *string `type:"string" required:"true" enum:"ScalingPlanStatusCode"`
 
 	// A simple message about the current status of the scaling plan.
 	StatusMessage *string `type:"string"`
 
-	// The Unix timestamp when the scaling plan entered the current status.
+	// The Unix time stamp when the scaling plan entered the current status.
 	StatusStartTime *time.Time `type:"timestamp"`
 }
 
@@ -1420,8 +2130,8 @@ type ScalingPlanResource struct {
 	//    * ECS service - The resource type is service and the unique identifier
 	//    is the cluster name and service name. Example: service/default/sample-webapp.
 	//
-	//    * Spot fleet request - The resource type is spot-fleet-request and the
-	//    unique identifier is the Spot fleet request ID. Example: spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE.
+	//    * Spot Fleet request - The resource type is spot-fleet-request and the
+	//    unique identifier is the Spot Fleet request ID. Example: spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE.
 	//
 	//    * DynamoDB table - The resource type is table and the unique identifier
 	//    is the resource ID. Example: table/my-table.
@@ -1443,7 +2153,7 @@ type ScalingPlanResource struct {
 	//    * ecs:service:DesiredCount - The desired task count of an ECS service.
 	//
 	//    * ec2:spot-fleet-request:TargetCapacity - The target capacity of a Spot
-	//    fleet request.
+	//    Fleet request.
 	//
 	//    * dynamodb:table:ReadCapacityUnits - The provisioned read capacity for
 	//    a DynamoDB table.
@@ -1458,7 +2168,8 @@ type ScalingPlanResource struct {
 	//    a DynamoDB global secondary index.
 	//
 	//    * rds:cluster:ReadReplicaCount - The count of Aurora Replicas in an Aurora
-	//    DB cluster. Available for Aurora MySQL-compatible edition.
+	//    DB cluster. Available for Aurora MySQL-compatible edition and Aurora PostgreSQL-compatible
+	//    edition.
 	//
 	// ScalableDimension is a required field
 	ScalableDimension *string `type:"string" required:"true" enum:"ScalableDimension"`
@@ -1468,7 +2179,7 @@ type ScalingPlanResource struct {
 	// ScalingPlanName is a required field
 	ScalingPlanName *string `min:"1" type:"string" required:"true"`
 
-	// The version of the scaling plan.
+	// The version number of the scaling plan.
 	//
 	// ScalingPlanVersion is a required field
 	ScalingPlanVersion *int64 `type:"long" required:"true"`
@@ -1572,7 +2283,8 @@ type ScalingPolicy struct {
 	// PolicyType is a required field
 	PolicyType *string `type:"string" required:"true" enum:"PolicyType"`
 
-	// The target tracking scaling policy.
+	// The target tracking scaling policy. Includes support for predefined or customized
+	// metrics.
 	TargetTrackingConfiguration *TargetTrackingConfiguration `type:"structure"`
 }
 
@@ -1650,17 +2362,21 @@ func (s *TagFilter) SetValues(v []*string) *TagFilter {
 	return s
 }
 
-// Represents a target tracking scaling policy.
+// Describes a target tracking configuration to use with AWS Auto Scaling. Used
+// with ScalingInstruction and ScalingPolicy.
 type TargetTrackingConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// A customized metric.
+	// A customized metric. You can specify either a predefined metric or a customized
+	// metric.
 	CustomizedScalingMetricSpecification *CustomizedScalingMetricSpecification `type:"structure"`
 
-	// Indicates whether scale in by the target tracking policy is disabled. If
-	// the value is true, scale in is disabled and the target tracking policy won't
-	// remove capacity from the scalable resource. Otherwise, scale in is enabled
-	// and the target tracking policy can remove capacity from the scalable resource.
+	// Indicates whether scale in by the target tracking scaling policy is disabled.
+	// If the value is true, scale in is disabled and the target tracking scaling
+	// policy doesn't remove capacity from the scalable resource. Otherwise, scale
+	// in is enabled and the target tracking scaling policy can remove capacity
+	// from the scalable resource.
+	//
 	// The default value is false.
 	DisableScaleIn *bool `type:"boolean"`
 
@@ -1669,7 +2385,8 @@ type TargetTrackingConfiguration struct {
 	// Auto Scaling group.
 	EstimatedInstanceWarmup *int64 `type:"integer"`
 
-	// A predefined metric.
+	// A predefined metric. You can specify either a predefined metric or a customized
+	// metric.
 	PredefinedScalingMetricSpecification *PredefinedScalingMetricSpecification `type:"structure"`
 
 	// The amount of time, in seconds, after a scale in activity completes before
@@ -1678,17 +2395,17 @@ type TargetTrackingConfiguration struct {
 	//
 	// The cooldown period is used to block subsequent scale in requests until it
 	// has expired. The intention is to scale in conservatively to protect your
-	// application's availability. However, if another alarm triggers a scale out
+	// application's availability. However, if another alarm triggers a scale-out
 	// policy during the cooldown period after a scale-in, AWS Auto Scaling scales
 	// out your scalable target immediately.
 	ScaleInCooldown *int64 `type:"integer"`
 
-	// The amount of time, in seconds, after a scale out activity completes before
-	// another scale out activity can start. This value is not used if the scalable
+	// The amount of time, in seconds, after a scale-out activity completes before
+	// another scale-out activity can start. This value is not used if the scalable
 	// resource is an Auto Scaling group.
 	//
 	// While the cooldown period is in effect, the capacity that has been added
-	// by the previous scale out event that initiated the cooldown is calculated
+	// by the previous scale-out event that initiated the cooldown is calculated
 	// as part of the desired capacity for the next scale out. The intention is
 	// to continuously (but not excessively) scale out.
 	ScaleOutCooldown *int64 `type:"integer"`
@@ -1789,7 +2506,7 @@ type UpdateScalingPlanInput struct {
 	// ScalingPlanName is a required field
 	ScalingPlanName *string `min:"1" type:"string" required:"true"`
 
-	// The version number.
+	// The version number of the scaling plan.
 	//
 	// ScalingPlanVersion is a required field
 	ScalingPlanVersion *int64 `type:"long" required:"true"`
@@ -1878,6 +2595,34 @@ func (s UpdateScalingPlanOutput) GoString() string {
 }
 
 const (
+	// ForecastDataTypeCapacityForecast is a ForecastDataType enum value
+	ForecastDataTypeCapacityForecast = "CapacityForecast"
+
+	// ForecastDataTypeLoadForecast is a ForecastDataType enum value
+	ForecastDataTypeLoadForecast = "LoadForecast"
+
+	// ForecastDataTypeScheduledActionMinCapacity is a ForecastDataType enum value
+	ForecastDataTypeScheduledActionMinCapacity = "ScheduledActionMinCapacity"
+
+	// ForecastDataTypeScheduledActionMaxCapacity is a ForecastDataType enum value
+	ForecastDataTypeScheduledActionMaxCapacity = "ScheduledActionMaxCapacity"
+)
+
+const (
+	// LoadMetricTypeAsgtotalCpuutilization is a LoadMetricType enum value
+	LoadMetricTypeAsgtotalCpuutilization = "ASGTotalCPUUtilization"
+
+	// LoadMetricTypeAsgtotalNetworkIn is a LoadMetricType enum value
+	LoadMetricTypeAsgtotalNetworkIn = "ASGTotalNetworkIn"
+
+	// LoadMetricTypeAsgtotalNetworkOut is a LoadMetricType enum value
+	LoadMetricTypeAsgtotalNetworkOut = "ASGTotalNetworkOut"
+
+	// LoadMetricTypeAlbtargetGroupRequestCount is a LoadMetricType enum value
+	LoadMetricTypeAlbtargetGroupRequestCount = "ALBTargetGroupRequestCount"
+)
+
+const (
 	// MetricStatisticAverage is a MetricStatistic enum value
 	MetricStatisticAverage = "Average"
 
@@ -1897,6 +2642,25 @@ const (
 const (
 	// PolicyTypeTargetTrackingScaling is a PolicyType enum value
 	PolicyTypeTargetTrackingScaling = "TargetTrackingScaling"
+)
+
+const (
+	// PredictiveScalingMaxCapacityBehaviorSetForecastCapacityToMaxCapacity is a PredictiveScalingMaxCapacityBehavior enum value
+	PredictiveScalingMaxCapacityBehaviorSetForecastCapacityToMaxCapacity = "SetForecastCapacityToMaxCapacity"
+
+	// PredictiveScalingMaxCapacityBehaviorSetMaxCapacityToForecastCapacity is a PredictiveScalingMaxCapacityBehavior enum value
+	PredictiveScalingMaxCapacityBehaviorSetMaxCapacityToForecastCapacity = "SetMaxCapacityToForecastCapacity"
+
+	// PredictiveScalingMaxCapacityBehaviorSetMaxCapacityAboveForecastCapacity is a PredictiveScalingMaxCapacityBehavior enum value
+	PredictiveScalingMaxCapacityBehaviorSetMaxCapacityAboveForecastCapacity = "SetMaxCapacityAboveForecastCapacity"
+)
+
+const (
+	// PredictiveScalingModeForecastAndScale is a PredictiveScalingMode enum value
+	PredictiveScalingModeForecastAndScale = "ForecastAndScale"
+
+	// PredictiveScalingModeForecastOnly is a PredictiveScalingMode enum value
+	PredictiveScalingModeForecastOnly = "ForecastOnly"
 )
 
 const (
@@ -1990,6 +2754,14 @@ const (
 
 	// ScalingPlanStatusCodeUpdateFailed is a ScalingPlanStatusCode enum value
 	ScalingPlanStatusCodeUpdateFailed = "UpdateFailed"
+)
+
+const (
+	// ScalingPolicyUpdateBehaviorKeepExternalPolicies is a ScalingPolicyUpdateBehavior enum value
+	ScalingPolicyUpdateBehaviorKeepExternalPolicies = "KeepExternalPolicies"
+
+	// ScalingPolicyUpdateBehaviorReplaceExternalPolicies is a ScalingPolicyUpdateBehavior enum value
+	ScalingPolicyUpdateBehaviorReplaceExternalPolicies = "ReplaceExternalPolicies"
 )
 
 const (

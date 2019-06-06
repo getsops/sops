@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewReservationsSummariesClientWithBaseURI(baseURI string, subscriptionID st
 // filter - required only for daily grain. The properties/UsageDate for start date and end date. The filter
 // supports 'le' and  'ge'
 func (client ReservationsSummariesClient) List(ctx context.Context, scope string, grain Datagrain, filter string) (result ReservationSummariesListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationsSummariesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, scope, grain, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.ReservationsSummariesClient", "List", nil, "Failure preparing request")

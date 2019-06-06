@@ -64,6 +64,10 @@ type TranscribeServiceAPI interface {
 	CreateVocabularyWithContext(aws.Context, *transcribeservice.CreateVocabularyInput, ...request.Option) (*transcribeservice.CreateVocabularyOutput, error)
 	CreateVocabularyRequest(*transcribeservice.CreateVocabularyInput) (*request.Request, *transcribeservice.CreateVocabularyOutput)
 
+	DeleteTranscriptionJob(*transcribeservice.DeleteTranscriptionJobInput) (*transcribeservice.DeleteTranscriptionJobOutput, error)
+	DeleteTranscriptionJobWithContext(aws.Context, *transcribeservice.DeleteTranscriptionJobInput, ...request.Option) (*transcribeservice.DeleteTranscriptionJobOutput, error)
+	DeleteTranscriptionJobRequest(*transcribeservice.DeleteTranscriptionJobInput) (*request.Request, *transcribeservice.DeleteTranscriptionJobOutput)
+
 	DeleteVocabulary(*transcribeservice.DeleteVocabularyInput) (*transcribeservice.DeleteVocabularyOutput, error)
 	DeleteVocabularyWithContext(aws.Context, *transcribeservice.DeleteVocabularyInput, ...request.Option) (*transcribeservice.DeleteVocabularyOutput, error)
 	DeleteVocabularyRequest(*transcribeservice.DeleteVocabularyInput) (*request.Request, *transcribeservice.DeleteVocabularyOutput)

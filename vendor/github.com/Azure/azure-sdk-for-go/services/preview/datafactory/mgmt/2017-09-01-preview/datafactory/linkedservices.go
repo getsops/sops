@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewLinkedServicesClientWithBaseURI(baseURI string, subscriptionID string) L
 // ifMatch - eTag of the linkedService entity.  Should only be specified for update, for which it should match
 // existing entity or can be * for unconditional update.
 func (client LinkedServicesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string, linkedService LinkedServiceResource, ifMatch string) (result LinkedServiceResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServicesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -148,6 +159,16 @@ func (client LinkedServicesClient) CreateOrUpdateResponder(resp *http.Response) 
 // factoryName - the factory name.
 // linkedServiceName - the linked service name.
 func (client LinkedServicesClient) Delete(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -232,6 +253,16 @@ func (client LinkedServicesClient) DeleteResponder(resp *http.Response) (result 
 // factoryName - the factory name.
 // linkedServiceName - the linked service name.
 func (client LinkedServicesClient) Get(ctx context.Context, resourceGroupName string, factoryName string, linkedServiceName string) (result LinkedServiceResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -316,6 +347,16 @@ func (client LinkedServicesClient) GetResponder(resp *http.Response) (result Lin
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client LinkedServicesClient) ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result LinkedServiceListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServicesClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.lslr.Response.Response != nil {
+				sc = result.lslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -392,8 +433,8 @@ func (client LinkedServicesClient) ListByFactoryResponder(resp *http.Response) (
 }
 
 // listByFactoryNextResults retrieves the next set of results, if any.
-func (client LinkedServicesClient) listByFactoryNextResults(lastResults LinkedServiceListResponse) (result LinkedServiceListResponse, err error) {
-	req, err := lastResults.linkedServiceListResponsePreparer()
+func (client LinkedServicesClient) listByFactoryNextResults(ctx context.Context, lastResults LinkedServiceListResponse) (result LinkedServiceListResponse, err error) {
+	req, err := lastResults.linkedServiceListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.LinkedServicesClient", "listByFactoryNextResults", nil, "Failure preparing next results request")
 	}
@@ -414,6 +455,16 @@ func (client LinkedServicesClient) listByFactoryNextResults(lastResults LinkedSe
 
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LinkedServicesClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result LinkedServiceListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LinkedServicesClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }

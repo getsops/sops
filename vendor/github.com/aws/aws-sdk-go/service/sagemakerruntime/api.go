@@ -13,7 +13,7 @@ const opInvokeEndpoint = "InvokeEndpoint"
 // InvokeEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the InvokeEndpoint operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -125,12 +125,12 @@ type InvokeEndpointInput struct {
 	// (http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html).
 	//
 	// Body is a required field
-	Body []byte `type:"blob" required:"true"`
+	Body []byte `type:"blob" required:"true" sensitive:"true"`
 
 	// The MIME type of the input data in the request body.
 	ContentType *string `location:"header" locationName:"Content-Type" type:"string"`
 
-	CustomAttributes *string `location:"header" locationName:"X-Amzn-SageMaker-Custom-Attributes" type:"string"`
+	CustomAttributes *string `location:"header" locationName:"X-Amzn-SageMaker-Custom-Attributes" type:"string" sensitive:"true"`
 
 	// The name of the endpoint that you specified when you created the endpoint
 	// using the CreateEndpoint (http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html)
@@ -158,6 +158,9 @@ func (s *InvokeEndpointInput) Validate() error {
 	}
 	if s.EndpointName == nil {
 		invalidParams.Add(request.NewErrParamRequired("EndpointName"))
+	}
+	if s.EndpointName != nil && len(*s.EndpointName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EndpointName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -205,12 +208,12 @@ type InvokeEndpointOutput struct {
 	// (http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html).
 	//
 	// Body is a required field
-	Body []byte `type:"blob" required:"true"`
+	Body []byte `type:"blob" required:"true" sensitive:"true"`
 
 	// The MIME type of the inference returned in the response body.
 	ContentType *string `location:"header" locationName:"Content-Type" type:"string"`
 
-	CustomAttributes *string `location:"header" locationName:"X-Amzn-SageMaker-Custom-Attributes" type:"string"`
+	CustomAttributes *string `location:"header" locationName:"X-Amzn-SageMaker-Custom-Attributes" type:"string" sensitive:"true"`
 
 	// Identifies the production variant that was invoked.
 	InvokedProductionVariant *string `location:"header" locationName:"x-Amzn-Invoked-Production-Variant" type:"string"`

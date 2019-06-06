@@ -311,7 +311,7 @@ func ExampleWAFRegional_DeleteByteMatchSet_shared00() {
 
 // To delete an IP set
 //
-// The following example deletes an IP match set  with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
+// The following example deletes an IP match set with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
 func ExampleWAFRegional_DeleteIPSet_shared00() {
 	svc := wafregional.New(session.New())
 	input := &waf.DeleteIPSetInput{
@@ -391,7 +391,7 @@ func ExampleWAFRegional_DeleteRule_shared00() {
 
 // To delete a size constraint set
 //
-// The following example deletes a size constraint set  with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
+// The following example deletes a size constraint set with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
 func ExampleWAFRegional_DeleteSizeConstraintSet_shared00() {
 	svc := wafregional.New(session.New())
 	input := &waf.DeleteSizeConstraintSetInput{
@@ -431,7 +431,7 @@ func ExampleWAFRegional_DeleteSizeConstraintSet_shared00() {
 
 // To delete a SQL injection match set
 //
-// The following example deletes a SQL injection match set  with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
+// The following example deletes a SQL injection match set with the ID example1ds3t-46da-4fdb-b8d5-abc321j569j5.
 func ExampleWAFRegional_DeleteSqlInjectionMatchSet_shared00() {
 	svc := wafregional.New(session.New())
 	input := &waf.DeleteSqlInjectionMatchSetInput{

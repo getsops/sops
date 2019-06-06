@@ -3,13 +3,11 @@
   "metadata":{
     "apiVersion":"0000-00-00",
     "endpointPrefix":"restxmlservice",
-    "jsonVersion":"1.1",
     "protocol":"rest-xml",
     "serviceAbbreviation":"RESTXMLService",
     "serviceFullName":"REST XML Service",
     "serviceId":"RESTXMLService",
     "signatureVersion":"v4",
-    "targetPrefix":"RESTXMLService_00000000",
     "uid":"RESTXMLService-0000-00-00"
   },
   "operations":{
@@ -30,7 +28,17 @@
       },
       "input":{"shape":"EmptyStreamRequest"},
       "output":{"shape":"EmptyStreamResponse"}
-    }
+    },
+	"OtherOperation":{
+      "name":"OtherOperation",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+	  "errors":[
+		  {"shape":"ExceptionEvent2"}
+	  ]
+	}
   },
   "shapes":{
     "Bool":{"type":"boolean"},
@@ -65,7 +73,8 @@
         "PayloadOnlyBlob":{"shape":"PayloadOnlyBlobEvent"},
         "PayloadOnlyString":{"shape":"PayloadOnlyStringEvent"},
         "Empty":{"shape":"EmptyEvent"},
-        "Exception":{"shape":"ExceptionEvent"}
+        "Exception":{"shape":"ExceptionEvent"},
+        "Exception2":{"shape":"ExceptionEvent2"}
       },
       "eventstream":true
     },
@@ -204,6 +213,12 @@
       "members":{
         "IntVal":{"shape":"Integer"},
         "message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ExceptionEvent2":{
+      "type":"structure",
+      "members":{
       },
       "exception":true
     }

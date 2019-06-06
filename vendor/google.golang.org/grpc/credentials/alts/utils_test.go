@@ -19,11 +19,11 @@
 package alts
 
 import (
+	"context"
 	"io"
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
 	altspb "google.golang.org/grpc/credentials/alts/internal/proto/grpc_gcp"
 	"google.golang.org/grpc/peer"
 )

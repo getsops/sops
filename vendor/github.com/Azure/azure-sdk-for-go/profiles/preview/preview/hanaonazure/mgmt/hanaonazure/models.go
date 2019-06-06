@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,16 @@
 
 package hanaonazure
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/hanaonazure/mgmt/2017-11-03-preview/hanaonazure"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/hanaonazure/mgmt/2017-11-03-preview/hanaonazure"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type HanaInstancesClient = original.HanaInstancesClient
 type HanaHardwareTypeNamesEnum = original.HanaHardwareTypeNamesEnum
 
 const (
@@ -48,54 +50,91 @@ const (
 type HanaInstanceSizeNamesEnum = original.HanaInstanceSizeNamesEnum
 
 const (
-	S144    HanaInstanceSizeNamesEnum = original.S144
-	S144m   HanaInstanceSizeNamesEnum = original.S144m
-	S192    HanaInstanceSizeNamesEnum = original.S192
-	S192m   HanaInstanceSizeNamesEnum = original.S192m
-	S192xm  HanaInstanceSizeNamesEnum = original.S192xm
-	S384    HanaInstanceSizeNamesEnum = original.S384
-	S384m   HanaInstanceSizeNamesEnum = original.S384m
-	S384xm  HanaInstanceSizeNamesEnum = original.S384xm
-	S384xxm HanaInstanceSizeNamesEnum = original.S384xxm
-	S576m   HanaInstanceSizeNamesEnum = original.S576m
-	S576xm  HanaInstanceSizeNamesEnum = original.S576xm
-	S72     HanaInstanceSizeNamesEnum = original.S72
-	S72m    HanaInstanceSizeNamesEnum = original.S72m
-	S768    HanaInstanceSizeNamesEnum = original.S768
-	S768m   HanaInstanceSizeNamesEnum = original.S768m
-	S768xm  HanaInstanceSizeNamesEnum = original.S768xm
-	S960m   HanaInstanceSizeNamesEnum = original.S960m
+	S144     HanaInstanceSizeNamesEnum = original.S144
+	S144m    HanaInstanceSizeNamesEnum = original.S144m
+	S192     HanaInstanceSizeNamesEnum = original.S192
+	S192m    HanaInstanceSizeNamesEnum = original.S192m
+	S192xm   HanaInstanceSizeNamesEnum = original.S192xm
+	S224m    HanaInstanceSizeNamesEnum = original.S224m
+	S224o    HanaInstanceSizeNamesEnum = original.S224o
+	S224om   HanaInstanceSizeNamesEnum = original.S224om
+	S224oxm  HanaInstanceSizeNamesEnum = original.S224oxm
+	S224oxxm HanaInstanceSizeNamesEnum = original.S224oxxm
+	S384     HanaInstanceSizeNamesEnum = original.S384
+	S384m    HanaInstanceSizeNamesEnum = original.S384m
+	S384xm   HanaInstanceSizeNamesEnum = original.S384xm
+	S384xxm  HanaInstanceSizeNamesEnum = original.S384xxm
+	S576m    HanaInstanceSizeNamesEnum = original.S576m
+	S576xm   HanaInstanceSizeNamesEnum = original.S576xm
+	S72      HanaInstanceSizeNamesEnum = original.S72
+	S72m     HanaInstanceSizeNamesEnum = original.S72m
+	S768     HanaInstanceSizeNamesEnum = original.S768
+	S768m    HanaInstanceSizeNamesEnum = original.S768m
+	S768xm   HanaInstanceSizeNamesEnum = original.S768xm
+	S96      HanaInstanceSizeNamesEnum = original.S96
+	S960m    HanaInstanceSizeNamesEnum = original.S960m
 )
 
+type HanaProvisioningStatesEnum = original.HanaProvisioningStatesEnum
+
+const (
+	Accepted  HanaProvisioningStatesEnum = original.Accepted
+	Creating  HanaProvisioningStatesEnum = original.Creating
+	Deleting  HanaProvisioningStatesEnum = original.Deleting
+	Failed    HanaProvisioningStatesEnum = original.Failed
+	Migrating HanaProvisioningStatesEnum = original.Migrating
+	Succeeded HanaProvisioningStatesEnum = original.Succeeded
+	Updating  HanaProvisioningStatesEnum = original.Updating
+)
+
+type BaseClient = original.BaseClient
 type Disk = original.Disk
 type Display = original.Display
 type ErrorResponse = original.ErrorResponse
 type HanaInstance = original.HanaInstance
 type HanaInstanceProperties = original.HanaInstanceProperties
+type HanaInstancesClient = original.HanaInstancesClient
+type HanaInstancesCreateFuture = original.HanaInstancesCreateFuture
+type HanaInstancesEnableMonitoringFuture = original.HanaInstancesEnableMonitoringFuture
 type HanaInstancesListResult = original.HanaInstancesListResult
 type HanaInstancesListResultIterator = original.HanaInstancesListResultIterator
 type HanaInstancesListResultPage = original.HanaInstancesListResultPage
+type HanaInstancesRestartFuture = original.HanaInstancesRestartFuture
 type HardwareProfile = original.HardwareProfile
 type IPAddress = original.IPAddress
+type MonitoringDetails = original.MonitoringDetails
 type NetworkProfile = original.NetworkProfile
+type OSProfile = original.OSProfile
 type Operation = original.Operation
 type OperationList = original.OperationList
-type OSProfile = original.OSProfile
+type OperationsClient = original.OperationsClient
 type Resource = original.Resource
 type StorageProfile = original.StorageProfile
-type OperationsClient = original.OperationsClient
+type Tags = original.Tags
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewHanaInstancesClient(subscriptionID string) HanaInstancesClient {
 	return original.NewHanaInstancesClient(subscriptionID)
 }
 func NewHanaInstancesClientWithBaseURI(baseURI string, subscriptionID string) HanaInstancesClient {
 	return original.NewHanaInstancesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewHanaInstancesListResultIterator(page HanaInstancesListResultPage) HanaInstancesListResultIterator {
+	return original.NewHanaInstancesListResultIterator(page)
+}
+func NewHanaInstancesListResultPage(getNextPage func(context.Context, HanaInstancesListResult) (HanaInstancesListResult, error)) HanaInstancesListResultPage {
+	return original.NewHanaInstancesListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleHanaHardwareTypeNamesEnumValues() []HanaHardwareTypeNamesEnum {
 	return original.PossibleHanaHardwareTypeNamesEnumValues()
@@ -106,11 +145,8 @@ func PossibleHanaInstancePowerStateEnumValues() []HanaInstancePowerStateEnum {
 func PossibleHanaInstanceSizeNamesEnumValues() []HanaInstanceSizeNamesEnum {
 	return original.PossibleHanaInstanceSizeNamesEnumValues()
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+func PossibleHanaProvisioningStatesEnumValues() []HanaProvisioningStatesEnum {
+	return original.PossibleHanaProvisioningStatesEnumValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

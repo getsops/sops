@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewGeographicHierarchiesClientWithBaseURI(baseURI string, subscriptionID st
 
 // GetDefault gets the default Geographic Hierarchy used by the Geographic traffic routing method.
 func (client GeographicHierarchiesClient) GetDefault(ctx context.Context) (result GeographicHierarchy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GeographicHierarchiesClient.GetDefault")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetDefaultPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "trafficmanager.GeographicHierarchiesClient", "GetDefault", nil, "Failure preparing request")

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -26,8 +27,6 @@ import (
 	"strings"
 	"testing"
 	"testing/iotest"
-
-	"golang.org/x/net/context"
 
 	// If you add a client, add a matching go:generate line below.
 	dfa "google.golang.org/api/dfareporting/v2.8"

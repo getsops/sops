@@ -19,7 +19,7 @@ const (
 	// ErrCodeDuplicateResourceException for service response error code
 	// "DuplicateResourceException".
 	//
-	// A resource with that name already exisits.
+	// A resource with that name already exists.
 	ErrCodeDuplicateResourceException = "DuplicateResourceException"
 
 	// ErrCodeInternalServiceException for service response error code

@@ -65,7 +65,7 @@
   "description": "Stores and accesses user data in the fitness store from apps on any platform.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/fit/rest/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/LrHl832jGdFhMW8MGSdDnCVIH0w\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/5HkIXTuow4_42nhAZgQJ4gq5QE8\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -288,47 +288,6 @@
                 "https://www.googleapis.com/auth/fitness.oxygen_saturation.read",
                 "https://www.googleapis.com/auth/fitness.oxygen_saturation.write",
                 "https://www.googleapis.com/auth/fitness.reproductive_health.read",
-                "https://www.googleapis.com/auth/fitness.reproductive_health.write"
-              ]
-            },
-            "patch": {
-              "description": "Updates the specified data source. The dataStreamId, dataType, type, dataStreamName, and device properties with the exception of version, cannot be modified.\n\nData sources are identified by their dataStreamId. This method supports patch semantics.",
-              "httpMethod": "PATCH",
-              "id": "fitness.users.dataSources.patch",
-              "parameterOrder": [
-                "userId",
-                "dataSourceId"
-              ],
-              "parameters": {
-                "dataSourceId": {
-                  "description": "The data stream ID of the data source to update.",
-                  "location": "path",
-                  "required": true,
-                  "type": "string"
-                },
-                "userId": {
-                  "description": "Update the data source for the person identified. Use me to indicate the authenticated user. Only me is supported at this time.",
-                  "location": "path",
-                  "required": true,
-                  "type": "string"
-                }
-              },
-              "path": "{userId}/dataSources/{dataSourceId}",
-              "request": {
-                "$ref": "DataSource"
-              },
-              "response": {
-                "$ref": "DataSource"
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/fitness.activity.write",
-                "https://www.googleapis.com/auth/fitness.blood_glucose.write",
-                "https://www.googleapis.com/auth/fitness.blood_pressure.write",
-                "https://www.googleapis.com/auth/fitness.body.write",
-                "https://www.googleapis.com/auth/fitness.body_temperature.write",
-                "https://www.googleapis.com/auth/fitness.location.write",
-                "https://www.googleapis.com/auth/fitness.nutrition.write",
-                "https://www.googleapis.com/auth/fitness.oxygen_saturation.write",
                 "https://www.googleapis.com/auth/fitness.reproductive_health.write"
               ]
             },
@@ -717,7 +676,7 @@
                   "type": "boolean"
                 },
                 "pageToken": {
-                  "description": "The continuation token, which is used to page through large result sets. To get the next page of results, set this parameter to the value of nextPageToken from the previous response.",
+                  "description": "The continuation token, which is used for incremental syncing. To get the next batch of changes, set this parameter to the value of nextPageToken from the previous response. This token is treated as a timestamp (in millis since epoch). If specified, the API returns sessions modified since this time. The page token is ignored if either start or end time is specified. If none of start time, end time, and the page token is specified, sessions modified in the last 30 days are returned.",
                   "location": "query",
                   "type": "string"
                 },
@@ -802,7 +761,7 @@
       }
     }
   },
-  "revision": "20170922",
+  "revision": "20190408",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AggregateBucket": {
@@ -913,7 +872,7 @@
           "type": "string"
         },
         "filteredDataQualityStandard": {
-          "description": "A list of acceptable data quality standards. Only data points which conform to at least one of the specified data quality standards will be returned. If the list is empty, all data points are returned.",
+          "description": "DO NOT POPULATE THIS FIELD. As data quality standards are deprecated, filling it in will result in no data sources being returned. It will be removed in a future version entirely.",
           "items": {
             "enum": [
               "dataQualityBloodGlucoseIso151972003",
@@ -1071,7 +1030,7 @@
       "id": "DataPoint",
       "properties": {
         "computationTimeMillis": {
-          "description": "Used for version checking during transformation; that is, a datapoint can only replace another datapoint that has an older computation time stamp.",
+          "description": "DO NOT USE THIS FIELD. It is ignored, and not stored.",
           "format": "int64",
           "type": "string"
         },
@@ -1100,7 +1059,7 @@
           "type": "string"
         },
         "originDataSourceId": {
-          "description": "If the data point is contained in a dataset for a derived data source, this field will be populated with the data source stream ID that created the data point originally.",
+          "description": "If the data point is contained in a dataset for a derived data source, this field will be populated with the data source stream ID that created the data point originally.\n\nWARNING: do not rely on this field for anything other than debugging. The value of this field, if it is set at all, is an implementation detail and is not guaranteed to remain consistent.",
           "type": "string"
         },
         "rawTimestampNanos": {
@@ -1148,7 +1107,7 @@
           "description": "Information about an application which feeds sensor data into the platform."
         },
         "dataQualityStandard": {
-          "description": "",
+          "description": "DO NOT POPULATE THIS FIELD. It is never populated in responses from the platform, and is ignored in queries. It will be removed in a future version entirely.",
           "items": {
             "enum": [
               "dataQualityBloodGlucoseIso151972003",
@@ -1184,7 +1143,7 @@
               "fitness.users.dataSources.update"
             ]
           },
-          "description": "A unique identifier for the data stream produced by this data source. The identifier includes:\n\n \n- The physical device's manufacturer, model, and serial number (UID). \n- The application's package name or name. Package name is used when the data source was created by an Android application. The developer project number is used when the data source was created by a REST client. \n- The data source's type. \n- The data source's stream name.  Note that not all attributes of the data source are used as part of the stream identifier. In particular, the version of the hardware/the application isn't used. This allows us to preserve the same stream through version updates. This also means that two DataSource objects may represent the same data stream even if they're not equal.\n\nThe exact format of the data stream ID created by an Android application is: type:dataType.name:application.packageName:device.manufacturer:device.model:device.uid:dataStreamName \n\nThe exact format of the data stream ID created by a REST client is: type:dataType.name:developer project number:device.manufacturer:device.model:device.uid:dataStreamName \n\nWhen any of the optional fields that comprise of the data stream ID are blank, they will be omitted from the data stream ID. The minimum viable data stream ID would be: type:dataType.name:developer project number\n\nFinally, the developer project number is obfuscated when read by any REST or Android client that did not create the data source. Only the data source creator will see the developer project number in clear and normal form.",
+          "description": "A unique identifier for the data stream produced by this data source. The identifier includes:\n\n \n- The physical device's manufacturer, model, and serial number (UID). \n- The application's package name or name. Package name is used when the data source was created by an Android application. The developer project number is used when the data source was created by a REST client. \n- The data source's type. \n- The data source's stream name.  Note that not all attributes of the data source are used as part of the stream identifier. In particular, the version of the hardware/the application isn't used. This allows us to preserve the same stream through version updates. This also means that two DataSource objects may represent the same data stream even if they're not equal.\n\nThe exact format of the data stream ID created by an Android application is: type:dataType.name:application.packageName:device.manufacturer:device.model:device.uid:dataStreamName \n\nThe exact format of the data stream ID created by a REST client is: type:dataType.name:developer project number:device.manufacturer:device.model:device.uid:dataStreamName \n\nWhen any of the optional fields that make up the data stream ID are absent, they will be omitted from the data stream ID. The minimum viable data stream ID would be: type:dataType.name:developer project number\n\nFinally, the developer project number is obfuscated when read by any REST or Android client that did not create the data source. Only the data source creator will see the developer project number in clear and normal form.",
           "type": "string"
         },
         "dataStreamName": {
@@ -1333,7 +1292,7 @@
               "fitness.users.dataSources.datasets.patch"
             ]
           },
-          "description": "The largest end time of all data points in this possibly partial representation of the dataset. Time is in nanoseconds from epoch. This should also match the first part of the dataset identifier.",
+          "description": "The largest end time of all data points in this possibly partial representation of the dataset. Time is in nanoseconds from epoch. This should also match the second part of the dataset identifier.",
           "format": "int64",
           "type": "string"
         },

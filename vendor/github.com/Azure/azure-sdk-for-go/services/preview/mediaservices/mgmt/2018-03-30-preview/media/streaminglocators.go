@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewStreamingLocatorsClientWithBaseURI(baseURI string, subscriptionID string
 // streamingLocatorName - the Streaming Locator name.
 // parameters - the request parameters
 func (client StreamingLocatorsClient) Create(ctx context.Context, resourceGroupName string, accountName string, streamingLocatorName string, parameters StreamingLocator) (result StreamingLocator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.StreamingLocatorProperties", Name: validation.Null, Rule: false,
@@ -127,6 +138,16 @@ func (client StreamingLocatorsClient) CreateResponder(resp *http.Response) (resu
 // accountName - the Media Services account name.
 // streamingLocatorName - the Streaming Locator name.
 func (client StreamingLocatorsClient) Delete(ctx context.Context, resourceGroupName string, accountName string, streamingLocatorName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName, streamingLocatorName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.StreamingLocatorsClient", "Delete", nil, "Failure preparing request")
@@ -195,6 +216,16 @@ func (client StreamingLocatorsClient) DeleteResponder(resp *http.Response) (resu
 // accountName - the Media Services account name.
 // streamingLocatorName - the Streaming Locator name.
 func (client StreamingLocatorsClient) Get(ctx context.Context, resourceGroupName string, accountName string, streamingLocatorName string) (result StreamingLocator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName, streamingLocatorName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.StreamingLocatorsClient", "Get", nil, "Failure preparing request")
@@ -265,8 +296,18 @@ func (client StreamingLocatorsClient) GetResponder(resp *http.Response) (result 
 // filter - restricts the set of items returned.
 // top - specifies a non-negative integer n that limits the number of items returned from a collection. The
 // service returns the number of available items up to but not greater than the specified value n.
-// orderby - specifies the the key by which the result collection should be ordered.
+// orderby - specifies the key by which the result collection should be ordered.
 func (client StreamingLocatorsClient) List(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, orderby string) (result StreamingLocatorCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.List")
+		defer func() {
+			sc := -1
+			if result.slc.Response.Response != nil {
+				sc = result.slc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, accountName, filter, top, orderby)
 	if err != nil {
@@ -340,8 +381,8 @@ func (client StreamingLocatorsClient) ListResponder(resp *http.Response) (result
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client StreamingLocatorsClient) listNextResults(lastResults StreamingLocatorCollection) (result StreamingLocatorCollection, err error) {
-	req, err := lastResults.streamingLocatorCollectionPreparer()
+func (client StreamingLocatorsClient) listNextResults(ctx context.Context, lastResults StreamingLocatorCollection) (result StreamingLocatorCollection, err error) {
+	req, err := lastResults.streamingLocatorCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.StreamingLocatorsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -362,6 +403,16 @@ func (client StreamingLocatorsClient) listNextResults(lastResults StreamingLocat
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client StreamingLocatorsClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, orderby string) (result StreamingLocatorCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, accountName, filter, top, orderby)
 	return
 }
@@ -372,6 +423,16 @@ func (client StreamingLocatorsClient) ListComplete(ctx context.Context, resource
 // accountName - the Media Services account name.
 // streamingLocatorName - the Streaming Locator name.
 func (client StreamingLocatorsClient) ListContentKeys(ctx context.Context, resourceGroupName string, accountName string, streamingLocatorName string) (result ListContentKeysResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.ListContentKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListContentKeysPreparer(ctx, resourceGroupName, accountName, streamingLocatorName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.StreamingLocatorsClient", "ListContentKeys", nil, "Failure preparing request")
@@ -441,6 +502,16 @@ func (client StreamingLocatorsClient) ListContentKeysResponder(resp *http.Respon
 // accountName - the Media Services account name.
 // streamingLocatorName - the Streaming Locator name.
 func (client StreamingLocatorsClient) ListPaths(ctx context.Context, resourceGroupName string, accountName string, streamingLocatorName string) (result ListPathsResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingLocatorsClient.ListPaths")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPathsPreparer(ctx, resourceGroupName, accountName, streamingLocatorName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.StreamingLocatorsClient", "ListPaths", nil, "Failure preparing request")

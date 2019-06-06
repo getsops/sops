@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewProtectionContainersClientWithBaseURI(baseURI string, subscriptionID str
 // fabricName - the fabric name associated with the container.
 // containerName - the container name used for this GET operation.
 func (client ProtectionContainersClient) Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string) (result ProtectionContainerResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, fabricName, containerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionContainersClient", "Get", nil, "Failure preparing request")
@@ -119,6 +130,16 @@ func (client ProtectionContainersClient) GetResponder(resp *http.Response) (resu
 // Registered, Registering} and friendlyName eq {containername} and backupManagementType eq {AzureIaasVM, MAB,
 // DPM, AzureBackupServer, AzureSql}.
 func (client ProtectionContainersClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result ProtectionContainerResourceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionContainersClient", "List", nil, "Failure preparing request")
@@ -191,6 +212,16 @@ func (client ProtectionContainersClient) ListResponder(resp *http.Response) (res
 // resourceGroupName - the name of the resource group associated with the Recovery Services vault.
 // fabricName - the fabric name associated with the container.
 func (client ProtectionContainersClient) Refresh(ctx context.Context, vaultName string, resourceGroupName string, fabricName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainersClient.Refresh")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RefreshPreparer(ctx, vaultName, resourceGroupName, fabricName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionContainersClient", "Refresh", nil, "Failure preparing request")
@@ -259,6 +290,16 @@ func (client ProtectionContainersClient) RefreshResponder(resp *http.Response) (
 // vaultName - the name of the Recovery Services vault.
 // identityName - name of the protection container to unregister.
 func (client ProtectionContainersClient) Unregister(ctx context.Context, resourceGroupName string, vaultName string, identityName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainersClient.Unregister")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UnregisterPreparer(ctx, resourceGroupName, vaultName, identityName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionContainersClient", "Unregister", nil, "Failure preparing request")

@@ -5,6 +5,7 @@
     "endpointPrefix":"data.jobs.iot",
     "protocol":"rest-json",
     "serviceFullName":"AWS IoT Jobs Data Plane",
+    "serviceId":"IoT Jobs Data Plane",
     "signatureVersion":"v4",
     "signingName":"iot-jobs-data",
     "uid":"iot-jobs-data-2017-09-29"
@@ -78,6 +79,8 @@
     }
   },
   "shapes":{
+    "ApproximateSecondsBeforeTimedOut":{"type":"long"},
+    "BinaryBlob":{"type":"blob"},
     "CertificateValidationException":{
       "type":"structure",
       "members":{
@@ -194,6 +197,7 @@
         "queuedAt":{"shape":"QueuedAt"},
         "startedAt":{"shape":"StartedAt"},
         "lastUpdatedAt":{"shape":"LastUpdatedAt"},
+        "approximateSecondsBeforeTimedOut":{"shape":"ApproximateSecondsBeforeTimedOut"},
         "versionNumber":{"shape":"VersionNumber"},
         "executionNumber":{"shape":"ExecutionNumber"},
         "jobDocument":{"shape":"JobDocument"}
@@ -214,6 +218,7 @@
         "IN_PROGRESS",
         "SUCCEEDED",
         "FAILED",
+        "TIMED_OUT",
         "REJECTED",
         "REMOVED",
         "CANCELED"
@@ -268,7 +273,8 @@
           "location":"uri",
           "locationName":"thingName"
         },
-        "statusDetails":{"shape":"DetailsMap"}
+        "statusDetails":{"shape":"DetailsMap"},
+        "stepTimeoutInMinutes":{"shape":"StepTimeoutInMinutes"}
       }
     },
     "StartNextPendingJobExecutionResponse":{
@@ -278,6 +284,7 @@
       }
     },
     "StartedAt":{"type":"long"},
+    "StepTimeoutInMinutes":{"type":"long"},
     "TerminalStateException":{
       "type":"structure",
       "members":{
@@ -295,7 +302,8 @@
     "ThrottlingException":{
       "type":"structure",
       "members":{
-        "message":{"shape":"errorMessage"}
+        "message":{"shape":"errorMessage"},
+        "payload":{"shape":"BinaryBlob"}
       },
       "error":{"httpStatusCode":429},
       "exception":true
@@ -320,6 +328,7 @@
         },
         "status":{"shape":"JobExecutionStatus"},
         "statusDetails":{"shape":"DetailsMap"},
+        "stepTimeoutInMinutes":{"shape":"StepTimeoutInMinutes"},
         "expectedVersion":{"shape":"ExpectedVersion"},
         "includeJobExecutionState":{"shape":"IncludeExecutionState"},
         "includeJobDocument":{"shape":"IncludeJobDocument"},

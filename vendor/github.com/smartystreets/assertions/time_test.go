@@ -142,6 +142,15 @@ func (this *AssertionsFixture) TestShouldBeChronological() {
 	this.pass(so([]time.Time{january1, january2, january3, january4, january5}, ShouldBeChronological))
 }
 
+func (this *AssertionsFixture) TestShouldNotBeChronological() {
+	this.fail(so(0, ShouldNotBeChronological, 1, 2, 3), "This assertion requires exactly 0 comparison values (you provided 3).")
+	this.fail(so(0, ShouldNotBeChronological), shouldUseTimeSlice)
+	this.fail(so([]time.Time{january1, january5}, ShouldNotBeChronological),
+		"The provided times should NOT be chronological, but they were.")
+
+	this.pass(so([]time.Time{january2, january1, january3, january4, january5}, ShouldNotBeChronological))
+}
+
 const layout = "2006-01-02 15:04"
 
 var january1, _ = time.Parse(layout, "2013-01-01 00:00")

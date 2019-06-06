@@ -47,6 +47,13 @@ func TestMSISlice(t *testing.T) {
 	assert.Panics(t, func() {
 		m.Get("nothing").MustMSISlice()
 	})
+
+	o := objx.MustFromJSON(`{"d":[{"author":{"displayName":"DemoUser3","id":2},"classes":null,"id":9879,"v":{"code":"","created":"2013-09-19T09:38:50+02:00","published":"0001-01-01T00:00:00Z","updated":"2013-09-19T09:38:50+02:00"}}],"s":200}`)
+	assert.Equal(t, 9879, o.Get("d").MustMSISlice()[0]["id"])
+	assert.Equal(t, 1, len(o.Get("d").MSISlice()))
+
+	i := objx.MustFromJSON(`{"d":[{"author":"abc"},[1]]}`)
+	assert.Nil(t, i.Get("d").MSISlice())
 }
 
 func TestIsMSI(t *testing.T) {
@@ -62,6 +69,14 @@ func TestIsMSISlice(t *testing.T) {
 
 	assert.True(t, m.Get("data").IsMSISlice())
 	assert.True(t, m.Get("data2").IsMSISlice())
+
+	o := objx.MustFromJSON(`{"d":[{"author":{"displayName":"DemoUser3","id":2},"classes":null,"id":9879,"v":{"code":"","created":"2013-09-19T09:38:50+02:00","published":"0001-01-01T00:00:00Z","updated":"2013-09-19T09:38:50+02:00"}}],"s":200}`)
+	assert.True(t, o.Has("d"))
+	assert.True(t, o.Get("d").IsMSISlice())
+
+	o = objx.MustFromJSON(`{"d":[{"author":"abc"},[1]]}`)
+	assert.True(t, o.Has("d"))
+	assert.False(t, o.Get("d").IsMSISlice())
 }
 
 func TestEachMSI(t *testing.T) {
@@ -259,6 +274,13 @@ func TestObjxMapSlice(t *testing.T) {
 	assert.Panics(t, func() {
 		m.Get("nothing").MustObjxMapSlice()
 	})
+
+	o := objx.MustFromJSON(`{"d":[{"author":{"displayName":"DemoUser3","id":2},"classes":null,"id":9879,"v":{"code":"","created":"2013-09-19T09:38:50+02:00","published":"0001-01-01T00:00:00Z","updated":"2013-09-19T09:38:50+02:00"}}],"s":200}`)
+	assert.Equal(t, 9879, o.Get("d").MustObjxMapSlice()[0].Get("id").Int())
+	assert.Equal(t, 1, len(o.Get("d").ObjxMapSlice()))
+
+	i := objx.MustFromJSON(`{"d":[{"author":"abc"},[1]]}`)
+	assert.Nil(t, i.Get("d").ObjxMapSlice())
 }
 
 func TestIsObjxMap(t *testing.T) {
@@ -273,6 +295,15 @@ func TestIsObjxMapSlice(t *testing.T) {
 
 	assert.True(t, m.Get("data").IsObjxMapSlice())
 	assert.True(t, m.Get("data2").IsObjxMapSlice())
+
+	o := objx.MustFromJSON(`{"d":[{"author":{"displayName":"DemoUser3","id":2},"classes":null,"id":9879,"v":{"code":"","created":"2013-09-19T09:38:50+02:00","published":"0001-01-01T00:00:00Z","updated":"2013-09-19T09:38:50+02:00"}}],"s":200}`)
+	assert.True(t, o.Has("d"))
+	assert.True(t, o.Get("d").IsObjxMapSlice())
+
+	//Valid json but not MSI slice
+	o = objx.MustFromJSON(`{"d":[{"author":"abc"},[1]]}`)
+	assert.True(t, o.Has("d"))
+	assert.False(t, o.Get("d").IsObjxMapSlice())
 }
 
 func TestEachObjxMap(t *testing.T) {

@@ -1,17 +1,19 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS Application Discovery Service</fullname> <p>AWS Application Discovery Service helps you plan application migration projects by automatically identifying servers, virtual machines (VMs), software, and software dependencies running in your on-premises data centers. Application Discovery Service also collects application performance data, which can help you assess the outcome of your migration. The data collected by Application Discovery Service is securely retained in an AWS-hosted and managed database in the cloud. You can export the data as a CSV or XML file into your preferred visualization tool or cloud-migration solution to plan your migration. For more information, see <a href=\"http://aws.amazon.com/application-discovery/faqs/\">AWS Application Discovery Service FAQ</a>.</p> <p>Application Discovery Service offers two modes of operation:</p> <ul> <li> <p> <b>Agentless discovery</b> mode is recommended for environments that use VMware vCenter Server. This mode doesn't require you to install an agent on each host. Agentless discovery gathers server information regardless of the operating systems, which minimizes the time required for initial on-premises infrastructure assessment. Agentless discovery doesn't collect information about software and software dependencies. It also doesn't work in non-VMware environments. </p> </li> <li> <p> <b>Agent-based discovery</b> mode collects a richer set of data than agentless discovery by using the AWS Application Discovery Agent, which you install on one or more hosts in your data center. The agent captures infrastructure and application information, including an inventory of installed software applications, system and process performance, resource utilization, and network dependencies between workloads. The information collected by agents is secured at rest and in transit to the Application Discovery Service database in the cloud. </p> </li> </ul> <p>We recommend that you use agent-based discovery for non-VMware environments and to collect information about software and software dependencies. You can also run agent-based and agentless discovery simultaneously. Use agentless discovery to quickly complete the initial infrastructure assessment and then install agents on select hosts.</p> <p>Application Discovery Service integrates with application discovery solutions from AWS Partner Network (APN) partners. Third-party application discovery tools can query Application Discovery Service and write to the Application Discovery Service database using a public API. You can then import the data into either a visualization tool or cloud-migration solution.</p> <important> <p>Application Discovery Service doesn't gather sensitive information. All data is handled according to the <a href=\"http://aws.amazon.com/privacy/\">AWS Privacy Policy</a>. You can operate Application Discovery Service offline to inspect collected data before it is shared with the service.</p> </important> <p>Your AWS account must be granted access to Application Discovery Service, a process called <i>whitelisting</i>. This is true for AWS partners and customers alike. To request access, <a href=\"http://aws.amazon.com/application-discovery/\">sign up for Application Discovery Service</a>. </p> <p>This API reference provides descriptions, syntax, and usage examples for each of the actions and data types for Application Discovery Service. The topic for each action shows the API request parameters and the response. Alternatively, you can use one of the AWS SDKs to access an API that is tailored to the programming language or platform that you're using. For more information, see <a href=\"http://aws.amazon.com/tools/#SDKs\">AWS SDKs</a>.</p> <p>This guide is intended for use with the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/userguide/\"> <i>AWS Application Discovery Service User Guide</i> </a>.</p>",
+  "service": "<fullname>AWS Application Discovery Service</fullname> <p>AWS Application Discovery Service helps you plan application migration projects by automatically identifying servers, virtual machines (VMs), software, and software dependencies running in your on-premises data centers. Application Discovery Service also collects application performance data, which can help you assess the outcome of your migration. The data collected by Application Discovery Service is securely retained in an AWS-hosted and managed database in the cloud. You can export the data as a CSV or XML file into your preferred visualization tool or cloud-migration solution to plan your migration. For more information, see <a href=\"http://aws.amazon.com/application-discovery/faqs/\">AWS Application Discovery Service FAQ</a>.</p> <p>Application Discovery Service offers two modes of operation:</p> <ul> <li> <p> <b>Agentless discovery</b> mode is recommended for environments that use VMware vCenter Server. This mode doesn't require you to install an agent on each host. Agentless discovery gathers server information regardless of the operating systems, which minimizes the time required for initial on-premises infrastructure assessment. Agentless discovery doesn't collect information about software and software dependencies. It also doesn't work in non-VMware environments. </p> </li> <li> <p> <b>Agent-based discovery</b> mode collects a richer set of data than agentless discovery by using the AWS Application Discovery Agent, which you install on one or more hosts in your data center. The agent captures infrastructure and application information, including an inventory of installed software applications, system and process performance, resource utilization, and network dependencies between workloads. The information collected by agents is secured at rest and in transit to the Application Discovery Service database in the cloud. </p> </li> </ul> <p>We recommend that you use agent-based discovery for non-VMware environments and to collect information about software and software dependencies. You can also run agent-based and agentless discovery simultaneously. Use agentless discovery to quickly complete the initial infrastructure assessment and then install agents on select hosts.</p> <p>Application Discovery Service integrates with application discovery solutions from AWS Partner Network (APN) partners. Third-party application discovery tools can query Application Discovery Service and write to the Application Discovery Service database using a public API. You can then import the data into either a visualization tool or cloud-migration solution.</p> <important> <p>Application Discovery Service doesn't gather sensitive information. All data is handled according to the <a href=\"http://aws.amazon.com/privacy/\">AWS Privacy Policy</a>. You can operate Application Discovery Service offline to inspect collected data before it is shared with the service.</p> </important> <p>This API reference provides descriptions, syntax, and usage examples for each of the actions and data types for Application Discovery Service. The topic for each action shows the API request parameters and the response. Alternatively, you can use one of the AWS SDKs to access an API that is tailored to the programming language or platform that you're using. For more information, see <a href=\"http://aws.amazon.com/tools/#SDKs\">AWS SDKs</a>.</p> <p>This guide is intended for use with the <a href=\"http://docs.aws.amazon.com/application-discovery/latest/userguide/\"> <i>AWS Application Discovery Service User Guide</i> </a>.</p>",
   "operations": {
     "AssociateConfigurationItemsToApplication": "<p>Associates one or more configuration items with an application.</p>",
+    "BatchDeleteImportData": "<p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>",
     "CreateApplication": "<p>Creates an application with the given name and description.</p>",
     "CreateTags": "<p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>",
     "DeleteApplications": "<p>Deletes a list of applications and their associations with configuration items.</p>",
     "DeleteTags": "<p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>",
     "DescribeAgents": "<p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>",
-    "DescribeConfigurations": "<p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the follwoing:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations\">Using the DescribeConfigurations Action</a>.</p> </note>",
+    "DescribeConfigurations": "<p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations\">Using the DescribeConfigurations Action</a>.</p> </note>",
     "DescribeContinuousExports": "<p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>",
-    "DescribeExportConfigurations": "<p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html\"> <code>DescribeExportTasks</code> </a>.</p>",
+    "DescribeExportConfigurations": "<p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href=\"https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html\">DescribeImportTasks</a>, instead.</p>",
     "DescribeExportTasks": "<p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>",
+    "DescribeImportTasks": "<p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>",
     "DescribeTags": "<p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>",
     "DisassociateConfigurationItemsFromApplication": "<p>Disassociates one or more configuration items from an application.</p>",
     "ExportConfigurations": "<p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>",
@@ -21,6 +23,7 @@
     "StartContinuousExport": "<p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>",
     "StartDataCollectionByAgentIds": "<p>Instructs the specified agents or connectors to start collecting data.</p>",
     "StartExportTask": "<p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentIds</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentIds</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>",
+    "StartImportTask": "<p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href=\"https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv\">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it's Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href=\"https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html\">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see <a href=\"https://docs.aws.amazon.com/application-discovery/latest/userguide/ads_service_limits.html\">AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note>",
     "StopContinuousExport": "<p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>",
     "StopDataCollectionByAgentIds": "<p>Instructs the specified agents or connectors to stop collecting data.</p>",
     "UpdateApplication": "<p>Updates metadata about an application.</p>"
@@ -114,6 +117,40 @@
       "refs": {
       }
     },
+    "BatchDeleteImportDataError": {
+      "base": "<p>Error messages returned for each import task that you deleted as a response for this command.</p>",
+      "refs": {
+        "BatchDeleteImportDataErrorList$member": null
+      }
+    },
+    "BatchDeleteImportDataErrorCode": {
+      "base": null,
+      "refs": {
+        "BatchDeleteImportDataError$errorCode": "<p>The type of error that occurred for a specific import task.</p>"
+      }
+    },
+    "BatchDeleteImportDataErrorDescription": {
+      "base": null,
+      "refs": {
+        "BatchDeleteImportDataError$errorDescription": "<p>The description of the error that occurred for a specific import task.</p>"
+      }
+    },
+    "BatchDeleteImportDataErrorList": {
+      "base": null,
+      "refs": {
+        "BatchDeleteImportDataResponse$errors": "<p>Error messages returned for each import task that you deleted as a response for this command.</p>"
+      }
+    },
+    "BatchDeleteImportDataRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "BatchDeleteImportDataResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
@@ -126,6 +163,13 @@
       "base": null,
       "refs": {
         "NeighborConnectionDetail$destinationPort": "<p>The destination network port for the connection.</p>"
+      }
+    },
+    "ClientRequestToken": {
+      "base": null,
+      "refs": {
+        "ImportTask$clientRequestToken": "<p>A unique token used to prevent the same import request from occurring more than once. If you didn't provide a token, a token was automatically generated when the import task request was sent.</p>",
+        "StartImportTaskRequest$clientRequestToken": "<p>Optional. A unique token that you can provide to prevent the same import request from occurring more than once. If you don't provide a token, a token is automatically generated.</p> <p>Sending more than one <code>StartImportTask</code> request with the same client request token will return information about the original import task with that client request token.</p>"
       }
     },
     "Condition": {
@@ -368,6 +412,28 @@
       "refs": {
       }
     },
+    "DescribeImportTasksFilterList": {
+      "base": null,
+      "refs": {
+        "DescribeImportTasksRequest$filters": "<p>An array of name-value pairs that you provide to filter the results for the <code>DescribeImportTask</code> request to a specific subset of results. Currently, wildcard values aren't supported for filters.</p>"
+      }
+    },
+    "DescribeImportTasksMaxResults": {
+      "base": null,
+      "refs": {
+        "DescribeImportTasksRequest$maxResults": "<p>The maximum number of results that you want this request to return, up to 100.</p>"
+      }
+    },
+    "DescribeImportTasksRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeImportTasksResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeTagsRequest": {
       "base": null,
       "refs": {
@@ -500,6 +566,71 @@
       "refs": {
       }
     },
+    "ImportStatus": {
+      "base": null,
+      "refs": {
+        "ImportTask$status": "<p>The status of the import task. An import can have the status of <code>IMPORT_COMPLETE</code> and still have some records fail to import from the overall request. More information can be found in the downloadable archive defined in the <code>errorsAndFailedEntriesZip</code> field, or in the Migration Hub management console.</p>"
+      }
+    },
+    "ImportTask": {
+      "base": "<p>An array of information related to the import task request that includes status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>",
+      "refs": {
+        "ImportTaskList$member": null,
+        "StartImportTaskResponse$task": "<p>An array of information related to the import task request including status information, times, IDs, the Amazon S3 Object URL for the import file, and more. </p>"
+      }
+    },
+    "ImportTaskFilter": {
+      "base": "<p>A name-values pair of elements you can use to filter the results when querying your import tasks. Currently, wildcards are not supported for filters.</p> <note> <p>When filtering by import status, all other filter values are ignored.</p> </note>",
+      "refs": {
+        "DescribeImportTasksFilterList$member": null
+      }
+    },
+    "ImportTaskFilterName": {
+      "base": null,
+      "refs": {
+        "ImportTaskFilter$name": "<p>The name, status, or import task ID for a specific import task.</p>"
+      }
+    },
+    "ImportTaskFilterValue": {
+      "base": null,
+      "refs": {
+        "ImportTaskFilterValueList$member": null
+      }
+    },
+    "ImportTaskFilterValueList": {
+      "base": null,
+      "refs": {
+        "ImportTaskFilter$values": "<p>An array of strings that you can provide to match against a specific name, status, or import task ID to filter the results for your import task queries.</p>"
+      }
+    },
+    "ImportTaskIdentifier": {
+      "base": null,
+      "refs": {
+        "BatchDeleteImportDataError$importTaskId": "<p>The unique import ID associated with the error that occurred.</p>",
+        "ImportTask$importTaskId": "<p>The unique ID for a specific import task. These IDs aren't globally unique, but they are unique within an AWS account.</p>",
+        "ToDeleteIdentifierList$member": null
+      }
+    },
+    "ImportTaskList": {
+      "base": null,
+      "refs": {
+        "DescribeImportTasksResponse$tasks": "<p>A returned array of import tasks that match any applied filters, up to the specified number of maximum results.</p>"
+      }
+    },
+    "ImportTaskName": {
+      "base": null,
+      "refs": {
+        "ImportTask$name": "<p>A descriptive name for an import task. You can use this name to filter future requests related to this import task, such as identifying applications and servers that were included in this import task. We recommend that you use a meaningful name for each import task.</p>",
+        "StartImportTaskRequest$name": "<p>A descriptive name for this request. You can use this name to filter future requests related to this import task, such as identifying applications and servers that were included in this import task. We recommend that you use a meaningful name for each import task.</p>"
+      }
+    },
+    "ImportURL": {
+      "base": null,
+      "refs": {
+        "ImportTask$importUrl": "<p>The URL for your import file that you've uploaded to Amazon S3.</p>",
+        "StartImportTaskRequest$importUrl": "<p>The URL for your import file that you've uploaded to Amazon S3.</p> <note> <p>If you're using the AWS CLI, this URL is structured as follows: <code>s3://BucketName/ImportFileName.CSV</code> </p> </note>"
+      }
+    },
     "Integer": {
       "base": null,
       "refs": {
@@ -521,6 +652,10 @@
         "DescribeExportConfigurationsRequest$maxResults": "<p>A number between 1 and 100 specifying the maximum number of continuous export descriptions returned.</p>",
         "DescribeExportTasksRequest$maxResults": "<p>The maximum number of volume results returned by <code>DescribeExportTasks</code> in paginated output. When this parameter is used, <code>DescribeExportTasks</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element.</p>",
         "DescribeTagsRequest$maxResults": "<p>The total number of items to return in a single page of output. The maximum value is 100.</p>",
+        "ImportTask$serverImportSuccess": "<p>The total number of server records in the import file that were successfully imported.</p>",
+        "ImportTask$serverImportFailure": "<p>The total number of server records in the import file that failed to be imported.</p>",
+        "ImportTask$applicationImportSuccess": "<p>The total number of application records in the import file that were successfully imported.</p>",
+        "ImportTask$applicationImportFailure": "<p>The total number of application records in the import file that failed to be imported.</p>",
         "ListConfigurationsRequest$maxResults": "<p>The total number of items to return. The maximum value is 100.</p>",
         "ListServerNeighborsRequest$maxResults": "<p>Maximum number of results to return in a single page of output.</p>"
       }
@@ -602,6 +737,8 @@
         "DescribeExportConfigurationsResponse$nextToken": "<p>The token from the previous call to describe-export-tasks.</p>",
         "DescribeExportTasksRequest$nextToken": "<p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeExportTasks</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is null when there are no more results to return.</p>",
         "DescribeExportTasksResponse$nextToken": "<p>The <code>nextToken</code> value to include in a future <code>DescribeExportTasks</code> request. When the results of a <code>DescribeExportTasks</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is null when there are no more results to return.</p>",
+        "DescribeImportTasksRequest$nextToken": "<p>The token to request a specific page of results.</p>",
+        "DescribeImportTasksResponse$nextToken": "<p>The token to request the next page of results.</p>",
         "DescribeTagsRequest$nextToken": "<p>A token to start the list. Use this token to get the next set of results.</p>",
         "DescribeTagsResponse$nextToken": "<p>The call returns a token. Use this token to get the next set of results.</p>",
         "ListConfigurationsRequest$nextToken": "<p>Token to retrieve the next set of results. For example, if a previous call to ListConfigurations returned 100 items, but you set <code>ListConfigurationsRequest$maxResults</code> to 10, you received a set of 10 results along with a token. Use that token in this query to get the next set of 10.</p>",
@@ -626,7 +763,7 @@
       }
     },
     "ResourceInUseException": {
-      "base": "<p/>",
+      "base": "<p>This issue occurs when the same <code>clientRequestToken</code> is used with the <code>StartImportTask</code> action, but with different parameters. For example, you use the same request token but have two different import URLs, you can encounter this issue. If the import tasks are meant to be different, use a different <code>clientRequestToken</code>, and try again.</p>",
       "refs": {
       }
     },
@@ -640,6 +777,12 @@
       "refs": {
         "ContinuousExportDescription$s3Bucket": "<p>The name of the s3 bucket where the export data parquet files are stored.</p>",
         "StartContinuousExportResponse$s3Bucket": "<p>The name of the s3 bucket where the export data parquet files are stored.</p>"
+      }
+    },
+    "S3PresignedUrl": {
+      "base": null,
+      "refs": {
+        "ImportTask$errorsAndFailedEntriesZip": "<p>A link to a compressed archive folder (in the ZIP format) that contains an error log and a file of failed records. You can use these two files to quickly identify records that failed, why they failed, and correct those records. Afterward, you can upload the corrected file to your Amazon S3 bucket and create another import task request.</p> <p>This field also includes authorization information so you can confirm the authenticity of the compressed archive before you download it.</p> <p>If some records failed to be imported we recommend that you correct the records in the failed entries file and then imports that failed entries file. This prevents you from having to correct and update the larger original file and attempt importing it again.</p>"
       }
     },
     "SchemaStorageConfig": {
@@ -680,6 +823,16 @@
       }
     },
     "StartExportTaskResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartImportTaskRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartImportTaskResponse": {
       "base": null,
       "refs": {
       }
@@ -738,7 +891,7 @@
     "StringMax255": {
       "base": null,
       "refs": {
-        "ContinuousExportDescription$statusDetail": "<p>Contains information about any errors that may have occurred.</p>"
+        "ContinuousExportDescription$statusDetail": "<p>Contains information about any errors that have occurred. This data type can have the following values:</p> <ul> <li> <p>ACCESS_DENIED - You don’t have permission to start Data Exploration in Amazon Athena. Contact your AWS administrator for help. For more information, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/userguide/setting-up.html\">Setting Up AWS Application Discovery Service</a> in the Application Discovery Service User Guide.</p> </li> <li> <p>DELIVERY_STREAM_LIMIT_FAILURE - You reached the limit for Amazon Kinesis Data Firehose delivery streams. Reduce the number of streams or request a limit increase and try again. For more information, see <a href=\"http://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html\">Kinesis Data Streams Limits</a> in the Amazon Kinesis Data Streams Developer Guide.</p> </li> <li> <p>FIREHOSE_ROLE_MISSING - The Data Exploration feature is in an error state because your IAM User is missing the AWSApplicationDiscoveryServiceFirehose role. Turn on Data Exploration in Amazon Athena and try again. For more information, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/userguide/setting-up.html#setting-up-user-policy\">Step 3: Provide Application Discovery Service Access to Non-Administrator Users by Attaching Policies</a> in the Application Discovery Service User Guide.</p> </li> <li> <p>FIREHOSE_STREAM_DOES_NOT_EXIST - The Data Exploration feature is in an error state because your IAM User is missing one or more of the Kinesis data delivery streams.</p> </li> <li> <p>INTERNAL_FAILURE - The Data Exploration feature is in an error state because of an internal failure. Try again later. If this problem persists, contact AWS Support.</p> </li> <li> <p>S3_BUCKET_LIMIT_FAILURE - You reached the limit for Amazon S3 buckets. Reduce the number of Amazon S3 buckets or request a limit increase and try again. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html\">Bucket Restrictions and Limitations</a> in the Amazon Simple Storage Service Developer Guide.</p> </li> <li> <p>S3_NOT_SIGNED_UP - Your account is not signed up for the Amazon S3 service. You must sign up before you can use Amazon S3. You can sign up at the following URL: <a href=\"https://aws.amazon.com/s3\">https://aws.amazon.com/s3</a>.</p> </li> </ul>"
       }
     },
     "Tag": {
@@ -788,11 +941,20 @@
         "ContinuousExportDescription$stopTime": "<p>The timestamp that represents when this continuous export was stopped.</p>",
         "ExportInfo$requestedStartTime": "<p>The value of <code>startTime</code> parameter in the <code>StartExportTask</code> request. If no <code>startTime</code> was requested, this result does not appear in <code>ExportInfo</code>.</p>",
         "ExportInfo$requestedEndTime": "<p>The <code>endTime</code> used in the <code>StartExportTask</code> request. If no <code>endTime</code> was requested, this result does not appear in <code>ExportInfo</code>.</p>",
+        "ImportTask$importRequestTime": "<p>The time that the import task request was made, presented in the Unix time stamp format.</p>",
+        "ImportTask$importCompletionTime": "<p>The time that the import task request finished, presented in the Unix time stamp format.</p>",
+        "ImportTask$importDeletedTime": "<p>The time that the import task request was deleted, presented in the Unix time stamp format.</p>",
         "StartContinuousExportResponse$startTime": "<p>The timestamp representing when the continuous export was started.</p>",
         "StartExportTaskRequest$startTime": "<p>The start timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, data is exported starting from the first data collected by the agent.</p>",
         "StartExportTaskRequest$endTime": "<p>The end timestamp for exported data from the single Application Discovery Agent selected in the filters. If no value is specified, exported data includes the most recent data collected by the agent.</p>",
         "StopContinuousExportResponse$startTime": "<p>Timestamp that represents when this continuous export started collecting data.</p>",
         "StopContinuousExportResponse$stopTime": "<p>Timestamp that represents when this continuous export was stopped.</p>"
+      }
+    },
+    "ToDeleteIdentifierList": {
+      "base": null,
+      "refs": {
+        "BatchDeleteImportDataRequest$importTaskIds": "<p>The IDs for the import tasks that you want to delete.</p>"
       }
     },
     "UpdateApplicationRequest": {

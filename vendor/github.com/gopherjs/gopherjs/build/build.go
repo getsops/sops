@@ -139,6 +139,9 @@ func importWithSrcDir(bctx build.Context, path string, srcDir string, mode build
 		if installSuffix != "" {
 			bctx.InstallSuffix += "_" + installSuffix
 		}
+	case "syscall/js":
+		// There are no buildable files in this package, but we need to use files in the virtual directory.
+		mode |= build.FindOnly
 	case "math/big":
 		// Use pure Go version of math/big; we don't want non-Go assembly versions.
 		bctx.BuildTags = append(bctx.BuildTags, "math_big_pure_go")
@@ -312,6 +315,14 @@ func parseAndAugment(bctx *build.Context, pkg *build.Package, isTest bool, fileS
 			return natives.FS.Open(name)
 		},
 	}
+
+	// reflect needs to tell Go 1.11 apart from Go 1.11.1 for https://github.com/gopherjs/gopherjs/issues/862,
+	// so provide it with the custom go1.11.1 build tag whenever we're on Go 1.11.1 or later.
+	// TODO: Remove this ad hoc special behavior in GopherJS 1.12.
+	if runtime.Version() != "go1.11" {
+		nativesContext.ReleaseTags = append(nativesContext.ReleaseTags, "go1.11.1")
+	}
+
 	if nativesPkg, err := nativesContext.Import(importPath, "", 0); err == nil {
 		names := nativesPkg.GoFiles
 		if isTest {

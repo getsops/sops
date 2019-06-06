@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<p>The AWS IoT 1-Click Project API Reference</p>",
+  "service": "<p>The AWS IoT 1-Click Projects API Reference</p>",
   "operations": {
     "AssociateDeviceWithPlacement": "<p>Associates a physical device with a placement.</p>",
     "CreatePlacement": "<p>Creates an empty placement.</p>",
@@ -13,6 +13,9 @@
     "GetDevicesInPlacement": "<p>Returns an object enumerating the devices in a placement.</p>",
     "ListPlacements": "<p>Lists the placement(s) of a project.</p>",
     "ListProjects": "<p>Lists the AWS IoT 1-Click project(s) associated with your AWS account and region.</p>",
+    "ListTagsForResource": "<p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>",
+    "TagResource": "<p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href=\"https://aws.amazon.com/answers/account-management/aws-tagging-strategies/\">AWS Tagging Strategies</a>.</p>",
+    "UntagResource": "<p>Removes one or more tags (metadata key/value pairs) from a resource.</p>",
     "UpdatePlacement": "<p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., \"\").</p>",
     "UpdateProject": "<p>Updates a project associated with your AWS account and region. With the exception of device template names, you can pass just the values that need to be updated because the update request will change only the values that are provided. To clear a value, pass the empty string (i.e., <code>\"\"</code>).</p>"
   },
@@ -238,6 +241,16 @@
       "refs": {
       }
     },
+    "ListTagsForResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListTagsForResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "MaxResults": {
       "base": null,
       "refs": {
@@ -312,6 +325,16 @@
         "UpdateProjectRequest$placementTemplate": "<p>An object defining the project update. Once a project has been created, you cannot add device template names to the project. However, for a given <code>placementTemplate</code>, you can update the associated <code>callbackOverrides</code> for the device definition using this API.</p>"
       }
     },
+    "ProjectArn": {
+      "base": null,
+      "refs": {
+        "ListTagsForResourceRequest$resourceArn": "<p>The ARN of the resource whose tags you want to list.</p>",
+        "ProjectDescription$arn": "<p>The ARN of the project.</p>",
+        "ProjectSummary$arn": "<p>The ARN of the project.</p>",
+        "TagResourceRequest$resourceArn": "<p>The ARN of the resouce for which tag(s) should be added or modified.</p>",
+        "UntagResourceRequest$resourceArn": "<p>The ARN of the resource whose tag you want to remove.</p>"
+      }
+    },
     "ProjectDescription": {
       "base": "<p>An object providing detailed information for a particular project associated with an AWS account and region.</p>",
       "refs": {
@@ -361,6 +384,45 @@
       "refs": {
       }
     },
+    "TagKey": {
+      "base": null,
+      "refs": {
+        "TagKeyList$member": null,
+        "TagMap$key": null
+      }
+    },
+    "TagKeyList": {
+      "base": null,
+      "refs": {
+        "UntagResourceRequest$tagKeys": "<p>The keys of those tags which you want to remove.</p>"
+      }
+    },
+    "TagMap": {
+      "base": null,
+      "refs": {
+        "CreateProjectRequest$tags": "<p>Optional tags (metadata key/value pairs) to be associated with the project. For example, <code>{ {\"key1\": \"value1\", \"key2\": \"value2\"} }</code>. For more information, see <a href=\"https://aws.amazon.com/answers/account-management/aws-tagging-strategies/\">AWS Tagging Strategies</a>.</p>",
+        "ListTagsForResourceResponse$tags": "<p>The tags (metadata key/value pairs) which you have assigned to the resource.</p>",
+        "ProjectDescription$tags": "<p>The tags (metadata key/value pairs) associated with the project.</p>",
+        "ProjectSummary$tags": "<p>The tags (metadata key/value pairs) associated with the project.</p>",
+        "TagResourceRequest$tags": "<p>The new or modifying tag(s) for the resource. See <a href=\"https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits\">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per resource.</p>"
+      }
+    },
+    "TagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagValue": {
+      "base": null,
+      "refs": {
+        "TagMap$value": null
+      }
+    },
     "Time": {
       "base": null,
       "refs": {
@@ -376,6 +438,16 @@
     },
     "TooManyRequestsException": {
       "base": "<p/>",
+      "refs": {
+      }
+    },
+    "UntagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UntagResourceResponse": {
+      "base": null,
       "refs": {
       }
     },

@@ -442,7 +442,7 @@
         "customers": {
           "methods": {
             "create": {
-              "description": "Creates a customer for zero-touch enrollment. After the method returns\nsuccessfully, admin and owner roles can manage devices and EMM configs\nby calling API methods or using their zero-touch enrollment portal. The API\ndoesn't notify the customer that they have access.",
+              "description": "Creates a customer for zero-touch enrollment. After the method returns\nsuccessfully, admin and owner roles can manage devices and EMM configs\nby calling API methods or using their zero-touch enrollment portal.\nThe customer receives an email that welcomes them to zero-touch enrollment\nand explains how to sign into the portal.",
               "flatPath": "v1/partners/{partnersId}/customers",
               "httpMethod": "POST",
               "id": "androiddeviceprovisioning.partners.customers.create",
@@ -475,6 +475,17 @@
                 "partnerId"
               ],
               "parameters": {
+                "pageSize": {
+                  "description": "The maximum number of results to be returned. If not specified or 0, all\nthe records are returned.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "A token identifying a page of results returned by the server.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "partnerId": {
                   "description": "Required. The ID of the reseller partner.",
                   "format": "int64",
@@ -630,7 +641,7 @@
               ],
               "parameters": {
                 "deviceId": {
-                  "description": "Required. The ID of the reseller partner.",
+                  "description": "Required. The ID of the device.",
                   "format": "int64",
                   "location": "path",
                   "pattern": "^[^/]+$",
@@ -813,7 +824,7 @@
       }
     }
   },
-  "revision": "20180804",
+  "revision": "20190531",
   "rootUrl": "https://androiddeviceprovisioning.googleapis.com/",
   "schemas": {
     "ClaimDeviceRequest": {
@@ -828,6 +839,10 @@
         "deviceIdentifier": {
           "$ref": "DeviceIdentifier",
           "description": "Required. The device identifier of the device to claim."
+        },
+        "deviceMetadata": {
+          "$ref": "DeviceMetadata",
+          "description": "Optional. The metadata to attach to the device."
         },
         "sectionType": {
           "description": "Required. The section type of the device's provisioning record.",
@@ -1148,6 +1163,16 @@
             "Zero-touch enrollment section type."
           ],
           "type": "string"
+        },
+        "vacationModeExpireTime": {
+          "description": "The timestamp when the device will exit ‘vacation mode’. This value is\npresent iff the device is in 'vacation mode'.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "vacationModeStartTime": {
+          "description": "The timestamp when the device was put into ‘vacation mode’. This value is\npresent iff the device is in 'vacation mode'.",
+          "format": "google-datetime",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1320,6 +1345,11 @@
         "nextPageToken": {
           "description": "A token used to access the next page of results. Omitted if no further\nresults are available.",
           "type": "string"
+        },
+        "totalSize": {
+          "description": "The total count of items in the list irrespective of pagination.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1376,6 +1406,11 @@
         "nextPageToken": {
           "description": "A token used to access the next page of results.\nOmitted if no further results are available.",
           "type": "string"
+        },
+        "totalSize": {
+          "description": "The total count of items in the list irrespective of pagination.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1390,6 +1425,15 @@
             "$ref": "Company"
           },
           "type": "array"
+        },
+        "nextPageToken": {
+          "description": "A token to retrieve the next page of results. Omitted if no further results\nare available.",
+          "type": "string"
+        },
+        "totalSize": {
+          "description": "The total count of items in the list irrespective of pagination.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1408,6 +1452,11 @@
         "nextPageToken": {
           "description": "A token to retrieve the next page of results. Omitted if no further results\nare available.",
           "type": "string"
+        },
+        "totalSize": {
+          "description": "The total count of items in the list irrespective of pagination.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1419,6 +1468,11 @@
         "nextPageToken": {
           "description": "A token to retrieve the next page of results. Omitted if no further results\nare available.",
           "type": "string"
+        },
+        "totalSize": {
+          "description": "The total count of items in the list irrespective of pagination.",
+          "format": "int32",
+          "type": "integer"
         },
         "vendors": {
           "description": "List of vendors of the reseller partner. Fields `name`, `companyId` and\n`companyName` are populated to the Company object.",
@@ -1451,7 +1505,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -1548,6 +1602,16 @@
             "Zero-touch enrollment section type."
           ],
           "type": "string"
+        },
+        "vacationModeDays": {
+          "description": "The duration of the vacation unlock starting from when the request is\nprocessed. (1 day is treated as 24 hours)",
+          "format": "int32",
+          "type": "integer"
+        },
+        "vacationModeExpireTime": {
+          "description": "The expiration time of the vacation unlock.",
+          "format": "google-datetime",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1597,7 +1661,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "Status",
       "properties": {
         "code": {
@@ -1648,6 +1712,16 @@
             "SIM-lock section type.",
             "Zero-touch enrollment section type."
           ],
+          "type": "string"
+        },
+        "vacationModeDays": {
+          "description": "The duration of the vacation unlock starting from when the request is\nprocessed. (1 day is treated as 24 hours)",
+          "format": "int32",
+          "type": "integer"
+        },
+        "vacationModeExpireTime": {
+          "description": "The expiration time of the vacation unlock.",
+          "format": "google-datetime",
           "type": "string"
         }
       },

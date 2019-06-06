@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,13 +46,23 @@ func NewResourceGroupDimensionsClientWithBaseURI(baseURI string, subscriptionID 
 // resourceGroupName - azure Resource Group Name.
 // filter - may be used to filter dimensions by properties/category, properties/usageStart,
 // properties/usageEnd. Supported operators are 'eq','lt', 'gt', 'le', 'ge'.
-// expand - may be used to expand the properties/data within a dimension dategory. By default, data is not
+// expand - may be used to expand the properties/data within a dimension category. By default, data is not
 // included when listing dimensions.
 // skiptoken - skiptoken is only used if a previous operation returned a partial result. If a previous response
 // contains a nextLink element, the value of the nextLink element will include a skiptoken parameter that
 // specifies a starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N dimension data.
 func (client ResourceGroupDimensionsClient) List(ctx context.Context, resourceGroupName string, filter string, expand string, skiptoken string, top *int32) (result DimensionsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceGroupDimensionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,

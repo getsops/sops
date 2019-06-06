@@ -18,13 +18,18 @@ package dtl
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/devtestlabs/mgmt/2016-05-15/dtl"
 
 // CostThresholdStatus enumerates the values for cost threshold status.
 type CostThresholdStatus string
@@ -460,17 +465,17 @@ func PossibleWindowsOsStateValues() []WindowsOsState {
 	return []WindowsOsState{NonSysprepped, SysprepApplied, SysprepRequested}
 }
 
-// ApplicableSchedule schedules applicable to a virtual machine. The schedules may have been defined on a VM or on
-// lab level.
+// ApplicableSchedule schedules applicable to a virtual machine. The schedules may have been defined on a
+// VM or on lab level.
 type ApplicableSchedule struct {
 	autorest.Response `json:"-"`
 	// ApplicableScheduleProperties - The properties of the resource.
 	*ApplicableScheduleProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -483,15 +488,6 @@ func (as ApplicableSchedule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if as.ApplicableScheduleProperties != nil {
 		objectMap["properties"] = as.ApplicableScheduleProperties
-	}
-	if as.ID != nil {
-		objectMap["id"] = as.ID
-	}
-	if as.Name != nil {
-		objectMap["name"] = as.Name
-	}
-	if as.Type != nil {
-		objectMap["type"] = as.Type
 	}
 	if as.Location != nil {
 		objectMap["location"] = as.Location
@@ -571,16 +567,16 @@ func (as *ApplicableSchedule) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ApplicableScheduleFragment schedules applicable to a virtual machine. The schedules may have been defined on a
-// VM or on lab level.
+// ApplicableScheduleFragment schedules applicable to a virtual machine. The schedules may have been
+// defined on a VM or on lab level.
 type ApplicableScheduleFragment struct {
 	// ApplicableSchedulePropertiesFragment - The properties of the resource.
 	*ApplicableSchedulePropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -593,15 +589,6 @@ func (asf ApplicableScheduleFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if asf.ApplicableSchedulePropertiesFragment != nil {
 		objectMap["properties"] = asf.ApplicableSchedulePropertiesFragment
-	}
-	if asf.ID != nil {
-		objectMap["id"] = asf.ID
-	}
-	if asf.Name != nil {
-		objectMap["name"] = asf.Name
-	}
-	if asf.Type != nil {
-		objectMap["type"] = asf.Type
 	}
 	if asf.Location != nil {
 		objectMap["location"] = asf.Location
@@ -708,11 +695,11 @@ type ArmTemplate struct {
 	autorest.Response `json:"-"`
 	// ArmTemplateProperties - The properties of the resource.
 	*ArmTemplateProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -725,15 +712,6 @@ func (at ArmTemplate) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if at.ArmTemplateProperties != nil {
 		objectMap["properties"] = at.ArmTemplateProperties
-	}
-	if at.ID != nil {
-		objectMap["id"] = at.ID
-	}
-	if at.Name != nil {
-		objectMap["name"] = at.Name
-	}
-	if at.Type != nil {
-		objectMap["type"] = at.Type
 	}
 	if at.Location != nil {
 		objectMap["location"] = at.Location
@@ -832,19 +810,19 @@ type ArmTemplateParameterProperties struct {
 
 // ArmTemplateProperties properties of an Azure Resource Manager template.
 type ArmTemplateProperties struct {
-	// DisplayName - The display name of the ARM template.
+	// DisplayName - READ-ONLY; The display name of the ARM template.
 	DisplayName *string `json:"displayName,omitempty"`
-	// Description - The description of the ARM template.
+	// Description - READ-ONLY; The description of the ARM template.
 	Description *string `json:"description,omitempty"`
-	// Publisher - The publisher of the ARM template.
+	// Publisher - READ-ONLY; The publisher of the ARM template.
 	Publisher *string `json:"publisher,omitempty"`
-	// Icon - The URI to the icon of the ARM template.
+	// Icon - READ-ONLY; The URI to the icon of the ARM template.
 	Icon *string `json:"icon,omitempty"`
-	// Contents - The contents of the ARM template.
+	// Contents - READ-ONLY; The contents of the ARM template.
 	Contents interface{} `json:"contents,omitempty"`
-	// CreatedDate - The creation date of the armTemplate.
+	// CreatedDate - READ-ONLY; The creation date of the armTemplate.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
-	// ParametersValueFilesInfo - File name and parameter values information from all azuredeploy.*.parameters.json for the ARM template.
+	// ParametersValueFilesInfo - READ-ONLY; File name and parameter values information from all azuredeploy.*.parameters.json for the ARM template.
 	ParametersValueFilesInfo *[]ParametersValueFileInfo `json:"parametersValueFilesInfo,omitempty"`
 }
 
@@ -853,11 +831,11 @@ type Artifact struct {
 	autorest.Response `json:"-"`
 	// ArtifactProperties - The properties of the resource.
 	*ArtifactProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -870,15 +848,6 @@ func (a Artifact) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if a.ArtifactProperties != nil {
 		objectMap["properties"] = a.ArtifactProperties
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
-	if a.Name != nil {
-		objectMap["name"] = a.Name
-	}
-	if a.Type != nil {
-		objectMap["type"] = a.Type
 	}
 	if a.Location != nil {
 		objectMap["location"] = a.Location
@@ -1028,21 +997,21 @@ type ArtifactParameterPropertiesFragment struct {
 
 // ArtifactProperties properties of an artifact.
 type ArtifactProperties struct {
-	// Title - The artifact's title.
+	// Title - READ-ONLY; The artifact's title.
 	Title *string `json:"title,omitempty"`
-	// Description - The artifact's description.
+	// Description - READ-ONLY; The artifact's description.
 	Description *string `json:"description,omitempty"`
-	// Publisher - The artifact's publisher.
+	// Publisher - READ-ONLY; The artifact's publisher.
 	Publisher *string `json:"publisher,omitempty"`
-	// FilePath - The file path to the artifact.
+	// FilePath - READ-ONLY; The file path to the artifact.
 	FilePath *string `json:"filePath,omitempty"`
-	// Icon - The URI to the artifact icon.
+	// Icon - READ-ONLY; The URI to the artifact icon.
 	Icon *string `json:"icon,omitempty"`
-	// TargetOsType - The artifact's target OS.
+	// TargetOsType - READ-ONLY; The artifact's target OS.
 	TargetOsType *string `json:"targetOsType,omitempty"`
-	// Parameters - The artifact's parameters.
+	// Parameters - READ-ONLY; The artifact's parameters.
 	Parameters interface{} `json:"parameters,omitempty"`
-	// CreatedDate - The artifact's creation date.
+	// CreatedDate - READ-ONLY; The artifact's creation date.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 }
 
@@ -1051,11 +1020,11 @@ type ArtifactSource struct {
 	autorest.Response `json:"-"`
 	// ArtifactSourceProperties - The properties of the resource.
 	*ArtifactSourceProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -1068,15 +1037,6 @@ func (as ArtifactSource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if as.ArtifactSourceProperties != nil {
 		objectMap["properties"] = as.ArtifactSourceProperties
-	}
-	if as.ID != nil {
-		objectMap["id"] = as.ID
-	}
-	if as.Name != nil {
-		objectMap["name"] = as.Name
-	}
-	if as.Type != nil {
-		objectMap["type"] = as.Type
 	}
 	if as.Location != nil {
 		objectMap["location"] = as.Location
@@ -1160,11 +1120,11 @@ func (as *ArtifactSource) UnmarshalJSON(body []byte) error {
 type ArtifactSourceFragment struct {
 	// ArtifactSourcePropertiesFragment - The properties of the resource.
 	*ArtifactSourcePropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -1177,15 +1137,6 @@ func (asf ArtifactSourceFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if asf.ArtifactSourcePropertiesFragment != nil {
 		objectMap["properties"] = asf.ArtifactSourcePropertiesFragment
-	}
-	if asf.ID != nil {
-		objectMap["id"] = asf.ID
-	}
-	if asf.Name != nil {
-		objectMap["name"] = asf.Name
-	}
-	if asf.Type != nil {
-		objectMap["type"] = asf.Type
 	}
 	if asf.Location != nil {
 		objectMap["location"] = asf.Location
@@ -1283,7 +1234,7 @@ type ArtifactSourceProperties struct {
 	SecurityToken *string `json:"securityToken,omitempty"`
 	// Status - Indicates if the artifact source is enabled (values: Enabled, Disabled). Possible values include: 'EnableStatusEnabled', 'EnableStatusDisabled'
 	Status EnableStatus `json:"status,omitempty"`
-	// CreatedDate - The artifact source's creation date.
+	// CreatedDate - READ-ONLY; The artifact source's creation date.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// ProvisioningState - The provisioning status of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
@@ -1323,7 +1274,7 @@ type AttachDiskProperties struct {
 
 // AttachNewDataDiskOptions properties to attach new disk to the Virtual Machine.
 type AttachNewDataDiskOptions struct {
-	// DiskSizeGiB - Size of the disk to be attached in GibiBytes.
+	// DiskSizeGiB - Size of the disk to be attached in Gibibytes.
 	DiskSizeGiB *int32 `json:"diskSizeGiB,omitempty"`
 	// DiskName - The name of the disk to be attached.
 	DiskName *string `json:"diskName,omitempty"`
@@ -1450,11 +1401,11 @@ type CustomImage struct {
 	autorest.Response `json:"-"`
 	// CustomImageProperties - The properties of the resource.
 	*CustomImageProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -1467,15 +1418,6 @@ func (ci CustomImage) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ci.CustomImageProperties != nil {
 		objectMap["properties"] = ci.CustomImageProperties
-	}
-	if ci.ID != nil {
-		objectMap["id"] = ci.ID
-	}
-	if ci.Name != nil {
-		objectMap["name"] = ci.Name
-	}
-	if ci.Type != nil {
-		objectMap["type"] = ci.Type
 	}
 	if ci.Location != nil {
 		objectMap["location"] = ci.Location
@@ -1565,7 +1507,7 @@ type CustomImageProperties struct {
 	Description *string `json:"description,omitempty"`
 	// Author - The author of the custom image.
 	Author *string `json:"author,omitempty"`
-	// CreationDate - The creation date of the custom image.
+	// CreationDate - READ-ONLY; The creation date of the custom image.
 	CreationDate *date.Time `json:"creationDate,omitempty"`
 	// ManagedImageID - The Managed Image Id backing the custom image.
 	ManagedImageID *string `json:"managedImageId,omitempty"`
@@ -1595,8 +1537,8 @@ type CustomImagePropertiesFromVM struct {
 	LinuxOsInfo *LinuxOsInfo `json:"linuxOsInfo,omitempty"`
 }
 
-// CustomImagesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// CustomImagesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type CustomImagesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1605,7 +1547,7 @@ type CustomImagesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *CustomImagesCreateOrUpdateFuture) Result(client CustomImagesClient) (ci CustomImage, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.CustomImagesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1624,7 +1566,8 @@ func (future *CustomImagesCreateOrUpdateFuture) Result(client CustomImagesClient
 	return
 }
 
-// CustomImagesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CustomImagesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CustomImagesDeleteFuture struct {
 	azure.Future
 }
@@ -1633,7 +1576,7 @@ type CustomImagesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *CustomImagesDeleteFuture) Result(client CustomImagesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.CustomImagesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1685,11 +1628,11 @@ type Disk struct {
 	autorest.Response `json:"-"`
 	// DiskProperties - The properties of the resource.
 	*DiskProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -1702,15 +1645,6 @@ func (d Disk) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if d.DiskProperties != nil {
 		objectMap["properties"] = d.DiskProperties
-	}
-	if d.ID != nil {
-		objectMap["id"] = d.ID
-	}
-	if d.Name != nil {
-		objectMap["name"] = d.Name
-	}
-	if d.Type != nil {
-		objectMap["type"] = d.Type
 	}
 	if d.Location != nil {
 		objectMap["location"] = d.Location
@@ -1794,7 +1728,7 @@ func (d *Disk) UnmarshalJSON(body []byte) error {
 type DiskProperties struct {
 	// DiskType - The storage type for the disk (i.e. Standard, Premium). Possible values include: 'Standard', 'Premium'
 	DiskType StorageType `json:"diskType,omitempty"`
-	// DiskSizeGiB - The size of the disk in GibiBytes.
+	// DiskSizeGiB - The size of the disk in Gibibytes.
 	DiskSizeGiB *int32 `json:"diskSizeGiB,omitempty"`
 	// LeasedByLabVMID - The resource ID of the VM to which this disk is leased.
 	LeasedByLabVMID *string `json:"leasedByLabVmId,omitempty"`
@@ -1802,7 +1736,7 @@ type DiskProperties struct {
 	DiskBlobName *string `json:"diskBlobName,omitempty"`
 	// DiskURI - When backed by a blob, the URI of underlying blob.
 	DiskURI *string `json:"diskUri,omitempty"`
-	// CreatedDate - The creation date of the disk.
+	// CreatedDate - READ-ONLY; The creation date of the disk.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// HostCaching - The host caching policy of the disk (i.e. None, ReadOnly, ReadWrite).
 	HostCaching *string `json:"hostCaching,omitempty"`
@@ -1823,7 +1757,7 @@ type DisksAttachFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DisksAttachFuture) Result(client DisksClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.DisksAttachFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1836,7 +1770,8 @@ func (future *DisksAttachFuture) Result(client DisksClient) (ar autorest.Respons
 	return
 }
 
-// DisksCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DisksCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DisksCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1845,7 +1780,7 @@ type DisksCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DisksCreateOrUpdateFuture) Result(client DisksClient) (d Disk, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.DisksCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1873,7 +1808,7 @@ type DisksDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DisksDeleteFuture) Result(client DisksClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.DisksDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1895,7 +1830,7 @@ type DisksDetachFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DisksDetachFuture) Result(client DisksClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.DisksDetachFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1913,11 +1848,11 @@ type Environment struct {
 	autorest.Response `json:"-"`
 	// EnvironmentProperties - The properties of the resource.
 	*EnvironmentProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -1930,15 +1865,6 @@ func (e Environment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if e.EnvironmentProperties != nil {
 		objectMap["properties"] = e.EnvironmentProperties
-	}
-	if e.ID != nil {
-		objectMap["id"] = e.ID
-	}
-	if e.Name != nil {
-		objectMap["name"] = e.Name
-	}
-	if e.Type != nil {
-		objectMap["type"] = e.Type
 	}
 	if e.Location != nil {
 		objectMap["location"] = e.Location
@@ -2032,9 +1958,9 @@ type EnvironmentProperties struct {
 	DeploymentProperties *EnvironmentDeploymentProperties `json:"deploymentProperties,omitempty"`
 	// ArmTemplateDisplayName - The display name of the Azure Resource Manager template that produced the environment.
 	ArmTemplateDisplayName *string `json:"armTemplateDisplayName,omitempty"`
-	// ResourceGroupID - The identifier of the resource group containing the environment's resources.
+	// ResourceGroupID - READ-ONLY; The identifier of the resource group containing the environment's resources.
 	ResourceGroupID *string `json:"resourceGroupId,omitempty"`
-	// CreatedByUser - The creator of the environment.
+	// CreatedByUser - READ-ONLY; The creator of the environment.
 	CreatedByUser *string `json:"createdByUser,omitempty"`
 	// ProvisioningState - The provisioning status of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
@@ -2042,8 +1968,8 @@ type EnvironmentProperties struct {
 	UniqueIdentifier *string `json:"uniqueIdentifier,omitempty"`
 }
 
-// EnvironmentsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// EnvironmentsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type EnvironmentsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -2052,7 +1978,7 @@ type EnvironmentsCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *EnvironmentsCreateOrUpdateFuture) Result(client EnvironmentsClient) (e Environment, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.EnvironmentsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2071,7 +1997,8 @@ func (future *EnvironmentsCreateOrUpdateFuture) Result(client EnvironmentsClient
 	return
 }
 
-// EnvironmentsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// EnvironmentsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EnvironmentsDeleteFuture struct {
 	azure.Future
 }
@@ -2080,7 +2007,7 @@ type EnvironmentsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *EnvironmentsDeleteFuture) Result(client EnvironmentsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.EnvironmentsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2157,11 +2084,11 @@ type Formula struct {
 	autorest.Response `json:"-"`
 	// FormulaProperties - The properties of the resource.
 	*FormulaProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -2174,15 +2101,6 @@ func (f Formula) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if f.FormulaProperties != nil {
 		objectMap["properties"] = f.FormulaProperties
-	}
-	if f.ID != nil {
-		objectMap["id"] = f.ID
-	}
-	if f.Name != nil {
-		objectMap["name"] = f.Name
-	}
-	if f.Type != nil {
-		objectMap["type"] = f.Type
 	}
 	if f.Location != nil {
 		objectMap["location"] = f.Location
@@ -2270,7 +2188,7 @@ type FormulaProperties struct {
 	Author *string `json:"author,omitempty"`
 	// OsType - The OS type of the formula.
 	OsType *string `json:"osType,omitempty"`
-	// CreationDate - The creation date of the formula.
+	// CreationDate - READ-ONLY; The creation date of the formula.
 	CreationDate *date.Time `json:"creationDate,omitempty"`
 	// FormulaContent - The content of the formula.
 	FormulaContent *LabVirtualMachineCreationParameter `json:"formulaContent,omitempty"`
@@ -2298,7 +2216,7 @@ type FormulasCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *FormulasCreateOrUpdateFuture) Result(client FormulasClient) (f Formula, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.FormulasCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2321,11 +2239,11 @@ func (future *FormulasCreateOrUpdateFuture) Result(client FormulasClient) (f For
 type GalleryImage struct {
 	// GalleryImageProperties - The properties of the resource.
 	*GalleryImageProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -2338,15 +2256,6 @@ func (gi GalleryImage) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if gi.GalleryImageProperties != nil {
 		objectMap["properties"] = gi.GalleryImageProperties
-	}
-	if gi.ID != nil {
-		objectMap["id"] = gi.ID
-	}
-	if gi.Name != nil {
-		objectMap["name"] = gi.Name
-	}
-	if gi.Type != nil {
-		objectMap["type"] = gi.Type
 	}
 	if gi.Location != nil {
 		objectMap["location"] = gi.Location
@@ -2430,7 +2339,7 @@ func (gi *GalleryImage) UnmarshalJSON(body []byte) error {
 type GalleryImageProperties struct {
 	// Author - The author of the gallery image.
 	Author *string `json:"author,omitempty"`
-	// CreatedDate - The creation date of the gallery image.
+	// CreatedDate - READ-ONLY; The creation date of the gallery image.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// Description - The description of the gallery image.
 	Description *string `json:"description,omitempty"`
@@ -2488,7 +2397,7 @@ type GenerateUploadURIParameter struct {
 	BlobName *string `json:"blobName,omitempty"`
 }
 
-// GenerateUploadURIResponse reponse body for generating an upload URI.
+// GenerateUploadURIResponse response body for generating an upload URI.
 type GenerateUploadURIResponse struct {
 	autorest.Response `json:"-"`
 	// UploadURI - The upload URI for the VHD.
@@ -2505,7 +2414,7 @@ type GlobalSchedulesExecuteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *GlobalSchedulesExecuteFuture) Result(client GlobalSchedulesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesExecuteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2528,7 +2437,7 @@ type GlobalSchedulesRetargetFuture struct {
 // If the operation has not completed it will return an error.
 func (future *GlobalSchedulesRetargetFuture) Result(client GlobalSchedulesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.GlobalSchedulesRetargetFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2576,8 +2485,8 @@ type InboundNatRule struct {
 	BackendPort *int32 `json:"backendPort,omitempty"`
 }
 
-// InboundNatRuleFragment a rule for NAT - exposing a VM's port (backendPort) on the public IP address using a load
-// balancer.
+// InboundNatRuleFragment a rule for NAT - exposing a VM's port (backendPort) on the public IP address
+// using a load balancer.
 type InboundNatRuleFragment struct {
 	// TransportProtocol - The transport protocol for the endpoint. Possible values include: 'TCP', 'UDP'
 	TransportProtocol TransportProtocol `json:"transportProtocol,omitempty"`
@@ -2592,11 +2501,11 @@ type Lab struct {
 	autorest.Response `json:"-"`
 	// LabProperties - The properties of the resource.
 	*LabProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -2609,15 +2518,6 @@ func (l Lab) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if l.LabProperties != nil {
 		objectMap["properties"] = l.LabProperties
-	}
-	if l.ID != nil {
-		objectMap["id"] = l.ID
-	}
-	if l.Name != nil {
-		objectMap["name"] = l.Name
-	}
-	if l.Type != nil {
-		objectMap["type"] = l.Type
 	}
 	if l.Location != nil {
 		objectMap["location"] = l.Location
@@ -2702,11 +2602,11 @@ type LabCost struct {
 	autorest.Response `json:"-"`
 	// LabCostProperties - The properties of the resource.
 	*LabCostProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -2719,15 +2619,6 @@ func (lc LabCost) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if lc.LabCostProperties != nil {
 		objectMap["properties"] = lc.LabCostProperties
-	}
-	if lc.ID != nil {
-		objectMap["id"] = lc.ID
-	}
-	if lc.Name != nil {
-		objectMap["name"] = lc.Name
-	}
-	if lc.Type != nil {
-		objectMap["type"] = lc.Type
 	}
 	if lc.Location != nil {
 		objectMap["location"] = lc.Location
@@ -2821,11 +2712,11 @@ type LabCostDetailsProperties struct {
 type LabCostProperties struct {
 	// TargetCost - The target cost properties
 	TargetCost *TargetCostProperties `json:"targetCost,omitempty"`
-	// LabCostSummary - The lab cost summary component of the cost data.
+	// LabCostSummary - READ-ONLY; The lab cost summary component of the cost data.
 	LabCostSummary *LabCostSummaryProperties `json:"labCostSummary,omitempty"`
-	// LabCostDetails - The lab cost details component of the cost data.
+	// LabCostDetails - READ-ONLY; The lab cost details component of the cost data.
 	LabCostDetails *[]LabCostDetailsProperties `json:"labCostDetails,omitempty"`
-	// ResourceCosts - The resource cost component of the cost data.
+	// ResourceCosts - READ-ONLY; The resource cost component of the cost data.
 	ResourceCosts *[]LabResourceCostProperties `json:"resourceCosts,omitempty"`
 	// CurrencyCode - The currency code of the cost.
 	CurrencyCode *string `json:"currencyCode,omitempty"`
@@ -2851,11 +2742,11 @@ type LabCostSummaryProperties struct {
 type LabFragment struct {
 	// LabPropertiesFragment - The properties of the resource.
 	*LabPropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -2868,15 +2759,6 @@ func (lf LabFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if lf.LabPropertiesFragment != nil {
 		objectMap["properties"] = lf.LabPropertiesFragment
-	}
-	if lf.ID != nil {
-		objectMap["id"] = lf.ID
-	}
-	if lf.Name != nil {
-		objectMap["name"] = lf.Name
-	}
-	if lf.Type != nil {
-		objectMap["type"] = lf.Type
 	}
 	if lf.Location != nil {
 		objectMap["location"] = lf.Location
@@ -2958,19 +2840,19 @@ func (lf *LabFragment) UnmarshalJSON(body []byte) error {
 
 // LabProperties properties of a lab.
 type LabProperties struct {
-	// DefaultStorageAccount - The lab's default storage account.
+	// DefaultStorageAccount - READ-ONLY; The lab's default storage account.
 	DefaultStorageAccount *string `json:"defaultStorageAccount,omitempty"`
-	// DefaultPremiumStorageAccount - The lab's default premium storage account.
+	// DefaultPremiumStorageAccount - READ-ONLY; The lab's default premium storage account.
 	DefaultPremiumStorageAccount *string `json:"defaultPremiumStorageAccount,omitempty"`
-	// ArtifactsStorageAccount - The lab's artifact storage account.
+	// ArtifactsStorageAccount - READ-ONLY; The lab's artifact storage account.
 	ArtifactsStorageAccount *string `json:"artifactsStorageAccount,omitempty"`
-	// PremiumDataDiskStorageAccount - The lab's premium data disk storage account.
+	// PremiumDataDiskStorageAccount - READ-ONLY; The lab's premium data disk storage account.
 	PremiumDataDiskStorageAccount *string `json:"premiumDataDiskStorageAccount,omitempty"`
-	// VaultName - The lab's Key vault.
+	// VaultName - READ-ONLY; The lab's Key vault.
 	VaultName *string `json:"vaultName,omitempty"`
 	// LabStorageType - Type of storage used by the lab. It can be either Premium or Standard. Default is Premium. Possible values include: 'Standard', 'Premium'
 	LabStorageType StorageType `json:"labStorageType,omitempty"`
-	// CreatedDate - The creation date of the lab.
+	// CreatedDate - READ-ONLY; The creation date of the lab.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// PremiumDataDisks - The setting to enable usage of premium data disks.
 	// When its value is 'Enabled', creation of standard or premium data disks is allowed.
@@ -3018,7 +2900,8 @@ type LabResourceCostProperties struct {
 	ExternalResourceID *string `json:"externalResourceId,omitempty"`
 }
 
-// LabsClaimAnyVMFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// LabsClaimAnyVMFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type LabsClaimAnyVMFuture struct {
 	azure.Future
 }
@@ -3027,7 +2910,7 @@ type LabsClaimAnyVMFuture struct {
 // If the operation has not completed it will return an error.
 func (future *LabsClaimAnyVMFuture) Result(client LabsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.LabsClaimAnyVMFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3050,7 +2933,7 @@ type LabsCreateEnvironmentFuture struct {
 // If the operation has not completed it will return an error.
 func (future *LabsCreateEnvironmentFuture) Result(client LabsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.LabsCreateEnvironmentFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3063,7 +2946,8 @@ func (future *LabsCreateEnvironmentFuture) Result(client LabsClient) (ar autores
 	return
 }
 
-// LabsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// LabsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type LabsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -3072,7 +2956,7 @@ type LabsCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *LabsCreateOrUpdateFuture) Result(client LabsClient) (l Lab, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.LabsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3100,7 +2984,7 @@ type LabsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *LabsDeleteFuture) Result(client LabsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.LabsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3123,7 +3007,7 @@ type LabsExportResourceUsageFuture struct {
 // If the operation has not completed it will return an error.
 func (future *LabsExportResourceUsageFuture) Result(client LabsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.LabsExportResourceUsageFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3147,11 +3031,11 @@ type LabVirtualMachine struct {
 	autorest.Response `json:"-"`
 	// LabVirtualMachineProperties - The properties of the resource.
 	*LabVirtualMachineProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -3164,15 +3048,6 @@ func (lvm LabVirtualMachine) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if lvm.LabVirtualMachineProperties != nil {
 		objectMap["properties"] = lvm.LabVirtualMachineProperties
-	}
-	if lvm.ID != nil {
-		objectMap["id"] = lvm.ID
-	}
-	if lvm.Name != nil {
-		objectMap["name"] = lvm.Name
-	}
-	if lvm.Type != nil {
-		objectMap["type"] = lvm.Type
 	}
 	if lvm.Location != nil {
 		objectMap["location"] = lvm.Location
@@ -3403,11 +3278,11 @@ type LabVirtualMachineCreationParameterProperties struct {
 type LabVirtualMachineFragment struct {
 	// LabVirtualMachinePropertiesFragment - The properties of the resource.
 	*LabVirtualMachinePropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -3420,15 +3295,6 @@ func (lvmf LabVirtualMachineFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if lvmf.LabVirtualMachinePropertiesFragment != nil {
 		objectMap["properties"] = lvmf.LabVirtualMachinePropertiesFragment
-	}
-	if lvmf.ID != nil {
-		objectMap["id"] = lvmf.ID
-	}
-	if lvmf.Name != nil {
-		objectMap["name"] = lvmf.Name
-	}
-	if lvmf.Type != nil {
-		objectMap["type"] = lvmf.Type
 	}
 	if lvmf.Location != nil {
 		objectMap["location"] = lvmf.Location
@@ -3522,7 +3388,7 @@ type LabVirtualMachineProperties struct {
 	CreatedByUser *string `json:"createdByUser,omitempty"`
 	// CreatedDate - The creation date of the virtual machine.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
-	// ComputeID - The resource identifier (Microsoft.Compute) of the virtual machine.
+	// ComputeID - READ-ONLY; The resource identifier (Microsoft.Compute) of the virtual machine.
 	ComputeID *string `json:"computeId,omitempty"`
 	// CustomImageID - The custom image identifier of the virtual machine.
 	CustomImageID *string `json:"customImageId,omitempty"`
@@ -3693,11 +3559,11 @@ type NotificationChannel struct {
 	autorest.Response `json:"-"`
 	// NotificationChannelProperties - The properties of the resource.
 	*NotificationChannelProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -3710,15 +3576,6 @@ func (nc NotificationChannel) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if nc.NotificationChannelProperties != nil {
 		objectMap["properties"] = nc.NotificationChannelProperties
-	}
-	if nc.ID != nil {
-		objectMap["id"] = nc.ID
-	}
-	if nc.Name != nil {
-		objectMap["name"] = nc.Name
-	}
-	if nc.Type != nil {
-		objectMap["type"] = nc.Type
 	}
 	if nc.Location != nil {
 		objectMap["location"] = nc.Location
@@ -3802,11 +3659,11 @@ func (nc *NotificationChannel) UnmarshalJSON(body []byte) error {
 type NotificationChannelFragment struct {
 	// NotificationChannelPropertiesFragment - The properties of the resource.
 	*NotificationChannelPropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -3819,15 +3676,6 @@ func (ncf NotificationChannelFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ncf.NotificationChannelPropertiesFragment != nil {
 		objectMap["properties"] = ncf.NotificationChannelPropertiesFragment
-	}
-	if ncf.ID != nil {
-		objectMap["id"] = ncf.ID
-	}
-	if ncf.Name != nil {
-		objectMap["name"] = ncf.Name
-	}
-	if ncf.Type != nil {
-		objectMap["type"] = ncf.Type
 	}
 	if ncf.Location != nil {
 		objectMap["location"] = ncf.Location
@@ -3915,7 +3763,7 @@ type NotificationChannelProperties struct {
 	Description *string `json:"description,omitempty"`
 	// Events - The list of event for which this notification is enabled.
 	Events *[]Event `json:"events,omitempty"`
-	// CreatedDate - The creation date of the notification channel.
+	// CreatedDate - READ-ONLY; The creation date of the notification channel.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// ProvisioningState - The provisioning status of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
@@ -4031,11 +3879,11 @@ type Policy struct {
 	autorest.Response `json:"-"`
 	// PolicyProperties - The properties of the resource.
 	*PolicyProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -4048,15 +3896,6 @@ func (p Policy) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if p.PolicyProperties != nil {
 		objectMap["properties"] = p.PolicyProperties
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
-	}
-	if p.Name != nil {
-		objectMap["name"] = p.Name
-	}
-	if p.Type != nil {
-		objectMap["type"] = p.Type
 	}
 	if p.Location != nil {
 		objectMap["location"] = p.Location
@@ -4140,11 +3979,11 @@ func (p *Policy) UnmarshalJSON(body []byte) error {
 type PolicyFragment struct {
 	// PolicyPropertiesFragment - The properties of the resource.
 	*PolicyPropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -4157,15 +3996,6 @@ func (pf PolicyFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if pf.PolicyPropertiesFragment != nil {
 		objectMap["properties"] = pf.PolicyPropertiesFragment
-	}
-	if pf.ID != nil {
-		objectMap["id"] = pf.ID
-	}
-	if pf.Name != nil {
-		objectMap["name"] = pf.Name
-	}
-	if pf.Type != nil {
-		objectMap["type"] = pf.Type
 	}
 	if pf.Location != nil {
 		objectMap["location"] = pf.Location
@@ -4259,7 +4089,7 @@ type PolicyProperties struct {
 	Threshold *string `json:"threshold,omitempty"`
 	// EvaluatorType - The evaluator type of the policy (i.e. AllowedValuesPolicy, MaxValuePolicy). Possible values include: 'AllowedValuesPolicy', 'MaxValuePolicy'
 	EvaluatorType PolicyEvaluatorType `json:"evaluatorType,omitempty"`
-	// CreatedDate - The creation date of the policy.
+	// CreatedDate - READ-ONLY; The creation date of the policy.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// ProvisioningState - The provisioning status of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
@@ -4324,7 +4154,7 @@ type ProviderOperationResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of operations supported by the resource provider.
 	Value *[]OperationMetadata `json:"value,omitempty"`
-	// NextLink - URL to get the next set of operation list results if there are any.
+	// NextLink - READ-ONLY; URL to get the next set of operation list results if there are any.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -4334,20 +4164,37 @@ type ProviderOperationResultIterator struct {
 	page ProviderOperationResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProviderOperationResultIterator) Next() error {
+func (iter *ProviderOperationResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProviderOperationResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4369,6 +4216,11 @@ func (iter ProviderOperationResultIterator) Value() OperationMetadata {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProviderOperationResultIterator type.
+func NewProviderOperationResultIterator(page ProviderOperationResultPage) ProviderOperationResultIterator {
+	return ProviderOperationResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (por ProviderOperationResult) IsEmpty() bool {
 	return por.Value == nil || len(*por.Value) == 0
@@ -4376,11 +4228,11 @@ func (por ProviderOperationResult) IsEmpty() bool {
 
 // providerOperationResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (por ProviderOperationResult) providerOperationResultPreparer() (*http.Request, error) {
+func (por ProviderOperationResult) providerOperationResultPreparer(ctx context.Context) (*http.Request, error) {
 	if por.NextLink == nil || len(to.String(por.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(por.NextLink)))
@@ -4388,19 +4240,36 @@ func (por ProviderOperationResult) providerOperationResultPreparer() (*http.Requ
 
 // ProviderOperationResultPage contains a page of OperationMetadata values.
 type ProviderOperationResultPage struct {
-	fn  func(ProviderOperationResult) (ProviderOperationResult, error)
+	fn  func(context.Context, ProviderOperationResult) (ProviderOperationResult, error)
 	por ProviderOperationResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProviderOperationResultPage) Next() error {
-	next, err := page.fn(page.por)
+func (page *ProviderOperationResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderOperationResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.por)
 	if err != nil {
 		return err
 	}
 	page.por = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProviderOperationResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4421,13 +4290,18 @@ func (page ProviderOperationResultPage) Values() []OperationMetadata {
 	return *page.por.Value
 }
 
+// Creates a new instance of the ProviderOperationResultPage type.
+func NewProviderOperationResultPage(getNextPage func(context.Context, ProviderOperationResult) (ProviderOperationResult, error)) ProviderOperationResultPage {
+	return ProviderOperationResultPage{fn: getNextPage}
+}
+
 // Resource an Azure resource.
 type Resource struct {
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -4438,15 +4312,6 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}
@@ -4471,20 +4336,37 @@ type ResponseWithContinuationArmTemplateIterator struct {
 	page ResponseWithContinuationArmTemplatePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationArmTemplateIterator) Next() error {
+func (iter *ResponseWithContinuationArmTemplateIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationArmTemplateIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationArmTemplateIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4506,6 +4388,11 @@ func (iter ResponseWithContinuationArmTemplateIterator) Value() ArmTemplate {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationArmTemplateIterator type.
+func NewResponseWithContinuationArmTemplateIterator(page ResponseWithContinuationArmTemplatePage) ResponseWithContinuationArmTemplateIterator {
+	return ResponseWithContinuationArmTemplateIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcAt ResponseWithContinuationArmTemplate) IsEmpty() bool {
 	return rwcAt.Value == nil || len(*rwcAt.Value) == 0
@@ -4513,11 +4400,11 @@ func (rwcAt ResponseWithContinuationArmTemplate) IsEmpty() bool {
 
 // responseWithContinuationArmTemplatePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcAt ResponseWithContinuationArmTemplate) responseWithContinuationArmTemplatePreparer() (*http.Request, error) {
+func (rwcAt ResponseWithContinuationArmTemplate) responseWithContinuationArmTemplatePreparer(ctx context.Context) (*http.Request, error) {
 	if rwcAt.NextLink == nil || len(to.String(rwcAt.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcAt.NextLink)))
@@ -4525,19 +4412,36 @@ func (rwcAt ResponseWithContinuationArmTemplate) responseWithContinuationArmTemp
 
 // ResponseWithContinuationArmTemplatePage contains a page of ArmTemplate values.
 type ResponseWithContinuationArmTemplatePage struct {
-	fn    func(ResponseWithContinuationArmTemplate) (ResponseWithContinuationArmTemplate, error)
+	fn    func(context.Context, ResponseWithContinuationArmTemplate) (ResponseWithContinuationArmTemplate, error)
 	rwcat ResponseWithContinuationArmTemplate
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationArmTemplatePage) Next() error {
-	next, err := page.fn(page.rwcat)
+func (page *ResponseWithContinuationArmTemplatePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationArmTemplatePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcat)
 	if err != nil {
 		return err
 	}
 	page.rwcat = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationArmTemplatePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4558,6 +4462,11 @@ func (page ResponseWithContinuationArmTemplatePage) Values() []ArmTemplate {
 	return *page.rwcat.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationArmTemplatePage type.
+func NewResponseWithContinuationArmTemplatePage(getNextPage func(context.Context, ResponseWithContinuationArmTemplate) (ResponseWithContinuationArmTemplate, error)) ResponseWithContinuationArmTemplatePage {
+	return ResponseWithContinuationArmTemplatePage{fn: getNextPage}
+}
+
 // ResponseWithContinuationArtifact the response of a list operation.
 type ResponseWithContinuationArtifact struct {
 	autorest.Response `json:"-"`
@@ -4573,20 +4482,37 @@ type ResponseWithContinuationArtifactIterator struct {
 	page ResponseWithContinuationArtifactPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationArtifactIterator) Next() error {
+func (iter *ResponseWithContinuationArtifactIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationArtifactIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationArtifactIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4608,6 +4534,11 @@ func (iter ResponseWithContinuationArtifactIterator) Value() Artifact {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationArtifactIterator type.
+func NewResponseWithContinuationArtifactIterator(page ResponseWithContinuationArtifactPage) ResponseWithContinuationArtifactIterator {
+	return ResponseWithContinuationArtifactIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcA ResponseWithContinuationArtifact) IsEmpty() bool {
 	return rwcA.Value == nil || len(*rwcA.Value) == 0
@@ -4615,11 +4546,11 @@ func (rwcA ResponseWithContinuationArtifact) IsEmpty() bool {
 
 // responseWithContinuationArtifactPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcA ResponseWithContinuationArtifact) responseWithContinuationArtifactPreparer() (*http.Request, error) {
+func (rwcA ResponseWithContinuationArtifact) responseWithContinuationArtifactPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcA.NextLink == nil || len(to.String(rwcA.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcA.NextLink)))
@@ -4627,19 +4558,36 @@ func (rwcA ResponseWithContinuationArtifact) responseWithContinuationArtifactPre
 
 // ResponseWithContinuationArtifactPage contains a page of Artifact values.
 type ResponseWithContinuationArtifactPage struct {
-	fn   func(ResponseWithContinuationArtifact) (ResponseWithContinuationArtifact, error)
+	fn   func(context.Context, ResponseWithContinuationArtifact) (ResponseWithContinuationArtifact, error)
 	rwca ResponseWithContinuationArtifact
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationArtifactPage) Next() error {
-	next, err := page.fn(page.rwca)
+func (page *ResponseWithContinuationArtifactPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationArtifactPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwca)
 	if err != nil {
 		return err
 	}
 	page.rwca = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationArtifactPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4660,6 +4608,11 @@ func (page ResponseWithContinuationArtifactPage) Values() []Artifact {
 	return *page.rwca.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationArtifactPage type.
+func NewResponseWithContinuationArtifactPage(getNextPage func(context.Context, ResponseWithContinuationArtifact) (ResponseWithContinuationArtifact, error)) ResponseWithContinuationArtifactPage {
+	return ResponseWithContinuationArtifactPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationArtifactSource the response of a list operation.
 type ResponseWithContinuationArtifactSource struct {
 	autorest.Response `json:"-"`
@@ -4669,26 +4622,44 @@ type ResponseWithContinuationArtifactSource struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationArtifactSourceIterator provides access to a complete listing of ArtifactSource values.
+// ResponseWithContinuationArtifactSourceIterator provides access to a complete listing of ArtifactSource
+// values.
 type ResponseWithContinuationArtifactSourceIterator struct {
 	i    int
 	page ResponseWithContinuationArtifactSourcePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationArtifactSourceIterator) Next() error {
+func (iter *ResponseWithContinuationArtifactSourceIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationArtifactSourceIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationArtifactSourceIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4710,6 +4681,11 @@ func (iter ResponseWithContinuationArtifactSourceIterator) Value() ArtifactSourc
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationArtifactSourceIterator type.
+func NewResponseWithContinuationArtifactSourceIterator(page ResponseWithContinuationArtifactSourcePage) ResponseWithContinuationArtifactSourceIterator {
+	return ResponseWithContinuationArtifactSourceIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcAs ResponseWithContinuationArtifactSource) IsEmpty() bool {
 	return rwcAs.Value == nil || len(*rwcAs.Value) == 0
@@ -4717,11 +4693,11 @@ func (rwcAs ResponseWithContinuationArtifactSource) IsEmpty() bool {
 
 // responseWithContinuationArtifactSourcePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcAs ResponseWithContinuationArtifactSource) responseWithContinuationArtifactSourcePreparer() (*http.Request, error) {
+func (rwcAs ResponseWithContinuationArtifactSource) responseWithContinuationArtifactSourcePreparer(ctx context.Context) (*http.Request, error) {
 	if rwcAs.NextLink == nil || len(to.String(rwcAs.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcAs.NextLink)))
@@ -4729,19 +4705,36 @@ func (rwcAs ResponseWithContinuationArtifactSource) responseWithContinuationArti
 
 // ResponseWithContinuationArtifactSourcePage contains a page of ArtifactSource values.
 type ResponseWithContinuationArtifactSourcePage struct {
-	fn    func(ResponseWithContinuationArtifactSource) (ResponseWithContinuationArtifactSource, error)
+	fn    func(context.Context, ResponseWithContinuationArtifactSource) (ResponseWithContinuationArtifactSource, error)
 	rwcas ResponseWithContinuationArtifactSource
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationArtifactSourcePage) Next() error {
-	next, err := page.fn(page.rwcas)
+func (page *ResponseWithContinuationArtifactSourcePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationArtifactSourcePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcas)
 	if err != nil {
 		return err
 	}
 	page.rwcas = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationArtifactSourcePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4762,6 +4755,11 @@ func (page ResponseWithContinuationArtifactSourcePage) Values() []ArtifactSource
 	return *page.rwcas.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationArtifactSourcePage type.
+func NewResponseWithContinuationArtifactSourcePage(getNextPage func(context.Context, ResponseWithContinuationArtifactSource) (ResponseWithContinuationArtifactSource, error)) ResponseWithContinuationArtifactSourcePage {
+	return ResponseWithContinuationArtifactSourcePage{fn: getNextPage}
+}
+
 // ResponseWithContinuationCustomImage the response of a list operation.
 type ResponseWithContinuationCustomImage struct {
 	autorest.Response `json:"-"`
@@ -4777,20 +4775,37 @@ type ResponseWithContinuationCustomImageIterator struct {
 	page ResponseWithContinuationCustomImagePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationCustomImageIterator) Next() error {
+func (iter *ResponseWithContinuationCustomImageIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationCustomImageIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationCustomImageIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4812,6 +4827,11 @@ func (iter ResponseWithContinuationCustomImageIterator) Value() CustomImage {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationCustomImageIterator type.
+func NewResponseWithContinuationCustomImageIterator(page ResponseWithContinuationCustomImagePage) ResponseWithContinuationCustomImageIterator {
+	return ResponseWithContinuationCustomImageIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcCi ResponseWithContinuationCustomImage) IsEmpty() bool {
 	return rwcCi.Value == nil || len(*rwcCi.Value) == 0
@@ -4819,11 +4839,11 @@ func (rwcCi ResponseWithContinuationCustomImage) IsEmpty() bool {
 
 // responseWithContinuationCustomImagePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcCi ResponseWithContinuationCustomImage) responseWithContinuationCustomImagePreparer() (*http.Request, error) {
+func (rwcCi ResponseWithContinuationCustomImage) responseWithContinuationCustomImagePreparer(ctx context.Context) (*http.Request, error) {
 	if rwcCi.NextLink == nil || len(to.String(rwcCi.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcCi.NextLink)))
@@ -4831,19 +4851,36 @@ func (rwcCi ResponseWithContinuationCustomImage) responseWithContinuationCustomI
 
 // ResponseWithContinuationCustomImagePage contains a page of CustomImage values.
 type ResponseWithContinuationCustomImagePage struct {
-	fn    func(ResponseWithContinuationCustomImage) (ResponseWithContinuationCustomImage, error)
+	fn    func(context.Context, ResponseWithContinuationCustomImage) (ResponseWithContinuationCustomImage, error)
 	rwcci ResponseWithContinuationCustomImage
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationCustomImagePage) Next() error {
-	next, err := page.fn(page.rwcci)
+func (page *ResponseWithContinuationCustomImagePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationCustomImagePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcci)
 	if err != nil {
 		return err
 	}
 	page.rwcci = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationCustomImagePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4864,6 +4901,11 @@ func (page ResponseWithContinuationCustomImagePage) Values() []CustomImage {
 	return *page.rwcci.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationCustomImagePage type.
+func NewResponseWithContinuationCustomImagePage(getNextPage func(context.Context, ResponseWithContinuationCustomImage) (ResponseWithContinuationCustomImage, error)) ResponseWithContinuationCustomImagePage {
+	return ResponseWithContinuationCustomImagePage{fn: getNextPage}
+}
+
 // ResponseWithContinuationDisk the response of a list operation.
 type ResponseWithContinuationDisk struct {
 	autorest.Response `json:"-"`
@@ -4879,20 +4921,37 @@ type ResponseWithContinuationDiskIterator struct {
 	page ResponseWithContinuationDiskPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationDiskIterator) Next() error {
+func (iter *ResponseWithContinuationDiskIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationDiskIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationDiskIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -4914,6 +4973,11 @@ func (iter ResponseWithContinuationDiskIterator) Value() Disk {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationDiskIterator type.
+func NewResponseWithContinuationDiskIterator(page ResponseWithContinuationDiskPage) ResponseWithContinuationDiskIterator {
+	return ResponseWithContinuationDiskIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcD ResponseWithContinuationDisk) IsEmpty() bool {
 	return rwcD.Value == nil || len(*rwcD.Value) == 0
@@ -4921,11 +4985,11 @@ func (rwcD ResponseWithContinuationDisk) IsEmpty() bool {
 
 // responseWithContinuationDiskPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcD ResponseWithContinuationDisk) responseWithContinuationDiskPreparer() (*http.Request, error) {
+func (rwcD ResponseWithContinuationDisk) responseWithContinuationDiskPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcD.NextLink == nil || len(to.String(rwcD.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcD.NextLink)))
@@ -4933,19 +4997,36 @@ func (rwcD ResponseWithContinuationDisk) responseWithContinuationDiskPreparer() 
 
 // ResponseWithContinuationDiskPage contains a page of Disk values.
 type ResponseWithContinuationDiskPage struct {
-	fn   func(ResponseWithContinuationDisk) (ResponseWithContinuationDisk, error)
+	fn   func(context.Context, ResponseWithContinuationDisk) (ResponseWithContinuationDisk, error)
 	rwcd ResponseWithContinuationDisk
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationDiskPage) Next() error {
-	next, err := page.fn(page.rwcd)
+func (page *ResponseWithContinuationDiskPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationDiskPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcd)
 	if err != nil {
 		return err
 	}
 	page.rwcd = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationDiskPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -4966,6 +5047,11 @@ func (page ResponseWithContinuationDiskPage) Values() []Disk {
 	return *page.rwcd.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationDiskPage type.
+func NewResponseWithContinuationDiskPage(getNextPage func(context.Context, ResponseWithContinuationDisk) (ResponseWithContinuationDisk, error)) ResponseWithContinuationDiskPage {
+	return ResponseWithContinuationDiskPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationDtlEnvironment the response of a list operation.
 type ResponseWithContinuationDtlEnvironment struct {
 	autorest.Response `json:"-"`
@@ -4975,26 +5061,44 @@ type ResponseWithContinuationDtlEnvironment struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationDtlEnvironmentIterator provides access to a complete listing of Environment values.
+// ResponseWithContinuationDtlEnvironmentIterator provides access to a complete listing of Environment
+// values.
 type ResponseWithContinuationDtlEnvironmentIterator struct {
 	i    int
 	page ResponseWithContinuationDtlEnvironmentPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationDtlEnvironmentIterator) Next() error {
+func (iter *ResponseWithContinuationDtlEnvironmentIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationDtlEnvironmentIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationDtlEnvironmentIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5016,6 +5120,11 @@ func (iter ResponseWithContinuationDtlEnvironmentIterator) Value() Environment {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationDtlEnvironmentIterator type.
+func NewResponseWithContinuationDtlEnvironmentIterator(page ResponseWithContinuationDtlEnvironmentPage) ResponseWithContinuationDtlEnvironmentIterator {
+	return ResponseWithContinuationDtlEnvironmentIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcDe ResponseWithContinuationDtlEnvironment) IsEmpty() bool {
 	return rwcDe.Value == nil || len(*rwcDe.Value) == 0
@@ -5023,11 +5132,11 @@ func (rwcDe ResponseWithContinuationDtlEnvironment) IsEmpty() bool {
 
 // responseWithContinuationDtlEnvironmentPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcDe ResponseWithContinuationDtlEnvironment) responseWithContinuationDtlEnvironmentPreparer() (*http.Request, error) {
+func (rwcDe ResponseWithContinuationDtlEnvironment) responseWithContinuationDtlEnvironmentPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcDe.NextLink == nil || len(to.String(rwcDe.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcDe.NextLink)))
@@ -5035,19 +5144,36 @@ func (rwcDe ResponseWithContinuationDtlEnvironment) responseWithContinuationDtlE
 
 // ResponseWithContinuationDtlEnvironmentPage contains a page of Environment values.
 type ResponseWithContinuationDtlEnvironmentPage struct {
-	fn    func(ResponseWithContinuationDtlEnvironment) (ResponseWithContinuationDtlEnvironment, error)
+	fn    func(context.Context, ResponseWithContinuationDtlEnvironment) (ResponseWithContinuationDtlEnvironment, error)
 	rwcde ResponseWithContinuationDtlEnvironment
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationDtlEnvironmentPage) Next() error {
-	next, err := page.fn(page.rwcde)
+func (page *ResponseWithContinuationDtlEnvironmentPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationDtlEnvironmentPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcde)
 	if err != nil {
 		return err
 	}
 	page.rwcde = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationDtlEnvironmentPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5068,6 +5194,11 @@ func (page ResponseWithContinuationDtlEnvironmentPage) Values() []Environment {
 	return *page.rwcde.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationDtlEnvironmentPage type.
+func NewResponseWithContinuationDtlEnvironmentPage(getNextPage func(context.Context, ResponseWithContinuationDtlEnvironment) (ResponseWithContinuationDtlEnvironment, error)) ResponseWithContinuationDtlEnvironmentPage {
+	return ResponseWithContinuationDtlEnvironmentPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationFormula the response of a list operation.
 type ResponseWithContinuationFormula struct {
 	autorest.Response `json:"-"`
@@ -5083,20 +5214,37 @@ type ResponseWithContinuationFormulaIterator struct {
 	page ResponseWithContinuationFormulaPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationFormulaIterator) Next() error {
+func (iter *ResponseWithContinuationFormulaIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationFormulaIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationFormulaIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5118,6 +5266,11 @@ func (iter ResponseWithContinuationFormulaIterator) Value() Formula {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationFormulaIterator type.
+func NewResponseWithContinuationFormulaIterator(page ResponseWithContinuationFormulaPage) ResponseWithContinuationFormulaIterator {
+	return ResponseWithContinuationFormulaIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcF ResponseWithContinuationFormula) IsEmpty() bool {
 	return rwcF.Value == nil || len(*rwcF.Value) == 0
@@ -5125,11 +5278,11 @@ func (rwcF ResponseWithContinuationFormula) IsEmpty() bool {
 
 // responseWithContinuationFormulaPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcF ResponseWithContinuationFormula) responseWithContinuationFormulaPreparer() (*http.Request, error) {
+func (rwcF ResponseWithContinuationFormula) responseWithContinuationFormulaPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcF.NextLink == nil || len(to.String(rwcF.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcF.NextLink)))
@@ -5137,19 +5290,36 @@ func (rwcF ResponseWithContinuationFormula) responseWithContinuationFormulaPrepa
 
 // ResponseWithContinuationFormulaPage contains a page of Formula values.
 type ResponseWithContinuationFormulaPage struct {
-	fn   func(ResponseWithContinuationFormula) (ResponseWithContinuationFormula, error)
+	fn   func(context.Context, ResponseWithContinuationFormula) (ResponseWithContinuationFormula, error)
 	rwcf ResponseWithContinuationFormula
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationFormulaPage) Next() error {
-	next, err := page.fn(page.rwcf)
+func (page *ResponseWithContinuationFormulaPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationFormulaPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcf)
 	if err != nil {
 		return err
 	}
 	page.rwcf = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationFormulaPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5170,6 +5340,11 @@ func (page ResponseWithContinuationFormulaPage) Values() []Formula {
 	return *page.rwcf.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationFormulaPage type.
+func NewResponseWithContinuationFormulaPage(getNextPage func(context.Context, ResponseWithContinuationFormula) (ResponseWithContinuationFormula, error)) ResponseWithContinuationFormulaPage {
+	return ResponseWithContinuationFormulaPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationGalleryImage the response of a list operation.
 type ResponseWithContinuationGalleryImage struct {
 	autorest.Response `json:"-"`
@@ -5179,26 +5354,44 @@ type ResponseWithContinuationGalleryImage struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationGalleryImageIterator provides access to a complete listing of GalleryImage values.
+// ResponseWithContinuationGalleryImageIterator provides access to a complete listing of GalleryImage
+// values.
 type ResponseWithContinuationGalleryImageIterator struct {
 	i    int
 	page ResponseWithContinuationGalleryImagePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationGalleryImageIterator) Next() error {
+func (iter *ResponseWithContinuationGalleryImageIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationGalleryImageIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationGalleryImageIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5220,6 +5413,11 @@ func (iter ResponseWithContinuationGalleryImageIterator) Value() GalleryImage {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationGalleryImageIterator type.
+func NewResponseWithContinuationGalleryImageIterator(page ResponseWithContinuationGalleryImagePage) ResponseWithContinuationGalleryImageIterator {
+	return ResponseWithContinuationGalleryImageIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcGi ResponseWithContinuationGalleryImage) IsEmpty() bool {
 	return rwcGi.Value == nil || len(*rwcGi.Value) == 0
@@ -5227,11 +5425,11 @@ func (rwcGi ResponseWithContinuationGalleryImage) IsEmpty() bool {
 
 // responseWithContinuationGalleryImagePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcGi ResponseWithContinuationGalleryImage) responseWithContinuationGalleryImagePreparer() (*http.Request, error) {
+func (rwcGi ResponseWithContinuationGalleryImage) responseWithContinuationGalleryImagePreparer(ctx context.Context) (*http.Request, error) {
 	if rwcGi.NextLink == nil || len(to.String(rwcGi.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcGi.NextLink)))
@@ -5239,19 +5437,36 @@ func (rwcGi ResponseWithContinuationGalleryImage) responseWithContinuationGaller
 
 // ResponseWithContinuationGalleryImagePage contains a page of GalleryImage values.
 type ResponseWithContinuationGalleryImagePage struct {
-	fn    func(ResponseWithContinuationGalleryImage) (ResponseWithContinuationGalleryImage, error)
+	fn    func(context.Context, ResponseWithContinuationGalleryImage) (ResponseWithContinuationGalleryImage, error)
 	rwcgi ResponseWithContinuationGalleryImage
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationGalleryImagePage) Next() error {
-	next, err := page.fn(page.rwcgi)
+func (page *ResponseWithContinuationGalleryImagePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationGalleryImagePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcgi)
 	if err != nil {
 		return err
 	}
 	page.rwcgi = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationGalleryImagePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5272,6 +5487,11 @@ func (page ResponseWithContinuationGalleryImagePage) Values() []GalleryImage {
 	return *page.rwcgi.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationGalleryImagePage type.
+func NewResponseWithContinuationGalleryImagePage(getNextPage func(context.Context, ResponseWithContinuationGalleryImage) (ResponseWithContinuationGalleryImage, error)) ResponseWithContinuationGalleryImagePage {
+	return ResponseWithContinuationGalleryImagePage{fn: getNextPage}
+}
+
 // ResponseWithContinuationLab the response of a list operation.
 type ResponseWithContinuationLab struct {
 	autorest.Response `json:"-"`
@@ -5287,20 +5507,37 @@ type ResponseWithContinuationLabIterator struct {
 	page ResponseWithContinuationLabPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationLabIterator) Next() error {
+func (iter *ResponseWithContinuationLabIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationLabIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationLabIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5322,6 +5559,11 @@ func (iter ResponseWithContinuationLabIterator) Value() Lab {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationLabIterator type.
+func NewResponseWithContinuationLabIterator(page ResponseWithContinuationLabPage) ResponseWithContinuationLabIterator {
+	return ResponseWithContinuationLabIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcL ResponseWithContinuationLab) IsEmpty() bool {
 	return rwcL.Value == nil || len(*rwcL.Value) == 0
@@ -5329,11 +5571,11 @@ func (rwcL ResponseWithContinuationLab) IsEmpty() bool {
 
 // responseWithContinuationLabPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcL ResponseWithContinuationLab) responseWithContinuationLabPreparer() (*http.Request, error) {
+func (rwcL ResponseWithContinuationLab) responseWithContinuationLabPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcL.NextLink == nil || len(to.String(rwcL.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcL.NextLink)))
@@ -5341,19 +5583,36 @@ func (rwcL ResponseWithContinuationLab) responseWithContinuationLabPreparer() (*
 
 // ResponseWithContinuationLabPage contains a page of Lab values.
 type ResponseWithContinuationLabPage struct {
-	fn   func(ResponseWithContinuationLab) (ResponseWithContinuationLab, error)
+	fn   func(context.Context, ResponseWithContinuationLab) (ResponseWithContinuationLab, error)
 	rwcl ResponseWithContinuationLab
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationLabPage) Next() error {
-	next, err := page.fn(page.rwcl)
+func (page *ResponseWithContinuationLabPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationLabPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcl)
 	if err != nil {
 		return err
 	}
 	page.rwcl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationLabPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5374,6 +5633,11 @@ func (page ResponseWithContinuationLabPage) Values() []Lab {
 	return *page.rwcl.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationLabPage type.
+func NewResponseWithContinuationLabPage(getNextPage func(context.Context, ResponseWithContinuationLab) (ResponseWithContinuationLab, error)) ResponseWithContinuationLabPage {
+	return ResponseWithContinuationLabPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationLabVhd the response of a list operation.
 type ResponseWithContinuationLabVhd struct {
 	autorest.Response `json:"-"`
@@ -5389,20 +5653,37 @@ type ResponseWithContinuationLabVhdIterator struct {
 	page ResponseWithContinuationLabVhdPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationLabVhdIterator) Next() error {
+func (iter *ResponseWithContinuationLabVhdIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationLabVhdIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationLabVhdIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5424,6 +5705,11 @@ func (iter ResponseWithContinuationLabVhdIterator) Value() LabVhd {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationLabVhdIterator type.
+func NewResponseWithContinuationLabVhdIterator(page ResponseWithContinuationLabVhdPage) ResponseWithContinuationLabVhdIterator {
+	return ResponseWithContinuationLabVhdIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcLv ResponseWithContinuationLabVhd) IsEmpty() bool {
 	return rwcLv.Value == nil || len(*rwcLv.Value) == 0
@@ -5431,11 +5717,11 @@ func (rwcLv ResponseWithContinuationLabVhd) IsEmpty() bool {
 
 // responseWithContinuationLabVhdPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcLv ResponseWithContinuationLabVhd) responseWithContinuationLabVhdPreparer() (*http.Request, error) {
+func (rwcLv ResponseWithContinuationLabVhd) responseWithContinuationLabVhdPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcLv.NextLink == nil || len(to.String(rwcLv.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcLv.NextLink)))
@@ -5443,19 +5729,36 @@ func (rwcLv ResponseWithContinuationLabVhd) responseWithContinuationLabVhdPrepar
 
 // ResponseWithContinuationLabVhdPage contains a page of LabVhd values.
 type ResponseWithContinuationLabVhdPage struct {
-	fn    func(ResponseWithContinuationLabVhd) (ResponseWithContinuationLabVhd, error)
+	fn    func(context.Context, ResponseWithContinuationLabVhd) (ResponseWithContinuationLabVhd, error)
 	rwclv ResponseWithContinuationLabVhd
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationLabVhdPage) Next() error {
-	next, err := page.fn(page.rwclv)
+func (page *ResponseWithContinuationLabVhdPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationLabVhdPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwclv)
 	if err != nil {
 		return err
 	}
 	page.rwclv = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationLabVhdPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5476,6 +5779,11 @@ func (page ResponseWithContinuationLabVhdPage) Values() []LabVhd {
 	return *page.rwclv.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationLabVhdPage type.
+func NewResponseWithContinuationLabVhdPage(getNextPage func(context.Context, ResponseWithContinuationLabVhd) (ResponseWithContinuationLabVhd, error)) ResponseWithContinuationLabVhdPage {
+	return ResponseWithContinuationLabVhdPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationLabVirtualMachine the response of a list operation.
 type ResponseWithContinuationLabVirtualMachine struct {
 	autorest.Response `json:"-"`
@@ -5485,27 +5793,44 @@ type ResponseWithContinuationLabVirtualMachine struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationLabVirtualMachineIterator provides access to a complete listing of LabVirtualMachine
-// values.
+// ResponseWithContinuationLabVirtualMachineIterator provides access to a complete listing of
+// LabVirtualMachine values.
 type ResponseWithContinuationLabVirtualMachineIterator struct {
 	i    int
 	page ResponseWithContinuationLabVirtualMachinePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationLabVirtualMachineIterator) Next() error {
+func (iter *ResponseWithContinuationLabVirtualMachineIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationLabVirtualMachineIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationLabVirtualMachineIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5527,6 +5852,11 @@ func (iter ResponseWithContinuationLabVirtualMachineIterator) Value() LabVirtual
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationLabVirtualMachineIterator type.
+func NewResponseWithContinuationLabVirtualMachineIterator(page ResponseWithContinuationLabVirtualMachinePage) ResponseWithContinuationLabVirtualMachineIterator {
+	return ResponseWithContinuationLabVirtualMachineIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcLvm ResponseWithContinuationLabVirtualMachine) IsEmpty() bool {
 	return rwcLvm.Value == nil || len(*rwcLvm.Value) == 0
@@ -5534,11 +5864,11 @@ func (rwcLvm ResponseWithContinuationLabVirtualMachine) IsEmpty() bool {
 
 // responseWithContinuationLabVirtualMachinePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcLvm ResponseWithContinuationLabVirtualMachine) responseWithContinuationLabVirtualMachinePreparer() (*http.Request, error) {
+func (rwcLvm ResponseWithContinuationLabVirtualMachine) responseWithContinuationLabVirtualMachinePreparer(ctx context.Context) (*http.Request, error) {
 	if rwcLvm.NextLink == nil || len(to.String(rwcLvm.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcLvm.NextLink)))
@@ -5546,19 +5876,36 @@ func (rwcLvm ResponseWithContinuationLabVirtualMachine) responseWithContinuation
 
 // ResponseWithContinuationLabVirtualMachinePage contains a page of LabVirtualMachine values.
 type ResponseWithContinuationLabVirtualMachinePage struct {
-	fn     func(ResponseWithContinuationLabVirtualMachine) (ResponseWithContinuationLabVirtualMachine, error)
+	fn     func(context.Context, ResponseWithContinuationLabVirtualMachine) (ResponseWithContinuationLabVirtualMachine, error)
 	rwclvm ResponseWithContinuationLabVirtualMachine
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationLabVirtualMachinePage) Next() error {
-	next, err := page.fn(page.rwclvm)
+func (page *ResponseWithContinuationLabVirtualMachinePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationLabVirtualMachinePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwclvm)
 	if err != nil {
 		return err
 	}
 	page.rwclvm = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationLabVirtualMachinePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5579,6 +5926,11 @@ func (page ResponseWithContinuationLabVirtualMachinePage) Values() []LabVirtualM
 	return *page.rwclvm.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationLabVirtualMachinePage type.
+func NewResponseWithContinuationLabVirtualMachinePage(getNextPage func(context.Context, ResponseWithContinuationLabVirtualMachine) (ResponseWithContinuationLabVirtualMachine, error)) ResponseWithContinuationLabVirtualMachinePage {
+	return ResponseWithContinuationLabVirtualMachinePage{fn: getNextPage}
+}
+
 // ResponseWithContinuationNotificationChannel the response of a list operation.
 type ResponseWithContinuationNotificationChannel struct {
 	autorest.Response `json:"-"`
@@ -5588,27 +5940,44 @@ type ResponseWithContinuationNotificationChannel struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationNotificationChannelIterator provides access to a complete listing of NotificationChannel
-// values.
+// ResponseWithContinuationNotificationChannelIterator provides access to a complete listing of
+// NotificationChannel values.
 type ResponseWithContinuationNotificationChannelIterator struct {
 	i    int
 	page ResponseWithContinuationNotificationChannelPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationNotificationChannelIterator) Next() error {
+func (iter *ResponseWithContinuationNotificationChannelIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationNotificationChannelIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationNotificationChannelIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5630,6 +5999,11 @@ func (iter ResponseWithContinuationNotificationChannelIterator) Value() Notifica
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationNotificationChannelIterator type.
+func NewResponseWithContinuationNotificationChannelIterator(page ResponseWithContinuationNotificationChannelPage) ResponseWithContinuationNotificationChannelIterator {
+	return ResponseWithContinuationNotificationChannelIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcNc ResponseWithContinuationNotificationChannel) IsEmpty() bool {
 	return rwcNc.Value == nil || len(*rwcNc.Value) == 0
@@ -5637,11 +6011,11 @@ func (rwcNc ResponseWithContinuationNotificationChannel) IsEmpty() bool {
 
 // responseWithContinuationNotificationChannelPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcNc ResponseWithContinuationNotificationChannel) responseWithContinuationNotificationChannelPreparer() (*http.Request, error) {
+func (rwcNc ResponseWithContinuationNotificationChannel) responseWithContinuationNotificationChannelPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcNc.NextLink == nil || len(to.String(rwcNc.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcNc.NextLink)))
@@ -5649,19 +6023,36 @@ func (rwcNc ResponseWithContinuationNotificationChannel) responseWithContinuatio
 
 // ResponseWithContinuationNotificationChannelPage contains a page of NotificationChannel values.
 type ResponseWithContinuationNotificationChannelPage struct {
-	fn    func(ResponseWithContinuationNotificationChannel) (ResponseWithContinuationNotificationChannel, error)
+	fn    func(context.Context, ResponseWithContinuationNotificationChannel) (ResponseWithContinuationNotificationChannel, error)
 	rwcnc ResponseWithContinuationNotificationChannel
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationNotificationChannelPage) Next() error {
-	next, err := page.fn(page.rwcnc)
+func (page *ResponseWithContinuationNotificationChannelPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationNotificationChannelPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcnc)
 	if err != nil {
 		return err
 	}
 	page.rwcnc = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationNotificationChannelPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5682,6 +6073,11 @@ func (page ResponseWithContinuationNotificationChannelPage) Values() []Notificat
 	return *page.rwcnc.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationNotificationChannelPage type.
+func NewResponseWithContinuationNotificationChannelPage(getNextPage func(context.Context, ResponseWithContinuationNotificationChannel) (ResponseWithContinuationNotificationChannel, error)) ResponseWithContinuationNotificationChannelPage {
+	return ResponseWithContinuationNotificationChannelPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationPolicy the response of a list operation.
 type ResponseWithContinuationPolicy struct {
 	autorest.Response `json:"-"`
@@ -5697,20 +6093,37 @@ type ResponseWithContinuationPolicyIterator struct {
 	page ResponseWithContinuationPolicyPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationPolicyIterator) Next() error {
+func (iter *ResponseWithContinuationPolicyIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationPolicyIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationPolicyIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5732,6 +6145,11 @@ func (iter ResponseWithContinuationPolicyIterator) Value() Policy {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationPolicyIterator type.
+func NewResponseWithContinuationPolicyIterator(page ResponseWithContinuationPolicyPage) ResponseWithContinuationPolicyIterator {
+	return ResponseWithContinuationPolicyIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcP ResponseWithContinuationPolicy) IsEmpty() bool {
 	return rwcP.Value == nil || len(*rwcP.Value) == 0
@@ -5739,11 +6157,11 @@ func (rwcP ResponseWithContinuationPolicy) IsEmpty() bool {
 
 // responseWithContinuationPolicyPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcP ResponseWithContinuationPolicy) responseWithContinuationPolicyPreparer() (*http.Request, error) {
+func (rwcP ResponseWithContinuationPolicy) responseWithContinuationPolicyPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcP.NextLink == nil || len(to.String(rwcP.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcP.NextLink)))
@@ -5751,19 +6169,36 @@ func (rwcP ResponseWithContinuationPolicy) responseWithContinuationPolicyPrepare
 
 // ResponseWithContinuationPolicyPage contains a page of Policy values.
 type ResponseWithContinuationPolicyPage struct {
-	fn   func(ResponseWithContinuationPolicy) (ResponseWithContinuationPolicy, error)
+	fn   func(context.Context, ResponseWithContinuationPolicy) (ResponseWithContinuationPolicy, error)
 	rwcp ResponseWithContinuationPolicy
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationPolicyPage) Next() error {
-	next, err := page.fn(page.rwcp)
+func (page *ResponseWithContinuationPolicyPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationPolicyPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcp)
 	if err != nil {
 		return err
 	}
 	page.rwcp = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationPolicyPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5784,6 +6219,11 @@ func (page ResponseWithContinuationPolicyPage) Values() []Policy {
 	return *page.rwcp.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationPolicyPage type.
+func NewResponseWithContinuationPolicyPage(getNextPage func(context.Context, ResponseWithContinuationPolicy) (ResponseWithContinuationPolicy, error)) ResponseWithContinuationPolicyPage {
+	return ResponseWithContinuationPolicyPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationSchedule the response of a list operation.
 type ResponseWithContinuationSchedule struct {
 	autorest.Response `json:"-"`
@@ -5799,20 +6239,37 @@ type ResponseWithContinuationScheduleIterator struct {
 	page ResponseWithContinuationSchedulePage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationScheduleIterator) Next() error {
+func (iter *ResponseWithContinuationScheduleIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationScheduleIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationScheduleIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5834,6 +6291,11 @@ func (iter ResponseWithContinuationScheduleIterator) Value() Schedule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationScheduleIterator type.
+func NewResponseWithContinuationScheduleIterator(page ResponseWithContinuationSchedulePage) ResponseWithContinuationScheduleIterator {
+	return ResponseWithContinuationScheduleIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcS ResponseWithContinuationSchedule) IsEmpty() bool {
 	return rwcS.Value == nil || len(*rwcS.Value) == 0
@@ -5841,11 +6303,11 @@ func (rwcS ResponseWithContinuationSchedule) IsEmpty() bool {
 
 // responseWithContinuationSchedulePreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcS ResponseWithContinuationSchedule) responseWithContinuationSchedulePreparer() (*http.Request, error) {
+func (rwcS ResponseWithContinuationSchedule) responseWithContinuationSchedulePreparer(ctx context.Context) (*http.Request, error) {
 	if rwcS.NextLink == nil || len(to.String(rwcS.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcS.NextLink)))
@@ -5853,19 +6315,36 @@ func (rwcS ResponseWithContinuationSchedule) responseWithContinuationSchedulePre
 
 // ResponseWithContinuationSchedulePage contains a page of Schedule values.
 type ResponseWithContinuationSchedulePage struct {
-	fn   func(ResponseWithContinuationSchedule) (ResponseWithContinuationSchedule, error)
+	fn   func(context.Context, ResponseWithContinuationSchedule) (ResponseWithContinuationSchedule, error)
 	rwcs ResponseWithContinuationSchedule
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationSchedulePage) Next() error {
-	next, err := page.fn(page.rwcs)
+func (page *ResponseWithContinuationSchedulePage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationSchedulePage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcs)
 	if err != nil {
 		return err
 	}
 	page.rwcs = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationSchedulePage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5886,6 +6365,11 @@ func (page ResponseWithContinuationSchedulePage) Values() []Schedule {
 	return *page.rwcs.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationSchedulePage type.
+func NewResponseWithContinuationSchedulePage(getNextPage func(context.Context, ResponseWithContinuationSchedule) (ResponseWithContinuationSchedule, error)) ResponseWithContinuationSchedulePage {
+	return ResponseWithContinuationSchedulePage{fn: getNextPage}
+}
+
 // ResponseWithContinuationSecret the response of a list operation.
 type ResponseWithContinuationSecret struct {
 	autorest.Response `json:"-"`
@@ -5901,20 +6385,37 @@ type ResponseWithContinuationSecretIterator struct {
 	page ResponseWithContinuationSecretPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationSecretIterator) Next() error {
+func (iter *ResponseWithContinuationSecretIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationSecretIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationSecretIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -5936,6 +6437,11 @@ func (iter ResponseWithContinuationSecretIterator) Value() Secret {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationSecretIterator type.
+func NewResponseWithContinuationSecretIterator(page ResponseWithContinuationSecretPage) ResponseWithContinuationSecretIterator {
+	return ResponseWithContinuationSecretIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcS ResponseWithContinuationSecret) IsEmpty() bool {
 	return rwcS.Value == nil || len(*rwcS.Value) == 0
@@ -5943,11 +6449,11 @@ func (rwcS ResponseWithContinuationSecret) IsEmpty() bool {
 
 // responseWithContinuationSecretPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcS ResponseWithContinuationSecret) responseWithContinuationSecretPreparer() (*http.Request, error) {
+func (rwcS ResponseWithContinuationSecret) responseWithContinuationSecretPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcS.NextLink == nil || len(to.String(rwcS.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcS.NextLink)))
@@ -5955,19 +6461,36 @@ func (rwcS ResponseWithContinuationSecret) responseWithContinuationSecretPrepare
 
 // ResponseWithContinuationSecretPage contains a page of Secret values.
 type ResponseWithContinuationSecretPage struct {
-	fn   func(ResponseWithContinuationSecret) (ResponseWithContinuationSecret, error)
+	fn   func(context.Context, ResponseWithContinuationSecret) (ResponseWithContinuationSecret, error)
 	rwcs ResponseWithContinuationSecret
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationSecretPage) Next() error {
-	next, err := page.fn(page.rwcs)
+func (page *ResponseWithContinuationSecretPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationSecretPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcs)
 	if err != nil {
 		return err
 	}
 	page.rwcs = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationSecretPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -5988,6 +6511,11 @@ func (page ResponseWithContinuationSecretPage) Values() []Secret {
 	return *page.rwcs.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationSecretPage type.
+func NewResponseWithContinuationSecretPage(getNextPage func(context.Context, ResponseWithContinuationSecret) (ResponseWithContinuationSecret, error)) ResponseWithContinuationSecretPage {
+	return ResponseWithContinuationSecretPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationServiceRunner the response of a list operation.
 type ResponseWithContinuationServiceRunner struct {
 	autorest.Response `json:"-"`
@@ -5997,26 +6525,44 @@ type ResponseWithContinuationServiceRunner struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationServiceRunnerIterator provides access to a complete listing of ServiceRunner values.
+// ResponseWithContinuationServiceRunnerIterator provides access to a complete listing of ServiceRunner
+// values.
 type ResponseWithContinuationServiceRunnerIterator struct {
 	i    int
 	page ResponseWithContinuationServiceRunnerPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationServiceRunnerIterator) Next() error {
+func (iter *ResponseWithContinuationServiceRunnerIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationServiceRunnerIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationServiceRunnerIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -6038,6 +6584,11 @@ func (iter ResponseWithContinuationServiceRunnerIterator) Value() ServiceRunner 
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationServiceRunnerIterator type.
+func NewResponseWithContinuationServiceRunnerIterator(page ResponseWithContinuationServiceRunnerPage) ResponseWithContinuationServiceRunnerIterator {
+	return ResponseWithContinuationServiceRunnerIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcSr ResponseWithContinuationServiceRunner) IsEmpty() bool {
 	return rwcSr.Value == nil || len(*rwcSr.Value) == 0
@@ -6045,11 +6596,11 @@ func (rwcSr ResponseWithContinuationServiceRunner) IsEmpty() bool {
 
 // responseWithContinuationServiceRunnerPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcSr ResponseWithContinuationServiceRunner) responseWithContinuationServiceRunnerPreparer() (*http.Request, error) {
+func (rwcSr ResponseWithContinuationServiceRunner) responseWithContinuationServiceRunnerPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcSr.NextLink == nil || len(to.String(rwcSr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcSr.NextLink)))
@@ -6057,19 +6608,36 @@ func (rwcSr ResponseWithContinuationServiceRunner) responseWithContinuationServi
 
 // ResponseWithContinuationServiceRunnerPage contains a page of ServiceRunner values.
 type ResponseWithContinuationServiceRunnerPage struct {
-	fn    func(ResponseWithContinuationServiceRunner) (ResponseWithContinuationServiceRunner, error)
+	fn    func(context.Context, ResponseWithContinuationServiceRunner) (ResponseWithContinuationServiceRunner, error)
 	rwcsr ResponseWithContinuationServiceRunner
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationServiceRunnerPage) Next() error {
-	next, err := page.fn(page.rwcsr)
+func (page *ResponseWithContinuationServiceRunnerPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationServiceRunnerPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcsr)
 	if err != nil {
 		return err
 	}
 	page.rwcsr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationServiceRunnerPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -6090,6 +6658,11 @@ func (page ResponseWithContinuationServiceRunnerPage) Values() []ServiceRunner {
 	return *page.rwcsr.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationServiceRunnerPage type.
+func NewResponseWithContinuationServiceRunnerPage(getNextPage func(context.Context, ResponseWithContinuationServiceRunner) (ResponseWithContinuationServiceRunner, error)) ResponseWithContinuationServiceRunnerPage {
+	return ResponseWithContinuationServiceRunnerPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationUser the response of a list operation.
 type ResponseWithContinuationUser struct {
 	autorest.Response `json:"-"`
@@ -6105,20 +6678,37 @@ type ResponseWithContinuationUserIterator struct {
 	page ResponseWithContinuationUserPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationUserIterator) Next() error {
+func (iter *ResponseWithContinuationUserIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationUserIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationUserIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -6140,6 +6730,11 @@ func (iter ResponseWithContinuationUserIterator) Value() User {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationUserIterator type.
+func NewResponseWithContinuationUserIterator(page ResponseWithContinuationUserPage) ResponseWithContinuationUserIterator {
+	return ResponseWithContinuationUserIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcU ResponseWithContinuationUser) IsEmpty() bool {
 	return rwcU.Value == nil || len(*rwcU.Value) == 0
@@ -6147,11 +6742,11 @@ func (rwcU ResponseWithContinuationUser) IsEmpty() bool {
 
 // responseWithContinuationUserPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcU ResponseWithContinuationUser) responseWithContinuationUserPreparer() (*http.Request, error) {
+func (rwcU ResponseWithContinuationUser) responseWithContinuationUserPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcU.NextLink == nil || len(to.String(rwcU.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcU.NextLink)))
@@ -6159,19 +6754,36 @@ func (rwcU ResponseWithContinuationUser) responseWithContinuationUserPreparer() 
 
 // ResponseWithContinuationUserPage contains a page of User values.
 type ResponseWithContinuationUserPage struct {
-	fn   func(ResponseWithContinuationUser) (ResponseWithContinuationUser, error)
+	fn   func(context.Context, ResponseWithContinuationUser) (ResponseWithContinuationUser, error)
 	rwcu ResponseWithContinuationUser
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationUserPage) Next() error {
-	next, err := page.fn(page.rwcu)
+func (page *ResponseWithContinuationUserPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationUserPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcu)
 	if err != nil {
 		return err
 	}
 	page.rwcu = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationUserPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -6192,6 +6804,11 @@ func (page ResponseWithContinuationUserPage) Values() []User {
 	return *page.rwcu.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationUserPage type.
+func NewResponseWithContinuationUserPage(getNextPage func(context.Context, ResponseWithContinuationUser) (ResponseWithContinuationUser, error)) ResponseWithContinuationUserPage {
+	return ResponseWithContinuationUserPage{fn: getNextPage}
+}
+
 // ResponseWithContinuationVirtualNetwork the response of a list operation.
 type ResponseWithContinuationVirtualNetwork struct {
 	autorest.Response `json:"-"`
@@ -6201,26 +6818,44 @@ type ResponseWithContinuationVirtualNetwork struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ResponseWithContinuationVirtualNetworkIterator provides access to a complete listing of VirtualNetwork values.
+// ResponseWithContinuationVirtualNetworkIterator provides access to a complete listing of VirtualNetwork
+// values.
 type ResponseWithContinuationVirtualNetworkIterator struct {
 	i    int
 	page ResponseWithContinuationVirtualNetworkPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResponseWithContinuationVirtualNetworkIterator) Next() error {
+func (iter *ResponseWithContinuationVirtualNetworkIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationVirtualNetworkIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResponseWithContinuationVirtualNetworkIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -6242,6 +6877,11 @@ func (iter ResponseWithContinuationVirtualNetworkIterator) Value() VirtualNetwor
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResponseWithContinuationVirtualNetworkIterator type.
+func NewResponseWithContinuationVirtualNetworkIterator(page ResponseWithContinuationVirtualNetworkPage) ResponseWithContinuationVirtualNetworkIterator {
+	return ResponseWithContinuationVirtualNetworkIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rwcVn ResponseWithContinuationVirtualNetwork) IsEmpty() bool {
 	return rwcVn.Value == nil || len(*rwcVn.Value) == 0
@@ -6249,11 +6889,11 @@ func (rwcVn ResponseWithContinuationVirtualNetwork) IsEmpty() bool {
 
 // responseWithContinuationVirtualNetworkPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rwcVn ResponseWithContinuationVirtualNetwork) responseWithContinuationVirtualNetworkPreparer() (*http.Request, error) {
+func (rwcVn ResponseWithContinuationVirtualNetwork) responseWithContinuationVirtualNetworkPreparer(ctx context.Context) (*http.Request, error) {
 	if rwcVn.NextLink == nil || len(to.String(rwcVn.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rwcVn.NextLink)))
@@ -6261,19 +6901,36 @@ func (rwcVn ResponseWithContinuationVirtualNetwork) responseWithContinuationVirt
 
 // ResponseWithContinuationVirtualNetworkPage contains a page of VirtualNetwork values.
 type ResponseWithContinuationVirtualNetworkPage struct {
-	fn    func(ResponseWithContinuationVirtualNetwork) (ResponseWithContinuationVirtualNetwork, error)
+	fn    func(context.Context, ResponseWithContinuationVirtualNetwork) (ResponseWithContinuationVirtualNetwork, error)
 	rwcvn ResponseWithContinuationVirtualNetwork
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResponseWithContinuationVirtualNetworkPage) Next() error {
-	next, err := page.fn(page.rwcvn)
+func (page *ResponseWithContinuationVirtualNetworkPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResponseWithContinuationVirtualNetworkPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rwcvn)
 	if err != nil {
 		return err
 	}
 	page.rwcvn = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResponseWithContinuationVirtualNetworkPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -6294,6 +6951,11 @@ func (page ResponseWithContinuationVirtualNetworkPage) Values() []VirtualNetwork
 	return *page.rwcvn.Value
 }
 
+// Creates a new instance of the ResponseWithContinuationVirtualNetworkPage type.
+func NewResponseWithContinuationVirtualNetworkPage(getNextPage func(context.Context, ResponseWithContinuationVirtualNetwork) (ResponseWithContinuationVirtualNetwork, error)) ResponseWithContinuationVirtualNetworkPage {
+	return ResponseWithContinuationVirtualNetworkPage{fn: getNextPage}
+}
+
 // RetargetScheduleProperties properties for retargeting a virtual machine schedule.
 type RetargetScheduleProperties struct {
 	// CurrentResourceID - The resource Id of the virtual machine on which the schedule operates
@@ -6307,11 +6969,11 @@ type Schedule struct {
 	autorest.Response `json:"-"`
 	// ScheduleProperties - The properties of the resource.
 	*ScheduleProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -6324,15 +6986,6 @@ func (s Schedule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if s.ScheduleProperties != nil {
 		objectMap["properties"] = s.ScheduleProperties
-	}
-	if s.ID != nil {
-		objectMap["id"] = s.ID
-	}
-	if s.Name != nil {
-		objectMap["name"] = s.Name
-	}
-	if s.Type != nil {
-		objectMap["type"] = s.Type
 	}
 	if s.Location != nil {
 		objectMap["location"] = s.Location
@@ -6416,11 +7069,11 @@ func (s *Schedule) UnmarshalJSON(body []byte) error {
 type ScheduleFragment struct {
 	// SchedulePropertiesFragment - The properties of the resource.
 	*SchedulePropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -6433,15 +7086,6 @@ func (sf ScheduleFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if sf.SchedulePropertiesFragment != nil {
 		objectMap["properties"] = sf.SchedulePropertiesFragment
-	}
-	if sf.ID != nil {
-		objectMap["id"] = sf.ID
-	}
-	if sf.Name != nil {
-		objectMap["name"] = sf.Name
-	}
-	if sf.Type != nil {
-		objectMap["type"] = sf.Type
 	}
 	if sf.Location != nil {
 		objectMap["location"] = sf.Location
@@ -6537,7 +7181,7 @@ type ScheduleProperties struct {
 	TimeZoneID *string `json:"timeZoneId,omitempty"`
 	// NotificationSettings - Notification settings.
 	NotificationSettings *NotificationSettings `json:"notificationSettings,omitempty"`
-	// CreatedDate - The creation date of the schedule.
+	// CreatedDate - READ-ONLY; The creation date of the schedule.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// TargetResourceID - The resource ID to which the schedule belongs
 	TargetResourceID *string `json:"targetResourceId,omitempty"`
@@ -6571,7 +7215,8 @@ type SchedulePropertiesFragment struct {
 	UniqueIdentifier *string `json:"uniqueIdentifier,omitempty"`
 }
 
-// SchedulesExecuteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// SchedulesExecuteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type SchedulesExecuteFuture struct {
 	azure.Future
 }
@@ -6580,7 +7225,7 @@ type SchedulesExecuteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *SchedulesExecuteFuture) Result(client SchedulesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.SchedulesExecuteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -6598,11 +7243,11 @@ type Secret struct {
 	autorest.Response `json:"-"`
 	// SecretProperties - The properties of the resource.
 	*SecretProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -6615,15 +7260,6 @@ func (s Secret) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if s.SecretProperties != nil {
 		objectMap["properties"] = s.SecretProperties
-	}
-	if s.ID != nil {
-		objectMap["id"] = s.ID
-	}
-	if s.Name != nil {
-		objectMap["name"] = s.Name
-	}
-	if s.Type != nil {
-		objectMap["type"] = s.Type
 	}
 	if s.Location != nil {
 		objectMap["location"] = s.Location
@@ -6718,11 +7354,11 @@ type ServiceRunner struct {
 	autorest.Response `json:"-"`
 	// Identity - The identity of the resource.
 	Identity *IdentityProperties `json:"identity,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -6736,15 +7372,6 @@ func (sr ServiceRunner) MarshalJSON() ([]byte, error) {
 	if sr.Identity != nil {
 		objectMap["identity"] = sr.Identity
 	}
-	if sr.ID != nil {
-		objectMap["id"] = sr.ID
-	}
-	if sr.Name != nil {
-		objectMap["name"] = sr.Name
-	}
-	if sr.Type != nil {
-		objectMap["type"] = sr.Type
-	}
 	if sr.Location != nil {
 		objectMap["location"] = sr.Location
 	}
@@ -6754,22 +7381,22 @@ func (sr ServiceRunner) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// SharedPublicIPAddressConfiguration properties of a virtual machine that determine how it is connected to a load
-// balancer.
+// SharedPublicIPAddressConfiguration properties of a virtual machine that determine how it is connected to
+// a load balancer.
 type SharedPublicIPAddressConfiguration struct {
 	// InboundNatRules - The incoming NAT rules
 	InboundNatRules *[]InboundNatRule `json:"inboundNatRules,omitempty"`
 }
 
-// SharedPublicIPAddressConfigurationFragment properties of a virtual machine that determine how it is connected to
-// a load balancer.
+// SharedPublicIPAddressConfigurationFragment properties of a virtual machine that determine how it is
+// connected to a load balancer.
 type SharedPublicIPAddressConfigurationFragment struct {
 	// InboundNatRules - The incoming NAT rules
 	InboundNatRules *[]InboundNatRuleFragment `json:"inboundNatRules,omitempty"`
 }
 
-// ShutdownNotificationContent the contents of a shutdown notification. Webhooks can use this type to deserialize
-// the request body when they get notified of an imminent shutdown.
+// ShutdownNotificationContent the contents of a shutdown notification. Webhooks can use this type to
+// deserialize the request body when they get notified of an imminent shutdown.
 type ShutdownNotificationContent struct {
 	// SkipURL - The URL to skip auto-shutdown.
 	SkipURL *string `json:"skipUrl,omitempty"`
@@ -6880,11 +7507,11 @@ type User struct {
 	autorest.Response `json:"-"`
 	// UserProperties - The properties of the resource.
 	*UserProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -6897,15 +7524,6 @@ func (u User) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if u.UserProperties != nil {
 		objectMap["properties"] = u.UserProperties
-	}
-	if u.ID != nil {
-		objectMap["id"] = u.ID
-	}
-	if u.Name != nil {
-		objectMap["name"] = u.Name
-	}
-	if u.Type != nil {
-		objectMap["type"] = u.Type
 	}
 	if u.Location != nil {
 		objectMap["location"] = u.Location
@@ -6989,11 +7607,11 @@ func (u *User) UnmarshalJSON(body []byte) error {
 type UserFragment struct {
 	// UserPropertiesFragment - The properties of the resource.
 	*UserPropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -7006,15 +7624,6 @@ func (uf UserFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if uf.UserPropertiesFragment != nil {
 		objectMap["properties"] = uf.UserPropertiesFragment
-	}
-	if uf.ID != nil {
-		objectMap["id"] = uf.ID
-	}
-	if uf.Name != nil {
-		objectMap["name"] = uf.Name
-	}
-	if uf.Type != nil {
-		objectMap["type"] = uf.Type
 	}
 	if uf.Location != nil {
 		objectMap["location"] = uf.Location
@@ -7128,7 +7737,7 @@ type UserProperties struct {
 	Identity *UserIdentity `json:"identity,omitempty"`
 	// SecretStore - The secret store of the user.
 	SecretStore *UserSecretStore `json:"secretStore,omitempty"`
-	// CreatedDate - The creation date of the user profile.
+	// CreatedDate - READ-ONLY; The creation date of the user profile.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// ProvisioningState - The provisioning status of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
@@ -7157,7 +7766,7 @@ type UsersDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *UsersDeleteFuture) Result(client UsersClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.UsersDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7186,8 +7795,8 @@ type UserSecretStoreFragment struct {
 	KeyVaultID *string `json:"keyVaultId,omitempty"`
 }
 
-// VirtualMachinesAddDataDiskFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualMachinesAddDataDiskFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualMachinesAddDataDiskFuture struct {
 	azure.Future
 }
@@ -7196,7 +7805,7 @@ type VirtualMachinesAddDataDiskFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesAddDataDiskFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesAddDataDiskFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7209,8 +7818,8 @@ func (future *VirtualMachinesAddDataDiskFuture) Result(client VirtualMachinesCli
 	return
 }
 
-// VirtualMachinesApplyArtifactsFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualMachinesApplyArtifactsFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualMachinesApplyArtifactsFuture struct {
 	azure.Future
 }
@@ -7219,7 +7828,7 @@ type VirtualMachinesApplyArtifactsFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesApplyArtifactsFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesApplyArtifactsFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7232,8 +7841,8 @@ func (future *VirtualMachinesApplyArtifactsFuture) Result(client VirtualMachines
 	return
 }
 
-// VirtualMachineSchedulesExecuteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualMachineSchedulesExecuteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualMachineSchedulesExecuteFuture struct {
 	azure.Future
 }
@@ -7242,7 +7851,7 @@ type VirtualMachineSchedulesExecuteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachineSchedulesExecuteFuture) Result(client VirtualMachineSchedulesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineSchedulesExecuteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7255,7 +7864,8 @@ func (future *VirtualMachineSchedulesExecuteFuture) Result(client VirtualMachine
 	return
 }
 
-// VirtualMachinesClaimFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// VirtualMachinesClaimFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VirtualMachinesClaimFuture struct {
 	azure.Future
 }
@@ -7264,7 +7874,7 @@ type VirtualMachinesClaimFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesClaimFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesClaimFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7277,8 +7887,8 @@ func (future *VirtualMachinesClaimFuture) Result(client VirtualMachinesClient) (
 	return
 }
 
-// VirtualMachinesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualMachinesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualMachinesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -7287,7 +7897,7 @@ type VirtualMachinesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesCreateOrUpdateFuture) Result(client VirtualMachinesClient) (lvm LabVirtualMachine, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7316,7 +7926,7 @@ type VirtualMachinesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesDeleteFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7329,8 +7939,8 @@ func (future *VirtualMachinesDeleteFuture) Result(client VirtualMachinesClient) 
 	return
 }
 
-// VirtualMachinesDetachDataDiskFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualMachinesDetachDataDiskFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualMachinesDetachDataDiskFuture struct {
 	azure.Future
 }
@@ -7339,7 +7949,7 @@ type VirtualMachinesDetachDataDiskFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesDetachDataDiskFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesDetachDataDiskFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7352,7 +7962,8 @@ func (future *VirtualMachinesDetachDataDiskFuture) Result(client VirtualMachines
 	return
 }
 
-// VirtualMachinesStartFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// VirtualMachinesStartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VirtualMachinesStartFuture struct {
 	azure.Future
 }
@@ -7361,7 +7972,7 @@ type VirtualMachinesStartFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesStartFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesStartFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7374,7 +7985,8 @@ func (future *VirtualMachinesStartFuture) Result(client VirtualMachinesClient) (
 	return
 }
 
-// VirtualMachinesStopFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// VirtualMachinesStopFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VirtualMachinesStopFuture struct {
 	azure.Future
 }
@@ -7383,7 +7995,7 @@ type VirtualMachinesStopFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualMachinesStopFuture) Result(client VirtualMachinesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachinesStopFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7401,11 +8013,11 @@ type VirtualNetwork struct {
 	autorest.Response `json:"-"`
 	// VirtualNetworkProperties - The properties of the resource.
 	*VirtualNetworkProperties `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -7418,15 +8030,6 @@ func (vn VirtualNetwork) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if vn.VirtualNetworkProperties != nil {
 		objectMap["properties"] = vn.VirtualNetworkProperties
-	}
-	if vn.ID != nil {
-		objectMap["id"] = vn.ID
-	}
-	if vn.Name != nil {
-		objectMap["name"] = vn.Name
-	}
-	if vn.Type != nil {
-		objectMap["type"] = vn.Type
 	}
 	if vn.Location != nil {
 		objectMap["location"] = vn.Location
@@ -7510,11 +8113,11 @@ func (vn *VirtualNetwork) UnmarshalJSON(body []byte) error {
 type VirtualNetworkFragment struct {
 	// VirtualNetworkPropertiesFragment - The properties of the resource.
 	*VirtualNetworkPropertiesFragment `json:"properties,omitempty"`
-	// ID - The identifier of the resource.
+	// ID - READ-ONLY; The identifier of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource.
+	// Type - READ-ONLY; The type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource.
 	Location *string `json:"location,omitempty"`
@@ -7527,15 +8130,6 @@ func (vnf VirtualNetworkFragment) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if vnf.VirtualNetworkPropertiesFragment != nil {
 		objectMap["properties"] = vnf.VirtualNetworkPropertiesFragment
-	}
-	if vnf.ID != nil {
-		objectMap["id"] = vnf.ID
-	}
-	if vnf.Name != nil {
-		objectMap["name"] = vnf.Name
-	}
-	if vnf.Type != nil {
-		objectMap["type"] = vnf.Type
 	}
 	if vnf.Location != nil {
 		objectMap["location"] = vnf.Location
@@ -7627,7 +8221,7 @@ type VirtualNetworkProperties struct {
 	ExternalSubnets *[]ExternalSubnet `json:"externalSubnets,omitempty"`
 	// SubnetOverrides - The subnet overrides of the virtual network.
 	SubnetOverrides *[]SubnetOverride `json:"subnetOverrides,omitempty"`
-	// CreatedDate - The creation date of the virtual network.
+	// CreatedDate - READ-ONLY; The creation date of the virtual network.
 	CreatedDate *date.Time `json:"createdDate,omitempty"`
 	// ProvisioningState - The provisioning status of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
@@ -7653,8 +8247,8 @@ type VirtualNetworkPropertiesFragment struct {
 	UniqueIdentifier *string `json:"uniqueIdentifier,omitempty"`
 }
 
-// VirtualNetworksCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualNetworksCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualNetworksCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -7663,7 +8257,7 @@ type VirtualNetworksCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualNetworksCreateOrUpdateFuture) Result(client VirtualNetworksClient) (vn VirtualNetwork, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualNetworksCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -7692,7 +8286,7 @@ type VirtualNetworksDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualNetworksDeleteFuture) Result(client VirtualNetworksClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualNetworksDeleteFuture", "Result", future.Response(), "Polling failure")
 		return

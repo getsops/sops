@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +22,9 @@ package customsearch
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/customsearch"
 
 const (
-	DefaultBaseURI = original.DefaultBaseURI
+	DefaultEndpoint = original.DefaultEndpoint
 )
 
-type BaseClient = original.BaseClient
-type CustomInstanceClient = original.CustomInstanceClient
 type ErrorCode = original.ErrorCode
 
 const (
@@ -85,24 +83,26 @@ const (
 	TypeWebWebAnswer        Type = original.TypeWebWebAnswer
 )
 
-type BasicAnswer = original.BasicAnswer
 type Answer = original.Answer
+type BaseClient = original.BaseClient
+type BasicAnswer = original.BasicAnswer
 type BasicCreativeWork = original.BasicCreativeWork
+type BasicIdentifiable = original.BasicIdentifiable
+type BasicResponse = original.BasicResponse
+type BasicResponseBase = original.BasicResponseBase
+type BasicSearchResultsAnswer = original.BasicSearchResultsAnswer
+type BasicThing = original.BasicThing
 type CreativeWork = original.CreativeWork
+type CustomInstanceClient = original.CustomInstanceClient
 type Error = original.Error
 type ErrorResponse = original.ErrorResponse
-type BasicIdentifiable = original.BasicIdentifiable
 type Identifiable = original.Identifiable
 type Query = original.Query
 type QueryContext = original.QueryContext
-type BasicResponse = original.BasicResponse
 type Response = original.Response
-type BasicResponseBase = original.BasicResponseBase
 type ResponseBase = original.ResponseBase
 type SearchResponse = original.SearchResponse
-type BasicSearchResultsAnswer = original.BasicSearchResultsAnswer
 type SearchResultsAnswer = original.SearchResultsAnswer
-type BasicThing = original.BasicThing
 type Thing = original.Thing
 type WebMetaTag = original.WebMetaTag
 type WebPage = original.WebPage
@@ -111,14 +111,11 @@ type WebWebAnswer = original.WebWebAnswer
 func New() BaseClient {
 	return original.New()
 }
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
-}
 func NewCustomInstanceClient() CustomInstanceClient {
 	return original.NewCustomInstanceClient()
 }
-func NewCustomInstanceClientWithBaseURI(baseURI string) CustomInstanceClient {
-	return original.NewCustomInstanceClientWithBaseURI(baseURI)
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func PossibleErrorCodeValues() []ErrorCode {
 	return original.PossibleErrorCodeValues()

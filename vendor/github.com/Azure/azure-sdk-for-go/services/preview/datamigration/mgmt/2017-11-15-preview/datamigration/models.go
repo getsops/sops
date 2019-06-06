@@ -18,13 +18,18 @@ package datamigration
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datamigration/mgmt/2017-11-15-preview/datamigration"
 
 // AuthenticationType enumerates the values for authentication type.
 type AuthenticationType string
@@ -694,8 +699,8 @@ func (ci ConnectionInfo) AsBasicConnectionInfo() (BasicConnectionInfo, bool) {
 	return &ci, true
 }
 
-// ConnectToSourceSQLServerTaskInput input for the task that validates connection to SQL Server and also validates
-// source server requirements
+// ConnectToSourceSQLServerTaskInput input for the task that validates connection to SQL Server and also
+// validates source server requirements
 type ConnectToSourceSQLServerTaskInput struct {
 	// SourceConnectionInfo - Connection information for Source SQL Server
 	SourceConnectionInfo *SQLConnectionInfo `json:"sourceConnectionInfo,omitempty"`
@@ -714,7 +719,7 @@ type BasicConnectToSourceSQLServerTaskOutput interface {
 // ConnectToSourceSQLServerTaskOutput output for the task that validates connection to SQL Server and also
 // validates source server requirements
 type ConnectToSourceSQLServerTaskOutput struct {
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeConnectToSourceSQLServerTaskOutput', 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeTaskLevelOutput'
 	ResultType ResultTypeBasicConnectToSourceSQLServerTaskOutput `json:"resultType,omitempty"`
@@ -765,9 +770,6 @@ func unmarshalBasicConnectToSourceSQLServerTaskOutputArray(body []byte) ([]Basic
 func (ctsssto ConnectToSourceSQLServerTaskOutput) MarshalJSON() ([]byte, error) {
 	ctsssto.ResultType = ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeConnectToSourceSQLServerTaskOutput
 	objectMap := make(map[string]interface{})
-	if ctsssto.ID != nil {
-		objectMap["id"] = ctsssto.ID
-	}
 	if ctsssto.ResultType != "" {
 		objectMap["resultType"] = ctsssto.ResultType
 	}
@@ -794,20 +796,20 @@ func (ctsssto ConnectToSourceSQLServerTaskOutput) AsBasicConnectToSourceSQLServe
 	return &ctsssto, true
 }
 
-// ConnectToSourceSQLServerTaskOutputDatabaseLevel database level output for the task that validates connection to
-// SQL Server and also validates source server requirements
+// ConnectToSourceSQLServerTaskOutputDatabaseLevel database level output for the task that validates
+// connection to SQL Server and also validates source server requirements
 type ConnectToSourceSQLServerTaskOutputDatabaseLevel struct {
-	// Name - Database name
+	// Name - READ-ONLY; Database name
 	Name *string `json:"name,omitempty"`
-	// SizeMB - Size of the file in megabytes
+	// SizeMB - READ-ONLY; Size of the file in megabytes
 	SizeMB *float64 `json:"sizeMB,omitempty"`
-	// DatabaseFiles - The list of database files
+	// DatabaseFiles - READ-ONLY; The list of database files
 	DatabaseFiles *[]DatabaseFileInfo `json:"databaseFiles,omitempty"`
-	// CompatibilityLevel - SQL Server compatibility level of database. Possible values include: 'CompatLevel80', 'CompatLevel90', 'CompatLevel100', 'CompatLevel110', 'CompatLevel120', 'CompatLevel130', 'CompatLevel140'
+	// CompatibilityLevel - READ-ONLY; SQL Server compatibility level of database. Possible values include: 'CompatLevel80', 'CompatLevel90', 'CompatLevel100', 'CompatLevel110', 'CompatLevel120', 'CompatLevel130', 'CompatLevel140'
 	CompatibilityLevel DatabaseCompatLevel `json:"compatibilityLevel,omitempty"`
-	// DatabaseState - State of the database. Possible values include: 'Online', 'Restoring', 'Recovering', 'RecoveryPending', 'Suspect', 'Emergency', 'Offline', 'Copying', 'OfflineSecondary'
+	// DatabaseState - READ-ONLY; State of the database. Possible values include: 'Online', 'Restoring', 'Recovering', 'RecoveryPending', 'Suspect', 'Emergency', 'Offline', 'Copying', 'OfflineSecondary'
 	DatabaseState DatabaseState `json:"databaseState,omitempty"`
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeConnectToSourceSQLServerTaskOutput', 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeTaskLevelOutput'
 	ResultType ResultTypeBasicConnectToSourceSQLServerTaskOutput `json:"resultType,omitempty"`
@@ -817,24 +819,6 @@ type ConnectToSourceSQLServerTaskOutputDatabaseLevel struct {
 func (ctssstodl ConnectToSourceSQLServerTaskOutputDatabaseLevel) MarshalJSON() ([]byte, error) {
 	ctssstodl.ResultType = ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeDatabaseLevelOutput
 	objectMap := make(map[string]interface{})
-	if ctssstodl.Name != nil {
-		objectMap["name"] = ctssstodl.Name
-	}
-	if ctssstodl.SizeMB != nil {
-		objectMap["sizeMB"] = ctssstodl.SizeMB
-	}
-	if ctssstodl.DatabaseFiles != nil {
-		objectMap["databaseFiles"] = ctssstodl.DatabaseFiles
-	}
-	if ctssstodl.CompatibilityLevel != "" {
-		objectMap["compatibilityLevel"] = ctssstodl.CompatibilityLevel
-	}
-	if ctssstodl.DatabaseState != "" {
-		objectMap["databaseState"] = ctssstodl.DatabaseState
-	}
-	if ctssstodl.ID != nil {
-		objectMap["id"] = ctssstodl.ID
-	}
 	if ctssstodl.ResultType != "" {
 		objectMap["resultType"] = ctssstodl.ResultType
 	}
@@ -861,18 +845,18 @@ func (ctssstodl ConnectToSourceSQLServerTaskOutputDatabaseLevel) AsBasicConnectT
 	return &ctssstodl, true
 }
 
-// ConnectToSourceSQLServerTaskOutputTaskLevel task level output for the task that validates connection to SQL
-// Server and also validates source server requirements
+// ConnectToSourceSQLServerTaskOutputTaskLevel task level output for the task that validates connection to
+// SQL Server and also validates source server requirements
 type ConnectToSourceSQLServerTaskOutputTaskLevel struct {
-	// Databases - Source databases as a map from database name to database id
+	// Databases - READ-ONLY; Source databases as a map from database name to database id
 	Databases map[string]*string `json:"databases"`
-	// SourceServerVersion - Source server version
+	// SourceServerVersion - READ-ONLY; Source server version
 	SourceServerVersion *string `json:"sourceServerVersion,omitempty"`
-	// SourceServerBrandVersion - Source server brand version
+	// SourceServerBrandVersion - READ-ONLY; Source server brand version
 	SourceServerBrandVersion *string `json:"sourceServerBrandVersion,omitempty"`
-	// ValidationErrors - Validation errors
+	// ValidationErrors - READ-ONLY; Validation errors
 	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeConnectToSourceSQLServerTaskOutput', 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeTaskLevelOutput'
 	ResultType ResultTypeBasicConnectToSourceSQLServerTaskOutput `json:"resultType,omitempty"`
@@ -882,21 +866,6 @@ type ConnectToSourceSQLServerTaskOutputTaskLevel struct {
 func (ctssstotl ConnectToSourceSQLServerTaskOutputTaskLevel) MarshalJSON() ([]byte, error) {
 	ctssstotl.ResultType = ResultTypeBasicConnectToSourceSQLServerTaskOutputResultTypeTaskLevelOutput
 	objectMap := make(map[string]interface{})
-	if ctssstotl.Databases != nil {
-		objectMap["databases"] = ctssstotl.Databases
-	}
-	if ctssstotl.SourceServerVersion != nil {
-		objectMap["sourceServerVersion"] = ctssstotl.SourceServerVersion
-	}
-	if ctssstotl.SourceServerBrandVersion != nil {
-		objectMap["sourceServerBrandVersion"] = ctssstotl.SourceServerBrandVersion
-	}
-	if ctssstotl.ValidationErrors != nil {
-		objectMap["validationErrors"] = ctssstotl.ValidationErrors
-	}
-	if ctssstotl.ID != nil {
-		objectMap["id"] = ctssstotl.ID
-	}
 	if ctssstotl.ResultType != "" {
 		objectMap["resultType"] = ctssstotl.ResultType
 	}
@@ -923,16 +892,16 @@ func (ctssstotl ConnectToSourceSQLServerTaskOutputTaskLevel) AsBasicConnectToSou
 	return &ctssstotl, true
 }
 
-// ConnectToSourceSQLServerTaskProperties properties for the task that validates connection to SQL Server and also
-// validates source server requirements
+// ConnectToSourceSQLServerTaskProperties properties for the task that validates connection to SQL Server
+// and also validates source server requirements
 type ConnectToSourceSQLServerTaskProperties struct {
 	// Input - Task input
 	Input *ConnectToSourceSQLServerTaskInput `json:"input,omitempty"`
-	// Output - Task output. This is ignored if submitted.
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
 	Output *[]BasicConnectToSourceSQLServerTaskOutput `json:"output,omitempty"`
-	// Errors - Array of errors. This is ignored if submitted.
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
 	Errors *[]ODataError `json:"errors,omitempty"`
-	// State - The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
 	State TaskState `json:"state,omitempty"`
 	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceSQLServer'
 	TaskType TaskType `json:"taskType,omitempty"`
@@ -944,15 +913,6 @@ func (ctssstp ConnectToSourceSQLServerTaskProperties) MarshalJSON() ([]byte, err
 	objectMap := make(map[string]interface{})
 	if ctssstp.Input != nil {
 		objectMap["input"] = ctssstp.Input
-	}
-	if ctssstp.Output != nil {
-		objectMap["output"] = ctssstp.Output
-	}
-	if ctssstp.Errors != nil {
-		objectMap["errors"] = ctssstp.Errors
-	}
-	if ctssstp.State != "" {
-		objectMap["state"] = ctssstp.State
 	}
 	if ctssstp.TaskType != "" {
 		objectMap["taskType"] = ctssstp.TaskType
@@ -1059,44 +1019,32 @@ type ConnectToTargetSQLDbTaskInput struct {
 // ConnectToTargetSQLDbTaskOutput output for the task that validates connection to SQL DB and target server
 // requirements
 type ConnectToTargetSQLDbTaskOutput struct {
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
-	// Databases - Source databases as a map from database name to database id
+	// Databases - READ-ONLY; Source databases as a map from database name to database id
 	Databases map[string]*string `json:"databases"`
-	// TargetServerVersion - Version of the target server
+	// TargetServerVersion - READ-ONLY; Version of the target server
 	TargetServerVersion *string `json:"targetServerVersion,omitempty"`
-	// TargetServerBrandVersion - Target server brand version
+	// TargetServerBrandVersion - READ-ONLY; Target server brand version
 	TargetServerBrandVersion *string `json:"targetServerBrandVersion,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for ConnectToTargetSQLDbTaskOutput.
 func (cttsdto ConnectToTargetSQLDbTaskOutput) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if cttsdto.ID != nil {
-		objectMap["id"] = cttsdto.ID
-	}
-	if cttsdto.Databases != nil {
-		objectMap["databases"] = cttsdto.Databases
-	}
-	if cttsdto.TargetServerVersion != nil {
-		objectMap["targetServerVersion"] = cttsdto.TargetServerVersion
-	}
-	if cttsdto.TargetServerBrandVersion != nil {
-		objectMap["targetServerBrandVersion"] = cttsdto.TargetServerBrandVersion
-	}
 	return json.Marshal(objectMap)
 }
 
-// ConnectToTargetSQLDbTaskProperties properties for the task that validates connection to SQL DB and target server
-// requirements
+// ConnectToTargetSQLDbTaskProperties properties for the task that validates connection to SQL DB and
+// target server requirements
 type ConnectToTargetSQLDbTaskProperties struct {
 	// Input - Task input
 	Input *ConnectToTargetSQLDbTaskInput `json:"input,omitempty"`
-	// Output - Task output. This is ignored if submitted.
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
 	Output *[]ConnectToTargetSQLDbTaskOutput `json:"output,omitempty"`
-	// Errors - Array of errors. This is ignored if submitted.
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
 	Errors *[]ODataError `json:"errors,omitempty"`
-	// State - The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
 	State TaskState `json:"state,omitempty"`
 	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceSQLServer'
 	TaskType TaskType `json:"taskType,omitempty"`
@@ -1108,15 +1056,6 @@ func (cttsdtp ConnectToTargetSQLDbTaskProperties) MarshalJSON() ([]byte, error) 
 	objectMap := make(map[string]interface{})
 	if cttsdtp.Input != nil {
 		objectMap["input"] = cttsdtp.Input
-	}
-	if cttsdtp.Output != nil {
-		objectMap["output"] = cttsdtp.Output
-	}
-	if cttsdtp.Errors != nil {
-		objectMap["errors"] = cttsdtp.Errors
-	}
-	if cttsdtp.State != "" {
-		objectMap["state"] = cttsdtp.State
 	}
 	if cttsdtp.TaskType != "" {
 		objectMap["taskType"] = cttsdtp.TaskType
@@ -1232,11 +1171,11 @@ type DatabaseInfo struct {
 
 // DatabaseObjectName a representation of the name of an object in a database
 type DatabaseObjectName struct {
-	// DatabaseName - The unescaped name of the database containing the object
+	// DatabaseName - READ-ONLY; The unescaped name of the database containing the object
 	DatabaseName *string `json:"databaseName,omitempty"`
-	// ObjectName - The unescaped name of the object
+	// ObjectName - READ-ONLY; The unescaped name of the object
 	ObjectName *string `json:"objectName,omitempty"`
-	// SchemaName - The unescaped name of the schema containing the object
+	// SchemaName - READ-ONLY; The unescaped name of the schema containing the object
 	SchemaName *string `json:"schemaName,omitempty"`
 	// ObjectType - Type of the object in the database. Possible values include: 'StoredProcedures', 'Table', 'User', 'View', 'Function'
 	ObjectType ObjectType `json:"objectType,omitempty"`
@@ -1244,33 +1183,33 @@ type DatabaseObjectName struct {
 
 // DatabaseSummaryResult summary of database results in the migration
 type DatabaseSummaryResult struct {
-	// SizeMB - Size of the database in megabytes
+	// SizeMB - READ-ONLY; Size of the database in megabytes
 	SizeMB *float64 `json:"sizeMB,omitempty"`
-	// Name - Name of the item
+	// Name - READ-ONLY; Name of the item
 	Name *string `json:"name,omitempty"`
-	// StartedOn - Migration start time
+	// StartedOn - READ-ONLY; Migration start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Migration end time
+	// EndedOn - READ-ONLY; Migration end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// State - Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
+	// State - READ-ONLY; Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
 	State MigrationState `json:"state,omitempty"`
-	// StatusMessage - Status message
+	// StatusMessage - READ-ONLY; Status message
 	StatusMessage *string `json:"statusMessage,omitempty"`
-	// ItemsCount - Number of items
+	// ItemsCount - READ-ONLY; Number of items
 	ItemsCount *int64 `json:"itemsCount,omitempty"`
-	// ItemsCompletedCount - Number of successfully completed items
+	// ItemsCompletedCount - READ-ONLY; Number of successfully completed items
 	ItemsCompletedCount *int64 `json:"itemsCompletedCount,omitempty"`
-	// ErrorPrefix - Wildcard string prefix to use for querying all errors of the item
+	// ErrorPrefix - READ-ONLY; Wildcard string prefix to use for querying all errors of the item
 	ErrorPrefix *string `json:"errorPrefix,omitempty"`
-	// ResultPrefix - Wildcard string prefix to use for querying all sub-tem results of the item
+	// ResultPrefix - READ-ONLY; Wildcard string prefix to use for querying all sub-tem results of the item
 	ResultPrefix *string `json:"resultPrefix,omitempty"`
 }
 
 // DatabaseTable table properties
 type DatabaseTable struct {
-	// HasRows - Indicates whether table is empty or not
+	// HasRows - READ-ONLY; Indicates whether table is empty or not
 	HasRows *bool `json:"hasRows,omitempty"`
-	// Name - Schema-qualified name of the table
+	// Name - READ-ONLY; Schema-qualified name of the table
 	Name *string `json:"name,omitempty"`
 }
 
@@ -1296,29 +1235,29 @@ func (divr DataIntegrityValidationResult) MarshalJSON() ([]byte, error) {
 
 // DataItemMigrationSummaryResult basic summary of a data item migration
 type DataItemMigrationSummaryResult struct {
-	// Name - Name of the item
+	// Name - READ-ONLY; Name of the item
 	Name *string `json:"name,omitempty"`
-	// StartedOn - Migration start time
+	// StartedOn - READ-ONLY; Migration start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Migration end time
+	// EndedOn - READ-ONLY; Migration end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// State - Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
+	// State - READ-ONLY; Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
 	State MigrationState `json:"state,omitempty"`
-	// StatusMessage - Status message
+	// StatusMessage - READ-ONLY; Status message
 	StatusMessage *string `json:"statusMessage,omitempty"`
-	// ItemsCount - Number of items
+	// ItemsCount - READ-ONLY; Number of items
 	ItemsCount *int64 `json:"itemsCount,omitempty"`
-	// ItemsCompletedCount - Number of successfully completed items
+	// ItemsCompletedCount - READ-ONLY; Number of successfully completed items
 	ItemsCompletedCount *int64 `json:"itemsCompletedCount,omitempty"`
-	// ErrorPrefix - Wildcard string prefix to use for querying all errors of the item
+	// ErrorPrefix - READ-ONLY; Wildcard string prefix to use for querying all errors of the item
 	ErrorPrefix *string `json:"errorPrefix,omitempty"`
-	// ResultPrefix - Wildcard string prefix to use for querying all sub-tem results of the item
+	// ResultPrefix - READ-ONLY; Wildcard string prefix to use for querying all sub-tem results of the item
 	ResultPrefix *string `json:"resultPrefix,omitempty"`
 }
 
 // Error migration Task errors
 type Error struct {
-	// Message - Error description
+	// Message - READ-ONLY; Error description
 	Message *string `json:"message,omitempty"`
 	// Type - Possible values include: 'ErrorTypeDefault', 'ErrorTypeWarning', 'ErrorTypeError'
 	Type ErrorType `json:"type,omitempty"`
@@ -1374,38 +1313,30 @@ type GetUserTablesSQLTaskInput struct {
 
 // GetUserTablesSQLTaskOutput output of the task that collects user tables for the given list of databases
 type GetUserTablesSQLTaskOutput struct {
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
-	// DatabasesToTables - Mapping from database name to list of tables
+	// DatabasesToTables - READ-ONLY; Mapping from database name to list of tables
 	DatabasesToTables map[string][]DatabaseTable `json:"databasesToTables"`
-	// ValidationErrors - Validation errors
+	// ValidationErrors - READ-ONLY; Validation errors
 	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for GetUserTablesSQLTaskOutput.
 func (gutsto GetUserTablesSQLTaskOutput) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if gutsto.ID != nil {
-		objectMap["id"] = gutsto.ID
-	}
-	if gutsto.DatabasesToTables != nil {
-		objectMap["databasesToTables"] = gutsto.DatabasesToTables
-	}
-	if gutsto.ValidationErrors != nil {
-		objectMap["validationErrors"] = gutsto.ValidationErrors
-	}
 	return json.Marshal(objectMap)
 }
 
-// GetUserTablesSQLTaskProperties properties for the task that collects user tables for the given list of databases
+// GetUserTablesSQLTaskProperties properties for the task that collects user tables for the given list of
+// databases
 type GetUserTablesSQLTaskProperties struct {
 	// Input - Task input
 	Input *GetUserTablesSQLTaskInput `json:"input,omitempty"`
-	// Output - Task output. This is ignored if submitted.
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
 	Output *[]GetUserTablesSQLTaskOutput `json:"output,omitempty"`
-	// Errors - Array of errors. This is ignored if submitted.
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
 	Errors *[]ODataError `json:"errors,omitempty"`
-	// State - The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
 	State TaskState `json:"state,omitempty"`
 	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceSQLServer'
 	TaskType TaskType `json:"taskType,omitempty"`
@@ -1417,15 +1348,6 @@ func (gutstp GetUserTablesSQLTaskProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if gutstp.Input != nil {
 		objectMap["input"] = gutstp.Input
-	}
-	if gutstp.Output != nil {
-		objectMap["output"] = gutstp.Output
-	}
-	if gutstp.Errors != nil {
-		objectMap["errors"] = gutstp.Errors
-	}
-	if gutstp.State != "" {
-		objectMap["state"] = gutstp.State
 	}
 	if gutstp.TaskType != "" {
 		objectMap["taskType"] = gutstp.TaskType
@@ -1463,7 +1385,8 @@ func (gutstp GetUserTablesSQLTaskProperties) AsBasicProjectTaskProperties() (Bas
 	return &gutstp, true
 }
 
-// MigrateSQLServerSQLDbDatabaseInput database specific information for SQL to Azure SQL DB migration task inputs
+// MigrateSQLServerSQLDbDatabaseInput database specific information for SQL to Azure SQL DB migration task
+// inputs
 type MigrateSQLServerSQLDbDatabaseInput struct {
 	// Name - Name of the database
 	Name *string `json:"name,omitempty"`
@@ -1493,8 +1416,8 @@ func (msssddi MigrateSQLServerSQLDbDatabaseInput) MarshalJSON() ([]byte, error) 
 	return json.Marshal(objectMap)
 }
 
-// MigrateSQLServerSQLDbTaskInput input for the task that migrates on-prem SQL Server databases to Azure SQL
-// Database
+// MigrateSQLServerSQLDbTaskInput input for the task that migrates on-prem SQL Server databases to Azure
+// SQL Database
 type MigrateSQLServerSQLDbTaskInput struct {
 	// SelectedDatabases - Databases to migrate
 	SelectedDatabases *[]MigrateSQLServerSQLDbDatabaseInput `json:"selectedDatabases,omitempty"`
@@ -1521,7 +1444,7 @@ type BasicMigrateSQLServerSQLDbTaskOutput interface {
 // MigrateSQLServerSQLDbTaskOutput output for the task that migrates on-prem SQL Server databases to Azure SQL
 // Database
 type MigrateSQLServerSQLDbTaskOutput struct {
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeMigrateSQLServerSQLDbTaskOutput', 'ResultTypeErrorOutput', 'ResultTypeTableLevelOutput', 'ResultTypeDatabaseLevelOutput', 'ResultTypeMigrationLevelOutput'
 	ResultType ResultType `json:"resultType,omitempty"`
@@ -1580,9 +1503,6 @@ func unmarshalBasicMigrateSQLServerSQLDbTaskOutputArray(body []byte) ([]BasicMig
 func (msssdto MigrateSQLServerSQLDbTaskOutput) MarshalJSON() ([]byte, error) {
 	msssdto.ResultType = ResultTypeMigrateSQLServerSQLDbTaskOutput
 	objectMap := make(map[string]interface{})
-	if msssdto.ID != nil {
-		objectMap["id"] = msssdto.ID
-	}
 	if msssdto.ResultType != "" {
 		objectMap["resultType"] = msssdto.ResultType
 	}
@@ -1619,37 +1539,38 @@ func (msssdto MigrateSQLServerSQLDbTaskOutput) AsBasicMigrateSQLServerSQLDbTaskO
 	return &msssdto, true
 }
 
-// MigrateSQLServerSQLDbTaskOutputDatabaseLevel database level result for Sql Server to Azure Sql DB migration.
+// MigrateSQLServerSQLDbTaskOutputDatabaseLevel database level result for Sql Server to Azure Sql DB
+// migration.
 type MigrateSQLServerSQLDbTaskOutputDatabaseLevel struct {
-	// DatabaseName - Name of the item
+	// DatabaseName - READ-ONLY; Name of the item
 	DatabaseName *string `json:"databaseName,omitempty"`
-	// StartedOn - Migration start time
+	// StartedOn - READ-ONLY; Migration start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Migration end time
+	// EndedOn - READ-ONLY; Migration end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// State - Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
+	// State - READ-ONLY; Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
 	State MigrationState `json:"state,omitempty"`
-	// Stage - Migration stage that this database is in. Possible values include: 'DatabaseMigrationStageNone', 'DatabaseMigrationStageInitialize', 'DatabaseMigrationStageBackup', 'DatabaseMigrationStageFileCopy', 'DatabaseMigrationStageRestore', 'DatabaseMigrationStageCompleted'
+	// Stage - READ-ONLY; Migration stage that this database is in. Possible values include: 'DatabaseMigrationStageNone', 'DatabaseMigrationStageInitialize', 'DatabaseMigrationStageBackup', 'DatabaseMigrationStageFileCopy', 'DatabaseMigrationStageRestore', 'DatabaseMigrationStageCompleted'
 	Stage DatabaseMigrationStage `json:"stage,omitempty"`
-	// StatusMessage - Status message
+	// StatusMessage - READ-ONLY; Status message
 	StatusMessage *string `json:"statusMessage,omitempty"`
-	// Message - Migration progress message
+	// Message - READ-ONLY; Migration progress message
 	Message *string `json:"message,omitempty"`
-	// NumberOfObjects - Number of objects
+	// NumberOfObjects - READ-ONLY; Number of objects
 	NumberOfObjects *int64 `json:"numberOfObjects,omitempty"`
-	// NumberOfObjectsCompleted - Number of successfully completed objects
+	// NumberOfObjectsCompleted - READ-ONLY; Number of successfully completed objects
 	NumberOfObjectsCompleted *int64 `json:"numberOfObjectsCompleted,omitempty"`
-	// ErrorCount - Number of database/object errors.
+	// ErrorCount - READ-ONLY; Number of database/object errors.
 	ErrorCount *int64 `json:"errorCount,omitempty"`
-	// ErrorPrefix - Wildcard string prefix to use for querying all errors of the item
+	// ErrorPrefix - READ-ONLY; Wildcard string prefix to use for querying all errors of the item
 	ErrorPrefix *string `json:"errorPrefix,omitempty"`
-	// ResultPrefix - Wildcard string prefix to use for querying all sub-tem results of the item
+	// ResultPrefix - READ-ONLY; Wildcard string prefix to use for querying all sub-tem results of the item
 	ResultPrefix *string `json:"resultPrefix,omitempty"`
-	// ExceptionsAndWarnings - Migration exceptions and warnings.
+	// ExceptionsAndWarnings - READ-ONLY; Migration exceptions and warnings.
 	ExceptionsAndWarnings *[]ReportableException `json:"exceptionsAndWarnings,omitempty"`
-	// ObjectSummary - Summary of object results in the migration
+	// ObjectSummary - READ-ONLY; Summary of object results in the migration
 	ObjectSummary map[string]*DataItemMigrationSummaryResult `json:"objectSummary"`
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeMigrateSQLServerSQLDbTaskOutput', 'ResultTypeErrorOutput', 'ResultTypeTableLevelOutput', 'ResultTypeDatabaseLevelOutput', 'ResultTypeMigrationLevelOutput'
 	ResultType ResultType `json:"resultType,omitempty"`
@@ -1659,51 +1580,6 @@ type MigrateSQLServerSQLDbTaskOutputDatabaseLevel struct {
 func (msssdtodl MigrateSQLServerSQLDbTaskOutputDatabaseLevel) MarshalJSON() ([]byte, error) {
 	msssdtodl.ResultType = ResultTypeDatabaseLevelOutput
 	objectMap := make(map[string]interface{})
-	if msssdtodl.DatabaseName != nil {
-		objectMap["databaseName"] = msssdtodl.DatabaseName
-	}
-	if msssdtodl.StartedOn != nil {
-		objectMap["startedOn"] = msssdtodl.StartedOn
-	}
-	if msssdtodl.EndedOn != nil {
-		objectMap["endedOn"] = msssdtodl.EndedOn
-	}
-	if msssdtodl.State != "" {
-		objectMap["state"] = msssdtodl.State
-	}
-	if msssdtodl.Stage != "" {
-		objectMap["stage"] = msssdtodl.Stage
-	}
-	if msssdtodl.StatusMessage != nil {
-		objectMap["statusMessage"] = msssdtodl.StatusMessage
-	}
-	if msssdtodl.Message != nil {
-		objectMap["message"] = msssdtodl.Message
-	}
-	if msssdtodl.NumberOfObjects != nil {
-		objectMap["numberOfObjects"] = msssdtodl.NumberOfObjects
-	}
-	if msssdtodl.NumberOfObjectsCompleted != nil {
-		objectMap["numberOfObjectsCompleted"] = msssdtodl.NumberOfObjectsCompleted
-	}
-	if msssdtodl.ErrorCount != nil {
-		objectMap["errorCount"] = msssdtodl.ErrorCount
-	}
-	if msssdtodl.ErrorPrefix != nil {
-		objectMap["errorPrefix"] = msssdtodl.ErrorPrefix
-	}
-	if msssdtodl.ResultPrefix != nil {
-		objectMap["resultPrefix"] = msssdtodl.ResultPrefix
-	}
-	if msssdtodl.ExceptionsAndWarnings != nil {
-		objectMap["exceptionsAndWarnings"] = msssdtodl.ExceptionsAndWarnings
-	}
-	if msssdtodl.ObjectSummary != nil {
-		objectMap["objectSummary"] = msssdtodl.ObjectSummary
-	}
-	if msssdtodl.ID != nil {
-		objectMap["id"] = msssdtodl.ID
-	}
 	if msssdtodl.ResultType != "" {
 		objectMap["resultType"] = msssdtodl.ResultType
 	}
@@ -1742,9 +1618,9 @@ func (msssdtodl MigrateSQLServerSQLDbTaskOutputDatabaseLevel) AsBasicMigrateSQLS
 
 // MigrateSQLServerSQLDbTaskOutputError task errors for Sql Server to Azure Sql DB migration.
 type MigrateSQLServerSQLDbTaskOutputError struct {
-	// Error - Migration error
+	// Error - READ-ONLY; Migration error
 	Error *ReportableException `json:"error,omitempty"`
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeMigrateSQLServerSQLDbTaskOutput', 'ResultTypeErrorOutput', 'ResultTypeTableLevelOutput', 'ResultTypeDatabaseLevelOutput', 'ResultTypeMigrationLevelOutput'
 	ResultType ResultType `json:"resultType,omitempty"`
@@ -1754,12 +1630,6 @@ type MigrateSQLServerSQLDbTaskOutputError struct {
 func (msssdtoe MigrateSQLServerSQLDbTaskOutputError) MarshalJSON() ([]byte, error) {
 	msssdtoe.ResultType = ResultTypeErrorOutput
 	objectMap := make(map[string]interface{})
-	if msssdtoe.Error != nil {
-		objectMap["error"] = msssdtoe.Error
-	}
-	if msssdtoe.ID != nil {
-		objectMap["id"] = msssdtoe.ID
-	}
 	if msssdtoe.ResultType != "" {
 		objectMap["resultType"] = msssdtoe.ResultType
 	}
@@ -1796,37 +1666,38 @@ func (msssdtoe MigrateSQLServerSQLDbTaskOutputError) AsBasicMigrateSQLServerSQLD
 	return &msssdtoe, true
 }
 
-// MigrateSQLServerSQLDbTaskOutputMigrationLevel migration level result for Sql server to Azure Sql DB migration.
+// MigrateSQLServerSQLDbTaskOutputMigrationLevel migration level result for Sql server to Azure Sql DB
+// migration.
 type MigrateSQLServerSQLDbTaskOutputMigrationLevel struct {
-	// StartedOn - Migration start time
+	// StartedOn - READ-ONLY; Migration start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Migration end time
+	// EndedOn - READ-ONLY; Migration end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// DurationInSeconds - Duration of task execution in seconds.
+	// DurationInSeconds - READ-ONLY; Duration of task execution in seconds.
 	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
-	// Status - Current status of migration. Possible values include: 'MigrationStatusDefault', 'MigrationStatusConnecting', 'MigrationStatusSourceAndTargetSelected', 'MigrationStatusSelectLogins', 'MigrationStatusConfigured', 'MigrationStatusRunning', 'MigrationStatusError', 'MigrationStatusStopped', 'MigrationStatusCompleted', 'MigrationStatusCompletedWithWarnings'
+	// Status - READ-ONLY; Current status of migration. Possible values include: 'MigrationStatusDefault', 'MigrationStatusConnecting', 'MigrationStatusSourceAndTargetSelected', 'MigrationStatusSelectLogins', 'MigrationStatusConfigured', 'MigrationStatusRunning', 'MigrationStatusError', 'MigrationStatusStopped', 'MigrationStatusCompleted', 'MigrationStatusCompletedWithWarnings'
 	Status MigrationStatus `json:"status,omitempty"`
-	// StatusMessage - Migration status message
+	// StatusMessage - READ-ONLY; Migration status message
 	StatusMessage *string `json:"statusMessage,omitempty"`
-	// Message - Migration progress message
+	// Message - READ-ONLY; Migration progress message
 	Message *string `json:"message,omitempty"`
-	// Databases - Selected databases as a map from database name to database id
+	// Databases - READ-ONLY; Selected databases as a map from database name to database id
 	Databases map[string]*string `json:"databases"`
-	// DatabaseSummary - Summary of database results in the migration
+	// DatabaseSummary - READ-ONLY; Summary of database results in the migration
 	DatabaseSummary map[string]*DatabaseSummaryResult `json:"databaseSummary"`
 	// MigrationReportResult - Migration Report Result, provides unique url for downloading your migration report.
 	MigrationReportResult *MigrationReportResult `json:"migrationReportResult,omitempty"`
-	// SourceServerVersion - Source server version
+	// SourceServerVersion - READ-ONLY; Source server version
 	SourceServerVersion *string `json:"sourceServerVersion,omitempty"`
-	// SourceServerBrandVersion - Source server brand version
+	// SourceServerBrandVersion - READ-ONLY; Source server brand version
 	SourceServerBrandVersion *string `json:"sourceServerBrandVersion,omitempty"`
-	// TargetServerVersion - Target server version
+	// TargetServerVersion - READ-ONLY; Target server version
 	TargetServerVersion *string `json:"targetServerVersion,omitempty"`
-	// TargetServerBrandVersion - Target server brand version
+	// TargetServerBrandVersion - READ-ONLY; Target server brand version
 	TargetServerBrandVersion *string `json:"targetServerBrandVersion,omitempty"`
-	// ExceptionsAndWarnings - Migration exceptions and warnings.
+	// ExceptionsAndWarnings - READ-ONLY; Migration exceptions and warnings.
 	ExceptionsAndWarnings *[]ReportableException `json:"exceptionsAndWarnings,omitempty"`
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeMigrateSQLServerSQLDbTaskOutput', 'ResultTypeErrorOutput', 'ResultTypeTableLevelOutput', 'ResultTypeDatabaseLevelOutput', 'ResultTypeMigrationLevelOutput'
 	ResultType ResultType `json:"resultType,omitempty"`
@@ -1836,50 +1707,8 @@ type MigrateSQLServerSQLDbTaskOutputMigrationLevel struct {
 func (msssdtoml MigrateSQLServerSQLDbTaskOutputMigrationLevel) MarshalJSON() ([]byte, error) {
 	msssdtoml.ResultType = ResultTypeMigrationLevelOutput
 	objectMap := make(map[string]interface{})
-	if msssdtoml.StartedOn != nil {
-		objectMap["startedOn"] = msssdtoml.StartedOn
-	}
-	if msssdtoml.EndedOn != nil {
-		objectMap["endedOn"] = msssdtoml.EndedOn
-	}
-	if msssdtoml.DurationInSeconds != nil {
-		objectMap["durationInSeconds"] = msssdtoml.DurationInSeconds
-	}
-	if msssdtoml.Status != "" {
-		objectMap["status"] = msssdtoml.Status
-	}
-	if msssdtoml.StatusMessage != nil {
-		objectMap["statusMessage"] = msssdtoml.StatusMessage
-	}
-	if msssdtoml.Message != nil {
-		objectMap["message"] = msssdtoml.Message
-	}
-	if msssdtoml.Databases != nil {
-		objectMap["databases"] = msssdtoml.Databases
-	}
-	if msssdtoml.DatabaseSummary != nil {
-		objectMap["databaseSummary"] = msssdtoml.DatabaseSummary
-	}
 	if msssdtoml.MigrationReportResult != nil {
 		objectMap["migrationReportResult"] = msssdtoml.MigrationReportResult
-	}
-	if msssdtoml.SourceServerVersion != nil {
-		objectMap["sourceServerVersion"] = msssdtoml.SourceServerVersion
-	}
-	if msssdtoml.SourceServerBrandVersion != nil {
-		objectMap["sourceServerBrandVersion"] = msssdtoml.SourceServerBrandVersion
-	}
-	if msssdtoml.TargetServerVersion != nil {
-		objectMap["targetServerVersion"] = msssdtoml.TargetServerVersion
-	}
-	if msssdtoml.TargetServerBrandVersion != nil {
-		objectMap["targetServerBrandVersion"] = msssdtoml.TargetServerBrandVersion
-	}
-	if msssdtoml.ExceptionsAndWarnings != nil {
-		objectMap["exceptionsAndWarnings"] = msssdtoml.ExceptionsAndWarnings
-	}
-	if msssdtoml.ID != nil {
-		objectMap["id"] = msssdtoml.ID
 	}
 	if msssdtoml.ResultType != "" {
 		objectMap["resultType"] = msssdtoml.ResultType
@@ -1919,25 +1748,25 @@ func (msssdtoml MigrateSQLServerSQLDbTaskOutputMigrationLevel) AsBasicMigrateSQL
 
 // MigrateSQLServerSQLDbTaskOutputTableLevel table level result for Sql Server to Azure Sql DB migration.
 type MigrateSQLServerSQLDbTaskOutputTableLevel struct {
-	// ObjectName - Name of the item
+	// ObjectName - READ-ONLY; Name of the item
 	ObjectName *string `json:"objectName,omitempty"`
-	// StartedOn - Migration start time
+	// StartedOn - READ-ONLY; Migration start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Migration end time
+	// EndedOn - READ-ONLY; Migration end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// State - Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
+	// State - READ-ONLY; Current state of migration. Possible values include: 'MigrationStateNone', 'MigrationStateInProgress', 'MigrationStateFailed', 'MigrationStateWarning', 'MigrationStateCompleted', 'MigrationStateSkipped', 'MigrationStateStopped'
 	State MigrationState `json:"state,omitempty"`
-	// StatusMessage - Status message
+	// StatusMessage - READ-ONLY; Status message
 	StatusMessage *string `json:"statusMessage,omitempty"`
-	// ItemsCount - Number of items
+	// ItemsCount - READ-ONLY; Number of items
 	ItemsCount *int64 `json:"itemsCount,omitempty"`
-	// ItemsCompletedCount - Number of successfully completed items
+	// ItemsCompletedCount - READ-ONLY; Number of successfully completed items
 	ItemsCompletedCount *int64 `json:"itemsCompletedCount,omitempty"`
-	// ErrorPrefix - Wildcard string prefix to use for querying all errors of the item
+	// ErrorPrefix - READ-ONLY; Wildcard string prefix to use for querying all errors of the item
 	ErrorPrefix *string `json:"errorPrefix,omitempty"`
-	// ResultPrefix - Wildcard string prefix to use for querying all sub-tem results of the item
+	// ResultPrefix - READ-ONLY; Wildcard string prefix to use for querying all sub-tem results of the item
 	ResultPrefix *string `json:"resultPrefix,omitempty"`
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeMigrateSQLServerSQLDbTaskOutput', 'ResultTypeErrorOutput', 'ResultTypeTableLevelOutput', 'ResultTypeDatabaseLevelOutput', 'ResultTypeMigrationLevelOutput'
 	ResultType ResultType `json:"resultType,omitempty"`
@@ -1947,36 +1776,6 @@ type MigrateSQLServerSQLDbTaskOutputTableLevel struct {
 func (msssdtotl MigrateSQLServerSQLDbTaskOutputTableLevel) MarshalJSON() ([]byte, error) {
 	msssdtotl.ResultType = ResultTypeTableLevelOutput
 	objectMap := make(map[string]interface{})
-	if msssdtotl.ObjectName != nil {
-		objectMap["objectName"] = msssdtotl.ObjectName
-	}
-	if msssdtotl.StartedOn != nil {
-		objectMap["startedOn"] = msssdtotl.StartedOn
-	}
-	if msssdtotl.EndedOn != nil {
-		objectMap["endedOn"] = msssdtotl.EndedOn
-	}
-	if msssdtotl.State != "" {
-		objectMap["state"] = msssdtotl.State
-	}
-	if msssdtotl.StatusMessage != nil {
-		objectMap["statusMessage"] = msssdtotl.StatusMessage
-	}
-	if msssdtotl.ItemsCount != nil {
-		objectMap["itemsCount"] = msssdtotl.ItemsCount
-	}
-	if msssdtotl.ItemsCompletedCount != nil {
-		objectMap["itemsCompletedCount"] = msssdtotl.ItemsCompletedCount
-	}
-	if msssdtotl.ErrorPrefix != nil {
-		objectMap["errorPrefix"] = msssdtotl.ErrorPrefix
-	}
-	if msssdtotl.ResultPrefix != nil {
-		objectMap["resultPrefix"] = msssdtotl.ResultPrefix
-	}
-	if msssdtotl.ID != nil {
-		objectMap["id"] = msssdtotl.ID
-	}
 	if msssdtotl.ResultType != "" {
 		objectMap["resultType"] = msssdtotl.ResultType
 	}
@@ -2013,16 +1812,16 @@ func (msssdtotl MigrateSQLServerSQLDbTaskOutputTableLevel) AsBasicMigrateSQLServ
 	return &msssdtotl, true
 }
 
-// MigrateSQLServerSQLDbTaskProperties properties for the task that migrates on-prem SQL Server databases to Azure
-// SQL Database
+// MigrateSQLServerSQLDbTaskProperties properties for the task that migrates on-prem SQL Server databases
+// to Azure SQL Database
 type MigrateSQLServerSQLDbTaskProperties struct {
 	// Input - Task input
 	Input *MigrateSQLServerSQLDbTaskInput `json:"input,omitempty"`
-	// Output - Task output. This is ignored if submitted.
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
 	Output *[]BasicMigrateSQLServerSQLDbTaskOutput `json:"output,omitempty"`
-	// Errors - Array of errors. This is ignored if submitted.
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
 	Errors *[]ODataError `json:"errors,omitempty"`
-	// State - The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
 	State TaskState `json:"state,omitempty"`
 	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceSQLServer'
 	TaskType TaskType `json:"taskType,omitempty"`
@@ -2034,15 +1833,6 @@ func (msssdtp MigrateSQLServerSQLDbTaskProperties) MarshalJSON() ([]byte, error)
 	objectMap := make(map[string]interface{})
 	if msssdtp.Input != nil {
 		objectMap["input"] = msssdtp.Input
-	}
-	if msssdtp.Output != nil {
-		objectMap["output"] = msssdtp.Output
-	}
-	if msssdtp.Errors != nil {
-		objectMap["errors"] = msssdtp.Errors
-	}
-	if msssdtp.State != "" {
-		objectMap["state"] = msssdtp.State
 	}
 	if msssdtp.TaskType != "" {
 		objectMap["taskType"] = msssdtp.TaskType
@@ -2139,7 +1929,8 @@ func (msssdtp *MigrateSQLServerSQLDbTaskProperties) UnmarshalJSON(body []byte) e
 	return nil
 }
 
-// MigrationReportResult migration validation report result, contains the url for downloading the generated report.
+// MigrationReportResult migration validation report result, contains the url for downloading the generated
+// report.
 type MigrationReportResult struct {
 	// ID - Migration validation result identifier
 	ID *string `json:"id,omitempty"`
@@ -2149,51 +1940,51 @@ type MigrationReportResult struct {
 
 // MigrationTableMetadata metadata for tables selected in migration project
 type MigrationTableMetadata struct {
-	// SourceTableName - Source table name
+	// SourceTableName - READ-ONLY; Source table name
 	SourceTableName *string `json:"sourceTableName,omitempty"`
-	// TargetTableName - Target table name
+	// TargetTableName - READ-ONLY; Target table name
 	TargetTableName *string `json:"targetTableName,omitempty"`
 }
 
 // MigrationValidationDatabaseLevelResult database level validation results
 type MigrationValidationDatabaseLevelResult struct {
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
-	// MigrationID - Migration Identifier
+	// MigrationID - READ-ONLY; Migration Identifier
 	MigrationID *string `json:"migrationId,omitempty"`
-	// SourceDatabaseName - Name of the source database
+	// SourceDatabaseName - READ-ONLY; Name of the source database
 	SourceDatabaseName *string `json:"sourceDatabaseName,omitempty"`
-	// TargetDatabaseName - Name of the target database
+	// TargetDatabaseName - READ-ONLY; Name of the target database
 	TargetDatabaseName *string `json:"targetDatabaseName,omitempty"`
-	// StartedOn - Validation start time
+	// StartedOn - READ-ONLY; Validation start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Validation end time
+	// EndedOn - READ-ONLY; Validation end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// DataIntegrityValidationResult - Provides data integrity validation result between the source and target tables that are migrated.
+	// DataIntegrityValidationResult - READ-ONLY; Provides data integrity validation result between the source and target tables that are migrated.
 	DataIntegrityValidationResult *DataIntegrityValidationResult `json:"dataIntegrityValidationResult,omitempty"`
-	// SchemaValidationResult - Provides schema comparison result between source and target database
+	// SchemaValidationResult - READ-ONLY; Provides schema comparison result between source and target database
 	SchemaValidationResult *SchemaComparisonValidationResult `json:"schemaValidationResult,omitempty"`
-	// QueryAnalysisValidationResult - Results of some of the query execution result between source and target database
+	// QueryAnalysisValidationResult - READ-ONLY; Results of some of the query execution result between source and target database
 	QueryAnalysisValidationResult *QueryAnalysisValidationResult `json:"queryAnalysisValidationResult,omitempty"`
-	// Status - Current status of validation at the database level. Possible values include: 'ValidationStatusDefault', 'ValidationStatusNotStarted', 'ValidationStatusInitialized', 'ValidationStatusInProgress', 'ValidationStatusCompleted', 'ValidationStatusCompletedWithIssues', 'ValidationStatusFailed', 'ValidationStatusStopped'
+	// Status - READ-ONLY; Current status of validation at the database level. Possible values include: 'ValidationStatusDefault', 'ValidationStatusNotStarted', 'ValidationStatusInitialized', 'ValidationStatusInProgress', 'ValidationStatusCompleted', 'ValidationStatusCompletedWithIssues', 'ValidationStatusFailed', 'ValidationStatusStopped'
 	Status ValidationStatus `json:"status,omitempty"`
 }
 
 // MigrationValidationDatabaseSummaryResult migration Validation Database level summary result
 type MigrationValidationDatabaseSummaryResult struct {
-	// ID - Result identifier
+	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
-	// MigrationID - Migration Identifier
+	// MigrationID - READ-ONLY; Migration Identifier
 	MigrationID *string `json:"migrationId,omitempty"`
-	// SourceDatabaseName - Name of the source database
+	// SourceDatabaseName - READ-ONLY; Name of the source database
 	SourceDatabaseName *string `json:"sourceDatabaseName,omitempty"`
-	// TargetDatabaseName - Name of the target database
+	// TargetDatabaseName - READ-ONLY; Name of the target database
 	TargetDatabaseName *string `json:"targetDatabaseName,omitempty"`
-	// StartedOn - Validation start time
+	// StartedOn - READ-ONLY; Validation start time
 	StartedOn *date.Time `json:"startedOn,omitempty"`
-	// EndedOn - Validation end time
+	// EndedOn - READ-ONLY; Validation end time
 	EndedOn *date.Time `json:"endedOn,omitempty"`
-	// Status - Current status of validation at the database level. Possible values include: 'ValidationStatusDefault', 'ValidationStatusNotStarted', 'ValidationStatusInitialized', 'ValidationStatusInProgress', 'ValidationStatusCompleted', 'ValidationStatusCompletedWithIssues', 'ValidationStatusFailed', 'ValidationStatusStopped'
+	// Status - READ-ONLY; Current status of validation at the database level. Possible values include: 'ValidationStatusDefault', 'ValidationStatusNotStarted', 'ValidationStatusInitialized', 'ValidationStatusInProgress', 'ValidationStatusCompleted', 'ValidationStatusCompletedWithIssues', 'ValidationStatusFailed', 'ValidationStatusStopped'
 	Status ValidationStatus `json:"status,omitempty"`
 }
 
@@ -2209,30 +2000,21 @@ type MigrationValidationOptions struct {
 
 // MigrationValidationResult migration Validation Result
 type MigrationValidationResult struct {
-	// ID - Migration validation result identifier
+	// ID - READ-ONLY; Migration validation result identifier
 	ID *string `json:"id,omitempty"`
-	// MigrationID - Migration Identifier
+	// MigrationID - READ-ONLY; Migration Identifier
 	MigrationID *string `json:"migrationId,omitempty"`
 	// SummaryResults - Validation summary results for each database
 	SummaryResults map[string]*MigrationValidationDatabaseSummaryResult `json:"summaryResults"`
-	// Status - Current status of validation at the migration level. Status from the database validation result status will be aggregated here. Possible values include: 'ValidationStatusDefault', 'ValidationStatusNotStarted', 'ValidationStatusInitialized', 'ValidationStatusInProgress', 'ValidationStatusCompleted', 'ValidationStatusCompletedWithIssues', 'ValidationStatusFailed', 'ValidationStatusStopped'
+	// Status - READ-ONLY; Current status of validation at the migration level. Status from the database validation result status will be aggregated here. Possible values include: 'ValidationStatusDefault', 'ValidationStatusNotStarted', 'ValidationStatusInitialized', 'ValidationStatusInProgress', 'ValidationStatusCompleted', 'ValidationStatusCompletedWithIssues', 'ValidationStatusFailed', 'ValidationStatusStopped'
 	Status ValidationStatus `json:"status,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for MigrationValidationResult.
 func (mvr MigrationValidationResult) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if mvr.ID != nil {
-		objectMap["id"] = mvr.ID
-	}
-	if mvr.MigrationID != nil {
-		objectMap["migrationId"] = mvr.MigrationID
-	}
 	if mvr.SummaryResults != nil {
 		objectMap["summaryResults"] = mvr.SummaryResults
-	}
-	if mvr.Status != "" {
-		objectMap["status"] = mvr.Status
 	}
 	return json.Marshal(objectMap)
 }
@@ -2275,11 +2057,11 @@ type Project struct {
 	Tags map[string]*string `json:"tags"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -2294,15 +2076,6 @@ func (p Project) MarshalJSON() ([]byte, error) {
 	}
 	if p.Location != nil {
 		objectMap["location"] = p.Location
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
-	}
-	if p.Name != nil {
-		objectMap["name"] = p.Name
-	}
-	if p.Type != nil {
-		objectMap["type"] = p.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -2391,20 +2164,37 @@ type ProjectListIterator struct {
 	page ProjectListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProjectListIterator) Next() error {
+func (iter *ProjectListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProjectListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2426,6 +2216,11 @@ func (iter ProjectListIterator) Value() Project {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProjectListIterator type.
+func NewProjectListIterator(page ProjectListPage) ProjectListIterator {
+	return ProjectListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pl ProjectList) IsEmpty() bool {
 	return pl.Value == nil || len(*pl.Value) == 0
@@ -2433,11 +2228,11 @@ func (pl ProjectList) IsEmpty() bool {
 
 // projectListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pl ProjectList) projectListPreparer() (*http.Request, error) {
+func (pl ProjectList) projectListPreparer(ctx context.Context) (*http.Request, error) {
 	if pl.NextLink == nil || len(to.String(pl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pl.NextLink)))
@@ -2445,19 +2240,36 @@ func (pl ProjectList) projectListPreparer() (*http.Request, error) {
 
 // ProjectListPage contains a page of Project values.
 type ProjectListPage struct {
-	fn func(ProjectList) (ProjectList, error)
+	fn func(context.Context, ProjectList) (ProjectList, error)
 	pl ProjectList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProjectListPage) Next() error {
-	next, err := page.fn(page.pl)
+func (page *ProjectListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pl)
 	if err != nil {
 		return err
 	}
 	page.pl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProjectListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2478,23 +2290,28 @@ func (page ProjectListPage) Values() []Project {
 	return *page.pl.Value
 }
 
+// Creates a new instance of the ProjectListPage type.
+func NewProjectListPage(getNextPage func(context.Context, ProjectList) (ProjectList, error)) ProjectListPage {
+	return ProjectListPage{fn: getNextPage}
+}
+
 // ProjectMetadata common metadata for migration projects
 type ProjectMetadata struct {
-	// SourceServerName - Source server name
+	// SourceServerName - READ-ONLY; Source server name
 	SourceServerName *string `json:"sourceServerName,omitempty"`
-	// SourceServerPort - Source server port number
+	// SourceServerPort - READ-ONLY; Source server port number
 	SourceServerPort *string `json:"sourceServerPort,omitempty"`
-	// SourceUsername - Source username
+	// SourceUsername - READ-ONLY; Source username
 	SourceUsername *string `json:"sourceUsername,omitempty"`
-	// TargetServerName - Target server name
+	// TargetServerName - READ-ONLY; Target server name
 	TargetServerName *string `json:"targetServerName,omitempty"`
-	// TargetUsername - Target username
+	// TargetUsername - READ-ONLY; Target username
 	TargetUsername *string `json:"targetUsername,omitempty"`
-	// TargetDbName - Target database name
+	// TargetDbName - READ-ONLY; Target database name
 	TargetDbName *string `json:"targetDbName,omitempty"`
-	// TargetUsingWinAuth - Whether target connection is Windows authentication
+	// TargetUsingWinAuth - READ-ONLY; Whether target connection is Windows authentication
 	TargetUsingWinAuth *bool `json:"targetUsingWinAuth,omitempty"`
-	// SelectedMigrationTables - List of tables selected for migration
+	// SelectedMigrationTables - READ-ONLY; List of tables selected for migration
 	SelectedMigrationTables *[]MigrationTableMetadata `json:"selectedMigrationTables,omitempty"`
 }
 
@@ -2504,7 +2321,7 @@ type ProjectProperties struct {
 	SourcePlatform ProjectSourcePlatform `json:"sourcePlatform,omitempty"`
 	// TargetPlatform - Target platform for the project. Possible values include: 'ProjectTargetPlatformSQLDB', 'ProjectTargetPlatformUnknown'
 	TargetPlatform ProjectTargetPlatform `json:"targetPlatform,omitempty"`
-	// CreationTime - UTC Date and time when project was created
+	// CreationTime - READ-ONLY; UTC Date and time when project was created
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 	// SourceConnectionInfo - Information for connecting to source
 	SourceConnectionInfo BasicConnectionInfo `json:"sourceConnectionInfo,omitempty"`
@@ -2512,7 +2329,7 @@ type ProjectProperties struct {
 	TargetConnectionInfo BasicConnectionInfo `json:"targetConnectionInfo,omitempty"`
 	// DatabasesInfo - List of DatabaseInfo
 	DatabasesInfo *[]DatabaseInfo `json:"databasesInfo,omitempty"`
-	// ProvisioningState - The project's provisioning state. Possible values include: 'Deleting', 'Succeeded'
+	// ProvisioningState - READ-ONLY; The project's provisioning state. Possible values include: 'Deleting', 'Succeeded'
 	ProvisioningState ProjectProvisioningState `json:"provisioningState,omitempty"`
 }
 
@@ -2599,11 +2416,11 @@ type ProjectTask struct {
 	Etag *string `json:"etag,omitempty"`
 	// Properties - Custom task properties
 	Properties BasicProjectTaskProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -2679,9 +2496,9 @@ type BasicProjectTaskProperties interface {
 // ProjectTaskProperties base class for all types of DMS task properties. If task is not supported by current
 // client, this object is returned.
 type ProjectTaskProperties struct {
-	// Errors - Array of errors. This is ignored if submitted.
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
 	Errors *[]ODataError `json:"errors,omitempty"`
-	// State - The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
 	State TaskState `json:"state,omitempty"`
 	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceSQLServer'
 	TaskType TaskType `json:"taskType,omitempty"`
@@ -2740,12 +2557,6 @@ func unmarshalBasicProjectTaskPropertiesArray(body []byte) ([]BasicProjectTaskPr
 func (ptp ProjectTaskProperties) MarshalJSON() ([]byte, error) {
 	ptp.TaskType = TaskTypeUnknown
 	objectMap := make(map[string]interface{})
-	if ptp.Errors != nil {
-		objectMap["errors"] = ptp.Errors
-	}
-	if ptp.State != "" {
-		objectMap["state"] = ptp.State
-	}
 	if ptp.TaskType != "" {
 		objectMap["taskType"] = ptp.TaskType
 	}
@@ -2831,20 +2642,37 @@ type QuotaListIterator struct {
 	page QuotaListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *QuotaListIterator) Next() error {
+func (iter *QuotaListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QuotaListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *QuotaListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2866,6 +2694,11 @@ func (iter QuotaListIterator) Value() Quota {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the QuotaListIterator type.
+func NewQuotaListIterator(page QuotaListPage) QuotaListIterator {
+	return QuotaListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ql QuotaList) IsEmpty() bool {
 	return ql.Value == nil || len(*ql.Value) == 0
@@ -2873,11 +2706,11 @@ func (ql QuotaList) IsEmpty() bool {
 
 // quotaListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ql QuotaList) quotaListPreparer() (*http.Request, error) {
+func (ql QuotaList) quotaListPreparer(ctx context.Context) (*http.Request, error) {
 	if ql.NextLink == nil || len(to.String(ql.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ql.NextLink)))
@@ -2885,19 +2718,36 @@ func (ql QuotaList) quotaListPreparer() (*http.Request, error) {
 
 // QuotaListPage contains a page of Quota values.
 type QuotaListPage struct {
-	fn func(QuotaList) (QuotaList, error)
+	fn func(context.Context, QuotaList) (QuotaList, error)
 	ql QuotaList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *QuotaListPage) Next() error {
-	next, err := page.fn(page.ql)
+func (page *QuotaListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QuotaListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ql)
 	if err != nil {
 		return err
 	}
 	page.ql = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *QuotaListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2916,6 +2766,11 @@ func (page QuotaListPage) Values() []Quota {
 		return nil
 	}
 	return *page.ql.Value
+}
+
+// Creates a new instance of the QuotaListPage type.
+func NewQuotaListPage(getNextPage func(context.Context, QuotaList) (QuotaList, error)) QuotaListPage {
+	return QuotaListPage{fn: getNextPage}
 }
 
 // QuotaName the name of the quota
@@ -2942,79 +2797,79 @@ type ReportableException struct {
 
 // Resource ARM resource.
 type Resource struct {
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // ResourceSku describes an available DMS SKU.
 type ResourceSku struct {
-	// ResourceType - The type of resource the SKU applies to.
+	// ResourceType - READ-ONLY; The type of resource the SKU applies to.
 	ResourceType *string `json:"resourceType,omitempty"`
-	// Name - The name of SKU.
+	// Name - READ-ONLY; The name of SKU.
 	Name *string `json:"name,omitempty"`
-	// Tier - Specifies the tier of DMS in a scale set.
+	// Tier - READ-ONLY; Specifies the tier of DMS in a scale set.
 	Tier *string `json:"tier,omitempty"`
-	// Size - The Size of the SKU.
+	// Size - READ-ONLY; The Size of the SKU.
 	Size *string `json:"size,omitempty"`
-	// Family - The Family of this particular SKU.
+	// Family - READ-ONLY; The Family of this particular SKU.
 	Family *string `json:"family,omitempty"`
-	// Kind - The Kind of resources that are supported in this SKU.
+	// Kind - READ-ONLY; The Kind of resources that are supported in this SKU.
 	Kind *string `json:"kind,omitempty"`
-	// Capacity - Not used.
+	// Capacity - READ-ONLY; Not used.
 	Capacity *ResourceSkuCapacity `json:"capacity,omitempty"`
-	// Locations - The set of locations that the SKU is available.
+	// Locations - READ-ONLY; The set of locations that the SKU is available.
 	Locations *[]string `json:"locations,omitempty"`
-	// APIVersions - The api versions that support this SKU.
+	// APIVersions - READ-ONLY; The api versions that support this SKU.
 	APIVersions *[]string `json:"apiVersions,omitempty"`
-	// Costs - Metadata for retrieving price info.
+	// Costs - READ-ONLY; Metadata for retrieving price info.
 	Costs *[]ResourceSkuCosts `json:"costs,omitempty"`
-	// Capabilities - A name value pair to describe the capability.
+	// Capabilities - READ-ONLY; A name value pair to describe the capability.
 	Capabilities *[]ResourceSkuCapabilities `json:"capabilities,omitempty"`
-	// Restrictions - The restrictions because of which SKU cannot be used. This is empty if there are no restrictions.
+	// Restrictions - READ-ONLY; The restrictions because of which SKU cannot be used. This is empty if there are no restrictions.
 	Restrictions *[]ResourceSkuRestrictions `json:"restrictions,omitempty"`
 }
 
-// ResourceSkuCapabilities describes The SKU capabilites object.
+// ResourceSkuCapabilities describes The SKU capabilities object.
 type ResourceSkuCapabilities struct {
-	// Name - An invariant to describe the feature.
+	// Name - READ-ONLY; An invariant to describe the feature.
 	Name *string `json:"name,omitempty"`
-	// Value - An invariant if the feature is measured by quantity.
+	// Value - READ-ONLY; An invariant if the feature is measured by quantity.
 	Value *string `json:"value,omitempty"`
 }
 
 // ResourceSkuCapacity describes scaling information of a SKU.
 type ResourceSkuCapacity struct {
-	// Minimum - The minimum capacity.
+	// Minimum - READ-ONLY; The minimum capacity.
 	Minimum *int64 `json:"minimum,omitempty"`
-	// Maximum - The maximum capacity.
+	// Maximum - READ-ONLY; The maximum capacity.
 	Maximum *int64 `json:"maximum,omitempty"`
-	// Default - The default capacity.
+	// Default - READ-ONLY; The default capacity.
 	Default *int64 `json:"default,omitempty"`
-	// ScaleType - The scale type applicable to the SKU. Possible values include: 'ResourceSkuCapacityScaleTypeAutomatic', 'ResourceSkuCapacityScaleTypeManual', 'ResourceSkuCapacityScaleTypeNone'
+	// ScaleType - READ-ONLY; The scale type applicable to the SKU. Possible values include: 'ResourceSkuCapacityScaleTypeAutomatic', 'ResourceSkuCapacityScaleTypeManual', 'ResourceSkuCapacityScaleTypeNone'
 	ScaleType ResourceSkuCapacityScaleType `json:"scaleType,omitempty"`
 }
 
 // ResourceSkuCosts describes metadata for retrieving price info.
 type ResourceSkuCosts struct {
-	// MeterID - Used for querying price from commerce.
+	// MeterID - READ-ONLY; Used for querying price from commerce.
 	MeterID *string `json:"meterID,omitempty"`
-	// Quantity - The multiplier is needed to extend the base metered cost.
+	// Quantity - READ-ONLY; The multiplier is needed to extend the base metered cost.
 	Quantity *int64 `json:"quantity,omitempty"`
-	// ExtendedUnit - An invariant to show the extended unit.
+	// ExtendedUnit - READ-ONLY; An invariant to show the extended unit.
 	ExtendedUnit *string `json:"extendedUnit,omitempty"`
 }
 
 // ResourceSkuRestrictions describes scaling information of a SKU.
 type ResourceSkuRestrictions struct {
-	// Type - The type of restrictions. Possible values include: 'Location'
+	// Type - READ-ONLY; The type of restrictions. Possible values include: 'Location'
 	Type ResourceSkuRestrictionsType `json:"type,omitempty"`
-	// Values - The value of restrictions. If the restriction type is set to location. This would be different locations where the SKU is restricted.
+	// Values - READ-ONLY; The value of restrictions. If the restriction type is set to location. This would be different locations where the SKU is restricted.
 	Values *[]string `json:"values,omitempty"`
-	// ReasonCode - The reason code for restriction. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
+	// ReasonCode - READ-ONLY; The reason code for restriction. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
 	ReasonCode ResourceSkuRestrictionsReasonCode `json:"reasonCode,omitempty"`
 }
 
@@ -3033,20 +2888,37 @@ type ResourceSkusResultIterator struct {
 	page ResourceSkusResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ResourceSkusResultIterator) Next() error {
+func (iter *ResourceSkusResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ResourceSkusResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3068,6 +2940,11 @@ func (iter ResourceSkusResultIterator) Value() ResourceSku {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ResourceSkusResultIterator type.
+func NewResourceSkusResultIterator(page ResourceSkusResultPage) ResourceSkusResultIterator {
+	return ResourceSkusResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rsr ResourceSkusResult) IsEmpty() bool {
 	return rsr.Value == nil || len(*rsr.Value) == 0
@@ -3075,11 +2952,11 @@ func (rsr ResourceSkusResult) IsEmpty() bool {
 
 // resourceSkusResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rsr ResourceSkusResult) resourceSkusResultPreparer() (*http.Request, error) {
+func (rsr ResourceSkusResult) resourceSkusResultPreparer(ctx context.Context) (*http.Request, error) {
 	if rsr.NextLink == nil || len(to.String(rsr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rsr.NextLink)))
@@ -3087,19 +2964,36 @@ func (rsr ResourceSkusResult) resourceSkusResultPreparer() (*http.Request, error
 
 // ResourceSkusResultPage contains a page of ResourceSku values.
 type ResourceSkusResultPage struct {
-	fn  func(ResourceSkusResult) (ResourceSkusResult, error)
+	fn  func(context.Context, ResourceSkusResult) (ResourceSkusResult, error)
 	rsr ResourceSkusResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ResourceSkusResultPage) Next() error {
-	next, err := page.fn(page.rsr)
+func (page *ResourceSkusResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ResourceSkusResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rsr)
 	if err != nil {
 		return err
 	}
 	page.rsr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ResourceSkusResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3118,6 +3012,11 @@ func (page ResourceSkusResultPage) Values() []ResourceSku {
 		return nil
 	}
 	return *page.rsr.Value
+}
+
+// Creates a new instance of the ResourceSkusResultPage type.
+func NewResourceSkusResultPage(getNextPage func(context.Context, ResourceSkusResult) (ResourceSkusResult, error)) ResourceSkusResultPage {
+	return ResourceSkusResultPage{fn: getNextPage}
 }
 
 // SchemaComparisonValidationResult results for schema comparison between the source and target
@@ -3150,7 +3049,8 @@ func (scvr SchemaComparisonValidationResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// SchemaComparisonValidationResultType description about the errors happen while performing migration validation
+// SchemaComparisonValidationResultType description about the errors happen while performing migration
+// validation
 type SchemaComparisonValidationResultType struct {
 	// ObjectName - Name of the object that has the difference
 	ObjectName *string `json:"objectName,omitempty"`
@@ -3175,11 +3075,11 @@ type Service struct {
 	Tags map[string]*string `json:"tags"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -3203,15 +3103,6 @@ func (s Service) MarshalJSON() ([]byte, error) {
 	}
 	if s.Location != nil {
 		objectMap["location"] = s.Location
-	}
-	if s.ID != nil {
-		objectMap["id"] = s.ID
-	}
-	if s.Name != nil {
-		objectMap["name"] = s.Name
-	}
-	if s.Type != nil {
-		objectMap["type"] = s.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -3327,20 +3218,37 @@ type ServiceListIterator struct {
 	page ServiceListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceListIterator) Next() error {
+func (iter *ServiceListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3362,6 +3270,11 @@ func (iter ServiceListIterator) Value() Service {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceListIterator type.
+func NewServiceListIterator(page ServiceListPage) ServiceListIterator {
+	return ServiceListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (sl ServiceList) IsEmpty() bool {
 	return sl.Value == nil || len(*sl.Value) == 0
@@ -3369,11 +3282,11 @@ func (sl ServiceList) IsEmpty() bool {
 
 // serviceListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sl ServiceList) serviceListPreparer() (*http.Request, error) {
+func (sl ServiceList) serviceListPreparer(ctx context.Context) (*http.Request, error) {
 	if sl.NextLink == nil || len(to.String(sl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sl.NextLink)))
@@ -3381,19 +3294,36 @@ func (sl ServiceList) serviceListPreparer() (*http.Request, error) {
 
 // ServiceListPage contains a page of Service values.
 type ServiceListPage struct {
-	fn func(ServiceList) (ServiceList, error)
+	fn func(context.Context, ServiceList) (ServiceList, error)
 	sl ServiceList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceListPage) Next() error {
-	next, err := page.fn(page.sl)
+func (page *ServiceListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sl)
 	if err != nil {
 		return err
 	}
 	page.sl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3412,6 +3342,11 @@ func (page ServiceListPage) Values() []Service {
 		return nil
 	}
 	return *page.sl.Value
+}
+
+// Creates a new instance of the ServiceListPage type.
+func NewServiceListPage(getNextPage func(context.Context, ServiceList) (ServiceList, error)) ServiceListPage {
+	return ServiceListPage{fn: getNextPage}
 }
 
 // ServiceOperation description of an action supported by the Data Migration Service
@@ -3449,20 +3384,37 @@ type ServiceOperationListIterator struct {
 	page ServiceOperationListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceOperationListIterator) Next() error {
+func (iter *ServiceOperationListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceOperationListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceOperationListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3484,6 +3436,11 @@ func (iter ServiceOperationListIterator) Value() ServiceOperation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceOperationListIterator type.
+func NewServiceOperationListIterator(page ServiceOperationListPage) ServiceOperationListIterator {
+	return ServiceOperationListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (sol ServiceOperationList) IsEmpty() bool {
 	return sol.Value == nil || len(*sol.Value) == 0
@@ -3491,11 +3448,11 @@ func (sol ServiceOperationList) IsEmpty() bool {
 
 // serviceOperationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (sol ServiceOperationList) serviceOperationListPreparer() (*http.Request, error) {
+func (sol ServiceOperationList) serviceOperationListPreparer(ctx context.Context) (*http.Request, error) {
 	if sol.NextLink == nil || len(to.String(sol.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(sol.NextLink)))
@@ -3503,19 +3460,36 @@ func (sol ServiceOperationList) serviceOperationListPreparer() (*http.Request, e
 
 // ServiceOperationListPage contains a page of ServiceOperation values.
 type ServiceOperationListPage struct {
-	fn  func(ServiceOperationList) (ServiceOperationList, error)
+	fn  func(context.Context, ServiceOperationList) (ServiceOperationList, error)
 	sol ServiceOperationList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceOperationListPage) Next() error {
-	next, err := page.fn(page.sol)
+func (page *ServiceOperationListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceOperationListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sol)
 	if err != nil {
 		return err
 	}
 	page.sol = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceOperationListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3536,9 +3510,14 @@ func (page ServiceOperationListPage) Values() []ServiceOperation {
 	return *page.sol.Value
 }
 
+// Creates a new instance of the ServiceOperationListPage type.
+func NewServiceOperationListPage(getNextPage func(context.Context, ServiceOperationList) (ServiceOperationList, error)) ServiceOperationListPage {
+	return ServiceOperationListPage{fn: getNextPage}
+}
+
 // ServiceProperties properties of the Data Migration service instance
 type ServiceProperties struct {
-	// ProvisioningState - The resource's provisioning state. Possible values include: 'ServiceProvisioningStateAccepted', 'ServiceProvisioningStateDeleting', 'ServiceProvisioningStateDeploying', 'ServiceProvisioningStateStopped', 'ServiceProvisioningStateStopping', 'ServiceProvisioningStateStarting', 'ServiceProvisioningStateFailedToStart', 'ServiceProvisioningStateFailedToStop', 'ServiceProvisioningStateSucceeded', 'ServiceProvisioningStateFailed'
+	// ProvisioningState - READ-ONLY; The resource's provisioning state. Possible values include: 'ServiceProvisioningStateAccepted', 'ServiceProvisioningStateDeleting', 'ServiceProvisioningStateDeploying', 'ServiceProvisioningStateStopped', 'ServiceProvisioningStateStopping', 'ServiceProvisioningStateStarting', 'ServiceProvisioningStateFailedToStart', 'ServiceProvisioningStateFailedToStop', 'ServiceProvisioningStateSucceeded', 'ServiceProvisioningStateFailed'
 	ProvisioningState ServiceProvisioningState `json:"provisioningState,omitempty"`
 	// PublicKey - The public key of the service, used to encrypt secrets sent to the service
 	PublicKey *string `json:"publicKey,omitempty"`
@@ -3556,7 +3535,7 @@ type ServicesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServicesCreateOrUpdateFuture) Result(client ServicesClient) (s Service, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3575,7 +3554,8 @@ func (future *ServicesCreateOrUpdateFuture) Result(client ServicesClient) (s Ser
 	return
 }
 
-// ServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServicesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesDeleteFuture struct {
 	azure.Future
 }
@@ -3584,7 +3564,7 @@ type ServicesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServicesDeleteFuture) Result(client ServicesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3626,20 +3606,37 @@ type ServiceSkuListIterator struct {
 	page ServiceSkuListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ServiceSkuListIterator) Next() error {
+func (iter *ServiceSkuListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceSkuListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ServiceSkuListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3661,6 +3658,11 @@ func (iter ServiceSkuListIterator) Value() AvailableServiceSku {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ServiceSkuListIterator type.
+func NewServiceSkuListIterator(page ServiceSkuListPage) ServiceSkuListIterator {
+	return ServiceSkuListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ssl ServiceSkuList) IsEmpty() bool {
 	return ssl.Value == nil || len(*ssl.Value) == 0
@@ -3668,11 +3670,11 @@ func (ssl ServiceSkuList) IsEmpty() bool {
 
 // serviceSkuListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ssl ServiceSkuList) serviceSkuListPreparer() (*http.Request, error) {
+func (ssl ServiceSkuList) serviceSkuListPreparer(ctx context.Context) (*http.Request, error) {
 	if ssl.NextLink == nil || len(to.String(ssl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ssl.NextLink)))
@@ -3680,19 +3682,36 @@ func (ssl ServiceSkuList) serviceSkuListPreparer() (*http.Request, error) {
 
 // ServiceSkuListPage contains a page of AvailableServiceSku values.
 type ServiceSkuListPage struct {
-	fn  func(ServiceSkuList) (ServiceSkuList, error)
+	fn  func(context.Context, ServiceSkuList) (ServiceSkuList, error)
 	ssl ServiceSkuList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ServiceSkuListPage) Next() error {
-	next, err := page.fn(page.ssl)
+func (page *ServiceSkuListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceSkuListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ssl)
 	if err != nil {
 		return err
 	}
 	page.ssl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ServiceSkuListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3713,7 +3732,13 @@ func (page ServiceSkuListPage) Values() []AvailableServiceSku {
 	return *page.ssl.Value
 }
 
-// ServicesStartFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// Creates a new instance of the ServiceSkuListPage type.
+func NewServiceSkuListPage(getNextPage func(context.Context, ServiceSkuList) (ServiceSkuList, error)) ServiceSkuListPage {
+	return ServiceSkuListPage{fn: getNextPage}
+}
+
+// ServicesStartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesStartFuture struct {
 	azure.Future
 }
@@ -3722,7 +3747,7 @@ type ServicesStartFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServicesStartFuture) Result(client ServicesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesStartFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3744,7 +3769,7 @@ type ServicesStopFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServicesStopFuture) Result(client ServicesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesStopFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3770,7 +3795,8 @@ type ServiceStatusResponse struct {
 	SupportedTaskTypes *[]string `json:"supportedTaskTypes,omitempty"`
 }
 
-// ServicesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServicesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesUpdateFuture struct {
 	azure.Future
 }
@@ -3779,7 +3805,7 @@ type ServicesUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServicesUpdateFuture) Result(client ServicesClient) (s Service, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -3887,20 +3913,37 @@ type TaskListIterator struct {
 	page TaskListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *TaskListIterator) Next() error {
+func (iter *TaskListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TaskListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *TaskListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -3922,6 +3965,11 @@ func (iter TaskListIterator) Value() ProjectTask {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the TaskListIterator type.
+func NewTaskListIterator(page TaskListPage) TaskListIterator {
+	return TaskListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (tl TaskList) IsEmpty() bool {
 	return tl.Value == nil || len(*tl.Value) == 0
@@ -3929,11 +3977,11 @@ func (tl TaskList) IsEmpty() bool {
 
 // taskListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (tl TaskList) taskListPreparer() (*http.Request, error) {
+func (tl TaskList) taskListPreparer(ctx context.Context) (*http.Request, error) {
 	if tl.NextLink == nil || len(to.String(tl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(tl.NextLink)))
@@ -3941,19 +3989,36 @@ func (tl TaskList) taskListPreparer() (*http.Request, error) {
 
 // TaskListPage contains a page of ProjectTask values.
 type TaskListPage struct {
-	fn func(TaskList) (TaskList, error)
+	fn func(context.Context, TaskList) (TaskList, error)
 	tl TaskList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *TaskListPage) Next() error {
-	next, err := page.fn(page.tl)
+func (page *TaskListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TaskListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.tl)
 	if err != nil {
 		return err
 	}
 	page.tl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *TaskListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -3974,17 +4039,22 @@ func (page TaskListPage) Values() []ProjectTask {
 	return *page.tl.Value
 }
 
+// Creates a new instance of the TaskListPage type.
+func NewTaskListPage(getNextPage func(context.Context, TaskList) (TaskList, error)) TaskListPage {
+	return TaskListPage{fn: getNextPage}
+}
+
 // TrackedResource ARM tracked top level resource.
 type TrackedResource struct {
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -3996,15 +4066,6 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	}
 	if tr.Location != nil {
 		objectMap["location"] = tr.Location
-	}
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
 	}
 	return json.Marshal(objectMap)
 }

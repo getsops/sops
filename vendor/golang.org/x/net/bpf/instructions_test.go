@@ -64,14 +64,22 @@ var allInstructions = []Instruction{
 
 	NegateA{},
 
-	Jump{Skip: 10},
-	JumpIf{Cond: JumpEqual, Val: 42, SkipTrue: 8, SkipFalse: 9},
-	JumpIf{Cond: JumpNotEqual, Val: 42, SkipTrue: 8},
-	JumpIf{Cond: JumpLessThan, Val: 42, SkipTrue: 7},
-	JumpIf{Cond: JumpLessOrEqual, Val: 42, SkipTrue: 6},
-	JumpIf{Cond: JumpGreaterThan, Val: 42, SkipTrue: 4, SkipFalse: 5},
-	JumpIf{Cond: JumpGreaterOrEqual, Val: 42, SkipTrue: 3, SkipFalse: 4},
-	JumpIf{Cond: JumpBitsSet, Val: 42, SkipTrue: 2, SkipFalse: 3},
+	Jump{Skip: 17},
+	JumpIf{Cond: JumpEqual, Val: 42, SkipTrue: 15, SkipFalse: 16},
+	JumpIf{Cond: JumpNotEqual, Val: 42, SkipTrue: 15},
+	JumpIf{Cond: JumpLessThan, Val: 42, SkipTrue: 14},
+	JumpIf{Cond: JumpLessOrEqual, Val: 42, SkipTrue: 13},
+	JumpIf{Cond: JumpGreaterThan, Val: 42, SkipTrue: 11, SkipFalse: 12},
+	JumpIf{Cond: JumpGreaterOrEqual, Val: 42, SkipTrue: 10, SkipFalse: 11},
+	JumpIf{Cond: JumpBitsSet, Val: 42, SkipTrue: 9, SkipFalse: 10},
+
+	JumpIfX{Cond: JumpEqual, SkipTrue: 8, SkipFalse: 9},
+	JumpIfX{Cond: JumpNotEqual, SkipTrue: 8},
+	JumpIfX{Cond: JumpLessThan, SkipTrue: 7},
+	JumpIfX{Cond: JumpLessOrEqual, SkipTrue: 6},
+	JumpIfX{Cond: JumpGreaterThan, SkipTrue: 4, SkipFalse: 5},
+	JumpIfX{Cond: JumpGreaterOrEqual, SkipTrue: 3, SkipFalse: 4},
+	JumpIfX{Cond: JumpBitsSet, SkipTrue: 2, SkipFalse: 3},
 
 	TAX{},
 	TXA{},
@@ -487,7 +495,67 @@ func TestString(t *testing.T) {
 		},
 		{
 			instruction: JumpIf{Cond: 0xffff, Val: 42, SkipTrue: 1, SkipFalse: 2},
-			assembler:   "unknown instruction: bpf.JumpIf{Cond:0xffff, Val:0x2a, SkipTrue:0x1, SkipFalse:0x2}",
+			assembler:   "unknown JumpTest 0xffff",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpEqual, SkipTrue: 8, SkipFalse: 9},
+			assembler:   "jeq x,8,9",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpEqual, SkipTrue: 8},
+			assembler:   "jeq x,8",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpEqual, SkipFalse: 8},
+			assembler:   "jneq x,8",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpNotEqual, SkipTrue: 8},
+			assembler:   "jneq x,8",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpLessThan, SkipTrue: 7},
+			assembler:   "jlt x,7",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpLessOrEqual, SkipTrue: 6},
+			assembler:   "jle x,6",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpGreaterThan, SkipTrue: 4, SkipFalse: 5},
+			assembler:   "jgt x,4,5",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpGreaterThan, SkipTrue: 4},
+			assembler:   "jgt x,4",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpGreaterOrEqual, SkipTrue: 3, SkipFalse: 4},
+			assembler:   "jge x,3,4",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpGreaterOrEqual, SkipTrue: 3},
+			assembler:   "jge x,3",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpBitsSet, SkipTrue: 2, SkipFalse: 3},
+			assembler:   "jset x,2,3",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpBitsSet, SkipTrue: 2},
+			assembler:   "jset x,2",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpBitsNotSet, SkipTrue: 2, SkipFalse: 3},
+			assembler:   "jset x,3,2",
+		},
+		{
+			instruction: JumpIfX{Cond: JumpBitsNotSet, SkipTrue: 2},
+			assembler:   "jset x,0,2",
+		},
+		{
+			instruction: JumpIfX{Cond: 0xffff, SkipTrue: 1, SkipFalse: 2},
+			assembler:   "unknown JumpTest 0xffff",
 		},
 		{
 			instruction: TAX{},

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,20 +19,16 @@
 
 package consumption
 
-import original "github.com/Azure/azure-sdk-for-go/services/consumption/mgmt/2018-06-30/consumption"
+import (
+	"context"
 
-type AggregatedCostClient = original.AggregatedCostClient
-type BalancesClient = original.BalancesClient
-type BudgetsClient = original.BudgetsClient
+	original "github.com/Azure/azure-sdk-for-go/services/consumption/mgmt/2019-01-01/consumption"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type CostTagsClient = original.CostTagsClient
-type ForecastsClient = original.ForecastsClient
-type MarketplacesClient = original.MarketplacesClient
 type BillingFrequency = original.BillingFrequency
 
 const (
@@ -88,24 +84,32 @@ const (
 type TimeGrainType = original.TimeGrainType
 
 const (
-	TimeGrainTypeAnnually  TimeGrainType = original.TimeGrainTypeAnnually
-	TimeGrainTypeMonthly   TimeGrainType = original.TimeGrainTypeMonthly
-	TimeGrainTypeQuarterly TimeGrainType = original.TimeGrainTypeQuarterly
+	TimeGrainTypeAnnually       TimeGrainType = original.TimeGrainTypeAnnually
+	TimeGrainTypeBillingAnnual  TimeGrainType = original.TimeGrainTypeBillingAnnual
+	TimeGrainTypeBillingMonth   TimeGrainType = original.TimeGrainTypeBillingMonth
+	TimeGrainTypeBillingQuarter TimeGrainType = original.TimeGrainTypeBillingQuarter
+	TimeGrainTypeMonthly        TimeGrainType = original.TimeGrainTypeMonthly
+	TimeGrainTypeQuarterly      TimeGrainType = original.TimeGrainTypeQuarterly
 )
 
+type AggregatedCostClient = original.AggregatedCostClient
 type Balance = original.Balance
 type BalanceProperties = original.BalanceProperties
 type BalancePropertiesAdjustmentDetailsItem = original.BalancePropertiesAdjustmentDetailsItem
 type BalancePropertiesNewPurchasesDetailsItem = original.BalancePropertiesNewPurchasesDetailsItem
+type BalancesClient = original.BalancesClient
+type BaseClient = original.BaseClient
 type Budget = original.Budget
 type BudgetProperties = original.BudgetProperties
+type BudgetTimePeriod = original.BudgetTimePeriod
+type BudgetsClient = original.BudgetsClient
 type BudgetsListResult = original.BudgetsListResult
 type BudgetsListResultIterator = original.BudgetsListResultIterator
 type BudgetsListResultPage = original.BudgetsListResultPage
-type BudgetTimePeriod = original.BudgetTimePeriod
-type CostTag = original.CostTag
-type CostTagProperties = original.CostTagProperties
-type CostTagsModel = original.CostTagsModel
+type ChargeSummary = original.ChargeSummary
+type ChargeSummaryProperties = original.ChargeSummaryProperties
+type ChargesClient = original.ChargesClient
+type ChargesListResult = original.ChargesListResult
 type CurrentSpend = original.CurrentSpend
 type ErrorDetails = original.ErrorDetails
 type ErrorResponse = original.ErrorResponse
@@ -113,11 +117,13 @@ type Filters = original.Filters
 type Forecast = original.Forecast
 type ForecastProperties = original.ForecastProperties
 type ForecastPropertiesConfidenceLevelsItem = original.ForecastPropertiesConfidenceLevelsItem
+type ForecastsClient = original.ForecastsClient
 type ForecastsListResult = original.ForecastsListResult
 type ManagementGroupAggregatedCostProperties = original.ManagementGroupAggregatedCostProperties
 type ManagementGroupAggregatedCostResult = original.ManagementGroupAggregatedCostResult
 type Marketplace = original.Marketplace
 type MarketplaceProperties = original.MarketplaceProperties
+type MarketplacesClient = original.MarketplacesClient
 type MarketplacesListResult = original.MarketplacesListResult
 type MarketplacesListResultIterator = original.MarketplacesListResultIterator
 type MarketplacesListResultPage = original.MarketplacesListResultPage
@@ -128,6 +134,8 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
+type PriceSheetClient = original.PriceSheetClient
 type PriceSheetModel = original.PriceSheetModel
 type PriceSheetProperties = original.PriceSheetProperties
 type PriceSheetResult = original.PriceSheetResult
@@ -139,6 +147,7 @@ type ReservationDetailsListResultIterator = original.ReservationDetailsListResul
 type ReservationDetailsListResultPage = original.ReservationDetailsListResultPage
 type ReservationRecommendation = original.ReservationRecommendation
 type ReservationRecommendationProperties = original.ReservationRecommendationProperties
+type ReservationRecommendationsClient = original.ReservationRecommendationsClient
 type ReservationRecommendationsListResult = original.ReservationRecommendationsListResult
 type ReservationRecommendationsListResultIterator = original.ReservationRecommendationsListResultIterator
 type ReservationRecommendationsListResultPage = original.ReservationRecommendationsListResultPage
@@ -147,24 +156,24 @@ type ReservationSummariesListResultIterator = original.ReservationSummariesListR
 type ReservationSummariesListResultPage = original.ReservationSummariesListResultPage
 type ReservationSummary = original.ReservationSummary
 type ReservationSummaryProperties = original.ReservationSummaryProperties
+type ReservationsDetailsClient = original.ReservationsDetailsClient
+type ReservationsSummariesClient = original.ReservationsSummariesClient
 type Resource = original.Resource
 type ResourceAttributes = original.ResourceAttributes
 type Tag = original.Tag
 type TagProperties = original.TagProperties
+type TagsClient = original.TagsClient
 type TagsResult = original.TagsResult
 type UsageDetail = original.UsageDetail
 type UsageDetailProperties = original.UsageDetailProperties
+type UsageDetailsClient = original.UsageDetailsClient
 type UsageDetailsListResult = original.UsageDetailsListResult
 type UsageDetailsListResultIterator = original.UsageDetailsListResultIterator
 type UsageDetailsListResultPage = original.UsageDetailsListResultPage
-type OperationsClient = original.OperationsClient
-type PriceSheetClient = original.PriceSheetClient
-type ReservationRecommendationsClient = original.ReservationRecommendationsClient
-type ReservationsDetailsClient = original.ReservationsDetailsClient
-type ReservationsSummariesClient = original.ReservationsSummariesClient
-type TagsClient = original.TagsClient
-type UsageDetailsClient = original.UsageDetailsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAggregatedCostClient(subscriptionID string) AggregatedCostClient {
 	return original.NewAggregatedCostClient(subscriptionID)
 }
@@ -183,17 +192,17 @@ func NewBudgetsClient(subscriptionID string) BudgetsClient {
 func NewBudgetsClientWithBaseURI(baseURI string, subscriptionID string) BudgetsClient {
 	return original.NewBudgetsClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewBudgetsListResultIterator(page BudgetsListResultPage) BudgetsListResultIterator {
+	return original.NewBudgetsListResultIterator(page)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewBudgetsListResultPage(getNextPage func(context.Context, BudgetsListResult) (BudgetsListResult, error)) BudgetsListResultPage {
+	return original.NewBudgetsListResultPage(getNextPage)
 }
-func NewCostTagsClient(subscriptionID string) CostTagsClient {
-	return original.NewCostTagsClient(subscriptionID)
+func NewChargesClient(subscriptionID string) ChargesClient {
+	return original.NewChargesClient(subscriptionID)
 }
-func NewCostTagsClientWithBaseURI(baseURI string, subscriptionID string) CostTagsClient {
-	return original.NewCostTagsClientWithBaseURI(baseURI, subscriptionID)
+func NewChargesClientWithBaseURI(baseURI string, subscriptionID string) ChargesClient {
+	return original.NewChargesClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewForecastsClient(subscriptionID string) ForecastsClient {
 	return original.NewForecastsClient(subscriptionID)
@@ -207,29 +216,17 @@ func NewMarketplacesClient(subscriptionID string) MarketplacesClient {
 func NewMarketplacesClientWithBaseURI(baseURI string, subscriptionID string) MarketplacesClient {
 	return original.NewMarketplacesClientWithBaseURI(baseURI, subscriptionID)
 }
-func PossibleBillingFrequencyValues() []BillingFrequency {
-	return original.PossibleBillingFrequencyValues()
+func NewMarketplacesListResultIterator(page MarketplacesListResultPage) MarketplacesListResultIterator {
+	return original.NewMarketplacesListResultIterator(page)
 }
-func PossibleBoundValues() []Bound {
-	return original.PossibleBoundValues()
+func NewMarketplacesListResultPage(getNextPage func(context.Context, MarketplacesListResult) (MarketplacesListResult, error)) MarketplacesListResultPage {
+	return original.NewMarketplacesListResultPage(getNextPage)
 }
-func PossibleCategoryTypeValues() []CategoryType {
-	return original.PossibleCategoryTypeValues()
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
 }
-func PossibleChargeTypeValues() []ChargeType {
-	return original.PossibleChargeTypeValues()
-}
-func PossibleDatagrainValues() []Datagrain {
-	return original.PossibleDatagrainValues()
-}
-func PossibleGrainValues() []Grain {
-	return original.PossibleGrainValues()
-}
-func PossibleOperatorTypeValues() []OperatorType {
-	return original.PossibleOperatorTypeValues()
-}
-func PossibleTimeGrainTypeValues() []TimeGrainType {
-	return original.PossibleTimeGrainTypeValues()
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
@@ -243,11 +240,29 @@ func NewPriceSheetClient(subscriptionID string) PriceSheetClient {
 func NewPriceSheetClientWithBaseURI(baseURI string, subscriptionID string) PriceSheetClient {
 	return original.NewPriceSheetClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewReservationDetailsListResultIterator(page ReservationDetailsListResultPage) ReservationDetailsListResultIterator {
+	return original.NewReservationDetailsListResultIterator(page)
+}
+func NewReservationDetailsListResultPage(getNextPage func(context.Context, ReservationDetailsListResult) (ReservationDetailsListResult, error)) ReservationDetailsListResultPage {
+	return original.NewReservationDetailsListResultPage(getNextPage)
+}
 func NewReservationRecommendationsClient(subscriptionID string) ReservationRecommendationsClient {
 	return original.NewReservationRecommendationsClient(subscriptionID)
 }
 func NewReservationRecommendationsClientWithBaseURI(baseURI string, subscriptionID string) ReservationRecommendationsClient {
 	return original.NewReservationRecommendationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewReservationRecommendationsListResultIterator(page ReservationRecommendationsListResultPage) ReservationRecommendationsListResultIterator {
+	return original.NewReservationRecommendationsListResultIterator(page)
+}
+func NewReservationRecommendationsListResultPage(getNextPage func(context.Context, ReservationRecommendationsListResult) (ReservationRecommendationsListResult, error)) ReservationRecommendationsListResultPage {
+	return original.NewReservationRecommendationsListResultPage(getNextPage)
+}
+func NewReservationSummariesListResultIterator(page ReservationSummariesListResultPage) ReservationSummariesListResultIterator {
+	return original.NewReservationSummariesListResultIterator(page)
+}
+func NewReservationSummariesListResultPage(getNextPage func(context.Context, ReservationSummariesListResult) (ReservationSummariesListResult, error)) ReservationSummariesListResultPage {
+	return original.NewReservationSummariesListResultPage(getNextPage)
 }
 func NewReservationsDetailsClient(subscriptionID string) ReservationsDetailsClient {
 	return original.NewReservationsDetailsClient(subscriptionID)
@@ -272,6 +287,39 @@ func NewUsageDetailsClient(subscriptionID string) UsageDetailsClient {
 }
 func NewUsageDetailsClientWithBaseURI(baseURI string, subscriptionID string) UsageDetailsClient {
 	return original.NewUsageDetailsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewUsageDetailsListResultIterator(page UsageDetailsListResultPage) UsageDetailsListResultIterator {
+	return original.NewUsageDetailsListResultIterator(page)
+}
+func NewUsageDetailsListResultPage(getNextPage func(context.Context, UsageDetailsListResult) (UsageDetailsListResult, error)) UsageDetailsListResultPage {
+	return original.NewUsageDetailsListResultPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleBillingFrequencyValues() []BillingFrequency {
+	return original.PossibleBillingFrequencyValues()
+}
+func PossibleBoundValues() []Bound {
+	return original.PossibleBoundValues()
+}
+func PossibleCategoryTypeValues() []CategoryType {
+	return original.PossibleCategoryTypeValues()
+}
+func PossibleChargeTypeValues() []ChargeType {
+	return original.PossibleChargeTypeValues()
+}
+func PossibleDatagrainValues() []Datagrain {
+	return original.PossibleDatagrainValues()
+}
+func PossibleGrainValues() []Grain {
+	return original.PossibleGrainValues()
+}
+func PossibleOperatorTypeValues() []OperatorType {
+	return original.PossibleOperatorTypeValues()
+}
+func PossibleTimeGrainTypeValues() []TimeGrainType {
+	return original.PossibleTimeGrainTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

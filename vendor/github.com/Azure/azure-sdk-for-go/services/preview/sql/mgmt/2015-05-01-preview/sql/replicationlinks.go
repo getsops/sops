@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewReplicationLinksClientWithBaseURI(baseURI string, subscriptionID string)
 // databaseName - the name of the database that has the replication link to be dropped.
 // linkID - the ID of the replication link to be deleted.
 func (client ReplicationLinksClient) Delete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLinksClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, databaseName, linkID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksClient", "Delete", nil, "Failure preparing request")
@@ -120,6 +131,16 @@ func (client ReplicationLinksClient) DeleteResponder(resp *http.Response) (resul
 // databaseName - the name of the database that has the replication link to be failed over.
 // linkID - the ID of the replication link to be failed over.
 func (client ReplicationLinksClient) Failover(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string) (result ReplicationLinksFailoverFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLinksClient.Failover")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.FailoverPreparer(ctx, resourceGroupName, serverName, databaseName, linkID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksClient", "Failover", nil, "Failure preparing request")
@@ -167,10 +188,6 @@ func (client ReplicationLinksClient) FailoverSender(req *http.Request) (future R
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -196,6 +213,16 @@ func (client ReplicationLinksClient) FailoverResponder(resp *http.Response) (res
 // databaseName - the name of the database that has the replication link to be failed over.
 // linkID - the ID of the replication link to be failed over.
 func (client ReplicationLinksClient) FailoverAllowDataLoss(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string) (result ReplicationLinksFailoverAllowDataLossFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLinksClient.FailoverAllowDataLoss")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.FailoverAllowDataLossPreparer(ctx, resourceGroupName, serverName, databaseName, linkID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksClient", "FailoverAllowDataLoss", nil, "Failure preparing request")
@@ -243,10 +270,6 @@ func (client ReplicationLinksClient) FailoverAllowDataLossSender(req *http.Reque
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -271,6 +294,16 @@ func (client ReplicationLinksClient) FailoverAllowDataLossResponder(resp *http.R
 // databaseName - the name of the database to get the link for.
 // linkID - the replication link ID to be retrieved.
 func (client ReplicationLinksClient) Get(ctx context.Context, resourceGroupName string, serverName string, databaseName string, linkID string) (result ReplicationLink, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLinksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, databaseName, linkID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksClient", "Get", nil, "Failure preparing request")
@@ -342,6 +375,16 @@ func (client ReplicationLinksClient) GetResponder(resp *http.Response) (result R
 // serverName - the name of the server.
 // databaseName - the name of the database to retrieve links for.
 func (client ReplicationLinksClient) ListByDatabase(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result ReplicationLinkListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationLinksClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByDatabasePreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksClient", "ListByDatabase", nil, "Failure preparing request")

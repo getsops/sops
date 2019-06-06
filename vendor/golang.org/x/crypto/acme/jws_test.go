@@ -5,6 +5,7 @@
 package acme
 
 import (
+	"crypto"
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rsa"
@@ -13,6 +14,7 @@ import (
 	"encoding/json"
 	"encoding/pem"
 	"fmt"
+	"io"
 	"math/big"
 	"testing"
 )
@@ -238,6 +240,79 @@ func TestJWSEncodeJSONEC(t *testing.T) {
 		if head.JWK.Y != test.y {
 			t.Errorf("%d: head.JWK.Y = %q; want %q", i, head.JWK.Y, test.y)
 		}
+	}
+}
+
+type customTestSigner struct {
+	sig []byte
+	pub crypto.PublicKey
+}
+
+func (s *customTestSigner) Public() crypto.PublicKey { return s.pub }
+func (s *customTestSigner) Sign(io.Reader, []byte, crypto.SignerOpts) ([]byte, error) {
+	return s.sig, nil
+}
+
+func TestJWSEncodeJSONCustom(t *testing.T) {
+	claims := struct{ Msg string }{"hello"}
+	const (
+		// printf '{"Msg":"hello"}' | base64 | tr -d '=' | tr '/+' '_-'
+		payload = "eyJNc2ciOiJoZWxsbyJ9"
+		// printf 'testsig' | base64 | tr -d '='
+		testsig = "dGVzdHNpZw"
+
+		// printf '{"alg":"ES256","jwk":{"crv":"P-256","kty":"EC","x":<testKeyECPubY>,"y":<testKeyECPubY>,"nonce":"nonce"}' | \
+		// base64 | tr -d '=' | tr '/+' '_-'
+		es256phead = "eyJhbGciOiJFUzI1NiIsImp3ayI6eyJjcnYiOiJQLTI1NiIsImt0eSI6IkVDIiwieCI6IjVsaEV1" +
+			"ZzV4SzR4QkRaMm5BYmF4THRhTGl2ODVieEo3ZVBkMWRrTzIzSFEiLCJ5IjoiNGFpSzcyc0JlVUFH" +
+			"a3YwVGFMc213b2tZVVl5TnhHc1M1RU1JS3dzTklLayJ9LCJub25jZSI6Im5vbmNlIn0"
+
+		// {"alg":"RS256","jwk":{"e":"AQAB","kty":"RSA","n":"..."},"nonce":"nonce"}
+		rs256phead = "eyJhbGciOiJSUzI1NiIsImp3ayI6eyJlIjoiQVFBQiIsImt0eSI6" +
+			"IlJTQSIsIm4iOiI0eGdaM2VSUGt3b1J2eTdxZVJVYm1NRGUwVi14" +
+			"SDllV0xkdTBpaGVlTGxybUQybXFXWGZQOUllU0tBcGJuMzRnOFR1" +
+			"QVM5ZzV6aHE4RUxRM2ttanItS1Y4NkdBTWdJNlZBY0dscTNRcnpw" +
+			"VENmXzMwQWI3LXphd3JmUmFGT05hMUh3RXpQWTFLSG5HVmt4SmM4" +
+			"NWdOa3dZSTlTWTJSSFh0dmxuM3pzNXdJVE5yZG9zcUVYZWFJa1ZZ" +
+			"QkVoYmhOdTU0cHAza3hvNlR1V0xpOWU2cFhlV2V0RXdtbEJ3dFda" +
+			"bFBvaWIyajNUeExCa3NLWmZveUZ5ZWszODBtSGdKQXVtUV9JMmZq" +
+			"ajk4Xzk3bWszaWhPWTRBZ1ZkQ0RqMXpfR0NvWmtHNVJxN25iQ0d5" +
+			"b3N5S1d5RFgwMFpzLW5OcVZob0xlSXZYQzRubldkSk1aNnJvZ3h5" +
+			"UVEifSwibm9uY2UiOiJub25jZSJ9"
+	)
+
+	tt := []struct {
+		alg, phead string
+		pub        crypto.PublicKey
+	}{
+		{"RS256", rs256phead, testKey.Public()},
+		{"ES256", es256phead, testKeyEC.Public()},
+	}
+	for _, tc := range tt {
+		tc := tc
+		t.Run(tc.alg, func(t *testing.T) {
+			signer := &customTestSigner{
+				sig: []byte("testsig"),
+				pub: tc.pub,
+			}
+			b, err := jwsEncodeJSON(claims, signer, "nonce")
+			if err != nil {
+				t.Fatal(err)
+			}
+			var j struct{ Protected, Payload, Signature string }
+			if err := json.Unmarshal(b, &j); err != nil {
+				t.Fatal(err)
+			}
+			if j.Protected != tc.phead {
+				t.Errorf("j.Protected = %q\nwant %q", j.Protected, tc.phead)
+			}
+			if j.Payload != payload {
+				t.Errorf("j.Payload = %q\nwant %q", j.Payload, payload)
+			}
+			if j.Signature != testsig {
+				t.Errorf("j.Signature = %q\nwant %q", j.Signature, testsig)
+			}
+		})
 	}
 }
 

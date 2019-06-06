@@ -58,16 +58,16 @@ const (
 	//    * You tried to update an object (ByteMatchSet, IPSet, Rule, or WebACL)
 	//    using an action other than INSERT or DELETE.
 	//
-	//    * You tried to create a WebACL with a DefaultActionType other than ALLOW,
+	//    * You tried to create a WebACL with a DefaultAction Type other than ALLOW,
 	//    BLOCK, or COUNT.
 	//
 	//    * You tried to create a RateBasedRule with a RateKey value other than
 	//    IP.
 	//
-	//    * You tried to update a WebACL with a WafActionType other than ALLOW,
+	//    * You tried to update a WebACL with a WafAction Type other than ALLOW,
 	//    BLOCK, or COUNT.
 	//
-	//    * You tried to update a ByteMatchSet with a FieldToMatchType other than
+	//    * You tried to update a ByteMatchSet with a FieldToMatch Type other than
 	//    HEADER, METHOD, QUERY_STRING, URI, or BODY.
 	//
 	//    * You tried to update a ByteMatchSet with a Field of HEADER but no value
@@ -115,7 +115,7 @@ const (
 	//
 	// The operation exceeds a resource limit, for example, the maximum number of
 	// WebACL objects that you can create for an AWS account. For more information,
-	// see Limits (http://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
+	// see Limits (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
 	// in the AWS WAF Developer Guide.
 	ErrCodeLimitsExceededException = "WAFLimitsExceededException"
 
@@ -171,6 +171,19 @@ const (
 	//
 	//    * You tried to delete a Rule that is still referenced by a WebACL.
 	ErrCodeReferencedItemException = "WAFReferencedItemException"
+
+	// ErrCodeServiceLinkedRoleErrorException for service response error code
+	// "WAFServiceLinkedRoleErrorException".
+	//
+	// AWS WAF is not able to access the service linked role. This can be caused
+	// by a previous PutLoggingConfiguration request, which can lock the service
+	// linked role for about 20 seconds. Please try your request again. The service
+	// linked role can also be locked by a previous DeleteServiceLinkedRole request,
+	// which can lock the role for 15 minutes or more. If you recently made a DeleteServiceLinkedRole,
+	// wait at least 15 minutes and try the request again. If you receive this same
+	// exception again, you will have to wait additional time until the role is
+	// unlocked.
+	ErrCodeServiceLinkedRoleErrorException = "WAFServiceLinkedRoleErrorException"
 
 	// ErrCodeStaleDataException for service response error code
 	// "WAFStaleDataException".

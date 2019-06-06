@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewVirtualNetworkClientWithBaseURI(baseURI string, subscriptionID string) V
 // labName - the name of the lab.
 // name - the name of the virtual network.
 func (client VirtualNetworkClient) CreateOrUpdateResource(ctx context.Context, resourceGroupName string, labName string, name string, virtualNetwork VirtualNetwork) (result VirtualNetworkCreateOrUpdateResourceFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkClient.CreateOrUpdateResource")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdateResourcePreparer(ctx, resourceGroupName, labName, name, virtualNetwork)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualNetworkClient", "CreateOrUpdateResource", nil, "Failure preparing request")
@@ -93,10 +104,6 @@ func (client VirtualNetworkClient) CreateOrUpdateResourceSender(req *http.Reques
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -120,6 +127,16 @@ func (client VirtualNetworkClient) CreateOrUpdateResourceResponder(resp *http.Re
 // labName - the name of the lab.
 // name - the name of the virtual network.
 func (client VirtualNetworkClient) DeleteResource(ctx context.Context, resourceGroupName string, labName string, name string) (result VirtualNetworkDeleteResourceFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkClient.DeleteResource")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualNetworkClient", "DeleteResource", nil, "Failure preparing request")
@@ -166,10 +183,6 @@ func (client VirtualNetworkClient) DeleteResourceSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -192,6 +205,16 @@ func (client VirtualNetworkClient) DeleteResourceResponder(resp *http.Response) 
 // labName - the name of the lab.
 // name - the name of the virtual network.
 func (client VirtualNetworkClient) GetResource(ctx context.Context, resourceGroupName string, labName string, name string) (result VirtualNetwork, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkClient.GetResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualNetworkClient", "GetResource", nil, "Failure preparing request")
@@ -261,6 +284,16 @@ func (client VirtualNetworkClient) GetResourceResponder(resp *http.Response) (re
 // labName - the name of the lab.
 // filter - the filter to apply on the operation.
 func (client VirtualNetworkClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationVirtualNetworkPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcvn.Response.Response != nil {
+				sc = result.rwcvn.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderBy)
 	if err != nil {
@@ -334,8 +367,8 @@ func (client VirtualNetworkClient) ListResponder(resp *http.Response) (result Re
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client VirtualNetworkClient) listNextResults(lastResults ResponseWithContinuationVirtualNetwork) (result ResponseWithContinuationVirtualNetwork, err error) {
-	req, err := lastResults.responseWithContinuationVirtualNetworkPreparer()
+func (client VirtualNetworkClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationVirtualNetwork) (result ResponseWithContinuationVirtualNetwork, err error) {
+	req, err := lastResults.responseWithContinuationVirtualNetworkPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.VirtualNetworkClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -356,6 +389,16 @@ func (client VirtualNetworkClient) listNextResults(lastResults ResponseWithConti
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VirtualNetworkClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationVirtualNetworkIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderBy)
 	return
 }
@@ -366,6 +409,16 @@ func (client VirtualNetworkClient) ListComplete(ctx context.Context, resourceGro
 // labName - the name of the lab.
 // name - the name of the virtual network.
 func (client VirtualNetworkClient) PatchResource(ctx context.Context, resourceGroupName string, labName string, name string, virtualNetwork VirtualNetwork) (result VirtualNetwork, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkClient.PatchResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchResourcePreparer(ctx, resourceGroupName, labName, name, virtualNetwork)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualNetworkClient", "PatchResource", nil, "Failure preparing request")

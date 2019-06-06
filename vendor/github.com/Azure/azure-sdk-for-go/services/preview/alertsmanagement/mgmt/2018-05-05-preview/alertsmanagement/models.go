@@ -18,12 +18,17 @@ package alertsmanagement
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/alertsmanagement/mgmt/2018-05-05-preview/alertsmanagement"
 
 // AlertModificationEvent enumerates the values for alert modification event.
 type AlertModificationEvent string
@@ -443,20 +448,37 @@ type AlertsListIterator struct {
 	page AlertsListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AlertsListIterator) Next() error {
+func (iter *AlertsListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AlertsListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -485,11 +507,11 @@ func (al AlertsList) IsEmpty() bool {
 
 // alertsListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (al AlertsList) alertsListPreparer() (*http.Request, error) {
+func (al AlertsList) alertsListPreparer(ctx context.Context) (*http.Request, error) {
 	if al.NextLink == nil || len(to.String(al.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(al.NextLink)))
@@ -497,19 +519,36 @@ func (al AlertsList) alertsListPreparer() (*http.Request, error) {
 
 // AlertsListPage contains a page of Alert values.
 type AlertsListPage struct {
-	fn func(AlertsList) (AlertsList, error)
+	fn func(context.Context, AlertsList) (AlertsList, error)
 	al AlertsList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AlertsListPage) Next() error {
-	next, err := page.fn(page.al)
+func (page *AlertsListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.al)
 	if err != nil {
 		return err
 	}
 	page.al = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AlertsListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -665,7 +704,8 @@ type AlertsSummaryBySeverityAndMonitorCondition struct {
 	Sev4 *AlertsSummaryBySeverityAndMonitorConditionSev4 `json:"sev4,omitempty"`
 }
 
-// AlertsSummaryBySeverityAndMonitorConditionSev0 summary of alerts by monitor condition with severity 'Sev0'
+// AlertsSummaryBySeverityAndMonitorConditionSev0 summary of alerts by monitor condition with severity
+// 'Sev0'
 type AlertsSummaryBySeverityAndMonitorConditionSev0 struct {
 	// Fired - Count of alerts with monitorCondition 'Fired'
 	Fired *int32 `json:"fired,omitempty"`
@@ -673,7 +713,8 @@ type AlertsSummaryBySeverityAndMonitorConditionSev0 struct {
 	Resolved *int32 `json:"resolved,omitempty"`
 }
 
-// AlertsSummaryBySeverityAndMonitorConditionSev1 summary of alerts by monitor condition with severity 'Sev1'
+// AlertsSummaryBySeverityAndMonitorConditionSev1 summary of alerts by monitor condition with severity
+// 'Sev1'
 type AlertsSummaryBySeverityAndMonitorConditionSev1 struct {
 	// Fired - Count of alerts with monitorCondition 'Fired'
 	Fired *int32 `json:"fired,omitempty"`
@@ -681,7 +722,8 @@ type AlertsSummaryBySeverityAndMonitorConditionSev1 struct {
 	Resolved *int32 `json:"resolved,omitempty"`
 }
 
-// AlertsSummaryBySeverityAndMonitorConditionSev2 summary of alerts by monitor condition with severity 'Sev2'
+// AlertsSummaryBySeverityAndMonitorConditionSev2 summary of alerts by monitor condition with severity
+// 'Sev2'
 type AlertsSummaryBySeverityAndMonitorConditionSev2 struct {
 	// Fired - Count of alerts with monitorCondition 'Fired'
 	Fired *int32 `json:"fired,omitempty"`
@@ -689,7 +731,8 @@ type AlertsSummaryBySeverityAndMonitorConditionSev2 struct {
 	Resolved *int32 `json:"resolved,omitempty"`
 }
 
-// AlertsSummaryBySeverityAndMonitorConditionSev3 summary of alerts by monitor condition with severity 'Sev3'
+// AlertsSummaryBySeverityAndMonitorConditionSev3 summary of alerts by monitor condition with severity
+// 'Sev3'
 type AlertsSummaryBySeverityAndMonitorConditionSev3 struct {
 	// Fired - Count of alerts with monitorCondition 'Fired'
 	Fired *int32 `json:"fired,omitempty"`
@@ -697,7 +740,8 @@ type AlertsSummaryBySeverityAndMonitorConditionSev3 struct {
 	Resolved *int32 `json:"resolved,omitempty"`
 }
 
-// AlertsSummaryBySeverityAndMonitorConditionSev4 summary of alerts by monitor condition with severity 'Sev4'
+// AlertsSummaryBySeverityAndMonitorConditionSev4 summary of alerts by monitor condition with severity
+// 'Sev4'
 type AlertsSummaryBySeverityAndMonitorConditionSev4 struct {
 	// Fired - Count of alerts with monitorCondition 'Fired'
 	Fired *int32 `json:"fired,omitempty"`
@@ -779,7 +823,8 @@ type AlertsSummaryPropertiesSummaryBySeverity struct {
 	Sev4 *AlertsSummaryPropertiesSummaryBySeveritySev4 `json:"sev4,omitempty"`
 }
 
-// AlertsSummaryPropertiesSummaryBySeverityAndMonitorCondition summary of alerts by severity and monitor condition
+// AlertsSummaryPropertiesSummaryBySeverityAndMonitorCondition summary of alerts by severity and monitor
+// condition
 type AlertsSummaryPropertiesSummaryBySeverityAndMonitorCondition struct {
 	// Sev0 - Summary of alerts by monitor condition with severity 'Sev0'
 	Sev0 *AlertsSummaryBySeverityAndMonitorConditionSev0 `json:"sev0,omitempty"`
@@ -905,20 +950,37 @@ type OperationsListIterator struct {
 	page OperationsListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationsListIterator) Next() error {
+func (iter *OperationsListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationsListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -947,11 +1009,11 @@ func (ol OperationsList) IsEmpty() bool {
 
 // operationsListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ol OperationsList) operationsListPreparer() (*http.Request, error) {
+func (ol OperationsList) operationsListPreparer(ctx context.Context) (*http.Request, error) {
 	if ol.NextLink == nil || len(to.String(ol.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ol.NextLink)))
@@ -959,19 +1021,36 @@ func (ol OperationsList) operationsListPreparer() (*http.Request, error) {
 
 // OperationsListPage contains a page of Operation values.
 type OperationsListPage struct {
-	fn func(OperationsList) (OperationsList, error)
+	fn func(context.Context, OperationsList) (OperationsList, error)
 	ol OperationsList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationsListPage) Next() error {
-	next, err := page.fn(page.ol)
+func (page *OperationsListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ol)
 	if err != nil {
 		return err
 	}
 	page.ol = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationsListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.

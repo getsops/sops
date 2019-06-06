@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package analysisservices
 
-import original "github.com/Azure/azure-sdk-for-go/services/analysisservices/mgmt/2017-08-01/analysisservices"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/analysisservices/mgmt/2017-08-01/analysisservices"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type ConnectionMode = original.ConnectionMode
 
 const (
@@ -81,6 +84,7 @@ const (
 	Live Status = original.Live
 )
 
+type BaseClient = original.BaseClient
 type CheckServerNameAvailabilityParameters = original.CheckServerNameAvailabilityParameters
 type CheckServerNameAvailabilityResult = original.CheckServerNameAvailabilityResult
 type ErrorResponse = original.ErrorResponse
@@ -96,27 +100,45 @@ type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
 type OperationStatus = original.OperationStatus
+type OperationsClient = original.OperationsClient
 type Resource = original.Resource
 type ResourceSku = original.ResourceSku
 type Server = original.Server
 type ServerAdministrators = original.ServerAdministrators
 type ServerMutableProperties = original.ServerMutableProperties
 type ServerProperties = original.ServerProperties
+type ServerUpdateParameters = original.ServerUpdateParameters
 type Servers = original.Servers
+type ServersClient = original.ServersClient
 type ServersCreateFuture = original.ServersCreateFuture
 type ServersDeleteFuture = original.ServersDeleteFuture
 type ServersResumeFuture = original.ServersResumeFuture
 type ServersSuspendFuture = original.ServersSuspendFuture
 type ServersUpdateFuture = original.ServersUpdateFuture
-type ServerUpdateParameters = original.ServerUpdateParameters
 type SkuDetailsForExistingResource = original.SkuDetailsForExistingResource
 type SkuEnumerationForExistingResourceResult = original.SkuEnumerationForExistingResourceResult
 type SkuEnumerationForNewResourceResult = original.SkuEnumerationForNewResourceResult
-type OperationsClient = original.OperationsClient
-type ServersClient = original.ServersClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewServersClient(subscriptionID string) ServersClient {
+	return original.NewServersClient(subscriptionID)
+}
+func NewServersClientWithBaseURI(baseURI string, subscriptionID string) ServersClient {
+	return original.NewServersClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -135,18 +157,6 @@ func PossibleStateValues() []State {
 }
 func PossibleStatusValues() []Status {
 	return original.PossibleStatusValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewServersClient(subscriptionID string) ServersClient {
-	return original.NewServersClient(subscriptionID)
-}
-func NewServersClientWithBaseURI(baseURI string, subscriptionID string) ServersClient {
-	return original.NewServersClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

@@ -10,7 +10,6 @@
     "serviceId":"Kinesis Analytics",
     "signatureVersion":"v4",
     "targetPrefix":"KinesisAnalytics_20150814",
-    "timestampFormat":"unixTimestamp",
     "uid":"kinesisanalytics-2015-08-14"
   },
   "operations":{
@@ -26,7 +25,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "AddApplicationInput":{
@@ -42,7 +42,8 @@
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
         {"shape":"ConcurrentModificationException"},
-        {"shape":"CodeValidationException"}
+        {"shape":"CodeValidationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "AddApplicationInputProcessingConfiguration":{
@@ -57,7 +58,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "AddApplicationOutput":{
@@ -72,7 +74,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "AddApplicationReferenceDataSource":{
@@ -87,7 +90,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "CreateApplication":{
@@ -102,7 +106,9 @@
         {"shape":"CodeValidationException"},
         {"shape":"ResourceInUseException"},
         {"shape":"LimitExceededException"},
-        {"shape":"InvalidArgumentException"}
+        {"shape":"InvalidArgumentException"},
+        {"shape":"TooManyTagsException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "DeleteApplication":{
@@ -116,7 +122,8 @@
       "errors":[
         {"shape":"ConcurrentModificationException"},
         {"shape":"ResourceNotFoundException"},
-        {"shape":"ResourceInUseException"}
+        {"shape":"ResourceInUseException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "DeleteApplicationCloudWatchLoggingOption":{
@@ -131,7 +138,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "DeleteApplicationInputProcessingConfiguration":{
@@ -146,7 +154,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "DeleteApplicationOutput":{
@@ -161,7 +170,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "DeleteApplicationReferenceDataSource":{
@@ -176,7 +186,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "DescribeApplication":{
@@ -188,7 +199,8 @@
       "input":{"shape":"DescribeApplicationRequest"},
       "output":{"shape":"DescribeApplicationResponse"},
       "errors":[
-        {"shape":"ResourceNotFoundException"}
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "DiscoverInputSchema":{
@@ -215,6 +227,20 @@
       "input":{"shape":"ListApplicationsRequest"},
       "output":{"shape":"ListApplicationsResponse"}
     },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
     "StartApplication":{
       "name":"StartApplication",
       "http":{
@@ -227,7 +253,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"InvalidApplicationConfigurationException"}
+        {"shape":"InvalidApplicationConfigurationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     },
     "StopApplication":{
@@ -240,7 +267,40 @@
       "output":{"shape":"StopApplicationResponse"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
-        {"shape":"ResourceInUseException"}
+        {"shape":"ResourceInUseException"},
+        {"shape":"UnsupportedOperationException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"TooManyTagsException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"TooManyTagsException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "UpdateApplication":{
@@ -256,7 +316,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ConcurrentModificationException"}
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"UnsupportedOperationException"}
       ]
     }
   },
@@ -355,7 +416,7 @@
     },
     "ApplicationCode":{
       "type":"string",
-      "max":51200,
+      "max":102400,
       "min":0
     },
     "ApplicationDescription":{
@@ -520,7 +581,8 @@
         "Inputs":{"shape":"Inputs"},
         "Outputs":{"shape":"Outputs"},
         "CloudWatchLoggingOptions":{"shape":"CloudWatchLoggingOptions"},
-        "ApplicationCode":{"shape":"ApplicationCode"}
+        "ApplicationCode":{"shape":"ApplicationCode"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreateApplicationResponse":{
@@ -634,6 +696,7 @@
     },
     "DestinationSchema":{
       "type":"structure",
+      "required":["RecordFormatType"],
       "members":{
         "RecordFormatType":{"shape":"RecordFormatType"}
       }
@@ -672,8 +735,7 @@
     "InAppStreamName":{
       "type":"string",
       "max":32,
-      "min":1,
-      "pattern":"[a-zA-Z][a-zA-Z0-9_]+"
+      "min":1
     },
     "InAppStreamNames":{
       "type":"list",
@@ -682,8 +744,7 @@
     "InAppTableName":{
       "type":"string",
       "max":32,
-      "min":1,
-      "pattern":"[a-zA-Z][a-zA-Z0-9_]+"
+      "min":1
     },
     "Input":{
       "type":"structure",
@@ -859,6 +920,12 @@
         "RecordRowPath":{"shape":"RecordRowPath"}
       }
     },
+    "KinesisAnalyticsARN":{
+      "type":"string",
+      "max":2048,
+      "min":1,
+      "pattern":"arn:aws:kinesisanalytics:[a-z]{2}-[a-z]+-\\d{1}+:\\d{12}+:application/[a-zA-Z0-9_.-]{1,128}"
+    },
     "KinesisFirehoseInput":{
       "type":"structure",
       "required":[
@@ -1014,6 +1081,19 @@
         "HasMoreApplications":{"shape":"BooleanObject"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["ResourceARN"],
+      "members":{
+        "ResourceARN":{"shape":"KinesisAnalyticsARN"}
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"Tags"}
+      }
+    },
     "LogStreamARN":{
       "type":"string",
       "max":2048,
@@ -1112,10 +1192,7 @@
       "min":1
     },
     "RecordColumnMapping":{"type":"string"},
-    "RecordColumnName":{
-      "type":"string",
-      "pattern":"[a-zA-Z_][a-zA-Z0-9_]*"
-    },
+    "RecordColumnName":{"type":"string"},
     "RecordColumnSqlType":{
       "type":"string",
       "min":1
@@ -1325,7 +1402,60 @@
       "members":{
       }
     },
+    "Tag":{
+      "type":"structure",
+      "required":["Key"],
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagKeys":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "max":200,
+      "min":1
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "Tags"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"KinesisAnalyticsARN"},
+        "Tags":{"shape":"Tags"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
+    "Tags":{
+      "type":"list",
+      "member":{"shape":"Tag"},
+      "max":200,
+      "min":1
+    },
     "Timestamp":{"type":"timestamp"},
+    "TooManyTagsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
     "UnableToDetectSchemaException":{
       "type":"structure",
       "members":{
@@ -1334,6 +1464,29 @@
         "ProcessedInputRecords":{"shape":"ProcessedInputRecords"}
       },
       "exception":true
+    },
+    "UnsupportedOperationException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"KinesisAnalyticsARN"},
+        "TagKeys":{"shape":"TagKeys"}
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "UpdateApplicationRequest":{
       "type":"structure",

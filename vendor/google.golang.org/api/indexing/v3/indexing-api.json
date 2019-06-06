@@ -1,9 +1,18 @@
 {
+  "auth": {
+    "oauth2": {
+      "scopes": {
+        "https://www.googleapis.com/auth/indexing": {
+          "description": "Submit data to Google for indexing"
+        }
+      }
+    }
+  },
   "basePath": "",
   "baseUrl": "https://indexing.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Indexing",
-  "description": "The Indexing API allows developers to share the life cycle of a Web Document with Google.",
+  "description": "Notifies Google when your web pages change.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/search/apis/indexing-api/",
   "fullyEncodeReservedExpansion": true,
@@ -113,7 +122,10 @@
           "path": "v3/urlNotifications/metadata",
           "response": {
             "$ref": "UrlNotificationMetadata"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/indexing"
+          ]
         },
         "publish": {
           "description": "Notifies that a URL has been updated or deleted.",
@@ -128,12 +140,15 @@
           },
           "response": {
             "$ref": "PublishUrlNotificationResponse"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/indexing"
+          ]
         }
       }
     }
   },
-  "revision": "20180621",
+  "revision": "20181012",
   "rootUrl": "https://indexing.googleapis.com/",
   "schemas": {
     "PublishUrlNotificationResponse": {

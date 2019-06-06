@@ -14,7 +14,7 @@ func TestHeaders_Set(t *testing.T) {
 
 	var actual Headers
 	actual.Set("ABC", Int32Value(123))
-	actual.Set("ABC", StringValue("123")) // replase case
+	actual.Set("ABC", StringValue("123")) // replace case
 	actual.Set("EFG", TimestampValue(time.Time{}))
 
 	if e, a := expect, actual; !reflect.DeepEqual(e, a) {

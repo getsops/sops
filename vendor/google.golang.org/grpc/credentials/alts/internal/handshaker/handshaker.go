@@ -20,13 +20,13 @@
 package handshaker
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
 	"net"
 	"sync"
 
-	"golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -151,7 +151,7 @@ type altsHandshaker struct {
 // stub created using the passed conn and used to talk to the ALTS Handshaker
 // service in the metadata server.
 func NewClientHandshaker(ctx context.Context, conn *grpc.ClientConn, c net.Conn, opts *ClientHandshakerOptions) (core.Handshaker, error) {
-	stream, err := altsgrpc.NewHandshakerServiceClient(conn).DoHandshake(ctx, grpc.FailFast(false))
+	stream, err := altsgrpc.NewHandshakerServiceClient(conn).DoHandshake(ctx, grpc.WaitForReady(true))
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func NewClientHandshaker(ctx context.Context, conn *grpc.ClientConn, c net.Conn,
 // stub created using the passed conn and used to talk to the ALTS Handshaker
 // service in the metadata server.
 func NewServerHandshaker(ctx context.Context, conn *grpc.ClientConn, c net.Conn, opts *ServerHandshakerOptions) (core.Handshaker, error) {
-	stream, err := altsgrpc.NewHandshakerServiceClient(conn).DoHandshake(ctx, grpc.FailFast(false))
+	stream, err := altsgrpc.NewHandshakerServiceClient(conn).DoHandshake(ctx, grpc.WaitForReady(true))
 	if err != nil {
 		return nil, err
 	}

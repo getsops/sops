@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewVirtualNetworkRulesClientWithBaseURI(baseURI string, subscriptionID stri
 // virtualNetworkRuleName - the name of the virtual network rule.
 // parameters - the requested virtual Network Rule Resource state.
 func (client VirtualNetworkRulesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string, parameters VirtualNetworkRule) (result VirtualNetworkRulesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRulesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.VirtualNetworkRuleProperties", Name: validation.Null, Rule: false,
@@ -105,10 +116,6 @@ func (client VirtualNetworkRulesClient) CreateOrUpdateSender(req *http.Request) 
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -133,6 +140,16 @@ func (client VirtualNetworkRulesClient) CreateOrUpdateResponder(resp *http.Respo
 // serverName - the name of the server.
 // virtualNetworkRuleName - the name of the virtual network rule.
 func (client VirtualNetworkRulesClient) Delete(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string) (result VirtualNetworkRulesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRulesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, virtualNetworkRuleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.VirtualNetworkRulesClient", "Delete", nil, "Failure preparing request")
@@ -179,10 +196,6 @@ func (client VirtualNetworkRulesClient) DeleteSender(req *http.Request) (future 
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -206,6 +219,16 @@ func (client VirtualNetworkRulesClient) DeleteResponder(resp *http.Response) (re
 // serverName - the name of the server.
 // virtualNetworkRuleName - the name of the virtual network rule.
 func (client VirtualNetworkRulesClient) Get(ctx context.Context, resourceGroupName string, serverName string, virtualNetworkRuleName string) (result VirtualNetworkRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRulesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, virtualNetworkRuleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.VirtualNetworkRulesClient", "Get", nil, "Failure preparing request")
@@ -275,6 +298,16 @@ func (client VirtualNetworkRulesClient) GetResponder(resp *http.Response) (resul
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client VirtualNetworkRulesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result VirtualNetworkRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRulesClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.vnrlr.Response.Response != nil {
+				sc = result.vnrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -339,8 +372,8 @@ func (client VirtualNetworkRulesClient) ListByServerResponder(resp *http.Respons
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client VirtualNetworkRulesClient) listByServerNextResults(lastResults VirtualNetworkRuleListResult) (result VirtualNetworkRuleListResult, err error) {
-	req, err := lastResults.virtualNetworkRuleListResultPreparer()
+func (client VirtualNetworkRulesClient) listByServerNextResults(ctx context.Context, lastResults VirtualNetworkRuleListResult) (result VirtualNetworkRuleListResult, err error) {
+	req, err := lastResults.virtualNetworkRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.VirtualNetworkRulesClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -361,6 +394,16 @@ func (client VirtualNetworkRulesClient) listByServerNextResults(lastResults Virt
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VirtualNetworkRulesClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result VirtualNetworkRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRulesClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }

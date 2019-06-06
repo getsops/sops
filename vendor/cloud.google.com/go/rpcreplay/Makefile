@@ -17,7 +17,9 @@
 # Change these to match your environment.
 PROTOC=$(HOME)/bin/protoc
 PROTOC_GO_PLUGIN_DIR=$(GOPATH)/bin
-PROTOBUF_REPO=$(HOME)/git-repos/protobuf
+
+# The repo github.com/google/protobuf.
+PROTOBUF_REPO=$(HOME)/git-repos/google/protobuf
 
 gen-protos:  sync-protobuf
 	for d in proto/*; do \

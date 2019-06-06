@@ -1,6 +1,6 @@
 /*
  *
- * Copyright 2017 gRPC authors.
+ * Copyright 2018 gRPC authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 package dns
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -32,7 +34,12 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	cleanup := replaceNetFunc()
+	// Set a valid duration for the re-resolution rate only for tests which are
+	// actually testing that feature.
+	dc := replaceDNSResRate(time.Duration(0))
+	defer dc()
+
+	cleanup := replaceNetFunc(nil)
 	code := m.Run()
 	cleanup()
 	os.Exit(code)
@@ -50,6 +57,10 @@ type testClientConn struct {
 	m2     sync.Mutex
 	sc     string
 	s      int
+}
+
+func (t *testClientConn) UpdateState(s resolver.State) {
+	panic("unused")
 }
 
 func (t *testClientConn) NewAddress(addresses []resolver.Address) {
@@ -76,6 +87,46 @@ func (t *testClientConn) getSc() (string, int) {
 	t.m2.Lock()
 	defer t.m2.Unlock()
 	return t.sc, t.s
+}
+
+type testResolver struct {
+	// A write to this channel is made when this resolver receives a resolution
+	// request. Tests can rely on reading from this channel to be notified about
+	// resolution requests instead of sleeping for a predefined period of time.
+	ch chan struct{}
+}
+
+func (tr *testResolver) LookupHost(ctx context.Context, host string) ([]string, error) {
+	if tr.ch != nil {
+		tr.ch <- struct{}{}
+	}
+	return hostLookup(host)
+}
+
+func (*testResolver) LookupSRV(ctx context.Context, service, proto, name string) (string, []*net.SRV, error) {
+	return srvLookup(service, proto, name)
+}
+
+func (*testResolver) LookupTXT(ctx context.Context, host string) ([]string, error) {
+	return txtLookup(host)
+}
+
+func replaceNetFunc(ch chan struct{}) func() {
+	oldResolver := defaultResolver
+	defaultResolver = &testResolver{ch: ch}
+
+	return func() {
+		defaultResolver = oldResolver
+	}
+}
+
+func replaceDNSResRate(d time.Duration) func() {
+	oldMinDNSResRate := minDNSResRate
+	minDNSResRate = d
+
+	return func() {
+		minDNSResRate = oldMinDNSResRate
+	}
 }
 
 var hostLookupTbl = struct {
@@ -548,10 +599,10 @@ var scs = []string{
 // scLookupTbl is a set, which contains targets that have service config. Target
 // not in this set should not have service config.
 var scLookupTbl = map[string]bool{
-	"foo.bar.com":          true,
-	"srv.ipv4.single.fake": true,
-	"srv.ipv4.multi.fake":  true,
-	"no.attribute":         true,
+	txtPrefix + "foo.bar.com":          true,
+	txtPrefix + "srv.ipv4.single.fake": true,
+	txtPrefix + "srv.ipv4.multi.fake":  true,
+	txtPrefix + "no.attribute":         true,
 }
 
 // generateSCF generates a slice of strings (aggregately representing a single
@@ -879,7 +930,7 @@ func TestResolveFunc(t *testing.T) {
 		{"[2001:db8::1]:", errEndsWithColon},
 		{":", errEndsWithColon},
 		{"", errMissingAddr},
-		{"[2001:db8:a0b:12f0::1", errForInvalidTarget},
+		{"[2001:db8:a0b:12f0::1", fmt.Errorf("invalid target address [2001:db8:a0b:12f0::1, error info: address [2001:db8:a0b:12f0::1:443: missing ']' in address")},
 	}
 
 	b := NewBuilder()
@@ -992,4 +1043,202 @@ func TestDNSResolverRetry(t *testing.T) {
 		t.Errorf("Resolved addresses of target: %q = %+v, want %+v\n", target, addrs, want)
 	}
 	r.Close()
+}
+
+func TestCustomAuthority(t *testing.T) {
+	defer leakcheck.Check(t)
+
+	tests := []struct {
+		authority     string
+		authorityWant string
+		expectError   bool
+	}{
+		{
+			"4.3.2.1:" + defaultDNSSvrPort,
+			"4.3.2.1:" + defaultDNSSvrPort,
+			false,
+		},
+		{
+			"4.3.2.1:123",
+			"4.3.2.1:123",
+			false,
+		},
+		{
+			"4.3.2.1",
+			"4.3.2.1:" + defaultDNSSvrPort,
+			false,
+		},
+		{
+			"::1",
+			"[::1]:" + defaultDNSSvrPort,
+			false,
+		},
+		{
+			"[::1]",
+			"[::1]:" + defaultDNSSvrPort,
+			false,
+		},
+		{
+			"[::1]:123",
+			"[::1]:123",
+			false,
+		},
+		{
+			"dnsserver.com",
+			"dnsserver.com:" + defaultDNSSvrPort,
+			false,
+		},
+		{
+			":123",
+			"localhost:123",
+			false,
+		},
+		{
+			":",
+			"",
+			true,
+		},
+		{
+			"[::1]:",
+			"",
+			true,
+		},
+		{
+			"dnsserver.com:",
+			"",
+			true,
+		},
+	}
+	oldCustomAuthorityDialler := customAuthorityDialler
+	defer func() {
+		customAuthorityDialler = oldCustomAuthorityDialler
+	}()
+
+	for _, a := range tests {
+		errChan := make(chan error, 1)
+		customAuthorityDialler = func(authority string) func(ctx context.Context, network, address string) (net.Conn, error) {
+			if authority != a.authorityWant {
+				errChan <- fmt.Errorf("wrong custom authority passed to resolver. input: %s expected: %s actual: %s", a.authority, a.authorityWant, authority)
+			} else {
+				errChan <- nil
+			}
+			return func(ctx context.Context, network, address string) (net.Conn, error) {
+				return nil, errors.New("no need to dial")
+			}
+		}
+
+		b := NewBuilder()
+		cc := &testClientConn{target: "foo.bar.com"}
+		r, err := b.Build(resolver.Target{Endpoint: "foo.bar.com", Authority: a.authority}, cc, resolver.BuildOption{})
+
+		if err == nil {
+			r.Close()
+
+			err = <-errChan
+			if err != nil {
+				t.Errorf(err.Error())
+			}
+
+			if a.expectError {
+				t.Errorf("custom authority should have caused an error: %s", a.authority)
+			}
+		} else if !a.expectError {
+			t.Errorf("unexpected error using custom authority %s: %s", a.authority, err)
+		}
+	}
+}
+
+// TestRateLimitedResolve exercises the rate limit enforced on re-resolution
+// requests. It sets the re-resolution rate to a small value and repeatedly
+// calls ResolveNow() and ensures only the expected number of resolution
+// requests are made.
+func TestRateLimitedResolve(t *testing.T) {
+	defer leakcheck.Check(t)
+
+	const dnsResRate = 100 * time.Millisecond
+	dc := replaceDNSResRate(dnsResRate)
+	defer dc()
+
+	// Create a new testResolver{} for this test because we want the exact count
+	// of the number of times the resolver was invoked.
+	nc := replaceNetFunc(make(chan struct{}, 1))
+	defer nc()
+
+	target := "foo.bar.com"
+	b := NewBuilder()
+	cc := &testClientConn{target: target}
+	r, err := b.Build(resolver.Target{Endpoint: target}, cc, resolver.BuildOption{})
+	if err != nil {
+		t.Fatalf("resolver.Build() returned error: %v\n", err)
+	}
+	defer r.Close()
+
+	dnsR, ok := r.(*dnsResolver)
+	if !ok {
+		t.Fatalf("resolver.Build() returned unexpected type: %T\n", dnsR)
+	}
+	tr, ok := dnsR.resolver.(*testResolver)
+	if !ok {
+		t.Fatalf("delegate resolver returned unexpected type: %T\n", tr)
+	}
+
+	// Wait for the first resolution request to be done. This happens as part of
+	// the first iteration of the for loop in watcher() because we start with a
+	// timer of zero duration.
+	<-tr.ch
+
+	// Here we start a couple of goroutines. One repeatedly calls ResolveNow()
+	// until asked to stop, and the other waits for two resolution requests to be
+	// made to our testResolver and stops the former. We measure the start and
+	// end times, and expect the duration elapsed to be in the interval
+	// {2*dnsResRate, 3*dnsResRate}
+	start := time.Now()
+	done := make(chan struct{})
+	go func() {
+		for {
+			select {
+			case <-done:
+				return
+			default:
+				r.ResolveNow(resolver.ResolveNowOption{})
+				time.Sleep(1 * time.Millisecond)
+			}
+		}
+	}()
+
+	gotCalls := 0
+	const wantCalls = 2
+	min, max := wantCalls*dnsResRate, (wantCalls+1)*dnsResRate
+	tMax := time.NewTimer(max)
+	for gotCalls != wantCalls {
+		select {
+		case <-tr.ch:
+			gotCalls++
+		case <-tMax.C:
+			t.Fatalf("Timed out waiting for %v calls after %v; got %v", wantCalls, max, gotCalls)
+		}
+	}
+	close(done)
+	elapsed := time.Since(start)
+
+	if gotCalls != wantCalls {
+		t.Fatalf("resolve count mismatch for target: %q = %+v, want %+v\n", target, gotCalls, wantCalls)
+	}
+	if elapsed < min {
+		t.Fatalf("elapsed time: %v, wanted it to be between {%v and %v}", elapsed, min, max)
+	}
+
+	wantAddrs := []resolver.Address{{Addr: "1.2.3.4" + colonDefaultPort}, {Addr: "5.6.7.8" + colonDefaultPort}}
+	var gotAddrs []resolver.Address
+	for {
+		var cnt int
+		gotAddrs, cnt = cc.getAddress()
+		if cnt > 0 {
+			break
+		}
+		time.Sleep(time.Millisecond)
+	}
+	if !reflect.DeepEqual(gotAddrs, wantAddrs) {
+		t.Errorf("Resolved addresses of target: %q = %+v, want %+v\n", target, gotAddrs, wantAddrs)
+	}
 }

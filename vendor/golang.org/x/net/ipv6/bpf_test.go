@@ -12,13 +12,14 @@ import (
 
 	"golang.org/x/net/bpf"
 	"golang.org/x/net/ipv6"
+	"golang.org/x/net/nettest"
 )
 
 func TestBPF(t *testing.T) {
 	if runtime.GOOS != "linux" {
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if !supportsIPv6 {
+	if !nettest.SupportsIPv6() {
 		t.Skip("ipv6 is not supported")
 	}
 

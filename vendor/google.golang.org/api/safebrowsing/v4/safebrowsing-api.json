@@ -258,7 +258,7 @@
       }
     }
   },
-  "revision": "20180626",
+  "revision": "20190520",
   "rootUrl": "https://safebrowsing.googleapis.com/",
   "schemas": {
     "Checksum": {
@@ -546,7 +546,8 @@
             "APK_MALWARE_OFFLINE",
             "SUBRESOURCE_FILTER",
             "SUSPICIOUS",
-            "TRICK_TO_BILL"
+            "TRICK_TO_BILL",
+            "HIGH_CONFIDENCE_ALLOWLIST"
           ],
           "enumDescriptions": [
             "Unknown.",
@@ -564,7 +565,8 @@
             "List used for offline APK checks in PAM.",
             "Patterns to be used for activating the subresource filter. Interstitial\nwill not be shown for patterns from this list.",
             "Entities that are suspected to present a threat.",
-            "Trick-to-bill threat list."
+            "Trick-to-bill threat list.",
+            "Safe list to ship hashes of known safe URL expressions."
           ],
           "type": "string"
         }
@@ -678,7 +680,8 @@
             "APK_MALWARE_OFFLINE",
             "SUBRESOURCE_FILTER",
             "SUSPICIOUS",
-            "TRICK_TO_BILL"
+            "TRICK_TO_BILL",
+            "HIGH_CONFIDENCE_ALLOWLIST"
           ],
           "enumDescriptions": [
             "Unknown.",
@@ -696,7 +699,8 @@
             "List used for offline APK checks in PAM.",
             "Patterns to be used for activating the subresource filter. Interstitial\nwill not be shown for patterns from this list.",
             "Entities that are suspected to present a threat.",
-            "Trick-to-bill threat list."
+            "Trick-to-bill threat list.",
+            "Safe list to ship hashes of known safe URL expressions."
           ],
           "type": "string"
         }
@@ -913,7 +917,8 @@
             "APK_MALWARE_OFFLINE",
             "SUBRESOURCE_FILTER",
             "SUSPICIOUS",
-            "TRICK_TO_BILL"
+            "TRICK_TO_BILL",
+            "HIGH_CONFIDENCE_ALLOWLIST"
           ],
           "enumDescriptions": [
             "Unknown.",
@@ -931,7 +936,8 @@
             "List used for offline APK checks in PAM.",
             "Patterns to be used for activating the subresource filter. Interstitial\nwill not be shown for patterns from this list.",
             "Entities that are suspected to present a threat.",
-            "Trick-to-bill threat list."
+            "Trick-to-bill threat list.",
+            "Safe list to ship hashes of known safe URL expressions."
           ],
           "type": "string"
         },
@@ -1025,7 +1031,8 @@
             "List used for offline APK checks in PAM.",
             "Patterns to be used for activating the subresource filter. Interstitial\nwill not be shown for patterns from this list.",
             "Entities that are suspected to present a threat.",
-            "Trick-to-bill threat list."
+            "Trick-to-bill threat list.",
+            "Safe list to ship hashes of known safe URL expressions."
           ],
           "items": {
             "enum": [
@@ -1044,7 +1051,8 @@
               "APK_MALWARE_OFFLINE",
               "SUBRESOURCE_FILTER",
               "SUSPICIOUS",
-              "TRICK_TO_BILL"
+              "TRICK_TO_BILL",
+              "HIGH_CONFIDENCE_ALLOWLIST"
             ],
             "type": "string"
           },
@@ -1123,7 +1131,8 @@
             "APK_MALWARE_OFFLINE",
             "SUBRESOURCE_FILTER",
             "SUSPICIOUS",
-            "TRICK_TO_BILL"
+            "TRICK_TO_BILL",
+            "HIGH_CONFIDENCE_ALLOWLIST"
           ],
           "enumDescriptions": [
             "Unknown.",
@@ -1141,7 +1150,8 @@
             "List used for offline APK checks in PAM.",
             "Patterns to be used for activating the subresource filter. Interstitial\nwill not be shown for patterns from this list.",
             "Entities that are suspected to present a threat.",
-            "Trick-to-bill threat list."
+            "Trick-to-bill threat list.",
+            "Safe list to ship hashes of known safe URL expressions."
           ],
           "type": "string"
         }
@@ -1231,7 +1241,8 @@
             "APK_MALWARE_OFFLINE",
             "SUBRESOURCE_FILTER",
             "SUSPICIOUS",
-            "TRICK_TO_BILL"
+            "TRICK_TO_BILL",
+            "HIGH_CONFIDENCE_ALLOWLIST"
           ],
           "enumDescriptions": [
             "Unknown.",
@@ -1249,7 +1260,8 @@
             "List used for offline APK checks in PAM.",
             "Patterns to be used for activating the subresource filter. Interstitial\nwill not be shown for patterns from this list.",
             "Entities that are suspected to present a threat.",
-            "Trick-to-bill threat list."
+            "Trick-to-bill threat list.",
+            "Safe list to ship hashes of known safe URL expressions."
           ],
           "type": "string"
         }

@@ -1,9 +1,8 @@
 // Package autosuggest implements the Azure ARM Autosuggest service API version 1.0.
 //
-// The AutoSuggest Search API lets you send a search query to Bing and get back a list of news that are relevant to the
-// search query. This section provides technical details about the query parameters and headers that you use to request
-// news and the JSON response objects that contain them. For examples that show how to make requests, see [Searching
-// the web for
+// Autosuggest supplies search terms derived from a root text sent to the service.  The terms Autosuggest supplies are
+// related to the root text based on similarity and their frequency or ratings of usefulness in other searches. For
+// examples that show how to use Autosuggest, see [Search using
 // AutoSuggest](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-autosuggest-api-v7-reference).
 package autosuggest
 
@@ -28,30 +27,31 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
 const (
-	// DefaultBaseURI is the default URI used for the service Autosuggest
-	DefaultBaseURI = "https://api.cognitive.microsoft.com/bing/v7.0"
+	// DefaultEndpoint is the default value for endpoint
+	DefaultEndpoint = "https://api.cognitive.microsoft.com"
 )
 
 // BaseClient is the base client for Autosuggest.
 type BaseClient struct {
 	autorest.Client
-	BaseURI string
+	Endpoint string
 }
 
 // New creates an instance of the BaseClient client.
 func New() BaseClient {
-	return NewWithBaseURI(DefaultBaseURI)
+	return NewWithoutDefaults(DefaultEndpoint)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
-func NewWithBaseURI(baseURI string) BaseClient {
+// NewWithoutDefaults creates an instance of the BaseClient client.
+func NewWithoutDefaults(endpoint string) BaseClient {
 	return BaseClient{
-		Client:  autorest.NewClientWithUserAgent(UserAgent()),
-		BaseURI: baseURI,
+		Client:   autorest.NewClientWithUserAgent(UserAgent()),
+		Endpoint: endpoint,
 	}
 }
 
@@ -166,6 +166,16 @@ func NewWithBaseURI(baseURI string) BaseClient {
 // values: JSON, JSONLD. The default is JSON. If you specify JSONLD, the response body includes JSON-LD objects
 // that contain the search results.
 func (client BaseClient) AutoSuggest(ctx context.Context, query string, acceptLanguage string, pragma string, userAgent string, clientID string, clientIP string, location string, countryCode string, market string, safeSearch SafeSearch, setLang string, responseFormat []ResponseFormat) (result Suggestions, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.AutoSuggest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AutoSuggestPreparer(ctx, query, acceptLanguage, pragma, userAgent, clientID, clientIP, location, countryCode, market, safeSearch, setLang, responseFormat)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "autosuggest.BaseClient", "AutoSuggest", nil, "Failure preparing request")
@@ -189,6 +199,10 @@ func (client BaseClient) AutoSuggest(ctx context.Context, query string, acceptLa
 
 // AutoSuggestPreparer prepares the AutoSuggest request.
 func (client BaseClient) AutoSuggestPreparer(ctx context.Context, query string, acceptLanguage string, pragma string, userAgent string, clientID string, clientIP string, location string, countryCode string, market string, safeSearch SafeSearch, setLang string, responseFormat []ResponseFormat) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{
 		"q": autorest.Encode("query", query),
 	}
@@ -212,7 +226,7 @@ func (client BaseClient) AutoSuggestPreparer(ctx context.Context, query string, 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/Suggestions"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))

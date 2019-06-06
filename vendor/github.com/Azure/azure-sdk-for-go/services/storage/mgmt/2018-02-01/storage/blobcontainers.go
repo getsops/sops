@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,6 +53,16 @@ func NewBlobContainersClientWithBaseURI(baseURI string, subscriptionID string) B
 // dash (-) character must be immediately preceded and followed by a letter or number.
 // legalHold - the LegalHold property that will be clear from a blob container.
 func (client BlobContainersClient) ClearLegalHold(ctx context.Context, resourceGroupName string, accountName string, containerName string, legalHold LegalHold) (result LegalHold, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.ClearLegalHold")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -105,6 +116,7 @@ func (client BlobContainersClient) ClearLegalHoldPreparer(ctx context.Context, r
 		"api-version": APIVersion,
 	}
 
+	legalHold.HasLegalHold = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
@@ -148,6 +160,16 @@ func (client BlobContainersClient) ClearLegalHoldResponder(resp *http.Response) 
 // dash (-) character must be immediately preceded and followed by a letter or number.
 // blobContainer - properties of the blob container to create.
 func (client BlobContainersClient) Create(ctx context.Context, resourceGroupName string, accountName string, containerName string, blobContainer BlobContainer) (result BlobContainer, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -251,6 +273,16 @@ func (client BlobContainersClient) CreateResponder(resp *http.Response) (result 
 // to apply the operation only if the immutability policy already exists. If omitted, this operation will
 // always be applied.
 func (client BlobContainersClient) CreateOrUpdateImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, parameters *ImmutabilityPolicy, ifMatch string) (result ImmutabilityPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.CreateOrUpdateImmutabilityPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -355,6 +387,16 @@ func (client BlobContainersClient) CreateOrUpdateImmutabilityPolicyResponder(res
 // must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only. Every
 // dash (-) character must be immediately preceded and followed by a letter or number.
 func (client BlobContainersClient) Delete(ctx context.Context, resourceGroupName string, accountName string, containerName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -449,6 +491,16 @@ func (client BlobContainersClient) DeleteResponder(resp *http.Response) (result 
 // to apply the operation only if the immutability policy already exists. If omitted, this operation will
 // always be applied.
 func (client BlobContainersClient) DeleteImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, ifMatch string) (result ImmutabilityPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.DeleteImmutabilityPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -543,8 +595,18 @@ func (client BlobContainersClient) DeleteImmutabilityPolicyResponder(resp *http.
 // ifMatch - the entity state (ETag) version of the immutability policy to update. A value of "*" can be used
 // to apply the operation only if the immutability policy already exists. If omitted, this operation will
 // always be applied.
-// parameters - the ImmutabilityPolicy Properties that will be extented for a blob container.
+// parameters - the ImmutabilityPolicy Properties that will be extended for a blob container.
 func (client BlobContainersClient) ExtendImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, ifMatch string, parameters *ImmutabilityPolicy) (result ImmutabilityPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.ExtendImmutabilityPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -645,6 +707,16 @@ func (client BlobContainersClient) ExtendImmutabilityPolicyResponder(resp *http.
 // must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only. Every
 // dash (-) character must be immediately preceded and followed by a letter or number.
 func (client BlobContainersClient) Get(ctx context.Context, resourceGroupName string, accountName string, containerName string) (result BlobContainer, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -738,6 +810,16 @@ func (client BlobContainersClient) GetResponder(resp *http.Response) (result Blo
 // to apply the operation only if the immutability policy already exists. If omitted, this operation will
 // always be applied.
 func (client BlobContainersClient) GetImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, ifMatch string) (result ImmutabilityPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.GetImmutabilityPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -822,6 +904,112 @@ func (client BlobContainersClient) GetImmutabilityPolicyResponder(resp *http.Res
 	return
 }
 
+// Lease the Lease Container operation establishes and manages a lock on a container for delete operations. The lock
+// duration can be 15 to 60 seconds, or can be infinite.
+// Parameters:
+// resourceGroupName - the name of the resource group within the user's subscription. The name is case
+// insensitive.
+// accountName - the name of the storage account within the specified resource group. Storage account names
+// must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+// containerName - the name of the blob container within the specified storage account. Blob container names
+// must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only. Every
+// dash (-) character must be immediately preceded and followed by a letter or number.
+// parameters - lease Container request body.
+func (client BlobContainersClient) Lease(ctx context.Context, resourceGroupName string, accountName string, containerName string, parameters *LeaseContainerRequest) (result LeaseContainerResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.Lease")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: accountName,
+			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 24, Chain: nil},
+				{Target: "accountName", Name: validation.MinLength, Rule: 3, Chain: nil}}},
+		{TargetValue: containerName,
+			Constraints: []validation.Constraint{{Target: "containerName", Name: validation.MaxLength, Rule: 63, Chain: nil},
+				{Target: "containerName", Name: validation.MinLength, Rule: 3, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("storage.BlobContainersClient", "Lease", err.Error())
+	}
+
+	req, err := client.LeasePreparer(ctx, resourceGroupName, accountName, containerName, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "Lease", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.LeaseSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "Lease", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.LeaseResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "Lease", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// LeasePreparer prepares the Lease request.
+func (client BlobContainersClient) LeasePreparer(ctx context.Context, resourceGroupName string, accountName string, containerName string, parameters *LeaseContainerRequest) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"accountName":       autorest.Encode("path", accountName),
+		"containerName":     autorest.Encode("path", containerName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-02-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/{accountName}/blobServices/default/containers/{containerName}/lease", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	if parameters != nil {
+		preparer = autorest.DecoratePreparer(preparer,
+			autorest.WithJSON(parameters))
+	}
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// LeaseSender sends the Lease request. The method will close the
+// http.Response Body if it receives an error.
+func (client BlobContainersClient) LeaseSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// LeaseResponder handles the response to the Lease request. The method always
+// closes the http.Response Body.
+func (client BlobContainersClient) LeaseResponder(resp *http.Response) (result LeaseContainerResponse, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // List lists all containers and does not support a prefix like data plane. Also SRP today does not return continuation
 // token.
 // Parameters:
@@ -830,6 +1018,16 @@ func (client BlobContainersClient) GetImmutabilityPolicyResponder(resp *http.Res
 // accountName - the name of the storage account within the specified resource group. Storage account names
 // must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 func (client BlobContainersClient) List(ctx context.Context, resourceGroupName string, accountName string) (result ListContainerItems, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -919,6 +1117,16 @@ func (client BlobContainersClient) ListResponder(resp *http.Response) (result Li
 // to apply the operation only if the immutability policy already exists. If omitted, this operation will
 // always be applied.
 func (client BlobContainersClient) LockImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, ifMatch string) (result ImmutabilityPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.LockImmutabilityPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1011,6 +1219,16 @@ func (client BlobContainersClient) LockImmutabilityPolicyResponder(resp *http.Re
 // dash (-) character must be immediately preceded and followed by a letter or number.
 // legalHold - the LegalHold property that will be set to a blob container.
 func (client BlobContainersClient) SetLegalHold(ctx context.Context, resourceGroupName string, accountName string, containerName string, legalHold LegalHold) (result LegalHold, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.SetLegalHold")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1064,6 +1282,7 @@ func (client BlobContainersClient) SetLegalHoldPreparer(ctx context.Context, res
 		"api-version": APIVersion,
 	}
 
+	legalHold.HasLegalHold = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
@@ -1106,6 +1325,16 @@ func (client BlobContainersClient) SetLegalHoldResponder(resp *http.Response) (r
 // dash (-) character must be immediately preceded and followed by a letter or number.
 // blobContainer - properties to update for the blob container.
 func (client BlobContainersClient) Update(ctx context.Context, resourceGroupName string, accountName string, containerName string, blobContainer BlobContainer) (result BlobContainer, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

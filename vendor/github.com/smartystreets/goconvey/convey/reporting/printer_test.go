@@ -31,7 +31,7 @@ func TestPrintFormat(t *testing.T) {
 func TestPrintPreservesEncodedStrings(t *testing.T) {
 	file := newMemoryFile()
 	printer := NewPrinter(file)
-	const expected = "= -> %3D"
+	const expected = "= -> %%3D"
 	printer.Print(expected)
 
 	if file.buffer != expected {
@@ -68,7 +68,7 @@ func TestPrintlnFormat(t *testing.T) {
 func TestPrintlnPreservesEncodedStrings(t *testing.T) {
 	file := newMemoryFile()
 	printer := NewPrinter(file)
-	const expected = "= -> %3D"
+	const expected = "= -> %%3D"
 	printer.Println(expected)
 
 	if file.buffer != expected+"\n" {

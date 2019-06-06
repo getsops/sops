@@ -67,34 +67,50 @@ func init() {
 	if err := proto.SetExtension(cloneTestMessage, pb.E_Ext_More, ext); err != nil {
 		panic("SetExtension: " + err.Error())
 	}
+	if err := proto.SetExtension(cloneTestMessage, pb.E_Ext_Text, proto.String("hello")); err != nil {
+		panic("SetExtension: " + err.Error())
+	}
+	if err := proto.SetExtension(cloneTestMessage, pb.E_Greeting, []string{"one", "two"}); err != nil {
+		panic("SetExtension: " + err.Error())
+	}
 }
 
 func TestClone(t *testing.T) {
+	// Create a clone using a marshal/unmarshal roundtrip.
+	vanilla := new(pb.MyMessage)
+	b, err := proto.Marshal(cloneTestMessage)
+	if err != nil {
+		t.Errorf("unexpected Marshal error: %v", err)
+	}
+	if err := proto.Unmarshal(b, vanilla); err != nil {
+		t.Errorf("unexpected Unarshal error: %v", err)
+	}
+
+	// Create a clone using Clone and verify that it is equal to the original.
 	m := proto.Clone(cloneTestMessage).(*pb.MyMessage)
 	if !proto.Equal(m, cloneTestMessage) {
 		t.Fatalf("Clone(%v) = %v", cloneTestMessage, m)
 	}
 
-	// Verify it was a deep copy.
+	// Mutate the clone, which should not affect the original.
+	x1, err := proto.GetExtension(m, pb.E_Ext_More)
+	if err != nil {
+		t.Errorf("unexpected GetExtension(%v) error: %v", pb.E_Ext_More.Name, err)
+	}
+	x2, err := proto.GetExtension(m, pb.E_Ext_Text)
+	if err != nil {
+		t.Errorf("unexpected GetExtension(%v) error: %v", pb.E_Ext_Text.Name, err)
+	}
+	x3, err := proto.GetExtension(m, pb.E_Greeting)
+	if err != nil {
+		t.Errorf("unexpected GetExtension(%v) error: %v", pb.E_Greeting.Name, err)
+	}
 	*m.Inner.Port++
-	if proto.Equal(m, cloneTestMessage) {
-		t.Error("Mutating clone changed the original")
-	}
-	// Byte fields and repeated fields should be copied.
-	if &m.Pet[0] == &cloneTestMessage.Pet[0] {
-		t.Error("Pet: repeated field not copied")
-	}
-	if &m.Others[0] == &cloneTestMessage.Others[0] {
-		t.Error("Others: repeated field not copied")
-	}
-	if &m.Others[0].Value[0] == &cloneTestMessage.Others[0].Value[0] {
-		t.Error("Others[0].Value: bytes field not copied")
-	}
-	if &m.RepBytes[0] == &cloneTestMessage.RepBytes[0] {
-		t.Error("RepBytes: repeated field not copied")
-	}
-	if &m.RepBytes[0][0] == &cloneTestMessage.RepBytes[0][0] {
-		t.Error("RepBytes[0]: bytes field not copied")
+	*(x1.(*pb.Ext)).Data = "blah blah"
+	*(x2.(*string)) = "goodbye"
+	x3.([]string)[0] = "zero"
+	if !proto.Equal(cloneTestMessage, vanilla) {
+		t.Fatalf("mutation on original detected:\ngot  %v\nwant %v", cloneTestMessage, vanilla)
 	}
 }
 

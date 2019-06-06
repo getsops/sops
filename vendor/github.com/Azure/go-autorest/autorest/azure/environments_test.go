@@ -27,6 +27,14 @@ import (
 	"testing"
 )
 
+const (
+	batchResourceID      = "--batch-resource-id--"
+	datalakeResourceID   = "--datalake-resource-id--"
+	graphResourceID      = "--graph-resource-id--"
+	keyvaultResourceID   = "--keyvault-resource-id--"
+	opInsightsResourceID = "--operational-insights-resource-id--"
+)
+
 // This correlates to the expected contents of ./testdata/test_environment_1.json
 var testEnvironment1 = Environment{
 	Name:                         "--unit-test--",
@@ -47,6 +55,13 @@ var testEnvironment1 = Environment{
 	ResourceManagerVMDNSSuffix:   "--arm-vm-dns-suffix--",
 	ContainerRegistryDNSSuffix:   "--container-registry-dns-suffix--",
 	TokenAudience:                "--token-audience",
+	ResourceIdentifiers: ResourceIdentifier{
+		Batch:               batchResourceID,
+		Datalake:            datalakeResourceID,
+		Graph:               graphResourceID,
+		KeyVault:            keyvaultResourceID,
+		OperationalInsights: opInsightsResourceID,
+	},
 }
 
 func TestEnvironment_EnvironmentFromURL_NoOverride_Success(t *testing.T) {
@@ -196,7 +211,14 @@ func TestDeserializeEnvironment(t *testing.T) {
 		"trafficManagerDNSSuffix": "--traffic-manager-dns-suffix--",
 		"serviceManagementVMDNSSuffix": "--asm-vm-dns-suffix--",
 		"resourceManagerVMDNSSuffix": "--arm-vm-dns-suffix--",
-		"containerRegistryDNSSuffix": "--container-registry-dns-suffix--"
+		"containerRegistryDNSSuffix": "--container-registry-dns-suffix--",
+		"resourceIdentifiers": {
+			"batch": "` + batchResourceID + `",
+			"datalake": "` + datalakeResourceID + `",
+			"graph": "` + graphResourceID + `",
+			"keyVault": "` + keyvaultResourceID + `",
+			"operationalInsights": "` + opInsightsResourceID + `"
+		}
 	}`
 
 	testSubject := Environment{}
@@ -256,6 +278,21 @@ func TestDeserializeEnvironment(t *testing.T) {
 	if "--container-registry-dns-suffix--" != testSubject.ContainerRegistryDNSSuffix {
 		t.Errorf("Expected ContainerRegistryDNSSuffix to be \"--container-registry-dns-suffix--\", but got %q", testSubject.ContainerRegistryDNSSuffix)
 	}
+	if batchResourceID != testSubject.ResourceIdentifiers.Batch {
+		t.Errorf("Expected ResourceIdentifiers.Batch to be "+batchResourceID+", but got %q", testSubject.ResourceIdentifiers.Batch)
+	}
+	if datalakeResourceID != testSubject.ResourceIdentifiers.Datalake {
+		t.Errorf("Expected ResourceIdentifiers.Datalake to be "+datalakeResourceID+", but got %q", testSubject.ResourceIdentifiers.Datalake)
+	}
+	if graphResourceID != testSubject.ResourceIdentifiers.Graph {
+		t.Errorf("Expected ResourceIdentifiers.Graph to be "+graphResourceID+", but got %q", testSubject.ResourceIdentifiers.Graph)
+	}
+	if keyvaultResourceID != testSubject.ResourceIdentifiers.KeyVault {
+		t.Errorf("Expected ResourceIdentifiers.KeyVault to be "+keyvaultResourceID+", but got %q", testSubject.ResourceIdentifiers.KeyVault)
+	}
+	if opInsightsResourceID != testSubject.ResourceIdentifiers.OperationalInsights {
+		t.Errorf("Expected ResourceIdentifiers.OperationalInsights to be "+opInsightsResourceID+", but got %q", testSubject.ResourceIdentifiers.OperationalInsights)
+	}
 }
 
 func TestRoundTripSerialization(t *testing.T) {
@@ -278,6 +315,13 @@ func TestRoundTripSerialization(t *testing.T) {
 		ServiceManagementVMDNSSuffix: "--asm-vm-dns-suffix--",
 		ResourceManagerVMDNSSuffix:   "--arm-vm-dns-suffix--",
 		ContainerRegistryDNSSuffix:   "--container-registry-dns-suffix--",
+		ResourceIdentifiers: ResourceIdentifier{
+			Batch:               batchResourceID,
+			Datalake:            datalakeResourceID,
+			Graph:               graphResourceID,
+			KeyVault:            keyvaultResourceID,
+			OperationalInsights: opInsightsResourceID,
+		},
 	}
 
 	bytes, err := json.Marshal(env)
@@ -344,5 +388,20 @@ func TestRoundTripSerialization(t *testing.T) {
 	}
 	if env.ContainerRegistryDNSSuffix != testSubject.ContainerRegistryDNSSuffix {
 		t.Errorf("Expected ContainerRegistryDNSSuffix to be %q, but got %q", env.ContainerRegistryDNSSuffix, testSubject.ContainerRegistryDNSSuffix)
+	}
+	if env.ResourceIdentifiers.Batch != testSubject.ResourceIdentifiers.Batch {
+		t.Errorf("Expected ResourceIdentifiers.Batch to be %q, but got %q", env.ResourceIdentifiers.Batch, testSubject.ResourceIdentifiers.Batch)
+	}
+	if env.ResourceIdentifiers.Datalake != testSubject.ResourceIdentifiers.Datalake {
+		t.Errorf("Expected ResourceIdentifiers.Datalake to be %q, but got %q", env.ResourceIdentifiers.Datalake, testSubject.ResourceIdentifiers.Datalake)
+	}
+	if env.ResourceIdentifiers.Graph != testSubject.ResourceIdentifiers.Graph {
+		t.Errorf("Expected ResourceIdentifiers.Graph to be %q, but got %q", env.ResourceIdentifiers.Graph, testSubject.ResourceIdentifiers.Graph)
+	}
+	if env.ResourceIdentifiers.KeyVault != testSubject.ResourceIdentifiers.KeyVault {
+		t.Errorf("Expected ResourceIdentifiers.KeyVault to be %q, but got %q", env.ResourceIdentifiers.KeyVault, testSubject.ResourceIdentifiers.KeyVault)
+	}
+	if env.ResourceIdentifiers.OperationalInsights != testSubject.ResourceIdentifiers.OperationalInsights {
+		t.Errorf("Expected ResourceIdentifiers.OperationalInsights to be %q, but got %q", env.ResourceIdentifiers.OperationalInsights, testSubject.ResourceIdentifiers.OperationalInsights)
 	}
 }

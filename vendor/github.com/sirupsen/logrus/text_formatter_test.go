@@ -5,11 +5,14 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"runtime"
+	"sort"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFormatting(t *testing.T) {
@@ -142,7 +145,7 @@ func TestDisableLevelTruncation(t *testing.T) {
 		tf := &TextFormatter{DisableLevelTruncation: disabled}
 		var b bytes.Buffer
 		entry.Level = level
-		tf.printColored(&b, entry, keys, timestampFormat)
+		tf.printColored(&b, entry, keys, nil, timestampFormat)
 		logLine := (&b).String()
 		if disabled {
 			expected := strings.ToUpper(level.String())
@@ -441,10 +444,42 @@ func TestTextFormatterIsColored(t *testing.T) {
 				os.Setenv("CLICOLOR_FORCE", val.clicolorForceVal)
 			}
 			res := tf.isColored()
-			assert.Equal(subT, val.expectedResult, res)
+			if runtime.GOOS == "windows" && !tf.ForceColors && !val.clicolorForceIsSet {
+				assert.Equal(subT, false, res)
+			} else {
+				assert.Equal(subT, val.expectedResult, res)
+			}
 		})
 	}
 }
 
-// TODO add tests for sorting etc., this requires a parser for the text
-// formatter output.
+func TestCustomSorting(t *testing.T) {
+	formatter := &TextFormatter{
+		DisableColors: true,
+		SortingFunc: func(keys []string) {
+			sort.Slice(keys, func(i, j int) bool {
+				if keys[j] == "prefix" {
+					return false
+				}
+				if keys[i] == "prefix" {
+					return true
+				}
+				return strings.Compare(keys[i], keys[j]) == -1
+			})
+		},
+	}
+
+	entry := &Entry{
+		Message: "Testing custom sort function",
+		Time:    time.Now(),
+		Level:   InfoLevel,
+		Data: Fields{
+			"test":      "testvalue",
+			"prefix":    "the application prefix",
+			"blablabla": "blablabla",
+		},
+	}
+	b, err := formatter.Format(entry)
+	require.NoError(t, err)
+	require.True(t, strings.HasPrefix(string(b), "prefix="), "format output is %q", string(b))
+}

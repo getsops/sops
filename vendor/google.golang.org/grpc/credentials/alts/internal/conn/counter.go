@@ -45,7 +45,7 @@ func (c *Counter) Value() ([]byte, error) {
 
 // Inc increments the counter and checks for overflow.
 func (c *Counter) Inc() {
-	// If the counter is already invalid, there is not need to increase it.
+	// If the counter is already invalid, there is no need to increase it.
 	if c.invalid {
 		return
 	}

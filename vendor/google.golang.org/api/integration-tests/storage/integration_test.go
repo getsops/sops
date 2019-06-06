@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package storage
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -28,7 +29,6 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/api/googleapi"
@@ -405,7 +405,7 @@ func TestFunctions(t *testing.T) {
 		}
 		obj, err := s.Objects.Insert(bucket, o).Media(f).Do()
 		if err != nil {
-			t.Fatalf("unable to insert object %q: %v", obj, err)
+			t.Fatalf("unable to insert object %v: %v", obj, err)
 		}
 		if got, want := obj.Size, c.size; got != want {
 			t.Errorf("object %q size = %v; want %v", c.name, got, want)

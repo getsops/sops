@@ -23,10 +23,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Azure/azure-sdk-for-go/tools/apidiff/delta"
-	"github.com/Azure/azure-sdk-for-go/tools/apidiff/exports"
 	"github.com/Azure/azure-sdk-for-go/tools/apidiff/ioext"
 	"github.com/Azure/azure-sdk-for-go/tools/apidiff/repo"
+	"github.com/Azure/azure-sdk-for-go/tools/apidiff/report"
 )
 
 func printf(format string, a ...interface{}) {
@@ -65,31 +64,16 @@ func vprintln(a ...interface{}) {
 	}
 }
 
-// represents a set of breaking changes
-type breakingChanges struct {
-	Consts     map[string]delta.Signature    `json:"consts,omitempty"`
-	Funcs      map[string]delta.FuncSig      `json:"funcs,omitempty"`
-	Interfaces map[string]delta.InterfaceDef `json:"interfaces,omitempty"`
-	Structs    map[string]delta.StructDef    `json:"structs,omitempty"`
-	Removed    *exports.Content              `json:"removed,omitempty"`
-}
-
-// returns true if there are no breaking changes
-func (bc breakingChanges) isEmpty() bool {
-	return len(bc.Consts) == 0 && len(bc.Funcs) == 0 && len(bc.Interfaces) == 0 && len(bc.Structs) == 0 &&
-		(bc.Removed == nil || bc.Removed.IsEmpty())
-}
-
 // represents a collection of per-package reports, one for each commit hash
 type commitPkgReport struct {
-	BreakingChanges []string             `json:"breakingChanges,omitempty"`
-	CommitsReports  map[string]pkgReport `json:"deltas"`
+	BreakingChanges []string                  `json:"breakingChanges,omitempty"`
+	CommitsReports  map[string]report.Package `json:"deltas"`
 }
 
 // returns true if the report contains no data
-func (c commitPkgReport) isEmpty() bool {
+func (c commitPkgReport) IsEmpty() bool {
 	for _, rpt := range c.CommitsReports {
-		if !rpt.isEmpty() {
+		if !rpt.IsEmpty() {
 			return false
 		}
 	}
@@ -99,7 +83,7 @@ func (c commitPkgReport) isEmpty() bool {
 // returns true if the report contains breaking changes
 func (c commitPkgReport) hasBreakingChanges() bool {
 	for _, r := range c.CommitsReports {
-		if r.hasBreakingChanges() {
+		if r.HasBreakingChanges() {
 			return true
 		}
 	}
@@ -109,66 +93,19 @@ func (c commitPkgReport) hasBreakingChanges() bool {
 // returns true if the report contains additive changes
 func (c commitPkgReport) hasAdditiveChanges() bool {
 	for _, r := range c.CommitsReports {
-		if r.hasAdditiveChanges() {
+		if r.HasAdditiveChanges() {
 			return true
 		}
 	}
 	return false
 }
 
-// represents a per-package report, contains additive and breaking changes
-type pkgReport struct {
-	AdditiveChanges *exports.Content `json:"additiveChanges,omitempty"`
-	BreakingChanges *breakingChanges `json:"breakingChanges,omitempty"`
+type reportInfo interface {
+	IsEmpty() bool
 }
 
-// returns true if the package report contains breaking changes
-func (r pkgReport) hasBreakingChanges() bool {
-	return r.BreakingChanges != nil && !r.BreakingChanges.isEmpty()
-}
-
-// returns true if the package report contains additive changes
-func (r pkgReport) hasAdditiveChanges() bool {
-	return r.AdditiveChanges != nil && !r.AdditiveChanges.IsEmpty()
-}
-
-// returns true if the report contains no data
-func (r pkgReport) isEmpty() bool {
-	return (r.AdditiveChanges == nil || r.AdditiveChanges.IsEmpty()) &&
-		(r.BreakingChanges == nil || r.BreakingChanges.isEmpty())
-}
-
-// generates a package report based on the delta between lhs and rhs
-func getPkgReport(lhs, rhs exports.Content) pkgReport {
-	r := pkgReport{}
-	if !onlyBreakingChangesFlag {
-		if adds := delta.GetExports(lhs, rhs); !adds.IsEmpty() {
-			r.AdditiveChanges = &adds
-		}
-	}
-
-	if !onlyAdditionsFlag {
-		breaks := breakingChanges{}
-		breaks.Consts = delta.GetConstTypeChanges(lhs, rhs)
-		breaks.Funcs = delta.GetFuncSigChanges(lhs, rhs)
-		breaks.Interfaces = delta.GetInterfaceMethodSigChanges(lhs, rhs)
-		breaks.Structs = delta.GetStructFieldChanges(lhs, rhs)
-		if removed := delta.GetExports(rhs, lhs); !removed.IsEmpty() {
-			breaks.Removed = &removed
-		}
-		if !breaks.isEmpty() {
-			r.BreakingChanges = &breaks
-		}
-	}
-	return r
-}
-
-type report interface {
-	isEmpty() bool
-}
-
-func printReport(r report) error {
-	if r.isEmpty() {
+func printReport(r reportInfo) error {
+	if r.IsEmpty() {
 		println("no changes were found")
 		return nil
 	}
@@ -288,17 +225,17 @@ func generateReports(args []string, cln repo.WorkingTree, fn reportGenFunc) erro
 }
 
 type reportStatus interface {
-	hasBreakingChanges() bool
-	hasAdditiveChanges() bool
+	HasBreakingChanges() bool
+	HasAdditiveChanges() bool
 }
 
 // compares report status with the desired report options (breaking/additions)
 // to determine if the program should terminate with a non-zero exit code.
 func evalReportStatus(r reportStatus) {
-	if onlyBreakingChangesFlag && r.hasBreakingChanges() {
+	if onlyBreakingChangesFlag && r.HasBreakingChanges() {
 		os.Exit(1)
 	}
-	if onlyAdditionsFlag && !r.hasAdditiveChanges() {
+	if onlyAdditionsFlag && !r.HasAdditiveChanges() {
 		os.Exit(1)
 	}
 }

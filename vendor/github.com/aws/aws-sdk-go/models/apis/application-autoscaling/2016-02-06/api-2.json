@@ -240,7 +240,8 @@
       "required":[
         "ServiceNamespace",
         "ScheduledActionName",
-        "ResourceId"
+        "ResourceId",
+        "ScalableDimension"
       ],
       "members":{
         "ServiceNamespace":{"shape":"ServiceNamespace"},
@@ -492,7 +493,8 @@
       "required":[
         "ServiceNamespace",
         "ScheduledActionName",
-        "ResourceId"
+        "ResourceId",
+        "ScalableDimension"
       ],
       "members":{
         "ServiceNamespace":{"shape":"ServiceNamespace"},

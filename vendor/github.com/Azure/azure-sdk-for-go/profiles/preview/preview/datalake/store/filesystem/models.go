@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ const (
 	DefaultAdlsFileSystemDNSSuffix = original.DefaultAdlsFileSystemDNSSuffix
 )
 
-type BaseClient = original.BaseClient
-type Client = original.Client
 type AppendModeType = original.AppendModeType
 
 const (
@@ -71,30 +69,32 @@ type AdlsBadOffsetException = original.AdlsBadOffsetException
 type AdlsError = original.AdlsError
 type AdlsFileAlreadyExistsException = original.AdlsFileAlreadyExistsException
 type AdlsFileNotFoundException = original.AdlsFileNotFoundException
-type AdlsIllegalArgumentException = original.AdlsIllegalArgumentException
 type AdlsIOException = original.AdlsIOException
-type BasicAdlsRemoteException = original.BasicAdlsRemoteException
+type AdlsIllegalArgumentException = original.AdlsIllegalArgumentException
 type AdlsRemoteException = original.AdlsRemoteException
 type AdlsRuntimeException = original.AdlsRuntimeException
 type AdlsSecurityException = original.AdlsSecurityException
 type AdlsUnsupportedOperationException = original.AdlsUnsupportedOperationException
+type BaseClient = original.BaseClient
+type BasicAdlsRemoteException = original.BasicAdlsRemoteException
+type Client = original.Client
 type ContentSummary = original.ContentSummary
 type ContentSummaryResult = original.ContentSummaryResult
 type FileOperationResult = original.FileOperationResult
-type FileStatuses = original.FileStatuses
-type FileStatusesResult = original.FileStatusesResult
 type FileStatusProperties = original.FileStatusProperties
 type FileStatusResult = original.FileStatusResult
+type FileStatuses = original.FileStatuses
+type FileStatusesResult = original.FileStatusesResult
 type ReadCloser = original.ReadCloser
 
 func New() BaseClient {
 	return original.New()
 }
-func NewWithoutDefaults(adlsFileSystemDNSSuffix string) BaseClient {
-	return original.NewWithoutDefaults(adlsFileSystemDNSSuffix)
-}
 func NewClient() Client {
 	return original.NewClient()
+}
+func NewWithoutDefaults(adlsFileSystemDNSSuffix string) BaseClient {
+	return original.NewWithoutDefaults(adlsFileSystemDNSSuffix)
 }
 func PossibleAppendModeTypeValues() []AppendModeType {
 	return original.PossibleAppendModeTypeValues()

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,33 +19,16 @@
 
 package automation
 
-import original "github.com/Azure/azure-sdk-for-go/services/automation/mgmt/2015-10-31/automation"
+import (
+	"context"
 
-type AccountClient = original.AccountClient
-type ActivityClient = original.ActivityClient
-type AgentRegistrationInformationClient = original.AgentRegistrationInformationClient
-type CertificateClient = original.CertificateClient
+	original "github.com/Azure/azure-sdk-for-go/services/automation/mgmt/2015-10-31/automation"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ConnectionClient = original.ConnectionClient
-type ConnectionTypeClient = original.ConnectionTypeClient
-type CredentialClient = original.CredentialClient
-type DscCompilationJobClient = original.DscCompilationJobClient
-type DscCompilationJobStreamClient = original.DscCompilationJobStreamClient
-type DscConfigurationClient = original.DscConfigurationClient
-type DscNodeClient = original.DscNodeClient
-type DscNodeConfigurationClient = original.DscNodeConfigurationClient
-type FieldsClient = original.FieldsClient
-type HybridRunbookWorkerGroupClient = original.HybridRunbookWorkerGroupClient
-type JobClient = original.JobClient
-type JobScheduleClient = original.JobScheduleClient
-type JobStreamClient = original.JobStreamClient
-type KeysClient = original.KeysClient
-type LinkedWorkspaceClient = original.LinkedWorkspaceClient
 type AccountState = original.AccountState
 
 const (
@@ -270,6 +253,7 @@ const (
 )
 
 type Account = original.Account
+type AccountClient = original.AccountClient
 type AccountCreateOrUpdateParameters = original.AccountCreateOrUpdateParameters
 type AccountCreateOrUpdateProperties = original.AccountCreateOrUpdateProperties
 type AccountListResult = original.AccountListResult
@@ -279,6 +263,7 @@ type AccountProperties = original.AccountProperties
 type AccountUpdateParameters = original.AccountUpdateParameters
 type AccountUpdateProperties = original.AccountUpdateProperties
 type Activity = original.Activity
+type ActivityClient = original.ActivityClient
 type ActivityListResult = original.ActivityListResult
 type ActivityListResultIterator = original.ActivityListResultIterator
 type ActivityListResultPage = original.ActivityListResultPage
@@ -290,9 +275,12 @@ type ActivityProperties = original.ActivityProperties
 type AdvancedSchedule = original.AdvancedSchedule
 type AdvancedScheduleMonthlyOccurrence = original.AdvancedScheduleMonthlyOccurrence
 type AgentRegistration = original.AgentRegistration
+type AgentRegistrationInformationClient = original.AgentRegistrationInformationClient
 type AgentRegistrationKeys = original.AgentRegistrationKeys
 type AgentRegistrationRegenerateKeyParameter = original.AgentRegistrationRegenerateKeyParameter
+type BaseClient = original.BaseClient
 type Certificate = original.Certificate
+type CertificateClient = original.CertificateClient
 type CertificateCreateOrUpdateParameters = original.CertificateCreateOrUpdateParameters
 type CertificateCreateOrUpdateProperties = original.CertificateCreateOrUpdateProperties
 type CertificateListResult = original.CertificateListResult
@@ -302,6 +290,7 @@ type CertificateProperties = original.CertificateProperties
 type CertificateUpdateParameters = original.CertificateUpdateParameters
 type CertificateUpdateProperties = original.CertificateUpdateProperties
 type Connection = original.Connection
+type ConnectionClient = original.ConnectionClient
 type ConnectionCreateOrUpdateParameters = original.ConnectionCreateOrUpdateParameters
 type ConnectionCreateOrUpdateProperties = original.ConnectionCreateOrUpdateProperties
 type ConnectionListResult = original.ConnectionListResult
@@ -310,6 +299,7 @@ type ConnectionListResultPage = original.ConnectionListResultPage
 type ConnectionProperties = original.ConnectionProperties
 type ConnectionType = original.ConnectionType
 type ConnectionTypeAssociationProperty = original.ConnectionTypeAssociationProperty
+type ConnectionTypeClient = original.ConnectionTypeClient
 type ConnectionTypeCreateOrUpdateParameters = original.ConnectionTypeCreateOrUpdateParameters
 type ConnectionTypeCreateOrUpdateProperties = original.ConnectionTypeCreateOrUpdateProperties
 type ConnectionTypeListResult = original.ConnectionTypeListResult
@@ -322,6 +312,7 @@ type ContentHash = original.ContentHash
 type ContentLink = original.ContentLink
 type ContentSource = original.ContentSource
 type Credential = original.Credential
+type CredentialClient = original.CredentialClient
 type CredentialCreateOrUpdateParameters = original.CredentialCreateOrUpdateParameters
 type CredentialCreateOrUpdateProperties = original.CredentialCreateOrUpdateProperties
 type CredentialListResult = original.CredentialListResult
@@ -331,14 +322,17 @@ type CredentialProperties = original.CredentialProperties
 type CredentialUpdateParameters = original.CredentialUpdateParameters
 type CredentialUpdateProperties = original.CredentialUpdateProperties
 type DscCompilationJob = original.DscCompilationJob
+type DscCompilationJobClient = original.DscCompilationJobClient
 type DscCompilationJobCreateParameters = original.DscCompilationJobCreateParameters
 type DscCompilationJobCreateProperties = original.DscCompilationJobCreateProperties
 type DscCompilationJobListResult = original.DscCompilationJobListResult
 type DscCompilationJobListResultIterator = original.DscCompilationJobListResultIterator
 type DscCompilationJobListResultPage = original.DscCompilationJobListResultPage
 type DscCompilationJobProperties = original.DscCompilationJobProperties
+type DscCompilationJobStreamClient = original.DscCompilationJobStreamClient
 type DscConfiguration = original.DscConfiguration
 type DscConfigurationAssociationProperty = original.DscConfigurationAssociationProperty
+type DscConfigurationClient = original.DscConfigurationClient
 type DscConfigurationCreateOrUpdateParameters = original.DscConfigurationCreateOrUpdateParameters
 type DscConfigurationCreateOrUpdateProperties = original.DscConfigurationCreateOrUpdateProperties
 type DscConfigurationListResult = original.DscConfigurationListResult
@@ -349,8 +343,10 @@ type DscConfigurationProperties = original.DscConfigurationProperties
 type DscConfigurationUpdateParameters = original.DscConfigurationUpdateParameters
 type DscMetaConfiguration = original.DscMetaConfiguration
 type DscNode = original.DscNode
+type DscNodeClient = original.DscNodeClient
 type DscNodeConfiguration = original.DscNodeConfiguration
 type DscNodeConfigurationAssociationProperty = original.DscNodeConfigurationAssociationProperty
+type DscNodeConfigurationClient = original.DscNodeConfigurationClient
 type DscNodeConfigurationCreateOrUpdateParameters = original.DscNodeConfigurationCreateOrUpdateParameters
 type DscNodeConfigurationListResult = original.DscNodeConfigurationListResult
 type DscNodeConfigurationListResultIterator = original.DscNodeConfigurationListResultIterator
@@ -369,13 +365,16 @@ type DscReportResource = original.DscReportResource
 type DscReportResourceNavigation = original.DscReportResourceNavigation
 type ErrorResponse = original.ErrorResponse
 type FieldDefinition = original.FieldDefinition
+type FieldsClient = original.FieldsClient
 type HybridRunbookWorker = original.HybridRunbookWorker
 type HybridRunbookWorkerGroup = original.HybridRunbookWorkerGroup
+type HybridRunbookWorkerGroupClient = original.HybridRunbookWorkerGroupClient
+type HybridRunbookWorkerGroupUpdateParameters = original.HybridRunbookWorkerGroupUpdateParameters
 type HybridRunbookWorkerGroupsListResult = original.HybridRunbookWorkerGroupsListResult
 type HybridRunbookWorkerGroupsListResultIterator = original.HybridRunbookWorkerGroupsListResultIterator
 type HybridRunbookWorkerGroupsListResultPage = original.HybridRunbookWorkerGroupsListResultPage
-type HybridRunbookWorkerGroupUpdateParameters = original.HybridRunbookWorkerGroupUpdateParameters
 type Job = original.Job
+type JobClient = original.JobClient
 type JobCreateParameters = original.JobCreateParameters
 type JobCreateProperties = original.JobCreateProperties
 type JobListResult = original.JobListResult
@@ -383,6 +382,7 @@ type JobListResultIterator = original.JobListResultIterator
 type JobListResultPage = original.JobListResultPage
 type JobProperties = original.JobProperties
 type JobSchedule = original.JobSchedule
+type JobScheduleClient = original.JobScheduleClient
 type JobScheduleCreateParameters = original.JobScheduleCreateParameters
 type JobScheduleCreateProperties = original.JobScheduleCreateProperties
 type JobScheduleListResult = original.JobScheduleListResult
@@ -390,14 +390,18 @@ type JobScheduleListResultIterator = original.JobScheduleListResultIterator
 type JobScheduleListResultPage = original.JobScheduleListResultPage
 type JobScheduleProperties = original.JobScheduleProperties
 type JobStream = original.JobStream
+type JobStreamClient = original.JobStreamClient
 type JobStreamListResult = original.JobStreamListResult
 type JobStreamListResultIterator = original.JobStreamListResultIterator
 type JobStreamListResultPage = original.JobStreamListResultPage
 type JobStreamProperties = original.JobStreamProperties
 type Key = original.Key
 type KeyListResult = original.KeyListResult
+type KeysClient = original.KeysClient
 type LinkedWorkspace = original.LinkedWorkspace
+type LinkedWorkspaceClient = original.LinkedWorkspaceClient
 type Module = original.Module
+type ModuleClient = original.ModuleClient
 type ModuleCreateOrUpdateParameters = original.ModuleCreateOrUpdateParameters
 type ModuleCreateOrUpdateProperties = original.ModuleCreateOrUpdateProperties
 type ModuleErrorInfo = original.ModuleErrorInfo
@@ -407,20 +411,25 @@ type ModuleListResultPage = original.ModuleListResultPage
 type ModuleProperties = original.ModuleProperties
 type ModuleUpdateParameters = original.ModuleUpdateParameters
 type ModuleUpdateProperties = original.ModuleUpdateProperties
+type NodeReportsClient = original.NodeReportsClient
+type ObjectDataTypesClient = original.ObjectDataTypesClient
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type ProxyResource = original.ProxyResource
 type ReadCloser = original.ReadCloser
 type Resource = original.Resource
 type RunAsCredentialAssociationProperty = original.RunAsCredentialAssociationProperty
 type Runbook = original.Runbook
 type RunbookAssociationProperty = original.RunbookAssociationProperty
+type RunbookClient = original.RunbookClient
 type RunbookCreateOrUpdateDraftParameters = original.RunbookCreateOrUpdateDraftParameters
 type RunbookCreateOrUpdateDraftProperties = original.RunbookCreateOrUpdateDraftProperties
 type RunbookCreateOrUpdateParameters = original.RunbookCreateOrUpdateParameters
 type RunbookCreateOrUpdateProperties = original.RunbookCreateOrUpdateProperties
 type RunbookDraft = original.RunbookDraft
+type RunbookDraftClient = original.RunbookDraftClient
 type RunbookDraftPublishFuture = original.RunbookDraftPublishFuture
 type RunbookDraftReplaceContentFuture = original.RunbookDraftReplaceContentFuture
 type RunbookDraftUndoEditResult = original.RunbookDraftUndoEditResult
@@ -433,6 +442,7 @@ type RunbookUpdateParameters = original.RunbookUpdateParameters
 type RunbookUpdateProperties = original.RunbookUpdateProperties
 type Schedule = original.Schedule
 type ScheduleAssociationProperty = original.ScheduleAssociationProperty
+type ScheduleClient = original.ScheduleClient
 type ScheduleCreateOrUpdateParameters = original.ScheduleCreateOrUpdateParameters
 type ScheduleCreateOrUpdateProperties = original.ScheduleCreateOrUpdateProperties
 type ScheduleListResult = original.ScheduleListResult
@@ -444,17 +454,22 @@ type ScheduleUpdateProperties = original.ScheduleUpdateProperties
 type SetObject = original.SetObject
 type Sku = original.Sku
 type Statistics = original.Statistics
+type StatisticsClient = original.StatisticsClient
 type StatisticsListResult = original.StatisticsListResult
 type String = original.String
 type TestJob = original.TestJob
+type TestJobClient = original.TestJobClient
 type TestJobCreateParameters = original.TestJobCreateParameters
+type TestJobStreamsClient = original.TestJobStreamsClient
 type TrackedResource = original.TrackedResource
 type TypeField = original.TypeField
 type TypeFieldListResult = original.TypeFieldListResult
 type Usage = original.Usage
 type UsageCounterName = original.UsageCounterName
 type UsageListResult = original.UsageListResult
+type UsagesClient = original.UsagesClient
 type Variable = original.Variable
+type VariableClient = original.VariableClient
 type VariableCreateOrUpdateParameters = original.VariableCreateOrUpdateParameters
 type VariableCreateOrUpdateProperties = original.VariableCreateOrUpdateProperties
 type VariableListResult = original.VariableListResult
@@ -464,6 +479,7 @@ type VariableProperties = original.VariableProperties
 type VariableUpdateParameters = original.VariableUpdateParameters
 type VariableUpdateProperties = original.VariableUpdateProperties
 type Webhook = original.Webhook
+type WebhookClient = original.WebhookClient
 type WebhookCreateOrUpdateParameters = original.WebhookCreateOrUpdateParameters
 type WebhookCreateOrUpdateProperties = original.WebhookCreateOrUpdateProperties
 type WebhookListResult = original.WebhookListResult
@@ -472,31 +488,33 @@ type WebhookListResultPage = original.WebhookListResultPage
 type WebhookProperties = original.WebhookProperties
 type WebhookUpdateParameters = original.WebhookUpdateParameters
 type WebhookUpdateProperties = original.WebhookUpdateProperties
-type ModuleClient = original.ModuleClient
-type NodeReportsClient = original.NodeReportsClient
-type ObjectDataTypesClient = original.ObjectDataTypesClient
-type OperationsClient = original.OperationsClient
-type RunbookClient = original.RunbookClient
-type RunbookDraftClient = original.RunbookDraftClient
-type ScheduleClient = original.ScheduleClient
-type StatisticsClient = original.StatisticsClient
-type TestJobClient = original.TestJobClient
-type TestJobStreamsClient = original.TestJobStreamsClient
-type UsagesClient = original.UsagesClient
-type VariableClient = original.VariableClient
-type WebhookClient = original.WebhookClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAccountClient(subscriptionID string) AccountClient {
 	return original.NewAccountClient(subscriptionID)
 }
 func NewAccountClientWithBaseURI(baseURI string, subscriptionID string) AccountClient {
 	return original.NewAccountClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewAccountListResultIterator(page AccountListResultPage) AccountListResultIterator {
+	return original.NewAccountListResultIterator(page)
+}
+func NewAccountListResultPage(getNextPage func(context.Context, AccountListResult) (AccountListResult, error)) AccountListResultPage {
+	return original.NewAccountListResultPage(getNextPage)
+}
 func NewActivityClient(subscriptionID string) ActivityClient {
 	return original.NewActivityClient(subscriptionID)
 }
 func NewActivityClientWithBaseURI(baseURI string, subscriptionID string) ActivityClient {
 	return original.NewActivityClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewActivityListResultIterator(page ActivityListResultPage) ActivityListResultIterator {
+	return original.NewActivityListResultIterator(page)
+}
+func NewActivityListResultPage(getNextPage func(context.Context, ActivityListResult) (ActivityListResult, error)) ActivityListResultPage {
+	return original.NewActivityListResultPage(getNextPage)
 }
 func NewAgentRegistrationInformationClient(subscriptionID string) AgentRegistrationInformationClient {
 	return original.NewAgentRegistrationInformationClient(subscriptionID)
@@ -510,11 +528,11 @@ func NewCertificateClient(subscriptionID string) CertificateClient {
 func NewCertificateClientWithBaseURI(baseURI string, subscriptionID string) CertificateClient {
 	return original.NewCertificateClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewCertificateListResultIterator(page CertificateListResultPage) CertificateListResultIterator {
+	return original.NewCertificateListResultIterator(page)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewCertificateListResultPage(getNextPage func(context.Context, CertificateListResult) (CertificateListResult, error)) CertificateListResultPage {
+	return original.NewCertificateListResultPage(getNextPage)
 }
 func NewConnectionClient(subscriptionID string) ConnectionClient {
 	return original.NewConnectionClient(subscriptionID)
@@ -522,11 +540,23 @@ func NewConnectionClient(subscriptionID string) ConnectionClient {
 func NewConnectionClientWithBaseURI(baseURI string, subscriptionID string) ConnectionClient {
 	return original.NewConnectionClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewConnectionListResultIterator(page ConnectionListResultPage) ConnectionListResultIterator {
+	return original.NewConnectionListResultIterator(page)
+}
+func NewConnectionListResultPage(getNextPage func(context.Context, ConnectionListResult) (ConnectionListResult, error)) ConnectionListResultPage {
+	return original.NewConnectionListResultPage(getNextPage)
+}
 func NewConnectionTypeClient(subscriptionID string) ConnectionTypeClient {
 	return original.NewConnectionTypeClient(subscriptionID)
 }
 func NewConnectionTypeClientWithBaseURI(baseURI string, subscriptionID string) ConnectionTypeClient {
 	return original.NewConnectionTypeClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewConnectionTypeListResultIterator(page ConnectionTypeListResultPage) ConnectionTypeListResultIterator {
+	return original.NewConnectionTypeListResultIterator(page)
+}
+func NewConnectionTypeListResultPage(getNextPage func(context.Context, ConnectionTypeListResult) (ConnectionTypeListResult, error)) ConnectionTypeListResultPage {
+	return original.NewConnectionTypeListResultPage(getNextPage)
 }
 func NewCredentialClient(subscriptionID string) CredentialClient {
 	return original.NewCredentialClient(subscriptionID)
@@ -534,11 +564,23 @@ func NewCredentialClient(subscriptionID string) CredentialClient {
 func NewCredentialClientWithBaseURI(baseURI string, subscriptionID string) CredentialClient {
 	return original.NewCredentialClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewCredentialListResultIterator(page CredentialListResultPage) CredentialListResultIterator {
+	return original.NewCredentialListResultIterator(page)
+}
+func NewCredentialListResultPage(getNextPage func(context.Context, CredentialListResult) (CredentialListResult, error)) CredentialListResultPage {
+	return original.NewCredentialListResultPage(getNextPage)
+}
 func NewDscCompilationJobClient(subscriptionID string) DscCompilationJobClient {
 	return original.NewDscCompilationJobClient(subscriptionID)
 }
 func NewDscCompilationJobClientWithBaseURI(baseURI string, subscriptionID string) DscCompilationJobClient {
 	return original.NewDscCompilationJobClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewDscCompilationJobListResultIterator(page DscCompilationJobListResultPage) DscCompilationJobListResultIterator {
+	return original.NewDscCompilationJobListResultIterator(page)
+}
+func NewDscCompilationJobListResultPage(getNextPage func(context.Context, DscCompilationJobListResult) (DscCompilationJobListResult, error)) DscCompilationJobListResultPage {
+	return original.NewDscCompilationJobListResultPage(getNextPage)
 }
 func NewDscCompilationJobStreamClient(subscriptionID string) DscCompilationJobStreamClient {
 	return original.NewDscCompilationJobStreamClient(subscriptionID)
@@ -552,6 +594,12 @@ func NewDscConfigurationClient(subscriptionID string) DscConfigurationClient {
 func NewDscConfigurationClientWithBaseURI(baseURI string, subscriptionID string) DscConfigurationClient {
 	return original.NewDscConfigurationClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewDscConfigurationListResultIterator(page DscConfigurationListResultPage) DscConfigurationListResultIterator {
+	return original.NewDscConfigurationListResultIterator(page)
+}
+func NewDscConfigurationListResultPage(getNextPage func(context.Context, DscConfigurationListResult) (DscConfigurationListResult, error)) DscConfigurationListResultPage {
+	return original.NewDscConfigurationListResultPage(getNextPage)
+}
 func NewDscNodeClient(subscriptionID string) DscNodeClient {
 	return original.NewDscNodeClient(subscriptionID)
 }
@@ -563,6 +611,24 @@ func NewDscNodeConfigurationClient(subscriptionID string) DscNodeConfigurationCl
 }
 func NewDscNodeConfigurationClientWithBaseURI(baseURI string, subscriptionID string) DscNodeConfigurationClient {
 	return original.NewDscNodeConfigurationClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewDscNodeConfigurationListResultIterator(page DscNodeConfigurationListResultPage) DscNodeConfigurationListResultIterator {
+	return original.NewDscNodeConfigurationListResultIterator(page)
+}
+func NewDscNodeConfigurationListResultPage(getNextPage func(context.Context, DscNodeConfigurationListResult) (DscNodeConfigurationListResult, error)) DscNodeConfigurationListResultPage {
+	return original.NewDscNodeConfigurationListResultPage(getNextPage)
+}
+func NewDscNodeListResultIterator(page DscNodeListResultPage) DscNodeListResultIterator {
+	return original.NewDscNodeListResultIterator(page)
+}
+func NewDscNodeListResultPage(getNextPage func(context.Context, DscNodeListResult) (DscNodeListResult, error)) DscNodeListResultPage {
+	return original.NewDscNodeListResultPage(getNextPage)
+}
+func NewDscNodeReportListResultIterator(page DscNodeReportListResultPage) DscNodeReportListResultIterator {
+	return original.NewDscNodeReportListResultIterator(page)
+}
+func NewDscNodeReportListResultPage(getNextPage func(context.Context, DscNodeReportListResult) (DscNodeReportListResult, error)) DscNodeReportListResultPage {
+	return original.NewDscNodeReportListResultPage(getNextPage)
 }
 func NewFieldsClient(subscriptionID string) FieldsClient {
 	return original.NewFieldsClient(subscriptionID)
@@ -576,11 +642,23 @@ func NewHybridRunbookWorkerGroupClient(subscriptionID string) HybridRunbookWorke
 func NewHybridRunbookWorkerGroupClientWithBaseURI(baseURI string, subscriptionID string) HybridRunbookWorkerGroupClient {
 	return original.NewHybridRunbookWorkerGroupClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewHybridRunbookWorkerGroupsListResultIterator(page HybridRunbookWorkerGroupsListResultPage) HybridRunbookWorkerGroupsListResultIterator {
+	return original.NewHybridRunbookWorkerGroupsListResultIterator(page)
+}
+func NewHybridRunbookWorkerGroupsListResultPage(getNextPage func(context.Context, HybridRunbookWorkerGroupsListResult) (HybridRunbookWorkerGroupsListResult, error)) HybridRunbookWorkerGroupsListResultPage {
+	return original.NewHybridRunbookWorkerGroupsListResultPage(getNextPage)
+}
 func NewJobClient(subscriptionID string) JobClient {
 	return original.NewJobClient(subscriptionID)
 }
 func NewJobClientWithBaseURI(baseURI string, subscriptionID string) JobClient {
 	return original.NewJobClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewJobListResultIterator(page JobListResultPage) JobListResultIterator {
+	return original.NewJobListResultIterator(page)
+}
+func NewJobListResultPage(getNextPage func(context.Context, JobListResult) (JobListResult, error)) JobListResultPage {
+	return original.NewJobListResultPage(getNextPage)
 }
 func NewJobScheduleClient(subscriptionID string) JobScheduleClient {
 	return original.NewJobScheduleClient(subscriptionID)
@@ -588,11 +666,23 @@ func NewJobScheduleClient(subscriptionID string) JobScheduleClient {
 func NewJobScheduleClientWithBaseURI(baseURI string, subscriptionID string) JobScheduleClient {
 	return original.NewJobScheduleClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewJobScheduleListResultIterator(page JobScheduleListResultPage) JobScheduleListResultIterator {
+	return original.NewJobScheduleListResultIterator(page)
+}
+func NewJobScheduleListResultPage(getNextPage func(context.Context, JobScheduleListResult) (JobScheduleListResult, error)) JobScheduleListResultPage {
+	return original.NewJobScheduleListResultPage(getNextPage)
+}
 func NewJobStreamClient(subscriptionID string) JobStreamClient {
 	return original.NewJobStreamClient(subscriptionID)
 }
 func NewJobStreamClientWithBaseURI(baseURI string, subscriptionID string) JobStreamClient {
 	return original.NewJobStreamClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewJobStreamListResultIterator(page JobStreamListResultPage) JobStreamListResultIterator {
+	return original.NewJobStreamListResultIterator(page)
+}
+func NewJobStreamListResultPage(getNextPage func(context.Context, JobStreamListResult) (JobStreamListResult, error)) JobStreamListResultPage {
+	return original.NewJobStreamListResultPage(getNextPage)
 }
 func NewKeysClient(subscriptionID string) KeysClient {
 	return original.NewKeysClient(subscriptionID)
@@ -605,6 +695,117 @@ func NewLinkedWorkspaceClient(subscriptionID string) LinkedWorkspaceClient {
 }
 func NewLinkedWorkspaceClientWithBaseURI(baseURI string, subscriptionID string) LinkedWorkspaceClient {
 	return original.NewLinkedWorkspaceClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewModuleClient(subscriptionID string) ModuleClient {
+	return original.NewModuleClient(subscriptionID)
+}
+func NewModuleClientWithBaseURI(baseURI string, subscriptionID string) ModuleClient {
+	return original.NewModuleClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewModuleListResultIterator(page ModuleListResultPage) ModuleListResultIterator {
+	return original.NewModuleListResultIterator(page)
+}
+func NewModuleListResultPage(getNextPage func(context.Context, ModuleListResult) (ModuleListResult, error)) ModuleListResultPage {
+	return original.NewModuleListResultPage(getNextPage)
+}
+func NewNodeReportsClient(subscriptionID string) NodeReportsClient {
+	return original.NewNodeReportsClient(subscriptionID)
+}
+func NewNodeReportsClientWithBaseURI(baseURI string, subscriptionID string) NodeReportsClient {
+	return original.NewNodeReportsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewObjectDataTypesClient(subscriptionID string) ObjectDataTypesClient {
+	return original.NewObjectDataTypesClient(subscriptionID)
+}
+func NewObjectDataTypesClientWithBaseURI(baseURI string, subscriptionID string) ObjectDataTypesClient {
+	return original.NewObjectDataTypesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRunbookClient(subscriptionID string) RunbookClient {
+	return original.NewRunbookClient(subscriptionID)
+}
+func NewRunbookClientWithBaseURI(baseURI string, subscriptionID string) RunbookClient {
+	return original.NewRunbookClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRunbookDraftClient(subscriptionID string) RunbookDraftClient {
+	return original.NewRunbookDraftClient(subscriptionID)
+}
+func NewRunbookDraftClientWithBaseURI(baseURI string, subscriptionID string) RunbookDraftClient {
+	return original.NewRunbookDraftClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRunbookListResultIterator(page RunbookListResultPage) RunbookListResultIterator {
+	return original.NewRunbookListResultIterator(page)
+}
+func NewRunbookListResultPage(getNextPage func(context.Context, RunbookListResult) (RunbookListResult, error)) RunbookListResultPage {
+	return original.NewRunbookListResultPage(getNextPage)
+}
+func NewScheduleClient(subscriptionID string) ScheduleClient {
+	return original.NewScheduleClient(subscriptionID)
+}
+func NewScheduleClientWithBaseURI(baseURI string, subscriptionID string) ScheduleClient {
+	return original.NewScheduleClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewScheduleListResultIterator(page ScheduleListResultPage) ScheduleListResultIterator {
+	return original.NewScheduleListResultIterator(page)
+}
+func NewScheduleListResultPage(getNextPage func(context.Context, ScheduleListResult) (ScheduleListResult, error)) ScheduleListResultPage {
+	return original.NewScheduleListResultPage(getNextPage)
+}
+func NewStatisticsClient(subscriptionID string) StatisticsClient {
+	return original.NewStatisticsClient(subscriptionID)
+}
+func NewStatisticsClientWithBaseURI(baseURI string, subscriptionID string) StatisticsClient {
+	return original.NewStatisticsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewTestJobClient(subscriptionID string) TestJobClient {
+	return original.NewTestJobClient(subscriptionID)
+}
+func NewTestJobClientWithBaseURI(baseURI string, subscriptionID string) TestJobClient {
+	return original.NewTestJobClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewTestJobStreamsClient(subscriptionID string) TestJobStreamsClient {
+	return original.NewTestJobStreamsClient(subscriptionID)
+}
+func NewTestJobStreamsClientWithBaseURI(baseURI string, subscriptionID string) TestJobStreamsClient {
+	return original.NewTestJobStreamsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewUsagesClient(subscriptionID string) UsagesClient {
+	return original.NewUsagesClient(subscriptionID)
+}
+func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
+	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewVariableClient(subscriptionID string) VariableClient {
+	return original.NewVariableClient(subscriptionID)
+}
+func NewVariableClientWithBaseURI(baseURI string, subscriptionID string) VariableClient {
+	return original.NewVariableClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewVariableListResultIterator(page VariableListResultPage) VariableListResultIterator {
+	return original.NewVariableListResultIterator(page)
+}
+func NewVariableListResultPage(getNextPage func(context.Context, VariableListResult) (VariableListResult, error)) VariableListResultPage {
+	return original.NewVariableListResultPage(getNextPage)
+}
+func NewWebhookClient(subscriptionID string) WebhookClient {
+	return original.NewWebhookClient(subscriptionID)
+}
+func NewWebhookClientWithBaseURI(baseURI string, subscriptionID string) WebhookClient {
+	return original.NewWebhookClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWebhookListResultIterator(page WebhookListResultPage) WebhookListResultIterator {
+	return original.NewWebhookListResultIterator(page)
+}
+func NewWebhookListResultPage(getNextPage func(context.Context, WebhookListResult) (WebhookListResult, error)) WebhookListResultPage {
+	return original.NewWebhookListResultPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAccountStateValues() []AccountState {
 	return original.PossibleAccountStateValues()
@@ -663,87 +864,9 @@ func PossibleScheduleFrequencyValues() []ScheduleFrequency {
 func PossibleSkuNameEnumValues() []SkuNameEnum {
 	return original.PossibleSkuNameEnumValues()
 }
-func NewModuleClient(subscriptionID string) ModuleClient {
-	return original.NewModuleClient(subscriptionID)
-}
-func NewModuleClientWithBaseURI(baseURI string, subscriptionID string) ModuleClient {
-	return original.NewModuleClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewNodeReportsClient(subscriptionID string) NodeReportsClient {
-	return original.NewNodeReportsClient(subscriptionID)
-}
-func NewNodeReportsClientWithBaseURI(baseURI string, subscriptionID string) NodeReportsClient {
-	return original.NewNodeReportsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewObjectDataTypesClient(subscriptionID string) ObjectDataTypesClient {
-	return original.NewObjectDataTypesClient(subscriptionID)
-}
-func NewObjectDataTypesClientWithBaseURI(baseURI string, subscriptionID string) ObjectDataTypesClient {
-	return original.NewObjectDataTypesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRunbookClient(subscriptionID string) RunbookClient {
-	return original.NewRunbookClient(subscriptionID)
-}
-func NewRunbookClientWithBaseURI(baseURI string, subscriptionID string) RunbookClient {
-	return original.NewRunbookClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRunbookDraftClient(subscriptionID string) RunbookDraftClient {
-	return original.NewRunbookDraftClient(subscriptionID)
-}
-func NewRunbookDraftClientWithBaseURI(baseURI string, subscriptionID string) RunbookDraftClient {
-	return original.NewRunbookDraftClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewScheduleClient(subscriptionID string) ScheduleClient {
-	return original.NewScheduleClient(subscriptionID)
-}
-func NewScheduleClientWithBaseURI(baseURI string, subscriptionID string) ScheduleClient {
-	return original.NewScheduleClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStatisticsClient(subscriptionID string) StatisticsClient {
-	return original.NewStatisticsClient(subscriptionID)
-}
-func NewStatisticsClientWithBaseURI(baseURI string, subscriptionID string) StatisticsClient {
-	return original.NewStatisticsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewTestJobClient(subscriptionID string) TestJobClient {
-	return original.NewTestJobClient(subscriptionID)
-}
-func NewTestJobClientWithBaseURI(baseURI string, subscriptionID string) TestJobClient {
-	return original.NewTestJobClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewTestJobStreamsClient(subscriptionID string) TestJobStreamsClient {
-	return original.NewTestJobStreamsClient(subscriptionID)
-}
-func NewTestJobStreamsClientWithBaseURI(baseURI string, subscriptionID string) TestJobStreamsClient {
-	return original.NewTestJobStreamsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewUsagesClient(subscriptionID string) UsagesClient {
-	return original.NewUsagesClient(subscriptionID)
-}
-func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesClient {
-	return original.NewUsagesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewVariableClient(subscriptionID string) VariableClient {
-	return original.NewVariableClient(subscriptionID)
-}
-func NewVariableClientWithBaseURI(baseURI string, subscriptionID string) VariableClient {
-	return original.NewVariableClientWithBaseURI(baseURI, subscriptionID)
-}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"
 }
 func Version() string {
 	return original.Version()
-}
-func NewWebhookClient(subscriptionID string) WebhookClient {
-	return original.NewWebhookClient(subscriptionID)
-}
-func NewWebhookClientWithBaseURI(baseURI string, subscriptionID string) WebhookClient {
-	return original.NewWebhookClientWithBaseURI(baseURI, subscriptionID)
 }

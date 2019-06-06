@@ -4,6 +4,12 @@ package cloudwatch
 
 const (
 
+	// ErrCodeConcurrentModificationException for service response error code
+	// "ConcurrentModificationException".
+	//
+	// More than one process tried to modify a resource at the same time.
+	ErrCodeConcurrentModificationException = "ConcurrentModificationException"
+
 	// ErrCodeDashboardInvalidInputError for service response error code
 	// "InvalidParameterInput".
 	//
@@ -63,4 +69,10 @@ const (
 	//
 	// The named resource does not exist.
 	ErrCodeResourceNotFound = "ResourceNotFound"
+
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// The named resource does not exist.
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 )

@@ -6,6 +6,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opDeleteReportDefinition = "DeleteReportDefinition"
@@ -13,7 +15,7 @@ const opDeleteReportDefinition = "DeleteReportDefinition"
 // DeleteReportDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteReportDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -52,7 +54,7 @@ func (c *CostandUsageReportService) DeleteReportDefinitionRequest(input *DeleteR
 
 // DeleteReportDefinition API operation for AWS Cost and Usage Report Service.
 //
-// Delete a specified report definition
+// Deletes the specified report.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -63,12 +65,11 @@ func (c *CostandUsageReportService) DeleteReportDefinitionRequest(input *DeleteR
 //
 // Returned Error Codes:
 //   * ErrCodeInternalErrorException "InternalErrorException"
-//   This exception is thrown on a known dependency failure.
+//   An error on the server occurred during the processing of your request. Try
+//   again later.
 //
 //   * ErrCodeValidationException "ValidationException"
-//   This exception is thrown when providing an invalid input. eg. Put a report
-//   preference with an invalid report name, or Delete a report preference with
-//   an empty report name.
+//   The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cur-2017-01-06/DeleteReportDefinition
 func (c *CostandUsageReportService) DeleteReportDefinition(input *DeleteReportDefinitionInput) (*DeleteReportDefinitionOutput, error) {
@@ -97,7 +98,7 @@ const opDescribeReportDefinitions = "DescribeReportDefinitions"
 // DescribeReportDefinitionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReportDefinitions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -142,7 +143,7 @@ func (c *CostandUsageReportService) DescribeReportDefinitionsRequest(input *Desc
 
 // DescribeReportDefinitions API operation for AWS Cost and Usage Report Service.
 //
-// Describe a list of report definitions owned by the account
+// Lists the AWS Cost and Usage reports available to this account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -153,7 +154,8 @@ func (c *CostandUsageReportService) DescribeReportDefinitionsRequest(input *Desc
 //
 // Returned Error Codes:
 //   * ErrCodeInternalErrorException "InternalErrorException"
-//   This exception is thrown on a known dependency failure.
+//   An error on the server occurred during the processing of your request. Try
+//   again later.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cur-2017-01-06/DescribeReportDefinitions
 func (c *CostandUsageReportService) DescribeReportDefinitions(input *DescribeReportDefinitionsInput) (*DescribeReportDefinitionsOutput, error) {
@@ -188,7 +190,7 @@ func (c *CostandUsageReportService) DescribeReportDefinitionsWithContext(ctx aws
 //    // Example iterating over at most 3 pages of a DescribeReportDefinitions operation.
 //    pageNum := 0
 //    err := client.DescribeReportDefinitionsPages(params,
-//        func(page *DescribeReportDefinitionsOutput, lastPage bool) bool {
+//        func(page *costandusagereportservice.DescribeReportDefinitionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -232,7 +234,7 @@ const opPutReportDefinition = "PutReportDefinition"
 // PutReportDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the PutReportDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -266,12 +268,13 @@ func (c *CostandUsageReportService) PutReportDefinitionRequest(input *PutReportD
 
 	output = &PutReportDefinitionOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // PutReportDefinition API operation for AWS Cost and Usage Report Service.
 //
-// Create a new report definition
+// Creates a new report using the description that you provide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -282,20 +285,19 @@ func (c *CostandUsageReportService) PutReportDefinitionRequest(input *PutReportD
 //
 // Returned Error Codes:
 //   * ErrCodeDuplicateReportNameException "DuplicateReportNameException"
-//   This exception is thrown when putting a report preference with a name that
-//   already exists.
+//   A report with the specified name already exists in the account. Specify a
+//   different report name.
 //
 //   * ErrCodeReportLimitReachedException "ReportLimitReachedException"
-//   This exception is thrown when the number of report preference reaches max
-//   limit. The max number is 5.
+//   This account already has five reports defined. To define a new report, you
+//   must delete an existing report.
 //
 //   * ErrCodeInternalErrorException "InternalErrorException"
-//   This exception is thrown on a known dependency failure.
+//   An error on the server occurred during the processing of your request. Try
+//   again later.
 //
 //   * ErrCodeValidationException "ValidationException"
-//   This exception is thrown when providing an invalid input. eg. Put a report
-//   preference with an invalid report name, or Delete a report preference with
-//   an empty report name.
+//   The input fails to satisfy the constraints specified by an AWS service.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/cur-2017-01-06/PutReportDefinition
 func (c *CostandUsageReportService) PutReportDefinition(input *PutReportDefinitionInput) (*PutReportDefinitionOutput, error) {
@@ -319,12 +321,12 @@ func (c *CostandUsageReportService) PutReportDefinitionWithContext(ctx aws.Conte
 	return out, req.Send()
 }
 
-// Request of DeleteReportDefinition
+// Deletes the specified report.
 type DeleteReportDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
-	// Preferred name for a report, it has to be unique. Must starts with a number/letter,
-	// case sensitive. Limited to 256 characters.
+	// The name of the report that you want to create. The name must be unique,
+	// is case sensitive, and can't include spaces.
 	ReportName *string `type:"string"`
 }
 
@@ -344,11 +346,11 @@ func (s *DeleteReportDefinitionInput) SetReportName(v string) *DeleteReportDefin
 	return s
 }
 
-// Response of DeleteReportDefinition
+// If the action is successful, the service sends back an HTTP 200 response.
 type DeleteReportDefinitionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A message indicates if the deletion is successful.
+	// Whether the deletion was successful or not.
 	ResponseMessage *string `type:"string"`
 }
 
@@ -368,11 +370,11 @@ func (s *DeleteReportDefinitionOutput) SetResponseMessage(v string) *DeleteRepor
 	return s
 }
 
-// Request of DescribeReportDefinitions
+// Requests a list of AWS Cost and Usage reports owned by the account.
 type DescribeReportDefinitionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The max number of results returned by the operation.
+	// The maximum number of results that AWS returns for the operation.
 	MaxResults *int64 `min:"5" type:"integer"`
 
 	// A generic string.
@@ -414,14 +416,14 @@ func (s *DescribeReportDefinitionsInput) SetNextToken(v string) *DescribeReportD
 	return s
 }
 
-// Response of DescribeReportDefinitions
+// If the action is successful, the service sends back an HTTP 200 response.
 type DescribeReportDefinitionsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A generic string.
 	NextToken *string `type:"string"`
 
-	// A list of report definitions.
+	// A list of AWS Cost and Usage reports owned by the account.
 	ReportDefinitions []*ReportDefinition `type:"list"`
 }
 
@@ -447,13 +449,12 @@ func (s *DescribeReportDefinitionsOutput) SetReportDefinitions(v []*ReportDefini
 	return s
 }
 
-// Request of PutReportDefinition
+// Creates a Cost and Usage Report.
 type PutReportDefinitionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The definition of AWS Cost and Usage Report. Customer can specify the report
-	// name, time unit, report format, compression format, S3 bucket and additional
-	// artifacts and schema elements in the definition.
+	// Represents the output of the PutReportDefinition operation. The content consists
+	// of the detailed metadata and data file information.
 	//
 	// ReportDefinition is a required field
 	ReportDefinition *ReportDefinition `type:"structure" required:"true"`
@@ -493,7 +494,8 @@ func (s *PutReportDefinitionInput) SetReportDefinition(v *ReportDefinition) *Put
 	return s
 }
 
-// Response of PutReportDefinition
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
 type PutReportDefinitionOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -508,52 +510,64 @@ func (s PutReportDefinitionOutput) GoString() string {
 	return s.String()
 }
 
-// The definition of AWS Cost and Usage Report. Customer can specify the report
-// name, time unit, report format, compression format, S3 bucket and additional
-// artifacts and schema elements in the definition.
+// The definition of AWS Cost and Usage Report. You can specify the report name,
+// time unit, report format, compression format, S3 bucket, additional artifacts,
+// and schema elements in the definition.
 type ReportDefinition struct {
 	_ struct{} `type:"structure"`
 
-	// A list of additional artifacts.
+	// A list of manifests that you want Amazon Web Services to create for this
+	// report.
 	AdditionalArtifacts []*string `type:"list"`
 
-	// A list of schema elements.
+	// A list of strings that indicate additional content that Amazon Web Services
+	// includes in the report, such as individual resource IDs.
 	//
 	// AdditionalSchemaElements is a required field
 	AdditionalSchemaElements []*string `type:"list" required:"true"`
 
-	// Preferred compression format for report.
+	// The compression format that AWS uses for the report.
 	//
 	// Compression is a required field
 	Compression *string `type:"string" required:"true" enum:"CompressionFormat"`
 
-	// Preferred format for report.
+	// The format that AWS saves the report in.
 	//
 	// Format is a required field
 	Format *string `type:"string" required:"true" enum:"ReportFormat"`
 
-	// Preferred name for a report, it has to be unique. Must starts with a number/letter,
-	// case sensitive. Limited to 256 characters.
+	// Whether you want Amazon Web Services to update your reports after they have
+	// been finalized if Amazon Web Services detects charges related to previous
+	// months. These charges can include refunds, credits, or support fees.
+	RefreshClosedReports *bool `type:"boolean"`
+
+	// The name of the report that you want to create. The name must be unique,
+	// is case sensitive, and can't include spaces.
 	//
 	// ReportName is a required field
 	ReportName *string `type:"string" required:"true"`
 
-	// Name of customer S3 bucket.
+	// Whether you want Amazon Web Services to overwrite the previous version of
+	// each report or to deliver the report in addition to the previous versions.
+	ReportVersioning *string `type:"string" enum:"ReportVersioning"`
+
+	// The S3 bucket where AWS delivers the report.
 	//
 	// S3Bucket is a required field
 	S3Bucket *string `type:"string" required:"true"`
 
-	// Preferred report path prefix. Limited to 256 characters.
+	// The prefix that AWS adds to the report name when AWS delivers the report.
+	// Your prefix can't include spaces.
 	//
 	// S3Prefix is a required field
 	S3Prefix *string `type:"string" required:"true"`
 
-	// Region of customer S3 bucket.
+	// The region of the S3 bucket that AWS delivers the report into.
 	//
 	// S3Region is a required field
 	S3Region *string `type:"string" required:"true" enum:"AWSRegion"`
 
-	// The frequency on which report data are measured and displayed.
+	// The length of time covered by the report.
 	//
 	// TimeUnit is a required field
 	TimeUnit *string `type:"string" required:"true" enum:"TimeUnit"`
@@ -627,9 +641,21 @@ func (s *ReportDefinition) SetFormat(v string) *ReportDefinition {
 	return s
 }
 
+// SetRefreshClosedReports sets the RefreshClosedReports field's value.
+func (s *ReportDefinition) SetRefreshClosedReports(v bool) *ReportDefinition {
+	s.RefreshClosedReports = &v
+	return s
+}
+
 // SetReportName sets the ReportName field's value.
 func (s *ReportDefinition) SetReportName(v string) *ReportDefinition {
 	s.ReportName = &v
+	return s
+}
+
+// SetReportVersioning sets the ReportVersioning field's value.
+func (s *ReportDefinition) SetReportVersioning(v string) *ReportDefinition {
+	s.ReportVersioning = &v
 	return s
 }
 
@@ -657,7 +683,7 @@ func (s *ReportDefinition) SetTimeUnit(v string) *ReportDefinition {
 	return s
 }
 
-// Region of customer S3 bucket.
+// The region of the S3 bucket that AWS delivers the report into.
 const (
 	// AWSRegionUsEast1 is a AWSRegion enum value
 	AWSRegionUsEast1 = "us-east-1"
@@ -682,40 +708,62 @@ const (
 
 	// AWSRegionApNortheast1 is a AWSRegion enum value
 	AWSRegionApNortheast1 = "ap-northeast-1"
+
+	// AWSRegionEuNorth1 is a AWSRegion enum value
+	AWSRegionEuNorth1 = "eu-north-1"
+
+	// AWSRegionApNortheast3 is a AWSRegion enum value
+	AWSRegionApNortheast3 = "ap-northeast-3"
 )
 
-// Enable support for Redshift and/or QuickSight.
+// The types of manifest that you want AWS to create for this report.
 const (
 	// AdditionalArtifactRedshift is a AdditionalArtifact enum value
 	AdditionalArtifactRedshift = "REDSHIFT"
 
 	// AdditionalArtifactQuicksight is a AdditionalArtifact enum value
 	AdditionalArtifactQuicksight = "QUICKSIGHT"
+
+	// AdditionalArtifactAthena is a AdditionalArtifact enum value
+	AdditionalArtifactAthena = "ATHENA"
 )
 
-// Preferred compression format for report.
+// The compression format that AWS uses for the report.
 const (
 	// CompressionFormatZip is a CompressionFormat enum value
 	CompressionFormatZip = "ZIP"
 
 	// CompressionFormatGzip is a CompressionFormat enum value
 	CompressionFormatGzip = "GZIP"
+
+	// CompressionFormatParquet is a CompressionFormat enum value
+	CompressionFormatParquet = "Parquet"
 )
 
-// Preferred format for report.
+// The format that AWS saves the report in.
 const (
 	// ReportFormatTextOrcsv is a ReportFormat enum value
 	ReportFormatTextOrcsv = "textORcsv"
+
+	// ReportFormatParquet is a ReportFormat enum value
+	ReportFormatParquet = "Parquet"
 )
 
-// Preference of including Resource IDs. You can include additional details
-// about individual resource IDs in your report.
+const (
+	// ReportVersioningCreateNewReport is a ReportVersioning enum value
+	ReportVersioningCreateNewReport = "CREATE_NEW_REPORT"
+
+	// ReportVersioningOverwriteReport is a ReportVersioning enum value
+	ReportVersioningOverwriteReport = "OVERWRITE_REPORT"
+)
+
+// Whether or not AWS includes resource IDs in the report.
 const (
 	// SchemaElementResources is a SchemaElement enum value
 	SchemaElementResources = "RESOURCES"
 )
 
-// The frequency on which report data are measured and displayed.
+// The length of time covered by the report.
 const (
 	// TimeUnitHourly is a TimeUnit enum value
 	TimeUnitHourly = "HOURLY"

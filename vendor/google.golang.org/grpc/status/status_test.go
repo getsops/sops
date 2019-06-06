@@ -19,6 +19,7 @@
 package status
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -28,7 +29,6 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	apb "github.com/golang/protobuf/ptypes/any"
 	dpb "github.com/golang/protobuf/ptypes/duration"
-	"golang.org/x/net/context"
 	cpb "google.golang.org/genproto/googleapis/rpc/code"
 	epb "google.golang.org/genproto/googleapis/rpc/errdetails"
 	spb "google.golang.org/genproto/googleapis/rpc/status"

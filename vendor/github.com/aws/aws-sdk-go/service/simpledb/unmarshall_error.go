@@ -8,17 +8,43 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol/xml/xmlutil"
 )
 
 type xmlErrorDetail struct {
 	Code    string `xml:"Code"`
 	Message string `xml:"Message"`
 }
-
-type xmlErrorResponse struct {
+type xmlErrorMessage struct {
 	XMLName   xml.Name         `xml:"Response"`
 	Errors    []xmlErrorDetail `xml:"Errors>Error"`
 	RequestID string           `xml:"RequestID"`
+}
+
+type xmlErrorResponse struct {
+	Code        string
+	Message     string
+	RequestID   string
+	OtherErrors []xmlErrorDetail
+}
+
+func (r *xmlErrorResponse) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var errResp xmlErrorMessage
+	if err := d.DecodeElement(&errResp, &start); err != nil {
+		return err
+	}
+
+	r.RequestID = errResp.RequestID
+	if len(errResp.Errors) == 0 {
+		r.Code = "MissingError"
+		r.Message = "missing error code in SimpleDB XML error response"
+	} else {
+		r.Code = errResp.Errors[0].Code
+		r.Message = errResp.Errors[0].Message
+		r.OtherErrors = errResp.Errors[1:]
+	}
+
+	return nil
 }
 
 func unmarshalError(r *request.Request) {
@@ -30,24 +56,32 @@ func unmarshalError(r *request.Request) {
 		r.Error = awserr.NewRequestFailure(
 			awserr.New(strings.Replace(r.HTTPResponse.Status, " ", "", -1), r.HTTPResponse.Status, nil),
 			r.HTTPResponse.StatusCode,
-			"",
+			r.RequestID,
 		)
 		return
 	}
 
-	resp := &xmlErrorResponse{}
-	err := xml.NewDecoder(r.HTTPResponse.Body).Decode(resp)
-	if err != nil && err != io.EOF {
-		r.Error = awserr.New("SerializationError", "failed to decode SimpleDB XML error response", nil)
-	} else if len(resp.Errors) == 0 {
-		r.Error = awserr.New("MissingError", "missing error code in SimpleDB XML error response", nil)
-	} else {
-		// If there are multiple error codes, return only the first as the aws.Error interface only supports
-		// one error code.
+	var errResp xmlErrorResponse
+	err := xmlutil.UnmarshalXMLError(&errResp, r.HTTPResponse.Body)
+	if err != nil {
 		r.Error = awserr.NewRequestFailure(
-			awserr.New(resp.Errors[0].Code, resp.Errors[0].Message, nil),
+			awserr.New(request.ErrCodeSerialization, "failed to unmarshal error message", err),
 			r.HTTPResponse.StatusCode,
-			resp.RequestID,
+			r.RequestID,
 		)
+		return
 	}
+
+	var otherErrs []error
+	for _, e := range errResp.OtherErrors {
+		otherErrs = append(otherErrs, awserr.New(e.Code, e.Message, nil))
+	}
+
+	// If there are multiple error codes, return only the first as the
+	// aws.Error interface only supports one error code.
+	r.Error = awserr.NewRequestFailure(
+		awserr.NewBatchError(errResp.Code, errResp.Message, otherErrs),
+		r.HTTPResponse.StatusCode,
+		errResp.RequestID,
+	)
 }

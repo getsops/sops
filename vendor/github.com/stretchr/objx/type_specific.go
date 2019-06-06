@@ -76,6 +76,20 @@ func (v *Value) IsMSISlice() bool {
 	_, ok := v.data.([]map[string]interface{})
 	if !ok {
 		_, ok = v.data.([]Map)
+		if !ok {
+			s, ok := v.data.([]interface{})
+			if ok {
+				for i := range s {
+					switch s[i].(type) {
+					case Map:
+					case map[string]interface{}:
+					default:
+						return false
+					}
+				}
+				return true
+			}
+		}
 	}
 	return ok
 }
@@ -241,7 +255,22 @@ func (v *Value) IsObjxMapSlice() bool {
 	_, ok := v.data.([](Map))
 	if !ok {
 		_, ok = v.data.([]map[string]interface{})
+		if !ok {
+			s, ok := v.data.([]interface{})
+			if ok {
+				for i := range s {
+					switch s[i].(type) {
+					case Map:
+					case map[string]interface{}:
+					default:
+						return false
+					}
+				}
+				return true
+			}
+		}
 	}
+
 	return ok
 }
 

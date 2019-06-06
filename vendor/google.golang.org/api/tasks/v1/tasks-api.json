@@ -3,7 +3,7 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/tasks": {
-          "description": "Manage your tasks"
+          "description": "Create, edit, organize, and delete all your tasks"
         },
         "https://www.googleapis.com/auth/tasks.readonly": {
           "description": "View your tasks"
@@ -14,10 +14,10 @@
   "basePath": "/tasks/v1/",
   "baseUrl": "https://www.googleapis.com/tasks/v1/",
   "batchPath": "batch/tasks/v1",
-  "description": "Lets you manage your tasks and task lists.",
+  "description": "Manages your tasks and task lists.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/google-apps/tasks/firstapp",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/iaDWjOjFfrYuDwmaQrhLvwQHzIw\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/-WJ16QjUY6WRx8nJZkprUvgFzIU\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/tasks-16.png",
     "x32": "https://www.google.com/images/icons/product/tasks-32.png"
@@ -141,7 +141,7 @@
           "id": "tasks.tasklists.list",
           "parameters": {
             "maxResults": {
-              "description": "Maximum number of task lists returned on one page. Optional. The default is 100.",
+              "description": "Maximum number of task lists returned on one page. Optional. The default is 20 (max allowed: 100).",
               "format": "int64",
               "location": "query",
               "type": "string"
@@ -360,7 +360,7 @@
               "type": "string"
             },
             "maxResults": {
-              "description": "Maximum number of task lists returned on one page. Optional. The default is 100.",
+              "description": "Maximum number of task lists returned on one page. Optional. The default is 20 (max allowed: 100).",
               "format": "int64",
               "location": "query",
               "type": "string"
@@ -515,7 +515,7 @@
       }
     }
   },
-  "revision": "20141121",
+  "revision": "20190222",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Task": {

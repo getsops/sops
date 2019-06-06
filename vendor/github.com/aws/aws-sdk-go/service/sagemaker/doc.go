@@ -3,7 +3,7 @@
 // Package sagemaker provides the client and types for making API
 // requests to Amazon SageMaker Service.
 //
-// Definition of the public APIs exposed by SageMaker
+// Provides APIs for creating and managing Amazon SageMaker resources.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/sagemaker-2017-07-24 for more information on this service.
 //

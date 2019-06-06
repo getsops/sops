@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewProtectionPoliciesClientWithBaseURI(baseURI string, subscriptionID strin
 // policyName - the backup policy to be created.
 // resourceProtectionPolicy - the resource backup policy.
 func (client ProtectionPoliciesClient) CreateOrUpdate(ctx context.Context, vaultName string, resourceGroupName string, policyName string, resourceProtectionPolicy ProtectionPolicyResource) (result ProtectionPolicyResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, vaultName, resourceGroupName, policyName, resourceProtectionPolicy)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionPoliciesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -119,6 +130,16 @@ func (client ProtectionPoliciesClient) CreateOrUpdateResponder(resp *http.Respon
 // resourceGroupName - the name of the resource group associated with the Recovery Services vault.
 // policyName - the name of the backup policy to be deleted.
 func (client ProtectionPoliciesClient) Delete(ctx context.Context, vaultName string, resourceGroupName string, policyName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionPoliciesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, vaultName, resourceGroupName, policyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionPoliciesClient", "Delete", nil, "Failure preparing request")
@@ -188,6 +209,16 @@ func (client ProtectionPoliciesClient) DeleteResponder(resp *http.Response) (res
 // resourceGroupName - the name of the resource group associated with the Recovery Services vault.
 // policyName - the backup policy name used in this GET operation.
 func (client ProtectionPoliciesClient) Get(ctx context.Context, vaultName string, resourceGroupName string, policyName string) (result ProtectionPolicyResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, policyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionPoliciesClient", "Get", nil, "Failure preparing request")
@@ -259,6 +290,16 @@ func (client ProtectionPoliciesClient) GetResponder(resp *http.Response) (result
 // filter - the following equation can be used to filter the list of backup policies. backupManagementType eq
 // {AzureIaasVM, MAB, DPM, AzureBackupServer, AzureSql}.
 func (client ProtectionPoliciesClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result ProtectionPolicyResourceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionPoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionPoliciesClient", "List", nil, "Failure preparing request")

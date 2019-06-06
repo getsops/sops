@@ -1,4 +1,4 @@
-// +build linux,!appengine,go1.7
+// +build linux,!appengine
 // +build 386 amd64
 
 /*
@@ -26,13 +26,13 @@
 package service
 
 import (
+	"context"
 	"reflect"
 	"strconv"
 	"testing"
 
 	"github.com/golang/protobuf/ptypes"
 	durpb "github.com/golang/protobuf/ptypes/duration"
-	"golang.org/x/net/context"
 	"golang.org/x/sys/unix"
 	channelzpb "google.golang.org/grpc/channelz/grpc_channelz_v1"
 	"google.golang.org/grpc/internal/channelz"
@@ -125,7 +125,8 @@ func protoToSocketOption(skopts []*channelzpb.SocketOption) *channelz.SocketOpti
 }
 
 func TestGetSocketOptions(t *testing.T) {
-	channelz.NewChannelzStorage()
+	czCleanup := channelz.NewChannelzStorage()
+	defer cleanupWrapper(czCleanup, t)
 	ss := []*dummySocket{
 		{
 			socketOptions: &channelz.SocketOptionData{
@@ -139,8 +140,10 @@ func TestGetSocketOptions(t *testing.T) {
 	svr := newCZServer()
 	ids := make([]int64, len(ss))
 	svrID := channelz.RegisterServer(&dummyServer{}, "")
+	defer channelz.RemoveEntry(svrID)
 	for i, s := range ss {
 		ids[i] = channelz.RegisterNormalSocket(s, svrID, strconv.Itoa(i))
+		defer channelz.RemoveEntry(ids[i])
 	}
 	for i, s := range ss {
 		resp, _ := svr.GetSocket(context.Background(), &channelzpb.GetSocketRequest{SocketId: ids[i]})

@@ -18,7 +18,7 @@ const opCancelRotateSecret = "CancelRotateSecret"
 // CancelRotateSecretRequest generates a "aws/request.Request" representing the
 // client's request for the CancelRotateSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -157,7 +157,7 @@ const opCreateSecret = "CreateSecret"
 // CreateSecretRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -213,26 +213,27 @@ func (c *SecretsManager) CreateSecretRequest(input *CreateSecretInput) (req *req
 // also creates an initial secret version and automatically attaches the staging
 // label AWSCURRENT to the new version.
 //
-// If you call an operation that needs to encrypt or decrypt the SecretString
-// or SecretBinary for a secret in the same account as the calling user and
-// that secret doesn't specify a AWS KMS encryption key, Secrets Manager uses
-// the account's default AWS managed customer master key (CMK) with the alias
-// aws/secretsmanager. If this key doesn't already exist in your account then
-// Secrets Manager creates it for you automatically. All users in the same AWS
-// account automatically have access to use the default CMK. Note that if an
-// Secrets Manager API call results in AWS having to create the account's AWS-managed
-// CMK, it can result in a one-time significant delay in returning the result.
+//    * If you call an operation that needs to encrypt or decrypt the SecretString
+//    or SecretBinary for a secret in the same account as the calling user and
+//    that secret doesn't specify a AWS KMS encryption key, Secrets Manager
+//    uses the account's default AWS managed customer master key (CMK) with
+//    the alias aws/secretsmanager. If this key doesn't already exist in your
+//    account then Secrets Manager creates it for you automatically. All users
+//    and roles in the same AWS account automatically have access to use the
+//    default CMK. Note that if an Secrets Manager API call results in AWS having
+//    to create the account's AWS-managed CMK, it can result in a one-time significant
+//    delay in returning the result.
 //
-// If the secret is in a different AWS account from the credentials calling
-// an API that requires encryption or decryption of the secret value then you
-// must create and use a custom AWS KMS CMK because you can't access the default
-// CMK for the account using credentials from a different AWS account. Store
-// the ARN of the CMK in the secret when you create the secret or when you update
-// it by including it in the KMSKeyId. If you call an API that must encrypt
-// or decrypt SecretString or SecretBinary using credentials from a different
-// account then the AWS KMS key policy must grant cross-account access to that
-// other account's user or role for both the kms:GenerateDataKey and kms:Decrypt
-// operations.
+//    * If the secret is in a different AWS account from the credentials calling
+//    an API that requires encryption or decryption of the secret value then
+//    you must create and use a custom AWS KMS CMK because you can't access
+//    the default CMK for the account using credentials from a different AWS
+//    account. Store the ARN of the CMK in the secret when you create the secret
+//    or when you update it by including it in the KMSKeyId. If you call an
+//    API that must encrypt or decrypt SecretString or SecretBinary using credentials
+//    from a different account then the AWS KMS key policy must grant cross-account
+//    access to that other account's user or role for both the kms:GenerateDataKey
+//    and kms:Decrypt operations.
 //
 // Minimum permissions
 //
@@ -247,6 +248,8 @@ func (c *SecretsManager) CreateSecretRequest(input *CreateSecretInput) (req *req
 //    * kms:Decrypt - needed only if you use a customer-managed AWS KMS key
 //    to encrypt the secret. You do not need this permission to use the account's
 //    default AWS managed CMK for Secrets Manager.
+//
+//    * secretsmanager:TagResource - needed only if you include the Tags parameter.
 //
 // Related operations
 //
@@ -342,7 +345,7 @@ const opDeleteResourcePolicy = "DeleteResourcePolicy"
 // DeleteResourcePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteResourcePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -452,7 +455,7 @@ const opDeleteSecret = "DeleteSecret"
 // DeleteSecretRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -505,15 +508,15 @@ func (c *SecretsManager) DeleteSecretRequest(input *DeleteSecretInput) (req *req
 // scheduled for deletion. If you need to access that information, you must
 // cancel the deletion with RestoreSecret and then retrieve the information.
 //
-// There is no explicit operation to delete a version of a secret. Instead,
-// remove all staging labels from the VersionStage field of a version. That
-// marks the version as deprecated and allows Secrets Manager to delete it as
-// needed. Versions that do not have any staging labels do not show up in ListSecretVersionIds
-// unless you specify IncludeDeprecated.
+//    * There is no explicit operation to delete a version of a secret. Instead,
+//    remove all staging labels from the VersionStage field of a version. That
+//    marks the version as deprecated and allows Secrets Manager to delete it
+//    as needed. Versions that do not have any staging labels do not show up
+//    in ListSecretVersionIds unless you specify IncludeDeprecated.
 //
-// The permanent secret deletion at the end of the waiting period is performed
-// as a background task with low priority. There is no guarantee of a specific
-// time after the recovery window for the actual delete operation to occur.
+//    * The permanent secret deletion at the end of the waiting period is performed
+//    as a background task with low priority. There is no guarantee of a specific
+//    time after the recovery window for the actual delete operation to occur.
 //
 // Minimum permissions
 //
@@ -585,7 +588,7 @@ const opDescribeSecret = "DescribeSecret"
 // DescribeSecretRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -685,7 +688,7 @@ const opGetRandomPassword = "GetRandomPassword"
 // GetRandomPasswordRequest generates a "aws/request.Request" representing the
 // client's request for the GetRandomPassword operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -789,7 +792,7 @@ const opGetResourcePolicy = "GetResourcePolicy"
 // GetResourcePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetResourcePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -902,7 +905,7 @@ const opGetSecretValue = "GetSecretValue"
 // GetSecretValueRequest generates a "aws/request.Request" representing the
 // client's request for the GetSecretValue operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1022,7 +1025,7 @@ const opListSecretVersionIds = "ListSecretVersionIds"
 // ListSecretVersionIdsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSecretVersionIds operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1138,7 +1141,7 @@ func (c *SecretsManager) ListSecretVersionIdsWithContext(ctx aws.Context, input 
 //    // Example iterating over at most 3 pages of a ListSecretVersionIds operation.
 //    pageNum := 0
 //    err := client.ListSecretVersionIdsPages(params,
-//        func(page *ListSecretVersionIdsOutput, lastPage bool) bool {
+//        func(page *secretsmanager.ListSecretVersionIdsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1182,7 +1185,7 @@ const opListSecrets = "ListSecrets"
 // ListSecretsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSecrets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1298,7 +1301,7 @@ func (c *SecretsManager) ListSecretsWithContext(ctx aws.Context, input *ListSecr
 //    // Example iterating over at most 3 pages of a ListSecrets operation.
 //    pageNum := 0
 //    err := client.ListSecretsPages(params,
-//        func(page *ListSecretsOutput, lastPage bool) bool {
+//        func(page *secretsmanager.ListSecretsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1342,7 +1345,7 @@ const opPutResourcePolicy = "PutResourcePolicy"
 // PutResourcePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutResourcePolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1390,7 +1393,7 @@ func (c *SecretsManager) PutResourcePolicyRequest(input *PutResourcePolicyInput)
 // For more information, see Using Resource-Based Policies for AWS Secrets Manager
 // (http://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_resource-based-policies.html).
 // For the complete description of the AWS policy syntax and grammar, see IAM
-// JSON Policy Reference (http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html)
+// JSON Policy Reference (https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html)
 // in the IAM User Guide.
 //
 // Minimum permissions
@@ -1468,7 +1471,7 @@ const opPutSecretValue = "PutSecretValue"
 // PutSecretValueRequest generates a "aws/request.Request" representing the
 // client's request for the PutSecretValue operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1535,26 +1538,27 @@ func (c *SecretsManager) PutSecretValueRequest(input *PutSecretValueInput) (req 
 //    However, if the secret data is different, then the operation fails because
 //    you cannot modify an existing version; you can only create new ones.
 //
-// If you call an operation that needs to encrypt or decrypt the SecretString
-// or SecretBinary for a secret in the same account as the calling user and
-// that secret doesn't specify a AWS KMS encryption key, Secrets Manager uses
-// the account's default AWS managed customer master key (CMK) with the alias
-// aws/secretsmanager. If this key doesn't already exist in your account then
-// Secrets Manager creates it for you automatically. All users in the same AWS
-// account automatically have access to use the default CMK. Note that if an
-// Secrets Manager API call results in AWS having to create the account's AWS-managed
-// CMK, it can result in a one-time significant delay in returning the result.
+//    * If you call an operation that needs to encrypt or decrypt the SecretString
+//    or SecretBinary for a secret in the same account as the calling user and
+//    that secret doesn't specify a AWS KMS encryption key, Secrets Manager
+//    uses the account's default AWS managed customer master key (CMK) with
+//    the alias aws/secretsmanager. If this key doesn't already exist in your
+//    account then Secrets Manager creates it for you automatically. All users
+//    and roles in the same AWS account automatically have access to use the
+//    default CMK. Note that if an Secrets Manager API call results in AWS having
+//    to create the account's AWS-managed CMK, it can result in a one-time significant
+//    delay in returning the result.
 //
-// If the secret is in a different AWS account from the credentials calling
-// an API that requires encryption or decryption of the secret value then you
-// must create and use a custom AWS KMS CMK because you can't access the default
-// CMK for the account using credentials from a different AWS account. Store
-// the ARN of the CMK in the secret when you create the secret or when you update
-// it by including it in the KMSKeyId. If you call an API that must encrypt
-// or decrypt SecretString or SecretBinary using credentials from a different
-// account then the AWS KMS key policy must grant cross-account access to that
-// other account's user or role for both the kms:GenerateDataKey and kms:Decrypt
-// operations.
+//    * If the secret is in a different AWS account from the credentials calling
+//    an API that requires encryption or decryption of the secret value then
+//    you must create and use a custom AWS KMS CMK because you can't access
+//    the default CMK for the account using credentials from a different AWS
+//    account. Store the ARN of the CMK in the secret when you create the secret
+//    or when you update it by including it in the KMSKeyId. If you call an
+//    API that must encrypt or decrypt SecretString or SecretBinary using credentials
+//    from a different account then the AWS KMS key policy must grant cross-account
+//    access to that other account's user or role for both the kms:GenerateDataKey
+//    and kms:Decrypt operations.
 //
 // Minimum permissions
 //
@@ -1647,7 +1651,7 @@ const opRestoreSecret = "RestoreSecret"
 // RestoreSecretRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1756,7 +1760,7 @@ const opRotateSecret = "RotateSecret"
 // RotateSecretRequest generates a "aws/request.Request" representing the
 // client's request for the RotateSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1810,7 +1814,7 @@ func (c *SecretsManager) RotateSecretRequest(input *RotateSecretInput) (req *req
 // clients all immediately begin to use the new version. For more information
 // about rotating secrets and how to configure a Lambda function to rotate the
 // secrets for your protected service, see Rotating Secrets in AWS Secrets Manager
-// (http://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html)
+// (https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html)
 // in the AWS Secrets Manager User Guide.
 //
 // Secrets Manager schedules the next rotation when the previous one is complete.
@@ -1909,7 +1913,7 @@ const opTagResource = "TagResource"
 // TagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the TagResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1943,8 +1947,7 @@ func (c *SecretsManager) TagResourceRequest(input *TagResourceInput) (req *reque
 
 	output = &TagResourceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2051,7 +2054,7 @@ const opUntagResource = "UntagResource"
 // UntagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2085,8 +2088,7 @@ func (c *SecretsManager) UntagResourceRequest(input *UntagResourceInput) (req *r
 
 	output = &UntagResourceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2172,7 +2174,7 @@ const opUpdateSecret = "UpdateSecret"
 // UpdateSecretRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSecret operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2212,7 +2214,7 @@ func (c *SecretsManager) UpdateSecretRequest(input *UpdateSecretInput) (req *req
 // UpdateSecret API operation for AWS Secrets Manager.
 //
 // Modifies many of the details of the specified secret. If you include a ClientRequestToken
-// and eitherSecretString or SecretBinary then it also creates a new version
+// and either SecretString or SecretBinary then it also creates a new version
 // attached to the secret.
 //
 // To modify the rotation configuration of a secret, use RotateSecret instead.
@@ -2230,26 +2232,27 @@ func (c *SecretsManager) UpdateSecretRequest(input *UpdateSecretInput) (req *req
 //    Secrets Manager automatically attaches the staging label AWSCURRENT to
 //    the new version.
 //
-// If you call an operation that needs to encrypt or decrypt the SecretString
-// or SecretBinary for a secret in the same account as the calling user and
-// that secret doesn't specify a AWS KMS encryption key, Secrets Manager uses
-// the account's default AWS managed customer master key (CMK) with the alias
-// aws/secretsmanager. If this key doesn't already exist in your account then
-// Secrets Manager creates it for you automatically. All users in the same AWS
-// account automatically have access to use the default CMK. Note that if an
-// Secrets Manager API call results in AWS having to create the account's AWS-managed
-// CMK, it can result in a one-time significant delay in returning the result.
+//    * If you call an operation that needs to encrypt or decrypt the SecretString
+//    or SecretBinary for a secret in the same account as the calling user and
+//    that secret doesn't specify a AWS KMS encryption key, Secrets Manager
+//    uses the account's default AWS managed customer master key (CMK) with
+//    the alias aws/secretsmanager. If this key doesn't already exist in your
+//    account then Secrets Manager creates it for you automatically. All users
+//    and roles in the same AWS account automatically have access to use the
+//    default CMK. Note that if an Secrets Manager API call results in AWS having
+//    to create the account's AWS-managed CMK, it can result in a one-time significant
+//    delay in returning the result.
 //
-// If the secret is in a different AWS account from the credentials calling
-// an API that requires encryption or decryption of the secret value then you
-// must create and use a custom AWS KMS CMK because you can't access the default
-// CMK for the account using credentials from a different AWS account. Store
-// the ARN of the CMK in the secret when you create the secret or when you update
-// it by including it in the KMSKeyId. If you call an API that must encrypt
-// or decrypt SecretString or SecretBinary using credentials from a different
-// account then the AWS KMS key policy must grant cross-account access to that
-// other account's user or role for both the kms:GenerateDataKey and kms:Decrypt
-// operations.
+//    * If the secret is in a different AWS account from the credentials calling
+//    an API that requires encryption or decryption of the secret value then
+//    you must create and use a custom AWS KMS CMK because you can't access
+//    the default CMK for the account using credentials from a different AWS
+//    account. Store the ARN of the CMK in the secret when you create the secret
+//    or when you update it by including it in the KMSKeyId. If you call an
+//    API that must encrypt or decrypt SecretString or SecretBinary using credentials
+//    from a different account then the AWS KMS key policy must grant cross-account
+//    access to that other account's user or role for both the kms:GenerateDataKey
+//    and kms:Decrypt operations.
 //
 // Minimum permissions
 //
@@ -2351,7 +2354,7 @@ const opUpdateSecretVersionStage = "UpdateSecretVersionStage"
 // UpdateSecretVersionStageRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateSecretVersionStage operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2396,7 +2399,7 @@ func (c *SecretsManager) UpdateSecretVersionStageRequest(input *UpdateSecretVers
 // a time. If a staging label to be added is already attached to another version,
 // then it is moved--removed from the other version first and then attached
 // to this one. For more information about staging labels, see Staging Labels
-// (http://docs.aws.amazon.com/secretsmanager/latest/userguide/terms-concepts.html#term_staging-label)
+// (https://docs.aws.amazon.com/secretsmanager/latest/userguide/terms-concepts.html#term_staging-label)
 // in the AWS Secrets Manager User Guide.
 //
 // The staging labels that you specify in the VersionStage parameter are added
@@ -2486,6 +2489,18 @@ type CancelRotateSecretInput struct {
 	// Specifies the secret for which you want to cancel a rotation request. You
 	// can specify either the Amazon Resource Name (ARN) or the friendly name of
 	// the secret.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -2630,6 +2645,11 @@ type CreateSecretInput struct {
 	// The secret name must be ASCII letters, digits, or the following characters
 	// : /_+=.@-
 	//
+	// Don't end your secret name with a hyphen followed by six characters. If you
+	// do so, you risk confusion and unexpected results when searching for a secret
+	// by partial ARN. This is because Secrets Manager automatically adds a hyphen
+	// and six random characters at the end of the ARN.
+	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
@@ -2645,7 +2665,7 @@ type CreateSecretInput struct {
 	// be accessed only by using the AWS CLI or one of the AWS SDKs.
 	//
 	// SecretBinary is automatically base64 encoded/decoded by the SDK.
-	SecretBinary []byte `type:"blob"`
+	SecretBinary []byte `type:"blob" sensitive:"true"`
 
 	// (Optional) Specifies text data that you want to encrypt and store in this
 	// new version of the secret.
@@ -2661,7 +2681,7 @@ type CreateSecretInput struct {
 	// For storing multiple values, we recommend that you use a JSON text string
 	// argument and specify key/value pairs. For information on how to format a
 	// JSON parameter for the various command line tool environments, see Using
-	// JSON for Parameters (http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
+	// JSON for Parameters (https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
 	// in the AWS CLI User Guide. For example:
 	//
 	// [{"username":"bob"},{"password":"abc123xyz456"}]
@@ -2669,24 +2689,24 @@ type CreateSecretInput struct {
 	// If your command-line tool or SDK requires quotation marks around the parameter,
 	// you should use single quotes to avoid confusion with the double quotes required
 	// in the JSON text.
-	SecretString *string `type:"string"`
+	SecretString *string `type:"string" sensitive:"true"`
 
 	// (Optional) Specifies a list of user-defined tags that are attached to the
 	// secret. Each tag is a "Key" and "Value" pair of strings. This operation only
 	// appends tags to the existing list of tags. To remove tags, you must use UntagResource.
 	//
-	// Secrets Manager tag key names are case sensitive. A tag with the key "ABC"
-	// is a different tag from one with key "abc".
+	//    * Secrets Manager tag key names are case sensitive. A tag with the key
+	//    "ABC" is a different tag from one with key "abc".
 	//
-	// If you check tags in IAM policy Condition elements as part of your security
-	// strategy, then adding or removing a tag can change permissions. If the successful
-	// completion of this operation would result in you losing your permissions
-	// for this secret, then this operation is blocked and returns an Access Denied
-	// error.
+	//    * If you check tags in IAM policy Condition elements as part of your security
+	//    strategy, then adding or removing a tag can change permissions. If the
+	//    successful completion of this operation would result in you losing your
+	//    permissions for this secret, then this operation is blocked and returns
+	//    an Access Denied error.
 	//
 	// This parameter requires a JSON text string argument. For information on how
 	// to format a JSON parameter for the various command line tool environments,
-	// see Using JSON for Parameters (http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
+	// see Using JSON for Parameters (https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
 	// in the AWS CLI User Guide. For example:
 	//
 	// [{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}]
@@ -2854,6 +2874,18 @@ type DeleteResourcePolicyInput struct {
 	// policy for. You can specify either the Amazon Resource Name (ARN) or the
 	// friendly name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 }
@@ -2952,6 +2984,18 @@ type DeleteSecretInput struct {
 	// Specifies the secret that you want to delete. You can specify either the
 	// Amazon Resource Name (ARN) or the friendly name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 }
@@ -3049,6 +3093,18 @@ type DescribeSecretInput struct {
 	// The identifier of the secret whose details you want to retrieve. You can
 	// specify either the Amazon Resource Name (ARN) or the friendly name of the
 	// secret.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -3389,6 +3445,18 @@ type GetResourcePolicyInput struct {
 	// policy for. You can specify either the Amazon Resource Name (ARN) or the
 	// friendly name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 }
@@ -3479,6 +3547,18 @@ type GetSecretValueInput struct {
 	// Specifies the secret containing the version that you want to retrieve. You
 	// can specify either the Amazon Resource Name (ARN) or the friendly name of
 	// the secret.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -3578,7 +3658,7 @@ type GetSecretValueOutput struct {
 	// in the SecretString or SecretBinary fields.
 	//
 	// SecretBinary is automatically base64 encoded/decoded by the SDK.
-	SecretBinary []byte `type:"blob"`
+	SecretBinary []byte `type:"blob" sensitive:"true"`
 
 	// The decrypted part of the protected secret information that was originally
 	// provided as a string.
@@ -3592,7 +3672,7 @@ type GetSecretValueOutput struct {
 	// UpdateSecret, or PutSecretValue API operations instead of the Secrets Manager
 	// console, or by using the Other secret type in the console, then you must
 	// code your Lambda rotation function to parse and interpret those values.
-	SecretString *string `type:"string"`
+	SecretString *string `type:"string" sensitive:"true"`
 
 	// The unique identifier of this version of the secret.
 	VersionId *string `min:"32" type:"string"`
@@ -3682,6 +3762,18 @@ type ListSecretVersionIdsInput struct {
 	// The identifier for the secret containing the versions you want to list. You
 	// can specify either the Amazon Resource Name (ARN) or the friendly name of
 	// the secret.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -3919,6 +4011,18 @@ type PutResourcePolicyInput struct {
 	// Specifies the secret that you want to attach the resource-based policy to.
 	// You can specify either the ARN or the friendly name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 }
@@ -4044,11 +4148,23 @@ type PutSecretValueInput struct {
 	// console.
 	//
 	// SecretBinary is automatically base64 encoded/decoded by the SDK.
-	SecretBinary []byte `type:"blob"`
+	SecretBinary []byte `type:"blob" sensitive:"true"`
 
 	// Specifies the secret to which you want to add a new version. You can specify
 	// either the Amazon Resource Name (ARN) or the friendly name of the secret.
 	// The secret must already exist.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -4065,7 +4181,7 @@ type PutSecretValueInput struct {
 	// For storing multiple values, we recommend that you use a JSON text string
 	// argument and specify key/value pairs. For information on how to format a
 	// JSON parameter for the various command line tool environments, see Using
-	// JSON for Parameters (http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
+	// JSON for Parameters (https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
 	// in the AWS CLI User Guide.
 	//
 	// For example:
@@ -4075,7 +4191,7 @@ type PutSecretValueInput struct {
 	// If your command-line tool or SDK requires quotation marks around the parameter,
 	// you should use single quotes to avoid confusion with the double quotes required
 	// in the JSON text.
-	SecretString *string `type:"string"`
+	SecretString *string `type:"string" sensitive:"true"`
 
 	// (Optional) Specifies a list of staging labels that are attached to this version
 	// of the secret. These staging labels are used to track the versions through
@@ -4213,6 +4329,18 @@ type RestoreSecretInput struct {
 	// deletion. You can specify either the Amazon Resource Name (ARN) or the friendly
 	// name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 }
@@ -4312,6 +4440,18 @@ type RotateSecretInput struct {
 
 	// Specifies the secret that you want to rotate. You can specify either the
 	// Amazon Resource Name (ARN) or the friendly name of the secret.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -4471,7 +4611,7 @@ type SecretListEntry struct {
 	// The Amazon Resource Name (ARN) of the secret.
 	//
 	// For more information about ARNs in Secrets Manager, see Policy Resources
-	// (http://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#iam-resources)
+	// (https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_iam-permissions.html#iam-resources)
 	// in the AWS Secrets Manager User Guide.
 	ARN *string `min:"20" type:"string"`
 
@@ -4724,6 +4864,18 @@ type TagResourceInput struct {
 	// The identifier for the secret that you want to attach tags to. You can specify
 	// either the Amazon Resource Name (ARN) or the friendly name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 
@@ -4732,7 +4884,7 @@ type TagResourceInput struct {
 	//
 	// This parameter to the API requires a JSON text string argument. For information
 	// on how to format a JSON parameter for the various command line tool environments,
-	// see Using JSON for Parameters (http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
+	// see Using JSON for Parameters (https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
 	// in the AWS CLI User Guide. For the AWS CLI, you can also use the syntax:
 	// --Tags Key="Key1",Value="Value1",Key="Key2",Value="Value2"[,…]
 	//
@@ -4812,6 +4964,18 @@ type UntagResourceInput struct {
 	// specify either the Amazon Resource Name (ARN) or the friendly name of the
 	// secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 
@@ -4820,7 +4984,7 @@ type UntagResourceInput struct {
 	//
 	// This parameter to the API requires a JSON text string argument. For information
 	// on how to format a JSON parameter for the various command line tool environments,
-	// see Using JSON for Parameters (http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
+	// see Using JSON for Parameters (https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
 	// in the AWS CLI User Guide.
 	//
 	// TagKeys is a required field
@@ -4943,11 +5107,23 @@ type UpdateSecretInput struct {
 	// This parameter is not accessible using the Secrets Manager console.
 	//
 	// SecretBinary is automatically base64 encoded/decoded by the SDK.
-	SecretBinary []byte `type:"blob"`
+	SecretBinary []byte `type:"blob" sensitive:"true"`
 
 	// Specifies the secret that you want to modify or to which you want to add
 	// a new version. You can specify either the Amazon Resource Name (ARN) or the
 	// friendly name of the secret.
+	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
 	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
@@ -4964,7 +5140,7 @@ type UpdateSecretInput struct {
 	// For storing multiple values, we recommend that you use a JSON text string
 	// argument and specify key/value pairs. For information on how to format a
 	// JSON parameter for the various command line tool environments, see Using
-	// JSON for Parameters (http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
+	// JSON for Parameters (https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json)
 	// in the AWS CLI User Guide. For example:
 	//
 	// [{"username":"bob"},{"password":"abc123xyz456"}]
@@ -4977,7 +5153,7 @@ type UpdateSecretInput struct {
 	// are escaped:
 	//
 	// "[{\"username\":\"bob\"},{\"password\":\"abc123xyz456\"}]"
-	SecretString *string `type:"string"`
+	SecretString *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -5097,34 +5273,41 @@ func (s *UpdateSecretOutput) SetVersionId(v string) *UpdateSecretOutput {
 type UpdateSecretVersionStageInput struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) The secret version ID that you want to add the staging labels
-	// to.
+	// (Optional) The secret version ID that you want to add the staging label to.
+	// If you want to remove a label from a version, then do not specify this parameter.
 	//
-	// If any of the staging labels are already attached to a different version
-	// of the secret, then they are automatically removed from that version before
-	// adding them to this version.
+	// If the staging label is already attached to a different version of the secret,
+	// then you must also specify the RemoveFromVersionId parameter.
 	MoveToVersionId *string `min:"32" type:"string"`
 
-	// (Optional) Specifies the secret version ID of the version that the staging
-	// labels are to be removed from.
-	//
-	// If you want to move a label to a new version, you do not have to explicitly
-	// remove it with this parameter. Adding a label using the MoveToVersionId parameter
-	// automatically removes it from the old version. However, if you do include
-	// both the "MoveTo" and "RemoveFrom" parameters, then the move is successful
-	// only if the staging labels are actually present on the "RemoveFrom" version.
-	// If a staging label was on a different version than "RemoveFrom", then the
-	// request fails.
+	// Specifies the secret version ID of the version that the staging label is
+	// to be removed from. If the staging label you are trying to attach to one
+	// version is already attached to a different version, then you must include
+	// this parameter and specify the version that the label is to be removed from.
+	// If the label is attached and you either do not specify this parameter, or
+	// the version ID does not match, then the operation fails.
 	RemoveFromVersionId *string `min:"32" type:"string"`
 
 	// Specifies the secret with the version whose list of staging labels you want
 	// to modify. You can specify either the Amazon Resource Name (ARN) or the friendly
 	// name of the secret.
 	//
+	// If you specify an ARN, we generally recommend that you specify a complete
+	// ARN. You can specify a partial ARN too—for example, if you don’t include
+	// the final hyphen and six random characters that Secrets Manager adds at the
+	// end of the ARN when you created the secret. A partial ARN match can work
+	// as long as it uniquely matches only one secret. However, if your secret has
+	// a name that ends in a hyphen followed by six characters (before Secrets Manager
+	// adds the hyphen and six characters to the ARN) and you try to use that as
+	// a partial ARN, then those characters cause Secrets Manager to assume that
+	// you’re specifying a complete ARN. This confusion can cause unexpected results.
+	// To avoid this situation, we recommend that you don’t create secret names
+	// that end with a hyphen followed by six characters.
+	//
 	// SecretId is a required field
 	SecretId *string `min:"1" type:"string" required:"true"`
 
-	// The list of staging labels to add to this version.
+	// The staging label to add to this version.
 	//
 	// VersionStage is a required field
 	VersionStage *string `min:"1" type:"string" required:"true"`
@@ -5195,10 +5378,10 @@ func (s *UpdateSecretVersionStageInput) SetVersionStage(v string) *UpdateSecretV
 type UpdateSecretVersionStageOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the secret with the staging labels that were modified.
+	// The ARN of the secret with the staging label that was modified.
 	ARN *string `min:"20" type:"string"`
 
-	// The friendly name of the secret with the staging labels that were modified.
+	// The friendly name of the secret with the staging label that was modified.
 	Name *string `min:"1" type:"string"`
 }
 

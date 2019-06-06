@@ -80,9 +80,25 @@ type GlueAPI interface {
 	BatchDeleteTableVersionWithContext(aws.Context, *glue.BatchDeleteTableVersionInput, ...request.Option) (*glue.BatchDeleteTableVersionOutput, error)
 	BatchDeleteTableVersionRequest(*glue.BatchDeleteTableVersionInput) (*request.Request, *glue.BatchDeleteTableVersionOutput)
 
+	BatchGetCrawlers(*glue.BatchGetCrawlersInput) (*glue.BatchGetCrawlersOutput, error)
+	BatchGetCrawlersWithContext(aws.Context, *glue.BatchGetCrawlersInput, ...request.Option) (*glue.BatchGetCrawlersOutput, error)
+	BatchGetCrawlersRequest(*glue.BatchGetCrawlersInput) (*request.Request, *glue.BatchGetCrawlersOutput)
+
+	BatchGetDevEndpoints(*glue.BatchGetDevEndpointsInput) (*glue.BatchGetDevEndpointsOutput, error)
+	BatchGetDevEndpointsWithContext(aws.Context, *glue.BatchGetDevEndpointsInput, ...request.Option) (*glue.BatchGetDevEndpointsOutput, error)
+	BatchGetDevEndpointsRequest(*glue.BatchGetDevEndpointsInput) (*request.Request, *glue.BatchGetDevEndpointsOutput)
+
+	BatchGetJobs(*glue.BatchGetJobsInput) (*glue.BatchGetJobsOutput, error)
+	BatchGetJobsWithContext(aws.Context, *glue.BatchGetJobsInput, ...request.Option) (*glue.BatchGetJobsOutput, error)
+	BatchGetJobsRequest(*glue.BatchGetJobsInput) (*request.Request, *glue.BatchGetJobsOutput)
+
 	BatchGetPartition(*glue.BatchGetPartitionInput) (*glue.BatchGetPartitionOutput, error)
 	BatchGetPartitionWithContext(aws.Context, *glue.BatchGetPartitionInput, ...request.Option) (*glue.BatchGetPartitionOutput, error)
 	BatchGetPartitionRequest(*glue.BatchGetPartitionInput) (*request.Request, *glue.BatchGetPartitionOutput)
+
+	BatchGetTriggers(*glue.BatchGetTriggersInput) (*glue.BatchGetTriggersOutput, error)
+	BatchGetTriggersWithContext(aws.Context, *glue.BatchGetTriggersInput, ...request.Option) (*glue.BatchGetTriggersOutput, error)
+	BatchGetTriggersRequest(*glue.BatchGetTriggersInput) (*request.Request, *glue.BatchGetTriggersOutput)
 
 	BatchStopJobRun(*glue.BatchStopJobRunInput) (*glue.BatchStopJobRunOutput, error)
 	BatchStopJobRunWithContext(aws.Context, *glue.BatchStopJobRunInput, ...request.Option) (*glue.BatchStopJobRunOutput, error)
@@ -164,6 +180,10 @@ type GlueAPI interface {
 	DeletePartitionWithContext(aws.Context, *glue.DeletePartitionInput, ...request.Option) (*glue.DeletePartitionOutput, error)
 	DeletePartitionRequest(*glue.DeletePartitionInput) (*request.Request, *glue.DeletePartitionOutput)
 
+	DeleteResourcePolicy(*glue.DeleteResourcePolicyInput) (*glue.DeleteResourcePolicyOutput, error)
+	DeleteResourcePolicyWithContext(aws.Context, *glue.DeleteResourcePolicyInput, ...request.Option) (*glue.DeleteResourcePolicyOutput, error)
+	DeleteResourcePolicyRequest(*glue.DeleteResourcePolicyInput) (*request.Request, *glue.DeleteResourcePolicyOutput)
+
 	DeleteSecurityConfiguration(*glue.DeleteSecurityConfigurationInput) (*glue.DeleteSecurityConfigurationOutput, error)
 	DeleteSecurityConfigurationWithContext(aws.Context, *glue.DeleteSecurityConfigurationInput, ...request.Option) (*glue.DeleteSecurityConfigurationOutput, error)
 	DeleteSecurityConfigurationRequest(*glue.DeleteSecurityConfigurationInput) (*request.Request, *glue.DeleteSecurityConfigurationOutput)
@@ -227,6 +247,10 @@ type GlueAPI interface {
 
 	GetCrawlersPages(*glue.GetCrawlersInput, func(*glue.GetCrawlersOutput, bool) bool) error
 	GetCrawlersPagesWithContext(aws.Context, *glue.GetCrawlersInput, func(*glue.GetCrawlersOutput, bool) bool, ...request.Option) error
+
+	GetDataCatalogEncryptionSettings(*glue.GetDataCatalogEncryptionSettingsInput) (*glue.GetDataCatalogEncryptionSettingsOutput, error)
+	GetDataCatalogEncryptionSettingsWithContext(aws.Context, *glue.GetDataCatalogEncryptionSettingsInput, ...request.Option) (*glue.GetDataCatalogEncryptionSettingsOutput, error)
+	GetDataCatalogEncryptionSettingsRequest(*glue.GetDataCatalogEncryptionSettingsInput) (*request.Request, *glue.GetDataCatalogEncryptionSettingsOutput)
 
 	GetDatabase(*glue.GetDatabaseInput) (*glue.GetDatabaseOutput, error)
 	GetDatabaseWithContext(aws.Context, *glue.GetDatabaseInput, ...request.Option) (*glue.GetDatabaseOutput, error)
@@ -295,6 +319,10 @@ type GlueAPI interface {
 	GetPlanWithContext(aws.Context, *glue.GetPlanInput, ...request.Option) (*glue.GetPlanOutput, error)
 	GetPlanRequest(*glue.GetPlanInput) (*request.Request, *glue.GetPlanOutput)
 
+	GetResourcePolicy(*glue.GetResourcePolicyInput) (*glue.GetResourcePolicyOutput, error)
+	GetResourcePolicyWithContext(aws.Context, *glue.GetResourcePolicyInput, ...request.Option) (*glue.GetResourcePolicyOutput, error)
+	GetResourcePolicyRequest(*glue.GetResourcePolicyInput) (*request.Request, *glue.GetResourcePolicyOutput)
+
 	GetSecurityConfiguration(*glue.GetSecurityConfigurationInput) (*glue.GetSecurityConfigurationOutput, error)
 	GetSecurityConfigurationWithContext(aws.Context, *glue.GetSecurityConfigurationInput, ...request.Option) (*glue.GetSecurityConfigurationOutput, error)
 	GetSecurityConfigurationRequest(*glue.GetSecurityConfigurationInput) (*request.Request, *glue.GetSecurityConfigurationOutput)
@@ -302,6 +330,9 @@ type GlueAPI interface {
 	GetSecurityConfigurations(*glue.GetSecurityConfigurationsInput) (*glue.GetSecurityConfigurationsOutput, error)
 	GetSecurityConfigurationsWithContext(aws.Context, *glue.GetSecurityConfigurationsInput, ...request.Option) (*glue.GetSecurityConfigurationsOutput, error)
 	GetSecurityConfigurationsRequest(*glue.GetSecurityConfigurationsInput) (*request.Request, *glue.GetSecurityConfigurationsOutput)
+
+	GetSecurityConfigurationsPages(*glue.GetSecurityConfigurationsInput, func(*glue.GetSecurityConfigurationsOutput, bool) bool) error
+	GetSecurityConfigurationsPagesWithContext(aws.Context, *glue.GetSecurityConfigurationsInput, func(*glue.GetSecurityConfigurationsOutput, bool) bool, ...request.Option) error
 
 	GetTable(*glue.GetTableInput) (*glue.GetTableOutput, error)
 	GetTableWithContext(aws.Context, *glue.GetTableInput, ...request.Option) (*glue.GetTableOutput, error)
@@ -324,6 +355,10 @@ type GlueAPI interface {
 
 	GetTablesPages(*glue.GetTablesInput, func(*glue.GetTablesOutput, bool) bool) error
 	GetTablesPagesWithContext(aws.Context, *glue.GetTablesInput, func(*glue.GetTablesOutput, bool) bool, ...request.Option) error
+
+	GetTags(*glue.GetTagsInput) (*glue.GetTagsOutput, error)
+	GetTagsWithContext(aws.Context, *glue.GetTagsInput, ...request.Option) (*glue.GetTagsOutput, error)
+	GetTagsRequest(*glue.GetTagsInput) (*request.Request, *glue.GetTagsOutput)
 
 	GetTrigger(*glue.GetTriggerInput) (*glue.GetTriggerOutput, error)
 	GetTriggerWithContext(aws.Context, *glue.GetTriggerInput, ...request.Option) (*glue.GetTriggerOutput, error)
@@ -351,9 +386,41 @@ type GlueAPI interface {
 	ImportCatalogToGlueWithContext(aws.Context, *glue.ImportCatalogToGlueInput, ...request.Option) (*glue.ImportCatalogToGlueOutput, error)
 	ImportCatalogToGlueRequest(*glue.ImportCatalogToGlueInput) (*request.Request, *glue.ImportCatalogToGlueOutput)
 
+	ListCrawlers(*glue.ListCrawlersInput) (*glue.ListCrawlersOutput, error)
+	ListCrawlersWithContext(aws.Context, *glue.ListCrawlersInput, ...request.Option) (*glue.ListCrawlersOutput, error)
+	ListCrawlersRequest(*glue.ListCrawlersInput) (*request.Request, *glue.ListCrawlersOutput)
+
+	ListCrawlersPages(*glue.ListCrawlersInput, func(*glue.ListCrawlersOutput, bool) bool) error
+	ListCrawlersPagesWithContext(aws.Context, *glue.ListCrawlersInput, func(*glue.ListCrawlersOutput, bool) bool, ...request.Option) error
+
+	ListDevEndpoints(*glue.ListDevEndpointsInput) (*glue.ListDevEndpointsOutput, error)
+	ListDevEndpointsWithContext(aws.Context, *glue.ListDevEndpointsInput, ...request.Option) (*glue.ListDevEndpointsOutput, error)
+	ListDevEndpointsRequest(*glue.ListDevEndpointsInput) (*request.Request, *glue.ListDevEndpointsOutput)
+
+	ListDevEndpointsPages(*glue.ListDevEndpointsInput, func(*glue.ListDevEndpointsOutput, bool) bool) error
+	ListDevEndpointsPagesWithContext(aws.Context, *glue.ListDevEndpointsInput, func(*glue.ListDevEndpointsOutput, bool) bool, ...request.Option) error
+
+	ListJobs(*glue.ListJobsInput) (*glue.ListJobsOutput, error)
+	ListJobsWithContext(aws.Context, *glue.ListJobsInput, ...request.Option) (*glue.ListJobsOutput, error)
+	ListJobsRequest(*glue.ListJobsInput) (*request.Request, *glue.ListJobsOutput)
+
+	ListJobsPages(*glue.ListJobsInput, func(*glue.ListJobsOutput, bool) bool) error
+	ListJobsPagesWithContext(aws.Context, *glue.ListJobsInput, func(*glue.ListJobsOutput, bool) bool, ...request.Option) error
+
+	ListTriggers(*glue.ListTriggersInput) (*glue.ListTriggersOutput, error)
+	ListTriggersWithContext(aws.Context, *glue.ListTriggersInput, ...request.Option) (*glue.ListTriggersOutput, error)
+	ListTriggersRequest(*glue.ListTriggersInput) (*request.Request, *glue.ListTriggersOutput)
+
+	ListTriggersPages(*glue.ListTriggersInput, func(*glue.ListTriggersOutput, bool) bool) error
+	ListTriggersPagesWithContext(aws.Context, *glue.ListTriggersInput, func(*glue.ListTriggersOutput, bool) bool, ...request.Option) error
+
 	PutDataCatalogEncryptionSettings(*glue.PutDataCatalogEncryptionSettingsInput) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
 	PutDataCatalogEncryptionSettingsWithContext(aws.Context, *glue.PutDataCatalogEncryptionSettingsInput, ...request.Option) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
 	PutDataCatalogEncryptionSettingsRequest(*glue.PutDataCatalogEncryptionSettingsInput) (*request.Request, *glue.PutDataCatalogEncryptionSettingsOutput)
+
+	PutResourcePolicy(*glue.PutResourcePolicyInput) (*glue.PutResourcePolicyOutput, error)
+	PutResourcePolicyWithContext(aws.Context, *glue.PutResourcePolicyInput, ...request.Option) (*glue.PutResourcePolicyOutput, error)
+	PutResourcePolicyRequest(*glue.PutResourcePolicyInput) (*request.Request, *glue.PutResourcePolicyOutput)
 
 	ResetJobBookmark(*glue.ResetJobBookmarkInput) (*glue.ResetJobBookmarkOutput, error)
 	ResetJobBookmarkWithContext(aws.Context, *glue.ResetJobBookmarkInput, ...request.Option) (*glue.ResetJobBookmarkOutput, error)
@@ -386,6 +453,14 @@ type GlueAPI interface {
 	StopTrigger(*glue.StopTriggerInput) (*glue.StopTriggerOutput, error)
 	StopTriggerWithContext(aws.Context, *glue.StopTriggerInput, ...request.Option) (*glue.StopTriggerOutput, error)
 	StopTriggerRequest(*glue.StopTriggerInput) (*request.Request, *glue.StopTriggerOutput)
+
+	TagResource(*glue.TagResourceInput) (*glue.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *glue.TagResourceInput, ...request.Option) (*glue.TagResourceOutput, error)
+	TagResourceRequest(*glue.TagResourceInput) (*request.Request, *glue.TagResourceOutput)
+
+	UntagResource(*glue.UntagResourceInput) (*glue.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *glue.UntagResourceInput, ...request.Option) (*glue.UntagResourceOutput, error)
+	UntagResourceRequest(*glue.UntagResourceInput) (*request.Request, *glue.UntagResourceOutput)
 
 	UpdateClassifier(*glue.UpdateClassifierInput) (*glue.UpdateClassifierOutput, error)
 	UpdateClassifierWithContext(aws.Context, *glue.UpdateClassifierInput, ...request.Option) (*glue.UpdateClassifierOutput, error)

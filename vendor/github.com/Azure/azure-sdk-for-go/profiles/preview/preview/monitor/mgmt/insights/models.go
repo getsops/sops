@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,29 +19,16 @@
 
 package insights
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/monitor/mgmt/2018-03-01/insights"
+import (
+	"context"
 
-type ActionGroupsClient = original.ActionGroupsClient
-type ActivityLogAlertsClient = original.ActivityLogAlertsClient
-type ActivityLogsClient = original.ActivityLogsClient
-type AlertRuleIncidentsClient = original.AlertRuleIncidentsClient
-type AlertRulesClient = original.AlertRulesClient
-type AutoscaleSettingsClient = original.AutoscaleSettingsClient
+	original "github.com/Azure/azure-sdk-for-go/services/preview/monitor/mgmt/2019-03-01/insights"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type DiagnosticSettingsClient = original.DiagnosticSettingsClient
-type DiagnosticSettingsCategoryClient = original.DiagnosticSettingsCategoryClient
-type EventCategoriesClient = original.EventCategoriesClient
-type LogProfilesClient = original.LogProfilesClient
-type MetricAlertsClient = original.MetricAlertsClient
-type MetricAlertsStatusClient = original.MetricAlertsStatusClient
-type MetricBaselineClient = original.MetricBaselineClient
-type MetricDefinitionsClient = original.MetricDefinitionsClient
-type MetricsClient = original.MetricsClient
 type AggregationType = original.AggregationType
 
 const (
@@ -63,6 +50,14 @@ const (
 	Zero  AlertSeverity = original.Zero
 )
 
+type BaselineSensitivity = original.BaselineSensitivity
+
+const (
+	High   BaselineSensitivity = original.High
+	Low    BaselineSensitivity = original.Low
+	Medium BaselineSensitivity = original.Medium
+)
+
 type CategoryType = original.CategoryType
 
 const (
@@ -81,6 +76,15 @@ const (
 	NotEquals          ComparisonOperationType = original.NotEquals
 )
 
+type ConditionOperator = original.ConditionOperator
+
+const (
+	ConditionOperatorGreaterThan        ConditionOperator = original.ConditionOperatorGreaterThan
+	ConditionOperatorGreaterThanOrEqual ConditionOperator = original.ConditionOperatorGreaterThanOrEqual
+	ConditionOperatorLessThan           ConditionOperator = original.ConditionOperatorLessThan
+	ConditionOperatorLessThanOrEqual    ConditionOperator = original.ConditionOperatorLessThanOrEqual
+)
+
 type ConditionalOperator = original.ConditionalOperator
 
 const (
@@ -89,13 +93,19 @@ const (
 	ConditionalOperatorLessThan    ConditionalOperator = original.ConditionalOperatorLessThan
 )
 
-type ConditionOperator = original.ConditionOperator
+type CriterionType = original.CriterionType
 
 const (
-	ConditionOperatorGreaterThan        ConditionOperator = original.ConditionOperatorGreaterThan
-	ConditionOperatorGreaterThanOrEqual ConditionOperator = original.ConditionOperatorGreaterThanOrEqual
-	ConditionOperatorLessThan           ConditionOperator = original.ConditionOperatorLessThan
-	ConditionOperatorLessThanOrEqual    ConditionOperator = original.ConditionOperatorLessThanOrEqual
+	CriterionTypeDynamicThresholdCriterion CriterionType = original.CriterionTypeDynamicThresholdCriterion
+	CriterionTypeMultiMetricCriteria       CriterionType = original.CriterionTypeMultiMetricCriteria
+	CriterionTypeStaticThresholdCriterion  CriterionType = original.CriterionTypeStaticThresholdCriterion
+)
+
+type DataStatus = original.DataStatus
+
+const (
+	NotPresent DataStatus = original.NotPresent
+	Present    DataStatus = original.Present
 )
 
 type Enabled = original.Enabled
@@ -108,11 +118,11 @@ const (
 type EventLevel = original.EventLevel
 
 const (
-	Critical      EventLevel = original.Critical
-	Error         EventLevel = original.Error
-	Informational EventLevel = original.Informational
-	Verbose       EventLevel = original.Verbose
-	Warning       EventLevel = original.Warning
+	EventLevelCritical      EventLevel = original.EventLevelCritical
+	EventLevelError         EventLevel = original.EventLevelError
+	EventLevelInformational EventLevel = original.EventLevelInformational
+	EventLevelVerbose       EventLevel = original.EventLevelVerbose
+	EventLevelWarning       EventLevel = original.EventLevelWarning
 )
 
 type MetricStatisticType = original.MetricStatisticType
@@ -142,15 +152,17 @@ const (
 type OdataTypeBasicAction = original.OdataTypeBasicAction
 
 const (
-	OdataTypeAction                                                                                                                                OdataTypeBasicAction = original.OdataTypeAction
-	OdataTypeMicrosoftWindowsAzureManagementMonitoringAlertsModelsMicrosoftAppInsightsNexusDataContractsResourcesScheduledQueryRulesAlertingAction OdataTypeBasicAction = original.OdataTypeMicrosoftWindowsAzureManagementMonitoringAlertsModelsMicrosoftAppInsightsNexusDataContractsResourcesScheduledQueryRulesAlertingAction
+	OdataTypeAction                                                                                                                                   OdataTypeBasicAction = original.OdataTypeAction
+	OdataTypeMicrosoftWindowsAzureManagementMonitoringAlertsModelsMicrosoftAppInsightsNexusDataContractsResourcesScheduledQueryRulesAlertingAction    OdataTypeBasicAction = original.OdataTypeMicrosoftWindowsAzureManagementMonitoringAlertsModelsMicrosoftAppInsightsNexusDataContractsResourcesScheduledQueryRulesAlertingAction
+	OdataTypeMicrosoftWindowsAzureManagementMonitoringAlertsModelsMicrosoftAppInsightsNexusDataContractsResourcesScheduledQueryRulesLogToMetricAction OdataTypeBasicAction = original.OdataTypeMicrosoftWindowsAzureManagementMonitoringAlertsModelsMicrosoftAppInsightsNexusDataContractsResourcesScheduledQueryRulesLogToMetricAction
 )
 
 type OdataTypeBasicMetricAlertCriteria = original.OdataTypeBasicMetricAlertCriteria
 
 const (
-	OdataTypeMetricAlertCriteria                                       OdataTypeBasicMetricAlertCriteria = original.OdataTypeMetricAlertCriteria
-	OdataTypeMicrosoftAzureMonitorSingleResourceMultipleMetricCriteria OdataTypeBasicMetricAlertCriteria = original.OdataTypeMicrosoftAzureMonitorSingleResourceMultipleMetricCriteria
+	OdataTypeMetricAlertCriteria                                         OdataTypeBasicMetricAlertCriteria = original.OdataTypeMetricAlertCriteria
+	OdataTypeMicrosoftAzureMonitorMultipleResourceMultipleMetricCriteria OdataTypeBasicMetricAlertCriteria = original.OdataTypeMicrosoftAzureMonitorMultipleResourceMultipleMetricCriteria
+	OdataTypeMicrosoftAzureMonitorSingleResourceMultipleMetricCriteria   OdataTypeBasicMetricAlertCriteria = original.OdataTypeMicrosoftAzureMonitorSingleResourceMultipleMetricCriteria
 )
 
 type OdataTypeBasicRuleAction = original.OdataTypeBasicRuleAction
@@ -168,6 +180,14 @@ const (
 	OdataTypeMicrosoftAzureManagementInsightsModelsManagementEventRuleCondition   OdataTypeBasicRuleCondition = original.OdataTypeMicrosoftAzureManagementInsightsModelsManagementEventRuleCondition
 	OdataTypeMicrosoftAzureManagementInsightsModelsThresholdRuleCondition         OdataTypeBasicRuleCondition = original.OdataTypeMicrosoftAzureManagementInsightsModelsThresholdRuleCondition
 	OdataTypeRuleCondition                                                        OdataTypeBasicRuleCondition = original.OdataTypeRuleCondition
+)
+
+type OnboardingStatus = original.OnboardingStatus
+
+const (
+	NotOnboarded OnboardingStatus = original.NotOnboarded
+	Onboarded    OnboardingStatus = original.Onboarded
+	Unknown      OnboardingStatus = original.Unknown
 )
 
 type ProvisioningState = original.ProvisioningState
@@ -232,9 +252,9 @@ const (
 type Sensitivity = original.Sensitivity
 
 const (
-	High   Sensitivity = original.High
-	Low    Sensitivity = original.Low
-	Medium Sensitivity = original.Medium
+	SensitivityHigh   Sensitivity = original.SensitivityHigh
+	SensitivityLow    Sensitivity = original.SensitivityLow
+	SensitivityMedium Sensitivity = original.SensitivityMedium
 )
 
 type TimeAggregationOperator = original.TimeAggregationOperator
@@ -252,6 +272,7 @@ type TimeAggregationType = original.TimeAggregationType
 const (
 	TimeAggregationTypeAverage TimeAggregationType = original.TimeAggregationTypeAverage
 	TimeAggregationTypeCount   TimeAggregationType = original.TimeAggregationTypeCount
+	TimeAggregationTypeLast    TimeAggregationType = original.TimeAggregationTypeLast
 	TimeAggregationTypeMaximum TimeAggregationType = original.TimeAggregationTypeMaximum
 	TimeAggregationTypeMinimum TimeAggregationType = original.TimeAggregationTypeMinimum
 	TimeAggregationTypeTotal   TimeAggregationType = original.TimeAggregationTypeTotal
@@ -271,13 +292,13 @@ const (
 	UnitUnspecified    Unit = original.UnitUnspecified
 )
 
-type BasicAction = original.BasicAction
 type Action = original.Action
 type ActionGroup = original.ActionGroup
 type ActionGroupList = original.ActionGroupList
 type ActionGroupPatch = original.ActionGroupPatch
 type ActionGroupPatchBody = original.ActionGroupPatchBody
 type ActionGroupResource = original.ActionGroupResource
+type ActionGroupsClient = original.ActionGroupsClient
 type ActivityLogAlert = original.ActivityLogAlert
 type ActivityLogAlertActionGroup = original.ActivityLogAlertActionGroup
 type ActivityLogAlertActionList = original.ActivityLogAlertActionList
@@ -287,11 +308,16 @@ type ActivityLogAlertList = original.ActivityLogAlertList
 type ActivityLogAlertPatch = original.ActivityLogAlertPatch
 type ActivityLogAlertPatchBody = original.ActivityLogAlertPatchBody
 type ActivityLogAlertResource = original.ActivityLogAlertResource
-type AlertingAction = original.AlertingAction
+type ActivityLogAlertsClient = original.ActivityLogAlertsClient
+type ActivityLogsClient = original.ActivityLogsClient
 type AlertRule = original.AlertRule
+type AlertRuleIncidentsClient = original.AlertRuleIncidentsClient
 type AlertRuleResource = original.AlertRuleResource
 type AlertRuleResourceCollection = original.AlertRuleResourceCollection
 type AlertRuleResourcePatch = original.AlertRuleResourcePatch
+type AlertRulesClient = original.AlertRulesClient
+type AlertingAction = original.AlertingAction
+type ArmRoleReceiver = original.ArmRoleReceiver
 type AutomationRunbookReceiver = original.AutomationRunbookReceiver
 type AutoscaleNotification = original.AutoscaleNotification
 type AutoscaleProfile = original.AutoscaleProfile
@@ -301,24 +327,43 @@ type AutoscaleSettingResourceCollection = original.AutoscaleSettingResourceColle
 type AutoscaleSettingResourceCollectionIterator = original.AutoscaleSettingResourceCollectionIterator
 type AutoscaleSettingResourceCollectionPage = original.AutoscaleSettingResourceCollectionPage
 type AutoscaleSettingResourcePatch = original.AutoscaleSettingResourcePatch
+type AutoscaleSettingsClient = original.AutoscaleSettingsClient
 type AzNsActionGroup = original.AzNsActionGroup
 type AzureAppPushReceiver = original.AzureAppPushReceiver
 type AzureFunctionReceiver = original.AzureFunctionReceiver
+type BaseClient = original.BaseClient
 type Baseline = original.Baseline
+type BaselineMetadata = original.BaselineMetadata
 type BaselineMetadataValue = original.BaselineMetadataValue
 type BaselineProperties = original.BaselineProperties
 type BaselineResponse = original.BaselineResponse
+type BaselinesClient = original.BaselinesClient
+type BasicAction = original.BasicAction
+type BasicMetricAlertCriteria = original.BasicMetricAlertCriteria
+type BasicMultiMetricCriteria = original.BasicMultiMetricCriteria
+type BasicRuleAction = original.BasicRuleAction
+type BasicRuleCondition = original.BasicRuleCondition
+type BasicRuleDataSource = original.BasicRuleDataSource
 type CalculateBaselineResponse = original.CalculateBaselineResponse
+type Criteria = original.Criteria
+type DataContainer = original.DataContainer
 type DiagnosticSettings = original.DiagnosticSettings
 type DiagnosticSettingsCategory = original.DiagnosticSettingsCategory
+type DiagnosticSettingsCategoryClient = original.DiagnosticSettingsCategoryClient
 type DiagnosticSettingsCategoryResource = original.DiagnosticSettingsCategoryResource
 type DiagnosticSettingsCategoryResourceCollection = original.DiagnosticSettingsCategoryResourceCollection
+type DiagnosticSettingsClient = original.DiagnosticSettingsClient
 type DiagnosticSettingsResource = original.DiagnosticSettingsResource
 type DiagnosticSettingsResourceCollection = original.DiagnosticSettingsResourceCollection
+type Dimension = original.Dimension
+type DynamicMetricCriteria = original.DynamicMetricCriteria
+type DynamicThresholdFailingPeriods = original.DynamicThresholdFailingPeriods
 type EmailNotification = original.EmailNotification
 type EmailReceiver = original.EmailReceiver
 type EnableRequest = original.EnableRequest
+type Error = original.Error
 type ErrorResponse = original.ErrorResponse
+type EventCategoriesClient = original.EventCategoriesClient
 type EventCategoryCollection = original.EventCategoryCollection
 type EventData = original.EventData
 type EventDataCollection = original.EventDataCollection
@@ -330,25 +375,27 @@ type IncidentListResult = original.IncidentListResult
 type ItsmReceiver = original.ItsmReceiver
 type LocalizableString = original.LocalizableString
 type LocationThresholdRuleCondition = original.LocationThresholdRuleCondition
-type LogicAppReceiver = original.LogicAppReceiver
 type LogMetricTrigger = original.LogMetricTrigger
 type LogProfileCollection = original.LogProfileCollection
 type LogProfileProperties = original.LogProfileProperties
 type LogProfileResource = original.LogProfileResource
 type LogProfileResourcePatch = original.LogProfileResourcePatch
+type LogProfilesClient = original.LogProfilesClient
 type LogSearchRule = original.LogSearchRule
 type LogSearchRulePatch = original.LogSearchRulePatch
 type LogSearchRuleResource = original.LogSearchRuleResource
 type LogSearchRuleResourceCollection = original.LogSearchRuleResourceCollection
 type LogSearchRuleResourcePatch = original.LogSearchRuleResourcePatch
 type LogSettings = original.LogSettings
+type LogToMetricAction = original.LogToMetricAction
+type LogicAppReceiver = original.LogicAppReceiver
 type ManagementEventAggregationCondition = original.ManagementEventAggregationCondition
 type ManagementEventRuleCondition = original.ManagementEventRuleCondition
 type MetadataValue = original.MetadataValue
 type Metric = original.Metric
 type MetricAlertAction = original.MetricAlertAction
-type BasicMetricAlertCriteria = original.BasicMetricAlertCriteria
 type MetricAlertCriteria = original.MetricAlertCriteria
+type MetricAlertMultipleResourceMultipleMetricCriteria = original.MetricAlertMultipleResourceMultipleMetricCriteria
 type MetricAlertProperties = original.MetricAlertProperties
 type MetricAlertResource = original.MetricAlertResource
 type MetricAlertResourceCollection = original.MetricAlertResourceCollection
@@ -357,28 +404,41 @@ type MetricAlertSingleResourceMultipleMetricCriteria = original.MetricAlertSingl
 type MetricAlertStatus = original.MetricAlertStatus
 type MetricAlertStatusCollection = original.MetricAlertStatusCollection
 type MetricAlertStatusProperties = original.MetricAlertStatusProperties
+type MetricAlertsClient = original.MetricAlertsClient
+type MetricAlertsStatusClient = original.MetricAlertsStatusClient
 type MetricAvailability = original.MetricAvailability
+type MetricBaselineClient = original.MetricBaselineClient
+type MetricBaselinesProperties = original.MetricBaselinesProperties
+type MetricBaselinesResponse = original.MetricBaselinesResponse
 type MetricCriteria = original.MetricCriteria
 type MetricDefinition = original.MetricDefinition
 type MetricDefinitionCollection = original.MetricDefinitionCollection
+type MetricDefinitionsClient = original.MetricDefinitionsClient
 type MetricDimension = original.MetricDimension
+type MetricNamespace = original.MetricNamespace
+type MetricNamespaceCollection = original.MetricNamespaceCollection
+type MetricNamespaceName = original.MetricNamespaceName
+type MetricNamespacesClient = original.MetricNamespacesClient
 type MetricSettings = original.MetricSettings
+type MetricSingleDimension = original.MetricSingleDimension
 type MetricTrigger = original.MetricTrigger
 type MetricValue = original.MetricValue
+type MetricsClient = original.MetricsClient
+type MultiMetricCriteria = original.MultiMetricCriteria
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type ProxyOnlyResource = original.ProxyOnlyResource
+type ProxyResource = original.ProxyResource
 type Recurrence = original.Recurrence
 type RecurrentSchedule = original.RecurrentSchedule
 type Resource = original.Resource
 type Response = original.Response
+type ResponseWithError = original.ResponseWithError
 type RetentionPolicy = original.RetentionPolicy
-type BasicRuleAction = original.BasicRuleAction
 type RuleAction = original.RuleAction
-type BasicRuleCondition = original.BasicRuleCondition
 type RuleCondition = original.RuleCondition
-type BasicRuleDataSource = original.BasicRuleDataSource
 type RuleDataSource = original.RuleDataSource
 type RuleEmailAction = original.RuleEmailAction
 type RuleManagementEventClaimsDataSource = original.RuleManagementEventClaimsDataSource
@@ -389,21 +449,31 @@ type ScaleAction = original.ScaleAction
 type ScaleCapacity = original.ScaleCapacity
 type ScaleRule = original.ScaleRule
 type Schedule = original.Schedule
+type ScheduledQueryRulesClient = original.ScheduledQueryRulesClient
 type SenderAuthorization = original.SenderAuthorization
+type SingleBaseline = original.SingleBaseline
+type SingleMetricBaseline = original.SingleMetricBaseline
 type SmsReceiver = original.SmsReceiver
 type Source = original.Source
+type TenantActivityLogsClient = original.TenantActivityLogsClient
 type ThresholdRuleCondition = original.ThresholdRuleCondition
+type TimeSeriesBaseline = original.TimeSeriesBaseline
 type TimeSeriesElement = original.TimeSeriesElement
 type TimeSeriesInformation = original.TimeSeriesInformation
 type TimeWindow = original.TimeWindow
 type TriggerCondition = original.TriggerCondition
+type VMInsightsClient = original.VMInsightsClient
+type VMInsightsOnboardingStatus = original.VMInsightsOnboardingStatus
+type VMInsightsOnboardingStatusProperties = original.VMInsightsOnboardingStatusProperties
 type VoiceReceiver = original.VoiceReceiver
 type WebhookNotification = original.WebhookNotification
 type WebhookReceiver = original.WebhookReceiver
-type OperationsClient = original.OperationsClient
-type ScheduledQueryRulesClient = original.ScheduledQueryRulesClient
-type TenantActivityLogsClient = original.TenantActivityLogsClient
+type WorkspaceInfo = original.WorkspaceInfo
+type WorkspaceInfoProperties = original.WorkspaceInfoProperties
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewActionGroupsClient(subscriptionID string) ActionGroupsClient {
 	return original.NewActionGroupsClient(subscriptionID)
 }
@@ -434,23 +504,23 @@ func NewAlertRulesClient(subscriptionID string) AlertRulesClient {
 func NewAlertRulesClientWithBaseURI(baseURI string, subscriptionID string) AlertRulesClient {
 	return original.NewAlertRulesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewAutoscaleSettingResourceCollectionIterator(page AutoscaleSettingResourceCollectionPage) AutoscaleSettingResourceCollectionIterator {
+	return original.NewAutoscaleSettingResourceCollectionIterator(page)
+}
+func NewAutoscaleSettingResourceCollectionPage(getNextPage func(context.Context, AutoscaleSettingResourceCollection) (AutoscaleSettingResourceCollection, error)) AutoscaleSettingResourceCollectionPage {
+	return original.NewAutoscaleSettingResourceCollectionPage(getNextPage)
+}
 func NewAutoscaleSettingsClient(subscriptionID string) AutoscaleSettingsClient {
 	return original.NewAutoscaleSettingsClient(subscriptionID)
 }
 func NewAutoscaleSettingsClientWithBaseURI(baseURI string, subscriptionID string) AutoscaleSettingsClient {
 	return original.NewAutoscaleSettingsClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewBaselinesClient(subscriptionID string) BaselinesClient {
+	return original.NewBaselinesClient(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
-}
-func NewDiagnosticSettingsClient(subscriptionID string) DiagnosticSettingsClient {
-	return original.NewDiagnosticSettingsClient(subscriptionID)
-}
-func NewDiagnosticSettingsClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticSettingsClient {
-	return original.NewDiagnosticSettingsClientWithBaseURI(baseURI, subscriptionID)
+func NewBaselinesClientWithBaseURI(baseURI string, subscriptionID string) BaselinesClient {
+	return original.NewBaselinesClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewDiagnosticSettingsCategoryClient(subscriptionID string) DiagnosticSettingsCategoryClient {
 	return original.NewDiagnosticSettingsCategoryClient(subscriptionID)
@@ -458,11 +528,23 @@ func NewDiagnosticSettingsCategoryClient(subscriptionID string) DiagnosticSettin
 func NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticSettingsCategoryClient {
 	return original.NewDiagnosticSettingsCategoryClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewDiagnosticSettingsClient(subscriptionID string) DiagnosticSettingsClient {
+	return original.NewDiagnosticSettingsClient(subscriptionID)
+}
+func NewDiagnosticSettingsClientWithBaseURI(baseURI string, subscriptionID string) DiagnosticSettingsClient {
+	return original.NewDiagnosticSettingsClientWithBaseURI(baseURI, subscriptionID)
+}
 func NewEventCategoriesClient(subscriptionID string) EventCategoriesClient {
 	return original.NewEventCategoriesClient(subscriptionID)
 }
 func NewEventCategoriesClientWithBaseURI(baseURI string, subscriptionID string) EventCategoriesClient {
 	return original.NewEventCategoriesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewEventDataCollectionIterator(page EventDataCollectionPage) EventDataCollectionIterator {
+	return original.NewEventDataCollectionIterator(page)
+}
+func NewEventDataCollectionPage(getNextPage func(context.Context, EventDataCollection) (EventDataCollection, error)) EventDataCollectionPage {
+	return original.NewEventDataCollectionPage(getNextPage)
 }
 func NewLogProfilesClient(subscriptionID string) LogProfilesClient {
 	return original.NewLogProfilesClient(subscriptionID)
@@ -494,11 +576,44 @@ func NewMetricDefinitionsClient(subscriptionID string) MetricDefinitionsClient {
 func NewMetricDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) MetricDefinitionsClient {
 	return original.NewMetricDefinitionsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewMetricNamespacesClient(subscriptionID string) MetricNamespacesClient {
+	return original.NewMetricNamespacesClient(subscriptionID)
+}
+func NewMetricNamespacesClientWithBaseURI(baseURI string, subscriptionID string) MetricNamespacesClient {
+	return original.NewMetricNamespacesClientWithBaseURI(baseURI, subscriptionID)
+}
 func NewMetricsClient(subscriptionID string) MetricsClient {
 	return original.NewMetricsClient(subscriptionID)
 }
 func NewMetricsClientWithBaseURI(baseURI string, subscriptionID string) MetricsClient {
 	return original.NewMetricsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewScheduledQueryRulesClient(subscriptionID string) ScheduledQueryRulesClient {
+	return original.NewScheduledQueryRulesClient(subscriptionID)
+}
+func NewScheduledQueryRulesClientWithBaseURI(baseURI string, subscriptionID string) ScheduledQueryRulesClient {
+	return original.NewScheduledQueryRulesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewTenantActivityLogsClient(subscriptionID string) TenantActivityLogsClient {
+	return original.NewTenantActivityLogsClient(subscriptionID)
+}
+func NewTenantActivityLogsClientWithBaseURI(baseURI string, subscriptionID string) TenantActivityLogsClient {
+	return original.NewTenantActivityLogsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewVMInsightsClient(subscriptionID string) VMInsightsClient {
+	return original.NewVMInsightsClient(subscriptionID)
+}
+func NewVMInsightsClientWithBaseURI(baseURI string, subscriptionID string) VMInsightsClient {
+	return original.NewVMInsightsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAggregationTypeValues() []AggregationType {
 	return original.PossibleAggregationTypeValues()
@@ -506,17 +621,26 @@ func PossibleAggregationTypeValues() []AggregationType {
 func PossibleAlertSeverityValues() []AlertSeverity {
 	return original.PossibleAlertSeverityValues()
 }
+func PossibleBaselineSensitivityValues() []BaselineSensitivity {
+	return original.PossibleBaselineSensitivityValues()
+}
 func PossibleCategoryTypeValues() []CategoryType {
 	return original.PossibleCategoryTypeValues()
 }
 func PossibleComparisonOperationTypeValues() []ComparisonOperationType {
 	return original.PossibleComparisonOperationTypeValues()
 }
+func PossibleConditionOperatorValues() []ConditionOperator {
+	return original.PossibleConditionOperatorValues()
+}
 func PossibleConditionalOperatorValues() []ConditionalOperator {
 	return original.PossibleConditionalOperatorValues()
 }
-func PossibleConditionOperatorValues() []ConditionOperator {
-	return original.PossibleConditionOperatorValues()
+func PossibleCriterionTypeValues() []CriterionType {
+	return original.PossibleCriterionTypeValues()
+}
+func PossibleDataStatusValues() []DataStatus {
+	return original.PossibleDataStatusValues()
 }
 func PossibleEnabledValues() []Enabled {
 	return original.PossibleEnabledValues()
@@ -530,9 +654,6 @@ func PossibleMetricStatisticTypeValues() []MetricStatisticType {
 func PossibleMetricTriggerTypeValues() []MetricTriggerType {
 	return original.PossibleMetricTriggerTypeValues()
 }
-func PossibleOdataTypeValues() []OdataType {
-	return original.PossibleOdataTypeValues()
-}
 func PossibleOdataTypeBasicActionValues() []OdataTypeBasicAction {
 	return original.PossibleOdataTypeBasicActionValues()
 }
@@ -544,6 +665,12 @@ func PossibleOdataTypeBasicRuleActionValues() []OdataTypeBasicRuleAction {
 }
 func PossibleOdataTypeBasicRuleConditionValues() []OdataTypeBasicRuleCondition {
 	return original.PossibleOdataTypeBasicRuleConditionValues()
+}
+func PossibleOdataTypeValues() []OdataType {
+	return original.PossibleOdataTypeValues()
+}
+func PossibleOnboardingStatusValues() []OnboardingStatus {
+	return original.PossibleOnboardingStatusValues()
 }
 func PossibleProvisioningStateValues() []ProvisioningState {
 	return original.PossibleProvisioningStateValues()
@@ -577,24 +704,6 @@ func PossibleTimeAggregationTypeValues() []TimeAggregationType {
 }
 func PossibleUnitValues() []Unit {
 	return original.PossibleUnitValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewScheduledQueryRulesClient(subscriptionID string) ScheduledQueryRulesClient {
-	return original.NewScheduledQueryRulesClient(subscriptionID)
-}
-func NewScheduledQueryRulesClientWithBaseURI(baseURI string, subscriptionID string) ScheduledQueryRulesClient {
-	return original.NewScheduledQueryRulesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewTenantActivityLogsClient(subscriptionID string) TenantActivityLogsClient {
-	return original.NewTenantActivityLogsClient(subscriptionID)
-}
-func NewTenantActivityLogsClientWithBaseURI(baseURI string, subscriptionID string) TenantActivityLogsClient {
-	return original.NewTenantActivityLogsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

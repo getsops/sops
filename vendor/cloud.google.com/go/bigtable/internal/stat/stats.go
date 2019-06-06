@@ -70,6 +70,7 @@ func quantile(data []time.Duration, k, q int) (quantile time.Duration, ok bool) 
 	return time.Duration(weightLower*float64(data[lower]) + weightUpper*float64(data[upper])), true
 }
 
+// Aggregate is an aggregate of latencies.
 type Aggregate struct {
 	Name               string
 	Count, Errors      int

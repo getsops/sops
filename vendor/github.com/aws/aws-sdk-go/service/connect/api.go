@@ -17,7 +17,7 @@ const opCreateUser = "CreateUser"
 // CreateUserRequest generates a "aws/request.Request" representing the
 // client's request for the CreateUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -76,7 +76,7 @@ func (c *Connect) CreateUserRequest(input *CreateUserInput) (req *request.Reques
 //   The allowed limit for the resource has been reached.
 //
 //   * ErrCodeDuplicateResourceException "DuplicateResourceException"
-//   A resource with that name already exisits.
+//   A resource with that name already exists.
 //
 //   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   The specified resource was not found.
@@ -114,7 +114,7 @@ const opDeleteUser = "DeleteUser"
 // DeleteUserRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -148,8 +148,7 @@ func (c *Connect) DeleteUserRequest(input *DeleteUserInput) (req *request.Reques
 
 	output = &DeleteUserOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -207,7 +206,7 @@ const opDescribeUser = "DescribeUser"
 // DescribeUserRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUser operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -299,7 +298,7 @@ const opDescribeUserHierarchyGroup = "DescribeUserHierarchyGroup"
 // DescribeUserHierarchyGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserHierarchyGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -391,7 +390,7 @@ const opDescribeUserHierarchyStructure = "DescribeUserHierarchyStructure"
 // DescribeUserHierarchyStructureRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeUserHierarchyStructure operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -478,12 +477,248 @@ func (c *Connect) DescribeUserHierarchyStructureWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opGetContactAttributes = "GetContactAttributes"
+
+// GetContactAttributesRequest generates a "aws/request.Request" representing the
+// client's request for the GetContactAttributes operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContactAttributes for more information on using the GetContactAttributes
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContactAttributesRequest method.
+//    req, resp := client.GetContactAttributesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetContactAttributes
+func (c *Connect) GetContactAttributesRequest(input *GetContactAttributesInput) (req *request.Request, output *GetContactAttributesOutput) {
+	op := &request.Operation{
+		Name:       opGetContactAttributes,
+		HTTPMethod: "GET",
+		HTTPPath:   "/contact/attributes/{InstanceId}/{InitialContactId}",
+	}
+
+	if input == nil {
+		input = &GetContactAttributesInput{}
+	}
+
+	output = &GetContactAttributesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContactAttributes API operation for Amazon Connect Service.
+//
+// Retrieves the contact attributes associated with a contact.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation GetContactAttributes for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   Request processing failed due to an error or failure with the service.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetContactAttributes
+func (c *Connect) GetContactAttributes(input *GetContactAttributesInput) (*GetContactAttributesOutput, error) {
+	req, out := c.GetContactAttributesRequest(input)
+	return out, req.Send()
+}
+
+// GetContactAttributesWithContext is the same as GetContactAttributes with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContactAttributes for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetContactAttributesWithContext(ctx aws.Context, input *GetContactAttributesInput, opts ...request.Option) (*GetContactAttributesOutput, error) {
+	req, out := c.GetContactAttributesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetCurrentMetricData = "GetCurrentMetricData"
+
+// GetCurrentMetricDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetCurrentMetricData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCurrentMetricData for more information on using the GetCurrentMetricData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCurrentMetricDataRequest method.
+//    req, resp := client.GetCurrentMetricDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetCurrentMetricData
+func (c *Connect) GetCurrentMetricDataRequest(input *GetCurrentMetricDataInput) (req *request.Request, output *GetCurrentMetricDataOutput) {
+	op := &request.Operation{
+		Name:       opGetCurrentMetricData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/metrics/current/{InstanceId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetCurrentMetricDataInput{}
+	}
+
+	output = &GetCurrentMetricDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCurrentMetricData API operation for Amazon Connect Service.
+//
+// The GetCurrentMetricData operation retrieves current metric data from your
+// Amazon Connect instance.
+//
+// If you are using an IAM account, it must have permission to the connect:GetCurrentMetricData
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation GetCurrentMetricData for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   One or more of the parameters provided to the operation are not valid.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   Request processing failed due to an error or failure with the service.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The throttling limit has been exceeded.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetCurrentMetricData
+func (c *Connect) GetCurrentMetricData(input *GetCurrentMetricDataInput) (*GetCurrentMetricDataOutput, error) {
+	req, out := c.GetCurrentMetricDataRequest(input)
+	return out, req.Send()
+}
+
+// GetCurrentMetricDataWithContext is the same as GetCurrentMetricData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCurrentMetricData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetCurrentMetricDataWithContext(ctx aws.Context, input *GetCurrentMetricDataInput, opts ...request.Option) (*GetCurrentMetricDataOutput, error) {
+	req, out := c.GetCurrentMetricDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetCurrentMetricDataPages iterates over the pages of a GetCurrentMetricData operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetCurrentMetricData method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetCurrentMetricData operation.
+//    pageNum := 0
+//    err := client.GetCurrentMetricDataPages(params,
+//        func(page *connect.GetCurrentMetricDataOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) GetCurrentMetricDataPages(input *GetCurrentMetricDataInput, fn func(*GetCurrentMetricDataOutput, bool) bool) error {
+	return c.GetCurrentMetricDataPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetCurrentMetricDataPagesWithContext same as GetCurrentMetricDataPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetCurrentMetricDataPagesWithContext(ctx aws.Context, input *GetCurrentMetricDataInput, fn func(*GetCurrentMetricDataOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetCurrentMetricDataInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetCurrentMetricDataRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetCurrentMetricDataOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opGetFederationToken = "GetFederationToken"
 
 // GetFederationTokenRequest generates a "aws/request.Request" representing the
 // client's request for the GetFederationToken operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -548,7 +783,7 @@ func (c *Connect) GetFederationTokenRequest(input *GetFederationTokenInput) (req
 //   Request processing failed due to an error or failure with the service.
 //
 //   * ErrCodeDuplicateResourceException "DuplicateResourceException"
-//   A resource with that name already exisits.
+//   A resource with that name already exists.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetFederationToken
 func (c *Connect) GetFederationToken(input *GetFederationTokenInput) (*GetFederationTokenOutput, error) {
@@ -572,12 +807,163 @@ func (c *Connect) GetFederationTokenWithContext(ctx aws.Context, input *GetFeder
 	return out, req.Send()
 }
 
+const opGetMetricData = "GetMetricData"
+
+// GetMetricDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetMetricData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetMetricData for more information on using the GetMetricData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetMetricDataRequest method.
+//    req, resp := client.GetMetricDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetMetricData
+func (c *Connect) GetMetricDataRequest(input *GetMetricDataInput) (req *request.Request, output *GetMetricDataOutput) {
+	op := &request.Operation{
+		Name:       opGetMetricData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/metrics/historical/{InstanceId}",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetMetricDataInput{}
+	}
+
+	output = &GetMetricDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetMetricData API operation for Amazon Connect Service.
+//
+// The GetMetricData operation retrieves historical metrics data from your Amazon
+// Connect instance.
+//
+// If you are using an IAM account, it must have permission to the connect:GetMetricData
+// action.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Connect Service's
+// API operation GetMetricData for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   One or more of the parameters provided to the operation are not valid.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   Request processing failed due to an error or failure with the service.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The throttling limit has been exceeded.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08/GetMetricData
+func (c *Connect) GetMetricData(input *GetMetricDataInput) (*GetMetricDataOutput, error) {
+	req, out := c.GetMetricDataRequest(input)
+	return out, req.Send()
+}
+
+// GetMetricDataWithContext is the same as GetMetricData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetMetricData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetMetricDataWithContext(ctx aws.Context, input *GetMetricDataInput, opts ...request.Option) (*GetMetricDataOutput, error) {
+	req, out := c.GetMetricDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetMetricDataPages iterates over the pages of a GetMetricData operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetMetricData method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetMetricData operation.
+//    pageNum := 0
+//    err := client.GetMetricDataPages(params,
+//        func(page *connect.GetMetricDataOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Connect) GetMetricDataPages(input *GetMetricDataInput, fn func(*GetMetricDataOutput, bool) bool) error {
+	return c.GetMetricDataPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetMetricDataPagesWithContext same as GetMetricDataPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Connect) GetMetricDataPagesWithContext(ctx aws.Context, input *GetMetricDataInput, fn func(*GetMetricDataOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetMetricDataInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetMetricDataRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetMetricDataOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListRoutingProfiles = "ListRoutingProfiles"
 
 // ListRoutingProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRoutingProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -669,7 +1055,7 @@ const opListSecurityProfiles = "ListSecurityProfiles"
 // ListSecurityProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListSecurityProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -762,7 +1148,7 @@ const opListUserHierarchyGroups = "ListUserHierarchyGroups"
 // ListUserHierarchyGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListUserHierarchyGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -854,7 +1240,7 @@ const opListUsers = "ListUsers"
 // ListUsersRequest generates a "aws/request.Request" representing the
 // client's request for the ListUsers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -945,7 +1331,7 @@ const opStartOutboundVoiceContact = "StartOutboundVoiceContact"
 // StartOutboundVoiceContactRequest generates a "aws/request.Request" representing the
 // client's request for the StartOutboundVoiceContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -987,11 +1373,11 @@ func (c *Connect) StartOutboundVoiceContactRequest(input *StartOutboundVoiceCont
 // The StartOutboundVoiceContact operation initiates a contact flow to place
 // an outbound call to a customer.
 //
-// There is a throttling limit placed on usage of the API that includes a RateLimit
-// of 2 per second, and a BurstLimit of 5 per second.
-//
 // If you are using an IAM account, it must have permission to the connect:StartOutboundVoiceContact
 // action.
+//
+// There is a 60 second dialing timeout for this operation. If the call is not
+// connected after 60 seconds, the call fails.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1049,7 +1435,7 @@ const opStopContact = "StopContact"
 // StopContactRequest generates a "aws/request.Request" representing the
 // client's request for the StopContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1083,6 +1469,7 @@ func (c *Connect) StopContactRequest(input *StopContactInput) (req *request.Requ
 
 	output = &StopContactOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1143,7 +1530,7 @@ const opUpdateContactAttributes = "UpdateContactAttributes"
 // UpdateContactAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateContactAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1177,13 +1564,14 @@ func (c *Connect) UpdateContactAttributesRequest(input *UpdateContactAttributesI
 
 	output = &UpdateContactAttributesOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // UpdateContactAttributes API operation for Amazon Connect Service.
 //
-// The UpdateContactAttributes operation lets you programmatically create new
-// or update existing contact attributes associated with a contact. You can
+// The UpdateContactAttributes operation lets you programmatically create new,
+// or update existing, contact attributes associated with a contact. You can
 // use the operation to add or update attributes for both ongoing and completed
 // contacts. For example, you can update the customer's name or the reason the
 // customer called while the call is active, or add notes about steps that the
@@ -1191,10 +1579,20 @@ func (c *Connect) UpdateContactAttributesRequest(input *UpdateContactAttributesI
 // the call. You can also use the UpdateContactAttributes operation to update
 // attributes for a contact using data from your CRM application and save the
 // data with the contact in Amazon Connect. You could also flag calls for additional
-// analysis, or flag abusive callers.
+// analysis, such as legal review or identifying abusive callers.
 //
 // Contact attributes are available in Amazon Connect for 24 months, and are
 // then deleted.
+//
+// Important:
+//
+// You cannot use the operation to update attributes for contacts that occurred
+// prior to the release of the API, September 12, 2018. You can update attributes
+// only for contacts that started after the release of the API. If you attempt
+// to update attributes for a contact that occurred prior to the release of
+// the API, a 400 error is returned. This applies also to queued callbacks that
+// were initiated prior to the release of the API but are still active in your
+// instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1243,7 +1641,7 @@ const opUpdateUserHierarchy = "UpdateUserHierarchy"
 // UpdateUserHierarchyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserHierarchy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1277,8 +1675,7 @@ func (c *Connect) UpdateUserHierarchyRequest(input *UpdateUserHierarchyInput) (r
 
 	output = &UpdateUserHierarchyOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1336,7 +1733,7 @@ const opUpdateUserIdentityInfo = "UpdateUserIdentityInfo"
 // UpdateUserIdentityInfoRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserIdentityInfo operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1370,8 +1767,7 @@ func (c *Connect) UpdateUserIdentityInfoRequest(input *UpdateUserIdentityInfoInp
 
 	output = &UpdateUserIdentityInfoOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1430,7 +1826,7 @@ const opUpdateUserPhoneConfig = "UpdateUserPhoneConfig"
 // UpdateUserPhoneConfigRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserPhoneConfig operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1464,8 +1860,7 @@ func (c *Connect) UpdateUserPhoneConfigRequest(input *UpdateUserPhoneConfigInput
 
 	output = &UpdateUserPhoneConfigOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1524,7 +1919,7 @@ const opUpdateUserRoutingProfile = "UpdateUserRoutingProfile"
 // UpdateUserRoutingProfileRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserRoutingProfile operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1558,8 +1953,7 @@ func (c *Connect) UpdateUserRoutingProfileRequest(input *UpdateUserRoutingProfil
 
 	output = &UpdateUserRoutingProfileOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1617,7 +2011,7 @@ const opUpdateUserSecurityProfiles = "UpdateUserSecurityProfiles"
 // UpdateUserSecurityProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateUserSecurityProfiles operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1651,14 +2045,13 @@ func (c *Connect) UpdateUserSecurityProfilesRequest(input *UpdateUserSecurityPro
 
 	output = &UpdateUserSecurityProfilesOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // UpdateUserSecurityProfiles API operation for Amazon Connect Service.
 //
-// Update the security profiles assigned to the user.
+// Updates the security profiles assigned to the user.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1758,7 +2151,9 @@ type CreateUserInput struct {
 	// SecurityProfileIds is a required field
 	SecurityProfileIds []*string `min:"1" type:"list" required:"true"`
 
-	// The user name in Amazon Connect for the user to create.
+	// The user name in Amazon Connect for the account to create. If you are using
+	// SAML for identity management in your Amazon Connect, the value for Username
+	// can include up to 64 characters from [a-zA-Z0-9_-.\@]+.
 	//
 	// Username is a required field
 	Username *string `min:"1" type:"string" required:"true"`
@@ -1909,14 +2304,14 @@ type Credentials struct {
 	_ struct{} `type:"structure"`
 
 	// An access token generated for a federated user to access Amazon Connect
-	AccessToken *string `type:"string"`
+	AccessToken *string `type:"string" sensitive:"true"`
 
 	// A token generated with an expiration time for the session a user is logged
 	// in to Amazon Connect
 	AccessTokenExpiration *time.Time `type:"timestamp"`
 
 	// Renews a token generated for a user to access the Amazon Connect instance.
-	RefreshToken *string `type:"string"`
+	RefreshToken *string `type:"string" sensitive:"true"`
 
 	// Renews the expiration timer for a generated token.
 	RefreshTokenExpiration *time.Time `type:"timestamp"`
@@ -1953,6 +2348,105 @@ func (s *Credentials) SetRefreshToken(v string) *Credentials {
 // SetRefreshTokenExpiration sets the RefreshTokenExpiration field's value.
 func (s *Credentials) SetRefreshTokenExpiration(v time.Time) *Credentials {
 	s.RefreshTokenExpiration = &v
+	return s
+}
+
+// A CurrentMetric object that contains the Name and Unit for the metric.
+type CurrentMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the metric.
+	Name *string `type:"string" enum:"CurrentMetricName"`
+
+	// The unit for the metric.
+	Unit *string `type:"string" enum:"Unit"`
+}
+
+// String returns the string representation
+func (s CurrentMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CurrentMetric) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *CurrentMetric) SetName(v string) *CurrentMetric {
+	s.Name = &v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *CurrentMetric) SetUnit(v string) *CurrentMetric {
+	s.Unit = &v
+	return s
+}
+
+// A CurrentMetricData object.
+type CurrentMetricData struct {
+	_ struct{} `type:"structure"`
+
+	// The metric in a CurrentMetricData object.
+	Metric *CurrentMetric `type:"structure"`
+
+	// The value of the metric in the CurrentMetricData object.
+	Value *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s CurrentMetricData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CurrentMetricData) GoString() string {
+	return s.String()
+}
+
+// SetMetric sets the Metric field's value.
+func (s *CurrentMetricData) SetMetric(v *CurrentMetric) *CurrentMetricData {
+	s.Metric = v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *CurrentMetricData) SetValue(v float64) *CurrentMetricData {
+	s.Value = &v
+	return s
+}
+
+// A CurrentMetricResult object.
+type CurrentMetricResult struct {
+	_ struct{} `type:"structure"`
+
+	// The Collections for the CurrentMetricResult object.
+	Collections []*CurrentMetricData `type:"list"`
+
+	// The Dimensions for the CurrentMetricResult object.
+	Dimensions *Dimensions `type:"structure"`
+}
+
+// String returns the string representation
+func (s CurrentMetricResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CurrentMetricResult) GoString() string {
+	return s.String()
+}
+
+// SetCollections sets the Collections field's value.
+func (s *CurrentMetricResult) SetCollections(v []*CurrentMetricData) *CurrentMetricResult {
+	s.Collections = v
+	return s
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *CurrentMetricResult) SetDimensions(v *Dimensions) *CurrentMetricResult {
+	s.Dimensions = v
 	return s
 }
 
@@ -1995,6 +2489,9 @@ func (s *DeleteUserInput) Validate() error {
 	}
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2062,6 +2559,9 @@ func (s *DescribeUserHierarchyGroupInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeUserHierarchyGroupInput"}
 	if s.HierarchyGroupId == nil {
 		invalidParams.Add(request.NewErrParamRequired("HierarchyGroupId"))
+	}
+	if s.HierarchyGroupId != nil && len(*s.HierarchyGroupId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("HierarchyGroupId", 1))
 	}
 	if s.InstanceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
@@ -2219,6 +2719,9 @@ func (s *DescribeUserInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2259,6 +2762,399 @@ func (s DescribeUserOutput) GoString() string {
 // SetUser sets the User field's value.
 func (s *DescribeUserOutput) SetUser(v *User) *DescribeUserOutput {
 	s.User = v
+	return s
+}
+
+// A Dimensions object that includes the Channel and Queue for the metric.
+type Dimensions struct {
+	_ struct{} `type:"structure"`
+
+	// The channel used for grouping and filters. Only VOICE is supported.
+	Channel *string `type:"string" enum:"Channel"`
+
+	// A QueueReference object used as one part of dimension for the metrics results.
+	Queue *QueueReference `type:"structure"`
+}
+
+// String returns the string representation
+func (s Dimensions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Dimensions) GoString() string {
+	return s.String()
+}
+
+// SetChannel sets the Channel field's value.
+func (s *Dimensions) SetChannel(v string) *Dimensions {
+	s.Channel = &v
+	return s
+}
+
+// SetQueue sets the Queue field's value.
+func (s *Dimensions) SetQueue(v *QueueReference) *Dimensions {
+	s.Queue = v
+	return s
+}
+
+// The filter, either channel or queues, to apply to the metric results retrieved.
+type Filters struct {
+	_ struct{} `type:"structure"`
+
+	// The Channel to use as a filter for the metrics returned. Only VOICE is supported.
+	Channels []*string `type:"list"`
+
+	// A list of up to 100 queue IDs or queue ARNs to use to filter the metrics
+	// retrieved. You can include both IDs and ARNs in a request.
+	Queues []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s Filters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Filters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Filters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Filters"}
+	if s.Queues != nil && len(s.Queues) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Queues", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetChannels sets the Channels field's value.
+func (s *Filters) SetChannels(v []*string) *Filters {
+	s.Channels = v
+	return s
+}
+
+// SetQueues sets the Queues field's value.
+func (s *Filters) SetQueues(v []*string) *Filters {
+	s.Queues = v
+	return s
+}
+
+type GetContactAttributesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID for the initial contact in Amazon Connect associated with the attributes
+	// to update.
+	//
+	// InitialContactId is a required field
+	InitialContactId *string `location:"uri" locationName:"InitialContactId" min:"1" type:"string" required:"true"`
+
+	// The instance ID for the instance from which to retrieve contact attributes.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetContactAttributesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactAttributesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContactAttributesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContactAttributesInput"}
+	if s.InitialContactId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InitialContactId"))
+	}
+	if s.InitialContactId != nil && len(*s.InitialContactId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InitialContactId", 1))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInitialContactId sets the InitialContactId field's value.
+func (s *GetContactAttributesInput) SetInitialContactId(v string) *GetContactAttributesInput {
+	s.InitialContactId = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetContactAttributesInput) SetInstanceId(v string) *GetContactAttributesInput {
+	s.InstanceId = &v
+	return s
+}
+
+type GetContactAttributesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The attributes to update.
+	Attributes map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s GetContactAttributesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactAttributesOutput) GoString() string {
+	return s.String()
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *GetContactAttributesOutput) SetAttributes(v map[string]*string) *GetContactAttributesOutput {
+	s.Attributes = v
+	return s
+}
+
+type GetCurrentMetricDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of CurrentMetric objects for the metrics to retrieve. Each CurrentMetric
+	// includes a name of a metric to retrieve and the unit to use for it. You must
+	// list each metric to retrieve data for in the request.
+	//
+	// The following metrics are available:
+	//
+	// AGENTS_AVAILABLE
+	//
+	// Unit: COUNT
+	//
+	// AGENTS_ONLINE
+	//
+	// Unit: COUNT
+	//
+	// AGENTS_ON_CALL
+	//
+	// Unit: COUNT
+	//
+	// AGENTS_STAFFED
+	//
+	// Unit: COUNT
+	//
+	// AGENTS_AFTER_CONTACT_WORK
+	//
+	// Unit: COUNT
+	//
+	// AGENTS_NON_PRODUCTIVE
+	//
+	// Unit: COUNT
+	//
+	// AGENTS_ERROR
+	//
+	// Unit: COUNT
+	//
+	// CONTACTS_IN_QUEUE
+	//
+	// Unit: COUNT
+	//
+	// OLDEST_CONTACT_AGE
+	//
+	// Unit: SECONDS
+	//
+	// CONTACTS_SCHEDULED
+	//
+	// Unit: COUNT
+	//
+	// CurrentMetrics is a required field
+	CurrentMetrics []*CurrentMetric `type:"list" required:"true"`
+
+	// A Filters object that contains a list of queue IDs or queue ARNs, up to 100,
+	// or list of Channels to use to filter the metrics returned in the response.
+	// Metric data is retrieved only for the resources associated with the queue
+	// IDs, ARNs, or Channels included in the filter. You can include both IDs and
+	// ARNs in the same request. To retrieve metrics for all queues, add the queue
+	// ID or ARN for each queue in your instance. Only VOICE is supported for Channels.
+	//
+	// To find the ARN for a queue, open the queue you want to use in the Amazon
+	// Connect Queue editor. The ARN for the queue is displayed in the address bar
+	// as part of the URL. For example, the queue ARN is the set of characters at
+	// the end of the URL, after 'id=' such as arn:aws:connect:us-east-1:270923740243:instance/78fb859d-1b7d-44b1-8aa3-12f0835c5855/queue/1d1a4575-9618-40ab-bbeb-81e45795fe61.
+	// The queue ID is also included in the URL, and is the string after 'queue/'.
+	//
+	// Filters is a required field
+	Filters *Filters `type:"structure" required:"true"`
+
+	// The grouping applied to the metrics returned. For example, when grouped by
+	// QUEUE, the metrics returned apply to each queue rather than aggregated for
+	// all queues. If you group by CHANNEL, you should include a Channels filter.
+	// The only supported channel is VOICE.
+	//
+	// If no Grouping is included in the request, a summary of CurrentMetrics is
+	// returned.
+	Groupings []*string `type:"list"`
+
+	// The identifier for your Amazon Connect instance. To find the ID of your instance,
+	// open the AWS console and select Amazon Connect. Select the alias of the instance
+	// in the Instance alias column. The instance ID is displayed in the Overview
+	// section of your instance settings. For example, the instance ID is the set
+	// of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// MaxResults indicates the maximum number of results to return per page in
+	// the response, between 1 and 100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	//
+	// The token expires after 5 minutes from the time it is created. Subsequent
+	// requests that use the NextToken must use the same request parameters as the
+	// request that generated the token.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetCurrentMetricDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCurrentMetricDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCurrentMetricDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCurrentMetricDataInput"}
+	if s.CurrentMetrics == nil {
+		invalidParams.Add(request.NewErrParamRequired("CurrentMetrics"))
+	}
+	if s.Filters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Filters != nil {
+		if err := s.Filters.Validate(); err != nil {
+			invalidParams.AddNested("Filters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCurrentMetrics sets the CurrentMetrics field's value.
+func (s *GetCurrentMetricDataInput) SetCurrentMetrics(v []*CurrentMetric) *GetCurrentMetricDataInput {
+	s.CurrentMetrics = v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetCurrentMetricDataInput) SetFilters(v *Filters) *GetCurrentMetricDataInput {
+	s.Filters = v
+	return s
+}
+
+// SetGroupings sets the Groupings field's value.
+func (s *GetCurrentMetricDataInput) SetGroupings(v []*string) *GetCurrentMetricDataInput {
+	s.Groupings = v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetCurrentMetricDataInput) SetInstanceId(v string) *GetCurrentMetricDataInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetCurrentMetricDataInput) SetMaxResults(v int64) *GetCurrentMetricDataInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetCurrentMetricDataInput) SetNextToken(v string) *GetCurrentMetricDataInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetCurrentMetricDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The time at which CurrentMetricData was retrieved and cached for pagination.
+	DataSnapshotTime *time.Time `type:"timestamp"`
+
+	// A list of CurrentMetricResult objects organized by Dimensions combining with
+	// CurrentMetricDataCollections.
+	//
+	// Dimensions is the resourceId specified in the Filters of the request.
+	//
+	// Collections is a list of CurrentMetricData objects with corresponding values
+	// to the CurrentMetrics specified in the request.
+	//
+	// If no Grouping is specified in the request, Collections is a summary for
+	// the CurrentMetric returned.
+	MetricResults []*CurrentMetricResult `type:"list"`
+
+	// A string returned in the response. Use the value returned in the response
+	// as the value of the NextToken in a subsequent request to retrieve the next
+	// set of results.
+	//
+	// The token expires after 5 minutes from the time it is created. Subsequent
+	// requests that use the NextToken must use the same request parameters as the
+	// request that generated the token.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetCurrentMetricDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCurrentMetricDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetDataSnapshotTime sets the DataSnapshotTime field's value.
+func (s *GetCurrentMetricDataOutput) SetDataSnapshotTime(v time.Time) *GetCurrentMetricDataOutput {
+	s.DataSnapshotTime = &v
+	return s
+}
+
+// SetMetricResults sets the MetricResults field's value.
+func (s *GetCurrentMetricDataOutput) SetMetricResults(v []*CurrentMetricResult) *GetCurrentMetricDataOutput {
+	s.MetricResults = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetCurrentMetricDataOutput) SetNextToken(v string) *GetCurrentMetricDataOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -2327,6 +3223,385 @@ func (s GetFederationTokenOutput) GoString() string {
 // SetCredentials sets the Credentials field's value.
 func (s *GetFederationTokenOutput) SetCredentials(v *Credentials) *GetFederationTokenOutput {
 	s.Credentials = v
+	return s
+}
+
+type GetMetricDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp, in UNIX Epoch time format, at which to end the reporting interval
+	// for the retrieval of historical metrics data. The time must be specified
+	// using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be
+	// later than the StartTime timestamp.
+	//
+	// The time range between StartTime and EndTime must be less than 24 hours.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `type:"timestamp" required:"true"`
+
+	// A Filters object that contains a list of queue IDs or queue ARNs, up to 100,
+	// or a list of Channels to use to filter the metrics returned in the response.
+	// Metric data is retrieved only for the resources associated with the IDs,
+	// ARNs, or Channels included in the filter. You can use both IDs and ARNs together
+	// in a request. Only VOICE is supported for Channel.
+	//
+	// To find the ARN for a queue, open the queue you want to use in the Amazon
+	// Connect Queue editor. The ARN for the queue is displayed in the address bar
+	// as part of the URL. For example, the queue ARN is the set of characters at
+	// the end of the URL, after 'id=' such as arn:aws:connect:us-east-1:270923740243:instance/78fb859d-1b7d-44b1-8aa3-12f0835c5855/queue/1d1a4575-9618-40ab-bbeb-81e45795fe61.
+	// The queue ID is also included in the URL, and is the string after 'queue/'.
+	//
+	// Filters is a required field
+	Filters *Filters `type:"structure" required:"true"`
+
+	// The grouping applied to the metrics returned. For example, when results are
+	// grouped by queueId, the metrics returned are grouped by queue. The values
+	// returned apply to the metrics for each queue rather than aggregated for all
+	// queues.
+	//
+	// The current version supports grouping by Queue
+	//
+	// If no Grouping is included in the request, a summary of HistoricalMetrics
+	// for all queues is returned.
+	Groupings []*string `type:"list"`
+
+	// A list of HistoricalMetric objects that contain the metrics to retrieve with
+	// the request.
+	//
+	// A HistoricalMetric object contains: HistoricalMetricName, Statistic, Threshold,
+	// and Unit.
+	//
+	// You must list each metric to retrieve data for in the request. For each historical
+	// metric you include in the request, you must include a Unit and a Statistic.
+	//
+	// The following historical metrics are available:
+	//
+	// CONTACTS_QUEUED
+	//
+	// Unit: COUNT
+	//
+	// Statistic: SUM
+	//
+	// CONTACTS_HANDLED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_ABANDONED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_CONSULTED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_AGENT_HUNG_UP_FIRST
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_HANDLED_INCOMING
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_HANDLED_OUTBOUND
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_HOLD_ABANDONS
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_TRANSFERRED_IN
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_TRANSFERRED_OUT
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_TRANSFERRED_IN_FROM_QUEUE
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_TRANSFERRED_OUT_FROM_QUEUE
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CALLBACK_CONTACTS_HANDLED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CALLBACK_CONTACTS_HANDLED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// API_CONTACTS_HANDLED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// CONTACTS_MISSED
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// OCCUPANCY
+	//
+	// Unit: PERCENT
+	//
+	// Statistics: AVG
+	//
+	// HANDLE_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: AVG
+	//
+	// AFTER_CONTACT_WORK_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: AVG
+	//
+	// QUEUED_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: MAX
+	//
+	// ABANDON_TIME
+	//
+	// Unit: COUNT
+	//
+	// Statistics: SUM
+	//
+	// QUEUE_ANSWER_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: AVG
+	//
+	// HOLD_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: AVG
+	//
+	// INTERACTION_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: AVG
+	//
+	// INTERACTION_AND_HOLD_TIME
+	//
+	// Unit: SECONDS
+	//
+	// Statistics: AVG
+	//
+	// SERVICE_LEVEL
+	//
+	// Unit: PERCENT
+	//
+	// Statistics: AVG
+	//
+	// Threshold: Only "Less than" comparisons are supported, with the following
+	// service level thresholds: 15, 20, 25, 30, 45, 60, 90, 120, 180, 240, 300,
+	// 600
+	//
+	// HistoricalMetrics is a required field
+	HistoricalMetrics []*HistoricalMetric `type:"list" required:"true"`
+
+	// The identifier for your Amazon Connect instance. To find the ID of your instance,
+	// open the AWS console and select Amazon Connect. Select the alias of the instance
+	// in the Instance alias column. The instance ID is displayed in the Overview
+	// section of your instance settings. For example, the instance ID is the set
+	// of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.
+	//
+	// InstanceId is a required field
+	InstanceId *string `location:"uri" locationName:"InstanceId" min:"1" type:"string" required:"true"`
+
+	// Indicates the maximum number of results to return per page in the response,
+	// between 1-100.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token for the next set of results. Use the value returned in the previous
+	// response in the next request to retrieve the next set of results.
+	NextToken *string `type:"string"`
+
+	// The timestamp, in UNIX Epoch time format, at which to start the reporting
+	// interval for the retrieval of historical metrics data. The time must be specified
+	// using a multiple of 5 minutes, such as 10:05, 10:10, 10:15.
+	//
+	// StartTime cannot be earlier than 24 hours before the time of the request.
+	// Historical metrics are available in Amazon Connect only for 24 hours.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation
+func (s GetMetricDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMetricDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetMetricDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetMetricDataInput"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.Filters == nil {
+		invalidParams.Add(request.NewErrParamRequired("Filters"))
+	}
+	if s.HistoricalMetrics == nil {
+		invalidParams.Add(request.NewErrParamRequired("HistoricalMetrics"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.InstanceId != nil && len(*s.InstanceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceId", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+	if s.Filters != nil {
+		if err := s.Filters.Validate(); err != nil {
+			invalidParams.AddNested("Filters", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *GetMetricDataInput) SetEndTime(v time.Time) *GetMetricDataInput {
+	s.EndTime = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetMetricDataInput) SetFilters(v *Filters) *GetMetricDataInput {
+	s.Filters = v
+	return s
+}
+
+// SetGroupings sets the Groupings field's value.
+func (s *GetMetricDataInput) SetGroupings(v []*string) *GetMetricDataInput {
+	s.Groupings = v
+	return s
+}
+
+// SetHistoricalMetrics sets the HistoricalMetrics field's value.
+func (s *GetMetricDataInput) SetHistoricalMetrics(v []*HistoricalMetric) *GetMetricDataInput {
+	s.HistoricalMetrics = v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetMetricDataInput) SetInstanceId(v string) *GetMetricDataInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetMetricDataInput) SetMaxResults(v int64) *GetMetricDataInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetMetricDataInput) SetNextToken(v string) *GetMetricDataInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *GetMetricDataInput) SetStartTime(v time.Time) *GetMetricDataInput {
+	s.StartTime = &v
+	return s
+}
+
+type GetMetricDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of HistoricalMetricResult objects, organized by Dimensions, which
+	// is the ID of the resource specified in the Filters used for the request.
+	// The metrics are combined with the metrics included in Collections, which
+	// is a list of HisotricalMetricData objects.
+	//
+	// If no Grouping is specified in the request, Collections includes summary
+	// data for the HistoricalMetrics.
+	MetricResults []*HistoricalMetricResult `type:"list"`
+
+	// A string returned in the response. Use the value returned in the response
+	// as the value of the NextToken in a subsequent request to retrieve the next
+	// set of results.
+	//
+	// The token expires after 5 minutes from the time it is created. Subsequent
+	// requests that use the NextToken must use the same request parameters as the
+	// request that generated the token.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetMetricDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetMetricDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetMetricResults sets the MetricResults field's value.
+func (s *GetMetricDataOutput) SetMetricResults(v []*HistoricalMetricResult) *GetMetricDataOutput {
+	s.MetricResults = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetMetricDataOutput) SetNextToken(v string) *GetMetricDataOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -2607,6 +3882,124 @@ func (s *HierarchyStructure) SetLevelThree(v *HierarchyLevel) *HierarchyStructur
 // SetLevelTwo sets the LevelTwo field's value.
 func (s *HierarchyStructure) SetLevelTwo(v *HierarchyLevel) *HierarchyStructure {
 	s.LevelTwo = v
+	return s
+}
+
+// A HistoricalMetric object that contains the Name, Unit, Statistic, and Threshold
+// for the metric.
+type HistoricalMetric struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the historical metric.
+	Name *string `type:"string" enum:"HistoricalMetricName"`
+
+	// The statistic for the metric.
+	Statistic *string `type:"string" enum:"Statistic"`
+
+	// The threshold for the metric, used with service level metrics.
+	Threshold *Threshold `type:"structure"`
+
+	// The unit for the metric.
+	Unit *string `type:"string" enum:"Unit"`
+}
+
+// String returns the string representation
+func (s HistoricalMetric) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s HistoricalMetric) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *HistoricalMetric) SetName(v string) *HistoricalMetric {
+	s.Name = &v
+	return s
+}
+
+// SetStatistic sets the Statistic field's value.
+func (s *HistoricalMetric) SetStatistic(v string) *HistoricalMetric {
+	s.Statistic = &v
+	return s
+}
+
+// SetThreshold sets the Threshold field's value.
+func (s *HistoricalMetric) SetThreshold(v *Threshold) *HistoricalMetric {
+	s.Threshold = v
+	return s
+}
+
+// SetUnit sets the Unit field's value.
+func (s *HistoricalMetric) SetUnit(v string) *HistoricalMetric {
+	s.Unit = &v
+	return s
+}
+
+// A HistoricalMetricData object than contains a Metric and a Value.
+type HistoricalMetricData struct {
+	_ struct{} `type:"structure"`
+
+	// A HistoricalMetric object.
+	Metric *HistoricalMetric `type:"structure"`
+
+	// The Value of the metric.
+	Value *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s HistoricalMetricData) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s HistoricalMetricData) GoString() string {
+	return s.String()
+}
+
+// SetMetric sets the Metric field's value.
+func (s *HistoricalMetricData) SetMetric(v *HistoricalMetric) *HistoricalMetricData {
+	s.Metric = v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *HistoricalMetricData) SetValue(v float64) *HistoricalMetricData {
+	s.Value = &v
+	return s
+}
+
+// The metrics data returned from a GetMetricData operation.
+type HistoricalMetricResult struct {
+	_ struct{} `type:"structure"`
+
+	// A list of HistoricalMetricData objects.
+	Collections []*HistoricalMetricData `type:"list"`
+
+	// The Dimensions for the metrics.
+	Dimensions *Dimensions `type:"structure"`
+}
+
+// String returns the string representation
+func (s HistoricalMetricResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s HistoricalMetricResult) GoString() string {
+	return s.String()
+}
+
+// SetCollections sets the Collections field's value.
+func (s *HistoricalMetricResult) SetCollections(v []*HistoricalMetricData) *HistoricalMetricResult {
+	s.Collections = v
+	return s
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *HistoricalMetricResult) SetDimensions(v *Dimensions) *HistoricalMetricResult {
+	s.Dimensions = v
 	return s
 }
 
@@ -3016,6 +4409,40 @@ func (s *ListUsersOutput) SetUserSummaryList(v []*UserSummary) *ListUsersOutput 
 	return s
 }
 
+// A QueueReference object that contains the the QueueId and ARN for the queue
+// resource for which metrics are returned.
+type QueueReference struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of queue.
+	Arn *string `type:"string"`
+
+	// The ID of the queue associated with the metrics returned.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation
+func (s QueueReference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s QueueReference) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *QueueReference) SetArn(v string) *QueueReference {
+	s.Arn = &v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *QueueReference) SetId(v string) *QueueReference {
+	s.Id = &v
+	return s
+}
+
 // A RoutingProfileSummary object that contains information about a routing
 // profile, including ARN, Id, and Name.
 type RoutingProfileSummary struct {
@@ -3109,8 +4536,8 @@ type StartOutboundVoiceContactInput struct {
 	// standard Amazon Connect attributes, and can be accessed in contact flows
 	// just like any other contact attributes.
 	//
-	// There can be up to 32,768 UTF-8 bytes across all key-value pairs. Attribute
-	// keys can include only alphanumeric, dash, and underscore characters.
+	// There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact.
+	// Attribute keys can include only alphanumeric, dash, and underscore characters.
 	//
 	// For example, if you want play a greeting when the customer answers the call,
 	// you can pass the customer name in attributes similar to the following:
@@ -3334,10 +4761,51 @@ func (s StopContactOutput) GoString() string {
 	return s.String()
 }
 
+// A Threshold object that includes a comparison and ThresholdValue to compare
+// to. Used with service level metrics.
+type Threshold struct {
+	_ struct{} `type:"structure"`
+
+	// The Threshold to use to compare service level metrics to. Only "Less than"
+	// (LT) comparisons are supported.
+	Comparison *string `type:"string" enum:"Comparison"`
+
+	// The value of the threshold to compare the metric to. Only "Less than" (LT)
+	// comparisons are supported.
+	ThresholdValue *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s Threshold) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Threshold) GoString() string {
+	return s.String()
+}
+
+// SetComparison sets the Comparison field's value.
+func (s *Threshold) SetComparison(v string) *Threshold {
+	s.Comparison = &v
+	return s
+}
+
+// SetThresholdValue sets the ThresholdValue field's value.
+func (s *Threshold) SetThresholdValue(v float64) *Threshold {
+	s.ThresholdValue = &v
+	return s
+}
+
 type UpdateContactAttributesInput struct {
 	_ struct{} `type:"structure"`
 
-	// The key-value pairs for the attribute to update.
+	// Specify a custom key-value pair using an attribute map. The attributes are
+	// standard Amazon Connect attributes, and can be accessed in contact flows
+	// just like any other contact attributes.
+	//
+	// There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact.
+	// Attribute keys can include only alphanumeric, dash, and underscore characters.
 	//
 	// Attributes is a required field
 	Attributes map[string]*string `type:"map" required:"true"`
@@ -3349,9 +4817,9 @@ type UpdateContactAttributesInput struct {
 	// InitialContactId is a required field
 	InitialContactId *string `min:"1" type:"string" required:"true"`
 
-	// The identifier for your Amazon Connect instance. To find the ID of your Amazon
-	// Connect instance, open the AWS console and select Amazon Connect. Select
-	// the instance alias of the instance. The instance ID is displayed in the Overview
+	// The identifier for your Amazon Connect instance. To find the ID of your instance,
+	// open the AWS console and select Amazon Connect. Select the alias of the instance
+	// in the Instance alias column. The instance ID is displayed in the Overview
 	// section of your instance settings. For example, the instance ID is the set
 	// of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.
 	//
@@ -3469,6 +4937,9 @@ func (s *UpdateUserHierarchyInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3555,6 +5026,9 @@ func (s *UpdateUserIdentityInfoInput) Validate() error {
 	}
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 	if s.IdentityInfo != nil {
 		if err := s.IdentityInfo.Validate(); err != nil {
@@ -3649,6 +5123,9 @@ func (s *UpdateUserPhoneConfigInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
 	if s.PhoneConfig != nil {
 		if err := s.PhoneConfig.Validate(); err != nil {
 			invalidParams.AddNested("PhoneConfig", err.(request.ErrInvalidParams))
@@ -3741,6 +5218,9 @@ func (s *UpdateUserRoutingProfileInput) Validate() error {
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
 	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3830,6 +5310,9 @@ func (s *UpdateUserSecurityProfilesInput) Validate() error {
 	}
 	if s.UserId == nil {
 		invalidParams.Add(request.NewErrParamRequired("UserId"))
+	}
+	if s.UserId != nil && len(*s.UserId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UserId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4141,9 +5624,160 @@ func (s *UserSummary) SetUsername(v string) *UserSummary {
 }
 
 const (
+	// ChannelVoice is a Channel enum value
+	ChannelVoice = "VOICE"
+)
+
+const (
+	// ComparisonLt is a Comparison enum value
+	ComparisonLt = "LT"
+)
+
+// A list of current metric names.
+const (
+	// CurrentMetricNameAgentsOnline is a CurrentMetricName enum value
+	CurrentMetricNameAgentsOnline = "AGENTS_ONLINE"
+
+	// CurrentMetricNameAgentsAvailable is a CurrentMetricName enum value
+	CurrentMetricNameAgentsAvailable = "AGENTS_AVAILABLE"
+
+	// CurrentMetricNameAgentsOnCall is a CurrentMetricName enum value
+	CurrentMetricNameAgentsOnCall = "AGENTS_ON_CALL"
+
+	// CurrentMetricNameAgentsNonProductive is a CurrentMetricName enum value
+	CurrentMetricNameAgentsNonProductive = "AGENTS_NON_PRODUCTIVE"
+
+	// CurrentMetricNameAgentsAfterContactWork is a CurrentMetricName enum value
+	CurrentMetricNameAgentsAfterContactWork = "AGENTS_AFTER_CONTACT_WORK"
+
+	// CurrentMetricNameAgentsError is a CurrentMetricName enum value
+	CurrentMetricNameAgentsError = "AGENTS_ERROR"
+
+	// CurrentMetricNameAgentsStaffed is a CurrentMetricName enum value
+	CurrentMetricNameAgentsStaffed = "AGENTS_STAFFED"
+
+	// CurrentMetricNameContactsInQueue is a CurrentMetricName enum value
+	CurrentMetricNameContactsInQueue = "CONTACTS_IN_QUEUE"
+
+	// CurrentMetricNameOldestContactAge is a CurrentMetricName enum value
+	CurrentMetricNameOldestContactAge = "OLDEST_CONTACT_AGE"
+
+	// CurrentMetricNameContactsScheduled is a CurrentMetricName enum value
+	CurrentMetricNameContactsScheduled = "CONTACTS_SCHEDULED"
+)
+
+const (
+	// GroupingQueue is a Grouping enum value
+	GroupingQueue = "QUEUE"
+
+	// GroupingChannel is a Grouping enum value
+	GroupingChannel = "CHANNEL"
+)
+
+// A list of historical metric names.
+const (
+	// HistoricalMetricNameContactsQueued is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsQueued = "CONTACTS_QUEUED"
+
+	// HistoricalMetricNameContactsHandled is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsHandled = "CONTACTS_HANDLED"
+
+	// HistoricalMetricNameContactsAbandoned is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsAbandoned = "CONTACTS_ABANDONED"
+
+	// HistoricalMetricNameContactsConsulted is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsConsulted = "CONTACTS_CONSULTED"
+
+	// HistoricalMetricNameContactsAgentHungUpFirst is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsAgentHungUpFirst = "CONTACTS_AGENT_HUNG_UP_FIRST"
+
+	// HistoricalMetricNameContactsHandledIncoming is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsHandledIncoming = "CONTACTS_HANDLED_INCOMING"
+
+	// HistoricalMetricNameContactsHandledOutbound is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsHandledOutbound = "CONTACTS_HANDLED_OUTBOUND"
+
+	// HistoricalMetricNameContactsHoldAbandons is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsHoldAbandons = "CONTACTS_HOLD_ABANDONS"
+
+	// HistoricalMetricNameContactsTransferredIn is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsTransferredIn = "CONTACTS_TRANSFERRED_IN"
+
+	// HistoricalMetricNameContactsTransferredOut is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsTransferredOut = "CONTACTS_TRANSFERRED_OUT"
+
+	// HistoricalMetricNameContactsTransferredInFromQueue is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsTransferredInFromQueue = "CONTACTS_TRANSFERRED_IN_FROM_QUEUE"
+
+	// HistoricalMetricNameContactsTransferredOutFromQueue is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsTransferredOutFromQueue = "CONTACTS_TRANSFERRED_OUT_FROM_QUEUE"
+
+	// HistoricalMetricNameContactsMissed is a HistoricalMetricName enum value
+	HistoricalMetricNameContactsMissed = "CONTACTS_MISSED"
+
+	// HistoricalMetricNameCallbackContactsHandled is a HistoricalMetricName enum value
+	HistoricalMetricNameCallbackContactsHandled = "CALLBACK_CONTACTS_HANDLED"
+
+	// HistoricalMetricNameApiContactsHandled is a HistoricalMetricName enum value
+	HistoricalMetricNameApiContactsHandled = "API_CONTACTS_HANDLED"
+
+	// HistoricalMetricNameOccupancy is a HistoricalMetricName enum value
+	HistoricalMetricNameOccupancy = "OCCUPANCY"
+
+	// HistoricalMetricNameHandleTime is a HistoricalMetricName enum value
+	HistoricalMetricNameHandleTime = "HANDLE_TIME"
+
+	// HistoricalMetricNameAfterContactWorkTime is a HistoricalMetricName enum value
+	HistoricalMetricNameAfterContactWorkTime = "AFTER_CONTACT_WORK_TIME"
+
+	// HistoricalMetricNameQueuedTime is a HistoricalMetricName enum value
+	HistoricalMetricNameQueuedTime = "QUEUED_TIME"
+
+	// HistoricalMetricNameAbandonTime is a HistoricalMetricName enum value
+	HistoricalMetricNameAbandonTime = "ABANDON_TIME"
+
+	// HistoricalMetricNameQueueAnswerTime is a HistoricalMetricName enum value
+	HistoricalMetricNameQueueAnswerTime = "QUEUE_ANSWER_TIME"
+
+	// HistoricalMetricNameHoldTime is a HistoricalMetricName enum value
+	HistoricalMetricNameHoldTime = "HOLD_TIME"
+
+	// HistoricalMetricNameInteractionTime is a HistoricalMetricName enum value
+	HistoricalMetricNameInteractionTime = "INTERACTION_TIME"
+
+	// HistoricalMetricNameInteractionAndHoldTime is a HistoricalMetricName enum value
+	HistoricalMetricNameInteractionAndHoldTime = "INTERACTION_AND_HOLD_TIME"
+
+	// HistoricalMetricNameServiceLevel is a HistoricalMetricName enum value
+	HistoricalMetricNameServiceLevel = "SERVICE_LEVEL"
+)
+
+const (
 	// PhoneTypeSoftPhone is a PhoneType enum value
 	PhoneTypeSoftPhone = "SOFT_PHONE"
 
 	// PhoneTypeDeskPhone is a PhoneType enum value
 	PhoneTypeDeskPhone = "DESK_PHONE"
+)
+
+const (
+	// StatisticSum is a Statistic enum value
+	StatisticSum = "SUM"
+
+	// StatisticMax is a Statistic enum value
+	StatisticMax = "MAX"
+
+	// StatisticAvg is a Statistic enum value
+	StatisticAvg = "AVG"
+)
+
+const (
+	// UnitSeconds is a Unit enum value
+	UnitSeconds = "SECONDS"
+
+	// UnitCount is a Unit enum value
+	UnitCount = "COUNT"
+
+	// UnitPercent is a Unit enum value
+	UnitPercent = "PERCENT"
 )

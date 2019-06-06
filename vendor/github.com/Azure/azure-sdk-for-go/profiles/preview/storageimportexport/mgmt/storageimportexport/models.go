@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,17 +19,16 @@
 
 package storageimportexport
 
-import original "github.com/Azure/azure-sdk-for-go/services/storageimportexport/mgmt/2016-11-01/storageimportexport"
+import (
+	"context"
 
-type BitLockerKeysClient = original.BitLockerKeysClient
+	original "github.com/Azure/azure-sdk-for-go/services/storageimportexport/mgmt/2016-11-01/storageimportexport"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type JobsClient = original.JobsClient
-type LocationsClient = original.LocationsClient
 type DriveState = original.DriveState
 
 const (
@@ -42,6 +41,8 @@ const (
 	Transferring      DriveState = original.Transferring
 )
 
+type BaseClient = original.BaseClient
+type BitLockerKeysClient = original.BitLockerKeysClient
 type DriveBitLockerKey = original.DriveBitLockerKey
 type DriveStatus = original.DriveStatus
 type ErrorResponse = original.ErrorResponse
@@ -52,15 +53,18 @@ type ExportBlobList = original.ExportBlobList
 type GetBitLockerKeysResponse = original.GetBitLockerKeysResponse
 type JobDetails = original.JobDetails
 type JobResponse = original.JobResponse
+type JobsClient = original.JobsClient
 type ListJobsResponse = original.ListJobsResponse
 type ListJobsResponseIterator = original.ListJobsResponseIterator
 type ListJobsResponsePage = original.ListJobsResponsePage
 type ListOperationsResponse = original.ListOperationsResponse
 type Location = original.Location
 type LocationProperties = original.LocationProperties
+type LocationsClient = original.LocationsClient
 type LocationsResponse = original.LocationsResponse
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
+type OperationsClient = original.OperationsClient
 type PackageInfomation = original.PackageInfomation
 type PutJobParameters = original.PutJobParameters
 type ReturnAddress = original.ReturnAddress
@@ -68,19 +72,15 @@ type ReturnShipping = original.ReturnShipping
 type ShippingInformation = original.ShippingInformation
 type UpdateJobParameters = original.UpdateJobParameters
 type UpdateJobParametersProperties = original.UpdateJobParametersProperties
-type OperationsClient = original.OperationsClient
 
+func New(subscriptionID string, acceptLanguage string) BaseClient {
+	return original.New(subscriptionID, acceptLanguage)
+}
 func NewBitLockerKeysClient(subscriptionID string, acceptLanguage string) BitLockerKeysClient {
 	return original.NewBitLockerKeysClient(subscriptionID, acceptLanguage)
 }
 func NewBitLockerKeysClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) BitLockerKeysClient {
 	return original.NewBitLockerKeysClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
-}
-func New(subscriptionID string, acceptLanguage string) BaseClient {
-	return original.New(subscriptionID, acceptLanguage)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
 func NewJobsClient(subscriptionID string, acceptLanguage string) JobsClient {
 	return original.NewJobsClient(subscriptionID, acceptLanguage)
@@ -88,20 +88,29 @@ func NewJobsClient(subscriptionID string, acceptLanguage string) JobsClient {
 func NewJobsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) JobsClient {
 	return original.NewJobsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
+func NewListJobsResponseIterator(page ListJobsResponsePage) ListJobsResponseIterator {
+	return original.NewListJobsResponseIterator(page)
+}
+func NewListJobsResponsePage(getNextPage func(context.Context, ListJobsResponse) (ListJobsResponse, error)) ListJobsResponsePage {
+	return original.NewListJobsResponsePage(getNextPage)
+}
 func NewLocationsClient(subscriptionID string, acceptLanguage string) LocationsClient {
 	return original.NewLocationsClient(subscriptionID, acceptLanguage)
 }
 func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) LocationsClient {
 	return original.NewLocationsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
-func PossibleDriveStateValues() []DriveState {
-	return original.PossibleDriveStateValues()
-}
 func NewOperationsClient(subscriptionID string, acceptLanguage string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID, acceptLanguage)
 }
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) OperationsClient {
 	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func PossibleDriveStateValues() []DriveState {
+	return original.PossibleDriveStateValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

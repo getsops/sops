@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,7 +46,18 @@ func NewPolicyClientWithBaseURI(baseURI string, subscriptionID string) PolicyCli
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // parameters - the policy contents to apply.
-func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract) (result PolicyContract, err error) {
+// ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
+func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract, ifMatch string) (result PolicyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -57,7 +69,7 @@ func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName
 		return result, validation.NewError("apimanagement.PolicyClient", "CreateOrUpdate", err.Error())
 	}
 
-	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, parameters)
+	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "CreateOrUpdate", nil, "Failure preparing request")
 		return
@@ -79,7 +91,7 @@ func (client PolicyClient) CreateOrUpdate(ctx context.Context, resourceGroupName
 }
 
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
-func (client PolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract) (*http.Request, error) {
+func (client PolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, parameters PolicyContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"policyId":          autorest.Encode("path", "policy"),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
@@ -99,6 +111,10 @@ func (client PolicyClient) CreateOrUpdatePreparer(ctx context.Context, resourceG
 		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies/{policyId}", pathParameters),
 		autorest.WithJSON(parameters),
 		autorest.WithQueryParameters(queryParameters))
+	if len(ifMatch) > 0 {
+		preparer = autorest.DecoratePreparer(preparer,
+			autorest.WithHeader("If-Match", autorest.String(ifMatch)))
+	}
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
@@ -129,6 +145,16 @@ func (client PolicyClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client PolicyClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -205,6 +231,16 @@ func (client PolicyClient) DeleteResponder(resp *http.Response) (result autorest
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client PolicyClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result PolicyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -281,6 +317,16 @@ func (client PolicyClient) GetResponder(resp *http.Response) (result PolicyContr
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client PolicyClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -355,8 +401,17 @@ func (client PolicyClient) GetEntityTagResponder(resp *http.Response) (result au
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// scope - policy scope.
-func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (result PolicyCollection, err error) {
+func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string) (result PolicyCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -365,7 +420,7 @@ func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName 
 		return result, validation.NewError("apimanagement.PolicyClient", "ListByService", err.Error())
 	}
 
-	req, err := client.ListByServicePreparer(ctx, resourceGroupName, serviceName, scope)
+	req, err := client.ListByServicePreparer(ctx, resourceGroupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "ListByService", nil, "Failure preparing request")
 		return
@@ -387,7 +442,7 @@ func (client PolicyClient) ListByService(ctx context.Context, resourceGroupName 
 }
 
 // ListByServicePreparer prepares the ListByService request.
-func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string, scope PolicyScopeContract) (*http.Request, error) {
+func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGroupName string, serviceName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
@@ -397,9 +452,6 @@ func (client PolicyClient) ListByServicePreparer(ctx context.Context, resourceGr
 	const APIVersion = "2018-06-01-preview"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
-	}
-	if len(string(scope)) > 0 {
-		queryParameters["scope"] = autorest.Encode("query", scope)
 	}
 
 	preparer := autorest.CreatePreparer(

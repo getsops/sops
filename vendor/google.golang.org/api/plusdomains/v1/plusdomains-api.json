@@ -5,14 +5,11 @@
         "https://www.googleapis.com/auth/plus.circles.read": {
           "description": "View your circles and the people and pages in them"
         },
-        "https://www.googleapis.com/auth/plus.circles.write": {
-          "description": "Manage your circles and add people and pages. People and pages you add to your circles will be notified. Others may see this information publicly. People you add to circles can use Hangouts with you."
-        },
         "https://www.googleapis.com/auth/plus.login": {
-          "description": "Know the list of people in your circles, your age range, and language"
+          "description": "View your basic profile info, including your age range and language"
         },
         "https://www.googleapis.com/auth/plus.me": {
-          "description": "Know who you are on Google"
+          "description": "Associate you with your personal info on Google"
         },
         "https://www.googleapis.com/auth/plus.media.upload": {
           "description": "Send your photos and videos to Google+"
@@ -23,14 +20,11 @@
         "https://www.googleapis.com/auth/plus.stream.read": {
           "description": "View your Google+ posts, comments, and stream"
         },
-        "https://www.googleapis.com/auth/plus.stream.write": {
-          "description": "Manage your Google+ posts, comments, and stream"
-        },
         "https://www.googleapis.com/auth/userinfo.email": {
           "description": "View your email address"
         },
         "https://www.googleapis.com/auth/userinfo.profile": {
-          "description": "View your basic profile info"
+          "description": "See your personal info, including any personal info you've made publicly available"
         }
       }
     }
@@ -41,7 +35,7 @@
   "description": "Builds on top of the Google+ platform for Google Apps Domains.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/+/domains/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/QN-lMFT7XaFWRpPfYwaRCAFMlw8\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/ANplrqN0lyV1CO8o5_Wvj5IFim0\"",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/gplus-16.png",
     "x32": "http://www.google.com/images/icons/product/gplus-32.png"
@@ -101,7 +95,7 @@
     "activities": {
       "methods": {
         "get": {
-          "description": "Get an activity.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.activities.get",
           "parameterOrder": [
@@ -125,41 +119,8 @@
             "https://www.googleapis.com/auth/plus.stream.read"
           ]
         },
-        "insert": {
-          "description": "Create a new activity for the authenticated user.",
-          "httpMethod": "POST",
-          "id": "plusDomains.activities.insert",
-          "parameterOrder": [
-            "userId"
-          ],
-          "parameters": {
-            "preview": {
-              "description": "If \"true\", extract the potential media attachments for a URL. The response will include all possible attachments for a URL, including video, photos, and articles based on the content of the page.",
-              "location": "query",
-              "type": "boolean"
-            },
-            "userId": {
-              "description": "The ID of the user to create the activity on behalf of. Its value should be \"me\", to indicate the authenticated user.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "people/{userId}/activities",
-          "request": {
-            "$ref": "Activity"
-          },
-          "response": {
-            "$ref": "Activity"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.login",
-            "https://www.googleapis.com/auth/plus.me",
-            "https://www.googleapis.com/auth/plus.stream.write"
-          ]
-        },
         "list": {
-          "description": "List all of the activities in the specified collection for a particular user.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.activities.list",
           "parameterOrder": [
@@ -215,7 +176,7 @@
     "audiences": {
       "methods": {
         "list": {
-          "description": "List all of the audiences to which a user can share.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.audiences.list",
           "parameterOrder": [
@@ -257,96 +218,8 @@
     },
     "circles": {
       "methods": {
-        "addPeople": {
-          "description": "Add a person to a circle. Google+ limits certain circle operations, including the number of circle adds. Learn More.",
-          "httpMethod": "PUT",
-          "id": "plusDomains.circles.addPeople",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to add the person to.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            },
-            "email": {
-              "description": "Email of the people to add to the circle. Optional, can be repeated.",
-              "location": "query",
-              "repeated": true,
-              "type": "string"
-            },
-            "userId": {
-              "description": "IDs of the people to add to the circle. Optional, can be repeated.",
-              "location": "query",
-              "repeated": true,
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}/people",
-          "response": {
-            "$ref": "Circle"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.write",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
-        },
-        "get": {
-          "description": "Get a circle.",
-          "httpMethod": "GET",
-          "id": "plusDomains.circles.get",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to get.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}",
-          "response": {
-            "$ref": "Circle"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.read",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
-        },
-        "insert": {
-          "description": "Create a new circle for the authenticated user.",
-          "httpMethod": "POST",
-          "id": "plusDomains.circles.insert",
-          "parameterOrder": [
-            "userId"
-          ],
-          "parameters": {
-            "userId": {
-              "description": "The ID of the user to create the circle on behalf of. The value \"me\" can be used to indicate the authenticated user.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "people/{userId}/circles",
-          "request": {
-            "$ref": "Circle"
-          },
-          "response": {
-            "$ref": "Circle"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.write",
-            "https://www.googleapis.com/auth/plus.login",
-            "https://www.googleapis.com/auth/plus.me"
-          ]
-        },
         "list": {
-          "description": "List all of the circles for a user.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.circles.list",
           "parameterOrder": [
@@ -383,121 +256,13 @@
             "https://www.googleapis.com/auth/plus.login",
             "https://www.googleapis.com/auth/plus.me"
           ]
-        },
-        "patch": {
-          "description": "Update a circle's description. This method supports patch semantics.",
-          "httpMethod": "PATCH",
-          "id": "plusDomains.circles.patch",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to update.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}",
-          "request": {
-            "$ref": "Circle"
-          },
-          "response": {
-            "$ref": "Circle"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.write",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
-        },
-        "remove": {
-          "description": "Delete a circle.",
-          "httpMethod": "DELETE",
-          "id": "plusDomains.circles.remove",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to delete.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}",
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.write",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
-        },
-        "removePeople": {
-          "description": "Remove a person from a circle.",
-          "httpMethod": "DELETE",
-          "id": "plusDomains.circles.removePeople",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to remove the person from.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            },
-            "email": {
-              "description": "Email of the people to add to the circle. Optional, can be repeated.",
-              "location": "query",
-              "repeated": true,
-              "type": "string"
-            },
-            "userId": {
-              "description": "IDs of the people to remove from the circle. Optional, can be repeated.",
-              "location": "query",
-              "repeated": true,
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}/people",
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.write",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
-        },
-        "update": {
-          "description": "Update a circle's description.",
-          "httpMethod": "PUT",
-          "id": "plusDomains.circles.update",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to update.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}",
-          "request": {
-            "$ref": "Circle"
-          },
-          "response": {
-            "$ref": "Circle"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.write",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
         }
       }
     },
     "comments": {
       "methods": {
         "get": {
-          "description": "Get a comment.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.comments.get",
           "parameterOrder": [
@@ -520,35 +285,8 @@
             "https://www.googleapis.com/auth/plus.stream.read"
           ]
         },
-        "insert": {
-          "description": "Create a new comment in reply to an activity.",
-          "httpMethod": "POST",
-          "id": "plusDomains.comments.insert",
-          "parameterOrder": [
-            "activityId"
-          ],
-          "parameters": {
-            "activityId": {
-              "description": "The ID of the activity to reply to.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "activities/{activityId}/comments",
-          "request": {
-            "$ref": "Comment"
-          },
-          "response": {
-            "$ref": "Comment"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.login",
-            "https://www.googleapis.com/auth/plus.stream.write"
-          ]
-        },
         "list": {
-          "description": "List all of the comments for an activity.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.comments.list",
           "parameterOrder": [
@@ -604,7 +342,7 @@
     "media": {
       "methods": {
         "insert": {
-          "description": "Add a new media item to an album. The current upload size limitations are 36MB for a photo and 1GB for a video. Uploads do not count against quota if photos are less than 2048 pixels on their longest side or videos are less than 15 minutes in length.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "POST",
           "id": "plusDomains.media.insert",
           "mediaUpload": {
@@ -757,7 +495,7 @@
           ]
         },
         "listByActivity": {
-          "description": "List all of the people in the specified collection for a particular activity.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plusDomains.people.listByActivity",
           "parameterOrder": [
@@ -810,49 +548,11 @@
             "https://www.googleapis.com/auth/plus.login",
             "https://www.googleapis.com/auth/plus.stream.read"
           ]
-        },
-        "listByCircle": {
-          "description": "List all of the people who are members of a circle.",
-          "httpMethod": "GET",
-          "id": "plusDomains.people.listByCircle",
-          "parameterOrder": [
-            "circleId"
-          ],
-          "parameters": {
-            "circleId": {
-              "description": "The ID of the circle to get the members of.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            },
-            "maxResults": {
-              "default": "20",
-              "description": "The maximum number of people to include in the response, which is used for paging. For any response, the actual number returned might be less than the specified maxResults.",
-              "format": "uint32",
-              "location": "query",
-              "maximum": "100",
-              "minimum": "1",
-              "type": "integer"
-            },
-            "pageToken": {
-              "description": "The continuation token, which is used to page through large result sets. To get the next page of results, set this parameter to the value of \"nextPageToken\" from the previous response.",
-              "location": "query",
-              "type": "string"
-            }
-          },
-          "path": "circles/{circleId}/people",
-          "response": {
-            "$ref": "PeopleFeed"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/plus.circles.read",
-            "https://www.googleapis.com/auth/plus.login"
-          ]
         }
       }
     }
   },
-  "revision": "20180424",
+  "revision": "20190415",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Acl": {

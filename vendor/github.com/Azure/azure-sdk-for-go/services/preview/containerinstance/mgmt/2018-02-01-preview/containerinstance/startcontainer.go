@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewStartContainerClientWithBaseURI(baseURI string, subscriptionID string) S
 // containerName - the name of the container instance.
 // containerExecRequest - the request for the exec command.
 func (client StartContainerClient) LaunchExec(ctx context.Context, resourceGroupName string, containerGroupName string, containerName string, containerExecRequest ContainerExecRequest) (result ContainerExecResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StartContainerClient.LaunchExec")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.LaunchExecPreparer(ctx, resourceGroupName, containerGroupName, containerName, containerExecRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.StartContainerClient", "LaunchExec", nil, "Failure preparing request")

@@ -32,7 +32,7 @@ func TestOpaqueParseReason(t *testing.T) {
 			break
 		}
 		// try to parse opaque packet
-		p, err := op.Parse()
+		p, _ := op.Parse()
 		switch pkt := p.(type) {
 		case *UserId:
 			uid = pkt

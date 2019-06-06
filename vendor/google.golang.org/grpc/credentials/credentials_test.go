@@ -19,11 +19,12 @@
 package credentials
 
 import (
+	"context"
 	"crypto/tls"
 	"net"
+	"reflect"
 	"testing"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/testdata"
 )
 
@@ -203,4 +204,40 @@ func tlsClientHandshake(conn net.Conn, _ string) (AuthInfo, error) {
 		return nil, err
 	}
 	return TLSInfo{State: clientConn.ConnectionState()}, nil
+}
+
+func TestAppendH2ToNextProtos(t *testing.T) {
+	tests := []struct {
+		name string
+		ps   []string
+		want []string
+	}{
+		{
+			name: "empty",
+			ps:   nil,
+			want: []string{"h2"},
+		},
+		{
+			name: "only h2",
+			ps:   []string{"h2"},
+			want: []string{"h2"},
+		},
+		{
+			name: "with h2",
+			ps:   []string{"alpn", "h2"},
+			want: []string{"alpn", "h2"},
+		},
+		{
+			name: "no h2",
+			ps:   []string{"alpn"},
+			want: []string{"alpn", "h2"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := appendH2ToNextProtos(tt.ps); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("appendH2ToNextProtos() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

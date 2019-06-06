@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewSyncGroupsClientWithBaseURI(baseURI string, subscriptionID string) SyncG
 // databaseName - the name of the database on which the sync group is hosted.
 // syncGroupName - the name of the sync group.
 func (client SyncGroupsClient) CancelSync(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.CancelSync")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelSyncPreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "CancelSync", nil, "Failure preparing request")
@@ -121,6 +132,16 @@ func (client SyncGroupsClient) CancelSyncResponder(resp *http.Response) (result 
 // syncGroupName - the name of the sync group.
 // parameters - the requested sync group resource state.
 func (client SyncGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string, parameters SyncGroup) (result SyncGroupsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -170,10 +191,6 @@ func (client SyncGroupsClient) CreateOrUpdateSender(req *http.Request) (future S
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -199,6 +216,16 @@ func (client SyncGroupsClient) CreateOrUpdateResponder(resp *http.Response) (res
 // databaseName - the name of the database on which the sync group is hosted.
 // syncGroupName - the name of the sync group.
 func (client SyncGroupsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result SyncGroupsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "Delete", nil, "Failure preparing request")
@@ -246,10 +273,6 @@ func (client SyncGroupsClient) DeleteSender(req *http.Request) (future SyncGroup
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -274,6 +297,16 @@ func (client SyncGroupsClient) DeleteResponder(resp *http.Response) (result auto
 // databaseName - the name of the database on which the sync group is hosted.
 // syncGroupName - the name of the sync group.
 func (client SyncGroupsClient) Get(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result SyncGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "Get", nil, "Failure preparing request")
@@ -345,6 +378,16 @@ func (client SyncGroupsClient) GetResponder(resp *http.Response) (result SyncGro
 // serverName - the name of the server.
 // databaseName - the name of the database on which the sync group is hosted.
 func (client SyncGroupsClient) ListByDatabase(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result SyncGroupListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.sglr.Response.Response != nil {
+				sc = result.sglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByDatabaseNextResults
 	req, err := client.ListByDatabasePreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
@@ -410,8 +453,8 @@ func (client SyncGroupsClient) ListByDatabaseResponder(resp *http.Response) (res
 }
 
 // listByDatabaseNextResults retrieves the next set of results, if any.
-func (client SyncGroupsClient) listByDatabaseNextResults(lastResults SyncGroupListResult) (result SyncGroupListResult, err error) {
-	req, err := lastResults.syncGroupListResultPreparer()
+func (client SyncGroupsClient) listByDatabaseNextResults(ctx context.Context, lastResults SyncGroupListResult) (result SyncGroupListResult, err error) {
+	req, err := lastResults.syncGroupListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "listByDatabaseNextResults", nil, "Failure preparing next results request")
 	}
@@ -432,6 +475,16 @@ func (client SyncGroupsClient) listByDatabaseNextResults(lastResults SyncGroupLi
 
 // ListByDatabaseComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SyncGroupsClient) ListByDatabaseComplete(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result SyncGroupListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByDatabase(ctx, resourceGroupName, serverName, databaseName)
 	return
 }
@@ -444,6 +497,16 @@ func (client SyncGroupsClient) ListByDatabaseComplete(ctx context.Context, resou
 // databaseName - the name of the database on which the sync group is hosted.
 // syncGroupName - the name of the sync group.
 func (client SyncGroupsClient) ListHubSchemas(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result SyncFullSchemaPropertiesListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListHubSchemas")
+		defer func() {
+			sc := -1
+			if result.sfsplr.Response.Response != nil {
+				sc = result.sfsplr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listHubSchemasNextResults
 	req, err := client.ListHubSchemasPreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	if err != nil {
@@ -510,8 +573,8 @@ func (client SyncGroupsClient) ListHubSchemasResponder(resp *http.Response) (res
 }
 
 // listHubSchemasNextResults retrieves the next set of results, if any.
-func (client SyncGroupsClient) listHubSchemasNextResults(lastResults SyncFullSchemaPropertiesListResult) (result SyncFullSchemaPropertiesListResult, err error) {
-	req, err := lastResults.syncFullSchemaPropertiesListResultPreparer()
+func (client SyncGroupsClient) listHubSchemasNextResults(ctx context.Context, lastResults SyncFullSchemaPropertiesListResult) (result SyncFullSchemaPropertiesListResult, err error) {
+	req, err := lastResults.syncFullSchemaPropertiesListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "listHubSchemasNextResults", nil, "Failure preparing next results request")
 	}
@@ -532,6 +595,16 @@ func (client SyncGroupsClient) listHubSchemasNextResults(lastResults SyncFullSch
 
 // ListHubSchemasComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SyncGroupsClient) ListHubSchemasComplete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result SyncFullSchemaPropertiesListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListHubSchemas")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListHubSchemas(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	return
 }
@@ -548,6 +621,16 @@ func (client SyncGroupsClient) ListHubSchemasComplete(ctx context.Context, resou
 // typeParameter - the types of logs to retrieve.
 // continuationToken - the continuation token for this operation.
 func (client SyncGroupsClient) ListLogs(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string, startTime string, endTime string, typeParameter string, continuationToken string) (result SyncGroupLogListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListLogs")
+		defer func() {
+			sc := -1
+			if result.sgllr.Response.Response != nil {
+				sc = result.sgllr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listLogsNextResults
 	req, err := client.ListLogsPreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName, startTime, endTime, typeParameter, continuationToken)
 	if err != nil {
@@ -620,8 +703,8 @@ func (client SyncGroupsClient) ListLogsResponder(resp *http.Response) (result Sy
 }
 
 // listLogsNextResults retrieves the next set of results, if any.
-func (client SyncGroupsClient) listLogsNextResults(lastResults SyncGroupLogListResult) (result SyncGroupLogListResult, err error) {
-	req, err := lastResults.syncGroupLogListResultPreparer()
+func (client SyncGroupsClient) listLogsNextResults(ctx context.Context, lastResults SyncGroupLogListResult) (result SyncGroupLogListResult, err error) {
+	req, err := lastResults.syncGroupLogListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "listLogsNextResults", nil, "Failure preparing next results request")
 	}
@@ -642,6 +725,16 @@ func (client SyncGroupsClient) listLogsNextResults(lastResults SyncGroupLogListR
 
 // ListLogsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SyncGroupsClient) ListLogsComplete(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string, startTime string, endTime string, typeParameter string, continuationToken string) (result SyncGroupLogListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListLogs")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListLogs(ctx, resourceGroupName, serverName, databaseName, syncGroupName, startTime, endTime, typeParameter, continuationToken)
 	return
 }
@@ -650,6 +743,16 @@ func (client SyncGroupsClient) ListLogsComplete(ctx context.Context, resourceGro
 // Parameters:
 // locationName - the name of the region where the resource is located.
 func (client SyncGroupsClient) ListSyncDatabaseIds(ctx context.Context, locationName string) (result SyncDatabaseIDListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListSyncDatabaseIds")
+		defer func() {
+			sc := -1
+			if result.sdilr.Response.Response != nil {
+				sc = result.sdilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listSyncDatabaseIdsNextResults
 	req, err := client.ListSyncDatabaseIdsPreparer(ctx, locationName)
 	if err != nil {
@@ -713,8 +816,8 @@ func (client SyncGroupsClient) ListSyncDatabaseIdsResponder(resp *http.Response)
 }
 
 // listSyncDatabaseIdsNextResults retrieves the next set of results, if any.
-func (client SyncGroupsClient) listSyncDatabaseIdsNextResults(lastResults SyncDatabaseIDListResult) (result SyncDatabaseIDListResult, err error) {
-	req, err := lastResults.syncDatabaseIDListResultPreparer()
+func (client SyncGroupsClient) listSyncDatabaseIdsNextResults(ctx context.Context, lastResults SyncDatabaseIDListResult) (result SyncDatabaseIDListResult, err error) {
+	req, err := lastResults.syncDatabaseIDListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "listSyncDatabaseIdsNextResults", nil, "Failure preparing next results request")
 	}
@@ -735,6 +838,16 @@ func (client SyncGroupsClient) listSyncDatabaseIdsNextResults(lastResults SyncDa
 
 // ListSyncDatabaseIdsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SyncGroupsClient) ListSyncDatabaseIdsComplete(ctx context.Context, locationName string) (result SyncDatabaseIDListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.ListSyncDatabaseIds")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSyncDatabaseIds(ctx, locationName)
 	return
 }
@@ -747,6 +860,16 @@ func (client SyncGroupsClient) ListSyncDatabaseIdsComplete(ctx context.Context, 
 // databaseName - the name of the database on which the sync group is hosted.
 // syncGroupName - the name of the sync group.
 func (client SyncGroupsClient) RefreshHubSchema(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result SyncGroupsRefreshHubSchemaFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.RefreshHubSchema")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RefreshHubSchemaPreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "RefreshHubSchema", nil, "Failure preparing request")
@@ -794,10 +917,6 @@ func (client SyncGroupsClient) RefreshHubSchemaSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -822,6 +941,16 @@ func (client SyncGroupsClient) RefreshHubSchemaResponder(resp *http.Response) (r
 // databaseName - the name of the database on which the sync group is hosted.
 // syncGroupName - the name of the sync group.
 func (client SyncGroupsClient) TriggerSync(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.TriggerSync")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.TriggerSyncPreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "TriggerSync", nil, "Failure preparing request")
@@ -894,6 +1023,16 @@ func (client SyncGroupsClient) TriggerSyncResponder(resp *http.Response) (result
 // syncGroupName - the name of the sync group.
 // parameters - the requested sync group resource state.
 func (client SyncGroupsClient) Update(ctx context.Context, resourceGroupName string, serverName string, databaseName string, syncGroupName string, parameters SyncGroup) (result SyncGroupsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SyncGroupsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, serverName, databaseName, syncGroupName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.SyncGroupsClient", "Update", nil, "Failure preparing request")
@@ -940,10 +1079,6 @@ func (client SyncGroupsClient) UpdateSender(req *http.Request) (future SyncGroup
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

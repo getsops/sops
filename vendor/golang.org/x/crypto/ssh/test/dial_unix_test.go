@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build !windows
+// +build !windows,!solaris,!js
 
 package test
 
@@ -104,8 +104,8 @@ func (x *unixDialTester) TestServerConn(t *testing.T, c net.Conn) {
 	if c.LocalAddr().String() != x.listenAddr {
 		t.Fatalf("expected %q, got %q", x.listenAddr, c.LocalAddr().String())
 	}
-	if c.RemoteAddr().String() != "@" {
-		t.Fatalf("expected \"@\", got %q", c.RemoteAddr().String())
+	if c.RemoteAddr().String() != "@" && c.RemoteAddr().String() != "" {
+		t.Fatalf("expected \"@\" or \"\", got %q", c.RemoteAddr().String())
 	}
 }
 

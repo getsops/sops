@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build !js,!nacl,!plan9,!solaris
+// +build aix darwin dragonfly freebsd linux netbsd openbsd solaris windows
 
 /*
 The h2i command is an interactive HTTP/2 console.

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,14 +19,23 @@
 
 package databox
 
-import original "github.com/Azure/azure-sdk-for-go/services/databox/mgmt/2018-01-01/databox"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/databox/mgmt/2018-01-01/databox"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type JobsClient = original.JobsClient
+type AccessProtocol = original.AccessProtocol
+
+const (
+	NFS AccessProtocol = original.NFS
+	SMB AccessProtocol = original.SMB
+)
+
 type AddressType = original.AddressType
 
 const (
@@ -47,8 +56,9 @@ type CopyLogDetailsType = original.CopyLogDetailsType
 
 const (
 	CopyLogDetailsTypeCopyLogDetails CopyLogDetailsType = original.CopyLogDetailsTypeCopyLogDetails
-	CopyLogDetailsTypeDisk           CopyLogDetailsType = original.CopyLogDetailsTypeDisk
-	CopyLogDetailsTypePod            CopyLogDetailsType = original.CopyLogDetailsTypePod
+	CopyLogDetailsTypeDataBox        CopyLogDetailsType = original.CopyLogDetailsTypeDataBox
+	CopyLogDetailsTypeDataBoxDisk    CopyLogDetailsType = original.CopyLogDetailsTypeDataBoxDisk
+	CopyLogDetailsTypeDataBoxHeavy   CopyLogDetailsType = original.CopyLogDetailsTypeDataBoxHeavy
 )
 
 type CopyStatus = original.CopyStatus
@@ -58,51 +68,34 @@ const (
 	CompletedWithErrors CopyStatus = original.CompletedWithErrors
 	Failed              CopyStatus = original.Failed
 	InProgress          CopyStatus = original.InProgress
+	NotReturned         CopyStatus = original.NotReturned
 	NotStarted          CopyStatus = original.NotStarted
 )
 
-type DeviceIssueType = original.DeviceIssueType
+type DataDestinationType = original.DataDestinationType
 
 const (
-	DeviceHealthCheckShowFailures DeviceIssueType = original.DeviceHealthCheckShowFailures
-	DeviceNotBootingUp            DeviceIssueType = original.DeviceNotBootingUp
-	DeviceTampering               DeviceIssueType = original.DeviceTampering
-	Misc                          DeviceIssueType = original.Misc
-	NICsAreNotWorking             DeviceIssueType = original.NICsAreNotWorking
+	DataDestinationTypeDestinationAccountDetails DataDestinationType = original.DataDestinationTypeDestinationAccountDetails
+	DataDestinationTypeManagedDisk               DataDestinationType = original.DataDestinationTypeManagedDisk
+	DataDestinationTypeStorageAccount            DataDestinationType = original.DataDestinationTypeStorageAccount
 )
 
-type DeviceType = original.DeviceType
+type JobDetailsTypeEnum = original.JobDetailsTypeEnum
 
 const (
-	Cabinet DeviceType = original.Cabinet
-	Disk    DeviceType = original.Disk
-	Pod     DeviceType = original.Pod
+	JobDetailsTypeDataBox      JobDetailsTypeEnum = original.JobDetailsTypeDataBox
+	JobDetailsTypeDataBoxDisk  JobDetailsTypeEnum = original.JobDetailsTypeDataBoxDisk
+	JobDetailsTypeDataBoxHeavy JobDetailsTypeEnum = original.JobDetailsTypeDataBoxHeavy
+	JobDetailsTypeJobDetails   JobDetailsTypeEnum = original.JobDetailsTypeJobDetails
 )
 
-type IssueType = original.IssueType
+type JobSecretsTypeEnum = original.JobSecretsTypeEnum
 
 const (
-	CredentialNotWorking     IssueType = original.CredentialNotWorking
-	DeviceFailure            IssueType = original.DeviceFailure
-	DeviceMismatch           IssueType = original.DeviceMismatch
-	ValidationStringMismatch IssueType = original.ValidationStringMismatch
-)
-
-type JobDetailsType = original.JobDetailsType
-
-const (
-	JobDetailsTypeDisk       JobDetailsType = original.JobDetailsTypeDisk
-	JobDetailsTypeJobDetails JobDetailsType = original.JobDetailsTypeJobDetails
-	JobDetailsTypePod        JobDetailsType = original.JobDetailsTypePod
-)
-
-type JobSecretsType = original.JobSecretsType
-
-const (
-	JobSecretsTypeCabinet    JobSecretsType = original.JobSecretsTypeCabinet
-	JobSecretsTypeDisk       JobSecretsType = original.JobSecretsTypeDisk
-	JobSecretsTypeJobSecrets JobSecretsType = original.JobSecretsTypeJobSecrets
-	JobSecretsTypePod        JobSecretsType = original.JobSecretsTypePod
+	JobSecretsTypeDataBox      JobSecretsTypeEnum = original.JobSecretsTypeDataBox
+	JobSecretsTypeDataBoxDisk  JobSecretsTypeEnum = original.JobSecretsTypeDataBoxDisk
+	JobSecretsTypeDataBoxHeavy JobSecretsTypeEnum = original.JobSecretsTypeDataBoxHeavy
+	JobSecretsTypeJobSecrets   JobSecretsTypeEnum = original.JobSecretsTypeJobSecrets
 )
 
 type NotificationStageName = original.NotificationStageName
@@ -114,6 +107,36 @@ const (
 	DevicePrepared NotificationStageName = original.DevicePrepared
 	Dispatched     NotificationStageName = original.Dispatched
 	PickedUp       NotificationStageName = original.PickedUp
+)
+
+type ShareDestinationFormatType = original.ShareDestinationFormatType
+
+const (
+	AzureFile   ShareDestinationFormatType = original.AzureFile
+	BlockBlob   ShareDestinationFormatType = original.BlockBlob
+	HCS         ShareDestinationFormatType = original.HCS
+	ManagedDisk ShareDestinationFormatType = original.ManagedDisk
+	PageBlob    ShareDestinationFormatType = original.PageBlob
+	UnknownType ShareDestinationFormatType = original.UnknownType
+)
+
+type SkuDisabledReason = original.SkuDisabledReason
+
+const (
+	SkuDisabledReasonCountry            SkuDisabledReason = original.SkuDisabledReasonCountry
+	SkuDisabledReasonFeature            SkuDisabledReason = original.SkuDisabledReasonFeature
+	SkuDisabledReasonNone               SkuDisabledReason = original.SkuDisabledReasonNone
+	SkuDisabledReasonNoSubscriptionInfo SkuDisabledReason = original.SkuDisabledReasonNoSubscriptionInfo
+	SkuDisabledReasonOfferType          SkuDisabledReason = original.SkuDisabledReasonOfferType
+	SkuDisabledReasonRegion             SkuDisabledReason = original.SkuDisabledReasonRegion
+)
+
+type SkuName = original.SkuName
+
+const (
+	DataBox      SkuName = original.DataBox
+	DataBoxDisk  SkuName = original.DataBoxDisk
+	DataBoxHeavy SkuName = original.DataBoxHeavy
 )
 
 type StageName = original.StageName
@@ -150,19 +173,24 @@ type AccountCopyLogDetails = original.AccountCopyLogDetails
 type AccountCredentialDetails = original.AccountCredentialDetails
 type AddressValidationOutput = original.AddressValidationOutput
 type AddressValidationProperties = original.AddressValidationProperties
+type ApplianceNetworkConfiguration = original.ApplianceNetworkConfiguration
 type ArmBaseObject = original.ArmBaseObject
 type AvailableSkuRequest = original.AvailableSkuRequest
 type AvailableSkusResult = original.AvailableSkusResult
 type AvailableSkusResultIterator = original.AvailableSkusResultIterator
 type AvailableSkusResultPage = original.AvailableSkusResultPage
-type CabinetJobSecrets = original.CabinetJobSecrets
-type CabinetPodSecret = original.CabinetPodSecret
+type BaseClient = original.BaseClient
+type BasicCopyLogDetails = original.BasicCopyLogDetails
+type BasicDestinationAccountDetails = original.BasicDestinationAccountDetails
+type BasicJobDetails = original.BasicJobDetails
+type BasicJobSecrets = original.BasicJobSecrets
 type CancellationReason = original.CancellationReason
 type ContactDetails = original.ContactDetails
-type BasicCopyLogDetails = original.BasicCopyLogDetails
 type CopyLogDetails = original.CopyLogDetails
 type CopyProgress = original.CopyProgress
 type DestinationAccountDetails = original.DestinationAccountDetails
+type DestinationManagedDiskDetails = original.DestinationManagedDiskDetails
+type DestinationStorageAccountDetails = original.DestinationStorageAccountDetails
 type DestinationToServiceLocationMap = original.DestinationToServiceLocationMap
 type DiskCopyLogDetails = original.DiskCopyLogDetails
 type DiskCopyProgress = original.DiskCopyProgress
@@ -170,9 +198,12 @@ type DiskJobDetails = original.DiskJobDetails
 type DiskJobSecrets = original.DiskJobSecrets
 type DiskSecret = original.DiskSecret
 type Error = original.Error
-type GetCopyLogsURIOutput = original.GetCopyLogsURIOutput
-type BasicJobDetails = original.BasicJobDetails
+type HeavyAccountCopyLogDetails = original.HeavyAccountCopyLogDetails
+type HeavyJobDetails = original.HeavyJobDetails
+type HeavyJobSecrets = original.HeavyJobSecrets
+type HeavySecret = original.HeavySecret
 type JobDetails = original.JobDetails
+type JobDetailsType = original.JobDetailsType
 type JobErrorDetails = original.JobErrorDetails
 type JobProperties = original.JobProperties
 type JobResource = original.JobResource
@@ -180,10 +211,12 @@ type JobResourceList = original.JobResourceList
 type JobResourceListIterator = original.JobResourceListIterator
 type JobResourceListPage = original.JobResourceListPage
 type JobResourceUpdateParameter = original.JobResourceUpdateParameter
-type JobsCreateFuture = original.JobsCreateFuture
-type BasicJobSecrets = original.BasicJobSecrets
 type JobSecrets = original.JobSecrets
+type JobSecretsType = original.JobSecretsType
 type JobStages = original.JobStages
+type JobsClient = original.JobsClient
+type JobsCreateFuture = original.JobsCreateFuture
+type JobsDeleteFuture = original.JobsDeleteFuture
 type JobsUpdateFuture = original.JobsUpdateFuture
 type NotificationPreference = original.NotificationPreference
 type Operation = original.Operation
@@ -191,40 +224,71 @@ type OperationDisplay = original.OperationDisplay
 type OperationList = original.OperationList
 type OperationListIterator = original.OperationListIterator
 type OperationListPage = original.OperationListPage
+type OperationsClient = original.OperationsClient
 type PackageShippingDetails = original.PackageShippingDetails
-type PodJobDetails = original.PodJobDetails
-type PodJobSecrets = original.PodJobSecrets
-type PodSecret = original.PodSecret
-type ReportIssueDetails = original.ReportIssueDetails
+type Preferences = original.Preferences
 type Resource = original.Resource
+type Secret = original.Secret
+type ServiceClient = original.ServiceClient
 type ShareCredentialDetails = original.ShareCredentialDetails
 type ShipmentPickUpRequest = original.ShipmentPickUpRequest
 type ShipmentPickUpResponse = original.ShipmentPickUpResponse
 type ShippingAddress = original.ShippingAddress
-type ShippingLabelDetails = original.ShippingLabelDetails
 type Sku = original.Sku
 type SkuCapacity = original.SkuCapacity
 type SkuCost = original.SkuCost
 type SkuInformation = original.SkuInformation
 type SkuProperties = original.SkuProperties
-type UnencryptedSecrets = original.UnencryptedSecrets
+type UnencryptedCredentials = original.UnencryptedCredentials
+type UnencryptedCredentialsList = original.UnencryptedCredentialsList
 type UpdateJobDetails = original.UpdateJobDetails
 type UpdateJobProperties = original.UpdateJobProperties
 type ValidateAddress = original.ValidateAddress
-type OperationsClient = original.OperationsClient
-type ServiceClient = original.ServiceClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewAvailableSkusResultIterator(page AvailableSkusResultPage) AvailableSkusResultIterator {
+	return original.NewAvailableSkusResultIterator(page)
+}
+func NewAvailableSkusResultPage(getNextPage func(context.Context, AvailableSkusResult) (AvailableSkusResult, error)) AvailableSkusResultPage {
+	return original.NewAvailableSkusResultPage(getNextPage)
+}
+func NewJobResourceListIterator(page JobResourceListPage) JobResourceListIterator {
+	return original.NewJobResourceListIterator(page)
+}
+func NewJobResourceListPage(getNextPage func(context.Context, JobResourceList) (JobResourceList, error)) JobResourceListPage {
+	return original.NewJobResourceListPage(getNextPage)
 }
 func NewJobsClient(subscriptionID string) JobsClient {
 	return original.NewJobsClient(subscriptionID)
 }
 func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient {
 	return original.NewJobsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationListIterator(page OperationListPage) OperationListIterator {
+	return original.NewOperationListIterator(page)
+}
+func NewOperationListPage(getNextPage func(context.Context, OperationList) (OperationList, error)) OperationListPage {
+	return original.NewOperationListPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewServiceClient(subscriptionID string) ServiceClient {
+	return original.NewServiceClient(subscriptionID)
+}
+func NewServiceClientWithBaseURI(baseURI string, subscriptionID string) ServiceClient {
+	return original.NewServiceClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleAccessProtocolValues() []AccessProtocol {
+	return original.PossibleAccessProtocolValues()
 }
 func PossibleAddressTypeValues() []AddressType {
 	return original.PossibleAddressTypeValues()
@@ -238,41 +302,32 @@ func PossibleCopyLogDetailsTypeValues() []CopyLogDetailsType {
 func PossibleCopyStatusValues() []CopyStatus {
 	return original.PossibleCopyStatusValues()
 }
-func PossibleDeviceIssueTypeValues() []DeviceIssueType {
-	return original.PossibleDeviceIssueTypeValues()
+func PossibleDataDestinationTypeValues() []DataDestinationType {
+	return original.PossibleDataDestinationTypeValues()
 }
-func PossibleDeviceTypeValues() []DeviceType {
-	return original.PossibleDeviceTypeValues()
+func PossibleJobDetailsTypeEnumValues() []JobDetailsTypeEnum {
+	return original.PossibleJobDetailsTypeEnumValues()
 }
-func PossibleIssueTypeValues() []IssueType {
-	return original.PossibleIssueTypeValues()
-}
-func PossibleJobDetailsTypeValues() []JobDetailsType {
-	return original.PossibleJobDetailsTypeValues()
-}
-func PossibleJobSecretsTypeValues() []JobSecretsType {
-	return original.PossibleJobSecretsTypeValues()
+func PossibleJobSecretsTypeEnumValues() []JobSecretsTypeEnum {
+	return original.PossibleJobSecretsTypeEnumValues()
 }
 func PossibleNotificationStageNameValues() []NotificationStageName {
 	return original.PossibleNotificationStageNameValues()
+}
+func PossibleShareDestinationFormatTypeValues() []ShareDestinationFormatType {
+	return original.PossibleShareDestinationFormatTypeValues()
+}
+func PossibleSkuDisabledReasonValues() []SkuDisabledReason {
+	return original.PossibleSkuDisabledReasonValues()
+}
+func PossibleSkuNameValues() []SkuName {
+	return original.PossibleSkuNameValues()
 }
 func PossibleStageNameValues() []StageName {
 	return original.PossibleStageNameValues()
 }
 func PossibleStageStatusValues() []StageStatus {
 	return original.PossibleStageStatusValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewServiceClient(subscriptionID string) ServiceClient {
-	return original.NewServiceClient(subscriptionID)
-}
-func NewServiceClientWithBaseURI(baseURI string, subscriptionID string) ServiceClient {
-	return original.NewServiceClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

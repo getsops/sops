@@ -124,8 +124,14 @@
               "type": "string"
             },
             "languageCode": {
-              "description": "Required.\n\nThe language of the query. This is\nthe BCP-47 language code, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47).\n\nFor CompletionType.JOB_TITLE type, only open jobs with same\nlanguage_code are returned.\n\nFor CompletionType.COMPANY_NAME type,\nonly companies having open jobs with same language_code are\nreturned.\n\nFor CompletionType.COMBINED type, only open jobs with same\nlanguage_code or companies having open jobs with same\nlanguage_code are returned.\n\nThe maximum number of allowed characters is 255.",
+              "description": "Deprecated. Use language_codes instead.\n\nOptional.\n\nThe language of the query. This is\nthe BCP-47 language code, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47).\n\nFor CompletionType.JOB_TITLE type, only open jobs with the same\nlanguage_code are returned.\n\nFor CompletionType.COMPANY_NAME type,\nonly companies having open jobs with the same language_code are\nreturned.\n\nFor CompletionType.COMBINED type, only open jobs with the same\nlanguage_code or companies having open jobs with the same\nlanguage_code are returned.\n\nThe maximum number of allowed characters is 255.",
               "location": "query",
+              "type": "string"
+            },
+            "languageCodes": {
+              "description": "Optional.\n\nThe list of languages of the query. This is\nthe BCP-47 language code, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47).\n\nFor CompletionType.JOB_TITLE type, only open jobs with the same\nlanguage_codes are returned.\n\nFor CompletionType.COMPANY_NAME type,\nonly companies having open jobs with the same language_codes are\nreturned.\n\nFor CompletionType.COMBINED type, only open jobs with the same\nlanguage_codes or companies having open jobs with the same\nlanguage_codes are returned.\n\nThe maximum number of allowed characters is 255.",
+              "location": "query",
+              "repeated": true,
               "type": "string"
             },
             "name": {
@@ -179,6 +185,39 @@
         }
       },
       "resources": {
+        "clientEvents": {
+          "methods": {
+            "create": {
+              "description": "Report events issued when end user interacts with customer's application\nthat uses Cloud Talent Solution. You may inspect the created events in\n[self service\ntools](https://console.cloud.google.com/talent-solution/overview).\n[Learn\nmore](https://cloud.google.com/talent-solution/docs/management-tools)\nabout self service tools.",
+              "flatPath": "v3/projects/{projectsId}/clientEvents",
+              "httpMethod": "POST",
+              "id": "jobs.projects.clientEvents.create",
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "parent": {
+                  "description": "Parent project name.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v3/{+parent}/clientEvents",
+              "request": {
+                "$ref": "CreateClientEventRequest"
+              },
+              "response": {
+                "$ref": "ClientEvent"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/jobs"
+              ]
+            }
+          }
+        },
         "companies": {
           "methods": {
             "create": {
@@ -211,7 +250,7 @@
               ]
             },
             "delete": {
-              "description": "Deletes specified company.",
+              "description": "Deletes specified company.\nPrerequisite: The company has no jobs associated with it.",
               "flatPath": "v3/projects/{projectsId}/companies/{companiesId}",
               "httpMethod": "DELETE",
               "id": "jobs.projects.companies.delete",
@@ -593,7 +632,7 @@
       }
     }
   },
-  "revision": "20180821",
+  "revision": "20190531",
   "rootUrl": "https://jobs.googleapis.com/",
   "schemas": {
     "ApplicationInfo": {
@@ -665,12 +704,47 @@
       },
       "type": "object"
     },
+    "ClientEvent": {
+      "description": "An event issued when an end user interacts with the application that\nimplements Cloud Talent Solution. Providing this information improves the\nquality of search and recommendation for the API clients, enabling the\nservice to perform optimally. The number of events sent must be consistent\nwith other calls, such as job searches, issued to the service by the client.",
+      "id": "ClientEvent",
+      "properties": {
+        "createTime": {
+          "description": "Required.\n\nThe timestamp of the event.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "eventId": {
+          "description": "Required.\n\nA unique identifier, generated by the client application. This `event_id`\nis used to establish the relationship between different events\n(see parent_event_id).",
+          "type": "string"
+        },
+        "extraInfo": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional.\n\nExtra information about this event. Used for storing information with no\nmatching field in event payload, for example, user application specific\ncontext or details.\n\nAt most 20 keys are supported. The maximum total size of all keys and\nvalues is 2 KB.",
+          "type": "object"
+        },
+        "jobEvent": {
+          "$ref": "JobEvent",
+          "description": "A event issued when a job seeker interacts with the application that\nimplements Cloud Talent Solution."
+        },
+        "parentEventId": {
+          "description": "Optional.\n\nThe event_id of an event that resulted in the current event. For example, a\nJob view event usually follows a parent\nimpression event: A job seeker first does a\nsearch where a list of jobs appears\n(impression). The job seeker then selects a\nresult and views the description of a particular job (Job\nview).",
+          "type": "string"
+        },
+        "requestId": {
+          "description": "Required.\n\nA unique ID generated in the API responses. It can be found in\nResponseMetadata.request_id.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "CommuteFilter": {
       "description": "Input only.\n\nParameters needed for commute search.",
       "id": "CommuteFilter",
       "properties": {
         "allowImpreciseAddresses": {
-          "description": "Optional.\nIf `true`, jobs without street level addresses may also be returned.\nFor city level addresses, the city center is used. For state and coarser\nlevel addresses, text matching is used.\nIf this field is set to `false` or is not specified, only jobs that include\nstreet level addresses will be returned by commute search.",
+          "description": "Optional.\nIf true, jobs without \"precise\" addresses (street level addresses or GPS\ncoordinates) might also be returned. For city and coarser level addresses,\ntext matching is used. If this field is set to false or is not specified,\nonly jobs that include precise addresses are returned by Commute\nSearch.\n\nNote: If `allow_imprecise_addresses` is set to true, Commute Search is not\nable to calculate accurate commute times to jobs with city level and\ncoarser address information. Jobs with imprecise addresses will return a\n`travel_duration` time of 0 regardless of distance from the job seeker.",
           "type": "boolean"
         },
         "commuteMethod": {
@@ -689,10 +763,10 @@
         },
         "departureTime": {
           "$ref": "TimeOfDay",
-          "description": "Optional.\n\nThe departure time used to calculate traffic impact, represented as\n.google.type.TimeOfDay in local time zone.\n\nCurrently traffic model is restricted to hour level resolution."
+          "description": "Optional.\n\nThe departure time used to calculate traffic impact, represented as\ngoogle.type.TimeOfDay in local time zone.\n\nCurrently traffic model is restricted to hour level resolution."
         },
         "roadTraffic": {
-          "description": "Optional.\n\nSpecifies the traffic density to use when caculating commute time.",
+          "description": "Optional.\n\nSpecifies the traffic density to use when calculating commute time.",
           "enum": [
             "ROAD_TRAFFIC_UNSPECIFIED",
             "TRAFFIC_FREE",
@@ -848,7 +922,7 @@
           "description": "Optional.\n\nCompensation range."
         },
         "type": {
-          "description": "Optional.\n\nCompensation type.\n\nDefault is CompensationUnit.OTHER_COMPENSATION_TYPE.",
+          "description": "Optional.\n\nCompensation type.\n\nDefault is CompensationUnit.COMPENSATION_TYPE_UNSPECIFIED.",
           "enum": [
             "COMPENSATION_TYPE_UNSPECIFIED",
             "BASE",
@@ -874,7 +948,7 @@
           "type": "string"
         },
         "unit": {
-          "description": "Optional.\n\nFrequency of the specified amount.\n\nDefault is CompensationUnit.OTHER_COMPENSATION_UNIT.",
+          "description": "Optional.\n\nFrequency of the specified amount.\n\nDefault is CompensationUnit.COMPENSATION_UNIT_UNSPECIFIED.",
           "enum": [
             "COMPENSATION_UNIT_UNSPECIFIED",
             "HOURLY",
@@ -905,7 +979,7 @@
       "id": "CompensationFilter",
       "properties": {
         "includeJobsWithUnspecifiedCompensationRange": {
-          "description": "Optional.\n\nWhether to include jobs whose compensation range is unspecified.",
+          "description": "Optional.\n\nIf set to true, jobs with unspecified compensation range fields are\nincluded.",
           "type": "boolean"
         },
         "range": {
@@ -1042,11 +1116,11 @@
       "properties": {
         "maxCompensation": {
           "$ref": "Money",
-          "description": "Required.\n\nThe maximum amount of compensation."
+          "description": "Optional.\n\nThe maximum amount of compensation. If left empty, the value is set\nto a maximal compensation value and the currency code is set to\nmatch the currency code of\nmin_compensation."
         },
         "minCompensation": {
           "$ref": "Money",
-          "description": "Required.\n\nThe minimum amount of compensation."
+          "description": "Optional.\n\nThe minimum amount of compensation. If left empty, the value is set\nto zero and the currency code is set to match the\ncurrency code of max_compensation."
         }
       },
       "type": "object"
@@ -1096,6 +1170,17 @@
             "Suggest both job titles and company names."
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CreateClientEventRequest": {
+      "description": "The report event request.",
+      "id": "CreateClientEventRequest",
+      "properties": {
+        "clientEvent": {
+          "$ref": "ClientEvent",
+          "description": "Required.\n\nEvents issued when end user interacts with customer's application that\nuses Cloud Talent Solution."
         }
       },
       "type": "object"
@@ -1248,7 +1333,7 @@
           "type": "array"
         },
         "simpleHistogramFacets": {
-          "description": "Optional. Specifies the simple type of histogram facets, for example,\n`COMPANY_SIZE`, `EMPLOYMENT_TYPE` etc. This field is equivalent to\nGetHistogramRequest.",
+          "description": "Optional.\n\nSpecifies the simple type of histogram facets, for example,\n`COMPANY_SIZE`, `EMPLOYMENT_TYPE` etc.",
           "enumDescriptions": [
             "The default value if search type is not specified.",
             "Filter by the company id field.",
@@ -1558,7 +1643,7 @@
           "type": "string"
         },
         "languageCode": {
-          "description": "Optional.\n\nThe language of the posting. This field is distinct from\nany requirements for fluency that are associated with the job.\n\nLanguage codes must be in BCP-47 format, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47){:\nclass=\"external\" target=\"_blank\" }.\n\nThe default value is `en-US`.",
+          "description": "Optional.\n\nThe language of the posting. This field is distinct from\nany requirements for fluency that are associated with the job.\n\nLanguage codes must be in BCP-47 format, such as \"en-US\" or \"sr-Latn\".\nFor more information, see\n[Tags for Identifying Languages](https://tools.ietf.org/html/bcp47){:\nclass=\"external\" target=\"_blank\" }.\n\nIf this field is unspecified and Job.description is present, detected\nlanguage code based on Job.description is assigned, otherwise\ndefaults to 'en_US'.",
           "type": "string"
         },
         "name": {
@@ -1581,7 +1666,7 @@
           "type": "string"
         },
         "postingRegion": {
-          "description": "Optional.\n\nThe job PostingRegion (for example, state, country) throughout which\nthe job is available. If this field is set, a\nLocationFilter in a search query within the job region\nfinds this job posting if an exact location match is not specified.\nIf this field is set to PostingRegion.NATION_WIDE or\n[PostingRegion.ADMINISTRATIVE_AREA], setting job addresses\nto the same location level as this field is strongly recommended.",
+          "description": "Optional.\n\nThe job PostingRegion (for example, state, country) throughout which\nthe job is available. If this field is set, a\nLocationFilter in a search query within the job region\nfinds this job posting if an exact location match isn't specified.\nIf this field is set to PostingRegion.NATION or\nPostingRegion.ADMINISTRATIVE_AREA, setting job Job.addresses\nto the same location level as this field is strongly recommended.",
           "enum": [
             "POSTING_REGION_UNSPECIFIED",
             "ADMINISTRATIVE_AREA",
@@ -1732,6 +1817,62 @@
       },
       "type": "object"
     },
+    "JobEvent": {
+      "description": "An event issued when a job seeker interacts with the application that\nimplements Cloud Talent Solution.",
+      "id": "JobEvent",
+      "properties": {
+        "jobs": {
+          "description": "Required.\n\nThe job name(s) associated with this event.\nFor example, if this is an impression event,\nthis field contains the identifiers of all jobs shown to the job seeker.\nIf this was a view event, this field contains the\nidentifier of the viewed job.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "description": "Required.\n\nThe type of the event (see JobEventType).",
+          "enum": [
+            "JOB_EVENT_TYPE_UNSPECIFIED",
+            "IMPRESSION",
+            "VIEW",
+            "VIEW_REDIRECT",
+            "APPLICATION_START",
+            "APPLICATION_FINISH",
+            "APPLICATION_QUICK_SUBMISSION",
+            "APPLICATION_REDIRECT",
+            "APPLICATION_START_FROM_SEARCH",
+            "APPLICATION_REDIRECT_FROM_SEARCH",
+            "APPLICATION_COMPANY_SUBMIT",
+            "BOOKMARK",
+            "NOTIFICATION",
+            "HIRED",
+            "SENT_CV",
+            "INTERVIEW_GRANTED",
+            "NOT_INTERESTED"
+          ],
+          "enumDescriptions": [
+            "The event is unspecified by other provided values.",
+            "The job seeker or other entity interacting with the service has\nhad a job rendered in their view, such as in a list of search results in\na compressed or clipped format. This event is typically associated with\nthe viewing of a jobs list on a single page by a job seeker.",
+            "The job seeker, or other entity interacting with the service, has\nviewed the details of a job, including the full description. This\nevent doesn't apply to the viewing a snippet of a job appearing as a\npart of the job search results. Viewing a snippet is associated with an\nimpression).",
+            "The job seeker or other entity interacting with the service\nperformed an action to view a job and was redirected to a different\nwebsite for job.",
+            "The job seeker or other entity interacting with the service\nbegan the process or demonstrated the intention of applying for a job.",
+            "The job seeker or other entity interacting with the service\nsubmitted an application for a job.",
+            "The job seeker or other entity interacting with the service\nsubmitted an application for a job with a single click without\nentering information. If a job seeker performs this action, send only\nthis event to the service. Do not also send\nJobEventType.APPLICATION_START or JobEventType.APPLICATION_FINISH\nevents.",
+            "The job seeker or other entity interacting with the service\nperformed an action to apply to a job and was redirected to a different\nwebsite to complete the application.",
+            "The job seeker or other entity interacting with the service began the\nprocess or demonstrated the intention of applying for a job from the\nsearch results page without viewing the details of the job posting.\nIf sending this event, JobEventType.VIEW event shouldn't be sent.",
+            "The job seeker, or other entity interacting with the service, performs an\naction with a single click from the search results page to apply to a job\n(without viewing the details of the job posting), and is redirected\nto a different website to complete the application. If a candidate\nperforms this action, send only this event to the service. Do not also\nsend JobEventType.APPLICATION_START,\nJobEventType.APPLICATION_FINISH or JobEventType.VIEW events.",
+            "This event should be used when a company submits an application\non behalf of a job seeker. This event is intended for use by staffing\nagencies attempting to place candidates.",
+            "The job seeker or other entity interacting with the service demonstrated\nan interest in a job by bookmarking or saving it.",
+            "The job seeker or other entity interacting with the service was\nsent a notification, such as an email alert or device notification,\ncontaining one or more jobs listings generated by the service.",
+            "The job seeker or other entity interacting with the service was\nemployed by the hiring entity (employer). Send this event\nonly if the job seeker was hired through an application that was\ninitiated by a search conducted through the Cloud Talent Solution\nservice.",
+            "A recruiter or staffing agency submitted an application on behalf of the\ncandidate after interacting with the service to identify a suitable job\nposting.",
+            "The entity interacting with the service (for example, the job seeker),\nwas granted an initial interview by the hiring entity (employer). This\nevent should only be sent if the job seeker was granted an interview as\npart of an application that was initiated by a search conducted through /\nrecommendation provided by the Cloud Talent Solution service.",
+            "The job seeker or other entity interacting with the service showed\nno interest in the job."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "JobQuery": {
       "description": "Input only.\n\nThe query required to perform a search query.",
       "id": "JobQuery",
@@ -1759,7 +1900,7 @@
           "description": "Optional.\n\nThis search filter is applied only to\nJob.compensation_info. For example, if the filter is specified\nas \"Hourly job with per-hour compensation \u003e $15\", only jobs meeting\nthese criteria are searched. If a filter isn't defined, all open jobs\nare searched."
         },
         "customAttributeFilter": {
-          "description": "Optional.\n\nThis filter specifies a structured syntax to match against the\nJob.custom_attributes marked as `filterable`.\n\nThe syntax for this expression is a subset of Google SQL syntax.\n\nSupported operators are: =, !=, \u003c, \u003c=, \u003e, \u003e= where the left of the operator\nis a custom field key and the right of the operator is a number or string\n(surrounded by quotes) value.\n\nSupported functions are LOWER(\u003cfield_name\u003e) to\nperform case insensitive match and EMPTY(\u003cfield_name\u003e) to filter on the\nexistence of a key.\n\nBoolean expressions (AND/OR/NOT) are supported up to 3 levels of\nnesting (for example, \"((A AND B AND C) OR NOT D) AND E\"), a maximum of 50\ncomparisons/functions are allowed in the expression. The expression\nmust be \u003c 2000 characters in length.\n\nSample Query:\n(LOWER(driving_license)=\"class a\" OR EMPTY(driving_license)) AND\ndriving_years \u003e 10",
+          "description": "Optional.\n\nThis filter specifies a structured syntax to match against the\nJob.custom_attributes marked as `filterable`.\n\nThe syntax for this expression is a subset of SQL syntax.\n\nSupported operators are: `=`, `!=`, `\u003c`, `\u003c=`, `\u003e`, and `\u003e=` where the\nleft of the operator is a custom field key and the right of the operator\nis a number or a quoted string. You must escape backslash (\\\\) and\nquote (\\\") characters.\n\nSupported functions are `LOWER([field_name])` to\nperform a case insensitive match and `EMPTY([field_name])` to filter on the\nexistence of a key.\n\nBoolean expressions (AND/OR/NOT) are supported up to 3 levels of\nnesting (for example, \"((A AND B AND C) OR NOT D) AND E\"), a maximum of 100\ncomparisons or functions are allowed in the expression. The expression\nmust be \u003c 3000 bytes in length.\n\nSample Query:\n`(LOWER(driving_license)=\"class \\\"a\\\"\" OR EMPTY(driving_license)) AND\ndriving_years \u003e 10`",
           "type": "string"
         },
         "disableSpellCheck": {
@@ -1880,7 +2021,7 @@
           "type": "array"
         },
         "locationFilters": {
-          "description": "Optional.\n\nThe location filter specifies geo-regions containing the jobs to\nsearch against. See LocationFilter for more information.\n\nIf a location value isn't specified, jobs fitting the other search\ncriteria are retrieved regardless of where they're located.\n\nIf multiple values are specified, jobs are retrieved from any of the\nspecified locations, and, if different values are specified\nfor the LocationFilter.distance_in_miles parameter, the maximum\nprovided distance is used for all locations.\n\nAt most 5 location filters are allowed.",
+          "description": "Optional.\n\nThe location filter specifies geo-regions containing the jobs to\nsearch against. See LocationFilter for more information.\n\nIf a location value isn't specified, jobs fitting the other search\ncriteria are retrieved regardless of where they're located.\n\nIf multiple values are specified, jobs are retrieved from any of the\nspecified locations. If different values are specified for the\nLocationFilter.distance_in_miles parameter, the maximum provided\ndistance is used for all locations.\n\nAt most 5 location filters are allowed.",
           "items": {
             "$ref": "LocationFilter"
           },
@@ -2001,7 +2142,7 @@
           "description": "Postal address of the location that includes human readable information,\nsuch as postal delivery and payments addresses. Given a postal address,\na postal service can deliver items to a premises, P.O. Box, or other\ndelivery location."
         },
         "radiusInMiles": {
-          "description": "Radius in meters of the job location. This value is derived from the\nlocation bounding box in which a circle with the specified radius\ncentered from LatLng coves the area associated with the job location.\nFor example, currently, \"Mountain View, CA, USA\" has a radius of\n6.17 miles.",
+          "description": "Radius in miles of the job location. This value is derived from the\nlocation bounding box in which a circle with the specified radius\ncentered from LatLng covers the area associated with the job location.\nFor example, currently, \"Mountain View, CA, USA\" has a radius of\n6.17 miles.",
           "format": "double",
           "type": "number"
         }
@@ -2262,6 +2403,20 @@
           "description": "Optional.\n\nControls whether to disable exact keyword match on Job.job_title,\nJob.description, Job.company_display_name, Job.locations,\nJob.qualifications. When disable keyword match is turned off, a\nkeyword match returns jobs that do not match given category filters when\nthere are matching keywords. For example, the query \"program manager,\" a\nresult is returned even if the job posting has the title \"software\ndeveloper,\" which does not fall into \"program manager\" ontology, but does\nhave \"program manager\" appearing in its description.\n\nFor queries like \"cloud\" that does not contain title or\nlocation specific ontology, jobs with \"cloud\" keyword matches are returned\nregardless of this flag's value.\n\nPlease use Company.keyword_searchable_custom_fields or\nCompany.keyword_searchable_custom_attributes if company specific\nglobally matched custom field/attribute string values is needed. Enabling\nkeyword match improves recall of subsequent search requests.\n\nDefaults to false.",
           "type": "boolean"
         },
+        "diversificationLevel": {
+          "description": "Optional.\n\nControls whether highly similar jobs are returned next to each other in\nthe search results. Jobs are identified as highly similar based on\ntheir titles, job categories, and locations. Highly similar results are\nclustered so that only one representative job of the cluster is\ndisplayed to the job seeker higher up in the results, with the other jobs\nbeing displayed lower down in the results.\n\nDefaults to DiversificationLevel.SIMPLE if no value\nis specified.",
+          "enum": [
+            "DIVERSIFICATION_LEVEL_UNSPECIFIED",
+            "DISABLED",
+            "SIMPLE"
+          ],
+          "enumDescriptions": [
+            "The diversification level isn't specified.",
+            "Disables diversification. Jobs that would normally be pushed to the last\npage would not have their positions altered. This may result in highly\nsimilar jobs appearing in sequence in the search results.",
+            "Default diversifying behavior. The result list is ordered so that\nhighly similar results are pushed to the end of the last page of search\nresults."
+          ],
+          "type": "string"
+        },
         "enableBroadening": {
           "description": "Optional.\n\nControls whether to broaden the search when it produces sparse results.\nBroadened queries append results to the end of the matching results\nlist.\n\nDefaults to false.",
           "type": "boolean"
@@ -2286,8 +2441,8 @@
           "enumDescriptions": [
             "Default value.",
             "A ID only view of job, with following attributes:\nJob.name, Job.requisition_id, Job.language_code.",
-            "A minimal view of the job, with the following attributes:\nJob.name, Job.requisition_id, Job.job_title,\nJob.company_name, Job.DerivedInfo.locations, Job.language_code.",
-            "A small view of the job, with the following attributes in the search\nresults: Job.name, Job.requisition_id, Job.job_title,\nJob.company_name, Job.DerivedInfo.locations, Job.visibility,\nJob.language_code, Job.description.",
+            "A minimal view of the job, with the following attributes:\nJob.name, Job.requisition_id, Job.title,\nJob.company_name, Job.DerivedInfo.locations, Job.language_code.",
+            "A small view of the job, with the following attributes in the search\nresults: Job.name, Job.requisition_id, Job.title,\nJob.company_name, Job.DerivedInfo.locations, Job.visibility,\nJob.language_code, Job.description.",
             "All available attributes are included in the search results."
           ],
           "type": "string"
@@ -2298,7 +2453,7 @@
           "type": "integer"
         },
         "orderBy": {
-          "description": "Optional.\n\nThe criteria determining how search results are sorted. Default is\n\"relevance desc\".\n\nSupported options are:\n  * \"relevance desc\": By relevance descending, as determined by the API\n    algorithms. Relevance thresholding of query results is only available\n    with this ordering.\n  * \"posting_publish_time desc\": By Job.posting_publish_time\n    descending.\n  * \"posting_update_time desc\": By Job.posting_update_time descending.\n  * \"title\": By Job.title ascending.\n  * \"title desc\": By Job.title descending.\n  * \"annualized_base_compensation\": By job's\n    CompensationInfo.annualized_base_compensation ascending. If job's\n    annualized base compensation is unspecified, they are put at the end of\n    search result.\n  * \"annualized_base_compensation desc\": By job's\n    CompensationInfo.annualized_base_compensation descending. If job's\n    annualized base compensation is unspecified, they are put at the end of\n    search result.\n  * \"annualized_total_compensation\": By job's\n    CompensationInfo.annualized_total_compensation ascending. If job's\n    annualized total compensation is unspecified, they are put at the end\n    of search result.\n  * \"annualized_total_compensation desc\": By job's\n    CompensationInfo.annualized_total_compensation descending. If job's\n    annualized total compensation is unspecified, they are put at the end\n    of search result.",
+          "description": "Optional.\n\nThe criteria determining how search results are sorted. Default is\n\"relevance desc\".\n\nSupported options are:\n\n* \"relevance desc\": By relevance descending, as determined by the API\nalgorithms. Relevance thresholding of query results is only available\nwith this ordering.\n* \"posting`_`publish`_`time desc\": By Job.posting_publish_time\ndescending.\n* \"posting`_`update`_`time desc\": By Job.posting_update_time\ndescending.\n* \"title\": By Job.title ascending.\n* \"title desc\": By Job.title descending.\n* \"annualized`_`base`_`compensation\": By job's\nCompensationInfo.annualized_base_compensation_range ascending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* \"annualized`_`base`_`compensation desc\": By job's\nCompensationInfo.annualized_base_compensation_range descending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* \"annualized`_`total`_`compensation\": By job's\nCompensationInfo.annualized_total_compensation_range ascending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* \"annualized`_`total`_`compensation desc\": By job's\nCompensationInfo.annualized_total_compensation_range descending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.",
           "type": "string"
         },
         "pageSize": {
@@ -2351,7 +2506,7 @@
         },
         "histogramResults": {
           "$ref": "HistogramResults",
-          "description": "The histogram results that match with specified\nSearchJobsRequest.histogram_facets."
+          "description": "The histogram results that match specified\nSearchJobsRequest.histogram_facets."
         },
         "locationFilters": {
           "description": "The location filters that the service applied to the specified query. If\nany filters are lat-lng based, the JobLocation.location_type is\nJobLocation.LocationType#LOCATION_TYPE_UNSPECIFIED.",
@@ -2380,7 +2535,7 @@
           "description": "The spell checking result, and correction."
         },
         "totalSize": {
-          "description": "The precise result count, which is available only if the client set\nenable_precise_result_size to `true` or if the response\nis the last page of results. Otherwise, the value will be `-1`.",
+          "description": "The precise result count, which is available only if the client set\nenable_precise_result_size to `true`, or if the response\nis the last page of results. Otherwise, the value is `-1`.",
           "format": "int32",
           "type": "integer"
         }

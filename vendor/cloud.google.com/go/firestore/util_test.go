@@ -15,21 +15,18 @@
 package firestore
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
-
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
 	"github.com/golang/protobuf/ptypes"
 	tspb "github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/api/option"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 	"google.golang.org/genproto/googleapis/type/latlng"
 	"google.golang.org/grpc"
 )

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/private/protocol"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCanSetIdempotencyToken(t *testing.T) {
@@ -55,7 +54,9 @@ func TestCanSetIdempotencyToken(t *testing.T) {
 		v := reflect.Indirect(reflect.ValueOf(c.Case))
 		ty := v.Type()
 		canSet := protocol.CanSetIdempotencyToken(v.Field(0), ty.Field(0))
-		assert.Equal(t, c.CanSet, canSet, "Expect case %d can set to match", i)
+		if e, a := c.CanSet, canSet; e != a {
+			t.Errorf("%d, expect %v, got %v", i, e, a)
+		}
 	}
 }
 
@@ -89,18 +90,24 @@ func TestSetIdempotencyToken(t *testing.T) {
 		v := reflect.Indirect(reflect.ValueOf(c.Case))
 
 		protocol.SetIdempotencyToken(v.Field(0))
-		assert.NotEmpty(t, v.Field(0).Interface(), "Expect case %d to be set", i)
+		if v.Field(0).Interface() == nil {
+			t.Errorf("%d, expect not nil", i)
+		}
 	}
 }
 
 func TestUUIDVersion4(t *testing.T) {
 	uuid := protocol.UUIDVersion4(make([]byte, 16))
-	assert.Equal(t, `00000000-0000-4000-8000-000000000000`, uuid)
+	if e, a := `00000000-0000-4000-8000-000000000000`, uuid; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 
 	b := make([]byte, 16)
 	for i := 0; i < len(b); i++ {
 		b[i] = 1
 	}
 	uuid = protocol.UUIDVersion4(b)
-	assert.Equal(t, `01010101-0101-4101-8101-010101010101`, uuid)
+	if e, a := `01010101-0101-4101-8101-010101010101`, uuid; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }

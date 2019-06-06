@@ -24,6 +24,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -55,6 +56,16 @@ func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 
 // GetAvailableOperations indicates which operations can be performed by the Power BI Resource Provider.
 func (client BaseClient) GetAvailableOperations(ctx context.Context) (result OperationList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetAvailableOperations")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAvailableOperationsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.BaseClient", "GetAvailableOperations", nil, "Failure preparing request")

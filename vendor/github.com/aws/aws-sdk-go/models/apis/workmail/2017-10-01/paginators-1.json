@@ -25,6 +25,11 @@
       "output_token": "NextToken",
       "limit_key": "MaxResults"
     },
+    "ListResourceDelegates": {
+      "input_token": "NextToken",
+      "output_token": "NextToken",
+      "limit_key": "MaxResults"
+    },
     "ListResources": {
       "input_token": "NextToken",
       "output_token": "NextToken",

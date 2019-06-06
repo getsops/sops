@@ -4,6 +4,9 @@
       "scopes": {
         "https://www.googleapis.com/auth/cloud-platform": {
           "description": "View and manage your data across Google Cloud Platform services"
+        },
+        "https://www.googleapis.com/auth/cloudkms": {
+          "description": "View and manage your keys and secrets stored in Cloud Key Management Service"
         }
       }
     }
@@ -12,7 +15,7 @@
   "baseUrl": "https://cloudkms.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud KMS",
-  "description": "Cloud KMS allows you to keep cryptographic keys in one central cloud service, for direct use by other cloud resources and applications. With Cloud KMS you are the ultimate custodian of your data, you can manage encryption in the cloud the same way you do on-premises, and you have a provable and monitorable root of trust over your data.\n",
+  "description": "Manages keys and performs cryptographic operations in a central cloud service, for direct use by other cloud resources and applications.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/kms/",
   "fullyEncodeReservedExpansion": true,
@@ -130,7 +133,8 @@
                 "$ref": "Location"
               },
               "scopes": [
-                "https://www.googleapis.com/auth/cloud-platform"
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/cloudkms"
               ]
             },
             "list": {
@@ -171,7 +175,8 @@
                 "$ref": "ListLocationsResponse"
               },
               "scopes": [
-                "https://www.googleapis.com/auth/cloud-platform"
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/cloudkms"
               ]
             }
           },
@@ -208,7 +213,8 @@
                     "$ref": "KeyRing"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudkms"
                   ]
                 },
                 "get": {
@@ -233,7 +239,8 @@
                     "$ref": "KeyRing"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudkms"
                   ]
                 },
                 "getIamPolicy": {
@@ -258,7 +265,8 @@
                     "$ref": "Policy"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudkms"
                   ]
                 },
                 "list": {
@@ -294,7 +302,8 @@
                     "$ref": "ListKeyRingsResponse"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudkms"
                   ]
                 },
                 "setIamPolicy": {
@@ -322,7 +331,8 @@
                     "$ref": "Policy"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudkms"
                   ]
                 },
                 "testIamPermissions": {
@@ -350,7 +360,8 @@
                     "$ref": "TestIamPermissionsResponse"
                   },
                   "scopes": [
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudkms"
                   ]
                 }
               },
@@ -387,7 +398,8 @@
                         "$ref": "CryptoKey"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "decrypt": {
@@ -415,7 +427,8 @@
                         "$ref": "DecryptResponse"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "encrypt": {
@@ -443,7 +456,8 @@
                         "$ref": "EncryptResponse"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "get": {
@@ -468,7 +482,8 @@
                         "$ref": "CryptoKey"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "getIamPolicy": {
@@ -493,7 +508,8 @@
                         "$ref": "Policy"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "list": {
@@ -538,7 +554,8 @@
                         "$ref": "ListCryptoKeysResponse"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "patch": {
@@ -572,7 +589,8 @@
                         "$ref": "CryptoKey"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "setIamPolicy": {
@@ -600,7 +618,8 @@
                         "$ref": "Policy"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "testIamPermissions": {
@@ -628,7 +647,8 @@
                         "$ref": "TestIamPermissionsResponse"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     },
                     "updatePrimaryVersion": {
@@ -656,7 +676,8 @@
                         "$ref": "CryptoKey"
                       },
                       "scopes": [
-                        "https://www.googleapis.com/auth/cloud-platform"
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
                       ]
                     }
                   },
@@ -688,7 +709,8 @@
                             "$ref": "AsymmetricDecryptResponse"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "asymmetricSign": {
@@ -716,7 +738,8 @@
                             "$ref": "AsymmetricSignResponse"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "create": {
@@ -744,7 +767,8 @@
                             "$ref": "CryptoKeyVersion"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "destroy": {
@@ -772,7 +796,8 @@
                             "$ref": "CryptoKeyVersion"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "get": {
@@ -797,7 +822,8 @@
                             "$ref": "CryptoKeyVersion"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "getPublicKey": {
@@ -822,7 +848,8 @@
                             "$ref": "PublicKey"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "list": {
@@ -867,7 +894,8 @@
                             "$ref": "ListCryptoKeyVersionsResponse"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "patch": {
@@ -901,7 +929,8 @@
                             "$ref": "CryptoKeyVersion"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         },
                         "restore": {
@@ -929,10 +958,99 @@
                             "$ref": "CryptoKeyVersion"
                           },
                           "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform"
+                            "https://www.googleapis.com/auth/cloud-platform",
+                            "https://www.googleapis.com/auth/cloudkms"
                           ]
                         }
                       }
+                    }
+                  }
+                },
+                "importJobs": {
+                  "methods": {
+                    "getIamPolicy": {
+                      "description": "Gets the access control policy for a resource.\nReturns an empty policy if the resource exists and does not have a policy\nset.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/keyRings/{keyRingsId}/importJobs/{importJobsId}:getIamPolicy",
+                      "httpMethod": "GET",
+                      "id": "cloudkms.projects.locations.keyRings.importJobs.getIamPolicy",
+                      "parameterOrder": [
+                        "resource"
+                      ],
+                      "parameters": {
+                        "resource": {
+                          "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/importJobs/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+resource}:getIamPolicy",
+                      "response": {
+                        "$ref": "Policy"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
+                      ]
+                    },
+                    "setIamPolicy": {
+                      "description": "Sets the access control policy on the specified resource. Replaces any\nexisting policy.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/keyRings/{keyRingsId}/importJobs/{importJobsId}:setIamPolicy",
+                      "httpMethod": "POST",
+                      "id": "cloudkms.projects.locations.keyRings.importJobs.setIamPolicy",
+                      "parameterOrder": [
+                        "resource"
+                      ],
+                      "parameters": {
+                        "resource": {
+                          "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/importJobs/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+resource}:setIamPolicy",
+                      "request": {
+                        "$ref": "SetIamPolicyRequest"
+                      },
+                      "response": {
+                        "$ref": "Policy"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
+                      ]
+                    },
+                    "testIamPermissions": {
+                      "description": "Returns permissions that a caller has on the specified resource.\nIf the resource does not exist, this will return an empty set of\npermissions, not a NOT_FOUND error.\n\nNote: This operation is designed to be used for building permission-aware\nUIs and command-line tools, not for authorization checking. This operation\nmay \"fail open\" without warning.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/keyRings/{keyRingsId}/importJobs/{importJobsId}:testIamPermissions",
+                      "httpMethod": "POST",
+                      "id": "cloudkms.projects.locations.keyRings.importJobs.testIamPermissions",
+                      "parameterOrder": [
+                        "resource"
+                      ],
+                      "parameters": {
+                        "resource": {
+                          "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/importJobs/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+resource}:testIamPermissions",
+                      "request": {
+                        "$ref": "TestIamPermissionsRequest"
+                      },
+                      "response": {
+                        "$ref": "TestIamPermissionsResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudkms"
+                      ]
                     }
                   }
                 }
@@ -943,7 +1061,7 @@
       }
     }
   },
-  "revision": "20180903",
+  "revision": "20190426",
   "rootUrl": "https://cloudkms.googleapis.com/",
   "schemas": {
     "AsymmetricDecryptRequest": {
@@ -1047,10 +1165,10 @@
       "properties": {
         "condition": {
           "$ref": "Expr",
-          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+          "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -1132,12 +1250,15 @@
             "RSA_SIGN_PSS_2048_SHA256",
             "RSA_SIGN_PSS_3072_SHA256",
             "RSA_SIGN_PSS_4096_SHA256",
+            "RSA_SIGN_PSS_4096_SHA512",
             "RSA_SIGN_PKCS1_2048_SHA256",
             "RSA_SIGN_PKCS1_3072_SHA256",
             "RSA_SIGN_PKCS1_4096_SHA256",
+            "RSA_SIGN_PKCS1_4096_SHA512",
             "RSA_DECRYPT_OAEP_2048_SHA256",
             "RSA_DECRYPT_OAEP_3072_SHA256",
             "RSA_DECRYPT_OAEP_4096_SHA256",
+            "RSA_DECRYPT_OAEP_4096_SHA512",
             "EC_SIGN_P256_SHA256",
             "EC_SIGN_P384_SHA384"
           ],
@@ -1147,12 +1268,15 @@
             "RSASSA-PSS 2048 bit key with a SHA256 digest.",
             "RSASSA-PSS 3072 bit key with a SHA256 digest.",
             "RSASSA-PSS 4096 bit key with a SHA256 digest.",
+            "RSASSA-PSS 4096 bit key with a SHA512 digest.",
             "RSASSA-PKCS1-v1_5 with a 2048 bit key and a SHA256 digest.",
             "RSASSA-PKCS1-v1_5 with a 3072 bit key and a SHA256 digest.",
             "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA256 digest.",
+            "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA512 digest.",
             "RSAES-OAEP 2048 bit key with a SHA256 digest.",
             "RSAES-OAEP 3072 bit key with a SHA256 digest.",
             "RSAES-OAEP 4096 bit key with a SHA256 digest.",
+            "RSAES-OAEP 4096 bit key with a SHA512 digest.",
             "ECDSA on the NIST P-256 curve with a SHA256 digest.",
             "ECDSA on the NIST P-384 curve with a SHA384 digest."
           ],
@@ -1235,12 +1359,15 @@
             "RSA_SIGN_PSS_2048_SHA256",
             "RSA_SIGN_PSS_3072_SHA256",
             "RSA_SIGN_PSS_4096_SHA256",
+            "RSA_SIGN_PSS_4096_SHA512",
             "RSA_SIGN_PKCS1_2048_SHA256",
             "RSA_SIGN_PKCS1_3072_SHA256",
             "RSA_SIGN_PKCS1_4096_SHA256",
+            "RSA_SIGN_PKCS1_4096_SHA512",
             "RSA_DECRYPT_OAEP_2048_SHA256",
             "RSA_DECRYPT_OAEP_3072_SHA256",
             "RSA_DECRYPT_OAEP_4096_SHA256",
+            "RSA_DECRYPT_OAEP_4096_SHA512",
             "EC_SIGN_P256_SHA256",
             "EC_SIGN_P384_SHA384"
           ],
@@ -1250,12 +1377,15 @@
             "RSASSA-PSS 2048 bit key with a SHA256 digest.",
             "RSASSA-PSS 3072 bit key with a SHA256 digest.",
             "RSASSA-PSS 4096 bit key with a SHA256 digest.",
+            "RSASSA-PSS 4096 bit key with a SHA512 digest.",
             "RSASSA-PKCS1-v1_5 with a 2048 bit key and a SHA256 digest.",
             "RSASSA-PKCS1-v1_5 with a 3072 bit key and a SHA256 digest.",
             "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA256 digest.",
+            "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA512 digest.",
             "RSAES-OAEP 2048 bit key with a SHA256 digest.",
             "RSAES-OAEP 3072 bit key with a SHA256 digest.",
             "RSAES-OAEP 4096 bit key with a SHA256 digest.",
+            "RSAES-OAEP 4096 bit key with a SHA512 digest.",
             "ECDSA on the NIST P-256 curve with a SHA256 digest.",
             "ECDSA on the NIST P-384 curve with a SHA384 digest."
           ],
@@ -1392,7 +1522,7 @@
       "type": "object"
     },
     "KeyOperationAttestation": {
-      "description": "Contains an HSM-generated attestation about a key operation.",
+      "description": "Contains an HSM-generated attestation about a key operation. For more\ninformation, see [Verifying attestations]\n(https://cloud.google.com/kms/docs/attest-key).",
       "id": "KeyOperationAttestation",
       "properties": {
         "content": {
@@ -1404,11 +1534,13 @@
           "description": "Output only. The format of the attestation data.",
           "enum": [
             "ATTESTATION_FORMAT_UNSPECIFIED",
-            "CAVIUM_V1_COMPRESSED"
+            "CAVIUM_V1_COMPRESSED",
+            "CAVIUM_V2_COMPRESSED"
           ],
           "enumDescriptions": [
-            "",
-            "Cavium HSM attestation compressed with gzip. Note that this format is\ndefined by Cavium and subject to change at any time."
+            "Not specified.",
+            "Cavium HSM attestation compressed with gzip. Note that this format is\ndefined by Cavium and subject to change at any time.",
+            "Cavium HSM attestation V2 compressed with gzip. This is a new format\nintroduced in Cavium's version 3.2-08."
           ],
           "type": "string"
         }
@@ -1606,12 +1738,15 @@
             "RSA_SIGN_PSS_2048_SHA256",
             "RSA_SIGN_PSS_3072_SHA256",
             "RSA_SIGN_PSS_4096_SHA256",
+            "RSA_SIGN_PSS_4096_SHA512",
             "RSA_SIGN_PKCS1_2048_SHA256",
             "RSA_SIGN_PKCS1_3072_SHA256",
             "RSA_SIGN_PKCS1_4096_SHA256",
+            "RSA_SIGN_PKCS1_4096_SHA512",
             "RSA_DECRYPT_OAEP_2048_SHA256",
             "RSA_DECRYPT_OAEP_3072_SHA256",
             "RSA_DECRYPT_OAEP_4096_SHA256",
+            "RSA_DECRYPT_OAEP_4096_SHA512",
             "EC_SIGN_P256_SHA256",
             "EC_SIGN_P384_SHA384"
           ],
@@ -1621,12 +1756,15 @@
             "RSASSA-PSS 2048 bit key with a SHA256 digest.",
             "RSASSA-PSS 3072 bit key with a SHA256 digest.",
             "RSASSA-PSS 4096 bit key with a SHA256 digest.",
+            "RSASSA-PSS 4096 bit key with a SHA512 digest.",
             "RSASSA-PKCS1-v1_5 with a 2048 bit key and a SHA256 digest.",
             "RSASSA-PKCS1-v1_5 with a 3072 bit key and a SHA256 digest.",
             "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA256 digest.",
+            "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA512 digest.",
             "RSAES-OAEP 2048 bit key with a SHA256 digest.",
             "RSAES-OAEP 3072 bit key with a SHA256 digest.",
             "RSAES-OAEP 4096 bit key with a SHA256 digest.",
+            "RSAES-OAEP 4096 bit key with a SHA512 digest.",
             "ECDSA on the NIST P-256 curve with a SHA256 digest.",
             "ECDSA on the NIST P-384 curve with a SHA384 digest."
           ],

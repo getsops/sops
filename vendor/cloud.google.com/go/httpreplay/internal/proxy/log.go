@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package proxy
 
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -33,13 +30,16 @@ import (
 // just want them to be stored literally. This isn't something we can fix in martian: it
 // is required in the HAR spec (http://www.softwareishard.com/blog/har-12-spec/#content).
 
-const LogVersion = "0.1"
+// LogVersion is the current version of the log format. It can be used to
+// support changes to the format over time, so newer code can read older files.
+const LogVersion = "0.2"
 
 // A Log is a record of HTTP interactions, suitable for replay. It can be serialized to JSON.
 type Log struct {
-	Initial []byte // initial data for replay
-	Version string // version of this log format
-	Entries []*Entry
+	Initial   []byte // initial data for replay
+	Version   string // version of this log format
+	Converter *Converter
+	Entries   []*Entry
 }
 
 // An Entry  single request-response pair.
@@ -51,12 +51,14 @@ type Entry struct {
 
 // A Request represents an http.Request in the log.
 type Request struct {
-	Method  string      // http.Request.Method
-	URL     string      // http.Request.URL, as a string
-	Proto   string      // http.Request.Proto
-	Header  http.Header // http.Request.Header
-	Body    []byte      // http.Request.Body, read to completion
-	Trailer http.Header `json:",omitempty"` // http.Request.Trailer
+	Method string      // http.Request.Method
+	URL    string      // http.Request.URL, as a string
+	Header http.Header // http.Request.Header
+	// We need to understand multipart bodies because the boundaries are
+	// generated randomly, so we can't just compare the entire bodies for equality.
+	MediaType string      // the media type part of the Content-Type header
+	BodyParts [][]byte    // http.Request.Body, read to completion and split for multipart
+	Trailer   http.Header `json:",omitempty"` // http.Request.Trailer
 }
 
 // A Response represents an http.Response in the log.
@@ -77,10 +79,13 @@ type Logger struct {
 	log     *Log
 }
 
-// NewLogger creates a new logger.
-func NewLogger() *Logger {
+// newLogger creates a new logger.
+func newLogger() *Logger {
 	return &Logger{
-		log:     &Log{Version: LogVersion},
+		log: &Log{
+			Version:   LogVersion,
+			Converter: defaultConverter(),
+		},
 		entries: map[string]*Entry{},
 	}
 }
@@ -94,7 +99,7 @@ func (l *Logger) ModifyRequest(req *http.Request) error {
 	if ctx.SkippingLogging() {
 		return nil
 	}
-	lreq, err := fromHTTPRequest(req)
+	lreq, err := l.log.Converter.convertRequest(req)
 	if err != nil {
 		return err
 	}
@@ -119,7 +124,7 @@ func (l *Logger) ModifyResponse(res *http.Response) error {
 		return nil
 	}
 	id := ctx.ID()
-	lres, err := fromHTTPResponse(res)
+	lres, err := l.log.Converter.convertResponse(res)
 	if err != nil {
 		return err
 	}
@@ -145,37 +150,6 @@ func (l *Logger) Extract() *Log {
 	return r
 }
 
-func fromHTTPRequest(req *http.Request) (*Request, error) {
-	data, err := snapshotBody(&req.Body)
-	if err != nil {
-		return nil, err
-	}
-	return &Request{
-		Method:  req.Method,
-		URL:     req.URL.String(),
-		Proto:   req.Proto,
-		Header:  redactHeaders(req.Header),
-		Body:    data,
-		Trailer: req.Trailer,
-	}, nil
-}
-
-func fromHTTPResponse(res *http.Response) (*Response, error) {
-	data, err := snapshotBody(&res.Body)
-	if err != nil {
-		return nil, err
-	}
-	return &Response{
-		StatusCode: res.StatusCode,
-		Proto:      res.Proto,
-		ProtoMajor: res.ProtoMajor,
-		ProtoMinor: res.ProtoMinor,
-		Header:     res.Header,
-		Body:       data,
-		Trailer:    res.Trailer,
-	}, nil
-}
-
 func toHTTPResponse(lr *Response, req *http.Request) *http.Response {
 	res := &http.Response{
 		StatusCode:    lr.StatusCode,
@@ -198,35 +172,4 @@ func toHTTPResponse(lr *Response, req *http.Request) *http.Response {
 		}
 	}
 	return res
-}
-
-func snapshotBody(body *io.ReadCloser) ([]byte, error) {
-	data, err := ioutil.ReadAll(*body)
-	if err != nil {
-		return nil, err
-	}
-	(*body).Close()
-	*body = ioutil.NopCloser(bytes.NewReader(data))
-	return data, nil
-}
-
-// Headers that may contain sensitive data (auth tokens, keys).
-var sensitiveHeaders = map[string]bool{
-	"Authorization":                     true,
-	"Proxy-Authorization":               true,
-	"X-Goog-Encryption-Key":             true, // used by Cloud Storage for customer-supplied encryption
-	"X-Goog-Copy-Source-Encryption-Key": true, // ditto
-}
-
-// Copy headers, redacting sensitive ones.
-func redactHeaders(hs http.Header) http.Header {
-	rh := http.Header{}
-	for k, v := range hs {
-		if sensitiveHeaders[k] {
-			rh.Set(k, "REDACTED")
-		} else {
-			rh[k] = v
-		}
-	}
-	return rh
 }

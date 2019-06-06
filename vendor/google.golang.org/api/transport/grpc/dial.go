@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All Rights Reserved.
+// Copyright 2015 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package transport/grpc supports network connections to GRPC servers.
+// Package grpc supports network connections to GRPC servers.
 // This package is not intended for use by end developers. Use the
 // google.golang.org/api/option package to configure API clients.
 package grpc
 
 import (
+	"context"
 	"errors"
 	"log"
+	"os"
+	"strings"
 
-	"golang.org/x/net/context"
+	"go.opencensus.io/plugin/ocgrpc"
+	"golang.org/x/oauth2"
 	"google.golang.org/api/internal"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	grpcgoogle "google.golang.org/grpc/credentials/google"
 	"google.golang.org/grpc/credentials/oauth"
+
+	// Install grpclb, which is required for direct path.
+	_ "google.golang.org/grpc/balancer/grpclb"
 )
 
 // Set at init time by dial_appengine.go. If nil, we're not on App Engine.
@@ -70,9 +78,31 @@ func dial(ctx context.Context, insecure bool, opts []option.ClientOption) (*grpc
 		if err != nil {
 			return nil, err
 		}
-		grpcOpts = []grpc.DialOption{
-			grpc.WithPerRPCCredentials(oauth.TokenSource{creds.TokenSource}),
-			grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
+		// Attempt Direct Path only if:
+		// * The endpoint is a host:port (or dns:///host:port).
+		// * Credentials are obtained via GCE metadata server, using the default
+		//   service account.
+		// * Opted in via GOOGLE_CLOUD_ENABLE_DIRECT_PATH environment variable.
+		//   For example, GOOGLE_CLOUD_ENABLE_DIRECT_PATH=spanner,pubsub
+		if isDirectPathEnabled(o.Endpoint) && isTokenSourceDirectPathCompatible(creds.TokenSource) {
+			if !strings.HasPrefix(o.Endpoint, "dns:///") {
+				o.Endpoint = "dns:///" + o.Endpoint
+			}
+			grpcOpts = []grpc.DialOption{
+				grpc.WithCredentialsBundle(
+					grpcgoogle.NewComputeEngineCredentials(),
+				),
+			}
+			// TODO(cbro): add support for system parameters (quota project, request reason) via chained interceptor.
+		} else {
+			grpcOpts = []grpc.DialOption{
+				grpc.WithPerRPCCredentials(grpcTokenSource{
+					TokenSource:   oauth.TokenSource{creds.TokenSource},
+					quotaProject:  o.QuotaProject,
+					requestReason: o.RequestReason,
+				}),
+				grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
+			}
 		}
 	}
 	if appengineDialerHook != nil {
@@ -88,4 +118,77 @@ func dial(ctx context.Context, insecure bool, opts []option.ClientOption) (*grpc
 		grpcOpts = append(grpcOpts, grpc.WithUserAgent(o.UserAgent))
 	}
 	return grpc.DialContext(ctx, o.Endpoint, grpcOpts...)
+}
+
+func addOCStatsHandler(opts []grpc.DialOption) []grpc.DialOption {
+	return append(opts, grpc.WithStatsHandler(&ocgrpc.ClientHandler{}))
+}
+
+// grpcTokenSource supplies PerRPCCredentials from an oauth.TokenSource.
+type grpcTokenSource struct {
+	oauth.TokenSource
+
+	// Additional metadata attached as headers.
+	quotaProject  string
+	requestReason string
+}
+
+// GetRequestMetadata gets the request metadata as a map from a grpcTokenSource.
+func (ts grpcTokenSource) GetRequestMetadata(ctx context.Context, uri ...string) (
+	map[string]string, error) {
+	metadata, err := ts.TokenSource.GetRequestMetadata(ctx, uri...)
+	if err != nil {
+		return nil, err
+	}
+
+	// Attach system parameters into the metadata
+	if ts.quotaProject != "" {
+		metadata["X-goog-user-project"] = ts.quotaProject
+	}
+	if ts.requestReason != "" {
+		metadata["X-goog-request-reason"] = ts.requestReason
+	}
+	return metadata, nil
+}
+
+func isTokenSourceDirectPathCompatible(ts oauth2.TokenSource) bool {
+	if ts == nil {
+		return false
+	}
+	tok, err := ts.Token()
+	if err != nil {
+		return false
+	}
+	if tok == nil {
+		return false
+	}
+	if source, _ := tok.Extra("oauth2.google.tokenSource").(string); source != "compute-metadata" {
+		return false
+	}
+	if acct, _ := tok.Extra("oauth2.google.serviceAccount").(string); acct != "default" {
+		return false
+	}
+	return true
+}
+
+func isDirectPathEnabled(endpoint string) bool {
+	// Only host:port is supported, not other schemes (e.g., "tcp://" or "unix://").
+	// Also don't try direct path if the user has chosen an alternate name resolver
+	// (i.e., via ":///" prefix).
+	//
+	// TODO(cbro): once gRPC has introspectible options, check the user hasn't
+	// provided a custom dialer in gRPC options.
+	if strings.Contains(endpoint, "://") && !strings.HasPrefix(endpoint, "dns:///") {
+		return false
+	}
+
+	// Only try direct path if the user has opted in via the environment variable.
+	whitelist := strings.Split(os.Getenv("GOOGLE_CLOUD_ENABLE_DIRECT_PATH"), ",")
+	for _, api := range whitelist {
+		// Ignore empty string since an empty env variable splits into [""]
+		if api != "" && strings.Contains(endpoint, api) {
+			return true
+		}
+	}
+	return false
 }

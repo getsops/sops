@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -46,6 +47,16 @@ func NewClientWithBaseURI(baseURI string, subscriptionID uuid.UUID) Client {
 // operationInputs - set the name parameter in the OperationInputs structure to the name of the IoTSpaces
 // instance to check.
 func (client Client) CheckNameAvailability(ctx context.Context, operationInputs OperationInputs) (result NameAvailabilityInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: operationInputs,
 			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -122,6 +133,16 @@ func (client Client) CheckNameAvailabilityResponder(resp *http.Response) (result
 // resourceName - the name of the IoTSpaces instance.
 // iotSpaceDescription - the IoTSpaces instance metadata and security metadata.
 func (client Client) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotSpaceDescription Description) (result CreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -181,10 +202,6 @@ func (client Client) CreateOrUpdateSender(req *http.Request) (future CreateOrUpd
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -207,6 +224,16 @@ func (client Client) CreateOrUpdateResponder(resp *http.Response) (result Descri
 // resourceGroupName - the name of the resource group that contains the IoTSpaces instance.
 // resourceName - the name of the IoTSpaces instance.
 func (client Client) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result DeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -262,10 +289,6 @@ func (client Client) DeleteSender(req *http.Request) (future DeleteFuture, err e
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -288,6 +311,16 @@ func (client Client) DeleteResponder(resp *http.Response) (result Description, e
 // resourceGroupName - the name of the resource group that contains the IoTSpaces instance.
 // resourceName - the name of the IoTSpaces instance.
 func (client Client) Get(ctx context.Context, resourceGroupName string, resourceName string) (result Description, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -362,6 +395,16 @@ func (client Client) GetResponder(resp *http.Response) (result Description, err 
 
 // List get all the IoTSpaces instances in a subscription.
 func (client Client) List(ctx context.Context) (result DescriptionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -424,8 +467,8 @@ func (client Client) ListResponder(resp *http.Response) (result DescriptionListR
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client Client) listNextResults(lastResults DescriptionListResult) (result DescriptionListResult, err error) {
-	req, err := lastResults.descriptionListResultPreparer()
+func (client Client) listNextResults(ctx context.Context, lastResults DescriptionListResult) (result DescriptionListResult, err error) {
+	req, err := lastResults.descriptionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "iotspaces.Client", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -446,6 +489,16 @@ func (client Client) listNextResults(lastResults DescriptionListResult) (result 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListComplete(ctx context.Context) (result DescriptionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -454,6 +507,16 @@ func (client Client) ListComplete(ctx context.Context) (result DescriptionListRe
 // Parameters:
 // resourceGroupName - the name of the resource group that contains the IoTSpaces instance.
 func (client Client) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result DescriptionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -524,8 +587,8 @@ func (client Client) ListByResourceGroupResponder(resp *http.Response) (result D
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client Client) listByResourceGroupNextResults(lastResults DescriptionListResult) (result DescriptionListResult, err error) {
-	req, err := lastResults.descriptionListResultPreparer()
+func (client Client) listByResourceGroupNextResults(ctx context.Context, lastResults DescriptionListResult) (result DescriptionListResult, err error) {
+	req, err := lastResults.descriptionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "iotspaces.Client", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -546,6 +609,16 @@ func (client Client) listByResourceGroupNextResults(lastResults DescriptionListR
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result DescriptionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -556,6 +629,16 @@ func (client Client) ListByResourceGroupComplete(ctx context.Context, resourceGr
 // resourceName - the name of the IoTSpaces instance.
 // iotSpacePatchDescription - the IoTSpaces instance metadata and security metadata.
 func (client Client) Update(ctx context.Context, resourceGroupName string, resourceName string, iotSpacePatchDescription PatchDescription) (result UpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -610,10 +693,6 @@ func (client Client) UpdateSender(req *http.Request) (future UpdateFuture, err e
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

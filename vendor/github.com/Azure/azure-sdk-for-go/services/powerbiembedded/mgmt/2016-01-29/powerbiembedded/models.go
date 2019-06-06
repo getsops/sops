@@ -18,10 +18,14 @@ package powerbiembedded
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/powerbiembedded/mgmt/2016-01-29/powerbiembedded"
 
 // AccessKeyName enumerates the values for access key name.
 type AccessKeyName string
@@ -220,7 +224,9 @@ func (wc WorkspaceCollection) MarshalJSON() ([]byte, error) {
 	if wc.Sku != nil {
 		objectMap["sku"] = wc.Sku
 	}
-	objectMap["properties"] = wc.Properties
+	if wc.Properties != nil {
+		objectMap["properties"] = wc.Properties
+	}
 	return json.Marshal(objectMap)
 }
 
@@ -245,8 +251,8 @@ type WorkspaceCollectionList struct {
 	Value             *[]WorkspaceCollection `json:"value,omitempty"`
 }
 
-// WorkspaceCollectionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// WorkspaceCollectionsDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type WorkspaceCollectionsDeleteFuture struct {
 	azure.Future
 }
@@ -255,7 +261,7 @@ type WorkspaceCollectionsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *WorkspaceCollectionsDeleteFuture) Result(client WorkspaceCollectionsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return

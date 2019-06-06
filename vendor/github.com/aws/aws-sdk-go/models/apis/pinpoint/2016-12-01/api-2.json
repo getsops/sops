@@ -551,6 +551,33 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "DeleteVoiceChannel" : {
+      "name" : "DeleteVoiceChannel",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/apps/{application-id}/channels/voice",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DeleteVoiceChannelRequest"
+      },
+      "output" : {
+        "shape" : "DeleteVoiceChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "GetAdmChannel" : {
       "name" : "GetAdmChannel",
       "http" : {
@@ -1388,6 +1415,48 @@
         "shape" : "TooManyRequestsException"
       } ]
     },
+    "GetVoiceChannel" : {
+      "name" : "GetVoiceChannel",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/apps/{application-id}/channels/voice",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetVoiceChannelRequest"
+      },
+      "output" : {
+        "shape" : "GetVoiceChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "ListTagsForResource" : {
+      "name" : "ListTagsForResource",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/tags/{resource-arn}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListTagsForResourceRequest"
+      },
+      "output" : {
+        "shape" : "ListTagsForResourceResponse"
+      },
+      "errors" : [ ]
+    },
     "PhoneNumberValidate" : {
       "name" : "PhoneNumberValidate",
       "http" : {
@@ -1549,6 +1618,30 @@
       }, {
         "shape" : "TooManyRequestsException"
       } ]
+    },
+    "TagResource" : {
+      "name" : "TagResource",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/v1/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "TagResourceRequest"
+      },
+      "errors" : [ ]
+    },
+    "UntagResource" : {
+      "name" : "UntagResource",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "UntagResourceRequest"
+      },
+      "errors" : [ ]
     },
     "UpdateAdmChannel" : {
       "name" : "UpdateAdmChannel",
@@ -1913,6 +2006,33 @@
       },
       "output" : {
         "shape" : "UpdateSmsChannelResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "MethodNotAllowedException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
+    "UpdateVoiceChannel" : {
+      "name" : "UpdateVoiceChannel",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/v1/apps/{application-id}/channels/voice",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateVoiceChannelRequest"
+      },
+      "output" : {
+        "shape" : "UpdateVoiceChannelResponse"
       },
       "errors" : [ {
         "shape" : "BadRequestException"
@@ -2465,11 +2585,18 @@
     "ApplicationResponse" : {
       "type" : "structure",
       "members" : {
+        "Arn" : {
+          "shape" : "__string"
+        },
         "Id" : {
           "shape" : "__string"
         },
         "Name" : {
           "shape" : "__string"
+        },
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
         }
       },
       "required" : [ ]
@@ -2671,6 +2798,18 @@
       },
       "required" : [ ]
     },
+    "CampaignEventFilter" : {
+      "type" : "structure",
+      "members" : {
+        "Dimensions" : {
+          "shape" : "EventDimensions"
+        },
+        "FilterType" : {
+          "shape" : "FilterType"
+        }
+      },
+      "required" : [ ]
+    },
     "CampaignHook" : {
       "type" : "structure",
       "members" : {
@@ -2709,6 +2848,9 @@
           "shape" : "ListOfTreatmentResource"
         },
         "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "Arn" : {
           "shape" : "__string"
         },
         "CreationDate" : {
@@ -2755,6 +2897,10 @@
         },
         "State" : {
           "shape" : "CampaignState"
+        },
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
         },
         "TreatmentDescription" : {
           "shape" : "__string"
@@ -2840,7 +2986,7 @@
     },
     "ChannelType" : {
       "type" : "string",
-      "enum" : [ "GCM", "APNS", "APNS_SANDBOX", "APNS_VOIP", "APNS_VOIP_SANDBOX", "ADM", "SMS", "EMAIL", "BAIDU", "CUSTOM" ]
+      "enum" : [ "GCM", "APNS", "APNS_SANDBOX", "APNS_VOIP", "APNS_VOIP_SANDBOX", "ADM", "SMS", "VOICE", "EMAIL", "BAIDU", "CUSTOM" ]
     },
     "ChannelsResponse" : {
       "type" : "structure",
@@ -2876,6 +3022,10 @@
       "members" : {
         "Name" : {
           "shape" : "__string"
+        },
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
         }
       },
       "required" : [ ]
@@ -3352,6 +3502,27 @@
       "required" : [ "EndpointsResponse" ],
       "payload" : "EndpointsResponse"
     },
+    "DeleteVoiceChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "DeleteVoiceChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "VoiceChannelResponse" : {
+          "shape" : "VoiceChannelResponse"
+        }
+      },
+      "required" : [ "VoiceChannelResponse" ],
+      "payload" : "VoiceChannelResponse"
+    },
     "DeliveryStatus" : {
       "type" : "string",
       "enum" : [ "SUCCESSFUL", "THROTTLED", "TEMPORARY_FAILURE", "PERMANENT_FAILURE", "UNKNOWN_FAILURE", "OPT_OUT", "DUPLICATE" ]
@@ -3378,11 +3549,17 @@
         "DefaultPushNotificationMessage" : {
           "shape" : "DefaultPushNotificationMessage"
         },
+        "EmailMessage" : {
+          "shape" : "EmailMessage"
+        },
         "GCMMessage" : {
           "shape" : "GCMMessage"
         },
         "SMSMessage" : {
           "shape" : "SMSMessage"
+        },
+        "VoiceMessage" : {
+          "shape" : "VoiceMessage"
         }
       },
       "required" : [ ]
@@ -3394,6 +3571,9 @@
     "EmailChannelRequest" : {
       "type" : "structure",
       "members" : {
+        "ConfigurationSet" : {
+          "shape" : "__string"
+        },
         "Enabled" : {
           "shape" : "__boolean"
         },
@@ -3413,6 +3593,9 @@
       "type" : "structure",
       "members" : {
         "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "ConfigurationSet" : {
           "shape" : "__string"
         },
         "CreationDate" : {
@@ -3456,6 +3639,32 @@
         }
       },
       "required" : [ ]
+    },
+    "EmailMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Body" : {
+          "shape" : "__string"
+        },
+        "FeedbackForwardingAddress" : {
+          "shape" : "__string"
+        },
+        "FromAddress" : {
+          "shape" : "__string"
+        },
+        "RawEmail" : {
+          "shape" : "RawEmail"
+        },
+        "ReplyToAddresses" : {
+          "shape" : "ListOf__string"
+        },
+        "SimpleEmail" : {
+          "shape" : "SimpleEmail"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        }
+      }
     },
     "EndpointBatchItem" : {
       "type" : "structure",
@@ -3725,6 +3934,15 @@
     "Event" : {
       "type" : "structure",
       "members" : {
+        "AppPackageName" : {
+          "shape" : "__string"
+        },
+        "AppTitle" : {
+          "shape" : "__string"
+        },
+        "AppVersionCode" : {
+          "shape" : "__string"
+        },
         "Attributes" : {
           "shape" : "MapOf__string"
         },
@@ -3737,6 +3955,9 @@
         "Metrics" : {
           "shape" : "MapOf__double"
         },
+        "SdkName" : {
+          "shape" : "__string"
+        },
         "Session" : {
           "shape" : "Session"
         },
@@ -3745,6 +3966,20 @@
         }
       },
       "required" : [ ]
+    },
+    "EventDimensions" : {
+      "type" : "structure",
+      "members" : {
+        "Attributes" : {
+          "shape" : "MapOfAttributeDimension"
+        },
+        "EventType" : {
+          "shape" : "SetDimension"
+        },
+        "Metrics" : {
+          "shape" : "MapOfMetricDimension"
+        }
+      }
     },
     "EventItemResponse" : {
       "type" : "structure",
@@ -3903,6 +4138,10 @@
       },
       "required" : [ ]
     },
+    "FilterType" : {
+      "type" : "string",
+      "enum" : [ "SYSTEM", "ENDPOINT" ]
+    },
     "ForbiddenException" : {
       "type" : "structure",
       "members" : {
@@ -3924,7 +4163,7 @@
     },
     "Frequency" : {
       "type" : "string",
-      "enum" : [ "ONCE", "HOURLY", "DAILY", "WEEKLY", "MONTHLY" ]
+      "enum" : [ "ONCE", "HOURLY", "DAILY", "WEEKLY", "MONTHLY", "EVENT" ]
     },
     "GCMChannelRequest" : {
       "type" : "structure",
@@ -4877,6 +5116,27 @@
       "required" : [ "EndpointsResponse" ],
       "payload" : "EndpointsResponse"
     },
+    "GetVoiceChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        }
+      },
+      "required" : [ "ApplicationId" ]
+    },
+    "GetVoiceChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "VoiceChannelResponse" : {
+          "shape" : "VoiceChannelResponse"
+        }
+      },
+      "required" : [ "VoiceChannelResponse" ],
+      "payload" : "VoiceChannelResponse"
+    },
     "ImportJobRequest" : {
       "type" : "structure",
       "members" : {
@@ -5027,6 +5287,27 @@
     "JobStatus" : {
       "type" : "string",
       "enum" : [ "CREATED", "INITIALIZING", "PROCESSING", "COMPLETING", "COMPLETED", "FAILING", "FAILED" ]
+    },
+    "ListTagsForResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        }
+      },
+      "required" : [ "ResourceArn" ]
+    },
+    "ListTagsForResourceResponse" : {
+      "type" : "structure",
+      "members" : {
+        "TagsModel" : {
+          "shape" : "TagsModel"
+        }
+      },
+      "required" : [ "TagsModel" ],
+      "payload" : "TagsModel"
     },
     "Message" : {
       "type" : "structure",
@@ -5195,7 +5476,8 @@
         "Value" : {
           "shape" : "__double"
         }
-      }
+      },
+      "required" : [ ]
     },
     "Mode" : {
       "type" : "string",
@@ -5393,6 +5675,17 @@
         }
       }
     },
+    "RawEmail" : {
+      "type" : "structure",
+      "members" : {
+        "Data" : {
+          "shape" : "__blob"
+        }
+      }
+    },
+    "__blob" : {
+      "type" : "blob"
+    },
     "RecencyDimension" : {
       "type" : "structure",
       "members" : {
@@ -5530,6 +5823,9 @@
       "members" : {
         "EndTime" : {
           "shape" : "__string"
+        },
+        "EventFilter" : {
+          "shape" : "CampaignEventFilter"
         },
         "Frequency" : {
           "shape" : "Frequency"
@@ -5677,12 +5973,16 @@
         "Version" : {
           "shape" : "__integer"
         }
-      }
+      },
+      "required" : [ ]
     },
     "SegmentResponse" : {
       "type" : "structure",
       "members" : {
         "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "Arn" : {
           "shape" : "__string"
         },
         "CreationDate" : {
@@ -5708,6 +6008,10 @@
         },
         "SegmentType" : {
           "shape" : "SegmentType"
+        },
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
         },
         "Version" : {
           "shape" : "__integer"
@@ -5844,9 +6148,59 @@
       },
       "required" : [ ]
     },
+    "SimpleEmail" : {
+      "type" : "structure",
+      "members" : {
+        "HtmlPart" : {
+          "shape" : "SimpleEmailPart"
+        },
+        "Subject" : {
+          "shape" : "SimpleEmailPart"
+        },
+        "TextPart" : {
+          "shape" : "SimpleEmailPart"
+        }
+      }
+    },
+    "SimpleEmailPart" : {
+      "type" : "structure",
+      "members" : {
+        "Charset" : {
+          "shape" : "__string"
+        },
+        "Data" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "SourceType" : {
       "type" : "string",
       "enum" : [ "ALL", "ANY", "NONE" ]
+    },
+    "TagResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "TagsModel" : {
+          "shape" : "TagsModel"
+        }
+      },
+      "required" : [ "ResourceArn", "TagsModel" ],
+      "payload" : "TagsModel"
+    },
+    "TagsModel" : {
+      "type" : "structure",
+      "members" : {
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
+        }
+      },
+      "required" : [ "tags" ]
     },
     "TooManyRequestsException" : {
       "type" : "structure",
@@ -5893,6 +6247,22 @@
     "Type" : {
       "type" : "string",
       "enum" : [ "ALL", "ANY", "NONE" ]
+    },
+    "UntagResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "TagKeys" : {
+          "shape" : "ListOf__string",
+          "location" : "querystring",
+          "locationName" : "tagKeys"
+        }
+      },
+      "required" : [ "TagKeys", "ResourceArn" ]
     },
     "UpdateAdmChannelRequest" : {
       "type" : "structure",
@@ -6267,6 +6637,96 @@
       "required" : [ "SMSChannelResponse" ],
       "payload" : "SMSChannelResponse"
     },
+    "UpdateVoiceChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "application-id"
+        },
+        "VoiceChannelRequest" : {
+          "shape" : "VoiceChannelRequest"
+        }
+      },
+      "required" : [ "ApplicationId", "VoiceChannelRequest" ],
+      "payload" : "VoiceChannelRequest"
+    },
+    "UpdateVoiceChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "VoiceChannelResponse" : {
+          "shape" : "VoiceChannelResponse"
+        }
+      },
+      "required" : [ "VoiceChannelResponse" ],
+      "payload" : "VoiceChannelResponse"
+    },
+    "VoiceChannelRequest" : {
+      "type" : "structure",
+      "members" : {
+        "Enabled" : {
+          "shape" : "__boolean"
+        }
+      },
+      "required" : [ ]
+    },
+    "VoiceChannelResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ApplicationId" : {
+          "shape" : "__string"
+        },
+        "CreationDate" : {
+          "shape" : "__string"
+        },
+        "Enabled" : {
+          "shape" : "__boolean"
+        },
+        "HasCredential" : {
+          "shape" : "__boolean"
+        },
+        "Id" : {
+          "shape" : "__string"
+        },
+        "IsArchived" : {
+          "shape" : "__boolean"
+        },
+        "LastModifiedBy" : {
+          "shape" : "__string"
+        },
+        "LastModifiedDate" : {
+          "shape" : "__string"
+        },
+        "Platform" : {
+          "shape" : "__string"
+        },
+        "Version" : {
+          "shape" : "__integer"
+        }
+      },
+      "required" : [ ]
+    },
+    "VoiceMessage" : {
+      "type" : "structure",
+      "members" : {
+        "Body" : {
+          "shape" : "__string"
+        },
+        "LanguageCode" : {
+          "shape" : "__string"
+        },
+        "OriginationNumber" : {
+          "shape" : "__string"
+        },
+        "Substitutions" : {
+          "shape" : "MapOfListOf__string"
+        },
+        "VoiceId" : {
+          "shape" : "__string"
+        }
+      }
+    },
     "WriteApplicationSettingsRequest" : {
       "type" : "structure",
       "members" : {
@@ -6320,6 +6780,10 @@
         "SegmentVersion" : {
           "shape" : "__integer"
         },
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
+        },
         "TreatmentDescription" : {
           "shape" : "__string"
         },
@@ -6351,6 +6815,10 @@
         },
         "SegmentGroups" : {
           "shape" : "SegmentGroupList"
+        },
+        "tags": {
+          "shape" : "MapOf__string",
+          "locationName" : "tags"
         }
       },
       "required" : [ ]

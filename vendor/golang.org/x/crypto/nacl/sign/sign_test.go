@@ -40,7 +40,7 @@ func TestOpen(t *testing.T) {
 	if !bytes.Equal(message, testMessage) {
 		t.Fatalf("message did not match, got\n%x\n, expected\n%x", message, testMessage)
 	}
-	message, ok = Open(nil, testSignedMessage[1:], &testPublicKey)
+	_, ok = Open(nil, testSignedMessage[1:], &testPublicKey)
 	if ok {
 		t.Fatalf("invalid signed message successfully verified")
 	}

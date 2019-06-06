@@ -16,7 +16,7 @@ const opGetMedia = "GetMedia"
 // GetMediaRequest generates a "aws/request.Request" representing the
 // client's request for the GetMedia operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -56,12 +56,13 @@ func (c *KinesisVideoMedia) GetMediaRequest(input *GetMediaInput) (req *request.
 // GetMedia API operation for Amazon Kinesis Video Streams Media.
 //
 // Use this API to retrieve media content from a Kinesis video stream. In the
-// request, you identify stream name or stream Amazon Resource Name (ARN), and
-// the starting chunk. Kinesis Video Streams then returns a stream of chunks
+// request, you identify the stream name or stream Amazon Resource Name (ARN),
+// and the starting chunk. Kinesis Video Streams then returns a stream of chunks
 // in order by fragment number.
 //
-// You must first call the GetDataEndpoint API to get an endpoint to which you
-// can then send the GetMedia requests.
+// You must first call the GetDataEndpoint API to get an endpoint. Then send
+// the GetMedia requests to this endpoint using the --endpoint-url parameter
+// (https://docs.aws.amazon.com/cli/latest/reference/).
 //
 // When you put media data (fragments) on a stream, Kinesis Video Streams stores
 // each incoming fragment and related metadata in what is called a "chunk."
@@ -219,9 +220,9 @@ type GetMediaOutput struct {
 	//
 	//    * AWS_KINESISVIDEO_FRAGMENT_NUMBER - Fragment number returned in the chunk.
 	//
-	//    * AWS_KINESISVIDEO_SERVER_TIMESTAMP - Server time stamp of the fragment.
+	//    * AWS_KINESISVIDEO_SERVER_TIMESTAMP - Server timestamp of the fragment.
 	//
-	//    * AWS_KINESISVIDEO_PRODUCER_TIMESTAMP - Producer time stamp of the fragment.
+	//    * AWS_KINESISVIDEO_PRODUCER_TIMESTAMP - Producer timestamp of the fragment.
 	//
 	// The following tags will be present if an error occurs:
 	//
@@ -240,7 +241,7 @@ type GetMediaOutput struct {
 	//
 	//    * 4501 - Stream's KMS key is disabled
 	//
-	//    * 4502 - Validation error on the Stream's KMS key
+	//    * 4502 - Validation error on the stream's KMS key
 	//
 	//    * 4503 - KMS key specified in the stream is unavailable
 	//
@@ -283,7 +284,7 @@ func (s *GetMediaOutput) SetPayload(v io.ReadCloser) *GetMediaOutput {
 //    * Choose the latest (or oldest) chunk.
 //
 //    * Identify a specific chunk. You can identify a specific chunk either
-//    by providing a fragment number or time stamp (server or producer).
+//    by providing a fragment number or timestamp (server or producer).
 //
 //    * Each chunk's metadata includes a continuation token as a Matroska (MKV)
 //    tag (AWS_KINESISVIDEO_CONTINUATION_TOKEN). If your previous GetMedia request
@@ -312,10 +313,10 @@ type StartSelector struct {
 	//    You must also specify the StartFragmentNumber.
 	//
 	//    * PRODUCER_TIMESTAMP or SERVER_TIMESTAMP - Start with the chunk containing
-	//    a fragment with the specified producer or server time stamp. You specify
-	//    the time stamp by adding StartTimestamp.
+	//    a fragment with the specified producer or server timestamp. You specify
+	//    the timestamp by adding StartTimestamp.
 	//
-	//    *  CONTINUATION_TOKEN - Read using the specified continuation token.
+	//    * CONTINUATION_TOKEN - Read using the specified continuation token.
 	//
 	// If you choose the NOW, EARLIEST, or CONTINUATION_TOKEN as the startSelectorType,
 	// you don't provide any additional information in the startSelector.
@@ -323,9 +324,9 @@ type StartSelector struct {
 	// StartSelectorType is a required field
 	StartSelectorType *string `type:"string" required:"true" enum:"StartSelectorType"`
 
-	// A time stamp value. This value is required if you choose the PRODUCER_TIMESTAMP
+	// A timestamp value. This value is required if you choose the PRODUCER_TIMESTAMP
 	// or the SERVER_TIMESTAMP as the startSelectorType. The GetMedia API then starts
-	// with the chunk containing the fragment that has the specified time stamp.
+	// with the chunk containing the fragment that has the specified timestamp.
 	StartTimestamp *time.Time `type:"timestamp"`
 }
 

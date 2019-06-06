@@ -27,6 +27,9 @@ import (
 )
 
 var goroutinesToIgnore = []string{
+	"net/http/transport.go",
+	"net/http/h2_bundle.go",
+	"src/go.opencensus.io/stats/view/worker.go",
 	"testing.Main(",
 	"testing.tRunner(",
 	"testing.(*M).",

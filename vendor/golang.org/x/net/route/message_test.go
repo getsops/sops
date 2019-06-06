@@ -162,20 +162,20 @@ func TestRouteMessage(t *testing.T) {
 				{
 					Type: sysRTM_GET,
 					Addrs: []Addr{
-						&Inet4Addr{IP: [4]byte{127, 0, 0, 1}},
-						nil,
-						nil,
-						nil,
-						&LinkAddr{},
-						&Inet4Addr{},
-						nil,
-						&Inet4Addr{},
+						sysRTAX_DST:     &Inet4Addr{IP: [4]byte{127, 0, 0, 1}},
+						sysRTAX_GATEWAY: nil,
+						sysRTAX_NETMASK: nil,
+						sysRTAX_GENMASK: nil,
+						sysRTAX_IFP:     &LinkAddr{},
+						sysRTAX_IFA:     &Inet4Addr{},
+						sysRTAX_AUTHOR:  nil,
+						sysRTAX_BRD:     &Inet4Addr{},
 					},
 				},
 				{
 					Type: sysRTM_GET,
 					Addrs: []Addr{
-						&Inet4Addr{IP: [4]byte{127, 0, 0, 1}},
+						sysRTAX_DST: &Inet4Addr{IP: [4]byte{127, 0, 0, 1}},
 					},
 				},
 			}...)
@@ -184,20 +184,20 @@ func TestRouteMessage(t *testing.T) {
 				{
 					Type: sysRTM_GET,
 					Addrs: []Addr{
-						&Inet6Addr{IP: [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}},
-						nil,
-						nil,
-						nil,
-						&LinkAddr{},
-						&Inet6Addr{},
-						nil,
-						&Inet6Addr{},
+						sysRTAX_DST:     &Inet6Addr{IP: [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}},
+						sysRTAX_GATEWAY: nil,
+						sysRTAX_NETMASK: nil,
+						sysRTAX_GENMASK: nil,
+						sysRTAX_IFP:     &LinkAddr{},
+						sysRTAX_IFA:     &Inet6Addr{},
+						sysRTAX_AUTHOR:  nil,
+						sysRTAX_BRD:     &Inet6Addr{},
 					},
 				},
 				{
 					Type: sysRTM_GET,
 					Addrs: []Addr{
-						&Inet6Addr{IP: [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}},
+						sysRTAX_DST: &Inet6Addr{IP: [16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}},
 					},
 				},
 			}...)
@@ -223,9 +223,8 @@ func TestRouteMessage(t *testing.T) {
 			t.Fatalf("%v: %v", m, err)
 		}
 		for _, rm := range rms {
-			err := rm.(*RouteMessage).Err
-			if err != nil {
-				t.Errorf("%v: %v", m, err)
+			if rm, ok := rm.(*RouteMessage); ok && rm.Err != nil {
+				t.Errorf("%v: %v", m, rm.Err)
 			}
 		}
 		ss, err := msgs(rms).validate()

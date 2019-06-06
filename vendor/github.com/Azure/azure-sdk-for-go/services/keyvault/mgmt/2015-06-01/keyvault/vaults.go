@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewVaultsClientWithBaseURI(baseURI string, subscriptionID string) VaultsCli
 // vaultName - name of the vault
 // parameters - parameters to create or update the vault
 func (client VaultsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, vaultName string, parameters VaultCreateOrUpdateParameters) (result Vault, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: vaultName,
 			Constraints: []validation.Constraint{{Target: "vaultName", Name: validation.Pattern, Rule: `^[a-zA-Z0-9-]{3,24}$`, Chain: nil}}},
@@ -131,6 +142,16 @@ func (client VaultsClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the Resource Group to which the vault belongs.
 // vaultName - the name of the vault to delete
 func (client VaultsClient) Delete(ctx context.Context, resourceGroupName string, vaultName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, vaultName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "keyvault.VaultsClient", "Delete", nil, "Failure preparing request")
@@ -197,6 +218,16 @@ func (client VaultsClient) DeleteResponder(resp *http.Response) (result autorest
 // resourceGroupName - the name of the Resource Group to which the vault belongs.
 // vaultName - the name of the vault.
 func (client VaultsClient) Get(ctx context.Context, resourceGroupName string, vaultName string) (result Vault, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, vaultName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "keyvault.VaultsClient", "Get", nil, "Failure preparing request")
@@ -263,6 +294,16 @@ func (client VaultsClient) GetResponder(resp *http.Response) (result Vault, err 
 // Parameters:
 // top - maximum number of results to return.
 func (client VaultsClient) List(ctx context.Context, top *int32) (result ResourceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.List")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, top)
 	if err != nil {
@@ -329,8 +370,8 @@ func (client VaultsClient) ListResponder(resp *http.Response) (result ResourceLi
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client VaultsClient) listNextResults(lastResults ResourceListResult) (result ResourceListResult, err error) {
-	req, err := lastResults.resourceListResultPreparer()
+func (client VaultsClient) listNextResults(ctx context.Context, lastResults ResourceListResult) (result ResourceListResult, err error) {
+	req, err := lastResults.resourceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "keyvault.VaultsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -351,6 +392,16 @@ func (client VaultsClient) listNextResults(lastResults ResourceListResult) (resu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VaultsClient) ListComplete(ctx context.Context, top *int32) (result ResourceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, top)
 	return
 }
@@ -361,6 +412,16 @@ func (client VaultsClient) ListComplete(ctx context.Context, top *int32) (result
 // resourceGroupName - the name of the Resource Group to which the vault belongs.
 // top - maximum number of results to return.
 func (client VaultsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, top *int32) (result VaultListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.vlr.Response.Response != nil {
+				sc = result.vlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, top)
 	if err != nil {
@@ -427,8 +488,8 @@ func (client VaultsClient) ListByResourceGroupResponder(resp *http.Response) (re
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client VaultsClient) listByResourceGroupNextResults(lastResults VaultListResult) (result VaultListResult, err error) {
-	req, err := lastResults.vaultListResultPreparer()
+func (client VaultsClient) listByResourceGroupNextResults(ctx context.Context, lastResults VaultListResult) (result VaultListResult, err error) {
+	req, err := lastResults.vaultListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "keyvault.VaultsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -449,6 +510,16 @@ func (client VaultsClient) listByResourceGroupNextResults(lastResults VaultListR
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VaultsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, top *int32) (result VaultListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, top)
 	return
 }

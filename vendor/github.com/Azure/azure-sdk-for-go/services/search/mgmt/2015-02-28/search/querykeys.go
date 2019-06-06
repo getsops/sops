@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewQueryKeysClientWithBaseURI(baseURI string, subscriptionID string) QueryK
 // resourceGroupName - the name of the resource group within the current subscription.
 // serviceName - the name of the Search service for which to list query keys.
 func (client QueryKeysClient) List(ctx context.Context, resourceGroupName string, serviceName string) (result ListQueryKeysResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/QueryKeysClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.QueryKeysClient", "List", nil, "Failure preparing request")

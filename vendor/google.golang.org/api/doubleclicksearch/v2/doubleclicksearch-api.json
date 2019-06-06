@@ -14,7 +14,7 @@
   "description": "Reports and modifies your advertising data in DoubleClick Search (for example, campaigns, ad groups, keywords, and conversions).",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/doubleclick-search/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/H5HDmm-9CkUQ1DFZsT2Y7JFDHV8\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/xqxEgtWWvH_ULTnGeL-VBWfFKDU\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -431,7 +431,7 @@
       }
     }
   },
-  "revision": "20180424",
+  "revision": "20181030",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Availability": {
@@ -966,7 +966,7 @@
             ]
           },
           "default": "10000",
-          "description": "Synchronous report only. The maxinum number of rows to return; additional rows are dropped. Acceptable values are 0 to 10000, inclusive. Defaults to 10000.",
+          "description": "Synchronous report only. The maximum number of rows to return; additional rows are dropped. Acceptable values are 0 to 10000, inclusive. Defaults to 10000.",
           "format": "int32",
           "maximum": "10000",
           "minimum": "0",

@@ -88,6 +88,14 @@ type FirehoseAPI interface {
 	PutRecordBatchWithContext(aws.Context, *firehose.PutRecordBatchInput, ...request.Option) (*firehose.PutRecordBatchOutput, error)
 	PutRecordBatchRequest(*firehose.PutRecordBatchInput) (*request.Request, *firehose.PutRecordBatchOutput)
 
+	StartDeliveryStreamEncryption(*firehose.StartDeliveryStreamEncryptionInput) (*firehose.StartDeliveryStreamEncryptionOutput, error)
+	StartDeliveryStreamEncryptionWithContext(aws.Context, *firehose.StartDeliveryStreamEncryptionInput, ...request.Option) (*firehose.StartDeliveryStreamEncryptionOutput, error)
+	StartDeliveryStreamEncryptionRequest(*firehose.StartDeliveryStreamEncryptionInput) (*request.Request, *firehose.StartDeliveryStreamEncryptionOutput)
+
+	StopDeliveryStreamEncryption(*firehose.StopDeliveryStreamEncryptionInput) (*firehose.StopDeliveryStreamEncryptionOutput, error)
+	StopDeliveryStreamEncryptionWithContext(aws.Context, *firehose.StopDeliveryStreamEncryptionInput, ...request.Option) (*firehose.StopDeliveryStreamEncryptionOutput, error)
+	StopDeliveryStreamEncryptionRequest(*firehose.StopDeliveryStreamEncryptionInput) (*request.Request, *firehose.StopDeliveryStreamEncryptionOutput)
+
 	TagDeliveryStream(*firehose.TagDeliveryStreamInput) (*firehose.TagDeliveryStreamOutput, error)
 	TagDeliveryStreamWithContext(aws.Context, *firehose.TagDeliveryStreamInput, ...request.Option) (*firehose.TagDeliveryStreamOutput, error)
 	TagDeliveryStreamRequest(*firehose.TagDeliveryStreamInput) (*request.Request, *firehose.TagDeliveryStreamOutput)

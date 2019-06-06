@@ -21,6 +21,7 @@
 package interop
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -28,7 +29,6 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/grpc"
@@ -393,6 +393,44 @@ func DoPerRPCCreds(tc testpb.TestServiceClient, serviceAccountKeyFile, oauthScop
 	}
 }
 
+// DoGoogleDefaultCredentials performs an unary RPC with google default credentials
+func DoGoogleDefaultCredentials(tc testpb.TestServiceClient, defaultServiceAccount string) {
+	pl := ClientNewPayload(testpb.PayloadType_COMPRESSABLE, largeReqSize)
+	req := &testpb.SimpleRequest{
+		ResponseType:   testpb.PayloadType_COMPRESSABLE,
+		ResponseSize:   int32(largeRespSize),
+		Payload:        pl,
+		FillUsername:   true,
+		FillOauthScope: true,
+	}
+	reply, err := tc.UnaryCall(context.Background(), req)
+	if err != nil {
+		grpclog.Fatal("/TestService/UnaryCall RPC failed: ", err)
+	}
+	if reply.GetUsername() != defaultServiceAccount {
+		grpclog.Fatalf("Got user name %q; wanted %q. ", reply.GetUsername(), defaultServiceAccount)
+	}
+}
+
+// DoComputeEngineChannelCredentials performs an unary RPC with compute engine channel credentials
+func DoComputeEngineChannelCredentials(tc testpb.TestServiceClient, defaultServiceAccount string) {
+	pl := ClientNewPayload(testpb.PayloadType_COMPRESSABLE, largeReqSize)
+	req := &testpb.SimpleRequest{
+		ResponseType:   testpb.PayloadType_COMPRESSABLE,
+		ResponseSize:   int32(largeRespSize),
+		Payload:        pl,
+		FillUsername:   true,
+		FillOauthScope: true,
+	}
+	reply, err := tc.UnaryCall(context.Background(), req)
+	if err != nil {
+		grpclog.Fatal("/TestService/UnaryCall RPC failed: ", err)
+	}
+	if reply.GetUsername() != defaultServiceAccount {
+		grpclog.Fatalf("Got user name %q; wanted %q. ", reply.GetUsername(), defaultServiceAccount)
+	}
+}
+
 var testMetadata = metadata.MD{
 	"key1": []string{"value1"},
 	"key2": []string{"value2"},
@@ -597,6 +635,40 @@ func DoUnimplementedMethod(cc *grpc.ClientConn) {
 	var req, reply proto.Message
 	if err := cc.Invoke(context.Background(), "/grpc.testing.TestService/UnimplementedCall", req, reply); err == nil || status.Code(err) != codes.Unimplemented {
 		grpclog.Fatalf("ClientConn.Invoke(_, _, _, _, _) = %v, want error code %s", err, codes.Unimplemented)
+	}
+}
+
+// DoPickFirstUnary runs multiple RPCs (rpcCount) and checks that all requests
+// are sent to the same backend.
+func DoPickFirstUnary(tc testpb.TestServiceClient) {
+	const rpcCount = 100
+
+	pl := ClientNewPayload(testpb.PayloadType_COMPRESSABLE, 1)
+	req := &testpb.SimpleRequest{
+		ResponseType: testpb.PayloadType_COMPRESSABLE,
+		ResponseSize: int32(1),
+		Payload:      pl,
+		FillServerId: true,
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	var serverID string
+	for i := 0; i < rpcCount; i++ {
+		resp, err := tc.UnaryCall(ctx, req)
+		if err != nil {
+			grpclog.Fatalf("iteration %d, failed to do UnaryCall: %v", i, err)
+		}
+		id := resp.ServerId
+		if id == "" {
+			grpclog.Fatalf("iteration %d, got empty server ID", i)
+		}
+		if i == 0 {
+			serverID = id
+			continue
+		}
+		if serverID != id {
+			grpclog.Fatalf("iteration %d, got different server ids: %q vs %q", i, serverID, id)
+		}
 	}
 }
 

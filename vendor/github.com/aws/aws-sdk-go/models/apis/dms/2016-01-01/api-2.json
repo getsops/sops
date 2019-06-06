@@ -24,6 +24,18 @@
         {"shape":"ResourceNotFoundFault"}
       ]
     },
+    "ApplyPendingMaintenanceAction":{
+      "name":"ApplyPendingMaintenanceAction",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ApplyPendingMaintenanceActionMessage"},
+      "output":{"shape":"ApplyPendingMaintenanceActionResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundFault"}
+      ]
+    },
     "CreateEndpoint":{
       "name":"CreateEndpoint",
       "http":{
@@ -51,10 +63,15 @@
       "output":{"shape":"CreateEventSubscriptionResponse"},
       "errors":[
         {"shape":"ResourceQuotaExceededFault"},
+        {"shape":"ResourceNotFoundFault"},
         {"shape":"ResourceAlreadyExistsFault"},
         {"shape":"SNSInvalidTopicFault"},
         {"shape":"SNSNoAuthorizationFault"},
-        {"shape":"ResourceNotFoundFault"}
+        {"shape":"KMSAccessDeniedFault"},
+        {"shape":"KMSDisabledFault"},
+        {"shape":"KMSInvalidStateFault"},
+        {"shape":"KMSNotFoundFault"},
+        {"shape":"KMSThrottlingFault"}
       ]
     },
     "CreateReplicationInstance":{
@@ -283,6 +300,18 @@
       "input":{"shape":"DescribeOrderableReplicationInstancesMessage"},
       "output":{"shape":"DescribeOrderableReplicationInstancesResponse"}
     },
+    "DescribePendingMaintenanceActions":{
+      "name":"DescribePendingMaintenanceActions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribePendingMaintenanceActionsMessage"},
+      "output":{"shape":"DescribePendingMaintenanceActionsResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundFault"}
+      ]
+    },
     "DescribeRefreshSchemasStatus":{
       "name":"DescribeRefreshSchemasStatus",
       "http":{
@@ -437,7 +466,12 @@
         {"shape":"ResourceQuotaExceededFault"},
         {"shape":"ResourceNotFoundFault"},
         {"shape":"SNSInvalidTopicFault"},
-        {"shape":"SNSNoAuthorizationFault"}
+        {"shape":"SNSNoAuthorizationFault"},
+        {"shape":"KMSAccessDeniedFault"},
+        {"shape":"KMSDisabledFault"},
+        {"shape":"KMSInvalidStateFault"},
+        {"shape":"KMSNotFoundFault"},
+        {"shape":"KMSThrottlingFault"}
       ]
     },
     "ModifyReplicationInstance":{
@@ -449,6 +483,7 @@
       "input":{"shape":"ModifyReplicationInstanceMessage"},
       "output":{"shape":"ModifyReplicationInstanceResponse"},
       "errors":[
+        {"shape":"AccessDeniedFault"},
         {"shape":"InvalidResourceStateFault"},
         {"shape":"ResourceAlreadyExistsFault"},
         {"shape":"ResourceNotFoundFault"},
@@ -634,6 +669,25 @@
       "members":{
       }
     },
+    "ApplyPendingMaintenanceActionMessage":{
+      "type":"structure",
+      "required":[
+        "ReplicationInstanceArn",
+        "ApplyAction",
+        "OptInType"
+      ],
+      "members":{
+        "ReplicationInstanceArn":{"shape":"String"},
+        "ApplyAction":{"shape":"String"},
+        "OptInType":{"shape":"String"}
+      }
+    },
+    "ApplyPendingMaintenanceActionResponse":{
+      "type":"structure",
+      "members":{
+        "ResourcePendingMaintenanceActions":{"shape":"ResourcePendingMaintenanceActions"}
+      }
+    },
     "AuthMechanismValue":{
       "type":"string",
       "enum":[
@@ -654,6 +708,10 @@
       "members":{
         "Name":{"shape":"String"}
       }
+    },
+    "AvailabilityZonesList":{
+      "type":"list",
+      "member":{"shape":"String"}
     },
     "Boolean":{"type":"boolean"},
     "BooleanOptional":{"type":"boolean"},
@@ -725,7 +783,10 @@
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
         "DmsTransferSettings":{"shape":"DmsTransferSettings"},
-        "MongoDbSettings":{"shape":"MongoDbSettings"}
+        "MongoDbSettings":{"shape":"MongoDbSettings"},
+        "KinesisSettings":{"shape":"KinesisSettings"},
+        "ElasticsearchSettings":{"shape":"ElasticsearchSettings"},
+        "RedshiftSettings":{"shape":"RedshiftSettings"}
       }
     },
     "CreateEndpointResponse":{
@@ -775,7 +836,8 @@
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "Tags":{"shape":"TagList"},
         "KmsKeyId":{"shape":"String"},
-        "PubliclyAccessible":{"shape":"BooleanOptional"}
+        "PubliclyAccessible":{"shape":"BooleanOptional"},
+        "DnsNameServers":{"shape":"String"}
       }
     },
     "CreateReplicationInstanceResponse":{
@@ -833,6 +895,13 @@
       "members":{
         "ReplicationTask":{"shape":"ReplicationTask"}
       }
+    },
+    "DataFormatValue":{
+      "type":"string",
+      "enum":[
+        "csv",
+        "parquet"
+      ]
     },
     "DeleteCertificateMessage":{
       "type":"structure",
@@ -1046,6 +1115,22 @@
         "Marker":{"shape":"String"}
       }
     },
+    "DescribePendingMaintenanceActionsMessage":{
+      "type":"structure",
+      "members":{
+        "ReplicationInstanceArn":{"shape":"String"},
+        "Filters":{"shape":"FilterList"},
+        "Marker":{"shape":"String"},
+        "MaxRecords":{"shape":"IntegerOptional"}
+      }
+    },
+    "DescribePendingMaintenanceActionsResponse":{
+      "type":"structure",
+      "members":{
+        "PendingMaintenanceActions":{"shape":"PendingMaintenanceActions"},
+        "Marker":{"shape":"String"}
+      }
+    },
     "DescribeRefreshSchemasStatusMessage":{
       "type":"structure",
       "required":["EndpointArn"],
@@ -1127,7 +1212,8 @@
       "members":{
         "Filters":{"shape":"FilterList"},
         "MaxRecords":{"shape":"IntegerOptional"},
-        "Marker":{"shape":"String"}
+        "Marker":{"shape":"String"},
+        "WithoutSettings":{"shape":"BooleanOptional"}
       }
     },
     "DescribeReplicationTasksResponse":{
@@ -1194,6 +1280,34 @@
         "ServiceAccessRoleArn":{"shape":"String"}
       }
     },
+    "ElasticsearchSettings":{
+      "type":"structure",
+      "required":[
+        "ServiceAccessRoleArn",
+        "EndpointUri"
+      ],
+      "members":{
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "EndpointUri":{"shape":"String"},
+        "FullLoadErrorPercentage":{"shape":"IntegerOptional"},
+        "ErrorRetryDuration":{"shape":"IntegerOptional"}
+      }
+    },
+    "EncodingTypeValue":{
+      "type":"string",
+      "enum":[
+        "plain",
+        "plain-dictionary",
+        "rle-dictionary"
+      ]
+    },
+    "EncryptionModeValue":{
+      "type":"string",
+      "enum":[
+        "sse-s3",
+        "sse-kms"
+      ]
+    },
     "Endpoint":{
       "type":"structure",
       "members":{
@@ -1217,7 +1331,10 @@
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
         "DmsTransferSettings":{"shape":"DmsTransferSettings"},
-        "MongoDbSettings":{"shape":"MongoDbSettings"}
+        "MongoDbSettings":{"shape":"MongoDbSettings"},
+        "KinesisSettings":{"shape":"KinesisSettings"},
+        "ElasticsearchSettings":{"shape":"ElasticsearchSettings"},
+        "RedshiftSettings":{"shape":"RedshiftSettings"}
       }
     },
     "EndpointList":{
@@ -1337,7 +1454,42 @@
       },
       "exception":true
     },
+    "KMSAccessDeniedFault":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "KMSDisabledFault":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "KMSInvalidStateFault":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
     "KMSKeyNotAccessibleFault":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "KMSNotFoundFault":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "KMSThrottlingFault":{
       "type":"structure",
       "members":{
         "message":{"shape":"ExceptionMessage"}
@@ -1347,6 +1499,14 @@
     "KeyList":{
       "type":"list",
       "member":{"shape":"String"}
+    },
+    "KinesisSettings":{
+      "type":"structure",
+      "members":{
+        "StreamArn":{"shape":"String"},
+        "MessageFormat":{"shape":"MessageFormatValue"},
+        "ServiceAccessRoleArn":{"shape":"String"}
+      }
     },
     "ListTagsForResourceMessage":{
       "type":"structure",
@@ -1362,6 +1522,10 @@
       }
     },
     "Long":{"type":"long"},
+    "MessageFormatValue":{
+      "type":"string",
+      "enum":["json"]
+    },
     "MigrationTypeValue":{
       "type":"string",
       "enum":[
@@ -1391,7 +1555,10 @@
         "DynamoDbSettings":{"shape":"DynamoDbSettings"},
         "S3Settings":{"shape":"S3Settings"},
         "DmsTransferSettings":{"shape":"DmsTransferSettings"},
-        "MongoDbSettings":{"shape":"MongoDbSettings"}
+        "MongoDbSettings":{"shape":"MongoDbSettings"},
+        "KinesisSettings":{"shape":"KinesisSettings"},
+        "ElasticsearchSettings":{"shape":"ElasticsearchSettings"},
+        "RedshiftSettings":{"shape":"RedshiftSettings"}
       }
     },
     "ModifyEndpointResponse":{
@@ -1511,12 +1678,39 @@
         "MinAllocatedStorage":{"shape":"Integer"},
         "MaxAllocatedStorage":{"shape":"Integer"},
         "DefaultAllocatedStorage":{"shape":"Integer"},
-        "IncludedAllocatedStorage":{"shape":"Integer"}
+        "IncludedAllocatedStorage":{"shape":"Integer"},
+        "AvailabilityZones":{"shape":"AvailabilityZonesList"}
       }
     },
     "OrderableReplicationInstanceList":{
       "type":"list",
       "member":{"shape":"OrderableReplicationInstance"}
+    },
+    "ParquetVersionValue":{
+      "type":"string",
+      "enum":[
+        "parquet-1-0",
+        "parquet-2-0"
+      ]
+    },
+    "PendingMaintenanceAction":{
+      "type":"structure",
+      "members":{
+        "Action":{"shape":"String"},
+        "AutoAppliedAfterDate":{"shape":"TStamp"},
+        "ForcedApplyDate":{"shape":"TStamp"},
+        "OptInStatus":{"shape":"String"},
+        "CurrentApplyDate":{"shape":"TStamp"},
+        "Description":{"shape":"String"}
+      }
+    },
+    "PendingMaintenanceActionDetails":{
+      "type":"list",
+      "member":{"shape":"PendingMaintenanceAction"}
+    },
+    "PendingMaintenanceActions":{
+      "type":"list",
+      "member":{"shape":"ResourcePendingMaintenanceActions"}
     },
     "RebootReplicationInstanceMessage":{
       "type":"structure",
@@ -1530,6 +1724,36 @@
       "type":"structure",
       "members":{
         "ReplicationInstance":{"shape":"ReplicationInstance"}
+      }
+    },
+    "RedshiftSettings":{
+      "type":"structure",
+      "members":{
+        "AcceptAnyDate":{"shape":"BooleanOptional"},
+        "AfterConnectScript":{"shape":"String"},
+        "BucketFolder":{"shape":"String"},
+        "BucketName":{"shape":"String"},
+        "ConnectionTimeout":{"shape":"IntegerOptional"},
+        "DatabaseName":{"shape":"String"},
+        "DateFormat":{"shape":"String"},
+        "EmptyAsNull":{"shape":"BooleanOptional"},
+        "EncryptionMode":{"shape":"EncryptionModeValue"},
+        "FileTransferUploadStreams":{"shape":"IntegerOptional"},
+        "LoadTimeout":{"shape":"IntegerOptional"},
+        "MaxFileSize":{"shape":"IntegerOptional"},
+        "Password":{"shape":"SecretString"},
+        "Port":{"shape":"IntegerOptional"},
+        "RemoveQuotes":{"shape":"BooleanOptional"},
+        "ReplaceInvalidChars":{"shape":"String"},
+        "ReplaceChars":{"shape":"String"},
+        "ServerName":{"shape":"String"},
+        "ServiceAccessRoleArn":{"shape":"String"},
+        "ServerSideEncryptionKmsKeyId":{"shape":"String"},
+        "TimeFormat":{"shape":"String"},
+        "TrimBlanks":{"shape":"BooleanOptional"},
+        "TruncateColumns":{"shape":"BooleanOptional"},
+        "Username":{"shape":"String"},
+        "WriteBufferSize":{"shape":"IntegerOptional"}
       }
     },
     "RefreshSchemasMessage":{
@@ -1645,7 +1869,8 @@
         "ReplicationInstancePrivateIpAddresses":{"shape":"ReplicationInstancePrivateIpAddressList"},
         "PubliclyAccessible":{"shape":"Boolean"},
         "SecondaryAvailabilityZone":{"shape":"String"},
-        "FreeUntil":{"shape":"TStamp"}
+        "FreeUntil":{"shape":"TStamp"},
+        "DnsNameServers":{"shape":"String"}
       }
     },
     "ReplicationInstanceList":{
@@ -1758,16 +1983,25 @@
     "ResourceAlreadyExistsFault":{
       "type":"structure",
       "members":{
-        "message":{"shape":"ExceptionMessage"}
+        "message":{"shape":"ExceptionMessage"},
+        "resourceArn":{"shape":"ResourceArn"}
       },
       "exception":true
     },
+    "ResourceArn":{"type":"string"},
     "ResourceNotFoundFault":{
       "type":"structure",
       "members":{
         "message":{"shape":"ExceptionMessage"}
       },
       "exception":true
+    },
+    "ResourcePendingMaintenanceActions":{
+      "type":"structure",
+      "members":{
+        "ResourceIdentifier":{"shape":"String"},
+        "PendingMaintenanceActionDetails":{"shape":"PendingMaintenanceActionDetails"}
+      }
     },
     "ResourceQuotaExceededFault":{
       "type":"structure",
@@ -1785,7 +2019,17 @@
         "CsvDelimiter":{"shape":"String"},
         "BucketFolder":{"shape":"String"},
         "BucketName":{"shape":"String"},
-        "CompressionType":{"shape":"CompressionTypeValue"}
+        "CompressionType":{"shape":"CompressionTypeValue"},
+        "EncryptionMode":{"shape":"EncryptionModeValue"},
+        "ServerSideEncryptionKmsKeyId":{"shape":"String"},
+        "DataFormat":{"shape":"DataFormatValue"},
+        "EncodingType":{"shape":"EncodingTypeValue"},
+        "DictPageSizeLimit":{"shape":"IntegerOptional"},
+        "RowGroupLength":{"shape":"IntegerOptional"},
+        "DataPageSize":{"shape":"IntegerOptional"},
+        "ParquetVersion":{"shape":"ParquetVersionValue"},
+        "EnableStatistics":{"shape":"BooleanOptional"},
+        "CdcInsertsOnly":{"shape":"BooleanOptional"}
       }
     },
     "SNSInvalidTopicFault":{

@@ -209,6 +209,52 @@ func TestSendMessageBatchChecksum(t *testing.T) {
 	}
 }
 
+func TestSendMessageBatchChecksumFailed(t *testing.T) {
+	req, _ := svc.SendMessageBatchRequest(&sqs.SendMessageBatchInput{
+		Entries: []*sqs.SendMessageBatchRequestEntry{
+			{Id: aws.String("1"), MessageBody: aws.String("test")},
+			{Id: aws.String("2"), MessageBody: aws.String("test")},
+			{Id: aws.String("3"), MessageBody: aws.String("test")},
+			{Id: aws.String("4"), MessageBody: aws.String("test")},
+		},
+	})
+	req.Handlers.Send.PushBack(func(r *request.Request) {
+		body := ioutil.NopCloser(bytes.NewReader([]byte("")))
+		r.HTTPResponse = &http.Response{StatusCode: 200, Body: body}
+		r.Data = &sqs.SendMessageBatchOutput{
+			Failed: []*sqs.BatchResultErrorEntry{
+				{
+					Id:          aws.String("1"),
+					Code:        aws.String("test"),
+					Message:     aws.String("test"),
+					SenderFault: aws.Bool(false),
+				},
+				{
+					Id:          aws.String("2"),
+					Code:        aws.String("test"),
+					Message:     aws.String("test"),
+					SenderFault: aws.Bool(false),
+				},
+				{
+					Id:          aws.String("3"),
+					Code:        aws.String("test"),
+					Message:     aws.String("test"),
+					SenderFault: aws.Bool(false),
+				},
+				{
+					Id:          aws.String("4"),
+					Code:        aws.String("test"),
+					Message:     aws.String("test"),
+					SenderFault: aws.Bool(false),
+				},
+			},
+		}
+	})
+	if err := req.Send(); err != nil {
+		t.Errorf("expect no error, got %v", err)
+	}
+}
+
 func TestSendMessageBatchChecksumInvalid(t *testing.T) {
 	req, _ := svc.SendMessageBatchRequest(&sqs.SendMessageBatchInput{
 		Entries: []*sqs.SendMessageBatchRequestEntry{

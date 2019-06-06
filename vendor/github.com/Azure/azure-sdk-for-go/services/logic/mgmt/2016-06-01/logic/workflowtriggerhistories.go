@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewWorkflowTriggerHistoriesClientWithBaseURI(baseURI string, subscriptionID
 // historyName - the workflow trigger history name. Corresponds to the run name for triggers that resulted in a
 // run.
 func (client WorkflowTriggerHistoriesClient) Get(ctx context.Context, resourceGroupName string, workflowName string, triggerName string, historyName string) (result WorkflowTriggerHistory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerHistoriesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workflowName, triggerName, historyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowTriggerHistoriesClient", "Get", nil, "Failure preparing request")
@@ -120,6 +131,16 @@ func (client WorkflowTriggerHistoriesClient) GetResponder(resp *http.Response) (
 // filter - the filter to apply on the operation. Options for filters include: Status, StartTime, and
 // ClientTrackingId.
 func (client WorkflowTriggerHistoriesClient) List(ctx context.Context, resourceGroupName string, workflowName string, triggerName string, top *int32, filter string) (result WorkflowTriggerHistoryListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerHistoriesClient.List")
+		defer func() {
+			sc := -1
+			if result.wthlr.Response.Response != nil {
+				sc = result.wthlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, workflowName, triggerName, top, filter)
 	if err != nil {
@@ -191,8 +212,8 @@ func (client WorkflowTriggerHistoriesClient) ListResponder(resp *http.Response) 
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkflowTriggerHistoriesClient) listNextResults(lastResults WorkflowTriggerHistoryListResult) (result WorkflowTriggerHistoryListResult, err error) {
-	req, err := lastResults.workflowTriggerHistoryListResultPreparer()
+func (client WorkflowTriggerHistoriesClient) listNextResults(ctx context.Context, lastResults WorkflowTriggerHistoryListResult) (result WorkflowTriggerHistoryListResult, err error) {
+	req, err := lastResults.workflowTriggerHistoryListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.WorkflowTriggerHistoriesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -213,6 +234,16 @@ func (client WorkflowTriggerHistoriesClient) listNextResults(lastResults Workflo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkflowTriggerHistoriesClient) ListComplete(ctx context.Context, resourceGroupName string, workflowName string, triggerName string, top *int32, filter string) (result WorkflowTriggerHistoryListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerHistoriesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, workflowName, triggerName, top, filter)
 	return
 }
@@ -225,6 +256,16 @@ func (client WorkflowTriggerHistoriesClient) ListComplete(ctx context.Context, r
 // historyName - the workflow trigger history name. Corresponds to the run name for triggers that resulted in a
 // run.
 func (client WorkflowTriggerHistoriesClient) Resubmit(ctx context.Context, resourceGroupName string, workflowName string, triggerName string, historyName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkflowTriggerHistoriesClient.Resubmit")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ResubmitPreparer(ctx, resourceGroupName, workflowName, triggerName, historyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.WorkflowTriggerHistoriesClient", "Resubmit", nil, "Failure preparing request")

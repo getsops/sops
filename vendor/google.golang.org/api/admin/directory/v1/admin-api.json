@@ -93,7 +93,7 @@
   "description": "Manages enterprise resources such as users and groups, administrative notifications, security features, and more.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/directory/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/Zp5udf3d_MSf3cProroao6vKvEo\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/TsFVRmNS9ZNOmXobzjavN4k9ZAM\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -2059,6 +2059,22 @@
                 "customer"
               ],
               "parameters": {
+                "coordinatesSource": {
+                  "default": "SOURCE_UNSPECIFIED",
+                  "description": "Source from which Building.coordinates are derived.",
+                  "enum": [
+                    "CLIENT_SPECIFIED",
+                    "RESOLVED_FROM_ADDRESS",
+                    "SOURCE_UNSPECIFIED"
+                  ],
+                  "enumDescriptions": [
+                    "Building.coordinates are set to the coordinates included in the request.",
+                    "Building.coordinates are automatically populated based on the postal address.",
+                    "Defaults to RESOLVED_FROM_ADDRESS if postal address is provided. Otherwise, defaults to CLIENT_SPECIFIED if coordinates are provided."
+                  ],
+                  "location": "query",
+                  "type": "string"
+                },
                 "customer": {
                   "description": "The unique ID for the customer's G Suite account. As an account administrator, you can also use the my_customer alias to represent your account's customer ID.",
                   "location": "path",
@@ -2129,6 +2145,22 @@
                   "required": true,
                   "type": "string"
                 },
+                "coordinatesSource": {
+                  "default": "SOURCE_UNSPECIFIED",
+                  "description": "Source from which Building.coordinates are derived.",
+                  "enum": [
+                    "CLIENT_SPECIFIED",
+                    "RESOLVED_FROM_ADDRESS",
+                    "SOURCE_UNSPECIFIED"
+                  ],
+                  "enumDescriptions": [
+                    "Building.coordinates are set to the coordinates included in the request.",
+                    "Building.coordinates are automatically populated based on the postal address.",
+                    "Defaults to RESOLVED_FROM_ADDRESS if postal address is provided. Otherwise, defaults to CLIENT_SPECIFIED if coordinates are provided."
+                  ],
+                  "location": "query",
+                  "type": "string"
+                },
                 "customer": {
                   "description": "The unique ID for the customer's G Suite account. As an account administrator, you can also use the my_customer alias to represent your account's customer ID.",
                   "location": "path",
@@ -2160,6 +2192,22 @@
                   "description": "The ID of the building to update.",
                   "location": "path",
                   "required": true,
+                  "type": "string"
+                },
+                "coordinatesSource": {
+                  "default": "SOURCE_UNSPECIFIED",
+                  "description": "Source from which Building.coordinates are derived.",
+                  "enum": [
+                    "CLIENT_SPECIFIED",
+                    "RESOLVED_FROM_ADDRESS",
+                    "SOURCE_UNSPECIFIED"
+                  ],
+                  "enumDescriptions": [
+                    "Building.coordinates are set to the coordinates included in the request.",
+                    "Building.coordinates are automatically populated based on the postal address.",
+                    "Defaults to RESOLVED_FROM_ADDRESS if postal address is provided. Otherwise, defaults to CLIENT_SPECIFIED if coordinates are provided."
+                  ],
+                  "location": "query",
                   "type": "string"
                 },
                 "customer": {
@@ -3969,6 +4017,7 @@
       }
     }
   },
+  "revision": "20190214",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Alias": {
@@ -4131,6 +4180,10 @@
       "description": "JSON template for Building object in Directory API.",
       "id": "Building",
       "properties": {
+        "address": {
+          "$ref": "BuildingAddress",
+          "description": "The postal address of the building. See PostalAddress for details. Note that only a single address line and region code are required."
+        },
         "buildingId": {
           "description": "Unique identifier for the building. The maximum length is 100 characters.",
           "type": "string"
@@ -4161,6 +4214,44 @@
         "kind": {
           "default": "admin#directory#resources#buildings#Building",
           "description": "Kind of resource this is.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BuildingAddress": {
+      "description": "JSON template for the postal address of a building in Directory API.",
+      "id": "BuildingAddress",
+      "properties": {
+        "addressLines": {
+          "description": "Unstructured address lines describing the lower levels of an address.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "administrativeArea": {
+          "description": "Optional. Highest administrative subdivision which is used for postal addresses of a country or region.",
+          "type": "string"
+        },
+        "languageCode": {
+          "description": "Optional. BCP-47 language code of the contents of this address (if known).",
+          "type": "string"
+        },
+        "locality": {
+          "description": "Optional. Generally refers to the city/town portion of the address. Examples: US city, IT comune, UK post town. In regions of the world where localities are not well defined or do not fit into this structure well, leave locality empty and use addressLines.",
+          "type": "string"
+        },
+        "postalCode": {
+          "description": "Optional. Postal code of the address.",
+          "type": "string"
+        },
+        "regionCode": {
+          "description": "Required. CLDR region code of the country/region of the address.",
+          "type": "string"
+        },
+        "sublocality": {
+          "description": "Optional. Sublocality of the address.",
           "type": "string"
         }
       },
@@ -4260,10 +4351,20 @@
           "type": "string"
         },
         "resourceId": {
+          "annotations": {
+            "required": [
+              "directory.resources.calendars.insert"
+            ]
+          },
           "description": "The unique ID for the calendar resource.",
           "type": "string"
         },
         "resourceName": {
+          "annotations": {
+            "required": [
+              "directory.resources.calendars.insert"
+            ]
+          },
           "description": "The name of the calendar resource. For example, \"Training Room 1A\".",
           "type": "string"
         },
@@ -4397,6 +4498,45 @@
           "description": "Chromebook boot mode (Read-only)",
           "type": "string"
         },
+        "cpuStatusReports": {
+          "description": "Reports of CPU utilization and temperature (Read-only)",
+          "items": {
+            "properties": {
+              "cpuTemperatureInfo": {
+                "description": "List of CPU temperature samples.",
+                "items": {
+                  "properties": {
+                    "label": {
+                      "description": "CPU label",
+                      "type": "string"
+                    },
+                    "temperature": {
+                      "description": "Temperature in Celsius degrees.",
+                      "format": "int32",
+                      "type": "integer"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "cpuUtilizationPercentageInfo": {
+                "items": {
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "reportTime": {
+                "description": "Date and time the report was received.",
+                "format": "date-time",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
         "deviceFiles": {
           "description": "List of device files to download (Read-only)",
           "items": {
@@ -4426,6 +4566,38 @@
         "deviceId": {
           "description": "Unique identifier of Chrome OS Device (Read-only)",
           "type": "string"
+        },
+        "diskVolumeReports": {
+          "description": "Reports of disk space and other info about mounted/connected volumes.",
+          "items": {
+            "properties": {
+              "volumeInfo": {
+                "description": "Disk volumes",
+                "items": {
+                  "properties": {
+                    "storageFree": {
+                      "description": "Free disk space [in bytes]",
+                      "format": "int64",
+                      "type": "string"
+                    },
+                    "storageTotal": {
+                      "description": "Total disk space [in bytes]",
+                      "format": "int64",
+                      "type": "string"
+                    },
+                    "volumeId": {
+                      "description": "Volume id",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
         },
         "etag": {
           "description": "ETag of the resource.",
@@ -4514,6 +4686,32 @@
         "supportEndDate": {
           "description": "Final date the device will be supported (Read-only)",
           "format": "date-time",
+          "type": "string"
+        },
+        "systemRamFreeReports": {
+          "description": "Reports of amounts of available RAM memory (Read-only)",
+          "items": {
+            "properties": {
+              "reportTime": {
+                "description": "Date and time the report was received.",
+                "format": "date-time",
+                "type": "string"
+              },
+              "systemRamFreeInfo": {
+                "items": {
+                  "format": "int64",
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "systemRamTotal": {
+          "description": "Total RAM on the device [in bytes] (Read-only)",
+          "format": "int64",
           "type": "string"
         },
         "tpmVersionInfo": {
@@ -5005,6 +5203,10 @@
       "description": "JSON template for Member resource in Directory API.",
       "id": "Member",
       "properties": {
+        "delivery_settings": {
+          "description": "Delivery settings of member",
+          "type": "string"
+        },
         "email": {
           "description": "Email of member (Read-only)",
           "type": "string"
@@ -5988,7 +6190,7 @@
           "type": "array"
         },
         "archived": {
-          "description": "Indicates if user is archived",
+          "description": "Indicates if user is archived.",
           "type": "boolean"
         },
         "changePasswordAtNextLogin": {
@@ -6155,7 +6357,7 @@
           "type": "any"
         },
         "suspended": {
-          "description": "Indicates if user is suspended",
+          "description": "Indicates if user is suspended.",
           "type": "boolean"
         },
         "suspensionReason": {
@@ -6598,8 +6800,7 @@
       "id": "UserPosixAccount",
       "properties": {
         "accountId": {
-          "description": "A POSIX account field identifier. (Read-only)",
-          "readOnly": true,
+          "description": "A POSIX account field identifier.",
           "type": "string"
         },
         "gecos": {

@@ -64,6 +64,10 @@ type ApplicationDiscoveryServiceAPI interface {
 	AssociateConfigurationItemsToApplicationWithContext(aws.Context, *applicationdiscoveryservice.AssociateConfigurationItemsToApplicationInput, ...request.Option) (*applicationdiscoveryservice.AssociateConfigurationItemsToApplicationOutput, error)
 	AssociateConfigurationItemsToApplicationRequest(*applicationdiscoveryservice.AssociateConfigurationItemsToApplicationInput) (*request.Request, *applicationdiscoveryservice.AssociateConfigurationItemsToApplicationOutput)
 
+	BatchDeleteImportData(*applicationdiscoveryservice.BatchDeleteImportDataInput) (*applicationdiscoveryservice.BatchDeleteImportDataOutput, error)
+	BatchDeleteImportDataWithContext(aws.Context, *applicationdiscoveryservice.BatchDeleteImportDataInput, ...request.Option) (*applicationdiscoveryservice.BatchDeleteImportDataOutput, error)
+	BatchDeleteImportDataRequest(*applicationdiscoveryservice.BatchDeleteImportDataInput) (*request.Request, *applicationdiscoveryservice.BatchDeleteImportDataOutput)
+
 	CreateApplication(*applicationdiscoveryservice.CreateApplicationInput) (*applicationdiscoveryservice.CreateApplicationOutput, error)
 	CreateApplicationWithContext(aws.Context, *applicationdiscoveryservice.CreateApplicationInput, ...request.Option) (*applicationdiscoveryservice.CreateApplicationOutput, error)
 	CreateApplicationRequest(*applicationdiscoveryservice.CreateApplicationInput) (*request.Request, *applicationdiscoveryservice.CreateApplicationOutput)
@@ -103,6 +107,13 @@ type ApplicationDiscoveryServiceAPI interface {
 	DescribeExportTasksWithContext(aws.Context, *applicationdiscoveryservice.DescribeExportTasksInput, ...request.Option) (*applicationdiscoveryservice.DescribeExportTasksOutput, error)
 	DescribeExportTasksRequest(*applicationdiscoveryservice.DescribeExportTasksInput) (*request.Request, *applicationdiscoveryservice.DescribeExportTasksOutput)
 
+	DescribeImportTasks(*applicationdiscoveryservice.DescribeImportTasksInput) (*applicationdiscoveryservice.DescribeImportTasksOutput, error)
+	DescribeImportTasksWithContext(aws.Context, *applicationdiscoveryservice.DescribeImportTasksInput, ...request.Option) (*applicationdiscoveryservice.DescribeImportTasksOutput, error)
+	DescribeImportTasksRequest(*applicationdiscoveryservice.DescribeImportTasksInput) (*request.Request, *applicationdiscoveryservice.DescribeImportTasksOutput)
+
+	DescribeImportTasksPages(*applicationdiscoveryservice.DescribeImportTasksInput, func(*applicationdiscoveryservice.DescribeImportTasksOutput, bool) bool) error
+	DescribeImportTasksPagesWithContext(aws.Context, *applicationdiscoveryservice.DescribeImportTasksInput, func(*applicationdiscoveryservice.DescribeImportTasksOutput, bool) bool, ...request.Option) error
+
 	DescribeTags(*applicationdiscoveryservice.DescribeTagsInput) (*applicationdiscoveryservice.DescribeTagsOutput, error)
 	DescribeTagsWithContext(aws.Context, *applicationdiscoveryservice.DescribeTagsInput, ...request.Option) (*applicationdiscoveryservice.DescribeTagsOutput, error)
 	DescribeTagsRequest(*applicationdiscoveryservice.DescribeTagsInput) (*request.Request, *applicationdiscoveryservice.DescribeTagsOutput)
@@ -138,6 +149,10 @@ type ApplicationDiscoveryServiceAPI interface {
 	StartExportTask(*applicationdiscoveryservice.StartExportTaskInput) (*applicationdiscoveryservice.StartExportTaskOutput, error)
 	StartExportTaskWithContext(aws.Context, *applicationdiscoveryservice.StartExportTaskInput, ...request.Option) (*applicationdiscoveryservice.StartExportTaskOutput, error)
 	StartExportTaskRequest(*applicationdiscoveryservice.StartExportTaskInput) (*request.Request, *applicationdiscoveryservice.StartExportTaskOutput)
+
+	StartImportTask(*applicationdiscoveryservice.StartImportTaskInput) (*applicationdiscoveryservice.StartImportTaskOutput, error)
+	StartImportTaskWithContext(aws.Context, *applicationdiscoveryservice.StartImportTaskInput, ...request.Option) (*applicationdiscoveryservice.StartImportTaskOutput, error)
+	StartImportTaskRequest(*applicationdiscoveryservice.StartImportTaskInput) (*request.Request, *applicationdiscoveryservice.StartImportTaskOutput)
 
 	StopContinuousExport(*applicationdiscoveryservice.StopContinuousExportInput) (*applicationdiscoveryservice.StopContinuousExportOutput, error)
 	StopContinuousExportWithContext(aws.Context, *applicationdiscoveryservice.StopContinuousExportInput, ...request.Option) (*applicationdiscoveryservice.StopContinuousExportOutput, error)

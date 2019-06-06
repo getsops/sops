@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewCanonicalSupportPlanTypesClientWithBaseURI(baseURI string, subscriptionI
 // Parameters:
 // providerName - the support plan type. For now the only valid type is "canonical".
 func (client CanonicalSupportPlanTypesClient) Get(ctx context.Context, providerName string) (result ListCanonicalSupportPlanStatusItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CanonicalSupportPlanTypesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, providerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "addons.CanonicalSupportPlanTypesClient", "Get", nil, "Failure preparing request")

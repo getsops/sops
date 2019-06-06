@@ -75,6 +75,8 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
 	svc.Handlers.UnmarshalMeta.PushBackNamed(jsonrpc.UnmarshalMetaHandler)
 	svc.Handlers.UnmarshalError.PushBackNamed(jsonrpc.UnmarshalErrorHandler)
 
+	svc.Handlers.UnmarshalStream.PushBackNamed(jsonrpc.UnmarshalHandler)
+
 	// Run custom client initialization if present
 	if initClient != nil {
 		initClient(svc.Client)

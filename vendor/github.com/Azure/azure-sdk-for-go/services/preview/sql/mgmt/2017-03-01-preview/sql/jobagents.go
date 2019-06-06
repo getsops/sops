@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewJobAgentsClientWithBaseURI(baseURI string, subscriptionID string) JobAge
 // jobAgentName - the name of the job agent to be created or updated.
 // parameters - the requested job agent resource state.
 func (client JobAgentsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, parameters JobAgent) (result JobAgentsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobAgentsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Sku", Name: validation.Null, Rule: false,
@@ -107,10 +118,6 @@ func (client JobAgentsClient) CreateOrUpdateSender(req *http.Request) (future Jo
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -135,6 +142,16 @@ func (client JobAgentsClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // serverName - the name of the server.
 // jobAgentName - the name of the job agent to be deleted.
 func (client JobAgentsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string) (result JobAgentsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobAgentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, jobAgentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobAgentsClient", "Delete", nil, "Failure preparing request")
@@ -181,10 +198,6 @@ func (client JobAgentsClient) DeleteSender(req *http.Request) (future JobAgentsD
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -208,6 +221,16 @@ func (client JobAgentsClient) DeleteResponder(resp *http.Response) (result autor
 // serverName - the name of the server.
 // jobAgentName - the name of the job agent to be retrieved.
 func (client JobAgentsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string) (result JobAgent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobAgentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobAgentsClient", "Get", nil, "Failure preparing request")
@@ -277,6 +300,16 @@ func (client JobAgentsClient) GetResponder(resp *http.Response) (result JobAgent
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client JobAgentsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result JobAgentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobAgentsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.jalr.Response.Response != nil {
+				sc = result.jalr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -341,8 +374,8 @@ func (client JobAgentsClient) ListByServerResponder(resp *http.Response) (result
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client JobAgentsClient) listByServerNextResults(lastResults JobAgentListResult) (result JobAgentListResult, err error) {
-	req, err := lastResults.jobAgentListResultPreparer()
+func (client JobAgentsClient) listByServerNextResults(ctx context.Context, lastResults JobAgentListResult) (result JobAgentListResult, err error) {
+	req, err := lastResults.jobAgentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobAgentsClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -363,6 +396,16 @@ func (client JobAgentsClient) listByServerNextResults(lastResults JobAgentListRe
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobAgentsClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result JobAgentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobAgentsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }
@@ -375,6 +418,16 @@ func (client JobAgentsClient) ListByServerComplete(ctx context.Context, resource
 // jobAgentName - the name of the job agent to be updated.
 // parameters - the update to the job agent.
 func (client JobAgentsClient) Update(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, parameters JobAgentUpdate) (result JobAgentsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobAgentsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, serverName, jobAgentName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobAgentsClient", "Update", nil, "Failure preparing request")
@@ -420,10 +473,6 @@ func (client JobAgentsClient) UpdateSender(req *http.Request) (future JobAgentsU
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

@@ -15,14 +15,22 @@
 package pubsub
 
 import (
-	"golang.org/x/net/context"
+	"context"
+	"sync/atomic"
+
 	"golang.org/x/sync/semaphore"
 )
 
 // flowController implements flow control for Subscription.Receive.
 type flowController struct {
+	maxCount          int
 	maxSize           int                 // max total size of messages
 	semCount, semSize *semaphore.Weighted // enforces max number and size of messages
+	// Number of calls to acquire - number of calls to release. This can go
+	// negative if semCount == nil and a large acquire is followed by multiple
+	// small releases.
+	// Atomic.
+	countRemaining int64
 }
 
 // newFlowController creates a new flowController that ensures no more than
@@ -31,6 +39,7 @@ type flowController struct {
 // respectively.
 func newFlowController(maxCount, maxSize int) *flowController {
 	fc := &flowController{
+		maxCount: maxCount,
 		maxSize:  maxSize,
 		semCount: nil,
 		semSize:  nil,
@@ -63,6 +72,7 @@ func (f *flowController) acquire(ctx context.Context, size int) error {
 			return err
 		}
 	}
+	atomic.AddInt64(&f.countRemaining, 1)
 	return nil
 }
 
@@ -85,11 +95,13 @@ func (f *flowController) tryAcquire(size int) bool {
 			return false
 		}
 	}
+	atomic.AddInt64(&f.countRemaining, 1)
 	return true
 }
 
 // release notes that one message of size bytes is no longer outstanding.
 func (f *flowController) release(size int) {
+	atomic.AddInt64(&f.countRemaining, -1)
 	if f.semCount != nil {
 		f.semCount.Release(1)
 	}
@@ -103,4 +115,8 @@ func (f *flowController) bound(size int) int64 {
 		return int64(f.maxSize)
 	}
 	return int64(size)
+}
+
+func (f *flowController) count() int {
+	return int(atomic.LoadInt64(&f.countRemaining))
 }

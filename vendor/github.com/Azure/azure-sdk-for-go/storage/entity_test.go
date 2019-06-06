@@ -20,7 +20,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	chk "gopkg.in/check.v1"
 )
 
@@ -42,7 +42,7 @@ func (s *StorageEntitySuite) TestGet(c *chk.C) {
 	entity := table.GetEntityReference("mypartitionkey", "myrowkey")
 
 	props := map[string]interface{}{
-		"AmountDue":      200.23,
+		"AmountDue":      float32(200.23),
 		"CustomerCode":   uuid.FromStringOrNil("c9da6455-213d-42c9-9a79-3e9149a57833"),
 		"CustomerSince":  time.Date(1992, time.December, 20, 21, 55, 0, 0, time.UTC),
 		"IsActive":       true,
@@ -91,7 +91,7 @@ func (s *StorageEntitySuite) TestInsert(c *chk.C) {
 	entity := table.GetEntityReference("mypartitionkey", "myrowkey")
 
 	props := map[string]interface{}{
-		"AmountDue":      200.23,
+		"AmountDue":      float32(200.23),
 		"CustomerCode":   uuid.FromStringOrNil("c9da6455-213d-42c9-9a79-3e9149a57833"),
 		"CustomerSince":  time.Date(1992, time.December, 20, 21, 55, 0, 0, time.UTC),
 		"IsActive":       true,
@@ -134,7 +134,7 @@ func (s *StorageEntitySuite) TestUpdate(c *chk.C) {
 
 	entity := table.GetEntityReference("mypartitionkey", "myrowkey")
 	entity.Properties = map[string]interface{}{
-		"AmountDue":      200.23,
+		"AmountDue":      float32(200.23),
 		"CustomerCode":   uuid.FromStringOrNil("c9da6455-213d-42c9-9a79-3e9149a57833"),
 		"CustomerSince":  time.Date(1992, time.December, 20, 21, 55, 0, 0, time.UTC),
 		"IsActive":       true,
@@ -458,7 +458,7 @@ func (s *StorageEntitySuite) TestExecuteQueryNextResults(c *chk.C) {
 }
 
 func (s *StorageEntitySuite) Test_entityMarshalJSON(c *chk.C) {
-	expected := `{"Address":"Mountain View","Age":23,"AmountDue":200.23,"Binary":"YWJjZA==","Binary@odata.type":"Edm.Binary","CustomerCode":"c9da6455-213d-42c9-9a79-3e9149a57833","CustomerCode@odata.type":"Edm.Guid","CustomerSince":"1992-12-20T21:55:00Z","CustomerSince@odata.type":"Edm.DateTime","IsActive":true,"NumberOfOrders":"255","NumberOfOrders@odata.type":"Edm.Int64","PartitionKey":"mypartitionkey","RowKey":"myrowkey"}`
+	expected := `{"Address":"Mountain View","Age":23,"AmountDue":"200.23","AmountDue@odata.type":"Edm.Double","Binary":"YWJjZA==","Binary@odata.type":"Edm.Binary","CustomerCode":"c9da6455-213d-42c9-9a79-3e9149a57833","CustomerCode@odata.type":"Edm.Guid","CustomerSince":"1992-12-20T21:55:00Z","CustomerSince@odata.type":"Edm.DateTime","IsActive":true,"NumberOfOrders":"255","NumberOfOrders@odata.type":"Edm.Int64","PartitionKey":"mypartitionkey","RowKey":"myrowkey"}`
 
 	entity := Entity{
 		PartitionKey: "mypartitionkey",
@@ -466,7 +466,7 @@ func (s *StorageEntitySuite) Test_entityMarshalJSON(c *chk.C) {
 		Properties: map[string]interface{}{
 			"Address":        "Mountain View",
 			"Age":            23,
-			"AmountDue":      200.23,
+			"AmountDue":      float64(200.23),
 			"Binary":         []byte("abcd"),
 			"CustomerCode":   uuid.FromStringOrNil("c9da6455-213d-42c9-9a79-3e9149a57833"),
 			"CustomerSince":  time.Date(1992, time.December, 20, 21, 55, 0, 0, time.UTC),
@@ -502,7 +502,8 @@ func (s *StorageEntitySuite) Test_entityUnmarshalJSON(c *chk.C) {
         "Timestamp@odata.type":"Edm.DateTime",
         "Address": "Mountain View",
         "Age": 23,
-        "AmountDue":200.23,
+        "AmountDue":"200.23",
+        "AmountDue@odata.type":"Edm.Double",
         "Binary@odata.type": "Edm.Binary",
         "Binary": "YWJjZA==",
         "CustomerCode@odata.type":"Edm.Guid",
@@ -521,7 +522,7 @@ func (s *StorageEntitySuite) Test_entityUnmarshalJSON(c *chk.C) {
 	expectedProperties := map[string]interface{}{
 		"Address":        "Mountain View",
 		"Age":            23,
-		"AmountDue":      200.23,
+		"AmountDue":      float64(200.23),
 		"Binary":         []byte("abcd"),
 		"CustomerCode":   uuid.FromStringOrNil("c9da6455-213d-42c9-9a79-3e9149a57833"),
 		"CustomerSince":  time.Date(1992, 12, 20, 21, 55, 0, 0, time.UTC),

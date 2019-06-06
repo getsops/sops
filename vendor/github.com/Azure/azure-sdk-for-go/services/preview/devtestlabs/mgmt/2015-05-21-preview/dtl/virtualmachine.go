@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewVirtualMachineClientWithBaseURI(baseURI string, subscriptionID string) V
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) ApplyArtifacts(ctx context.Context, resourceGroupName string, labName string, name string, applyArtifactsRequest ApplyArtifactsRequest) (result VirtualMachineApplyArtifactsFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.ApplyArtifacts")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ApplyArtifactsPreparer(ctx, resourceGroupName, labName, name, applyArtifactsRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "ApplyArtifacts", nil, "Failure preparing request")
@@ -93,10 +104,6 @@ func (client VirtualMachineClient) ApplyArtifactsSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -119,6 +126,16 @@ func (client VirtualMachineClient) ApplyArtifactsResponder(resp *http.Response) 
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) CreateOrUpdateResource(ctx context.Context, resourceGroupName string, labName string, name string, labVirtualMachine LabVirtualMachine) (result VirtualMachineCreateOrUpdateResourceFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.CreateOrUpdateResource")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdateResourcePreparer(ctx, resourceGroupName, labName, name, labVirtualMachine)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "CreateOrUpdateResource", nil, "Failure preparing request")
@@ -167,10 +184,6 @@ func (client VirtualMachineClient) CreateOrUpdateResourceSender(req *http.Reques
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -194,6 +207,16 @@ func (client VirtualMachineClient) CreateOrUpdateResourceResponder(resp *http.Re
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) DeleteResource(ctx context.Context, resourceGroupName string, labName string, name string) (result VirtualMachineDeleteResourceFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.DeleteResource")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "DeleteResource", nil, "Failure preparing request")
@@ -240,10 +263,6 @@ func (client VirtualMachineClient) DeleteResourceSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -266,6 +285,16 @@ func (client VirtualMachineClient) DeleteResourceResponder(resp *http.Response) 
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) GetResource(ctx context.Context, resourceGroupName string, labName string, name string) (result LabVirtualMachine, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.GetResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "GetResource", nil, "Failure preparing request")
@@ -335,6 +364,16 @@ func (client VirtualMachineClient) GetResourceResponder(resp *http.Response) (re
 // labName - the name of the lab.
 // filter - the filter to apply on the operation.
 func (client VirtualMachineClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationLabVirtualMachinePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.List")
+		defer func() {
+			sc := -1
+			if result.rwclvm.Response.Response != nil {
+				sc = result.rwclvm.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderBy)
 	if err != nil {
@@ -408,8 +447,8 @@ func (client VirtualMachineClient) ListResponder(resp *http.Response) (result Re
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client VirtualMachineClient) listNextResults(lastResults ResponseWithContinuationLabVirtualMachine) (result ResponseWithContinuationLabVirtualMachine, err error) {
-	req, err := lastResults.responseWithContinuationLabVirtualMachinePreparer()
+func (client VirtualMachineClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationLabVirtualMachine) (result ResponseWithContinuationLabVirtualMachine, err error) {
+	req, err := lastResults.responseWithContinuationLabVirtualMachinePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -430,6 +469,16 @@ func (client VirtualMachineClient) listNextResults(lastResults ResponseWithConti
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VirtualMachineClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationLabVirtualMachineIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderBy)
 	return
 }
@@ -440,6 +489,16 @@ func (client VirtualMachineClient) ListComplete(ctx context.Context, resourceGro
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) PatchResource(ctx context.Context, resourceGroupName string, labName string, name string, labVirtualMachine LabVirtualMachine) (result LabVirtualMachine, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.PatchResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PatchResourcePreparer(ctx, resourceGroupName, labName, name, labVirtualMachine)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "PatchResource", nil, "Failure preparing request")
@@ -511,6 +570,16 @@ func (client VirtualMachineClient) PatchResourceResponder(resp *http.Response) (
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) Start(ctx context.Context, resourceGroupName string, labName string, name string) (result VirtualMachineStartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.Start")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.StartPreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "Start", nil, "Failure preparing request")
@@ -557,10 +626,6 @@ func (client VirtualMachineClient) StartSender(req *http.Request) (future Virtua
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -583,6 +648,16 @@ func (client VirtualMachineClient) StartResponder(resp *http.Response) (result a
 // labName - the name of the lab.
 // name - the name of the virtual Machine.
 func (client VirtualMachineClient) Stop(ctx context.Context, resourceGroupName string, labName string, name string) (result VirtualMachineStopFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineClient.Stop")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.StopPreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineClient", "Stop", nil, "Failure preparing request")
@@ -626,10 +701,6 @@ func (client VirtualMachineClient) StopSender(req *http.Request) (future Virtual
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

@@ -18,32 +18,42 @@
 package container // import "cloud.google.com/go/container"
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 
-	"golang.org/x/net/context"
 	raw "google.golang.org/api/container/v1"
 	"google.golang.org/api/option"
 	htransport "google.golang.org/api/transport/http"
 )
 
+// Type is the operation type.
 type Type string
 
 const (
+	// TypeCreate describes that the operation is "create cluster".
 	TypeCreate = Type("createCluster")
+	// TypeDelete describes that the operation is "delete cluster".
 	TypeDelete = Type("deleteCluster")
 )
 
+// Status is the current status of the operation or resource.
 type Status string
 
 const (
-	StatusDone         = Status("done")
-	StatusPending      = Status("pending")
-	StatusRunning      = Status("running")
-	StatusError        = Status("error")
+	// StatusDone is a status indicating that the resource or operation is in done state.
+	StatusDone = Status("done")
+	// StatusPending is a status indicating that the resource or operation is in pending state.
+	StatusPending = Status("pending")
+	// StatusRunning is a status indicating that the resource or operation is in running state.
+	StatusRunning = Status("running")
+	// StatusError is a status indicating that the resource or operation is in error state.
+	StatusError = Status("error")
+	// StatusProvisioning is a status indicating that the resource or operation is in provisioning state.
 	StatusProvisioning = Status("provisioning")
-	StatusStopping     = Status("stopping")
+	// StatusStopping is a status indicating that the resource or operation is in stopping state.
+	StatusStopping = Status("stopping")
 )
 
 const prodAddr = "https://container.googleapis.com/"

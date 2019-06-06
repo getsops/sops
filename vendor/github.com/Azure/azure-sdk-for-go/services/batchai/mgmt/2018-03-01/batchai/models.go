@@ -18,13 +18,18 @@ package batchai
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/batchai/mgmt/2018-03-01/batchai"
 
 // AllocationState enumerates the values for allocation state.
 type AllocationState string
@@ -225,11 +230,12 @@ func PossibleVMPriorityValues() []VMPriority {
 	return []VMPriority{Dedicated, Lowpriority}
 }
 
-// AppInsightsReference specifies Azure Application Insights information for performance counters reporting.
+// AppInsightsReference specifies Azure Application Insights information for performance counters
+// reporting.
 type AppInsightsReference struct {
 	Component          *ResourceID `json:"component,omitempty"`
 	InstrumentationKey *string     `json:"instrumentationKey,omitempty"`
-	// InstrumentationKeySecretReference - Specifies KeyVault Store and Secret which contains Azure Application Insights instrumentation key. One of instumentationKey or instrumentationKeySecretReference must be specified.
+	// InstrumentationKeySecretReference - Specifies KeyVault Store and Secret which contains Azure Application Insights instrumentation key. One of instrumentationKey or instrumentationKeySecretReference must be specified.
 	InstrumentationKeySecretReference *KeyVaultSecretReference `json:"instrumentationKeySecretReference,omitempty"`
 }
 
@@ -241,8 +247,8 @@ type AutoScaleSettings struct {
 	InitialNodeCount *int32 `json:"initialNodeCount,omitempty"`
 }
 
-// AzureBlobFileSystemReference provides required information, for the service to be able to mount Azure Blob
-// Storage container on the cluster nodes.
+// AzureBlobFileSystemReference provides required information, for the service to be able to mount Azure
+// Blob Storage container on the cluster nodes.
 type AzureBlobFileSystemReference struct {
 	AccountName   *string                      `json:"accountName,omitempty"`
 	ContainerName *string                      `json:"containerName,omitempty"`
@@ -325,15 +331,15 @@ type Cluster struct {
 	autorest.Response `json:"-"`
 	// ClusterProperties - The properties associated with the Cluster.
 	*ClusterProperties `json:"properties,omitempty"`
-	// ID - The ID of the resource
+	// ID - READ-ONLY; The ID of the resource
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource
+	// Type - READ-ONLY; The type of the resource
 	Type *string `json:"type,omitempty"`
-	// Location - The location of the resource
+	// Location - READ-ONLY; The location of the resource
 	Location *string `json:"location,omitempty"`
-	// Tags - The tags of the resource
+	// Tags - READ-ONLY; The tags of the resource
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -342,21 +348,6 @@ func (c Cluster) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if c.ClusterProperties != nil {
 		objectMap["properties"] = c.ClusterProperties
-	}
-	if c.ID != nil {
-		objectMap["id"] = c.ID
-	}
-	if c.Name != nil {
-		objectMap["name"] = c.Name
-	}
-	if c.Type != nil {
-		objectMap["type"] = c.Type
-	}
-	if c.Location != nil {
-		objectMap["location"] = c.Location
-	}
-	if c.Tags != nil {
-		objectMap["tags"] = c.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -525,20 +516,37 @@ type ClusterListResultIterator struct {
 	page ClusterListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ClusterListResultIterator) Next() error {
+func (iter *ClusterListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ClusterListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -560,6 +568,11 @@ func (iter ClusterListResultIterator) Value() Cluster {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ClusterListResultIterator type.
+func NewClusterListResultIterator(page ClusterListResultPage) ClusterListResultIterator {
+	return ClusterListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (clr ClusterListResult) IsEmpty() bool {
 	return clr.Value == nil || len(*clr.Value) == 0
@@ -567,11 +580,11 @@ func (clr ClusterListResult) IsEmpty() bool {
 
 // clusterListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (clr ClusterListResult) clusterListResultPreparer() (*http.Request, error) {
+func (clr ClusterListResult) clusterListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if clr.NextLink == nil || len(to.String(clr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(clr.NextLink)))
@@ -579,19 +592,36 @@ func (clr ClusterListResult) clusterListResultPreparer() (*http.Request, error) 
 
 // ClusterListResultPage contains a page of Cluster values.
 type ClusterListResultPage struct {
-	fn  func(ClusterListResult) (ClusterListResult, error)
+	fn  func(context.Context, ClusterListResult) (ClusterListResult, error)
 	clr ClusterListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ClusterListResultPage) Next() error {
-	next, err := page.fn(page.clr)
+func (page *ClusterListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.clr)
 	if err != nil {
 		return err
 	}
 	page.clr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ClusterListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -612,31 +642,42 @@ func (page ClusterListResultPage) Values() []Cluster {
 	return *page.clr.Value
 }
 
+// Creates a new instance of the ClusterListResultPage type.
+func NewClusterListResultPage(getNextPage func(context.Context, ClusterListResult) (ClusterListResult, error)) ClusterListResultPage {
+	return ClusterListResultPage{fn: getNextPage}
+}
+
 // ClusterProperties job specific properties.
 type ClusterProperties struct {
 	// VMSize - All virtual machines in a cluster are the same size. For information about available VM sizes for clusters using images from the Virtual Machines Marketplace (see Sizes for Virtual Machines (Linux) or Sizes for Virtual Machines (Windows). Batch AI service supports all Azure VM sizes except STANDARD_A0 and those with premium storage (STANDARD_GS, STANDARD_DS, and STANDARD_DSV2 series).
 	VMSize *string `json:"vmSize,omitempty"`
-	// VMPriority - The default value is dedicated. The node can get preempted while the task is running if lowpriority is choosen. This is best suited if the workload is checkpointing and can be restarted. Possible values include: 'Dedicated', 'Lowpriority'
+	// VMPriority - The default value is dedicated. The node can get preempted while the task is running if lowpriority is chosen. This is best suited if the workload is checkpointing and can be restarted. Possible values include: 'Dedicated', 'Lowpriority'
 	VMPriority                  VMPriority                   `json:"vmPriority,omitempty"`
 	ScaleSettings               *ScaleSettings               `json:"scaleSettings,omitempty"`
 	VirtualMachineConfiguration *VirtualMachineConfiguration `json:"virtualMachineConfiguration,omitempty"`
 	NodeSetup                   *NodeSetup                   `json:"nodeSetup,omitempty"`
 	UserAccountSettings         *UserAccountSettings         `json:"userAccountSettings,omitempty"`
 	Subnet                      *ResourceID                  `json:"subnet,omitempty"`
-	CreationTime                *date.Time                   `json:"creationTime,omitempty"`
-	// ProvisioningState - Possible value are: creating - Specifies that the cluster is being created. succeeded - Specifies that the cluster has been created successfully. failed - Specifies that the cluster creation has failed. deleting - Specifies that the cluster is being deleted. Possible values include: 'ProvisioningStateCreating', 'ProvisioningStateSucceeded', 'ProvisioningStateFailed', 'ProvisioningStateDeleting'
-	ProvisioningState               ProvisioningState `json:"provisioningState,omitempty"`
-	ProvisioningStateTransitionTime *date.Time        `json:"provisioningStateTransitionTime,omitempty"`
-	// AllocationState - Possible values are: steady and resizing. steady state indicates that the cluster is not resizing. There are no changes to the number of compute nodes in the cluster in progress. A cluster enters this state when it is created and when no operations are being performed on the cluster to change the number of compute nodes. resizing state indicates that the cluster is resizing; that is, compute nodes are being added to or removed from the cluster. Possible values include: 'Steady', 'Resizing'
-	AllocationState               AllocationState `json:"allocationState,omitempty"`
-	AllocationStateTransitionTime *date.Time      `json:"allocationStateTransitionTime,omitempty"`
+	// CreationTime - READ-ONLY
+	CreationTime *date.Time `json:"creationTime,omitempty"`
+	// ProvisioningState - READ-ONLY; Possible value are: creating - Specifies that the cluster is being created. succeeded - Specifies that the cluster has been created successfully. failed - Specifies that the cluster creation has failed. deleting - Specifies that the cluster is being deleted. Possible values include: 'ProvisioningStateCreating', 'ProvisioningStateSucceeded', 'ProvisioningStateFailed', 'ProvisioningStateDeleting'
+	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
+	// ProvisioningStateTransitionTime - READ-ONLY
+	ProvisioningStateTransitionTime *date.Time `json:"provisioningStateTransitionTime,omitempty"`
+	// AllocationState - READ-ONLY; Possible values are: steady and resizing. steady state indicates that the cluster is not resizing. There are no changes to the number of compute nodes in the cluster in progress. A cluster enters this state when it is created and when no operations are being performed on the cluster to change the number of compute nodes. resizing state indicates that the cluster is resizing; that is, compute nodes are being added to or removed from the cluster. Possible values include: 'Steady', 'Resizing'
+	AllocationState AllocationState `json:"allocationState,omitempty"`
+	// AllocationStateTransitionTime - READ-ONLY
+	AllocationStateTransitionTime *date.Time `json:"allocationStateTransitionTime,omitempty"`
 	// Errors - This element contains all the errors encountered by various compute nodes during node setup.
-	Errors           *[]Error         `json:"errors,omitempty"`
-	CurrentNodeCount *int32           `json:"currentNodeCount,omitempty"`
-	NodeStateCounts  *NodeStateCounts `json:"nodeStateCounts,omitempty"`
+	Errors *[]Error `json:"errors,omitempty"`
+	// CurrentNodeCount - READ-ONLY
+	CurrentNodeCount *int32 `json:"currentNodeCount,omitempty"`
+	// NodeStateCounts - READ-ONLY
+	NodeStateCounts *NodeStateCounts `json:"nodeStateCounts,omitempty"`
 }
 
-// ClustersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ClustersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ClustersCreateFuture struct {
 	azure.Future
 }
@@ -645,7 +686,7 @@ type ClustersCreateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ClustersCreateFuture) Result(client ClustersClient) (c Cluster, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.ClustersCreateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -664,7 +705,8 @@ func (future *ClustersCreateFuture) Result(client ClustersClient) (c Cluster, er
 	return
 }
 
-// ClustersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ClustersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ClustersDeleteFuture struct {
 	azure.Future
 }
@@ -673,7 +715,7 @@ type ClustersDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ClustersDeleteFuture) Result(client ClustersClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.ClustersDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -886,7 +928,7 @@ func (f *File) UnmarshalJSON(body []byte) error {
 // FileListResult values returned by the List operation.
 type FileListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The collection of returned job directories and files.
+	// Value - READ-ONLY; The collection of returned job directories and files.
 	Value *[]File `json:"value,omitempty"`
 	// NextLink - The continuation token.
 	NextLink *string `json:"nextLink,omitempty"`
@@ -898,20 +940,37 @@ type FileListResultIterator struct {
 	page FileListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *FileListResultIterator) Next() error {
+func (iter *FileListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FileListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *FileListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -933,6 +992,11 @@ func (iter FileListResultIterator) Value() File {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the FileListResultIterator type.
+func NewFileListResultIterator(page FileListResultPage) FileListResultIterator {
+	return FileListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (flr FileListResult) IsEmpty() bool {
 	return flr.Value == nil || len(*flr.Value) == 0
@@ -940,11 +1004,11 @@ func (flr FileListResult) IsEmpty() bool {
 
 // fileListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (flr FileListResult) fileListResultPreparer() (*http.Request, error) {
+func (flr FileListResult) fileListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if flr.NextLink == nil || len(to.String(flr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(flr.NextLink)))
@@ -952,19 +1016,36 @@ func (flr FileListResult) fileListResultPreparer() (*http.Request, error) {
 
 // FileListResultPage contains a page of File values.
 type FileListResultPage struct {
-	fn  func(FileListResult) (FileListResult, error)
+	fn  func(context.Context, FileListResult) (FileListResult, error)
 	flr FileListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *FileListResultPage) Next() error {
-	next, err := page.fn(page.flr)
+func (page *FileListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FileListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.flr)
 	if err != nil {
 		return err
 	}
 	page.flr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *FileListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -985,6 +1066,11 @@ func (page FileListResultPage) Values() []File {
 	return *page.flr.Value
 }
 
+// Creates a new instance of the FileListResultPage type.
+func NewFileListResultPage(getNextPage func(context.Context, FileListResult) (FileListResult, error)) FileListResultPage {
+	return FileListResultPage{fn: getNextPage}
+}
+
 // FileProperties file specific properties.
 type FileProperties struct {
 	// LastModified - The time at which the file was last modified.
@@ -998,15 +1084,15 @@ type FileServer struct {
 	autorest.Response `json:"-"`
 	// FileServerProperties - The properties associated with the File Server.
 	*FileServerProperties `json:"properties,omitempty"`
-	// ID - The ID of the resource
+	// ID - READ-ONLY; The ID of the resource
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource
+	// Type - READ-ONLY; The type of the resource
 	Type *string `json:"type,omitempty"`
-	// Location - The location of the resource
+	// Location - READ-ONLY; The location of the resource
 	Location *string `json:"location,omitempty"`
-	// Tags - The tags of the resource
+	// Tags - READ-ONLY; The tags of the resource
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -1015,21 +1101,6 @@ func (fs FileServer) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if fs.FileServerProperties != nil {
 		objectMap["properties"] = fs.FileServerProperties
-	}
-	if fs.ID != nil {
-		objectMap["id"] = fs.ID
-	}
-	if fs.Name != nil {
-		objectMap["name"] = fs.Name
-	}
-	if fs.Type != nil {
-		objectMap["type"] = fs.Type
-	}
-	if fs.Location != nil {
-		objectMap["location"] = fs.Location
-	}
-	if fs.Tags != nil {
-		objectMap["tags"] = fs.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -1194,20 +1265,37 @@ type FileServerListResultIterator struct {
 	page FileServerListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *FileServerListResultIterator) Next() error {
+func (iter *FileServerListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FileServerListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *FileServerListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1229,6 +1317,11 @@ func (iter FileServerListResultIterator) Value() FileServer {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the FileServerListResultIterator type.
+func NewFileServerListResultIterator(page FileServerListResultPage) FileServerListResultIterator {
+	return FileServerListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (fslr FileServerListResult) IsEmpty() bool {
 	return fslr.Value == nil || len(*fslr.Value) == 0
@@ -1236,11 +1329,11 @@ func (fslr FileServerListResult) IsEmpty() bool {
 
 // fileServerListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (fslr FileServerListResult) fileServerListResultPreparer() (*http.Request, error) {
+func (fslr FileServerListResult) fileServerListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if fslr.NextLink == nil || len(to.String(fslr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(fslr.NextLink)))
@@ -1248,19 +1341,36 @@ func (fslr FileServerListResult) fileServerListResultPreparer() (*http.Request, 
 
 // FileServerListResultPage contains a page of FileServer values.
 type FileServerListResultPage struct {
-	fn   func(FileServerListResult) (FileServerListResult, error)
+	fn   func(context.Context, FileServerListResult) (FileServerListResult, error)
 	fslr FileServerListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *FileServerListResultPage) Next() error {
-	next, err := page.fn(page.fslr)
+func (page *FileServerListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FileServerListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.fslr)
 	if err != nil {
 		return err
 	}
 	page.fslr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *FileServerListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1281,32 +1391,41 @@ func (page FileServerListResultPage) Values() []FileServer {
 	return *page.fslr.Value
 }
 
+// Creates a new instance of the FileServerListResultPage type.
+func NewFileServerListResultPage(getNextPage func(context.Context, FileServerListResult) (FileServerListResult, error)) FileServerListResultPage {
+	return FileServerListResultPage{fn: getNextPage}
+}
+
 // FileServerProperties file server specific properties.
 type FileServerProperties struct {
 	// VMSize - For information about available VM sizes for File Server from the Virtual Machines Marketplace, see Sizes for Virtual Machines (Linux).
-	VMSize                          *string           `json:"vmSize,omitempty"`
-	SSHConfiguration                *SSHConfiguration `json:"sshConfiguration,omitempty"`
-	DataDisks                       *DataDisks        `json:"dataDisks,omitempty"`
-	Subnet                          *ResourceID       `json:"subnet,omitempty"`
-	MountSettings                   *MountSettings    `json:"mountSettings,omitempty"`
-	ProvisioningStateTransitionTime *date.Time        `json:"provisioningStateTransitionTime,omitempty"`
-	CreationTime                    *date.Time        `json:"creationTime,omitempty"`
-	// ProvisioningState - Possible values: creating - The File Server is getting created. updating - The File Server creation has been accepted and it is getting updated. deleting - The user has requested that the File Server be deleted, and it is in the process of being deleted. failed - The File Server creation has failed with the specified errorCode. Details about the error code are specified in the message field. succeeded - The File Server creation has succeeded. Possible values include: 'FileServerProvisioningStateCreating', 'FileServerProvisioningStateUpdating', 'FileServerProvisioningStateDeleting', 'FileServerProvisioningStateSucceeded', 'FileServerProvisioningStateFailed'
+	VMSize           *string           `json:"vmSize,omitempty"`
+	SSHConfiguration *SSHConfiguration `json:"sshConfiguration,omitempty"`
+	DataDisks        *DataDisks        `json:"dataDisks,omitempty"`
+	Subnet           *ResourceID       `json:"subnet,omitempty"`
+	// MountSettings - READ-ONLY
+	MountSettings *MountSettings `json:"mountSettings,omitempty"`
+	// ProvisioningStateTransitionTime - READ-ONLY
+	ProvisioningStateTransitionTime *date.Time `json:"provisioningStateTransitionTime,omitempty"`
+	// CreationTime - READ-ONLY
+	CreationTime *date.Time `json:"creationTime,omitempty"`
+	// ProvisioningState - READ-ONLY; Possible values: creating - The File Server is getting created. updating - The File Server creation has been accepted and it is getting updated. deleting - The user has requested that the File Server be deleted, and it is in the process of being deleted. failed - The File Server creation has failed with the specified errorCode. Details about the error code are specified in the message field. succeeded - The File Server creation has succeeded. Possible values include: 'FileServerProvisioningStateCreating', 'FileServerProvisioningStateUpdating', 'FileServerProvisioningStateDeleting', 'FileServerProvisioningStateSucceeded', 'FileServerProvisioningStateFailed'
 	ProvisioningState FileServerProvisioningState `json:"provisioningState,omitempty"`
 }
 
-// FileServerReference provides required information, for the service to be able to mount Azure FileShare on the
-// cluster nodes.
+// FileServerReference provides required information, for the service to be able to mount Azure FileShare
+// on the cluster nodes.
 type FileServerReference struct {
 	FileServer *ResourceID `json:"fileServer,omitempty"`
 	// SourceDirectory - If this property is not specified, the entire File Server will be mounted.
 	SourceDirectory *string `json:"sourceDirectory,omitempty"`
-	// RelativeMountPath - Note that all cluster level file servers will be mounted under $AZ_BATCHAI_MOUNT_ROOT location and job level file servers will be mouted under $AZ_BATCHAI_JOB_MOUNT_ROOT.
+	// RelativeMountPath - Note that all cluster level file servers will be mounted under $AZ_BATCHAI_MOUNT_ROOT location and job level file servers will be mounted under $AZ_BATCHAI_JOB_MOUNT_ROOT.
 	RelativeMountPath *string `json:"relativeMountPath,omitempty"`
 	MountOptions      *string `json:"mountOptions,omitempty"`
 }
 
-// FileServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// FileServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type FileServersCreateFuture struct {
 	azure.Future
 }
@@ -1315,7 +1434,7 @@ type FileServersCreateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *FileServersCreateFuture) Result(client FileServersClient) (fs FileServer, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.FileServersCreateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1334,7 +1453,8 @@ func (future *FileServersCreateFuture) Result(client FileServersClient) (fs File
 	return
 }
 
-// FileServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// FileServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type FileServersDeleteFuture struct {
 	azure.Future
 }
@@ -1343,7 +1463,7 @@ type FileServersDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *FileServersDeleteFuture) Result(client FileServersClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.FileServersDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1385,15 +1505,15 @@ type Job struct {
 	autorest.Response `json:"-"`
 	// JobProperties - The properties associated with the job.
 	*JobProperties `json:"properties,omitempty"`
-	// ID - The ID of the resource
+	// ID - READ-ONLY; The ID of the resource
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource
+	// Type - READ-ONLY; The type of the resource
 	Type *string `json:"type,omitempty"`
-	// Location - The location of the resource
+	// Location - READ-ONLY; The location of the resource
 	Location *string `json:"location,omitempty"`
-	// Tags - The tags of the resource
+	// Tags - READ-ONLY; The tags of the resource
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -1402,21 +1522,6 @@ func (j Job) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if j.JobProperties != nil {
 		objectMap["properties"] = j.JobProperties
-	}
-	if j.ID != nil {
-		objectMap["id"] = j.ID
-	}
-	if j.Name != nil {
-		objectMap["name"] = j.Name
-	}
-	if j.Type != nil {
-		objectMap["type"] = j.Type
-	}
-	if j.Location != nil {
-		objectMap["location"] = j.Location
-	}
-	if j.Tags != nil {
-		objectMap["tags"] = j.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -1497,7 +1602,7 @@ type JobBaseProperties struct {
 	// Priority - Priority associated with the job. Priority values can range from -1000 to 1000, with -1000 being the lowest priority and 1000 being the highest priority. The default value is 0.
 	Priority *int32      `json:"priority,omitempty"`
 	Cluster  *ResourceID `json:"cluster,omitempty"`
-	// MountVolumes - These volumes will be mounted before the job execution and will be unmouted after the job completion. The volumes will be mounted at location specified by $AZ_BATCHAI_JOB_MOUNT_ROOT environment variable.
+	// MountVolumes - These volumes will be mounted before the job execution and will be unmounted after the job completion. The volumes will be mounted at location specified by $AZ_BATCHAI_JOB_MOUNT_ROOT environment variable.
 	MountVolumes *MountVolumes `json:"mountVolumes,omitempty"`
 	// NodeCount - The job will be gang scheduled on that many compute nodes
 	NodeCount *int32 `json:"nodeCount,omitempty"`
@@ -1612,20 +1717,37 @@ type JobListResultIterator struct {
 	page JobListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *JobListResultIterator) Next() error {
+func (iter *JobListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *JobListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1647,6 +1769,11 @@ func (iter JobListResultIterator) Value() Job {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the JobListResultIterator type.
+func NewJobListResultIterator(page JobListResultPage) JobListResultIterator {
+	return JobListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (jlr JobListResult) IsEmpty() bool {
 	return jlr.Value == nil || len(*jlr.Value) == 0
@@ -1654,11 +1781,11 @@ func (jlr JobListResult) IsEmpty() bool {
 
 // jobListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (jlr JobListResult) jobListResultPreparer() (*http.Request, error) {
+func (jlr JobListResult) jobListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if jlr.NextLink == nil || len(to.String(jlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(jlr.NextLink)))
@@ -1666,19 +1793,36 @@ func (jlr JobListResult) jobListResultPreparer() (*http.Request, error) {
 
 // JobListResultPage contains a page of Job values.
 type JobListResultPage struct {
-	fn  func(JobListResult) (JobListResult, error)
+	fn  func(context.Context, JobListResult) (JobListResult, error)
 	jlr JobListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *JobListResultPage) Next() error {
-	next, err := page.fn(page.jlr)
+func (page *JobListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.jlr)
 	if err != nil {
 		return err
 	}
 	page.jlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *JobListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1699,6 +1843,11 @@ func (page JobListResultPage) Values() []Job {
 	return *page.jlr.Value
 }
 
+// Creates a new instance of the JobListResultPage type.
+func NewJobListResultPage(getNextPage func(context.Context, JobListResult) (JobListResult, error)) JobListResultPage {
+	return JobListResultPage{fn: getNextPage}
+}
+
 // JobPreparation specifies the settings for job preparation.
 type JobPreparation struct {
 	// CommandLine - If containerSettings is specified on the job, this commandLine will be executed in the same container as job. Otherwise it will be executed on the node.
@@ -1712,7 +1861,7 @@ type JobProperties struct {
 	// Priority - Priority associated with the job. Priority values can range from -1000 to 1000, with -1000 being the lowest priority and 1000 being the highest priority. The default value is 0.
 	Priority *int32      `json:"priority,omitempty"`
 	Cluster  *ResourceID `json:"cluster,omitempty"`
-	// MountVolumes - These volumes will be mounted before the job execution and will be unmouted after the job completion. The volumes will be mounted at location specified by $AZ_BATCHAI_JOB_MOUNT_ROOT environment variable.
+	// MountVolumes - These volumes will be mounted before the job execution and will be unmounted after the job completion. The volumes will be mounted at location specified by $AZ_BATCHAI_JOB_MOUNT_ROOT environment variable.
 	MountVolumes *MountVolumes `json:"mountVolumes,omitempty"`
 	// JobOutputDirectoryPathSegment - Batch AI creates job's output directories under an unique path to avoid conflicts between jobs. This value contains a path segment generated by Batch AI to make the path unique and can be used to find the output directory on the node or mounted filesystem.
 	JobOutputDirectoryPathSegment *string `json:"jobOutputDirectoryPathSegment,omitempty"`
@@ -1740,15 +1889,15 @@ type JobProperties struct {
 	Secrets *[]EnvironmentVariableWithSecretValue `json:"secrets,omitempty"`
 	// Constraints - Constraints associated with the Job.
 	Constraints *JobPropertiesConstraints `json:"constraints,omitempty"`
-	// CreationTime - The creation time of the job.
+	// CreationTime - READ-ONLY; The creation time of the job.
 	CreationTime *date.Time `json:"creationTime,omitempty"`
-	// ProvisioningState - The provisioned state of the Batch AI job. Possible values include: 'ProvisioningStateCreating', 'ProvisioningStateSucceeded', 'ProvisioningStateFailed', 'ProvisioningStateDeleting'
+	// ProvisioningState - READ-ONLY; The provisioned state of the Batch AI job. Possible values include: 'ProvisioningStateCreating', 'ProvisioningStateSucceeded', 'ProvisioningStateFailed', 'ProvisioningStateDeleting'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
-	// ProvisioningStateTransitionTime - The time at which the job entered its current provisioning state.
+	// ProvisioningStateTransitionTime - READ-ONLY; The time at which the job entered its current provisioning state.
 	ProvisioningStateTransitionTime *date.Time `json:"provisioningStateTransitionTime,omitempty"`
-	// ExecutionState - The current state of the job. Possible values are: queued - The job is queued and able to run. A job enters this state when it is created, or when it is awaiting a retry after a failed run. running - The job is running on a compute cluster. This includes job-level preparation such as downloading resource files or set up container specified on the job - it does not necessarily mean that the job command line has started executing. terminating - The job is terminated by the user, the terminate operation is in progress. succeeded - The job has completed running succesfully and exited with exit code 0. failed - The job has finished unsuccessfully (failed with a non-zero exit code) and has exhausted its retry limit. A job is also marked as failed if an error occurred launching the job. Possible values include: 'Queued', 'Running', 'Terminating', 'Succeeded', 'Failed'
+	// ExecutionState - The current state of the job. Possible values are: queued - The job is queued and able to run. A job enters this state when it is created, or when it is awaiting a retry after a failed run. running - The job is running on a compute cluster. This includes job-level preparation such as downloading resource files or set up container specified on the job - it does not necessarily mean that the job command line has started executing. terminating - The job is terminated by the user, the terminate operation is in progress. succeeded - The job has completed running successfully and exited with exit code 0. failed - The job has finished unsuccessfully (failed with a non-zero exit code) and has exhausted its retry limit. A job is also marked as failed if an error occurred launching the job. Possible values include: 'Queued', 'Running', 'Terminating', 'Succeeded', 'Failed'
 	ExecutionState ExecutionState `json:"executionState,omitempty"`
-	// ExecutionStateTransitionTime - The time at which the job entered its current execution state.
+	// ExecutionStateTransitionTime - READ-ONLY; The time at which the job entered its current execution state.
 	ExecutionStateTransitionTime *date.Time `json:"executionStateTransitionTime,omitempty"`
 	// ExecutionInfo - Contains information about the execution of a job in the Azure Batch service.
 	ExecutionInfo *JobPropertiesExecutionInfo `json:"executionInfo,omitempty"`
@@ -1780,7 +1929,7 @@ type JobsCreateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *JobsCreateFuture) Result(client JobsClient) (j Job, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.JobsCreateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1808,7 +1957,7 @@ type JobsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *JobsDeleteFuture) Result(client JobsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.JobsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1821,7 +1970,8 @@ func (future *JobsDeleteFuture) Result(client JobsClient) (ar autorest.Response,
 	return
 }
 
-// JobsTerminateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// JobsTerminateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type JobsTerminateFuture struct {
 	azure.Future
 }
@@ -1830,7 +1980,7 @@ type JobsTerminateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *JobsTerminateFuture) Result(client JobsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batchai.JobsTerminateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1870,20 +2020,37 @@ type ListUsagesResultIterator struct {
 	page ListUsagesResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListUsagesResultIterator) Next() error {
+func (iter *ListUsagesResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListUsagesResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ListUsagesResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1905,6 +2072,11 @@ func (iter ListUsagesResultIterator) Value() Usage {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ListUsagesResultIterator type.
+func NewListUsagesResultIterator(page ListUsagesResultPage) ListUsagesResultIterator {
+	return ListUsagesResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (lur ListUsagesResult) IsEmpty() bool {
 	return lur.Value == nil || len(*lur.Value) == 0
@@ -1912,11 +2084,11 @@ func (lur ListUsagesResult) IsEmpty() bool {
 
 // listUsagesResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lur ListUsagesResult) listUsagesResultPreparer() (*http.Request, error) {
+func (lur ListUsagesResult) listUsagesResultPreparer(ctx context.Context) (*http.Request, error) {
 	if lur.NextLink == nil || len(to.String(lur.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lur.NextLink)))
@@ -1924,19 +2096,36 @@ func (lur ListUsagesResult) listUsagesResultPreparer() (*http.Request, error) {
 
 // ListUsagesResultPage contains a page of Usage values.
 type ListUsagesResultPage struct {
-	fn  func(ListUsagesResult) (ListUsagesResult, error)
+	fn  func(context.Context, ListUsagesResult) (ListUsagesResult, error)
 	lur ListUsagesResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListUsagesResultPage) Next() error {
-	next, err := page.fn(page.lur)
+func (page *ListUsagesResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListUsagesResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.lur)
 	if err != nil {
 		return err
 	}
 	page.lur = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ListUsagesResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1955,6 +2144,11 @@ func (page ListUsagesResultPage) Values() []Usage {
 		return nil
 	}
 	return *page.lur.Value
+}
+
+// Creates a new instance of the ListUsagesResultPage type.
+func NewListUsagesResultPage(getNextPage func(context.Context, ListUsagesResult) (ListUsagesResult, error)) ListUsagesResultPage {
+	return ListUsagesResultPage{fn: getNextPage}
 }
 
 // LocalDataVolume represents mapping of host directories to directories in the container.
@@ -1996,8 +2190,8 @@ type NameValuePair struct {
 	Value *string `json:"value,omitempty"`
 }
 
-// NodeSetup use this to prepare the VM. NOTE: The volumes specified in mountVolumes are mounted first and then the
-// setupTask is run. Therefore the setup task can use local mountPaths in its execution.
+// NodeSetup use this to prepare the VM. NOTE: The volumes specified in mountVolumes are mounted first and
+// then the setupTask is run. Therefore the setup task can use local mountPaths in its execution.
 type NodeSetup struct {
 	SetupTask *SetupTask `json:"setupTask,omitempty"`
 	// MountVolumes - Specified mount volumes will be available to all jobs executing on the cluster. The volumes will be mounted at location specified by $AZ_BATCHAI_MOUNT_ROOT environment variable.
@@ -2046,20 +2240,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2081,6 +2292,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -2088,11 +2304,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -2100,19 +2316,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2131,6 +2364,11 @@ func (page OperationListResultPage) Values() []Operation {
 		return nil
 	}
 	return *page.olr.Value
+}
+
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
 }
 
 // OutputDirectory output directory for the job.
@@ -2191,26 +2429,44 @@ type RemoteLoginInformationListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// RemoteLoginInformationListResultIterator provides access to a complete listing of RemoteLoginInformation values.
+// RemoteLoginInformationListResultIterator provides access to a complete listing of RemoteLoginInformation
+// values.
 type RemoteLoginInformationListResultIterator struct {
 	i    int
 	page RemoteLoginInformationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RemoteLoginInformationListResultIterator) Next() error {
+func (iter *RemoteLoginInformationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RemoteLoginInformationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *RemoteLoginInformationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -2232,6 +2488,11 @@ func (iter RemoteLoginInformationListResultIterator) Value() RemoteLoginInformat
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the RemoteLoginInformationListResultIterator type.
+func NewRemoteLoginInformationListResultIterator(page RemoteLoginInformationListResultPage) RemoteLoginInformationListResultIterator {
+	return RemoteLoginInformationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rlilr RemoteLoginInformationListResult) IsEmpty() bool {
 	return rlilr.Value == nil || len(*rlilr.Value) == 0
@@ -2239,11 +2500,11 @@ func (rlilr RemoteLoginInformationListResult) IsEmpty() bool {
 
 // remoteLoginInformationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rlilr RemoteLoginInformationListResult) remoteLoginInformationListResultPreparer() (*http.Request, error) {
+func (rlilr RemoteLoginInformationListResult) remoteLoginInformationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if rlilr.NextLink == nil || len(to.String(rlilr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rlilr.NextLink)))
@@ -2251,19 +2512,36 @@ func (rlilr RemoteLoginInformationListResult) remoteLoginInformationListResultPr
 
 // RemoteLoginInformationListResultPage contains a page of RemoteLoginInformation values.
 type RemoteLoginInformationListResultPage struct {
-	fn    func(RemoteLoginInformationListResult) (RemoteLoginInformationListResult, error)
+	fn    func(context.Context, RemoteLoginInformationListResult) (RemoteLoginInformationListResult, error)
 	rlilr RemoteLoginInformationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RemoteLoginInformationListResultPage) Next() error {
-	next, err := page.fn(page.rlilr)
+func (page *RemoteLoginInformationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RemoteLoginInformationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rlilr)
 	if err != nil {
 		return err
 	}
 	page.rlilr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *RemoteLoginInformationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -2284,38 +2562,28 @@ func (page RemoteLoginInformationListResultPage) Values() []RemoteLoginInformati
 	return *page.rlilr.Value
 }
 
+// Creates a new instance of the RemoteLoginInformationListResultPage type.
+func NewRemoteLoginInformationListResultPage(getNextPage func(context.Context, RemoteLoginInformationListResult) (RemoteLoginInformationListResult, error)) RemoteLoginInformationListResultPage {
+	return RemoteLoginInformationListResultPage{fn: getNextPage}
+}
+
 // Resource a definition of an Azure resource.
 type Resource struct {
-	// ID - The ID of the resource
+	// ID - READ-ONLY; The ID of the resource
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource
+	// Name - READ-ONLY; The name of the resource
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource
+	// Type - READ-ONLY; The type of the resource
 	Type *string `json:"type,omitempty"`
-	// Location - The location of the resource
+	// Location - READ-ONLY; The location of the resource
 	Location *string `json:"location,omitempty"`
-	// Tags - The tags of the resource
+	// Tags - READ-ONLY; The tags of the resource
 	Tags map[string]*string `json:"tags"`
 }
 
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
-	if r.Location != nil {
-		objectMap["location"] = r.Location
-	}
-	if r.Tags != nil {
-		objectMap["tags"] = r.Tags
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -2325,9 +2593,9 @@ type ResourceID struct {
 	ID *string `json:"id,omitempty"`
 }
 
-// ScaleSettings at least one of manual or autoScale settings must be specified. Only one of manual or autoScale
-// settings can be specified. If autoScale settings are specified, the system automatically scales the cluster up
-// and down (within the supplied limits) based on the pending jobs on the cluster.
+// ScaleSettings at least one of manual or autoScale settings must be specified. Only one of manual or
+// autoScale settings can be specified. If autoScale settings are specified, the system automatically
+// scales the cluster up and down (within the supplied limits) based on the pending jobs on the cluster.
 type ScaleSettings struct {
 	Manual    *ManualScaleSettings `json:"manual,omitempty"`
 	AutoScale *AutoScaleSettings   `json:"autoScale,omitempty"`
@@ -2343,7 +2611,7 @@ type SetupTask struct {
 	RunElevated *bool `json:"runElevated,omitempty"`
 	// StdOutErrPathPrefix - The prefix of a path where the Batch AI service will upload the stdout and stderr of the setup task.
 	StdOutErrPathPrefix *string `json:"stdOutErrPathPrefix,omitempty"`
-	// StdOutErrPathSuffix - Batch AI creates the setup task output directories under an unique path to avoid conflicts between different clusters. You can concatinate stdOutErrPathPrefix and stdOutErrPathSuffix to get the full path to the output directory.
+	// StdOutErrPathSuffix - READ-ONLY; Batch AI creates the setup task output directories under an unique path to avoid conflicts between different clusters. You can concatenate stdOutErrPathPrefix and stdOutErrPathSuffix to get the full path to the output directory.
 	StdOutErrPathSuffix *string `json:"stdOutErrPathSuffix,omitempty"`
 }
 

@@ -99,6 +99,10 @@ type ACMAPI interface {
 	RemoveTagsFromCertificateWithContext(aws.Context, *acm.RemoveTagsFromCertificateInput, ...request.Option) (*acm.RemoveTagsFromCertificateOutput, error)
 	RemoveTagsFromCertificateRequest(*acm.RemoveTagsFromCertificateInput) (*request.Request, *acm.RemoveTagsFromCertificateOutput)
 
+	RenewCertificate(*acm.RenewCertificateInput) (*acm.RenewCertificateOutput, error)
+	RenewCertificateWithContext(aws.Context, *acm.RenewCertificateInput, ...request.Option) (*acm.RenewCertificateOutput, error)
+	RenewCertificateRequest(*acm.RenewCertificateInput) (*request.Request, *acm.RenewCertificateOutput)
+
 	RequestCertificate(*acm.RequestCertificateInput) (*acm.RequestCertificateOutput, error)
 	RequestCertificateWithContext(aws.Context, *acm.RequestCertificateInput, ...request.Option) (*acm.RequestCertificateOutput, error)
 	RequestCertificateRequest(*acm.RequestCertificateInput) (*request.Request, *acm.RequestCertificateOutput)

@@ -18,7 +18,7 @@
   "description": "Fetches reports for the administrators of G Suite customers about the usage, collaboration, security, and risk for their users.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/reports/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/JTVvLULIzphR5TtdRgvE9YPEbq0\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/0EtCa-COsQELMrVnzWFUx1nOfgI\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -95,7 +95,7 @@
             "applicationName": {
               "description": "Application name for which the events are to be retrieved.",
               "location": "path",
-              "pattern": "(admin)|(calendar)|(drive)|(login)|(mobile)|(token)|(groups)|(saml)|(chat)|(gplus)|(rules)|(jamboard)|(meet)|(user_accounts)",
+              "pattern": "(admin)|(calendar)|(drive)|(login)|(mobile)|(token)|(groups)|(saml)|(chat)|(gplus)|(rules)|(jamboard)|(meet)|(user_accounts)|(access_transparency)|(groups_enterprise)",
               "required": true,
               "type": "string"
             },
@@ -129,6 +129,13 @@
               "maximum": "1000",
               "minimum": "1",
               "type": "integer"
+            },
+            "orgUnitID": {
+              "default": "",
+              "description": "the organizational unit's(OU) ID to filter activities from users belonging to a specific OU or one of its sub-OU(s)",
+              "location": "query",
+              "pattern": "(id:[a-z0-9]+)",
+              "type": "string"
             },
             "pageToken": {
               "description": "Token to specify next page.",
@@ -174,7 +181,7 @@
             "applicationName": {
               "description": "Application name for which the events are to be retrieved.",
               "location": "path",
-              "pattern": "(admin)|(calendar)|(drive)|(login)|(mobile)|(token)|(groups)|(saml)|(chat)|(gplus)|(rules)|(jamboard)|(meet)|(user_accounts)",
+              "pattern": "(admin)|(calendar)|(drive)|(login)|(mobile)|(token)|(groups)|(saml)|(chat)|(gplus)|(rules)|(jamboard)|(meet)|(user_accounts)|(access_transparency)|(groups_enterprise)",
               "required": true,
               "type": "string"
             },
@@ -208,6 +215,13 @@
               "maximum": "1000",
               "minimum": "1",
               "type": "integer"
+            },
+            "orgUnitID": {
+              "default": "",
+              "description": "the organizational unit's(OU) ID to filter activities from users belonging to a specific OU or one of its sub-OU(s)",
+              "location": "query",
+              "pattern": "(id:[a-z0-9]+)",
+              "type": "string"
             },
             "pageToken": {
               "description": "Token to specify next page.",
@@ -414,6 +428,13 @@
               "maximum": "1000",
               "type": "integer"
             },
+            "orgUnitID": {
+              "default": "",
+              "description": "the organizational unit's ID to filter usage parameters from users belonging to a specific OU or one of its sub-OU(s).",
+              "location": "query",
+              "pattern": "(id:[a-z0-9]+)",
+              "type": "string"
+            },
             "pageToken": {
               "description": "Token to specify next page.",
               "location": "query",
@@ -443,6 +464,7 @@
       }
     }
   },
+  "revision": "20190521",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Activities": {
@@ -523,11 +545,40 @@
                       "format": "int64",
                       "type": "string"
                     },
+                    "messageValue": {
+                      "description": "Nested value of the parameter.",
+                      "properties": {
+                        "parameter": {
+                          "description": "Looping to get parameter values.",
+                          "items": {
+                            "$ref": "NestedParameter"
+                          },
+                          "type": "array"
+                        }
+                      },
+                      "type": "object"
+                    },
                     "multiIntValue": {
                       "description": "Multi-int value of the parameter.",
                       "items": {
                         "format": "int64",
                         "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "multiMessageValue": {
+                      "description": "Nested values of the parameter.",
+                      "items": {
+                        "properties": {
+                          "parameter": {
+                            "description": "Parameter value.",
+                            "items": {
+                              "$ref": "NestedParameter"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
                       },
                       "type": "array"
                     },
@@ -648,6 +699,52 @@
         },
         "type": {
           "description": "The type of delivery mechanism used for this channel.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "NestedParameter": {
+      "description": "JSON template for a parameter used in various reports.",
+      "id": "NestedParameter",
+      "properties": {
+        "boolValue": {
+          "description": "Boolean value of the parameter.",
+          "type": "boolean"
+        },
+        "intValue": {
+          "description": "Integral value of the parameter.",
+          "format": "int64",
+          "type": "string"
+        },
+        "multiBoolValue": {
+          "description": "Multiple boolean values of the parameter.",
+          "items": {
+            "type": "boolean"
+          },
+          "type": "array"
+        },
+        "multiIntValue": {
+          "description": "Multiple integral values of the parameter.",
+          "items": {
+            "format": "int64",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "multiValue": {
+          "description": "Multiple string values of the parameter.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "The name of the parameter.",
+          "type": "string"
+        },
+        "value": {
+          "description": "String value of the parameter.",
           "type": "string"
         }
       },

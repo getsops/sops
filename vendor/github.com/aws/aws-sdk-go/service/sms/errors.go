@@ -7,65 +7,68 @@ const (
 	// ErrCodeInternalError for service response error code
 	// "InternalError".
 	//
-	// An internal error has occured.
+	// An internal error occurred.
 	ErrCodeInternalError = "InternalError"
 
 	// ErrCodeInvalidParameterException for service response error code
 	// "InvalidParameterException".
 	//
-	// A parameter specified in the request is not valid, is unsupported, or cannot
-	// be used.
+	// A specified parameter is not valid.
 	ErrCodeInvalidParameterException = "InvalidParameterException"
 
 	// ErrCodeMissingRequiredParameterException for service response error code
 	// "MissingRequiredParameterException".
 	//
-	// The request is missing a required parameter. Ensure that you have supplied
-	// all the required parameters for the request.
+	// A required parameter is missing.
 	ErrCodeMissingRequiredParameterException = "MissingRequiredParameterException"
 
 	// ErrCodeNoConnectorsAvailableException for service response error code
 	// "NoConnectorsAvailableException".
 	//
-	// No connectors are available to handle this request. Please associate connector(s)
-	// and verify any existing connectors are healthy and can respond to requests.
+	// There are no connectors available.
 	ErrCodeNoConnectorsAvailableException = "NoConnectorsAvailableException"
 
 	// ErrCodeOperationNotPermittedException for service response error code
 	// "OperationNotPermittedException".
 	//
-	// The specified operation is not allowed. This error can occur for a number
-	// of reasons; for example, you might be trying to start a Replication Run before
-	// seed Replication Run.
+	// This operation is not allowed.
 	ErrCodeOperationNotPermittedException = "OperationNotPermittedException"
 
 	// ErrCodeReplicationJobAlreadyExistsException for service response error code
 	// "ReplicationJobAlreadyExistsException".
 	//
-	// An active Replication Job already exists for the specified server.
+	// The specified replication job already exists.
 	ErrCodeReplicationJobAlreadyExistsException = "ReplicationJobAlreadyExistsException"
 
 	// ErrCodeReplicationJobNotFoundException for service response error code
 	// "ReplicationJobNotFoundException".
 	//
-	// The specified Replication Job cannot be found.
+	// The specified replication job does not exist.
 	ErrCodeReplicationJobNotFoundException = "ReplicationJobNotFoundException"
 
 	// ErrCodeReplicationRunLimitExceededException for service response error code
 	// "ReplicationRunLimitExceededException".
 	//
-	// This user has exceeded the maximum allowed Replication Run limit.
+	// You have exceeded the number of on-demand replication runs you can request
+	// in a 24-hour period.
 	ErrCodeReplicationRunLimitExceededException = "ReplicationRunLimitExceededException"
 
 	// ErrCodeServerCannotBeReplicatedException for service response error code
 	// "ServerCannotBeReplicatedException".
 	//
-	// The provided server cannot be replicated.
+	// The specified server cannot be replicated.
 	ErrCodeServerCannotBeReplicatedException = "ServerCannotBeReplicatedException"
+
+	// ErrCodeTemporarilyUnavailableException for service response error code
+	// "TemporarilyUnavailableException".
+	//
+	// The service is temporarily unavailable.
+	ErrCodeTemporarilyUnavailableException = "TemporarilyUnavailableException"
 
 	// ErrCodeUnauthorizedOperationException for service response error code
 	// "UnauthorizedOperationException".
 	//
-	// This user does not have permissions to perform this operation.
+	// You lack permissions needed to perform this operation. Check your IAM policies,
+	// and ensure that you are using the correct access keys.
 	ErrCodeUnauthorizedOperationException = "UnauthorizedOperationException"
 )

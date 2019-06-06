@@ -7,6 +7,7 @@
 package windows_test
 
 import (
+	"strings"
 	"syscall"
 	"testing"
 
@@ -49,5 +50,15 @@ func TestGetProcAddressByOrdinal(t *testing.T) {
 	r, _, _ := syscall.Syscall(procIsOS, 1, OS_NT, 0, 0)
 	if r == 0 {
 		t.Error("shlwapi.dll:IsOS(OS_NT) returned 0, expected non-zero value")
+	}
+}
+
+func TestGetSystemDirectory(t *testing.T) {
+	d, err := windows.GetSystemDirectory()
+	if err != nil {
+		t.Fatalf("Failed to get system directory: %s", err)
+	}
+	if !strings.HasSuffix(strings.ToLower(d), "\\system32") {
+		t.Fatalf("System directory does not end in system32: %s", d)
 	}
 }

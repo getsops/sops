@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/entitysearch"
+
 // AnswerType enumerates the values for answer type.
 type AnswerType string
 
@@ -366,28 +369,31 @@ func PossibleTypeBasicResponseBaseValues() []TypeBasicResponseBase {
 
 // Airport ...
 type Airport struct {
+	// IataCode - READ-ONLY
 	IataCode *string `json:"iataCode,omitempty"`
+	// IcaoCode - READ-ONLY
 	IcaoCode *string `json:"icaoCode,omitempty"`
-	// Address - The postal address of where the entity is located
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -397,45 +403,6 @@ type Airport struct {
 func (a Airport) MarshalJSON() ([]byte, error) {
 	a.Type = TypeAirport
 	objectMap := make(map[string]interface{})
-	if a.IataCode != nil {
-		objectMap["iataCode"] = a.IataCode
-	}
-	if a.IcaoCode != nil {
-		objectMap["icaoCode"] = a.IcaoCode
-	}
-	if a.Address != nil {
-		objectMap["address"] = a.Address
-	}
-	if a.Telephone != nil {
-		objectMap["telephone"] = a.Telephone
-	}
-	if a.Name != nil {
-		objectMap["name"] = a.Name
-	}
-	if a.URL != nil {
-		objectMap["url"] = a.URL
-	}
-	if a.Image != nil {
-		objectMap["image"] = a.Image
-	}
-	if a.Description != nil {
-		objectMap["description"] = a.Description
-	}
-	if a.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = a.EntityPresentationInfo
-	}
-	if a.BingID != nil {
-		objectMap["bingId"] = a.BingID
-	}
-	if a.ContractualRules != nil {
-		objectMap["contractualRules"] = a.ContractualRules
-	}
-	if a.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = a.WebSearchURL
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
 	if a.Type != "" {
 		objectMap["_type"] = a.Type
 	}
@@ -818,11 +785,11 @@ type BasicAnswer interface {
 
 // Answer ...
 type Answer struct {
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -877,15 +844,6 @@ func unmarshalBasicAnswerArray(body []byte) ([]BasicAnswer, error) {
 func (a Answer) MarshalJSON() ([]byte, error) {
 	a.Type = TypeAnswer
 	objectMap := make(map[string]interface{})
-	if a.ContractualRules != nil {
-		objectMap["contractualRules"] = a.ContractualRules
-	}
-	if a.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = a.WebSearchURL
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
 	if a.Type != "" {
 		objectMap["_type"] = a.Type
 	}
@@ -1175,26 +1133,27 @@ type BasicCivicStructure interface {
 
 // CivicStructure ...
 type CivicStructure struct {
-	// Address - The postal address of where the entity is located
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -1241,39 +1200,6 @@ func unmarshalBasicCivicStructureArray(body []byte) ([]BasicCivicStructure, erro
 func (cs CivicStructure) MarshalJSON() ([]byte, error) {
 	cs.Type = TypeCivicStructure
 	objectMap := make(map[string]interface{})
-	if cs.Address != nil {
-		objectMap["address"] = cs.Address
-	}
-	if cs.Telephone != nil {
-		objectMap["telephone"] = cs.Telephone
-	}
-	if cs.Name != nil {
-		objectMap["name"] = cs.Name
-	}
-	if cs.URL != nil {
-		objectMap["url"] = cs.URL
-	}
-	if cs.Image != nil {
-		objectMap["image"] = cs.Image
-	}
-	if cs.Description != nil {
-		objectMap["description"] = cs.Description
-	}
-	if cs.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = cs.EntityPresentationInfo
-	}
-	if cs.BingID != nil {
-		objectMap["bingId"] = cs.BingID
-	}
-	if cs.ContractualRules != nil {
-		objectMap["contractualRules"] = cs.ContractualRules
-	}
-	if cs.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = cs.WebSearchURL
-	}
-	if cs.ID != nil {
-		objectMap["id"] = cs.ID
-	}
 	if cs.Type != "" {
 		objectMap["_type"] = cs.Type
 	}
@@ -1638,9 +1564,9 @@ type BasicContractualRulesAttribution interface {
 
 // ContractualRulesAttribution ...
 type ContractualRulesAttribution struct {
-	// MustBeCloseToContent - A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
+	// MustBeCloseToContent - READ-ONLY; A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
 	MustBeCloseToContent *bool `json:"mustBeCloseToContent,omitempty"`
-	// TargetPropertyName - The name of the field that the rule applies to.
+	// TargetPropertyName - READ-ONLY; The name of the field that the rule applies to.
 	TargetPropertyName *string `json:"targetPropertyName,omitempty"`
 	// Type - Possible values include: 'TypeContractualRulesContractualRule', 'TypeContractualRulesAttribution', 'TypeContractualRulesLicenseAttribution', 'TypeContractualRulesLinkAttribution', 'TypeContractualRulesMediaAttribution', 'TypeContractualRulesTextAttribution'
 	Type Type `json:"_type,omitempty"`
@@ -1699,12 +1625,6 @@ func unmarshalBasicContractualRulesAttributionArray(body []byte) ([]BasicContrac
 func (cra ContractualRulesAttribution) MarshalJSON() ([]byte, error) {
 	cra.Type = TypeContractualRulesAttribution
 	objectMap := make(map[string]interface{})
-	if cra.MustBeCloseToContent != nil {
-		objectMap["mustBeCloseToContent"] = cra.MustBeCloseToContent
-	}
-	if cra.TargetPropertyName != nil {
-		objectMap["targetPropertyName"] = cra.TargetPropertyName
-	}
 	if cra.Type != "" {
 		objectMap["_type"] = cra.Type
 	}
@@ -1764,7 +1684,7 @@ type BasicContractualRulesContractualRule interface {
 
 // ContractualRulesContractualRule ...
 type ContractualRulesContractualRule struct {
-	// TargetPropertyName - The name of the field that the rule applies to.
+	// TargetPropertyName - READ-ONLY; The name of the field that the rule applies to.
 	TargetPropertyName *string `json:"targetPropertyName,omitempty"`
 	// Type - Possible values include: 'TypeContractualRulesContractualRule', 'TypeContractualRulesAttribution', 'TypeContractualRulesLicenseAttribution', 'TypeContractualRulesLinkAttribution', 'TypeContractualRulesMediaAttribution', 'TypeContractualRulesTextAttribution'
 	Type Type `json:"_type,omitempty"`
@@ -1827,9 +1747,6 @@ func unmarshalBasicContractualRulesContractualRuleArray(body []byte) ([]BasicCon
 func (crcr ContractualRulesContractualRule) MarshalJSON() ([]byte, error) {
 	crcr.Type = TypeContractualRulesContractualRule
 	objectMap := make(map[string]interface{})
-	if crcr.TargetPropertyName != nil {
-		objectMap["targetPropertyName"] = crcr.TargetPropertyName
-	}
 	if crcr.Type != "" {
 		objectMap["_type"] = crcr.Type
 	}
@@ -1878,13 +1795,13 @@ func (crcr ContractualRulesContractualRule) AsBasicContractualRulesContractualRu
 
 // ContractualRulesLicenseAttribution defines a contractual rule for license attribution.
 type ContractualRulesLicenseAttribution struct {
-	// License - The license under which the content may be used.
+	// License - READ-ONLY; The license under which the content may be used.
 	License *License `json:"license,omitempty"`
-	// LicenseNotice - The license to display next to the targeted field.
+	// LicenseNotice - READ-ONLY; The license to display next to the targeted field.
 	LicenseNotice *string `json:"licenseNotice,omitempty"`
-	// MustBeCloseToContent - A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
+	// MustBeCloseToContent - READ-ONLY; A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
 	MustBeCloseToContent *bool `json:"mustBeCloseToContent,omitempty"`
-	// TargetPropertyName - The name of the field that the rule applies to.
+	// TargetPropertyName - READ-ONLY; The name of the field that the rule applies to.
 	TargetPropertyName *string `json:"targetPropertyName,omitempty"`
 	// Type - Possible values include: 'TypeContractualRulesContractualRule', 'TypeContractualRulesAttribution', 'TypeContractualRulesLicenseAttribution', 'TypeContractualRulesLinkAttribution', 'TypeContractualRulesMediaAttribution', 'TypeContractualRulesTextAttribution'
 	Type Type `json:"_type,omitempty"`
@@ -1894,18 +1811,6 @@ type ContractualRulesLicenseAttribution struct {
 func (crla ContractualRulesLicenseAttribution) MarshalJSON() ([]byte, error) {
 	crla.Type = TypeContractualRulesLicenseAttribution
 	objectMap := make(map[string]interface{})
-	if crla.License != nil {
-		objectMap["license"] = crla.License
-	}
-	if crla.LicenseNotice != nil {
-		objectMap["licenseNotice"] = crla.LicenseNotice
-	}
-	if crla.MustBeCloseToContent != nil {
-		objectMap["mustBeCloseToContent"] = crla.MustBeCloseToContent
-	}
-	if crla.TargetPropertyName != nil {
-		objectMap["targetPropertyName"] = crla.TargetPropertyName
-	}
 	if crla.Type != "" {
 		objectMap["_type"] = crla.Type
 	}
@@ -1958,11 +1863,11 @@ type ContractualRulesLinkAttribution struct {
 	Text *string `json:"text,omitempty"`
 	// URL - The URL to the provider's website. Use text and URL to create the hyperlink.
 	URL *string `json:"url,omitempty"`
-	// OptionalForListDisplay - Indicates whether this provider's attribution is optional.
+	// OptionalForListDisplay - READ-ONLY; Indicates whether this provider's attribution is optional.
 	OptionalForListDisplay *bool `json:"optionalForListDisplay,omitempty"`
-	// MustBeCloseToContent - A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
+	// MustBeCloseToContent - READ-ONLY; A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
 	MustBeCloseToContent *bool `json:"mustBeCloseToContent,omitempty"`
-	// TargetPropertyName - The name of the field that the rule applies to.
+	// TargetPropertyName - READ-ONLY; The name of the field that the rule applies to.
 	TargetPropertyName *string `json:"targetPropertyName,omitempty"`
 	// Type - Possible values include: 'TypeContractualRulesContractualRule', 'TypeContractualRulesAttribution', 'TypeContractualRulesLicenseAttribution', 'TypeContractualRulesLinkAttribution', 'TypeContractualRulesMediaAttribution', 'TypeContractualRulesTextAttribution'
 	Type Type `json:"_type,omitempty"`
@@ -1977,15 +1882,6 @@ func (crla ContractualRulesLinkAttribution) MarshalJSON() ([]byte, error) {
 	}
 	if crla.URL != nil {
 		objectMap["url"] = crla.URL
-	}
-	if crla.OptionalForListDisplay != nil {
-		objectMap["optionalForListDisplay"] = crla.OptionalForListDisplay
-	}
-	if crla.MustBeCloseToContent != nil {
-		objectMap["mustBeCloseToContent"] = crla.MustBeCloseToContent
-	}
-	if crla.TargetPropertyName != nil {
-		objectMap["targetPropertyName"] = crla.TargetPropertyName
 	}
 	if crla.Type != "" {
 		objectMap["_type"] = crla.Type
@@ -2035,11 +1931,11 @@ func (crla ContractualRulesLinkAttribution) AsBasicContractualRulesContractualRu
 
 // ContractualRulesMediaAttribution defines a contractual rule for media attribution.
 type ContractualRulesMediaAttribution struct {
-	// URL - The URL that you use to create of hyperlink of the media content. For example, if the target is an image, you would use the URL to make the image clickable.
+	// URL - READ-ONLY; The URL that you use to create of hyperlink of the media content. For example, if the target is an image, you would use the URL to make the image clickable.
 	URL *string `json:"url,omitempty"`
-	// MustBeCloseToContent - A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
+	// MustBeCloseToContent - READ-ONLY; A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
 	MustBeCloseToContent *bool `json:"mustBeCloseToContent,omitempty"`
-	// TargetPropertyName - The name of the field that the rule applies to.
+	// TargetPropertyName - READ-ONLY; The name of the field that the rule applies to.
 	TargetPropertyName *string `json:"targetPropertyName,omitempty"`
 	// Type - Possible values include: 'TypeContractualRulesContractualRule', 'TypeContractualRulesAttribution', 'TypeContractualRulesLicenseAttribution', 'TypeContractualRulesLinkAttribution', 'TypeContractualRulesMediaAttribution', 'TypeContractualRulesTextAttribution'
 	Type Type `json:"_type,omitempty"`
@@ -2049,15 +1945,6 @@ type ContractualRulesMediaAttribution struct {
 func (crma ContractualRulesMediaAttribution) MarshalJSON() ([]byte, error) {
 	crma.Type = TypeContractualRulesMediaAttribution
 	objectMap := make(map[string]interface{})
-	if crma.URL != nil {
-		objectMap["url"] = crma.URL
-	}
-	if crma.MustBeCloseToContent != nil {
-		objectMap["mustBeCloseToContent"] = crma.MustBeCloseToContent
-	}
-	if crma.TargetPropertyName != nil {
-		objectMap["targetPropertyName"] = crma.TargetPropertyName
-	}
 	if crma.Type != "" {
 		objectMap["_type"] = crma.Type
 	}
@@ -2108,11 +1995,11 @@ func (crma ContractualRulesMediaAttribution) AsBasicContractualRulesContractualR
 type ContractualRulesTextAttribution struct {
 	// Text - The attribution text. Text attribution applies to the entity as a whole and should be displayed immediately following the entity presentation. If there are multiple text or link attribution rules that do not specify a target, you should concatenate them and display them using a "Data from:" label.
 	Text *string `json:"text,omitempty"`
-	// OptionalForListDisplay - Indicates whether this provider's attribution is optional.
+	// OptionalForListDisplay - READ-ONLY; Indicates whether this provider's attribution is optional.
 	OptionalForListDisplay *bool `json:"optionalForListDisplay,omitempty"`
-	// MustBeCloseToContent - A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
+	// MustBeCloseToContent - READ-ONLY; A Boolean value that determines whether the contents of the rule must be placed in close proximity to the field that the rule applies to. If true, the contents must be placed in close proximity. If false, or this field does not exist, the contents may be placed at the caller's discretion.
 	MustBeCloseToContent *bool `json:"mustBeCloseToContent,omitempty"`
-	// TargetPropertyName - The name of the field that the rule applies to.
+	// TargetPropertyName - READ-ONLY; The name of the field that the rule applies to.
 	TargetPropertyName *string `json:"targetPropertyName,omitempty"`
 	// Type - Possible values include: 'TypeContractualRulesContractualRule', 'TypeContractualRulesAttribution', 'TypeContractualRulesLicenseAttribution', 'TypeContractualRulesLinkAttribution', 'TypeContractualRulesMediaAttribution', 'TypeContractualRulesTextAttribution'
 	Type Type `json:"_type,omitempty"`
@@ -2124,15 +2011,6 @@ func (crta ContractualRulesTextAttribution) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if crta.Text != nil {
 		objectMap["text"] = crta.Text
-	}
-	if crta.OptionalForListDisplay != nil {
-		objectMap["optionalForListDisplay"] = crta.OptionalForListDisplay
-	}
-	if crta.MustBeCloseToContent != nil {
-		objectMap["mustBeCloseToContent"] = crta.MustBeCloseToContent
-	}
-	if crta.TargetPropertyName != nil {
-		objectMap["targetPropertyName"] = crta.TargetPropertyName
 	}
 	if crta.Type != "" {
 		objectMap["_type"] = crta.Type
@@ -2191,27 +2069,29 @@ type BasicCreativeWork interface {
 
 // CreativeWork ...
 type CreativeWork struct {
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Text     *string       `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Text - READ-ONLY
+	Text *string `json:"text,omitempty"`
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -2266,42 +2146,6 @@ func unmarshalBasicCreativeWorkArray(body []byte) ([]BasicCreativeWork, error) {
 func (cw CreativeWork) MarshalJSON() ([]byte, error) {
 	cw.Type = TypeCreativeWork
 	objectMap := make(map[string]interface{})
-	if cw.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = cw.ThumbnailURL
-	}
-	if cw.Provider != nil {
-		objectMap["provider"] = cw.Provider
-	}
-	if cw.Text != nil {
-		objectMap["text"] = cw.Text
-	}
-	if cw.Name != nil {
-		objectMap["name"] = cw.Name
-	}
-	if cw.URL != nil {
-		objectMap["url"] = cw.URL
-	}
-	if cw.Image != nil {
-		objectMap["image"] = cw.Image
-	}
-	if cw.Description != nil {
-		objectMap["description"] = cw.Description
-	}
-	if cw.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = cw.EntityPresentationInfo
-	}
-	if cw.BingID != nil {
-		objectMap["bingId"] = cw.BingID
-	}
-	if cw.ContractualRules != nil {
-		objectMap["contractualRules"] = cw.ContractualRules
-	}
-	if cw.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = cw.WebSearchURL
-	}
-	if cw.ID != nil {
-		objectMap["id"] = cw.ID
-	}
 	if cw.Type != "" {
 		objectMap["_type"] = cw.Type
 	}
@@ -2671,31 +2515,35 @@ type BasicEntertainmentBusiness interface {
 
 // EntertainmentBusiness ...
 type EntertainmentBusiness struct {
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -2742,51 +2590,6 @@ func unmarshalBasicEntertainmentBusinessArray(body []byte) ([]BasicEntertainment
 func (eb EntertainmentBusiness) MarshalJSON() ([]byte, error) {
 	eb.Type = TypeEntertainmentBusiness
 	objectMap := make(map[string]interface{})
-	if eb.PriceRange != nil {
-		objectMap["priceRange"] = eb.PriceRange
-	}
-	if eb.Panoramas != nil {
-		objectMap["panoramas"] = eb.Panoramas
-	}
-	if eb.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = eb.IsPermanentlyClosed
-	}
-	if eb.TagLine != nil {
-		objectMap["tagLine"] = eb.TagLine
-	}
-	if eb.Address != nil {
-		objectMap["address"] = eb.Address
-	}
-	if eb.Telephone != nil {
-		objectMap["telephone"] = eb.Telephone
-	}
-	if eb.Name != nil {
-		objectMap["name"] = eb.Name
-	}
-	if eb.URL != nil {
-		objectMap["url"] = eb.URL
-	}
-	if eb.Image != nil {
-		objectMap["image"] = eb.Image
-	}
-	if eb.Description != nil {
-		objectMap["description"] = eb.Description
-	}
-	if eb.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = eb.EntityPresentationInfo
-	}
-	if eb.BingID != nil {
-		objectMap["bingId"] = eb.BingID
-	}
-	if eb.ContractualRules != nil {
-		objectMap["contractualRules"] = eb.ContractualRules
-	}
-	if eb.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = eb.WebSearchURL
-	}
-	if eb.ID != nil {
-		objectMap["id"] = eb.ID
-	}
 	if eb.Type != "" {
 		objectMap["_type"] = eb.Type
 	}
@@ -3178,16 +2981,17 @@ func (eb *EntertainmentBusiness) UnmarshalJSON(body []byte) error {
 
 // Entities defines an entity answer.
 type Entities struct {
-	// QueryScenario - The supported query scenario. This field is set to DominantEntity or DisambiguationItem. The field is set to DominantEntity if Bing determines that only a single entity satisfies the request. For example, a book, movie, person, or attraction. If multiple entities could satisfy the request, the field is set to DisambiguationItem. For example, if the request uses the generic title of a movie franchise, the entity's type would likely be DisambiguationItem. But, if the request specifies a specific title from the franchise, the entity's type would likely be DominantEntity. Possible values include: 'DominantEntity', 'DominantEntityWithDisambiguation', 'Disambiguation', 'List', 'ListWithPivot'
+	// QueryScenario - READ-ONLY; The supported query scenario. This field is set to DominantEntity or DisambiguationItem. The field is set to DominantEntity if Bing determines that only a single entity satisfies the request. For example, a book, movie, person, or attraction. If multiple entities could satisfy the request, the field is set to DisambiguationItem. For example, if the request uses the generic title of a movie franchise, the entity's type would likely be DisambiguationItem. But, if the request specifies a specific title from the franchise, the entity's type would likely be DominantEntity. Possible values include: 'DominantEntity', 'DominantEntityWithDisambiguation', 'Disambiguation', 'List', 'ListWithPivot'
 	QueryScenario EntityQueryScenario `json:"queryScenario,omitempty"`
 	// Value - A list of entities.
-	Value        *[]BasicThing `json:"value,omitempty"`
+	Value *[]BasicThing `json:"value,omitempty"`
+	// QueryContext - READ-ONLY
 	QueryContext *QueryContext `json:"queryContext,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -3197,23 +3001,8 @@ type Entities struct {
 func (e Entities) MarshalJSON() ([]byte, error) {
 	e.Type = TypeEntities
 	objectMap := make(map[string]interface{})
-	if e.QueryScenario != "" {
-		objectMap["queryScenario"] = e.QueryScenario
-	}
 	if e.Value != nil {
 		objectMap["value"] = e.Value
-	}
-	if e.QueryContext != nil {
-		objectMap["queryContext"] = e.QueryContext
-	}
-	if e.ContractualRules != nil {
-		objectMap["contractualRules"] = e.ContractualRules
-	}
-	if e.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = e.WebSearchURL
-	}
-	if e.ID != nil {
-		objectMap["id"] = e.ID
 	}
 	if e.Type != "" {
 		objectMap["_type"] = e.Type
@@ -3526,9 +3315,9 @@ func (e *Entities) UnmarshalJSON(body []byte) error {
 type EntitiesEntityPresentationInfo struct {
 	// EntityScenario - The supported scenario. Possible values include: 'EntityScenarioDominantEntity', 'EntityScenarioDisambiguationItem', 'EntityScenarioListItem'
 	EntityScenario EntityScenario `json:"entityScenario,omitempty"`
-	// EntityTypeHints - A list of hints that indicate the entity's type. The list could contain a single hint such as Movie or a list of hints such as Place, LocalBusiness, Restaurant. Each successive hint in the array narrows the entity's type.
+	// EntityTypeHints - READ-ONLY; A list of hints that indicate the entity's type. The list could contain a single hint such as Movie or a list of hints such as Place, LocalBusiness, Restaurant. Each successive hint in the array narrows the entity's type.
 	EntityTypeHints *[]EntityType `json:"entityTypeHints,omitempty"`
-	// EntityTypeDisplayHint - A display version of the entity hint. For example, if entityTypeHints is Artist, this field may be set to American Singer.
+	// EntityTypeDisplayHint - READ-ONLY; A display version of the entity hint. For example, if entityTypeHints is Artist, this field may be set to American Singer.
 	EntityTypeDisplayHint *string `json:"entityTypeDisplayHint,omitempty"`
 }
 
@@ -3536,15 +3325,15 @@ type EntitiesEntityPresentationInfo struct {
 type Error struct {
 	// Code - The error code that identifies the category of error. Possible values include: 'None', 'ServerError', 'InvalidRequest', 'RateLimitExceeded', 'InvalidAuthorization', 'InsufficientAuthorization'
 	Code ErrorCode `json:"code,omitempty"`
-	// SubCode - The error code that further helps to identify the error. Possible values include: 'UnexpectedError', 'ResourceError', 'NotImplemented', 'ParameterMissing', 'ParameterInvalidValue', 'HTTPNotAllowed', 'Blocked', 'AuthorizationMissing', 'AuthorizationRedundancy', 'AuthorizationDisabled', 'AuthorizationExpired'
+	// SubCode - READ-ONLY; The error code that further helps to identify the error. Possible values include: 'UnexpectedError', 'ResourceError', 'NotImplemented', 'ParameterMissing', 'ParameterInvalidValue', 'HTTPNotAllowed', 'Blocked', 'AuthorizationMissing', 'AuthorizationRedundancy', 'AuthorizationDisabled', 'AuthorizationExpired'
 	SubCode ErrorSubCode `json:"subCode,omitempty"`
 	// Message - A description of the error.
 	Message *string `json:"message,omitempty"`
-	// MoreDetails - A description that provides additional information about the error.
+	// MoreDetails - READ-ONLY; A description that provides additional information about the error.
 	MoreDetails *string `json:"moreDetails,omitempty"`
-	// Parameter - The parameter in the request that caused the error.
+	// Parameter - READ-ONLY; The parameter in the request that caused the error.
 	Parameter *string `json:"parameter,omitempty"`
-	// Value - The parameter's value in the request that was not valid.
+	// Value - READ-ONLY; The parameter's value in the request that was not valid.
 	Value *string `json:"value,omitempty"`
 }
 
@@ -3552,11 +3341,11 @@ type Error struct {
 type ErrorResponse struct {
 	// Errors - A list of errors that describe the reasons why the request failed.
 	Errors *[]Error `json:"errors,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -3568,15 +3357,6 @@ func (er ErrorResponse) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if er.Errors != nil {
 		objectMap["errors"] = er.Errors
-	}
-	if er.ContractualRules != nil {
-		objectMap["contractualRules"] = er.ContractualRules
-	}
-	if er.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = er.WebSearchURL
-	}
-	if er.ID != nil {
-		objectMap["id"] = er.ID
 	}
 	if er.Type != "" {
 		objectMap["_type"] = er.Type
@@ -3876,31 +3656,35 @@ type BasicFoodEstablishment interface {
 
 // FoodEstablishment ...
 type FoodEstablishment struct {
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -3947,51 +3731,6 @@ func unmarshalBasicFoodEstablishmentArray(body []byte) ([]BasicFoodEstablishment
 func (fe FoodEstablishment) MarshalJSON() ([]byte, error) {
 	fe.Type = TypeFoodEstablishment
 	objectMap := make(map[string]interface{})
-	if fe.PriceRange != nil {
-		objectMap["priceRange"] = fe.PriceRange
-	}
-	if fe.Panoramas != nil {
-		objectMap["panoramas"] = fe.Panoramas
-	}
-	if fe.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = fe.IsPermanentlyClosed
-	}
-	if fe.TagLine != nil {
-		objectMap["tagLine"] = fe.TagLine
-	}
-	if fe.Address != nil {
-		objectMap["address"] = fe.Address
-	}
-	if fe.Telephone != nil {
-		objectMap["telephone"] = fe.Telephone
-	}
-	if fe.Name != nil {
-		objectMap["name"] = fe.Name
-	}
-	if fe.URL != nil {
-		objectMap["url"] = fe.URL
-	}
-	if fe.Image != nil {
-		objectMap["image"] = fe.Image
-	}
-	if fe.Description != nil {
-		objectMap["description"] = fe.Description
-	}
-	if fe.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = fe.EntityPresentationInfo
-	}
-	if fe.BingID != nil {
-		objectMap["bingId"] = fe.BingID
-	}
-	if fe.ContractualRules != nil {
-		objectMap["contractualRules"] = fe.ContractualRules
-	}
-	if fe.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = fe.WebSearchURL
-	}
-	if fe.ID != nil {
-		objectMap["id"] = fe.ID
-	}
 	if fe.Type != "" {
 		objectMap["_type"] = fe.Type
 	}
@@ -4383,33 +4122,39 @@ func (fe *FoodEstablishment) UnmarshalJSON(body []byte) error {
 
 // Hotel ...
 type Hotel struct {
-	HotelClass *string   `json:"hotelClass,omitempty"`
-	Amenities  *[]string `json:"amenities,omitempty"`
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// HotelClass - READ-ONLY
+	HotelClass *string `json:"hotelClass,omitempty"`
+	// Amenities - READ-ONLY
+	Amenities *[]string `json:"amenities,omitempty"`
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -4419,57 +4164,6 @@ type Hotel struct {
 func (h Hotel) MarshalJSON() ([]byte, error) {
 	h.Type = TypeHotel
 	objectMap := make(map[string]interface{})
-	if h.HotelClass != nil {
-		objectMap["hotelClass"] = h.HotelClass
-	}
-	if h.Amenities != nil {
-		objectMap["amenities"] = h.Amenities
-	}
-	if h.PriceRange != nil {
-		objectMap["priceRange"] = h.PriceRange
-	}
-	if h.Panoramas != nil {
-		objectMap["panoramas"] = h.Panoramas
-	}
-	if h.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = h.IsPermanentlyClosed
-	}
-	if h.TagLine != nil {
-		objectMap["tagLine"] = h.TagLine
-	}
-	if h.Address != nil {
-		objectMap["address"] = h.Address
-	}
-	if h.Telephone != nil {
-		objectMap["telephone"] = h.Telephone
-	}
-	if h.Name != nil {
-		objectMap["name"] = h.Name
-	}
-	if h.URL != nil {
-		objectMap["url"] = h.URL
-	}
-	if h.Image != nil {
-		objectMap["image"] = h.Image
-	}
-	if h.Description != nil {
-		objectMap["description"] = h.Description
-	}
-	if h.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = h.EntityPresentationInfo
-	}
-	if h.BingID != nil {
-		objectMap["bingId"] = h.BingID
-	}
-	if h.ContractualRules != nil {
-		objectMap["contractualRules"] = h.ContractualRules
-	}
-	if h.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = h.WebSearchURL
-	}
-	if h.ID != nil {
-		objectMap["id"] = h.ID
-	}
 	if h.Type != "" {
 		objectMap["_type"] = h.Type
 	}
@@ -4925,7 +4619,7 @@ type BasicIdentifiable interface {
 
 // Identifiable defines the identity of a resource.
 type Identifiable struct {
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -5076,9 +4770,6 @@ func unmarshalBasicIdentifiableArray(body []byte) ([]BasicIdentifiable, error) {
 func (i Identifiable) MarshalJSON() ([]byte, error) {
 	i.Type = TypeIdentifiable
 	objectMap := make(map[string]interface{})
-	if i.ID != nil {
-		objectMap["id"] = i.ID
-	}
 	if i.Type != "" {
 		objectMap["_type"] = i.Type
 	}
@@ -5312,37 +5003,39 @@ func (i Identifiable) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // ImageObject defines an image
 type ImageObject struct {
-	// Thumbnail - The URL to a thumbnail of the image
+	// Thumbnail - READ-ONLY; The URL to a thumbnail of the image
 	Thumbnail *ImageObject `json:"thumbnail,omitempty"`
-	// ContentURL - Original URL to retrieve the source (file) for the media object (e.g the source URL for the image).
+	// ContentURL - READ-ONLY; Original URL to retrieve the source (file) for the media object (e.g the source URL for the image).
 	ContentURL *string `json:"contentUrl,omitempty"`
-	// HostPageURL - URL of the page that hosts the media object.
+	// HostPageURL - READ-ONLY; URL of the page that hosts the media object.
 	HostPageURL *string `json:"hostPageUrl,omitempty"`
-	// Width - The width of the source media object, in pixels.
+	// Width - READ-ONLY; The width of the source media object, in pixels.
 	Width *int32 `json:"width,omitempty"`
-	// Height - The height of the source media object, in pixels.
+	// Height - READ-ONLY; The height of the source media object, in pixels.
 	Height *int32 `json:"height,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Text     *string       `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Text - READ-ONLY
+	Text *string `json:"text,omitempty"`
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -5352,57 +5045,6 @@ type ImageObject struct {
 func (ioVar ImageObject) MarshalJSON() ([]byte, error) {
 	ioVar.Type = TypeImageObject
 	objectMap := make(map[string]interface{})
-	if ioVar.Thumbnail != nil {
-		objectMap["thumbnail"] = ioVar.Thumbnail
-	}
-	if ioVar.ContentURL != nil {
-		objectMap["contentUrl"] = ioVar.ContentURL
-	}
-	if ioVar.HostPageURL != nil {
-		objectMap["hostPageUrl"] = ioVar.HostPageURL
-	}
-	if ioVar.Width != nil {
-		objectMap["width"] = ioVar.Width
-	}
-	if ioVar.Height != nil {
-		objectMap["height"] = ioVar.Height
-	}
-	if ioVar.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = ioVar.ThumbnailURL
-	}
-	if ioVar.Provider != nil {
-		objectMap["provider"] = ioVar.Provider
-	}
-	if ioVar.Text != nil {
-		objectMap["text"] = ioVar.Text
-	}
-	if ioVar.Name != nil {
-		objectMap["name"] = ioVar.Name
-	}
-	if ioVar.URL != nil {
-		objectMap["url"] = ioVar.URL
-	}
-	if ioVar.Image != nil {
-		objectMap["image"] = ioVar.Image
-	}
-	if ioVar.Description != nil {
-		objectMap["description"] = ioVar.Description
-	}
-	if ioVar.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = ioVar.EntityPresentationInfo
-	}
-	if ioVar.BingID != nil {
-		objectMap["bingId"] = ioVar.BingID
-	}
-	if ioVar.ContractualRules != nil {
-		objectMap["contractualRules"] = ioVar.ContractualRules
-	}
-	if ioVar.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ioVar.WebSearchURL
-	}
-	if ioVar.ID != nil {
-		objectMap["id"] = ioVar.ID
-	}
 	if ioVar.Type != "" {
 		objectMap["_type"] = ioVar.Type
 	}
@@ -5819,22 +5461,23 @@ type BasicIntangible interface {
 
 // Intangible ...
 type Intangible struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -5885,33 +5528,6 @@ func unmarshalBasicIntangibleArray(body []byte) ([]BasicIntangible, error) {
 func (i Intangible) MarshalJSON() ([]byte, error) {
 	i.Type = TypeIntangible
 	objectMap := make(map[string]interface{})
-	if i.Name != nil {
-		objectMap["name"] = i.Name
-	}
-	if i.URL != nil {
-		objectMap["url"] = i.URL
-	}
-	if i.Image != nil {
-		objectMap["image"] = i.Image
-	}
-	if i.Description != nil {
-		objectMap["description"] = i.Description
-	}
-	if i.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = i.EntityPresentationInfo
-	}
-	if i.BingID != nil {
-		objectMap["bingId"] = i.BingID
-	}
-	if i.ContractualRules != nil {
-		objectMap["contractualRules"] = i.ContractualRules
-	}
-	if i.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = i.WebSearchURL
-	}
-	if i.ID != nil {
-		objectMap["id"] = i.ID
-	}
 	if i.Type != "" {
 		objectMap["_type"] = i.Type
 	}
@@ -6249,27 +5865,29 @@ func (i *Intangible) UnmarshalJSON(body []byte) error {
 
 // License defines the license under which the text or photo may be used.
 type License struct {
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Text     *string       `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Text - READ-ONLY
+	Text *string `json:"text,omitempty"`
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -6279,42 +5897,6 @@ type License struct {
 func (l License) MarshalJSON() ([]byte, error) {
 	l.Type = TypeLicense
 	objectMap := make(map[string]interface{})
-	if l.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = l.ThumbnailURL
-	}
-	if l.Provider != nil {
-		objectMap["provider"] = l.Provider
-	}
-	if l.Text != nil {
-		objectMap["text"] = l.Text
-	}
-	if l.Name != nil {
-		objectMap["name"] = l.Name
-	}
-	if l.URL != nil {
-		objectMap["url"] = l.URL
-	}
-	if l.Image != nil {
-		objectMap["image"] = l.Image
-	}
-	if l.Description != nil {
-		objectMap["description"] = l.Description
-	}
-	if l.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = l.EntityPresentationInfo
-	}
-	if l.BingID != nil {
-		objectMap["bingId"] = l.BingID
-	}
-	if l.ContractualRules != nil {
-		objectMap["contractualRules"] = l.ContractualRules
-	}
-	if l.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = l.WebSearchURL
-	}
-	if l.ID != nil {
-		objectMap["id"] = l.ID
-	}
 	if l.Type != "" {
 		objectMap["_type"] = l.Type
 	}
@@ -6692,31 +6274,35 @@ type BasicLocalBusiness interface {
 
 // LocalBusiness ...
 type LocalBusiness struct {
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -6783,51 +6369,6 @@ func unmarshalBasicLocalBusinessArray(body []byte) ([]BasicLocalBusiness, error)
 func (lb LocalBusiness) MarshalJSON() ([]byte, error) {
 	lb.Type = TypeLocalBusiness
 	objectMap := make(map[string]interface{})
-	if lb.PriceRange != nil {
-		objectMap["priceRange"] = lb.PriceRange
-	}
-	if lb.Panoramas != nil {
-		objectMap["panoramas"] = lb.Panoramas
-	}
-	if lb.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = lb.IsPermanentlyClosed
-	}
-	if lb.TagLine != nil {
-		objectMap["tagLine"] = lb.TagLine
-	}
-	if lb.Address != nil {
-		objectMap["address"] = lb.Address
-	}
-	if lb.Telephone != nil {
-		objectMap["telephone"] = lb.Telephone
-	}
-	if lb.Name != nil {
-		objectMap["name"] = lb.Name
-	}
-	if lb.URL != nil {
-		objectMap["url"] = lb.URL
-	}
-	if lb.Image != nil {
-		objectMap["image"] = lb.Image
-	}
-	if lb.Description != nil {
-		objectMap["description"] = lb.Description
-	}
-	if lb.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = lb.EntityPresentationInfo
-	}
-	if lb.BingID != nil {
-		objectMap["bingId"] = lb.BingID
-	}
-	if lb.ContractualRules != nil {
-		objectMap["contractualRules"] = lb.ContractualRules
-	}
-	if lb.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = lb.WebSearchURL
-	}
-	if lb.ID != nil {
-		objectMap["id"] = lb.ID
-	}
 	if lb.Type != "" {
 		objectMap["_type"] = lb.Type
 	}
@@ -7225,31 +6766,35 @@ type BasicLodgingBusiness interface {
 
 // LodgingBusiness ...
 type LodgingBusiness struct {
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -7296,51 +6841,6 @@ func unmarshalBasicLodgingBusinessArray(body []byte) ([]BasicLodgingBusiness, er
 func (lb LodgingBusiness) MarshalJSON() ([]byte, error) {
 	lb.Type = TypeLodgingBusiness
 	objectMap := make(map[string]interface{})
-	if lb.PriceRange != nil {
-		objectMap["priceRange"] = lb.PriceRange
-	}
-	if lb.Panoramas != nil {
-		objectMap["panoramas"] = lb.Panoramas
-	}
-	if lb.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = lb.IsPermanentlyClosed
-	}
-	if lb.TagLine != nil {
-		objectMap["tagLine"] = lb.TagLine
-	}
-	if lb.Address != nil {
-		objectMap["address"] = lb.Address
-	}
-	if lb.Telephone != nil {
-		objectMap["telephone"] = lb.Telephone
-	}
-	if lb.Name != nil {
-		objectMap["name"] = lb.Name
-	}
-	if lb.URL != nil {
-		objectMap["url"] = lb.URL
-	}
-	if lb.Image != nil {
-		objectMap["image"] = lb.Image
-	}
-	if lb.Description != nil {
-		objectMap["description"] = lb.Description
-	}
-	if lb.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = lb.EntityPresentationInfo
-	}
-	if lb.BingID != nil {
-		objectMap["bingId"] = lb.BingID
-	}
-	if lb.ContractualRules != nil {
-		objectMap["contractualRules"] = lb.ContractualRules
-	}
-	if lb.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = lb.WebSearchURL
-	}
-	if lb.ID != nil {
-		objectMap["id"] = lb.ID
-	}
 	if lb.Type != "" {
 		objectMap["_type"] = lb.Type
 	}
@@ -7738,35 +7238,37 @@ type BasicMediaObject interface {
 
 // MediaObject ...
 type MediaObject struct {
-	// ContentURL - Original URL to retrieve the source (file) for the media object (e.g the source URL for the image).
+	// ContentURL - READ-ONLY; Original URL to retrieve the source (file) for the media object (e.g the source URL for the image).
 	ContentURL *string `json:"contentUrl,omitempty"`
-	// HostPageURL - URL of the page that hosts the media object.
+	// HostPageURL - READ-ONLY; URL of the page that hosts the media object.
 	HostPageURL *string `json:"hostPageUrl,omitempty"`
-	// Width - The width of the source media object, in pixels.
+	// Width - READ-ONLY; The width of the source media object, in pixels.
 	Width *int32 `json:"width,omitempty"`
-	// Height - The height of the source media object, in pixels.
+	// Height - READ-ONLY; The height of the source media object, in pixels.
 	Height *int32 `json:"height,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Text     *string       `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Text - READ-ONLY
+	Text *string `json:"text,omitempty"`
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -7813,54 +7315,6 @@ func unmarshalBasicMediaObjectArray(body []byte) ([]BasicMediaObject, error) {
 func (mo MediaObject) MarshalJSON() ([]byte, error) {
 	mo.Type = TypeMediaObject
 	objectMap := make(map[string]interface{})
-	if mo.ContentURL != nil {
-		objectMap["contentUrl"] = mo.ContentURL
-	}
-	if mo.HostPageURL != nil {
-		objectMap["hostPageUrl"] = mo.HostPageURL
-	}
-	if mo.Width != nil {
-		objectMap["width"] = mo.Width
-	}
-	if mo.Height != nil {
-		objectMap["height"] = mo.Height
-	}
-	if mo.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = mo.ThumbnailURL
-	}
-	if mo.Provider != nil {
-		objectMap["provider"] = mo.Provider
-	}
-	if mo.Text != nil {
-		objectMap["text"] = mo.Text
-	}
-	if mo.Name != nil {
-		objectMap["name"] = mo.Name
-	}
-	if mo.URL != nil {
-		objectMap["url"] = mo.URL
-	}
-	if mo.Image != nil {
-		objectMap["image"] = mo.Image
-	}
-	if mo.Description != nil {
-		objectMap["description"] = mo.Description
-	}
-	if mo.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = mo.EntityPresentationInfo
-	}
-	if mo.BingID != nil {
-		objectMap["bingId"] = mo.BingID
-	}
-	if mo.ContractualRules != nil {
-		objectMap["contractualRules"] = mo.ContractualRules
-	}
-	if mo.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = mo.WebSearchURL
-	}
-	if mo.ID != nil {
-		objectMap["id"] = mo.ID
-	}
 	if mo.Type != "" {
 		objectMap["_type"] = mo.Type
 	}
@@ -8260,32 +7714,37 @@ func (mo *MediaObject) UnmarshalJSON(body []byte) error {
 
 // MovieTheater ...
 type MovieTheater struct {
+	// ScreenCount - READ-ONLY
 	ScreenCount *int32 `json:"screenCount,omitempty"`
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -8295,54 +7754,6 @@ type MovieTheater struct {
 func (mt MovieTheater) MarshalJSON() ([]byte, error) {
 	mt.Type = TypeMovieTheater
 	objectMap := make(map[string]interface{})
-	if mt.ScreenCount != nil {
-		objectMap["screenCount"] = mt.ScreenCount
-	}
-	if mt.PriceRange != nil {
-		objectMap["priceRange"] = mt.PriceRange
-	}
-	if mt.Panoramas != nil {
-		objectMap["panoramas"] = mt.Panoramas
-	}
-	if mt.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = mt.IsPermanentlyClosed
-	}
-	if mt.TagLine != nil {
-		objectMap["tagLine"] = mt.TagLine
-	}
-	if mt.Address != nil {
-		objectMap["address"] = mt.Address
-	}
-	if mt.Telephone != nil {
-		objectMap["telephone"] = mt.Telephone
-	}
-	if mt.Name != nil {
-		objectMap["name"] = mt.Name
-	}
-	if mt.URL != nil {
-		objectMap["url"] = mt.URL
-	}
-	if mt.Image != nil {
-		objectMap["image"] = mt.Image
-	}
-	if mt.Description != nil {
-		objectMap["description"] = mt.Description
-	}
-	if mt.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = mt.EntityPresentationInfo
-	}
-	if mt.BingID != nil {
-		objectMap["bingId"] = mt.BingID
-	}
-	if mt.ContractualRules != nil {
-		objectMap["contractualRules"] = mt.ContractualRules
-	}
-	if mt.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = mt.WebSearchURL
-	}
-	if mt.ID != nil {
-		objectMap["id"] = mt.ID
-	}
 	if mt.Type != "" {
 		objectMap["_type"] = mt.Type
 	}
@@ -8743,22 +8154,23 @@ func (mt *MovieTheater) UnmarshalJSON(body []byte) error {
 
 // Organization defines an organization.
 type Organization struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -8768,33 +8180,6 @@ type Organization struct {
 func (o Organization) MarshalJSON() ([]byte, error) {
 	o.Type = TypeOrganization
 	objectMap := make(map[string]interface{})
-	if o.Name != nil {
-		objectMap["name"] = o.Name
-	}
-	if o.URL != nil {
-		objectMap["url"] = o.URL
-	}
-	if o.Image != nil {
-		objectMap["image"] = o.Image
-	}
-	if o.Description != nil {
-		objectMap["description"] = o.Description
-	}
-	if o.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = o.EntityPresentationInfo
-	}
-	if o.BingID != nil {
-		objectMap["bingId"] = o.BingID
-	}
-	if o.ContractualRules != nil {
-		objectMap["contractualRules"] = o.ContractualRules
-	}
-	if o.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = o.WebSearchURL
-	}
-	if o.ID != nil {
-		objectMap["id"] = o.ID
-	}
 	if o.Type != "" {
 		objectMap["_type"] = o.Type
 	}
@@ -9152,26 +8537,27 @@ type BasicPlace interface {
 
 // Place defines information about a local entity, such as a restaurant or hotel.
 type Place struct {
-	// Address - The postal address of where the entity is located
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -9254,39 +8640,6 @@ func unmarshalBasicPlaceArray(body []byte) ([]BasicPlace, error) {
 func (p Place) MarshalJSON() ([]byte, error) {
 	p.Type = TypePlace
 	objectMap := make(map[string]interface{})
-	if p.Address != nil {
-		objectMap["address"] = p.Address
-	}
-	if p.Telephone != nil {
-		objectMap["telephone"] = p.Telephone
-	}
-	if p.Name != nil {
-		objectMap["name"] = p.Name
-	}
-	if p.URL != nil {
-		objectMap["url"] = p.URL
-	}
-	if p.Image != nil {
-		objectMap["image"] = p.Image
-	}
-	if p.Description != nil {
-		objectMap["description"] = p.Description
-	}
-	if p.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = p.EntityPresentationInfo
-	}
-	if p.BingID != nil {
-		objectMap["bingId"] = p.BingID
-	}
-	if p.ContractualRules != nil {
-		objectMap["contractualRules"] = p.ContractualRules
-	}
-	if p.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = p.WebSearchURL
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
-	}
 	if p.Type != "" {
 		objectMap["_type"] = p.Type
 	}
@@ -9643,13 +8996,14 @@ func (p *Place) UnmarshalJSON(body []byte) error {
 // Places defines a local entity answer.
 type Places struct {
 	// Value - A list of local entities, such as restaurants or hotels.
-	Value        *[]BasicThing `json:"value,omitempty"`
+	Value *[]BasicThing `json:"value,omitempty"`
+	// QueryContext - READ-ONLY
 	QueryContext *QueryContext `json:"queryContext,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -9661,18 +9015,6 @@ func (p Places) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if p.Value != nil {
 		objectMap["value"] = p.Value
-	}
-	if p.QueryContext != nil {
-		objectMap["queryContext"] = p.QueryContext
-	}
-	if p.ContractualRules != nil {
-		objectMap["contractualRules"] = p.ContractualRules
-	}
-	if p.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = p.WebSearchURL
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
 	}
 	if p.Type != "" {
 		objectMap["_type"] = p.Type
@@ -9974,41 +9316,45 @@ func (p *Places) UnmarshalJSON(body []byte) error {
 
 // PostalAddress defines a postal address.
 type PostalAddress struct {
+	// StreetAddress - READ-ONLY
 	StreetAddress *string `json:"streetAddress,omitempty"`
-	// AddressLocality - The city where the street address is located. For example, Seattle.
-	AddressLocality  *string `json:"addressLocality,omitempty"`
+	// AddressLocality - READ-ONLY; The city where the street address is located. For example, Seattle.
+	AddressLocality *string `json:"addressLocality,omitempty"`
+	// AddressSubregion - READ-ONLY
 	AddressSubregion *string `json:"addressSubregion,omitempty"`
-	// AddressRegion - The state or province code where the street address is located. This could be the two-letter code. For example, WA, or the full name , Washington.
+	// AddressRegion - READ-ONLY; The state or province code where the street address is located. This could be the two-letter code. For example, WA, or the full name , Washington.
 	AddressRegion *string `json:"addressRegion,omitempty"`
-	// PostalCode - The zip code or postal code where the street address is located. For example, 98052.
-	PostalCode          *string `json:"postalCode,omitempty"`
+	// PostalCode - READ-ONLY; The zip code or postal code where the street address is located. For example, 98052.
+	PostalCode *string `json:"postalCode,omitempty"`
+	// PostOfficeBoxNumber - READ-ONLY
 	PostOfficeBoxNumber *string `json:"postOfficeBoxNumber,omitempty"`
-	// AddressCountry - The country/region where the street address is located. This could be the two-letter ISO code. For example, US, or the full name, United States.
+	// AddressCountry - READ-ONLY; The country/region where the street address is located. This could be the two-letter ISO code. For example, US, or the full name, United States.
 	AddressCountry *string `json:"addressCountry,omitempty"`
-	// CountryIso - The two letter ISO code of this countr. For example, US.
+	// CountryIso - READ-ONLY; The two letter ISO code of this country. For example, US.
 	CountryIso *string `json:"countryIso,omitempty"`
-	// Neighborhood - The neighborhood where the street address is located. For example, Westlake.
+	// Neighborhood - READ-ONLY; The neighborhood where the street address is located. For example, Westlake.
 	Neighborhood *string `json:"neighborhood,omitempty"`
-	// AddressRegionAbbreviation - Region Abbreviation. For example, WA.
+	// AddressRegionAbbreviation - READ-ONLY; Region Abbreviation. For example, WA.
 	AddressRegionAbbreviation *string `json:"addressRegionAbbreviation,omitempty"`
-	// Text - The complete address. For example, 2100 Westlake Ave N, Bellevue, WA 98052.
+	// Text - READ-ONLY; The complete address. For example, 2100 Westlake Ave N, Bellevue, WA 98052.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -10018,66 +9364,6 @@ type PostalAddress struct {
 func (pa PostalAddress) MarshalJSON() ([]byte, error) {
 	pa.Type = TypePostalAddress
 	objectMap := make(map[string]interface{})
-	if pa.StreetAddress != nil {
-		objectMap["streetAddress"] = pa.StreetAddress
-	}
-	if pa.AddressLocality != nil {
-		objectMap["addressLocality"] = pa.AddressLocality
-	}
-	if pa.AddressSubregion != nil {
-		objectMap["addressSubregion"] = pa.AddressSubregion
-	}
-	if pa.AddressRegion != nil {
-		objectMap["addressRegion"] = pa.AddressRegion
-	}
-	if pa.PostalCode != nil {
-		objectMap["postalCode"] = pa.PostalCode
-	}
-	if pa.PostOfficeBoxNumber != nil {
-		objectMap["postOfficeBoxNumber"] = pa.PostOfficeBoxNumber
-	}
-	if pa.AddressCountry != nil {
-		objectMap["addressCountry"] = pa.AddressCountry
-	}
-	if pa.CountryIso != nil {
-		objectMap["countryIso"] = pa.CountryIso
-	}
-	if pa.Neighborhood != nil {
-		objectMap["neighborhood"] = pa.Neighborhood
-	}
-	if pa.AddressRegionAbbreviation != nil {
-		objectMap["addressRegionAbbreviation"] = pa.AddressRegionAbbreviation
-	}
-	if pa.Text != nil {
-		objectMap["text"] = pa.Text
-	}
-	if pa.Name != nil {
-		objectMap["name"] = pa.Name
-	}
-	if pa.URL != nil {
-		objectMap["url"] = pa.URL
-	}
-	if pa.Image != nil {
-		objectMap["image"] = pa.Image
-	}
-	if pa.Description != nil {
-		objectMap["description"] = pa.Description
-	}
-	if pa.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = pa.EntityPresentationInfo
-	}
-	if pa.BingID != nil {
-		objectMap["bingId"] = pa.BingID
-	}
-	if pa.ContractualRules != nil {
-		objectMap["contractualRules"] = pa.ContractualRules
-	}
-	if pa.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = pa.WebSearchURL
-	}
-	if pa.ID != nil {
-		objectMap["id"] = pa.ID
-	}
 	if pa.Type != "" {
 		objectMap["_type"] = pa.Type
 	}
@@ -10516,13 +9802,13 @@ func (pa *PostalAddress) UnmarshalJSON(body []byte) error {
 type QueryContext struct {
 	// OriginalQuery - The query string as specified in the request.
 	OriginalQuery *string `json:"originalQuery,omitempty"`
-	// AlteredQuery - The query string used by Bing to perform the query. Bing uses the altered query string if the original query string contained spelling mistakes. For example, if the query string is "saling downwind", the altered query string will be "sailing downwind". This field is included only if the original query string contains a spelling mistake.
+	// AlteredQuery - READ-ONLY; The query string used by Bing to perform the query. Bing uses the altered query string if the original query string contained spelling mistakes. For example, if the query string is "saling downwind", the altered query string will be "sailing downwind". This field is included only if the original query string contains a spelling mistake.
 	AlteredQuery *string `json:"alteredQuery,omitempty"`
-	// AlterationOverrideQuery - The query string to use to force Bing to use the original string. For example, if the query string is "saling downwind", the override query string will be "+saling downwind". Remember to encode the query string which results in "%2Bsaling+downwind". This field is included only if the original query string contains a spelling mistake.
+	// AlterationOverrideQuery - READ-ONLY; The query string to use to force Bing to use the original string. For example, if the query string is "saling downwind", the override query string will be "+saling downwind". Remember to encode the query string which results in "%2Bsaling+downwind". This field is included only if the original query string contains a spelling mistake.
 	AlterationOverrideQuery *string `json:"alterationOverrideQuery,omitempty"`
-	// AdultIntent - A Boolean value that indicates whether the specified query has adult intent. The value is true if the query has adult intent; otherwise, false.
+	// AdultIntent - READ-ONLY; A Boolean value that indicates whether the specified query has adult intent. The value is true if the query has adult intent; otherwise, false.
 	AdultIntent *bool `json:"adultIntent,omitempty"`
-	// AskUserForLocation - A Boolean value that indicates whether Bing requires the user's location to provide accurate results. If you specified the user's location by using the X-MSEdge-ClientIP and X-Search-Location headers, you can ignore this field. For location aware queries, such as "today's weather" or "restaurants near me" that need the user's location to provide accurate results, this field is set to true. For location aware queries that include the location (for example, "Seattle weather"), this field is set to false. This field is also set to false for queries that are not location aware, such as "best sellers".
+	// AskUserForLocation - READ-ONLY; A Boolean value that indicates whether Bing requires the user's location to provide accurate results. If you specified the user's location by using the X-MSEdge-ClientIP and X-Search-Location headers, you can ignore this field. For location aware queries, such as "today's weather" or "restaurants near me" that need the user's location to provide accurate results, this field is set to true. For location aware queries that include the location (for example, "Seattle weather"), this field is set to false. This field is also set to false for queries that are not location aware, such as "best sellers".
 	AskUserForLocation *bool `json:"askUserForLocation,omitempty"`
 }
 
@@ -10571,14 +9857,14 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that could be returned at the root of a response should inherit from
-// this
+// Response defines a response. All schemas that could be returned at the root of a response should inherit
+// from this
 type Response struct {
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -10725,15 +10011,6 @@ func unmarshalBasicResponseArray(body []byte) ([]BasicResponse, error) {
 func (r Response) MarshalJSON() ([]byte, error) {
 	r.Type = TypeResponse
 	objectMap := make(map[string]interface{})
-	if r.ContractualRules != nil {
-		objectMap["contractualRules"] = r.ContractualRules
-	}
-	if r.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = r.WebSearchURL
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -11451,35 +10728,43 @@ func (rb ResponseBase) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // Restaurant ...
 type Restaurant struct {
-	AcceptsReservations *bool     `json:"acceptsReservations,omitempty"`
-	ReservationURL      *string   `json:"reservationUrl,omitempty"`
-	ServesCuisine       *[]string `json:"servesCuisine,omitempty"`
-	MenuURL             *string   `json:"menuUrl,omitempty"`
-	// PriceRange - $$.
-	PriceRange          *string        `json:"priceRange,omitempty"`
-	Panoramas           *[]ImageObject `json:"panoramas,omitempty"`
-	IsPermanentlyClosed *bool          `json:"isPermanentlyClosed,omitempty"`
-	TagLine             *string        `json:"tagLine,omitempty"`
-	// Address - The postal address of where the entity is located
+	// AcceptsReservations - READ-ONLY
+	AcceptsReservations *bool `json:"acceptsReservations,omitempty"`
+	// ReservationURL - READ-ONLY
+	ReservationURL *string `json:"reservationUrl,omitempty"`
+	// ServesCuisine - READ-ONLY
+	ServesCuisine *[]string `json:"servesCuisine,omitempty"`
+	// MenuURL - READ-ONLY
+	MenuURL *string `json:"menuUrl,omitempty"`
+	// PriceRange - READ-ONLY; $$.
+	PriceRange *string `json:"priceRange,omitempty"`
+	// Panoramas - READ-ONLY
+	Panoramas *[]ImageObject `json:"panoramas,omitempty"`
+	// IsPermanentlyClosed - READ-ONLY
+	IsPermanentlyClosed *bool `json:"isPermanentlyClosed,omitempty"`
+	// TagLine - READ-ONLY
+	TagLine *string `json:"tagLine,omitempty"`
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -11489,63 +10774,6 @@ type Restaurant struct {
 func (r Restaurant) MarshalJSON() ([]byte, error) {
 	r.Type = TypeRestaurant
 	objectMap := make(map[string]interface{})
-	if r.AcceptsReservations != nil {
-		objectMap["acceptsReservations"] = r.AcceptsReservations
-	}
-	if r.ReservationURL != nil {
-		objectMap["reservationUrl"] = r.ReservationURL
-	}
-	if r.ServesCuisine != nil {
-		objectMap["servesCuisine"] = r.ServesCuisine
-	}
-	if r.MenuURL != nil {
-		objectMap["menuUrl"] = r.MenuURL
-	}
-	if r.PriceRange != nil {
-		objectMap["priceRange"] = r.PriceRange
-	}
-	if r.Panoramas != nil {
-		objectMap["panoramas"] = r.Panoramas
-	}
-	if r.IsPermanentlyClosed != nil {
-		objectMap["isPermanentlyClosed"] = r.IsPermanentlyClosed
-	}
-	if r.TagLine != nil {
-		objectMap["tagLine"] = r.TagLine
-	}
-	if r.Address != nil {
-		objectMap["address"] = r.Address
-	}
-	if r.Telephone != nil {
-		objectMap["telephone"] = r.Telephone
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.URL != nil {
-		objectMap["url"] = r.URL
-	}
-	if r.Image != nil {
-		objectMap["image"] = r.Image
-	}
-	if r.Description != nil {
-		objectMap["description"] = r.Description
-	}
-	if r.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = r.EntityPresentationInfo
-	}
-	if r.BingID != nil {
-		objectMap["bingId"] = r.BingID
-	}
-	if r.ContractualRules != nil {
-		objectMap["contractualRules"] = r.ContractualRules
-	}
-	if r.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = r.WebSearchURL
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -11974,17 +11202,17 @@ func (r *Restaurant) UnmarshalJSON(body []byte) error {
 // SearchResponse defines the top-level object that the response includes when the request succeeds.
 type SearchResponse struct {
 	autorest.Response `json:"-"`
-	// QueryContext - An object that contains the query string that Bing used for the request. This object contains the query string as entered by the user. It may also contain an altered query string that Bing used for the query if the query string contained a spelling mistake.
+	// QueryContext - READ-ONLY; An object that contains the query string that Bing used for the request. This object contains the query string as entered by the user. It may also contain an altered query string that Bing used for the query if the query string contained a spelling mistake.
 	QueryContext *QueryContext `json:"queryContext,omitempty"`
-	// Entities - A list of entities that are relevant to the search query.
+	// Entities - READ-ONLY; A list of entities that are relevant to the search query.
 	Entities *Entities `json:"entities,omitempty"`
-	// Places - A list of local entities such as restaurants or hotels that are relevant to the query.
+	// Places - READ-ONLY; A list of local entities such as restaurants or hotels that are relevant to the query.
 	Places *Places `json:"places,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -11994,24 +11222,6 @@ type SearchResponse struct {
 func (sr SearchResponse) MarshalJSON() ([]byte, error) {
 	sr.Type = TypeSearchResponse
 	objectMap := make(map[string]interface{})
-	if sr.QueryContext != nil {
-		objectMap["queryContext"] = sr.QueryContext
-	}
-	if sr.Entities != nil {
-		objectMap["entities"] = sr.Entities
-	}
-	if sr.Places != nil {
-		objectMap["places"] = sr.Places
-	}
-	if sr.ContractualRules != nil {
-		objectMap["contractualRules"] = sr.ContractualRules
-	}
-	if sr.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sr.WebSearchURL
-	}
-	if sr.ID != nil {
-		objectMap["id"] = sr.ID
-	}
 	if sr.Type != "" {
 		objectMap["_type"] = sr.Type
 	}
@@ -12329,12 +11539,13 @@ type BasicSearchResultsAnswer interface {
 
 // SearchResultsAnswer ...
 type SearchResultsAnswer struct {
+	// QueryContext - READ-ONLY
 	QueryContext *QueryContext `json:"queryContext,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -12385,18 +11596,6 @@ func unmarshalBasicSearchResultsAnswerArray(body []byte) ([]BasicSearchResultsAn
 func (sra SearchResultsAnswer) MarshalJSON() ([]byte, error) {
 	sra.Type = TypeSearchResultsAnswer
 	objectMap := make(map[string]interface{})
-	if sra.QueryContext != nil {
-		objectMap["queryContext"] = sra.QueryContext
-	}
-	if sra.ContractualRules != nil {
-		objectMap["contractualRules"] = sra.ContractualRules
-	}
-	if sra.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sra.WebSearchURL
-	}
-	if sra.ID != nil {
-		objectMap["id"] = sra.ID
-	}
 	if sra.Type != "" {
 		objectMap["_type"] = sra.Type
 	}
@@ -12695,22 +11894,23 @@ type BasicStructuredValue interface {
 
 // StructuredValue ...
 type StructuredValue struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -12757,33 +11957,6 @@ func unmarshalBasicStructuredValueArray(body []byte) ([]BasicStructuredValue, er
 func (sv StructuredValue) MarshalJSON() ([]byte, error) {
 	sv.Type = TypeStructuredValue
 	objectMap := make(map[string]interface{})
-	if sv.Name != nil {
-		objectMap["name"] = sv.Name
-	}
-	if sv.URL != nil {
-		objectMap["url"] = sv.URL
-	}
-	if sv.Image != nil {
-		objectMap["image"] = sv.Image
-	}
-	if sv.Description != nil {
-		objectMap["description"] = sv.Description
-	}
-	if sv.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = sv.EntityPresentationInfo
-	}
-	if sv.BingID != nil {
-		objectMap["bingId"] = sv.BingID
-	}
-	if sv.ContractualRules != nil {
-		objectMap["contractualRules"] = sv.ContractualRules
-	}
-	if sv.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sv.WebSearchURL
-	}
-	if sv.ID != nil {
-		objectMap["id"] = sv.ID
-	}
 	if sv.Type != "" {
 		objectMap["_type"] = sv.Type
 	}
@@ -13155,22 +12328,23 @@ type BasicThing interface {
 
 // Thing ...
 type Thing struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -13289,33 +12463,6 @@ func unmarshalBasicThingArray(body []byte) ([]BasicThing, error) {
 func (t Thing) MarshalJSON() ([]byte, error) {
 	t.Type = TypeThing
 	objectMap := make(map[string]interface{})
-	if t.Name != nil {
-		objectMap["name"] = t.Name
-	}
-	if t.URL != nil {
-		objectMap["url"] = t.URL
-	}
-	if t.Image != nil {
-		objectMap["image"] = t.Image
-	}
-	if t.Description != nil {
-		objectMap["description"] = t.Description
-	}
-	if t.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = t.EntityPresentationInfo
-	}
-	if t.BingID != nil {
-		objectMap["bingId"] = t.BingID
-	}
-	if t.ContractualRules != nil {
-		objectMap["contractualRules"] = t.ContractualRules
-	}
-	if t.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = t.WebSearchURL
-	}
-	if t.ID != nil {
-		objectMap["id"] = t.ID
-	}
 	if t.Type != "" {
 		objectMap["_type"] = t.Type
 	}
@@ -13653,26 +12800,27 @@ func (t *Thing) UnmarshalJSON(body []byte) error {
 
 // TouristAttraction ...
 type TouristAttraction struct {
-	// Address - The postal address of where the entity is located
+	// Address - READ-ONLY; The postal address of where the entity is located
 	Address *PostalAddress `json:"address,omitempty"`
-	// Telephone - The entity's telephone number
+	// Telephone - READ-ONLY; The entity's telephone number
 	Telephone *string `json:"telephone,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
-	URL   *string      `json:"url,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
+	URL *string `json:"url,omitempty"`
+	// Image - READ-ONLY
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// EntityPresentationInfo - Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
+	// EntityPresentationInfo - READ-ONLY; Additional information about the entity such as hints that you can use to determine the entity's type. To determine the entity's type, use the entityScenario and entityTypeHint fields.
 	EntityPresentationInfo *EntitiesEntityPresentationInfo `json:"entityPresentationInfo,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ContractualRules - A list of rules that you must adhere to if you display the item.
+	// ContractualRules - READ-ONLY; A list of rules that you must adhere to if you display the item.
 	ContractualRules *[]BasicContractualRulesContractualRule `json:"contractualRules,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeImageObject', 'TypeThing', 'TypeEntities', 'TypePlaces', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeAnswer', 'TypeErrorResponse', 'TypePostalAddress', 'TypePlace', 'TypeOrganization', 'TypeCreativeWork', 'TypeIntangible', 'TypeMovieTheater', 'TypeMediaObject', 'TypeCivicStructure', 'TypeLocalBusiness', 'TypeTouristAttraction', 'TypeAirport', 'TypeLicense', 'TypeStructuredValue', 'TypeEntertainmentBusiness', 'TypeFoodEstablishment', 'TypeLodgingBusiness', 'TypeRestaurant', 'TypeHotel'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -13682,39 +12830,6 @@ type TouristAttraction struct {
 func (ta TouristAttraction) MarshalJSON() ([]byte, error) {
 	ta.Type = TypeTouristAttraction
 	objectMap := make(map[string]interface{})
-	if ta.Address != nil {
-		objectMap["address"] = ta.Address
-	}
-	if ta.Telephone != nil {
-		objectMap["telephone"] = ta.Telephone
-	}
-	if ta.Name != nil {
-		objectMap["name"] = ta.Name
-	}
-	if ta.URL != nil {
-		objectMap["url"] = ta.URL
-	}
-	if ta.Image != nil {
-		objectMap["image"] = ta.Image
-	}
-	if ta.Description != nil {
-		objectMap["description"] = ta.Description
-	}
-	if ta.EntityPresentationInfo != nil {
-		objectMap["entityPresentationInfo"] = ta.EntityPresentationInfo
-	}
-	if ta.BingID != nil {
-		objectMap["bingId"] = ta.BingID
-	}
-	if ta.ContractualRules != nil {
-		objectMap["contractualRules"] = ta.ContractualRules
-	}
-	if ta.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ta.WebSearchURL
-	}
-	if ta.ID != nil {
-		objectMap["id"] = ta.ID
-	}
 	if ta.Type != "" {
 		objectMap["_type"] = ta.Type
 	}

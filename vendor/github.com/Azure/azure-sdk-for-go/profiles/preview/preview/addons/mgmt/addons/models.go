@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type OneTimeCharge = original.OneTimeCharge
 
 const (
@@ -62,21 +61,34 @@ const (
 	SupportPlanTypeStandard  SupportPlanType = original.SupportPlanTypeStandard
 )
 
+type BaseClient = original.BaseClient
 type CanonicalSupportPlanInfoDefinition = original.CanonicalSupportPlanInfoDefinition
 type CanonicalSupportPlanProperties = original.CanonicalSupportPlanProperties
 type CanonicalSupportPlanResponseEnvelope = original.CanonicalSupportPlanResponseEnvelope
 type ErrorDefinition = original.ErrorDefinition
 type ListCanonicalSupportPlanInfoDefinition = original.ListCanonicalSupportPlanInfoDefinition
 type ListOperationsDefinition = original.ListOperationsDefinition
+type OperationsClient = original.OperationsClient
 type OperationsDefinition = original.OperationsDefinition
 type OperationsDisplayDefinition = original.OperationsDisplayDefinition
+type SupportPlanTypesClient = original.SupportPlanTypesClient
 type SupportPlanTypesCreateOrUpdateFuture = original.SupportPlanTypesCreateOrUpdateFuture
 type SupportPlanTypesDeleteFuture = original.SupportPlanTypesDeleteFuture
-type OperationsClient = original.OperationsClient
-type SupportPlanTypesClient = original.SupportPlanTypesClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSupportPlanTypesClient(subscriptionID string) SupportPlanTypesClient {
+	return original.NewSupportPlanTypesClient(subscriptionID)
+}
+func NewSupportPlanTypesClientWithBaseURI(baseURI string, subscriptionID string) SupportPlanTypesClient {
+	return original.NewSupportPlanTypesClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -92,18 +104,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 }
 func PossibleSupportPlanTypeValues() []SupportPlanType {
 	return original.PossibleSupportPlanTypeValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewSupportPlanTypesClient(subscriptionID string) SupportPlanTypesClient {
-	return original.NewSupportPlanTypesClient(subscriptionID)
-}
-func NewSupportPlanTypesClientWithBaseURI(baseURI string, subscriptionID string) SupportPlanTypesClient {
-	return original.NewSupportPlanTypesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewInvoicesClientWithBaseURI(baseURI string, subscriptionID string) Invoice
 // Parameters:
 // invoiceName - the name of an invoice resource.
 func (client InvoicesClient) Get(ctx context.Context, invoiceName string) (result Invoice, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InvoicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, invoiceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "billing.InvoicesClient", "Get", nil, "Failure preparing request")
@@ -111,6 +122,16 @@ func (client InvoicesClient) GetResponder(resp *http.Response) (result Invoice, 
 // GetLatest gets the most recent invoice. When getting a single invoice, the downloadUrl property is expanded
 // automatically.
 func (client InvoicesClient) GetLatest(ctx context.Context) (result Invoice, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InvoicesClient.GetLatest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetLatestPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "billing.InvoicesClient", "GetLatest", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client InvoicesClient) GetLatestResponder(resp *http.Response) (result Inv
 // specifies a starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N invoices.
 func (client InvoicesClient) List(ctx context.Context, expand string, filter string, skiptoken string, top *int32) (result InvoicesListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InvoicesClient.List")
+		defer func() {
+			sc := -1
+			if result.ilr.Response.Response != nil {
+				sc = result.ilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -268,8 +299,8 @@ func (client InvoicesClient) ListResponder(resp *http.Response) (result Invoices
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client InvoicesClient) listNextResults(lastResults InvoicesListResult) (result InvoicesListResult, err error) {
-	req, err := lastResults.invoicesListResultPreparer()
+func (client InvoicesClient) listNextResults(ctx context.Context, lastResults InvoicesListResult) (result InvoicesListResult, err error) {
+	req, err := lastResults.invoicesListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "billing.InvoicesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -290,6 +321,16 @@ func (client InvoicesClient) listNextResults(lastResults InvoicesListResult) (re
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client InvoicesClient) ListComplete(ctx context.Context, expand string, filter string, skiptoken string, top *int32) (result InvoicesListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InvoicesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, expand, filter, skiptoken, top)
 	return
 }

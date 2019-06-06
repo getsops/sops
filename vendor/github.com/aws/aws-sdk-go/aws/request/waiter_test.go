@@ -8,8 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/client"
@@ -92,7 +90,7 @@ func TestWaiterPathAll(t *testing.T) {
 	})
 	svc.Handlers.Unmarshal.PushBack(func(r *request.Request) {
 		if reqNum >= len(resps) {
-			assert.Fail(t, "too many polling requests made")
+			t.Errorf("too many polling requests made")
 			return
 		}
 		r.Data = resps[reqNum]
@@ -115,9 +113,15 @@ func TestWaiterPathAll(t *testing.T) {
 	}
 
 	err := w.WaitWithContext(aws.BackgroundContext())
-	assert.NoError(t, err)
-	assert.Equal(t, 3, numBuiltReq)
-	assert.Equal(t, 3, reqNum)
+	if err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
+	if e, a := 3, numBuiltReq; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := 3, reqNum; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestWaiterPath(t *testing.T) {
@@ -157,7 +161,7 @@ func TestWaiterPath(t *testing.T) {
 	})
 	svc.Handlers.Unmarshal.PushBack(func(r *request.Request) {
 		if reqNum >= len(resps) {
-			assert.Fail(t, "too many polling requests made")
+			t.Errorf("too many polling requests made")
 			return
 		}
 		r.Data = resps[reqNum]
@@ -180,9 +184,15 @@ func TestWaiterPath(t *testing.T) {
 	}
 
 	err := w.WaitWithContext(aws.BackgroundContext())
-	assert.NoError(t, err)
-	assert.Equal(t, 3, numBuiltReq)
-	assert.Equal(t, 3, reqNum)
+	if err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
+	if e, a := 3, numBuiltReq; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := 3, reqNum; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestWaiterFailure(t *testing.T) {
@@ -222,7 +232,7 @@ func TestWaiterFailure(t *testing.T) {
 	})
 	svc.Handlers.Unmarshal.PushBack(func(r *request.Request) {
 		if reqNum >= len(resps) {
-			assert.Fail(t, "too many polling requests made")
+			t.Errorf("too many polling requests made")
 			return
 		}
 		r.Data = resps[reqNum]
@@ -251,11 +261,21 @@ func TestWaiterFailure(t *testing.T) {
 	}
 
 	err := w.WaitWithContext(aws.BackgroundContext()).(awserr.Error)
-	assert.Error(t, err)
-	assert.Equal(t, request.WaiterResourceNotReadyErrorCode, err.Code())
-	assert.Equal(t, "failed waiting for successful resource state", err.Message())
-	assert.Equal(t, 3, numBuiltReq)
-	assert.Equal(t, 3, reqNum)
+	if err == nil {
+		t.Errorf("expect error")
+	}
+	if e, a := request.WaiterResourceNotReadyErrorCode, err.Code(); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := "failed waiting for successful resource state", err.Message(); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := 3, numBuiltReq; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if e, a := 3, reqNum; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestWaiterError(t *testing.T) {
@@ -308,7 +328,7 @@ func TestWaiterError(t *testing.T) {
 	})
 	svc.Handlers.Unmarshal.PushBack(func(r *request.Request) {
 		if reqNum >= len(resps) {
-			assert.Fail(t, "too many polling requests made")
+			t.Errorf("too many polling requests made")
 			return
 		}
 		r.Data = resps[reqNum]
@@ -408,8 +428,12 @@ func TestWaiterStatus(t *testing.T) {
 	}
 
 	err := w.WaitWithContext(aws.BackgroundContext())
-	assert.NoError(t, err)
-	assert.Equal(t, 3, reqNum)
+	if err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
+	if e, a := 3, reqNum; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
 }
 
 func TestWaiter_ApplyOptions(t *testing.T) {

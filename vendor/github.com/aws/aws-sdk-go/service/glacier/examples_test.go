@@ -545,7 +545,7 @@ func ExampleGlacier_GetJobOutput_shared00() {
 	fmt.Println(result)
 }
 
-// To  get the access-policy set on the vault
+// To get the access-policy set on the vault
 //
 // The example retrieves the access-policy set on the vault named example-vault.
 func ExampleGlacier_GetVaultAccessPolicy_shared00() {

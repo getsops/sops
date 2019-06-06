@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewReplicationProtectableItemsClientWithBaseURI(baseURI string, subscriptio
 // protectionContainerName - protection container name.
 // protectableItemName - protectable item name.
 func (client ReplicationProtectableItemsClient) Get(ctx context.Context, fabricName string, protectionContainerName string, protectableItemName string) (result ProtectableItem, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectableItemsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, fabricName, protectionContainerName, protectableItemName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectableItemsClient", "Get", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client ReplicationProtectableItemsClient) GetResponder(resp *http.Response
 // fabricName - fabric name.
 // protectionContainerName - protection container name.
 func (client ReplicationProtectableItemsClient) ListByReplicationProtectionContainers(ctx context.Context, fabricName string, protectionContainerName string) (result ProtectableItemCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectableItemsClient.ListByReplicationProtectionContainers")
+		defer func() {
+			sc := -1
+			if result.pic.Response.Response != nil {
+				sc = result.pic.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReplicationProtectionContainersNextResults
 	req, err := client.ListByReplicationProtectionContainersPreparer(ctx, fabricName, protectionContainerName)
 	if err != nil {
@@ -182,8 +203,8 @@ func (client ReplicationProtectableItemsClient) ListByReplicationProtectionConta
 }
 
 // listByReplicationProtectionContainersNextResults retrieves the next set of results, if any.
-func (client ReplicationProtectableItemsClient) listByReplicationProtectionContainersNextResults(lastResults ProtectableItemCollection) (result ProtectableItemCollection, err error) {
-	req, err := lastResults.protectableItemCollectionPreparer()
+func (client ReplicationProtectableItemsClient) listByReplicationProtectionContainersNextResults(ctx context.Context, lastResults ProtectableItemCollection) (result ProtectableItemCollection, err error) {
+	req, err := lastResults.protectableItemCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationProtectableItemsClient", "listByReplicationProtectionContainersNextResults", nil, "Failure preparing next results request")
 	}
@@ -204,6 +225,16 @@ func (client ReplicationProtectableItemsClient) listByReplicationProtectionConta
 
 // ListByReplicationProtectionContainersComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationProtectableItemsClient) ListByReplicationProtectionContainersComplete(ctx context.Context, fabricName string, protectionContainerName string) (result ProtectableItemCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationProtectableItemsClient.ListByReplicationProtectionContainers")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReplicationProtectionContainers(ctx, fabricName, protectionContainerName)
 	return
 }

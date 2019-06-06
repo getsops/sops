@@ -26,6 +26,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -72,6 +73,16 @@ func NewWithBaseURI(baseURI string) BaseClient {
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) BackupPartition(ctx context.Context, partitionID uuid.UUID, backupPartitionDescription *BackupPartitionDescription, backupTimeout *int32, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.BackupPartition")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -184,6 +195,16 @@ func (client BaseClient) BackupPartitionResponder(resp *http.Response) (result a
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CancelOperation(ctx context.Context, operationID uuid.UUID, force bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CancelOperation")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -259,6 +280,16 @@ func (client BaseClient) CancelOperationResponder(resp *http.Response) (result a
 // Parameters:
 // repairTaskCancelDescription - describes the repair task to be cancelled.
 func (client BaseClient) CancelRepairTask(ctx context.Context, repairTaskCancelDescription RepairTaskCancelDescription) (result RepairTaskUpdateInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CancelRepairTask")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: repairTaskCancelDescription,
 			Constraints: []validation.Constraint{{Target: "repairTaskCancelDescription.TaskID", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -333,6 +364,16 @@ func (client BaseClient) CancelRepairTaskResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CommitImageStoreUploadSession(ctx context.Context, sessionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CommitImageStoreUploadSession")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -411,6 +452,16 @@ func (client BaseClient) CommitImageStoreUploadSessionResponder(resp *http.Respo
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CopyImageStoreContent(ctx context.Context, imageStoreCopyDescription ImageStoreCopyDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CopyImageStoreContent")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageStoreCopyDescription,
 			Constraints: []validation.Constraint{{Target: "imageStoreCopyDescription.RemoteSource", Name: validation.Null, Rule: true, Chain: nil},
@@ -492,6 +543,16 @@ func (client BaseClient) CopyImageStoreContentResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CreateApplication(ctx context.Context, applicationDescription ApplicationDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateApplication")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: applicationDescription,
 			Constraints: []validation.Constraint{{Target: "applicationDescription.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -581,6 +642,16 @@ func (client BaseClient) CreateApplicationResponder(resp *http.Response) (result
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CreateBackupPolicy(ctx context.Context, backupPolicyDescription BackupPolicyDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateBackupPolicy")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: backupPolicyDescription,
 			Constraints: []validation.Constraint{{Target: "backupPolicyDescription.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -670,6 +741,16 @@ func (client BaseClient) CreateBackupPolicyResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CreateComposeDeployment(ctx context.Context, createComposeDeploymentDescription CreateComposeDeploymentDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateComposeDeployment")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: createComposeDeploymentDescription,
 			Constraints: []validation.Constraint{{Target: "createComposeDeploymentDescription.DeploymentName", Name: validation.Null, Rule: true, Chain: nil},
@@ -751,6 +832,16 @@ func (client BaseClient) CreateComposeDeploymentResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CreateName(ctx context.Context, nameDescription NameDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateName")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: nameDescription,
 			Constraints: []validation.Constraint{{Target: "nameDescription.Name", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -838,6 +929,16 @@ func (client BaseClient) CreateNameResponder(resp *http.Response) (result autore
 // Parameters:
 // repairTask - describes the repair task to be created or updated.
 func (client BaseClient) CreateRepairTask(ctx context.Context, repairTask RepairTask) (result RepairTaskUpdateInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateRepairTask")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: repairTask,
 			Constraints: []validation.Constraint{{Target: "repairTask.TaskID", Name: validation.Null, Rule: true, Chain: nil},
@@ -917,6 +1018,16 @@ func (client BaseClient) CreateRepairTaskResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CreateService(ctx context.Context, applicationID string, serviceDescription BasicServiceDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateService")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceDescription,
 			Constraints: []validation.Constraint{{Target: "serviceDescription.ServiceName", Name: validation.Null, Rule: true, Chain: nil},
@@ -1011,6 +1122,16 @@ func (client BaseClient) CreateServiceResponder(resp *http.Response) (result aut
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) CreateServiceFromTemplate(ctx context.Context, applicationID string, serviceFromTemplateDescription ServiceFromTemplateDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CreateServiceFromTemplate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceFromTemplateDescription,
 			Constraints: []validation.Constraint{{Target: "serviceFromTemplateDescription.ApplicationName", Name: validation.Null, Rule: true, Chain: nil},
@@ -1109,6 +1230,16 @@ func (client BaseClient) CreateServiceFromTemplateResponder(resp *http.Response)
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteApplication(ctx context.Context, applicationID string, forceRemove *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteApplication")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1194,6 +1325,16 @@ func (client BaseClient) DeleteApplicationResponder(resp *http.Response) (result
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteBackupPolicy(ctx context.Context, backupPolicyName string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteBackupPolicy")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1275,6 +1416,16 @@ func (client BaseClient) DeleteBackupPolicyResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteImageStoreContent(ctx context.Context, contentPath string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteImageStoreContent")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1357,6 +1508,16 @@ func (client BaseClient) DeleteImageStoreContentResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteImageStoreUploadSession(ctx context.Context, sessionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteImageStoreUploadSession")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1435,6 +1596,16 @@ func (client BaseClient) DeleteImageStoreUploadSessionResponder(resp *http.Respo
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteName(ctx context.Context, nameID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteName")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1517,6 +1688,16 @@ func (client BaseClient) DeleteNameResponder(resp *http.Response) (result autore
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteProperty(ctx context.Context, nameID string, propertyName string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteProperty")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1595,6 +1776,16 @@ func (client BaseClient) DeletePropertyResponder(resp *http.Response) (result au
 // Parameters:
 // repairTaskDeleteDescription - describes the repair task to be deleted.
 func (client BaseClient) DeleteRepairTask(ctx context.Context, repairTaskDeleteDescription RepairTaskDeleteDescription) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteRepairTask")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: repairTaskDeleteDescription,
 			Constraints: []validation.Constraint{{Target: "repairTaskDeleteDescription.TaskID", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -1676,6 +1867,16 @@ func (client BaseClient) DeleteRepairTaskResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeleteService(ctx context.Context, serviceID string, forceRemove *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeleteService")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1764,6 +1965,16 @@ func (client BaseClient) DeleteServiceResponder(resp *http.Response) (result aut
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DeployServicePackageToNode(ctx context.Context, nodeName string, deployServicePackageToNodeDescription DeployServicePackageToNodeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DeployServicePackageToNode")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: deployServicePackageToNodeDescription,
 			Constraints: []validation.Constraint{{Target: "deployServicePackageToNodeDescription.ServiceManifestName", Name: validation.Null, Rule: true, Chain: nil},
@@ -1855,6 +2066,16 @@ func (client BaseClient) DeployServicePackageToNodeResponder(resp *http.Response
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DisableApplicationBackup(ctx context.Context, applicationID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DisableApplicationBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -1941,6 +2162,16 @@ func (client BaseClient) DisableApplicationBackupResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DisableNode(ctx context.Context, nodeName string, deactivationIntentDescription DeactivationIntentDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DisableNode")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -2026,6 +2257,16 @@ func (client BaseClient) DisableNodeResponder(resp *http.Response) (result autor
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DisablePartitionBackup(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DisablePartitionBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -2113,6 +2354,16 @@ func (client BaseClient) DisablePartitionBackupResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) DisableServiceBackup(ctx context.Context, serviceID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DisableServiceBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -2200,6 +2451,16 @@ func (client BaseClient) DisableServiceBackupResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) EnableApplicationBackup(ctx context.Context, applicationID string, enableBackupDescription EnableBackupDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.EnableApplicationBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: enableBackupDescription,
 			Constraints: []validation.Constraint{{Target: "enableBackupDescription.BackupPolicyName", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -2286,6 +2547,16 @@ func (client BaseClient) EnableApplicationBackupResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) EnableNode(ctx context.Context, nodeName string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.EnableNode")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -2371,6 +2642,16 @@ func (client BaseClient) EnableNodeResponder(resp *http.Response) (result autore
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) EnablePartitionBackup(ctx context.Context, partitionID uuid.UUID, enableBackupDescription EnableBackupDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.EnablePartitionBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: enableBackupDescription,
 			Constraints: []validation.Constraint{{Target: "enableBackupDescription.BackupPolicyName", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -2465,6 +2746,16 @@ func (client BaseClient) EnablePartitionBackupResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) EnableServiceBackup(ctx context.Context, serviceID string, enableBackupDescription EnableBackupDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.EnableServiceBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: enableBackupDescription,
 			Constraints: []validation.Constraint{{Target: "enableBackupDescription.BackupPolicyName", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -2547,6 +2838,16 @@ func (client BaseClient) EnableServiceBackupResponder(resp *http.Response) (resu
 // Parameters:
 // repairTaskApproveDescription - describes the repair task to be approved.
 func (client BaseClient) ForceApproveRepairTask(ctx context.Context, repairTaskApproveDescription RepairTaskApproveDescription) (result RepairTaskUpdateInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ForceApproveRepairTask")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: repairTaskApproveDescription,
 			Constraints: []validation.Constraint{{Target: "repairTaskApproveDescription.TaskID", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -2619,6 +2920,16 @@ func (client BaseClient) ForceApproveRepairTaskResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetAadMetadata(ctx context.Context, timeout *int64) (result AadMetadataObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetAadMetadata")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -2707,6 +3018,16 @@ func (client BaseClient) GetAadMetadataResponder(resp *http.Response) (result Aa
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetAllEntitiesBackedUpByPolicy(ctx context.Context, backupPolicyName string, continuationToken string, maxResults *int64, timeout *int64) (result PagedBackupEntityList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetAllEntitiesBackedUpByPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -2814,6 +3135,16 @@ func (client BaseClient) GetAllEntitiesBackedUpByPolicyResponder(resp *http.Resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationBackupConfigurationInfo(ctx context.Context, applicationID string, continuationToken string, maxResults *int64, timeout *int64) (result PagedBackupConfigurationInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationBackupConfigurationInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -2931,6 +3262,16 @@ func (client BaseClient) GetApplicationBackupConfigurationInfoResponder(resp *ht
 // in the configuration. If this parameter is zero or not specified, the paged queries includes as many results
 // as possible that fit in the return message.
 func (client BaseClient) GetApplicationBackupList(ctx context.Context, applicationID string, timeout *int64, latest *bool, startDateTimeFilter *date.Time, endDateTimeFilter *date.Time, continuationToken string, maxResults *int64) (result PagedBackupInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationBackupList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3046,6 +3387,16 @@ func (client BaseClient) GetApplicationBackupListResponder(resp *http.Response) 
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetApplicationEventList(ctx context.Context, applicationID string, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListApplicationEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3196,6 +3547,16 @@ func (client BaseClient) GetApplicationEventListResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationHealth(ctx context.Context, applicationID string, eventsHealthStateFilter *int32, deployedApplicationsHealthStateFilter *int32, servicesHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (result ApplicationHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3360,6 +3721,16 @@ func (client BaseClient) GetApplicationHealthResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationHealthUsingPolicy(ctx context.Context, applicationID string, eventsHealthStateFilter *int32, deployedApplicationsHealthStateFilter *int32, servicesHealthStateFilter *int32, excludeHealthStatistics *bool, applicationHealthPolicy *ApplicationHealthPolicy, timeout *int64) (result ApplicationHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3474,6 +3845,16 @@ func (client BaseClient) GetApplicationHealthUsingPolicyResponder(resp *http.Res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationInfo(ctx context.Context, applicationID string, excludeApplicationParameters *bool, timeout *int64) (result ApplicationInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3584,6 +3965,16 @@ func (client BaseClient) GetApplicationInfoResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationInfoList(ctx context.Context, applicationDefinitionKindFilter *int32, applicationTypeName string, excludeApplicationParameters *bool, continuationToken string, maxResults *int64, timeout *int64) (result PagedApplicationInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -3692,6 +4083,16 @@ func (client BaseClient) GetApplicationInfoListResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationLoadInfo(ctx context.Context, applicationID string, timeout *int64) (result ApplicationLoadInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationLoadInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3775,6 +4176,16 @@ func (client BaseClient) GetApplicationLoadInfoResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationManifest(ctx context.Context, applicationTypeName string, applicationTypeVersion string, timeout *int64) (result ApplicationTypeManifest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationManifest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3862,6 +4273,16 @@ func (client BaseClient) GetApplicationManifestResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationNameInfo(ctx context.Context, serviceID string, timeout *int64) (result ApplicationNameInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationNameInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -3950,6 +4371,16 @@ func (client BaseClient) GetApplicationNameInfoResponder(resp *http.Response) (r
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetApplicationsEventList(ctx context.Context, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListApplicationEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationsEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -4063,6 +4494,16 @@ func (client BaseClient) GetApplicationsEventListResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationTypeInfoList(ctx context.Context, applicationTypeDefinitionKindFilter *int32, excludeApplicationParameters *bool, continuationToken string, maxResults *int64, timeout *int64) (result PagedApplicationTypeInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationTypeInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -4183,6 +4624,16 @@ func (client BaseClient) GetApplicationTypeInfoListResponder(resp *http.Response
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationTypeInfoListByName(ctx context.Context, applicationTypeName string, applicationTypeVersion string, excludeApplicationParameters *bool, continuationToken string, maxResults *int64, timeout *int64) (result PagedApplicationTypeInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationTypeInfoListByName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -4288,6 +4739,16 @@ func (client BaseClient) GetApplicationTypeInfoListByNameResponder(resp *http.Re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetApplicationUpgrade(ctx context.Context, applicationID string, timeout *int64) (result ApplicationUpgradeProgressInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetApplicationUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -4369,6 +4830,16 @@ func (client BaseClient) GetApplicationUpgradeResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetBackupPolicyByName(ctx context.Context, backupPolicyName string, timeout *int64) (result BackupPolicyDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetBackupPolicyByName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -4459,6 +4930,16 @@ func (client BaseClient) GetBackupPolicyByNameResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetBackupPolicyList(ctx context.Context, continuationToken string, maxResults *int64, timeout *int64) (result PagedBackupPolicyDescriptionList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetBackupPolicyList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -4559,6 +5040,16 @@ func (client BaseClient) GetBackupPolicyListResponder(resp *http.Response) (resu
 // in the configuration. If this parameter is zero or not specified, the paged queries includes as many results
 // as possible that fit in the return message.
 func (client BaseClient) GetBackupsFromBackupLocation(ctx context.Context, getBackupByStorageQueryDescription GetBackupByStorageQueryDescription, timeout *int64, continuationToken string, maxResults *int64) (result PagedBackupInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetBackupsFromBackupLocation")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -4652,6 +5143,16 @@ func (client BaseClient) GetBackupsFromBackupLocationResponder(resp *http.Respon
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetChaos(ctx context.Context, timeout *int64) (result Chaos, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetChaos")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -4750,6 +5251,16 @@ func (client BaseClient) GetChaosResponder(resp *http.Response) (result Chaos, e
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetChaosEvents(ctx context.Context, continuationToken string, startTimeUtc string, endTimeUtc string, maxResults *int64, timeout *int64) (result ChaosEventsSegment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetChaosEvents")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -4840,6 +5351,16 @@ func (client BaseClient) GetChaosEventsResponder(resp *http.Response) (result Ch
 // GetChaosSchedule gets the version of the Chaos Schedule in use and the Chaos Schedule that defines when and how to
 // run Chaos.
 func (client BaseClient) GetChaosSchedule(ctx context.Context) (result ChaosScheduleDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetChaosSchedule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetChaosSchedulePreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.BaseClient", "GetChaosSchedule", nil, "Failure preparing request")
@@ -4905,6 +5426,16 @@ func (client BaseClient) GetChaosScheduleResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterConfiguration(ctx context.Context, configurationAPIVersion string, timeout *int64) (result ClusterConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterConfiguration")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -4983,6 +5514,16 @@ func (client BaseClient) GetClusterConfigurationResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterConfigurationUpgradeStatus(ctx context.Context, timeout *int64) (result ClusterConfigurationUpgradeStatusInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterConfigurationUpgradeStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5067,6 +5608,16 @@ func (client BaseClient) GetClusterConfigurationUpgradeStatusResponder(resp *htt
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetClusterEventList(ctx context.Context, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListClusterEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5219,6 +5770,16 @@ func (client BaseClient) GetClusterEventListResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterHealth(ctx context.Context, nodesHealthStateFilter *int32, applicationsHealthStateFilter *int32, eventsHealthStateFilter *int32, excludeHealthStatistics *bool, includeSystemApplicationHealthStatistics *bool, timeout *int64) (result ClusterHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5323,6 +5884,16 @@ func (client BaseClient) GetClusterHealthResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterHealthChunk(ctx context.Context, timeout *int64) (result ClusterHealthChunk, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterHealthChunk")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5421,6 +5992,16 @@ func (client BaseClient) GetClusterHealthChunkResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFilters(ctx context.Context, clusterHealthChunkQueryDescription *ClusterHealthChunkQueryDescription, timeout *int64) (result ClusterHealthChunk, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterHealthChunkUsingPolicyAndAdvancedFilters")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5576,6 +6157,16 @@ func (client BaseClient) GetClusterHealthChunkUsingPolicyAndAdvancedFiltersRespo
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterHealthUsingPolicy(ctx context.Context, nodesHealthStateFilter *int32, applicationsHealthStateFilter *int32, eventsHealthStateFilter *int32, excludeHealthStatistics *bool, includeSystemApplicationHealthStatistics *bool, clusterHealthPolicies *ClusterHealthPolicies, timeout *int64) (result ClusterHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5692,6 +6283,16 @@ func (client BaseClient) GetClusterHealthUsingPolicyResponder(resp *http.Respons
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterManifest(ctx context.Context, timeout *int64) (result ClusterManifest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterManifest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5769,6 +6370,16 @@ func (client BaseClient) GetClusterManifestResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetClusterUpgradeProgress(ctx context.Context, timeout *int64) (result ClusterUpgradeProgressObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetClusterUpgradeProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5848,6 +6459,16 @@ func (client BaseClient) GetClusterUpgradeProgressResponder(resp *http.Response)
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetComposeDeploymentStatus(ctx context.Context, deploymentName string, timeout *int64) (result ComposeDeploymentStatusInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetComposeDeploymentStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -5941,6 +6562,16 @@ func (client BaseClient) GetComposeDeploymentStatusResponder(resp *http.Response
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetComposeDeploymentStatusList(ctx context.Context, continuationToken string, maxResults *int64, timeout *int64) (result PagedComposeDeploymentStatusInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetComposeDeploymentStatusList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -6030,6 +6661,16 @@ func (client BaseClient) GetComposeDeploymentStatusListResponder(resp *http.Resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetComposeDeploymentUpgradeProgress(ctx context.Context, deploymentName string, timeout *int64) (result ComposeDeploymentUpgradeProgressInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetComposeDeploymentUpgradeProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6123,6 +6764,16 @@ func (client BaseClient) GetComposeDeploymentUpgradeProgressResponder(resp *http
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetContainerLogsDeployedOnNode(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, codePackageName string, tail string, previous *bool, timeout *int64) (result ContainerLogs, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetContainerLogsDeployedOnNode")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6222,6 +6873,16 @@ func (client BaseClient) GetContainerLogsDeployedOnNodeResponder(resp *http.Resp
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetContainersEventList(ctx context.Context, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListContainerInstanceEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetContainersEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6310,6 +6971,16 @@ func (client BaseClient) GetContainersEventListResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetCorrelatedEventList(ctx context.Context, eventInstanceID string, timeout *int64) (result ListFabricEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetCorrelatedEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6398,6 +7069,16 @@ func (client BaseClient) GetCorrelatedEventListResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDataLossProgress(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, timeout *int64) (result PartitionDataLossProgress, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDataLossProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6525,6 +7206,16 @@ func (client BaseClient) GetDataLossProgressResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedApplicationHealth(ctx context.Context, nodeName string, applicationID string, eventsHealthStateFilter *int32, deployedServicePackagesHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (result DeployedApplicationHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedApplicationHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6673,6 +7364,16 @@ func (client BaseClient) GetDeployedApplicationHealthResponder(resp *http.Respon
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedApplicationHealthUsingPolicy(ctx context.Context, nodeName string, applicationID string, eventsHealthStateFilter *int32, deployedServicePackagesHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, excludeHealthStatistics *bool, timeout *int64) (result DeployedApplicationHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedApplicationHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6789,6 +7490,16 @@ func (client BaseClient) GetDeployedApplicationHealthUsingPolicyResponder(resp *
 // are merged.
 // As a result, the query is more expensive and may take a longer time.
 func (client BaseClient) GetDeployedApplicationInfo(ctx context.Context, nodeName string, applicationID string, timeout *int64, includeHealthState *bool) (result DeployedApplicationInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedApplicationInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -6895,6 +7606,16 @@ func (client BaseClient) GetDeployedApplicationInfoResponder(resp *http.Response
 // in the configuration. If this parameter is zero or not specified, the paged queries includes as many results
 // as possible that fit in the return message.
 func (client BaseClient) GetDeployedApplicationInfoList(ctx context.Context, nodeName string, timeout *int64, includeHealthState *bool, continuationToken string, maxResults *int64) (result PagedDeployedApplicationInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedApplicationInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7002,6 +7723,16 @@ func (client BaseClient) GetDeployedApplicationInfoListResponder(resp *http.Resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedCodePackageInfoList(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, codePackageName string, timeout *int64) (result ListDeployedCodePackageInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedCodePackageInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7113,6 +7844,16 @@ func (client BaseClient) GetDeployedCodePackageInfoListResponder(resp *http.Resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServicePackageHealth(ctx context.Context, nodeName string, applicationID string, servicePackageName string, eventsHealthStateFilter *int32, timeout *int64) (result DeployedServicePackageHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServicePackageHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7231,6 +7972,16 @@ func (client BaseClient) GetDeployedServicePackageHealthResponder(resp *http.Res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServicePackageHealthUsingPolicy(ctx context.Context, nodeName string, applicationID string, servicePackageName string, eventsHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, timeout *int64) (result DeployedServicePackageHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServicePackageHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7330,6 +8081,16 @@ func (client BaseClient) GetDeployedServicePackageHealthUsingPolicyResponder(res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServicePackageInfoList(ctx context.Context, nodeName string, applicationID string, timeout *int64) (result ListDeployedServicePackageInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServicePackageInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7420,6 +8181,16 @@ func (client BaseClient) GetDeployedServicePackageInfoListResponder(resp *http.R
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServicePackageInfoListByName(ctx context.Context, nodeName string, applicationID string, servicePackageName string, timeout *int64) (result ListDeployedServicePackageInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServicePackageInfoListByName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7507,6 +8278,16 @@ func (client BaseClient) GetDeployedServicePackageInfoListByNameResponder(resp *
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfo(ctx context.Context, nodeName string, partitionID uuid.UUID, replicaID string, timeout *int64) (result DeployedServiceReplicaDetailInfoModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServiceReplicaDetailInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7593,6 +8374,16 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoResponder(resp *http
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionID(ctx context.Context, nodeName string, partitionID uuid.UUID, timeout *int64) (result DeployedServiceReplicaDetailInfoModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServiceReplicaDetailInfoByPartitionID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7686,6 +8477,16 @@ func (client BaseClient) GetDeployedServiceReplicaDetailInfoByPartitionIDRespond
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServiceReplicaInfoList(ctx context.Context, nodeName string, applicationID string, partitionID *uuid.UUID, serviceManifestName string, timeout *int64) (result ListDeployedServiceReplicaInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServiceReplicaInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7786,6 +8587,16 @@ func (client BaseClient) GetDeployedServiceReplicaInfoListResponder(resp *http.R
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServiceTypeInfoByName(ctx context.Context, nodeName string, applicationID string, serviceTypeName string, serviceManifestName string, timeout *int64) (result ListDeployedServiceTypeInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServiceTypeInfoByName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7882,6 +8693,16 @@ func (client BaseClient) GetDeployedServiceTypeInfoByNameResponder(resp *http.Re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetDeployedServiceTypeInfoList(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, timeout *int64) (result ListDeployedServiceTypeInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetDeployedServiceTypeInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -7980,6 +8801,16 @@ func (client BaseClient) GetDeployedServiceTypeInfoListResponder(resp *http.Resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetFaultOperationList(ctx context.Context, typeFilter int32, stateFilter int32, timeout *int64) (result ListOperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetFaultOperationList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8060,6 +8891,16 @@ func (client BaseClient) GetFaultOperationListResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetImageStoreContent(ctx context.Context, contentPath string, timeout *int64) (result ImageStoreContent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetImageStoreContent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8140,6 +8981,16 @@ func (client BaseClient) GetImageStoreContentResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetImageStoreRootContent(ctx context.Context, timeout *int64) (result ImageStoreContent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetImageStoreRootContent")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8219,6 +9070,16 @@ func (client BaseClient) GetImageStoreRootContentResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetImageStoreUploadSessionByID(ctx context.Context, sessionID uuid.UUID, timeout *int64) (result UploadSession, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetImageStoreUploadSessionByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8298,6 +9159,16 @@ func (client BaseClient) GetImageStoreUploadSessionByIDResponder(resp *http.Resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetImageStoreUploadSessionByPath(ctx context.Context, contentPath string, timeout *int64) (result UploadSession, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetImageStoreUploadSessionByPath")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8379,6 +9250,16 @@ func (client BaseClient) GetImageStoreUploadSessionByPathResponder(resp *http.Re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNameExistsInfo(ctx context.Context, nameID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNameExistsInfo")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8467,6 +9348,16 @@ func (client BaseClient) GetNameExistsInfoResponder(resp *http.Response) (result
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetNodeEventList(ctx context.Context, nodeName string, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListNodeEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8576,6 +9467,16 @@ func (client BaseClient) GetNodeEventListResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNodeHealth(ctx context.Context, nodeName string, eventsHealthStateFilter *int32, timeout *int64) (result NodeHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8682,6 +9583,16 @@ func (client BaseClient) GetNodeHealthResponder(resp *http.Response) (result Nod
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNodeHealthUsingPolicy(ctx context.Context, nodeName string, eventsHealthStateFilter *int32, clusterHealthPolicy *ClusterHealthPolicy, timeout *int64) (result NodeHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8774,6 +9685,16 @@ func (client BaseClient) GetNodeHealthUsingPolicyResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNodeInfo(ctx context.Context, nodeName string, timeout *int64) (result NodeInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8862,6 +9783,16 @@ func (client BaseClient) GetNodeInfoResponder(resp *http.Response) (result NodeI
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNodeInfoList(ctx context.Context, continuationToken string, nodeStatusFilter NodeStatusFilter, timeout *int64) (result PagedNodeInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -8948,6 +9879,16 @@ func (client BaseClient) GetNodeInfoListResponder(resp *http.Response) (result P
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNodeLoadInfo(ctx context.Context, nodeName string, timeout *int64) (result NodeLoadInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeLoadInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9036,6 +9977,16 @@ func (client BaseClient) GetNodeLoadInfoResponder(resp *http.Response) (result N
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetNodesEventList(ctx context.Context, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListNodeEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodesEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9127,6 +10078,16 @@ func (client BaseClient) GetNodesEventListResponder(resp *http.Response) (result
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetNodeTransitionProgress(ctx context.Context, nodeName string, operationID uuid.UUID, timeout *int64) (result NodeTransitionProgress, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetNodeTransitionProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9210,6 +10171,16 @@ func (client BaseClient) GetNodeTransitionProgressResponder(resp *http.Response)
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionBackupConfigurationInfo(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result PartitionBackupConfigurationInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionBackupConfigurationInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9301,6 +10272,16 @@ func (client BaseClient) GetPartitionBackupConfigurationInfoResponder(resp *http
 // time must be specified in ISO8601 format. This is an optional parameter. If not specified, enumeration is
 // done till the most recent backup.
 func (client BaseClient) GetPartitionBackupList(ctx context.Context, partitionID uuid.UUID, timeout *int64, latest *bool, startDateTimeFilter *date.Time, endDateTimeFilter *date.Time) (result PagedBackupInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionBackupList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9394,6 +10375,16 @@ func (client BaseClient) GetPartitionBackupListResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionBackupProgress(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result BackupProgressInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionBackupProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9483,6 +10474,16 @@ func (client BaseClient) GetPartitionBackupProgressResponder(resp *http.Response
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetPartitionEventList(ctx context.Context, partitionID uuid.UUID, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListPartitionEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9612,6 +10613,16 @@ func (client BaseClient) GetPartitionEventListResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionHealth(ctx context.Context, partitionID uuid.UUID, eventsHealthStateFilter *int32, replicasHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (result PartitionHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9753,6 +10764,16 @@ func (client BaseClient) GetPartitionHealthResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionHealthUsingPolicy(ctx context.Context, partitionID uuid.UUID, eventsHealthStateFilter *int32, replicasHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, excludeHealthStatistics *bool, timeout *int64) (result PartitionHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9856,6 +10877,16 @@ func (client BaseClient) GetPartitionHealthUsingPolicyResponder(resp *http.Respo
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionInfo(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result ServicePartitionInfoModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -9948,6 +10979,16 @@ func (client BaseClient) GetPartitionInfoResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionInfoList(ctx context.Context, serviceID string, continuationToken string, timeout *int64) (result PagedServicePartitionInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10034,6 +11075,16 @@ func (client BaseClient) GetPartitionInfoListResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionLoadInformation(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result PartitionLoadInformation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionLoadInformation")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10124,6 +11175,16 @@ func (client BaseClient) GetPartitionLoadInformationResponder(resp *http.Respons
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetPartitionReplicaEventList(ctx context.Context, partitionID uuid.UUID, replicaID string, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListReplicaEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionReplicaEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10225,6 +11286,16 @@ func (client BaseClient) GetPartitionReplicaEventListResponder(resp *http.Respon
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetPartitionReplicasEventList(ctx context.Context, partitionID uuid.UUID, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListReplicaEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionReplicasEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10325,6 +11396,16 @@ func (client BaseClient) GetPartitionReplicasEventListResponder(resp *http.Respo
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionRestartProgress(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, timeout *int64) (result PartitionRestartProgress, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionRestartProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10409,6 +11490,16 @@ func (client BaseClient) GetPartitionRestartProgressResponder(resp *http.Respons
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPartitionRestoreProgress(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result RestoreProgressInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionRestoreProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10497,6 +11588,16 @@ func (client BaseClient) GetPartitionRestoreProgressResponder(resp *http.Respons
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetPartitionsEventList(ctx context.Context, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListPartitionEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPartitionsEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10587,6 +11688,16 @@ func (client BaseClient) GetPartitionsEventListResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPropertyInfo(ctx context.Context, nameID string, propertyName string, timeout *int64) (result PropertyInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPropertyInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10678,6 +11789,16 @@ func (client BaseClient) GetPropertyInfoResponder(resp *http.Response) (result P
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetPropertyInfoList(ctx context.Context, nameID string, includeValues *bool, continuationToken string, timeout *int64) (result PagedPropertyInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetPropertyInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10769,6 +11890,16 @@ func (client BaseClient) GetPropertyInfoListResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetProvisionedFabricCodeVersionInfoList(ctx context.Context, codeVersion string, timeout *int64) (result ListFabricCodeVersionInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetProvisionedFabricCodeVersionInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10851,6 +11982,16 @@ func (client BaseClient) GetProvisionedFabricCodeVersionInfoListResponder(resp *
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetProvisionedFabricConfigVersionInfoList(ctx context.Context, configVersion string, timeout *int64) (result ListFabricConfigVersionInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetProvisionedFabricConfigVersionInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -10939,6 +12080,16 @@ func (client BaseClient) GetProvisionedFabricConfigVersionInfoListResponder(resp
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetQuorumLossProgress(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, timeout *int64) (result PartitionQuorumLossProgress, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetQuorumLossProgress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11029,6 +12180,16 @@ func (client BaseClient) GetQuorumLossProgressResponder(resp *http.Response) (re
 // - 64 - Completed
 // executorFilter - the name of the repair executor whose claimed tasks should be included in the list.
 func (client BaseClient) GetRepairTaskList(ctx context.Context, taskIDFilter string, stateFilter *int32, executorFilter string) (result ListRepairTask, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetRepairTaskList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetRepairTaskListPreparer(ctx, taskIDFilter, stateFilter, executorFilter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.BaseClient", "GetRepairTaskList", nil, "Failure preparing request")
@@ -11119,6 +12280,16 @@ func (client BaseClient) GetRepairTaskListResponder(resp *http.Response) (result
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetReplicaHealth(ctx context.Context, partitionID uuid.UUID, replicaID string, eventsHealthStateFilter *int32, timeout *int64) (result ReplicaHealthModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetReplicaHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11232,6 +12403,16 @@ func (client BaseClient) GetReplicaHealthResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetReplicaHealthUsingPolicy(ctx context.Context, partitionID uuid.UUID, replicaID string, eventsHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, timeout *int64) (result ReplicaHealthModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetReplicaHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11326,6 +12507,16 @@ func (client BaseClient) GetReplicaHealthUsingPolicyResponder(resp *http.Respons
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetReplicaInfo(ctx context.Context, partitionID uuid.UUID, replicaID string, timeout *int64) (result ReplicaInfoModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetReplicaInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11414,6 +12605,16 @@ func (client BaseClient) GetReplicaInfoResponder(resp *http.Response) (result Re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetReplicaInfoList(ctx context.Context, partitionID uuid.UUID, continuationToken string, timeout *int64) (result PagedReplicaInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetReplicaInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11513,6 +12714,16 @@ func (client BaseClient) GetReplicaInfoListResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceBackupConfigurationInfo(ctx context.Context, serviceID string, continuationToken string, maxResults *int64, timeout *int64) (result PagedBackupConfigurationInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceBackupConfigurationInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: maxResults,
 			Constraints: []validation.Constraint{{Target: "maxResults", Name: validation.Null, Rule: false,
@@ -11630,6 +12841,16 @@ func (client BaseClient) GetServiceBackupConfigurationInfoResponder(resp *http.R
 // in the configuration. If this parameter is zero or not specified, the paged queries includes as many results
 // as possible that fit in the return message.
 func (client BaseClient) GetServiceBackupList(ctx context.Context, serviceID string, timeout *int64, latest *bool, startDateTimeFilter *date.Time, endDateTimeFilter *date.Time, continuationToken string, maxResults *int64) (result PagedBackupInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceBackupList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11738,6 +12959,16 @@ func (client BaseClient) GetServiceBackupListResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceDescription(ctx context.Context, serviceID string, timeout *int64) (result ServiceDescriptionModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceDescription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11831,6 +13062,16 @@ func (client BaseClient) GetServiceDescriptionResponder(resp *http.Response) (re
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetServiceEventList(ctx context.Context, serviceID string, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListServiceEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -11966,6 +13207,16 @@ func (client BaseClient) GetServiceEventListResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceHealth(ctx context.Context, serviceID string, eventsHealthStateFilter *int32, partitionsHealthStateFilter *int32, excludeHealthStatistics *bool, timeout *int64) (result ServiceHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceHealth")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12112,6 +13363,16 @@ func (client BaseClient) GetServiceHealthResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceHealthUsingPolicy(ctx context.Context, serviceID string, eventsHealthStateFilter *int32, partitionsHealthStateFilter *int32, applicationHealthPolicy *ApplicationHealthPolicy, excludeHealthStatistics *bool, timeout *int64) (result ServiceHealth, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceHealthUsingPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12223,6 +13484,16 @@ func (client BaseClient) GetServiceHealthUsingPolicyResponder(resp *http.Respons
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceInfo(ctx context.Context, applicationID string, serviceID string, timeout *int64) (result ServiceInfoModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12316,6 +13587,16 @@ func (client BaseClient) GetServiceInfoResponder(resp *http.Response) (result Se
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceInfoList(ctx context.Context, applicationID string, serviceTypeName string, continuationToken string, timeout *int64) (result PagedServiceInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12407,6 +13688,16 @@ func (client BaseClient) GetServiceInfoListResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceManifest(ctx context.Context, applicationTypeName string, applicationTypeVersion string, serviceManifestName string, timeout *int64) (result ServiceTypeManifest, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceManifest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12491,6 +13782,16 @@ func (client BaseClient) GetServiceManifestResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceNameInfo(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result ServiceNameInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceNameInfo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12579,6 +13880,16 @@ func (client BaseClient) GetServiceNameInfoResponder(resp *http.Response) (resul
 // otherwise the CorrelationEvents get processed and HasCorrelatedEvents field in every FabricEvent gets
 // populated.
 func (client BaseClient) GetServicesEventList(ctx context.Context, startTimeUtc string, endTimeUtc string, timeout *int64, eventsTypesFilter string, excludeAnalysisEvents *bool, skipCorrelationLookup *bool) (result ListServiceEvent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServicesEventList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12662,7 +13973,7 @@ func (client BaseClient) GetServicesEventListResponder(resp *http.Response) (res
 
 // GetServiceTypeInfoByName gets the information about a specific service type that is supported by a provisioned
 // application type in a Service Fabric cluster. The provided application type must exist. Otherwise, a 404 status is
-// returned. A 204 response is returned if the specificed service type is not found in the cluster.
+// returned. A 204 response is returned if the specified service type is not found in the cluster.
 // Parameters:
 // applicationTypeName - the name of the application type.
 // applicationTypeVersion - the version of the application type.
@@ -12671,6 +13982,16 @@ func (client BaseClient) GetServicesEventListResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceTypeInfoByName(ctx context.Context, applicationTypeName string, applicationTypeVersion string, serviceTypeName string, timeout *int64) (result ServiceTypeInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceTypeInfoByName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12757,6 +14078,16 @@ func (client BaseClient) GetServiceTypeInfoByNameResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetServiceTypeInfoList(ctx context.Context, applicationTypeName string, applicationTypeVersion string, timeout *int64) (result ListServiceTypeInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetServiceTypeInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12847,6 +14178,16 @@ func (client BaseClient) GetServiceTypeInfoListResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetSubNameInfoList(ctx context.Context, nameID string, recursive *bool, continuationToken string, timeout *int64) (result PagedSubNameInfoList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetSubNameInfoList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -12936,6 +14277,16 @@ func (client BaseClient) GetSubNameInfoListResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) GetUpgradeOrchestrationServiceState(ctx context.Context, timeout *int64) (result UpgradeOrchestrationServiceState, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetUpgradeOrchestrationServiceState")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13025,6 +14376,16 @@ func (client BaseClient) GetUpgradeOrchestrationServiceStateResponder(resp *http
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) InvokeContainerAPI(ctx context.Context, nodeName string, applicationID string, serviceManifestName string, codePackageName string, codePackageInstanceID string, containerAPIRequestBody ContainerAPIRequestBody, timeout *int64) (result ContainerAPIResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.InvokeContainerAPI")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13124,6 +14485,16 @@ func (client BaseClient) InvokeContainerAPIResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) InvokeInfrastructureCommand(ctx context.Context, command string, serviceID string, timeout *int64) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.InvokeInfrastructureCommand")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13215,6 +14586,16 @@ func (client BaseClient) InvokeInfrastructureCommandResponder(resp *http.Respons
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) InvokeInfrastructureQuery(ctx context.Context, command string, serviceID string, timeout *int64) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.InvokeInfrastructureQuery")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13299,6 +14680,16 @@ func (client BaseClient) InvokeInfrastructureQueryResponder(resp *http.Response)
 // Parameters:
 // chaosSchedule - describes the schedule used by Chaos.
 func (client BaseClient) PostChaosSchedule(ctx context.Context, chaosSchedule ChaosScheduleDescription) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PostChaosSchedule")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: chaosSchedule,
 			Constraints: []validation.Constraint{{Target: "chaosSchedule.Version", Name: validation.Null, Rule: false,
@@ -13374,6 +14765,16 @@ func (client BaseClient) PostChaosScheduleResponder(resp *http.Response) (result
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ProvisionApplicationType(ctx context.Context, provisionApplicationTypeDescriptionBaseRequiredBodyParam BasicProvisionApplicationTypeDescriptionBase, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ProvisionApplicationType")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: provisionApplicationTypeDescriptionBaseRequiredBodyParam,
 			Constraints: []validation.Constraint{{Target: "provisionApplicationTypeDescriptionBaseRequiredBodyParam.Async", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -13454,6 +14855,16 @@ func (client BaseClient) ProvisionApplicationTypeResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ProvisionCluster(ctx context.Context, provisionFabricDescription ProvisionFabricDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ProvisionCluster")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13533,6 +14944,16 @@ func (client BaseClient) ProvisionClusterResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) PutProperty(ctx context.Context, nameID string, propertyDescription PropertyDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PutProperty")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: propertyDescription,
 			Constraints: []validation.Constraint{{Target: "propertyDescription.PropertyName", Name: validation.Null, Rule: true, Chain: nil},
@@ -13620,6 +15041,16 @@ func (client BaseClient) PutPropertyResponder(resp *http.Response) (result autor
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RecoverAllPartitions(ctx context.Context, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecoverAllPartitions")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13698,6 +15129,16 @@ func (client BaseClient) RecoverAllPartitionsResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RecoverPartition(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecoverPartition")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13784,6 +15225,16 @@ func (client BaseClient) RecoverPartitionResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RecoverServicePartitions(ctx context.Context, serviceID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecoverServicePartitions")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13865,6 +15316,16 @@ func (client BaseClient) RecoverServicePartitionsResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RecoverSystemPartitions(ctx context.Context, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecoverSystemPartitions")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -13941,6 +15402,16 @@ func (client BaseClient) RecoverSystemPartitionsResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RemoveComposeDeployment(ctx context.Context, deploymentName string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RemoveComposeDeployment")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -14026,6 +15497,16 @@ func (client BaseClient) RemoveComposeDeploymentResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RemoveNodeState(ctx context.Context, nodeName string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RemoveNodeState")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -14116,6 +15597,16 @@ func (client BaseClient) RemoveNodeStateResponder(resp *http.Response) (result a
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RemoveReplica(ctx context.Context, nodeName string, partitionID uuid.UUID, replicaID string, forceRemove *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RemoveReplica")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -14225,6 +15716,16 @@ func (client BaseClient) RemoveReplicaResponder(resp *http.Response) (result aut
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportApplicationHealth(ctx context.Context, applicationID string, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportApplicationHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -14334,6 +15835,16 @@ func (client BaseClient) ReportApplicationHealthResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportClusterHealth(ctx context.Context, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportClusterHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -14445,6 +15956,16 @@ func (client BaseClient) ReportClusterHealthResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportDeployedApplicationHealth(ctx context.Context, nodeName string, applicationID string, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportDeployedApplicationHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -14563,6 +16084,16 @@ func (client BaseClient) ReportDeployedApplicationHealthResponder(resp *http.Res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportDeployedServicePackageHealth(ctx context.Context, nodeName string, applicationID string, servicePackageName string, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportDeployedServicePackageHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -14675,6 +16206,16 @@ func (client BaseClient) ReportDeployedServicePackageHealthResponder(resp *http.
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportNodeHealth(ctx context.Context, nodeName string, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportNodeHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -14785,6 +16326,16 @@ func (client BaseClient) ReportNodeHealthResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportPartitionHealth(ctx context.Context, partitionID uuid.UUID, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportPartitionHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -14898,6 +16449,16 @@ func (client BaseClient) ReportPartitionHealthResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportReplicaHealth(ctx context.Context, partitionID uuid.UUID, replicaID string, replicaHealthReportServiceKind ReplicaHealthReportServiceKind, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportReplicaHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -15014,6 +16575,16 @@ func (client BaseClient) ReportReplicaHealthResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ReportServiceHealth(ctx context.Context, serviceID string, healthInformation HealthInformation, immediate *bool, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ReportServiceHealth")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: healthInformation,
 			Constraints: []validation.Constraint{{Target: "healthInformation.SourceID", Name: validation.Null, Rule: true, Chain: nil},
@@ -15104,6 +16675,16 @@ func (client BaseClient) ReportServiceHealthResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResetPartitionLoad(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResetPartitionLoad")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -15200,6 +16781,16 @@ func (client BaseClient) ResetPartitionLoadResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResolveService(ctx context.Context, serviceID string, partitionKeyType *int32, partitionKeyValue string, previousRspVersion string, timeout *int64) (result ResolvedServicePartition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResolveService")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -15298,6 +16889,16 @@ func (client BaseClient) ResolveServiceResponder(resp *http.Response) (result Re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RestartDeployedCodePackage(ctx context.Context, nodeName string, applicationID string, restartDeployedCodePackageDescription RestartDeployedCodePackageDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RestartDeployedCodePackage")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: restartDeployedCodePackageDescription,
 			Constraints: []validation.Constraint{{Target: "restartDeployedCodePackageDescription.ServiceManifestName", Name: validation.Null, Rule: true, Chain: nil},
@@ -15387,6 +16988,16 @@ func (client BaseClient) RestartDeployedCodePackageResponder(resp *http.Response
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RestartNode(ctx context.Context, nodeName string, restartNodeDescription RestartNodeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RestartNode")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: restartNodeDescription,
 			Constraints: []validation.Constraint{{Target: "restartNodeDescription.NodeInstanceID", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -15475,6 +17086,16 @@ func (client BaseClient) RestartNodeResponder(resp *http.Response) (result autor
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RestartReplica(ctx context.Context, nodeName string, partitionID uuid.UUID, replicaID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RestartReplica")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -15568,6 +17189,16 @@ func (client BaseClient) RestartReplicaResponder(resp *http.Response) (result au
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RestorePartition(ctx context.Context, partitionID uuid.UUID, restorePartitionDescription RestorePartitionDescription, restoreTimeout *int32, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RestorePartition")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: restorePartitionDescription,
 			Constraints: []validation.Constraint{{Target: "restorePartitionDescription.BackupID", Name: validation.Null, Rule: true, Chain: nil},
@@ -15663,6 +17294,16 @@ func (client BaseClient) RestorePartitionResponder(resp *http.Response) (result 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResumeApplicationBackup(ctx context.Context, applicationID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResumeApplicationBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -15750,6 +17391,16 @@ func (client BaseClient) ResumeApplicationBackupResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResumeApplicationUpgrade(ctx context.Context, applicationID string, resumeApplicationUpgradeDescription ResumeApplicationUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResumeApplicationUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resumeApplicationUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "resumeApplicationUpgradeDescription.UpgradeDomainName", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -15835,6 +17486,16 @@ func (client BaseClient) ResumeApplicationUpgradeResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResumeClusterUpgrade(ctx context.Context, resumeClusterUpgradeDescription ResumeClusterUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResumeClusterUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resumeClusterUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "resumeClusterUpgradeDescription.UpgradeDomain", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -15916,6 +17577,16 @@ func (client BaseClient) ResumeClusterUpgradeResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResumePartitionBackup(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResumePartitionBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -16001,6 +17672,16 @@ func (client BaseClient) ResumePartitionBackupResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) ResumeServiceBackup(ctx context.Context, serviceID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ResumeServiceBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -16088,6 +17769,16 @@ func (client BaseClient) ResumeServiceBackupResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RollbackApplicationUpgrade(ctx context.Context, applicationID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RollbackApplicationUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -16167,6 +17858,16 @@ func (client BaseClient) RollbackApplicationUpgradeResponder(resp *http.Response
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) RollbackClusterUpgrade(ctx context.Context, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RollbackClusterUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -16244,6 +17945,16 @@ func (client BaseClient) RollbackClusterUpgradeResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) SetUpgradeOrchestrationServiceState(ctx context.Context, upgradeOrchestrationServiceState UpgradeOrchestrationServiceState, timeout *int64) (result UpgradeOrchestrationServiceStateSummary, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.SetUpgradeOrchestrationServiceState")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -16329,6 +18040,16 @@ func (client BaseClient) SetUpgradeOrchestrationServiceStateResponder(resp *http
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartApplicationUpgrade(ctx context.Context, applicationID string, applicationUpgradeDescription ApplicationUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartApplicationUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: applicationUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "applicationUpgradeDescription.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -16419,6 +18140,16 @@ func (client BaseClient) StartApplicationUpgradeResponder(resp *http.Response) (
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartChaos(ctx context.Context, chaosParameters ChaosParameters, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartChaos")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: chaosParameters,
 			Constraints: []validation.Constraint{{Target: "chaosParameters.MaxClusterStabilizationTimeoutInSeconds", Name: validation.Null, Rule: false,
@@ -16515,6 +18246,16 @@ func (client BaseClient) StartChaosResponder(resp *http.Response) (result autore
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartClusterConfigurationUpgrade(ctx context.Context, clusterConfigurationUpgradeDescription ClusterConfigurationUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartClusterConfigurationUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: clusterConfigurationUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "clusterConfigurationUpgradeDescription.ClusterConfig", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -16596,6 +18337,16 @@ func (client BaseClient) StartClusterConfigurationUpgradeResponder(resp *http.Re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartClusterUpgrade(ctx context.Context, startClusterUpgradeDescription StartClusterUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartClusterUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: startClusterUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "startClusterUpgradeDescription.ClusterUpgradeHealthPolicy", Name: validation.Null, Rule: false,
@@ -16687,6 +18438,16 @@ func (client BaseClient) StartClusterUpgradeResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartComposeDeploymentUpgrade(ctx context.Context, deploymentName string, composeDeploymentUpgradeDescription ComposeDeploymentUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartComposeDeploymentUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: composeDeploymentUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "composeDeploymentUpgradeDescription.DeploymentName", Name: validation.Null, Rule: true, Chain: nil},
@@ -16796,6 +18557,16 @@ func (client BaseClient) StartComposeDeploymentUpgradeResponder(resp *http.Respo
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartDataLoss(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, dataLossMode DataLossMode, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartDataLoss")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -16890,6 +18661,16 @@ func (client BaseClient) StartDataLossResponder(resp *http.Response) (result aut
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartNodeTransition(ctx context.Context, nodeName string, operationID uuid.UUID, nodeTransitionType NodeTransitionType, nodeInstanceID string, stopDurationInSeconds int32, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartNodeTransition")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: stopDurationInSeconds,
 			Constraints: []validation.Constraint{{Target: "stopDurationInSeconds", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}},
@@ -16988,6 +18769,16 @@ func (client BaseClient) StartNodeTransitionResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartPartitionRestart(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, restartPartitionMode RestartPartitionMode, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartPartitionRestart")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17089,6 +18880,16 @@ func (client BaseClient) StartPartitionRestartResponder(resp *http.Response) (re
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StartQuorumLoss(ctx context.Context, serviceID string, partitionID uuid.UUID, operationID uuid.UUID, quorumLossMode QuorumLossMode, quorumLossDuration int32, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StartQuorumLoss")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17175,6 +18976,16 @@ func (client BaseClient) StartQuorumLossResponder(resp *http.Response) (result a
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) StopChaos(ctx context.Context, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.StopChaos")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17252,6 +19063,16 @@ func (client BaseClient) StopChaosResponder(resp *http.Response) (result autores
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) SubmitPropertyBatch(ctx context.Context, nameID string, propertyBatchDescriptionList PropertyBatchDescriptionList, timeout *int64) (result PropertyBatchInfoModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.SubmitPropertyBatch")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17341,6 +19162,16 @@ func (client BaseClient) SubmitPropertyBatchResponder(resp *http.Response) (resu
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) SuspendApplicationBackup(ctx context.Context, applicationID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.SuspendApplicationBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17422,6 +19253,16 @@ func (client BaseClient) SuspendApplicationBackupResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) SuspendPartitionBackup(ctx context.Context, partitionID uuid.UUID, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.SuspendPartitionBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17508,6 +19349,16 @@ func (client BaseClient) SuspendPartitionBackupResponder(resp *http.Response) (r
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) SuspendServiceBackup(ctx context.Context, serviceID string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.SuspendServiceBackup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17592,6 +19443,16 @@ func (client BaseClient) SuspendServiceBackupResponder(resp *http.Response) (res
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UnprovisionApplicationType(ctx context.Context, applicationTypeName string, unprovisionApplicationTypeDescriptionInfo UnprovisionApplicationTypeDescriptionInfo, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UnprovisionApplicationType")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: unprovisionApplicationTypeDescriptionInfo,
 			Constraints: []validation.Constraint{{Target: "unprovisionApplicationTypeDescriptionInfo.ApplicationTypeVersion", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -17677,6 +19538,16 @@ func (client BaseClient) UnprovisionApplicationTypeResponder(resp *http.Response
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UnprovisionCluster(ctx context.Context, unprovisionFabricDescription UnprovisionFabricDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UnprovisionCluster")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -17762,6 +19633,16 @@ func (client BaseClient) UnprovisionClusterResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UpdateApplicationUpgrade(ctx context.Context, applicationID string, applicationUpgradeUpdateDescription ApplicationUpgradeUpdateDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UpdateApplicationUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: applicationUpgradeUpdateDescription,
 			Constraints: []validation.Constraint{{Target: "applicationUpgradeUpdateDescription.Name", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -17847,6 +19728,16 @@ func (client BaseClient) UpdateApplicationUpgradeResponder(resp *http.Response) 
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UpdateBackupPolicy(ctx context.Context, backupPolicyDescription BackupPolicyDescription, backupPolicyName string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UpdateBackupPolicy")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: backupPolicyDescription,
 			Constraints: []validation.Constraint{{Target: "backupPolicyDescription.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -17938,6 +19829,16 @@ func (client BaseClient) UpdateBackupPolicyResponder(resp *http.Response) (resul
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UpdateClusterUpgrade(ctx context.Context, updateClusterUpgradeDescription UpdateClusterUpgradeDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UpdateClusterUpgrade")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: updateClusterUpgradeDescription,
 			Constraints: []validation.Constraint{{Target: "updateClusterUpgradeDescription.ClusterUpgradeHealthPolicy", Name: validation.Null, Rule: false,
@@ -18025,6 +19926,16 @@ func (client BaseClient) UpdateClusterUpgradeResponder(resp *http.Response) (res
 // Parameters:
 // repairTask - describes the repair task to be created or updated.
 func (client BaseClient) UpdateRepairExecutionState(ctx context.Context, repairTask RepairTask) (result RepairTaskUpdateInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UpdateRepairExecutionState")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: repairTask,
 			Constraints: []validation.Constraint{{Target: "repairTask.TaskID", Name: validation.Null, Rule: true, Chain: nil},
@@ -18095,6 +20006,16 @@ func (client BaseClient) UpdateRepairExecutionStateResponder(resp *http.Response
 // Parameters:
 // repairTaskUpdateHealthPolicyDescription - describes the repair task healthy policy to be updated.
 func (client BaseClient) UpdateRepairTaskHealthPolicy(ctx context.Context, repairTaskUpdateHealthPolicyDescription RepairTaskUpdateHealthPolicyDescription) (result RepairTaskUpdateInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UpdateRepairTaskHealthPolicy")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: repairTaskUpdateHealthPolicyDescription,
 			Constraints: []validation.Constraint{{Target: "repairTaskUpdateHealthPolicyDescription.TaskID", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -18176,6 +20097,16 @@ func (client BaseClient) UpdateRepairTaskHealthPolicyResponder(resp *http.Respon
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UpdateService(ctx context.Context, serviceID string, serviceUpdateDescription BasicServiceUpdateDescription, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UpdateService")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -18264,6 +20195,16 @@ func (client BaseClient) UpdateServiceResponder(resp *http.Response) (result aut
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UploadFile(ctx context.Context, contentPath string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UploadFile")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,
@@ -18356,6 +20297,16 @@ func (client BaseClient) UploadFileResponder(resp *http.Response) (result autore
 // duration that the client is willing to wait for the requested operation to complete. The default value for
 // this parameter is 60 seconds.
 func (client BaseClient) UploadFileChunk(ctx context.Context, contentPath string, sessionID uuid.UUID, contentRange string, timeout *int64) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.UploadFileChunk")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: timeout,
 			Constraints: []validation.Constraint{{Target: "timeout", Name: validation.Null, Rule: false,

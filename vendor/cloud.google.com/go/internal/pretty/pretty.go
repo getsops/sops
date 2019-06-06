@@ -40,6 +40,7 @@ var Indent = "    "
 // contains cycles will result in unbounded recursion.
 func Value(v interface{}) val { return val{v: v} }
 
+// val is a value.
 type val struct{ v interface{} }
 
 // Format implements the fmt.Formatter interface.
@@ -49,7 +50,7 @@ func (v val) Format(s fmt.State, c rune) {
 			defaults: s.Flag('+') || s.Flag('#'),
 		})
 	} else {
-		fmt.Fprintf(s, "%%!%c(pretty.Val)", c)
+		fmt.Fprintf(s, "%%!%c(pretty.val)", c)
 	}
 }
 
@@ -195,12 +196,6 @@ func short(v reflect.Value) string {
 		return fmt.Sprintf("%q", v)
 	}
 	return fmt.Sprintf("%v", v)
-}
-
-func indent(w io.Writer, level int) {
-	for i := 0; i < level; i++ {
-		io.WriteString(w, Indent) // ignore errors
-	}
 }
 
 func maybeSort(vs []reflect.Value, t reflect.Type) {

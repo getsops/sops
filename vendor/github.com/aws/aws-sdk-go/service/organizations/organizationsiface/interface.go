@@ -76,6 +76,10 @@ type OrganizationsAPI interface {
 	CreateAccountWithContext(aws.Context, *organizations.CreateAccountInput, ...request.Option) (*organizations.CreateAccountOutput, error)
 	CreateAccountRequest(*organizations.CreateAccountInput) (*request.Request, *organizations.CreateAccountOutput)
 
+	CreateGovCloudAccount(*organizations.CreateGovCloudAccountInput) (*organizations.CreateGovCloudAccountOutput, error)
+	CreateGovCloudAccountWithContext(aws.Context, *organizations.CreateGovCloudAccountInput, ...request.Option) (*organizations.CreateGovCloudAccountOutput, error)
+	CreateGovCloudAccountRequest(*organizations.CreateGovCloudAccountInput) (*request.Request, *organizations.CreateGovCloudAccountOutput)
+
 	CreateOrganization(*organizations.CreateOrganizationInput) (*organizations.CreateOrganizationOutput, error)
 	CreateOrganizationWithContext(aws.Context, *organizations.CreateOrganizationInput, ...request.Option) (*organizations.CreateOrganizationOutput, error)
 	CreateOrganizationRequest(*organizations.CreateOrganizationInput) (*request.Request, *organizations.CreateOrganizationOutput)

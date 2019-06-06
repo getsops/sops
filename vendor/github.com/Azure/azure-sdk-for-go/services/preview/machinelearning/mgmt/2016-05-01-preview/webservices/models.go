@@ -18,13 +18,18 @@ package webservices
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2016-05-01-preview/webservices"
 
 // AssetType enumerates the values for asset type.
 type AssetType string
@@ -269,14 +274,14 @@ func (ai AssetItem) MarshalJSON() ([]byte, error) {
 
 // AssetLocation describes the access location for a web service asset.
 type AssetLocation struct {
-	// URI - The URI where the asset is accessible from, (e.g. aml://abc for system assets or https://xyz for user asets
+	// URI - The URI where the asset is accessible from, (e.g. aml://abc for system assets or https://xyz for user assets
 	URI *string `json:"uri,omitempty"`
 	// Credentials - Access credentials for the asset, if applicable (e.g. asset specified by storage account connection string + blob URI)
 	Credentials *string `json:"credentials,omitempty"`
 }
 
-// ColumnSpecification swagger 2.0 schema for a column within the data table representing a web service input or
-// output. See Swagger specification: http://swagger.io/specification/
+// ColumnSpecification swagger 2.0 schema for a column within the data table representing a web service
+// input or output. See Swagger specification: http://swagger.io/specification/
 type ColumnSpecification struct {
 	// Type - Data type of the column. Possible values include: 'Boolean', 'Integer', 'Number', 'String'
 	Type ColumnType `json:"type,omitempty"`
@@ -296,7 +301,8 @@ type CommitmentPlan struct {
 	ID *string `json:"id,omitempty"`
 }
 
-// CreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -305,7 +311,7 @@ type CreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *CreateOrUpdateFuture) Result(client Client) (ws WebService, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.CreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -364,8 +370,8 @@ type GraphEdge struct {
 	TargetPortID *string `json:"targetPortId,omitempty"`
 }
 
-// GraphNode specifies a node in the web service graph. The node can either be an input, output or asset node, so
-// only one of the corresponding id properties is populated at any given time.
+// GraphNode specifies a node in the web service graph. The node can either be an input, output or asset
+// node, so only one of the corresponding id properties is populated at any given time.
 type GraphNode struct {
 	// AssetID - The id of the asset represented by this node.
 	AssetID *string `json:"assetId,omitempty"`
@@ -453,8 +459,8 @@ type Keys struct {
 	Secondary *string `json:"secondary,omitempty"`
 }
 
-// MachineLearningWorkspace information about the machine learning workspace containing the experiment that is
-// source for the web service.
+// MachineLearningWorkspace information about the machine learning workspace containing the experiment that
+// is source for the web service.
 type MachineLearningWorkspace struct {
 	// ID - Specifies the workspace ID of the machine learning workspace associated with the web service
 	ID *string `json:"id,omitempty"`
@@ -514,20 +520,37 @@ type PaginatedWebServicesListIterator struct {
 	page PaginatedWebServicesListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PaginatedWebServicesListIterator) Next() error {
+func (iter *PaginatedWebServicesListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PaginatedWebServicesListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *PaginatedWebServicesListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -549,6 +572,11 @@ func (iter PaginatedWebServicesListIterator) Value() WebService {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the PaginatedWebServicesListIterator type.
+func NewPaginatedWebServicesListIterator(page PaginatedWebServicesListPage) PaginatedWebServicesListIterator {
+	return PaginatedWebServicesListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pwsl PaginatedWebServicesList) IsEmpty() bool {
 	return pwsl.Value == nil || len(*pwsl.Value) == 0
@@ -556,11 +584,11 @@ func (pwsl PaginatedWebServicesList) IsEmpty() bool {
 
 // paginatedWebServicesListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pwsl PaginatedWebServicesList) paginatedWebServicesListPreparer() (*http.Request, error) {
+func (pwsl PaginatedWebServicesList) paginatedWebServicesListPreparer(ctx context.Context) (*http.Request, error) {
 	if pwsl.NextLink == nil || len(to.String(pwsl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pwsl.NextLink)))
@@ -568,19 +596,36 @@ func (pwsl PaginatedWebServicesList) paginatedWebServicesListPreparer() (*http.R
 
 // PaginatedWebServicesListPage contains a page of WebService values.
 type PaginatedWebServicesListPage struct {
-	fn   func(PaginatedWebServicesList) (PaginatedWebServicesList, error)
+	fn   func(context.Context, PaginatedWebServicesList) (PaginatedWebServicesList, error)
 	pwsl PaginatedWebServicesList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PaginatedWebServicesListPage) Next() error {
-	next, err := page.fn(page.pwsl)
+func (page *PaginatedWebServicesListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PaginatedWebServicesListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pwsl)
 	if err != nil {
 		return err
 	}
 	page.pwsl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *PaginatedWebServicesListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -601,6 +646,11 @@ func (page PaginatedWebServicesListPage) Values() []WebService {
 	return *page.pwsl.Value
 }
 
+// Creates a new instance of the PaginatedWebServicesListPage type.
+func NewPaginatedWebServicesListPage(getNextPage func(context.Context, PaginatedWebServicesList) (PaginatedWebServicesList, error)) PaginatedWebServicesListPage {
+	return PaginatedWebServicesListPage{fn: getNextPage}
+}
+
 // PatchFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type PatchFuture struct {
 	azure.Future
@@ -610,7 +660,7 @@ type PatchFuture struct {
 // If the operation has not completed it will return an error.
 func (future *PatchFuture) Result(client Client) (ws WebService, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.PatchFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -641,17 +691,17 @@ type Properties struct {
 	Title *string `json:"title,omitempty"`
 	// Description - The description of the web service.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - Read Only: The date and time when the web service was created.
+	// CreatedOn - READ-ONLY; Read Only: The date and time when the web service was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - Read Only: The date and time when the web service was last modified.
+	// ModifiedOn - READ-ONLY; Read Only: The date and time when the web service was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
-	// ProvisioningState - Read Only: The provision state of the web service. Valid values are Unknown, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Provisioning', 'Succeeded', 'Failed'
+	// ProvisioningState - READ-ONLY; Read Only: The provision state of the web service. Valid values are Unknown, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Provisioning', 'Succeeded', 'Failed'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Keys - Contains the web service provisioning keys. If you do not specify provisioning keys, the Azure Machine Learning system generates them for you. Note: The keys are not returned from calls to GET operations.
 	Keys *Keys `json:"keys,omitempty"`
 	// ReadOnly - When set to true, indicates that the web service is read-only and can no longer be updated or patched, only removed. Default, is false. Note: Once set to true, you cannot change its value.
 	ReadOnly *bool `json:"readOnly,omitempty"`
-	// SwaggerLocation - Read Only: Contains the URI of the swagger spec associated with this web service.
+	// SwaggerLocation - READ-ONLY; Read Only: Contains the URI of the swagger spec associated with this web service.
 	SwaggerLocation *string `json:"swaggerLocation,omitempty"`
 	// ExposeSampleData - When set to true, sample data is included in the web service's swagger definition. The default value is true.
 	ExposeSampleData *bool `json:"exposeSampleData,omitempty"`
@@ -726,23 +776,11 @@ func (p Properties) MarshalJSON() ([]byte, error) {
 	if p.Description != nil {
 		objectMap["description"] = p.Description
 	}
-	if p.CreatedOn != nil {
-		objectMap["createdOn"] = p.CreatedOn
-	}
-	if p.ModifiedOn != nil {
-		objectMap["modifiedOn"] = p.ModifiedOn
-	}
-	if p.ProvisioningState != "" {
-		objectMap["provisioningState"] = p.ProvisioningState
-	}
 	if p.Keys != nil {
 		objectMap["keys"] = p.Keys
 	}
 	if p.ReadOnly != nil {
 		objectMap["readOnly"] = p.ReadOnly
-	}
-	if p.SwaggerLocation != nil {
-		objectMap["swaggerLocation"] = p.SwaggerLocation
 	}
 	if p.ExposeSampleData != nil {
 		objectMap["exposeSampleData"] = p.ExposeSampleData
@@ -806,17 +844,17 @@ type PropertiesForGraph struct {
 	Title *string `json:"title,omitempty"`
 	// Description - The description of the web service.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - Read Only: The date and time when the web service was created.
+	// CreatedOn - READ-ONLY; Read Only: The date and time when the web service was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - Read Only: The date and time when the web service was last modified.
+	// ModifiedOn - READ-ONLY; Read Only: The date and time when the web service was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
-	// ProvisioningState - Read Only: The provision state of the web service. Valid values are Unknown, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Provisioning', 'Succeeded', 'Failed'
+	// ProvisioningState - READ-ONLY; Read Only: The provision state of the web service. Valid values are Unknown, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Provisioning', 'Succeeded', 'Failed'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Keys - Contains the web service provisioning keys. If you do not specify provisioning keys, the Azure Machine Learning system generates them for you. Note: The keys are not returned from calls to GET operations.
 	Keys *Keys `json:"keys,omitempty"`
 	// ReadOnly - When set to true, indicates that the web service is read-only and can no longer be updated or patched, only removed. Default, is false. Note: Once set to true, you cannot change its value.
 	ReadOnly *bool `json:"readOnly,omitempty"`
-	// SwaggerLocation - Read Only: Contains the URI of the swagger spec associated with this web service.
+	// SwaggerLocation - READ-ONLY; Read Only: Contains the URI of the swagger spec associated with this web service.
 	SwaggerLocation *string `json:"swaggerLocation,omitempty"`
 	// ExposeSampleData - When set to true, sample data is included in the web service's swagger definition. The default value is true.
 	ExposeSampleData *bool `json:"exposeSampleData,omitempty"`
@@ -857,23 +895,11 @@ func (pfg PropertiesForGraph) MarshalJSON() ([]byte, error) {
 	if pfg.Description != nil {
 		objectMap["description"] = pfg.Description
 	}
-	if pfg.CreatedOn != nil {
-		objectMap["createdOn"] = pfg.CreatedOn
-	}
-	if pfg.ModifiedOn != nil {
-		objectMap["modifiedOn"] = pfg.ModifiedOn
-	}
-	if pfg.ProvisioningState != "" {
-		objectMap["provisioningState"] = pfg.ProvisioningState
-	}
 	if pfg.Keys != nil {
 		objectMap["keys"] = pfg.Keys
 	}
 	if pfg.ReadOnly != nil {
 		objectMap["readOnly"] = pfg.ReadOnly
-	}
-	if pfg.SwaggerLocation != nil {
-		objectMap["swaggerLocation"] = pfg.SwaggerLocation
 	}
 	if pfg.ExposeSampleData != nil {
 		objectMap["exposeSampleData"] = pfg.ExposeSampleData
@@ -944,7 +970,7 @@ type RemoveFuture struct {
 // If the operation has not completed it will return an error.
 func (future *RemoveFuture) Result(client Client) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "webservices.RemoveFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -959,13 +985,13 @@ func (future *RemoveFuture) Result(client Client) (ar autorest.Response, err err
 
 // Resource ...
 type Resource struct {
-	// ID - Specifies the resource ID.
+	// ID - READ-ONLY; Specifies the resource ID.
 	ID *string `json:"id,omitempty"`
 	// Name - Specifies the name of the resource.
 	Name *string `json:"name,omitempty"`
 	// Location - Specifies the location of the resource.
 	Location *string `json:"location,omitempty"`
-	// Type - Specifies the type of the resource.
+	// Type - READ-ONLY; Specifies the type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Tags - Contains resource tags defined as key/value pairs.
 	Tags map[string]*string `json:"tags"`
@@ -974,17 +1000,11 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Name != nil {
 		objectMap["name"] = r.Name
 	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
 	}
 	if r.Tags != nil {
 		objectMap["tags"] = r.Tags
@@ -992,8 +1012,8 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ServiceInputOutputSpecification the swagger 2.0 schema describing the service's inputs or outputs. See Swagger
-// specification: http://swagger.io/specification/
+// ServiceInputOutputSpecification the swagger 2.0 schema describing the service's inputs or outputs. See
+// Swagger specification: http://swagger.io/specification/
 type ServiceInputOutputSpecification struct {
 	// Title - The title of your Swagger schema.
 	Title *string `json:"title,omitempty"`
@@ -1072,13 +1092,13 @@ type WebService struct {
 	autorest.Response `json:"-"`
 	// Properties - Contains the property payload that describes the web service.
 	Properties BasicProperties `json:"properties,omitempty"`
-	// ID - Specifies the resource ID.
+	// ID - READ-ONLY; Specifies the resource ID.
 	ID *string `json:"id,omitempty"`
 	// Name - Specifies the name of the resource.
 	Name *string `json:"name,omitempty"`
 	// Location - Specifies the location of the resource.
 	Location *string `json:"location,omitempty"`
-	// Type - Specifies the type of the resource.
+	// Type - READ-ONLY; Specifies the type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Tags - Contains resource tags defined as key/value pairs.
 	Tags map[string]*string `json:"tags"`
@@ -1088,17 +1108,11 @@ type WebService struct {
 func (ws WebService) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	objectMap["properties"] = ws.Properties
-	if ws.ID != nil {
-		objectMap["id"] = ws.ID
-	}
 	if ws.Name != nil {
 		objectMap["name"] = ws.Name
 	}
 	if ws.Location != nil {
 		objectMap["location"] = ws.Location
-	}
-	if ws.Type != nil {
-		objectMap["type"] = ws.Type
 	}
 	if ws.Tags != nil {
 		objectMap["tags"] = ws.Tags

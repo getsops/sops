@@ -5,7 +5,7 @@
   "description": "Searches over a website or collection of websites",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/custom-search/v1/using_rest",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/Nz7EqsJaWIDJp3FUTW78pyd2v30\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/2iWcS6EAVqIO3py2_4I7tTajAB4\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -20,11 +20,9 @@
       "default": "json",
       "description": "Data format for the response.",
       "enum": [
-        "atom",
         "json"
       ],
       "enumDescriptions": [
-        "Responses with Content-Type of application/atom+xml",
         "Responses with Content-Type of application/json"
       ],
       "location": "query",
@@ -777,7 +775,7 @@
       }
     }
   },
-  "revision": "20180815",
+  "revision": "20181001",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Context": {

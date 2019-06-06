@@ -19,13 +19,13 @@
 package mock_routeguide_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
 
 	"github.com/golang/mock/gomock"
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	rgmock "google.golang.org/grpc/examples/route_guide/mock_routeguide"
 	rgpb "google.golang.org/grpc/examples/route_guide/routeguide"
 )

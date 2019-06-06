@@ -23,13 +23,12 @@ package latency
 
 import (
 	"bytes"
+	"context"
 	"encoding/binary"
 	"fmt"
 	"io"
 	"net"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 // Dialer is a function matching the signature of net.Dial.

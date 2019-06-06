@@ -88,6 +88,10 @@ type EFSAPI interface {
 	DescribeFileSystemsWithContext(aws.Context, *efs.DescribeFileSystemsInput, ...request.Option) (*efs.DescribeFileSystemsOutput, error)
 	DescribeFileSystemsRequest(*efs.DescribeFileSystemsInput) (*request.Request, *efs.DescribeFileSystemsOutput)
 
+	DescribeLifecycleConfiguration(*efs.DescribeLifecycleConfigurationInput) (*efs.DescribeLifecycleConfigurationOutput, error)
+	DescribeLifecycleConfigurationWithContext(aws.Context, *efs.DescribeLifecycleConfigurationInput, ...request.Option) (*efs.DescribeLifecycleConfigurationOutput, error)
+	DescribeLifecycleConfigurationRequest(*efs.DescribeLifecycleConfigurationInput) (*request.Request, *efs.DescribeLifecycleConfigurationOutput)
+
 	DescribeMountTargetSecurityGroups(*efs.DescribeMountTargetSecurityGroupsInput) (*efs.DescribeMountTargetSecurityGroupsOutput, error)
 	DescribeMountTargetSecurityGroupsWithContext(aws.Context, *efs.DescribeMountTargetSecurityGroupsInput, ...request.Option) (*efs.DescribeMountTargetSecurityGroupsOutput, error)
 	DescribeMountTargetSecurityGroupsRequest(*efs.DescribeMountTargetSecurityGroupsInput) (*request.Request, *efs.DescribeMountTargetSecurityGroupsOutput)
@@ -103,6 +107,10 @@ type EFSAPI interface {
 	ModifyMountTargetSecurityGroups(*efs.ModifyMountTargetSecurityGroupsInput) (*efs.ModifyMountTargetSecurityGroupsOutput, error)
 	ModifyMountTargetSecurityGroupsWithContext(aws.Context, *efs.ModifyMountTargetSecurityGroupsInput, ...request.Option) (*efs.ModifyMountTargetSecurityGroupsOutput, error)
 	ModifyMountTargetSecurityGroupsRequest(*efs.ModifyMountTargetSecurityGroupsInput) (*request.Request, *efs.ModifyMountTargetSecurityGroupsOutput)
+
+	PutLifecycleConfiguration(*efs.PutLifecycleConfigurationInput) (*efs.PutLifecycleConfigurationOutput, error)
+	PutLifecycleConfigurationWithContext(aws.Context, *efs.PutLifecycleConfigurationInput, ...request.Option) (*efs.PutLifecycleConfigurationOutput, error)
+	PutLifecycleConfigurationRequest(*efs.PutLifecycleConfigurationInput) (*request.Request, *efs.PutLifecycleConfigurationOutput)
 
 	UpdateFileSystem(*efs.UpdateFileSystemInput) (*efs.UpdateFileSystemOutput, error)
 	UpdateFileSystemWithContext(aws.Context, *efs.UpdateFileSystemInput, ...request.Option) (*efs.UpdateFileSystemOutput, error)

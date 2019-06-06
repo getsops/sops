@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,8 +45,18 @@ func NewAppServiceCertificateOrdersClientWithBaseURI(baseURI string, subscriptio
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order.
-// certificateDistinguishedName - distinguished name to to use for the certificate order.
+// certificateDistinguishedName - distinguished name to use for the certificate order.
 func (client AppServiceCertificateOrdersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, certificateOrderName string, certificateDistinguishedName AppServiceCertificateOrder) (result AppServiceCertificateOrdersCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -108,10 +119,6 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateSender(req *http.R
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -136,6 +143,16 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateResponder(resp *ht
 // name - name of the certificate.
 // keyVaultCertificate - key vault certificate resource Id.
 func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificate(ctx context.Context, resourceGroupName string, certificateOrderName string, name string, keyVaultCertificate AppServiceCertificateResource) (result AppServiceCertificateOrdersCreateOrUpdateCertificateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.CreateOrUpdateCertificate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -192,10 +209,6 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificateSender(
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -218,6 +231,16 @@ func (client AppServiceCertificateOrdersClient) CreateOrUpdateCertificateRespond
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order.
 func (client AppServiceCertificateOrdersClient) Delete(ctx context.Context, resourceGroupName string, certificateOrderName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -293,6 +316,16 @@ func (client AppServiceCertificateOrdersClient) DeleteResponder(resp *http.Respo
 // certificateOrderName - name of the certificate order.
 // name - name of the certificate.
 func (client AppServiceCertificateOrdersClient) DeleteCertificate(ctx context.Context, resourceGroupName string, certificateOrderName string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.DeleteCertificate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -368,6 +401,16 @@ func (client AppServiceCertificateOrdersClient) DeleteCertificateResponder(resp 
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order..
 func (client AppServiceCertificateOrdersClient) Get(ctx context.Context, resourceGroupName string, certificateOrderName string) (result AppServiceCertificateOrder, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -444,6 +487,16 @@ func (client AppServiceCertificateOrdersClient) GetResponder(resp *http.Response
 // certificateOrderName - name of the certificate order.
 // name - name of the certificate.
 func (client AppServiceCertificateOrdersClient) GetCertificate(ctx context.Context, resourceGroupName string, certificateOrderName string, name string) (result AppServiceCertificateResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.GetCertificate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -517,6 +570,16 @@ func (client AppServiceCertificateOrdersClient) GetCertificateResponder(resp *ht
 
 // List list all certificate orders in a subscription.
 func (client AppServiceCertificateOrdersClient) List(ctx context.Context) (result AppServiceCertificateOrderCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.List")
+		defer func() {
+			sc := -1
+			if result.ascoc.Response.Response != nil {
+				sc = result.ascoc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -579,8 +642,8 @@ func (client AppServiceCertificateOrdersClient) ListResponder(resp *http.Respons
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AppServiceCertificateOrdersClient) listNextResults(lastResults AppServiceCertificateOrderCollection) (result AppServiceCertificateOrderCollection, err error) {
-	req, err := lastResults.appServiceCertificateOrderCollectionPreparer()
+func (client AppServiceCertificateOrdersClient) listNextResults(ctx context.Context, lastResults AppServiceCertificateOrderCollection) (result AppServiceCertificateOrderCollection, err error) {
+	req, err := lastResults.appServiceCertificateOrderCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.AppServiceCertificateOrdersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -601,6 +664,16 @@ func (client AppServiceCertificateOrdersClient) listNextResults(lastResults AppS
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppServiceCertificateOrdersClient) ListComplete(ctx context.Context) (result AppServiceCertificateOrderCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -609,6 +682,16 @@ func (client AppServiceCertificateOrdersClient) ListComplete(ctx context.Context
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 func (client AppServiceCertificateOrdersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AppServiceCertificateOrderCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.ascoc.Response.Response != nil {
+				sc = result.ascoc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -680,8 +763,8 @@ func (client AppServiceCertificateOrdersClient) ListByResourceGroupResponder(res
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AppServiceCertificateOrdersClient) listByResourceGroupNextResults(lastResults AppServiceCertificateOrderCollection) (result AppServiceCertificateOrderCollection, err error) {
-	req, err := lastResults.appServiceCertificateOrderCollectionPreparer()
+func (client AppServiceCertificateOrdersClient) listByResourceGroupNextResults(ctx context.Context, lastResults AppServiceCertificateOrderCollection) (result AppServiceCertificateOrderCollection, err error) {
+	req, err := lastResults.appServiceCertificateOrderCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.AppServiceCertificateOrdersClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -702,6 +785,16 @@ func (client AppServiceCertificateOrdersClient) listByResourceGroupNextResults(l
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppServiceCertificateOrdersClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result AppServiceCertificateOrderCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -711,6 +804,16 @@ func (client AppServiceCertificateOrdersClient) ListByResourceGroupComplete(ctx 
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order.
 func (client AppServiceCertificateOrdersClient) ListCertificates(ctx context.Context, resourceGroupName string, certificateOrderName string) (result AppServiceCertificateCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ListCertificates")
+		defer func() {
+			sc := -1
+			if result.ascc.Response.Response != nil {
+				sc = result.ascc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -783,8 +886,8 @@ func (client AppServiceCertificateOrdersClient) ListCertificatesResponder(resp *
 }
 
 // listCertificatesNextResults retrieves the next set of results, if any.
-func (client AppServiceCertificateOrdersClient) listCertificatesNextResults(lastResults AppServiceCertificateCollection) (result AppServiceCertificateCollection, err error) {
-	req, err := lastResults.appServiceCertificateCollectionPreparer()
+func (client AppServiceCertificateOrdersClient) listCertificatesNextResults(ctx context.Context, lastResults AppServiceCertificateCollection) (result AppServiceCertificateCollection, err error) {
+	req, err := lastResults.appServiceCertificateCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.AppServiceCertificateOrdersClient", "listCertificatesNextResults", nil, "Failure preparing next results request")
 	}
@@ -805,6 +908,16 @@ func (client AppServiceCertificateOrdersClient) listCertificatesNextResults(last
 
 // ListCertificatesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AppServiceCertificateOrdersClient) ListCertificatesComplete(ctx context.Context, resourceGroupName string, certificateOrderName string) (result AppServiceCertificateCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ListCertificates")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListCertificates(ctx, resourceGroupName, certificateOrderName)
 	return
 }
@@ -815,6 +928,16 @@ func (client AppServiceCertificateOrdersClient) ListCertificatesComplete(ctx con
 // certificateOrderName - name of the certificate order.
 // reissueCertificateOrderRequest - parameters for the reissue.
 func (client AppServiceCertificateOrdersClient) Reissue(ctx context.Context, resourceGroupName string, certificateOrderName string, reissueCertificateOrderRequest ReissueCertificateOrderRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.Reissue")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -892,6 +1015,16 @@ func (client AppServiceCertificateOrdersClient) ReissueResponder(resp *http.Resp
 // certificateOrderName - name of the certificate order.
 // renewCertificateOrderRequest - renew parameters
 func (client AppServiceCertificateOrdersClient) Renew(ctx context.Context, resourceGroupName string, certificateOrderName string, renewCertificateOrderRequest RenewCertificateOrderRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.Renew")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -968,6 +1101,16 @@ func (client AppServiceCertificateOrdersClient) RenewResponder(resp *http.Respon
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order.
 func (client AppServiceCertificateOrdersClient) ResendEmail(ctx context.Context, resourceGroupName string, certificateOrderName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ResendEmail")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1043,6 +1186,16 @@ func (client AppServiceCertificateOrdersClient) ResendEmailResponder(resp *http.
 // certificateOrderName - name of the certificate order.
 // nameIdentifier - email address
 func (client AppServiceCertificateOrdersClient) ResendRequestEmails(ctx context.Context, resourceGroupName string, certificateOrderName string, nameIdentifier NameIdentifier) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ResendRequestEmails")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1119,6 +1272,16 @@ func (client AppServiceCertificateOrdersClient) ResendRequestEmailsResponder(res
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the certificate order.
 func (client AppServiceCertificateOrdersClient) RetrieveCertificateActions(ctx context.Context, resourceGroupName string, name string) (result ListCertificateOrderAction, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.RetrieveCertificateActions")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1194,6 +1357,16 @@ func (client AppServiceCertificateOrdersClient) RetrieveCertificateActionsRespon
 // resourceGroupName - name of the resource group to which the resource belongs.
 // name - name of the certificate order.
 func (client AppServiceCertificateOrdersClient) RetrieveCertificateEmailHistory(ctx context.Context, resourceGroupName string, name string) (result ListCertificateEmail, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.RetrieveCertificateEmailHistory")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1270,6 +1443,16 @@ func (client AppServiceCertificateOrdersClient) RetrieveCertificateEmailHistoryR
 // certificateOrderName - name of the certificate order.
 // siteSealRequest - site seal request.
 func (client AppServiceCertificateOrdersClient) RetrieveSiteSeal(ctx context.Context, resourceGroupName string, certificateOrderName string, siteSealRequest SiteSealRequest) (result SiteSeal, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.RetrieveSiteSeal")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1346,8 +1529,18 @@ func (client AppServiceCertificateOrdersClient) RetrieveSiteSealResponder(resp *
 // Parameters:
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order.
-// certificateDistinguishedName - distinguished name to to use for the certificate order.
+// certificateDistinguishedName - distinguished name to use for the certificate order.
 func (client AppServiceCertificateOrdersClient) Update(ctx context.Context, resourceGroupName string, certificateOrderName string, certificateDistinguishedName AppServiceCertificateOrderPatchResource) (result AppServiceCertificateOrder, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1427,6 +1620,16 @@ func (client AppServiceCertificateOrdersClient) UpdateResponder(resp *http.Respo
 // name - name of the certificate.
 // keyVaultCertificate - key vault certificate resource Id.
 func (client AppServiceCertificateOrdersClient) UpdateCertificate(ctx context.Context, resourceGroupName string, certificateOrderName string, name string, keyVaultCertificate AppServiceCertificatePatchResource) (result AppServiceCertificateResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.UpdateCertificate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1504,6 +1707,16 @@ func (client AppServiceCertificateOrdersClient) UpdateCertificateResponder(resp 
 // Parameters:
 // appServiceCertificateOrder - information for a certificate order.
 func (client AppServiceCertificateOrdersClient) ValidatePurchaseInformation(ctx context.Context, appServiceCertificateOrder AppServiceCertificateOrder) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.ValidatePurchaseInformation")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: appServiceCertificateOrder,
 			Constraints: []validation.Constraint{{Target: "appServiceCertificateOrder.AppServiceCertificateOrderProperties", Name: validation.Null, Rule: false,
@@ -1581,6 +1794,16 @@ func (client AppServiceCertificateOrdersClient) ValidatePurchaseInformationRespo
 // resourceGroupName - name of the resource group to which the resource belongs.
 // certificateOrderName - name of the certificate order.
 func (client AppServiceCertificateOrdersClient) VerifyDomainOwnership(ctx context.Context, resourceGroupName string, certificateOrderName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AppServiceCertificateOrdersClient.VerifyDomainOwnership")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

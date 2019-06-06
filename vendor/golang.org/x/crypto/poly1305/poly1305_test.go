@@ -100,7 +100,50 @@ func TestSumUnaligned(t *testing.T)        { testSum(t, true, Sum) }
 func TestSumGeneric(t *testing.T)          { testSum(t, false, sumGeneric) }
 func TestSumGenericUnaligned(t *testing.T) { testSum(t, true, sumGeneric) }
 
-func benchmark(b *testing.B, size int, unaligned bool) {
+func TestWriteGeneric(t *testing.T)          { testWriteGeneric(t, false) }
+func TestWriteGenericUnaligned(t *testing.T) { testWriteGeneric(t, true) }
+func TestWrite(t *testing.T)                 { testWrite(t, false) }
+func TestWriteUnaligned(t *testing.T)        { testWrite(t, true) }
+
+func testWriteGeneric(t *testing.T, unaligned bool) {
+	for i, v := range testData {
+		key := v.Key()
+		input := v.Input()
+		var out [16]byte
+
+		if unaligned {
+			input = unalignBytes(input)
+		}
+		h := newMACGeneric(&key)
+		h.Write(input[:len(input)/2])
+		h.Write(input[len(input)/2:])
+		h.Sum(&out)
+		if tag := v.Tag(); out != tag {
+			t.Errorf("%d: expected %x, got %x", i, tag[:], out[:])
+		}
+	}
+}
+
+func testWrite(t *testing.T, unaligned bool) {
+	for i, v := range testData {
+		key := v.Key()
+		input := v.Input()
+		var out [16]byte
+
+		if unaligned {
+			input = unalignBytes(input)
+		}
+		h := New(&key)
+		h.Write(input[:len(input)/2])
+		h.Write(input[len(input)/2:])
+		h.Sum(out[:0])
+		if tag := v.Tag(); out != tag {
+			t.Errorf("%d: expected %x, got %x", i, tag[:], out[:])
+		}
+	}
+}
+
+func benchmarkSum(b *testing.B, size int, unaligned bool) {
 	var out [16]byte
 	var key [32]byte
 	in := make([]byte, size)
@@ -114,11 +157,33 @@ func benchmark(b *testing.B, size int, unaligned bool) {
 	}
 }
 
-func Benchmark64(b *testing.B)          { benchmark(b, 64, false) }
-func Benchmark1K(b *testing.B)          { benchmark(b, 1024, false) }
-func Benchmark64Unaligned(b *testing.B) { benchmark(b, 64, true) }
-func Benchmark1KUnaligned(b *testing.B) { benchmark(b, 1024, true) }
-func Benchmark2M(b *testing.B)          { benchmark(b, 2097152, true) }
+func benchmarkWrite(b *testing.B, size int, unaligned bool) {
+	var key [32]byte
+	h := New(&key)
+	in := make([]byte, size)
+	if unaligned {
+		in = unalignBytes(in)
+	}
+	b.SetBytes(int64(len(in)))
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		h.Write(in)
+	}
+}
+
+func Benchmark64(b *testing.B)          { benchmarkSum(b, 64, false) }
+func Benchmark1K(b *testing.B)          { benchmarkSum(b, 1024, false) }
+func Benchmark2M(b *testing.B)          { benchmarkSum(b, 2*1024*1024, false) }
+func Benchmark64Unaligned(b *testing.B) { benchmarkSum(b, 64, true) }
+func Benchmark1KUnaligned(b *testing.B) { benchmarkSum(b, 1024, true) }
+func Benchmark2MUnaligned(b *testing.B) { benchmarkSum(b, 2*1024*1024, true) }
+
+func BenchmarkWrite64(b *testing.B)          { benchmarkWrite(b, 64, false) }
+func BenchmarkWrite1K(b *testing.B)          { benchmarkWrite(b, 1024, false) }
+func BenchmarkWrite2M(b *testing.B)          { benchmarkWrite(b, 2*1024*1024, false) }
+func BenchmarkWrite64Unaligned(b *testing.B) { benchmarkWrite(b, 64, true) }
+func BenchmarkWrite1KUnaligned(b *testing.B) { benchmarkWrite(b, 1024, true) }
+func BenchmarkWrite2MUnaligned(b *testing.B) { benchmarkWrite(b, 2*1024*1024, true) }
 
 func unalignBytes(in []byte) []byte {
 	out := make([]byte, len(in)+1)

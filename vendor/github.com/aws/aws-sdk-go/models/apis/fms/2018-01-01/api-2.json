@@ -122,6 +122,20 @@
         {"shape":"InvalidTypeException"}
       ]
     },
+    "GetProtectionStatus":{
+      "name":"GetProtectionStatus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetProtectionStatusRequest"},
+      "output":{"shape":"GetProtectionStatusResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalErrorException"}
+      ]
+    },
     "ListComplianceStatus":{
       "name":"ListComplianceStatus",
       "http":{
@@ -198,7 +212,8 @@
     "AWSAccountId":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^[0-9]+$"
     },
     "AccountRoleStatus":{
       "type":"string",
@@ -233,7 +248,8 @@
     "CustomerPolicyScopeId":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "CustomerPolicyScopeIdList":{
       "type":"list",
@@ -257,20 +273,23 @@
       "type":"structure",
       "required":["PolicyId"],
       "members":{
-        "PolicyId":{"shape":"PolicyId"}
+        "PolicyId":{"shape":"PolicyId"},
+        "DeleteAllPolicyResources":{"shape":"Boolean"}
       }
     },
     "DependentServiceName":{
       "type":"string",
       "enum":[
         "AWSCONFIG",
-        "AWSWAF"
+        "AWSWAF",
+        "AWSSHIELD_ADVANCED"
       ]
     },
     "DetailedInfo":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "DisassociateAdminAccountRequest":{
       "type":"structure",
@@ -343,6 +362,27 @@
       "members":{
         "Policy":{"shape":"Policy"},
         "PolicyArn":{"shape":"ResourceArn"}
+      }
+    },
+    "GetProtectionStatusRequest":{
+      "type":"structure",
+      "required":["PolicyId"],
+      "members":{
+        "PolicyId":{"shape":"PolicyId"},
+        "MemberAccountId":{"shape":"AWSAccountId"},
+        "StartTime":{"shape":"TimeStamp"},
+        "EndTime":{"shape":"TimeStamp"},
+        "NextToken":{"shape":"PaginationToken"},
+        "MaxResults":{"shape":"PaginationMaxResults"}
+      }
+    },
+    "GetProtectionStatusResponse":{
+      "type":"structure",
+      "members":{
+        "AdminAccountId":{"shape":"AWSAccountId"},
+        "ServiceType":{"shape":"SecurityServiceType"},
+        "Data":{"shape":"ProtectionData"},
+        "NextToken":{"shape":"PaginationToken"}
       }
     },
     "InternalErrorException":{
@@ -445,7 +485,8 @@
     },
     "PaginationToken":{
       "type":"string",
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "Policy":{
       "type":"structure",
@@ -462,6 +503,7 @@
         "PolicyUpdateToken":{"shape":"PolicyUpdateToken"},
         "SecurityServicePolicyData":{"shape":"SecurityServicePolicyData"},
         "ResourceType":{"shape":"ResourceType"},
+        "ResourceTypeList":{"shape":"ResourceTypeList"},
         "ResourceTags":{"shape":"ResourceTags"},
         "ExcludeResourceTags":{"shape":"Boolean"},
         "RemediationEnabled":{"shape":"Boolean"},
@@ -507,7 +549,8 @@
     "PolicyId":{
       "type":"string",
       "max":36,
-      "min":36
+      "min":36,
+      "pattern":"^[a-z0-9A-Z-]{36}$"
     },
     "PolicySummary":{
       "type":"structure",
@@ -527,8 +570,10 @@
     "PolicyUpdateToken":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
+    "ProtectionData":{"type":"string"},
     "PutNotificationChannelRequest":{
       "type":"structure",
       "required":[
@@ -557,7 +602,8 @@
     "ResourceArn":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "ResourceCount":{
       "type":"long",
@@ -566,12 +612,14 @@
     "ResourceId":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "ResourceName":{
       "type":"string",
       "max":128,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
     },
     "ResourceNotFoundException":{
       "type":"structure",
@@ -597,7 +645,12 @@
     "ResourceType":{
       "type":"string",
       "max":128,
-      "min":1
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+    },
+    "ResourceTypeList":{
+      "type":"list",
+      "member":{"shape":"ResourceType"}
     },
     "SecurityServicePolicyData":{
       "type":"structure",
@@ -609,7 +662,10 @@
     },
     "SecurityServiceType":{
       "type":"string",
-      "enum":["WAF"]
+      "enum":[
+        "WAF",
+        "SHIELD_ADVANCED"
+      ]
     },
     "TagKey":{
       "type":"string",
@@ -628,7 +684,8 @@
       "enum":[
         "WEB_ACL_MISSING_RULE_GROUP",
         "RESOURCE_MISSING_WEB_ACL",
-        "RESOURCE_INCORRECT_WEB_ACL"
+        "RESOURCE_INCORRECT_WEB_ACL",
+        "RESOURCE_MISSING_SHIELD_PROTECTION"
       ]
     }
   }

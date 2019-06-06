@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -54,6 +55,16 @@ func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string) Project
 // resourceName - name of the Team Services project.
 // validating - this parameter is ignored and should be set to an empty string.
 func (client ProjectsClient) Create(ctx context.Context, body ProjectResource, resourceGroupName string, rootResourceName string, resourceName string, validating string) (result ProjectsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, body, resourceGroupName, rootResourceName, resourceName, validating)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.ProjectsClient", "Create", nil, "Failure preparing request")
@@ -105,10 +116,6 @@ func (client ProjectsClient) CreateSender(req *http.Request) (future ProjectsCre
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -132,6 +139,16 @@ func (client ProjectsClient) CreateResponder(resp *http.Response) (result Projec
 // rootResourceName - name of the Team Services account.
 // resourceName - name of the Team Services project.
 func (client ProjectsClient) Get(ctx context.Context, resourceGroupName string, rootResourceName string, resourceName string) (result ProjectResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, rootResourceName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.ProjectsClient", "Get", nil, "Failure preparing request")
@@ -204,6 +221,16 @@ func (client ProjectsClient) GetResponder(resp *http.Response) (result ProjectRe
 // operation - the operation type. The only supported value is 'put'.
 // jobID - the job identifier.
 func (client ProjectsClient) GetJobStatus(ctx context.Context, resourceGroupName string, rootResourceName string, resourceName string, subContainerName string, operation string, jobID *uuid.UUID) (result ProjectResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.GetJobStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetJobStatusPreparer(ctx, resourceGroupName, rootResourceName, resourceName, subContainerName, operation, jobID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.ProjectsClient", "GetJobStatus", nil, "Failure preparing request")
@@ -278,6 +305,16 @@ func (client ProjectsClient) GetJobStatusResponder(resp *http.Response) (result 
 // resourceGroupName - name of the resource group within the Azure subscription.
 // rootResourceName - name of the Team Services account.
 func (client ProjectsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, rootResourceName string) (result ProjectResourceListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, rootResourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.ProjectsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -347,6 +384,16 @@ func (client ProjectsClient) ListByResourceGroupResponder(resp *http.Response) (
 // rootResourceName - name of the Team Services account.
 // resourceName - name of the Team Services project.
 func (client ProjectsClient) Update(ctx context.Context, resourceGroupName string, body ProjectResource, rootResourceName string, resourceName string) (result ProjectResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, body, rootResourceName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.ProjectsClient", "Update", nil, "Failure preparing request")

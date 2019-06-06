@@ -413,11 +413,11 @@
       }
     },
     "cases": [
-     {
+      {
         "given": {
           "output": {
             "shape": "OutputShape"
-        },
+          },
           "name": "OperationName"
         },
         "result": {
@@ -428,6 +428,66 @@
           "status_code": 200,
           "headers": {},
           "body": "{\"FooEnum\": \"foo\", \"ListEnums\": [\"foo\", \"bar\"]}"
+        }
+      }
+    ]
+  },
+  {
+    "description": "unmodeled non-json response payload",
+    "metadata": {
+      "protocol": "json"
+    },
+    "shapes": {
+      "OutputShape": {
+        "type": "structure",
+        "members": {
+        }
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "output": {
+            "shape": "OutputShape"
+          },
+          "name": "OperationName"
+        },
+        "result": {
+        },
+        "response": {
+          "status_code": 200,
+          "headers": {},
+          "body": "success"
+        }
+      },
+      {
+        "given": {
+          "output": {
+            "shape": "OutputShape"
+          },
+          "name": "OperationName"
+        },
+        "result": {
+        },
+        "response": {
+          "status_code": 200,
+          "headers": {},
+          "body": "\"success\""
+        }
+      },
+      {
+        "given": {
+          "output": {
+            "shape": "OutputShape"
+          },
+          "name": "OperationName"
+        },
+        "result": {
+        },
+        "response": {
+          "status_code": 200,
+          "headers": {},
+          "body": "{}"
         }
       }
     ]

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewConfigurationsClientWithBaseURI(baseURI string, subscriptionID string) C
 // configContract - the Azure Advisor configuration data structure.
 // resourceGroup - the name of the Azure resource group.
 func (client ConfigurationsClient) CreateInResourceGroup(ctx context.Context, configContract ConfigData, resourceGroup string) (result ARMErrorResponseBody, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.CreateInResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateInResourceGroupPreparer(ctx, configContract, resourceGroup)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.ConfigurationsClient", "CreateInResourceGroup", nil, "Failure preparing request")
@@ -112,6 +123,16 @@ func (client ConfigurationsClient) CreateInResourceGroupResponder(resp *http.Res
 // Parameters:
 // configContract - the Azure Advisor configuration data structure.
 func (client ConfigurationsClient) CreateInSubscription(ctx context.Context, configContract ConfigData) (result ARMErrorResponseBody, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.CreateInSubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateInSubscriptionPreparer(ctx, configContract)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.ConfigurationsClient", "CreateInSubscription", nil, "Failure preparing request")
@@ -178,6 +199,16 @@ func (client ConfigurationsClient) CreateInSubscriptionResponder(resp *http.Resp
 // Parameters:
 // resourceGroup - the name of the Azure resource group.
 func (client ConfigurationsClient) ListByResourceGroup(ctx context.Context, resourceGroup string) (result ConfigurationListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroup)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.ConfigurationsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -242,6 +273,16 @@ func (client ConfigurationsClient) ListByResourceGroupResponder(resp *http.Respo
 // ListBySubscription retrieve Azure Advisor configurations and also retrieve configurations of contained resource
 // groups.
 func (client ConfigurationsClient) ListBySubscription(ctx context.Context) (result ConfigurationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.clr.Response.Response != nil {
+				sc = result.clr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -304,8 +345,8 @@ func (client ConfigurationsClient) ListBySubscriptionResponder(resp *http.Respon
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client ConfigurationsClient) listBySubscriptionNextResults(lastResults ConfigurationListResult) (result ConfigurationListResult, err error) {
-	req, err := lastResults.configurationListResultPreparer()
+func (client ConfigurationsClient) listBySubscriptionNextResults(ctx context.Context, lastResults ConfigurationListResult) (result ConfigurationListResult, err error) {
+	req, err := lastResults.configurationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "advisor.ConfigurationsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -326,6 +367,16 @@ func (client ConfigurationsClient) listBySubscriptionNextResults(lastResults Con
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ConfigurationsClient) ListBySubscriptionComplete(ctx context.Context) (result ConfigurationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ConfigurationsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }

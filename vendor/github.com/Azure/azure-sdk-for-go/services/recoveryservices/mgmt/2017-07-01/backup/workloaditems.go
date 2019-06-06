@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewWorkloadItemsClientWithBaseURI(baseURI string, subscriptionID string) Wo
 // filter - oData filter options.
 // skipToken - skipToken Filter.
 func (client WorkloadItemsClient) List(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, filter string, skipToken string) (result WorkloadItemResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkloadItemsClient.List")
+		defer func() {
+			sc := -1
+			if result.wirl.Response.Response != nil {
+				sc = result.wirl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, fabricName, containerName, filter, skipToken)
 	if err != nil {
@@ -122,8 +133,8 @@ func (client WorkloadItemsClient) ListResponder(resp *http.Response) (result Wor
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client WorkloadItemsClient) listNextResults(lastResults WorkloadItemResourceList) (result WorkloadItemResourceList, err error) {
-	req, err := lastResults.workloadItemResourceListPreparer()
+func (client WorkloadItemsClient) listNextResults(ctx context.Context, lastResults WorkloadItemResourceList) (result WorkloadItemResourceList, err error) {
+	req, err := lastResults.workloadItemResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "backup.WorkloadItemsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -144,6 +155,16 @@ func (client WorkloadItemsClient) listNextResults(lastResults WorkloadItemResour
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkloadItemsClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, containerName string, filter string, skipToken string) (result WorkloadItemResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkloadItemsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, vaultName, resourceGroupName, fabricName, containerName, filter, skipToken)
 	return
 }

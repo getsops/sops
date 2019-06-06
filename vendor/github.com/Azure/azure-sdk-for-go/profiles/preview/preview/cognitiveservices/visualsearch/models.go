@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,11 +22,9 @@ package visualsearch
 import original "github.com/Azure/azure-sdk-for-go/services/preview/cognitiveservices/v1.0/visualsearch"
 
 const (
-	DefaultBaseURI = original.DefaultBaseURI
+	DefaultEndpoint = original.DefaultEndpoint
 )
 
-type BaseClient = original.BaseClient
-type ImagesClient = original.ImagesClient
 type Currency = original.Currency
 
 const (
@@ -280,19 +278,29 @@ const (
 	TypeRating          TypeBasicPropertiesItem = original.TypeRating
 )
 
-type BasicAction = original.BasicAction
 type Action = original.Action
 type AggregateOffer = original.AggregateOffer
 type AggregateRating = original.AggregateRating
+type BaseClient = original.BaseClient
+type BasicAction = original.BasicAction
 type BasicCreativeWork = original.BasicCreativeWork
+type BasicIdentifiable = original.BasicIdentifiable
+type BasicImageAction = original.BasicImageAction
+type BasicIntangible = original.BasicIntangible
+type BasicMediaObject = original.BasicMediaObject
+type BasicOffer = original.BasicOffer
+type BasicPropertiesItem = original.BasicPropertiesItem
+type BasicRating = original.BasicRating
+type BasicResponse = original.BasicResponse
+type BasicResponseBase = original.BasicResponseBase
+type BasicStructuredValue = original.BasicStructuredValue
+type BasicThing = original.BasicThing
 type CreativeWork = original.CreativeWork
 type CropArea = original.CropArea
 type Error = original.Error
 type ErrorResponse = original.ErrorResponse
 type Filters = original.Filters
-type BasicIdentifiable = original.BasicIdentifiable
 type Identifiable = original.Identifiable
-type BasicImageAction = original.BasicImageAction
 type ImageAction = original.ImageAction
 type ImageEntityAction = original.ImageEntityAction
 type ImageInfo = original.ImageInfo
@@ -302,50 +310,39 @@ type ImageObject = original.ImageObject
 type ImageRecipesAction = original.ImageRecipesAction
 type ImageRelatedSearchesAction = original.ImageRelatedSearchesAction
 type ImageShoppingSourcesAction = original.ImageShoppingSourcesAction
-type ImagesImageMetadata = original.ImagesImageMetadata
-type ImagesModule = original.ImagesModule
 type ImageTag = original.ImageTag
 type ImageTagRegion = original.ImageTagRegion
-type BasicIntangible = original.BasicIntangible
+type ImagesClient = original.ImagesClient
+type ImagesImageMetadata = original.ImagesImageMetadata
+type ImagesModule = original.ImagesModule
 type Intangible = original.Intangible
 type KnowledgeRequest = original.KnowledgeRequest
-type BasicMediaObject = original.BasicMediaObject
 type MediaObject = original.MediaObject
 type NormalizedQuadrilateral = original.NormalizedQuadrilateral
-type BasicOffer = original.BasicOffer
 type Offer = original.Offer
 type Organization = original.Organization
 type Person = original.Person
 type Point2D = original.Point2D
-type BasicPropertiesItem = original.BasicPropertiesItem
 type PropertiesItem = original.PropertiesItem
 type Query = original.Query
-type BasicRating = original.BasicRating
 type Rating = original.Rating
 type Recipe = original.Recipe
 type RecipesModule = original.RecipesModule
 type RelatedSearchesModule = original.RelatedSearchesModule
 type Request = original.Request
-type BasicResponse = original.BasicResponse
 type Response = original.Response
-type BasicResponseBase = original.BasicResponseBase
 type ResponseBase = original.ResponseBase
-type BasicStructuredValue = original.BasicStructuredValue
 type StructuredValue = original.StructuredValue
-type BasicThing = original.BasicThing
 type Thing = original.Thing
 
 func New() BaseClient {
 	return original.New()
 }
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
-}
 func NewImagesClient() ImagesClient {
 	return original.NewImagesClient()
 }
-func NewImagesClientWithBaseURI(baseURI string) ImagesClient {
-	return original.NewImagesClientWithBaseURI(baseURI)
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func PossibleCurrencyValues() []Currency {
 	return original.PossibleCurrencyValues()
@@ -362,11 +359,11 @@ func PossibleItemAvailabilityValues() []ItemAvailability {
 func PossibleSafeSearchValues() []SafeSearch {
 	return original.PossibleSafeSearchValues()
 }
-func PossibleTypeValues() []Type {
-	return original.PossibleTypeValues()
-}
 func PossibleTypeBasicPropertiesItemValues() []TypeBasicPropertiesItem {
 	return original.PossibleTypeBasicPropertiesItemValues()
+}
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

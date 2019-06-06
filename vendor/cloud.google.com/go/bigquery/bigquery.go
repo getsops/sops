@@ -15,26 +15,24 @@
 package bigquery
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
 
-	gax "github.com/googleapis/gax-go"
-
 	"cloud.google.com/go/internal"
 	"cloud.google.com/go/internal/version"
-
+	gax "github.com/googleapis/gax-go/v2"
+	bq "google.golang.org/api/bigquery/v2"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/option"
 	htransport "google.golang.org/api/transport/http"
-
-	"golang.org/x/net/context"
-	bq "google.golang.org/api/bigquery/v2"
 )
 
 const (
-	prodAddr  = "https://www.googleapis.com/bigquery/v2/"
+	prodAddr = "https://www.googleapis.com/bigquery/v2/"
+	// Scope is the Oauth2 scope for the service.
 	Scope     = "https://www.googleapis.com/auth/bigquery"
 	userAgent = "gcloud-golang-bigquery/20160429"
 )

@@ -87,6 +87,7 @@
     }
   },
   "shapes":{
+    "CopyTags":{"type":"boolean"},
     "Count":{
       "type":"integer",
       "max":1000,
@@ -143,6 +144,7 @@
     },
     "ErrorCode":{"type":"string"},
     "ErrorMessage":{"type":"string"},
+    "ExcludeBootVolume":{"type":"boolean"},
     "ExecutionRoleArn":{"type":"string"},
     "GetLifecyclePoliciesRequest":{
       "type":"structure",
@@ -272,6 +274,12 @@
       "type":"list",
       "member":{"shape":"Parameter"}
     },
+    "Parameters":{
+      "type":"structure",
+      "members":{
+        "ExcludeBootVolume":{"shape":"ExcludeBootVolume"}
+      }
+    },
     "PolicyDescription":{
       "type":"string",
       "max":500,
@@ -280,15 +288,21 @@
     "PolicyDetails":{
       "type":"structure",
       "members":{
+        "PolicyType":{"shape":"PolicyTypeValues"},
         "ResourceTypes":{"shape":"ResourceTypeValuesList"},
         "TargetTags":{"shape":"TargetTagList"},
-        "Schedules":{"shape":"ScheduleList"}
+        "Schedules":{"shape":"ScheduleList"},
+        "Parameters":{"shape":"Parameters"}
       }
     },
     "PolicyId":{"type":"string"},
     "PolicyIdList":{
       "type":"list",
       "member":{"shape":"PolicyId"}
+    },
+    "PolicyTypeValues":{
+      "type":"string",
+      "enum":["EBS_SNAPSHOT_MANAGEMENT"]
     },
     "ResourceNotFoundException":{
       "type":"structure",
@@ -303,7 +317,10 @@
     },
     "ResourceTypeValues":{
       "type":"string",
-      "enum":["VOLUME"]
+      "enum":[
+        "VOLUME",
+        "INSTANCE"
+      ]
     },
     "ResourceTypeValuesList":{
       "type":"list",
@@ -322,7 +339,9 @@
       "type":"structure",
       "members":{
         "Name":{"shape":"ScheduleName"},
+        "CopyTags":{"shape":"CopyTags"},
         "TagsToAdd":{"shape":"TagsToAddList"},
+        "VariableTags":{"shape":"VariableTagsList"},
         "CreateRule":{"shape":"CreateRule"},
         "RetainRule":{"shape":"RetainRule"}
       }
@@ -391,7 +410,10 @@
       "member":{"shape":"Time"},
       "max":1
     },
-    "Timestamp":{"type":"timestamp"},
+    "Timestamp":{
+      "type":"timestamp",
+      "timestampFormat":"iso8601"
+    },
     "UpdateLifecyclePolicyRequest":{
       "type":"structure",
       "required":["PolicyId"],
@@ -411,6 +433,12 @@
       "type":"structure",
       "members":{
       }
+    },
+    "VariableTagsList":{
+      "type":"list",
+      "member":{"shape":"Tag"},
+      "max":50,
+      "min":0
     }
   }
 }

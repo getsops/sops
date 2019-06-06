@@ -18,13 +18,18 @@ package postgresql
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/postgresql/mgmt/2017-12-01/postgresql"
 
 // CreateMode enumerates the values for create mode.
 type CreateMode string
@@ -36,13 +41,15 @@ const (
 	CreateModeGeoRestore CreateMode = "GeoRestore"
 	// CreateModePointInTimeRestore ...
 	CreateModePointInTimeRestore CreateMode = "PointInTimeRestore"
+	// CreateModeReplica ...
+	CreateModeReplica CreateMode = "Replica"
 	// CreateModeServerPropertiesForCreate ...
 	CreateModeServerPropertiesForCreate CreateMode = "ServerPropertiesForCreate"
 )
 
 // PossibleCreateModeValues returns an array of possible values for the CreateMode const type.
 func PossibleCreateModeValues() []CreateMode {
-	return []CreateMode{CreateModeDefault, CreateModeGeoRestore, CreateModePointInTimeRestore, CreateModeServerPropertiesForCreate}
+	return []CreateMode{CreateModeDefault, CreateModeGeoRestore, CreateModePointInTimeRestore, CreateModeReplica, CreateModeServerPropertiesForCreate}
 }
 
 // GeoRedundantBackup enumerates the values for geo redundant backup.
@@ -162,6 +169,21 @@ func PossibleSslEnforcementEnumValues() []SslEnforcementEnum {
 	return []SslEnforcementEnum{SslEnforcementEnumDisabled, SslEnforcementEnumEnabled}
 }
 
+// StorageAutogrow enumerates the values for storage autogrow.
+type StorageAutogrow string
+
+const (
+	// StorageAutogrowDisabled ...
+	StorageAutogrowDisabled StorageAutogrow = "Disabled"
+	// StorageAutogrowEnabled ...
+	StorageAutogrowEnabled StorageAutogrow = "Enabled"
+)
+
+// PossibleStorageAutogrowValues returns an array of possible values for the StorageAutogrow const type.
+func PossibleStorageAutogrowValues() []StorageAutogrow {
+	return []StorageAutogrow{StorageAutogrowDisabled, StorageAutogrowEnabled}
+}
+
 // VirtualNetworkRuleState enumerates the values for virtual network rule state.
 type VirtualNetworkRuleState string
 
@@ -183,16 +205,33 @@ func PossibleVirtualNetworkRuleStateValues() []VirtualNetworkRuleState {
 	return []VirtualNetworkRuleState{Deleting, Initializing, InProgress, Ready, Unknown}
 }
 
+// CloudError an error response from the Batch service.
+type CloudError struct {
+	Error *CloudErrorBody `json:"error,omitempty"`
+}
+
+// CloudErrorBody an error response from the Batch service.
+type CloudErrorBody struct {
+	// Code - An identifier for the error. Codes are invariant and are intended to be consumed programmatically.
+	Code *string `json:"code,omitempty"`
+	// Message - A message describing the error, intended to be suitable for display in a user interface.
+	Message *string `json:"message,omitempty"`
+	// Target - The target of the particular error. For example, the name of the property in error.
+	Target *string `json:"target,omitempty"`
+	// Details - A list of additional details about the error.
+	Details *[]CloudErrorBody `json:"details,omitempty"`
+}
+
 // Configuration represents a Configuration.
 type Configuration struct {
 	autorest.Response `json:"-"`
 	// ConfigurationProperties - The properties of a configuration.
 	*ConfigurationProperties `json:"properties,omitempty"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -201,15 +240,6 @@ func (c Configuration) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if c.ConfigurationProperties != nil {
 		objectMap["properties"] = c.ConfigurationProperties
-	}
-	if c.ID != nil {
-		objectMap["id"] = c.ID
-	}
-	if c.Name != nil {
-		objectMap["name"] = c.Name
-	}
-	if c.Type != nil {
-		objectMap["type"] = c.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -276,20 +306,20 @@ type ConfigurationListResult struct {
 type ConfigurationProperties struct {
 	// Value - Value of the configuration.
 	Value *string `json:"value,omitempty"`
-	// Description - Description of the configuration.
+	// Description - READ-ONLY; Description of the configuration.
 	Description *string `json:"description,omitempty"`
-	// DefaultValue - Default value of the configuration.
+	// DefaultValue - READ-ONLY; Default value of the configuration.
 	DefaultValue *string `json:"defaultValue,omitempty"`
-	// DataType - Data type of the configuration.
+	// DataType - READ-ONLY; Data type of the configuration.
 	DataType *string `json:"dataType,omitempty"`
-	// AllowedValues - Allowed values of the configuration.
+	// AllowedValues - READ-ONLY; Allowed values of the configuration.
 	AllowedValues *string `json:"allowedValues,omitempty"`
 	// Source - Source of the configuration.
 	Source *string `json:"source,omitempty"`
 }
 
-// ConfigurationsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ConfigurationsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ConfigurationsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -298,7 +328,7 @@ type ConfigurationsCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ConfigurationsCreateOrUpdateFuture) Result(client ConfigurationsClient) (c Configuration, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.ConfigurationsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -322,11 +352,11 @@ type Database struct {
 	autorest.Response `json:"-"`
 	// DatabaseProperties - The properties of a database.
 	*DatabaseProperties `json:"properties,omitempty"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -335,15 +365,6 @@ func (d Database) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if d.DatabaseProperties != nil {
 		objectMap["properties"] = d.DatabaseProperties
-	}
-	if d.ID != nil {
-		objectMap["id"] = d.ID
-	}
-	if d.Name != nil {
-		objectMap["name"] = d.Name
-	}
-	if d.Type != nil {
-		objectMap["type"] = d.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -424,7 +445,7 @@ type DatabasesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesCreateOrUpdateFuture) Result(client DatabasesClient) (d Database, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.DatabasesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -443,7 +464,8 @@ func (future *DatabasesCreateOrUpdateFuture) Result(client DatabasesClient) (d D
 	return
 }
 
-// DatabasesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesDeleteFuture struct {
 	azure.Future
 }
@@ -452,7 +474,7 @@ type DatabasesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesDeleteFuture) Result(client DatabasesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.DatabasesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -470,11 +492,11 @@ type FirewallRule struct {
 	autorest.Response `json:"-"`
 	// FirewallRuleProperties - The properties of a firewall rule.
 	*FirewallRuleProperties `json:"properties,omitempty"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -483,15 +505,6 @@ func (fr FirewallRule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if fr.FirewallRuleProperties != nil {
 		objectMap["properties"] = fr.FirewallRuleProperties
-	}
-	if fr.ID != nil {
-		objectMap["id"] = fr.ID
-	}
-	if fr.Name != nil {
-		objectMap["name"] = fr.Name
-	}
-	if fr.Type != nil {
-		objectMap["type"] = fr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -562,8 +575,8 @@ type FirewallRuleProperties struct {
 	EndIPAddress *string `json:"endIpAddress,omitempty"`
 }
 
-// FirewallRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// FirewallRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type FirewallRulesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -572,7 +585,7 @@ type FirewallRulesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *FirewallRulesCreateOrUpdateFuture) Result(client FirewallRulesClient) (fr FirewallRule, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.FirewallRulesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -591,7 +604,8 @@ func (future *FirewallRulesCreateOrUpdateFuture) Result(client FirewallRulesClie
 	return
 }
 
-// FirewallRulesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// FirewallRulesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type FirewallRulesDeleteFuture struct {
 	azure.Future
 }
@@ -600,7 +614,7 @@ type FirewallRulesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *FirewallRulesDeleteFuture) Result(client FirewallRulesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.FirewallRulesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -617,11 +631,11 @@ func (future *FirewallRulesDeleteFuture) Result(client FirewallRulesClient) (ar 
 type LogFile struct {
 	// LogFileProperties - The properties of the log file.
 	*LogFileProperties `json:"properties,omitempty"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -630,15 +644,6 @@ func (lf LogFile) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if lf.LogFileProperties != nil {
 		objectMap["properties"] = lf.LogFileProperties
-	}
-	if lf.ID != nil {
-		objectMap["id"] = lf.ID
-	}
-	if lf.Name != nil {
-		objectMap["name"] = lf.Name
-	}
-	if lf.Type != nil {
-		objectMap["type"] = lf.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -705,9 +710,9 @@ type LogFileListResult struct {
 type LogFileProperties struct {
 	// SizeInKB - Size of the log file.
 	SizeInKB *int64 `json:"sizeInKB,omitempty"`
-	// CreatedTime - Creation timestamp of the log file.
+	// CreatedTime - READ-ONLY; Creation timestamp of the log file.
 	CreatedTime *date.Time `json:"createdTime,omitempty"`
-	// LastModifiedTime - Last modified timestamp of the log file.
+	// LastModifiedTime - READ-ONLY; Last modified timestamp of the log file.
 	LastModifiedTime *date.Time `json:"lastModifiedTime,omitempty"`
 	// Type - Type of the log file.
 	Type *string `json:"type,omitempty"`
@@ -736,43 +741,31 @@ type NameAvailabilityRequest struct {
 
 // Operation REST API operation definition.
 type Operation struct {
-	// Name - The name of the operation being performed on this particular object.
+	// Name - READ-ONLY; The name of the operation being performed on this particular object.
 	Name *string `json:"name,omitempty"`
-	// Display - The localized display information for this particular operation or action.
+	// Display - READ-ONLY; The localized display information for this particular operation or action.
 	Display *OperationDisplay `json:"display,omitempty"`
-	// Origin - The intended executor of the operation. Possible values include: 'NotSpecified', 'User', 'System'
+	// Origin - READ-ONLY; The intended executor of the operation. Possible values include: 'NotSpecified', 'User', 'System'
 	Origin OperationOrigin `json:"origin,omitempty"`
-	// Properties - Additional descriptions for the operation.
+	// Properties - READ-ONLY; Additional descriptions for the operation.
 	Properties map[string]interface{} `json:"properties"`
 }
 
 // MarshalJSON is the custom marshaler for Operation.
 func (o Operation) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if o.Name != nil {
-		objectMap["name"] = o.Name
-	}
-	if o.Display != nil {
-		objectMap["display"] = o.Display
-	}
-	if o.Origin != "" {
-		objectMap["origin"] = o.Origin
-	}
-	if o.Properties != nil {
-		objectMap["properties"] = o.Properties
-	}
 	return json.Marshal(objectMap)
 }
 
 // OperationDisplay display metadata associated with the operation.
 type OperationDisplay struct {
-	// Provider - Operation resource provider name.
+	// Provider - READ-ONLY; Operation resource provider name.
 	Provider *string `json:"provider,omitempty"`
-	// Resource - Resource on which the operation is performed.
+	// Resource - READ-ONLY; Resource on which the operation is performed.
 	Resource *string `json:"resource,omitempty"`
-	// Operation - Localized friendly name for the operation.
+	// Operation - READ-ONLY; Localized friendly name for the operation.
 	Operation *string `json:"operation,omitempty"`
-	// Description - Operation description.
+	// Description - READ-ONLY; Operation description.
 	Description *string `json:"description,omitempty"`
 }
 
@@ -820,11 +813,11 @@ type PerformanceTierServiceLevelObjectives struct {
 
 // ProxyResource resource properties.
 type ProxyResource struct {
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -857,11 +850,11 @@ type Server struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Application-specific metadata in the form of key-value pairs.
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -879,15 +872,6 @@ func (s Server) MarshalJSON() ([]byte, error) {
 	}
 	if s.Tags != nil {
 		objectMap["tags"] = s.Tags
-	}
-	if s.ID != nil {
-		objectMap["id"] = s.ID
-	}
-	if s.Name != nil {
-		objectMap["name"] = s.Name
-	}
-	if s.Type != nil {
-		objectMap["type"] = s.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1071,6 +1055,12 @@ type ServerProperties struct {
 	EarliestRestoreDate *date.Time `json:"earliestRestoreDate,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
+	// ReplicationRole - The replication role of the server.
+	ReplicationRole *string `json:"replicationRole,omitempty"`
+	// MasterServerID - The master server id of a replica server.
+	MasterServerID *string `json:"masterServerId,omitempty"`
+	// ReplicaCapacity - The maximum number of replicas that a master server can have.
+	ReplicaCapacity *int32 `json:"replicaCapacity,omitempty"`
 }
 
 // BasicServerPropertiesForCreate the properties used to create a new server.
@@ -1078,6 +1068,7 @@ type BasicServerPropertiesForCreate interface {
 	AsServerPropertiesForDefaultCreate() (*ServerPropertiesForDefaultCreate, bool)
 	AsServerPropertiesForRestore() (*ServerPropertiesForRestore, bool)
 	AsServerPropertiesForGeoRestore() (*ServerPropertiesForGeoRestore, bool)
+	AsServerPropertiesForReplica() (*ServerPropertiesForReplica, bool)
 	AsServerPropertiesForCreate() (*ServerPropertiesForCreate, bool)
 }
 
@@ -1089,7 +1080,7 @@ type ServerPropertiesForCreate struct {
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
-	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore'
+	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
 	CreateMode CreateMode `json:"createMode,omitempty"`
 }
 
@@ -1113,6 +1104,10 @@ func unmarshalBasicServerPropertiesForCreate(body []byte) (BasicServerProperties
 		var spfgr ServerPropertiesForGeoRestore
 		err := json.Unmarshal(body, &spfgr)
 		return spfgr, err
+	case string(CreateModeReplica):
+		var spfr ServerPropertiesForReplica
+		err := json.Unmarshal(body, &spfr)
+		return spfr, err
 	default:
 		var spfc ServerPropertiesForCreate
 		err := json.Unmarshal(body, &spfc)
@@ -1172,6 +1167,11 @@ func (spfc ServerPropertiesForCreate) AsServerPropertiesForGeoRestore() (*Server
 	return nil, false
 }
 
+// AsServerPropertiesForReplica is the BasicServerPropertiesForCreate implementation for ServerPropertiesForCreate.
+func (spfc ServerPropertiesForCreate) AsServerPropertiesForReplica() (*ServerPropertiesForReplica, bool) {
+	return nil, false
+}
+
 // AsServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForCreate.
 func (spfc ServerPropertiesForCreate) AsServerPropertiesForCreate() (*ServerPropertiesForCreate, bool) {
 	return &spfc, true
@@ -1194,7 +1194,7 @@ type ServerPropertiesForDefaultCreate struct {
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
-	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore'
+	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
 	CreateMode CreateMode `json:"createMode,omitempty"`
 }
 
@@ -1238,6 +1238,11 @@ func (spfdc ServerPropertiesForDefaultCreate) AsServerPropertiesForGeoRestore() 
 	return nil, false
 }
 
+// AsServerPropertiesForReplica is the BasicServerPropertiesForCreate implementation for ServerPropertiesForDefaultCreate.
+func (spfdc ServerPropertiesForDefaultCreate) AsServerPropertiesForReplica() (*ServerPropertiesForReplica, bool) {
+	return nil, false
+}
+
 // AsServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForDefaultCreate.
 func (spfdc ServerPropertiesForDefaultCreate) AsServerPropertiesForCreate() (*ServerPropertiesForCreate, bool) {
 	return nil, false
@@ -1248,8 +1253,8 @@ func (spfdc ServerPropertiesForDefaultCreate) AsBasicServerPropertiesForCreate()
 	return &spfdc, true
 }
 
-// ServerPropertiesForGeoRestore the properties used to create a new server by restoring to a different region from
-// a geo replicated backup.
+// ServerPropertiesForGeoRestore the properties used to create a new server by restoring to a different
+// region from a geo replicated backup.
 type ServerPropertiesForGeoRestore struct {
 	// SourceServerID - The source server id to restore from.
 	SourceServerID *string `json:"sourceServerId,omitempty"`
@@ -1259,7 +1264,7 @@ type ServerPropertiesForGeoRestore struct {
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
-	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore'
+	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
 	CreateMode CreateMode `json:"createMode,omitempty"`
 }
 
@@ -1300,6 +1305,11 @@ func (spfgr ServerPropertiesForGeoRestore) AsServerPropertiesForGeoRestore() (*S
 	return &spfgr, true
 }
 
+// AsServerPropertiesForReplica is the BasicServerPropertiesForCreate implementation for ServerPropertiesForGeoRestore.
+func (spfgr ServerPropertiesForGeoRestore) AsServerPropertiesForReplica() (*ServerPropertiesForReplica, bool) {
+	return nil, false
+}
+
 // AsServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForGeoRestore.
 func (spfgr ServerPropertiesForGeoRestore) AsServerPropertiesForCreate() (*ServerPropertiesForCreate, bool) {
 	return nil, false
@@ -1308,6 +1318,72 @@ func (spfgr ServerPropertiesForGeoRestore) AsServerPropertiesForCreate() (*Serve
 // AsBasicServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForGeoRestore.
 func (spfgr ServerPropertiesForGeoRestore) AsBasicServerPropertiesForCreate() (BasicServerPropertiesForCreate, bool) {
 	return &spfgr, true
+}
+
+// ServerPropertiesForReplica the properties to create a new replica.
+type ServerPropertiesForReplica struct {
+	// SourceServerID - The master server id to create replica from.
+	SourceServerID *string `json:"sourceServerId,omitempty"`
+	// Version - Server version. Possible values include: 'NineFullStopFive', 'NineFullStopSix', 'OneZero', 'OneZeroFullStopZero', 'OneZeroFullStopTwo'
+	Version ServerVersion `json:"version,omitempty"`
+	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
+	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// StorageProfile - Storage profile of a server.
+	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
+	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
+	CreateMode CreateMode `json:"createMode,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) MarshalJSON() ([]byte, error) {
+	spfr.CreateMode = CreateModeReplica
+	objectMap := make(map[string]interface{})
+	if spfr.SourceServerID != nil {
+		objectMap["sourceServerId"] = spfr.SourceServerID
+	}
+	if spfr.Version != "" {
+		objectMap["version"] = spfr.Version
+	}
+	if spfr.SslEnforcement != "" {
+		objectMap["sslEnforcement"] = spfr.SslEnforcement
+	}
+	if spfr.StorageProfile != nil {
+		objectMap["storageProfile"] = spfr.StorageProfile
+	}
+	if spfr.CreateMode != "" {
+		objectMap["createMode"] = spfr.CreateMode
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsServerPropertiesForDefaultCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) AsServerPropertiesForDefaultCreate() (*ServerPropertiesForDefaultCreate, bool) {
+	return nil, false
+}
+
+// AsServerPropertiesForRestore is the BasicServerPropertiesForCreate implementation for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) AsServerPropertiesForRestore() (*ServerPropertiesForRestore, bool) {
+	return nil, false
+}
+
+// AsServerPropertiesForGeoRestore is the BasicServerPropertiesForCreate implementation for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) AsServerPropertiesForGeoRestore() (*ServerPropertiesForGeoRestore, bool) {
+	return nil, false
+}
+
+// AsServerPropertiesForReplica is the BasicServerPropertiesForCreate implementation for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) AsServerPropertiesForReplica() (*ServerPropertiesForReplica, bool) {
+	return &spfr, true
+}
+
+// AsServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) AsServerPropertiesForCreate() (*ServerPropertiesForCreate, bool) {
+	return nil, false
+}
+
+// AsBasicServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForReplica.
+func (spfr ServerPropertiesForReplica) AsBasicServerPropertiesForCreate() (BasicServerPropertiesForCreate, bool) {
+	return &spfr, true
 }
 
 // ServerPropertiesForRestore the properties used to create a new server by restoring from a backup.
@@ -1322,7 +1398,7 @@ type ServerPropertiesForRestore struct {
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
 	// StorageProfile - Storage profile of a server.
 	StorageProfile *StorageProfile `json:"storageProfile,omitempty"`
-	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore'
+	// CreateMode - Possible values include: 'CreateModeServerPropertiesForCreate', 'CreateModeDefault', 'CreateModePointInTimeRestore', 'CreateModeGeoRestore', 'CreateModeReplica'
 	CreateMode CreateMode `json:"createMode,omitempty"`
 }
 
@@ -1366,6 +1442,11 @@ func (spfr ServerPropertiesForRestore) AsServerPropertiesForGeoRestore() (*Serve
 	return nil, false
 }
 
+// AsServerPropertiesForReplica is the BasicServerPropertiesForCreate implementation for ServerPropertiesForRestore.
+func (spfr ServerPropertiesForRestore) AsServerPropertiesForReplica() (*ServerPropertiesForReplica, bool) {
+	return nil, false
+}
+
 // AsServerPropertiesForCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForRestore.
 func (spfr ServerPropertiesForRestore) AsServerPropertiesForCreate() (*ServerPropertiesForCreate, bool) {
 	return nil, false
@@ -1376,7 +1457,8 @@ func (spfr ServerPropertiesForRestore) AsBasicServerPropertiesForCreate() (Basic
 	return &spfr, true
 }
 
-// ServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersCreateFuture struct {
 	azure.Future
 }
@@ -1385,7 +1467,7 @@ type ServersCreateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServersCreateFuture) Result(client ServersClient) (s Server, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.ServersCreateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1404,7 +1486,8 @@ func (future *ServersCreateFuture) Result(client ServersClient) (s Server, err e
 	return
 }
 
-// ServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersDeleteFuture struct {
 	azure.Future
 }
@@ -1413,7 +1496,7 @@ type ServersDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServersDeleteFuture) Result(client ServersClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.ServersDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1426,8 +1509,8 @@ func (future *ServersDeleteFuture) Result(client ServersClient) (ar autorest.Res
 	return
 }
 
-// ServerSecurityAlertPoliciesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ServerSecurityAlertPoliciesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type ServerSecurityAlertPoliciesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1436,7 +1519,7 @@ type ServerSecurityAlertPoliciesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServerSecurityAlertPoliciesCreateOrUpdateFuture) Result(client ServerSecurityAlertPoliciesClient) (ssap ServerSecurityAlertPolicy, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.ServerSecurityAlertPoliciesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1460,11 +1543,11 @@ type ServerSecurityAlertPolicy struct {
 	autorest.Response `json:"-"`
 	// SecurityAlertPolicyProperties - Resource properties.
 	*SecurityAlertPolicyProperties `json:"properties,omitempty"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1473,15 +1556,6 @@ func (ssap ServerSecurityAlertPolicy) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ssap.SecurityAlertPolicyProperties != nil {
 		objectMap["properties"] = ssap.SecurityAlertPolicyProperties
-	}
-	if ssap.ID != nil {
-		objectMap["id"] = ssap.ID
-	}
-	if ssap.Name != nil {
-		objectMap["name"] = ssap.Name
-	}
-	if ssap.Type != nil {
-		objectMap["type"] = ssap.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1537,7 +1611,31 @@ func (ssap *ServerSecurityAlertPolicy) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ServersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServersRestartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type ServersRestartFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ServersRestartFuture) Result(client ServersClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "postgresql.ServersRestartFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("postgresql.ServersRestartFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
+// ServersUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServersUpdateFuture struct {
 	azure.Future
 }
@@ -1546,7 +1644,7 @@ type ServersUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ServersUpdateFuture) Result(client ServersClient) (s Server, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.ServersUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1565,7 +1663,7 @@ func (future *ServersUpdateFuture) Result(client ServersClient) (s Server, err e
 	return
 }
 
-// ServerUpdateParameters parameters allowd to update for a server.
+// ServerUpdateParameters parameters allowed to update for a server.
 type ServerUpdateParameters struct {
 	// Sku - The SKU (pricing tier) of the server.
 	Sku *Sku `json:"sku,omitempty"`
@@ -1642,6 +1740,8 @@ type ServerUpdateParametersProperties struct {
 	Version ServerVersion `json:"version,omitempty"`
 	// SslEnforcement - Enable ssl enforcement or not when connect to server. Possible values include: 'SslEnforcementEnumEnabled', 'SslEnforcementEnumDisabled'
 	SslEnforcement SslEnforcementEnum `json:"sslEnforcement,omitempty"`
+	// ReplicationRole - The replication role of the server.
+	ReplicationRole *string `json:"replicationRole,omitempty"`
 }
 
 // Sku billing information related properties of a server.
@@ -1666,6 +1766,8 @@ type StorageProfile struct {
 	GeoRedundantBackup GeoRedundantBackup `json:"geoRedundantBackup,omitempty"`
 	// StorageMB - Max storage allowed for a server.
 	StorageMB *int32 `json:"storageMB,omitempty"`
+	// StorageAutogrow - Enable Storage Auto Grow. Possible values include: 'StorageAutogrowEnabled', 'StorageAutogrowDisabled'
+	StorageAutogrow StorageAutogrow `json:"storageAutogrow,omitempty"`
 }
 
 // TrackedResource resource properties including location and tags for track resources.
@@ -1674,11 +1776,11 @@ type TrackedResource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Application-specific metadata in the form of key-value pairs.
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1691,15 +1793,6 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	if tr.Tags != nil {
 		objectMap["tags"] = tr.Tags
 	}
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -1708,11 +1801,11 @@ type VirtualNetworkRule struct {
 	autorest.Response `json:"-"`
 	// VirtualNetworkRuleProperties - Resource properties.
 	*VirtualNetworkRuleProperties `json:"properties,omitempty"`
-	// ID - Resource ID
+	// ID - READ-ONLY; Resource ID
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1721,15 +1814,6 @@ func (vnr VirtualNetworkRule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if vnr.VirtualNetworkRuleProperties != nil {
 		objectMap["properties"] = vnr.VirtualNetworkRuleProperties
-	}
-	if vnr.ID != nil {
-		objectMap["id"] = vnr.ID
-	}
-	if vnr.Name != nil {
-		objectMap["name"] = vnr.Name
-	}
-	if vnr.Type != nil {
-		objectMap["type"] = vnr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1788,9 +1872,9 @@ func (vnr *VirtualNetworkRule) UnmarshalJSON(body []byte) error {
 // VirtualNetworkRuleListResult a list of virtual network rules.
 type VirtualNetworkRuleListResult struct {
 	autorest.Response `json:"-"`
-	// Value - Array of results.
+	// Value - READ-ONLY; Array of results.
 	Value *[]VirtualNetworkRule `json:"value,omitempty"`
-	// NextLink - Link to retrieve next page of results.
+	// NextLink - READ-ONLY; Link to retrieve next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -1800,20 +1884,37 @@ type VirtualNetworkRuleListResultIterator struct {
 	page VirtualNetworkRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *VirtualNetworkRuleListResultIterator) Next() error {
+func (iter *VirtualNetworkRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *VirtualNetworkRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1835,6 +1936,11 @@ func (iter VirtualNetworkRuleListResultIterator) Value() VirtualNetworkRule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the VirtualNetworkRuleListResultIterator type.
+func NewVirtualNetworkRuleListResultIterator(page VirtualNetworkRuleListResultPage) VirtualNetworkRuleListResultIterator {
+	return VirtualNetworkRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (vnrlr VirtualNetworkRuleListResult) IsEmpty() bool {
 	return vnrlr.Value == nil || len(*vnrlr.Value) == 0
@@ -1842,11 +1948,11 @@ func (vnrlr VirtualNetworkRuleListResult) IsEmpty() bool {
 
 // virtualNetworkRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer() (*http.Request, error) {
+func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if vnrlr.NextLink == nil || len(to.String(vnrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(vnrlr.NextLink)))
@@ -1854,19 +1960,36 @@ func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer()
 
 // VirtualNetworkRuleListResultPage contains a page of VirtualNetworkRule values.
 type VirtualNetworkRuleListResultPage struct {
-	fn    func(VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)
+	fn    func(context.Context, VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)
 	vnrlr VirtualNetworkRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *VirtualNetworkRuleListResultPage) Next() error {
-	next, err := page.fn(page.vnrlr)
+func (page *VirtualNetworkRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.vnrlr)
 	if err != nil {
 		return err
 	}
 	page.vnrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *VirtualNetworkRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1887,13 +2010,18 @@ func (page VirtualNetworkRuleListResultPage) Values() []VirtualNetworkRule {
 	return *page.vnrlr.Value
 }
 
+// Creates a new instance of the VirtualNetworkRuleListResultPage type.
+func NewVirtualNetworkRuleListResultPage(getNextPage func(context.Context, VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)) VirtualNetworkRuleListResultPage {
+	return VirtualNetworkRuleListResultPage{fn: getNextPage}
+}
+
 // VirtualNetworkRuleProperties properties of a virtual network rule.
 type VirtualNetworkRuleProperties struct {
 	// VirtualNetworkSubnetID - The ARM resource id of the virtual network subnet.
 	VirtualNetworkSubnetID *string `json:"virtualNetworkSubnetId,omitempty"`
 	// IgnoreMissingVnetServiceEndpoint - Create firewall rule before the virtual network has vnet service endpoint enabled.
 	IgnoreMissingVnetServiceEndpoint *bool `json:"ignoreMissingVnetServiceEndpoint,omitempty"`
-	// State - Virtual Network Rule State. Possible values include: 'Initializing', 'InProgress', 'Ready', 'Deleting', 'Unknown'
+	// State - READ-ONLY; Virtual Network Rule State. Possible values include: 'Initializing', 'InProgress', 'Ready', 'Deleting', 'Unknown'
 	State VirtualNetworkRuleState `json:"state,omitempty"`
 }
 
@@ -1907,7 +2035,7 @@ type VirtualNetworkRulesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualNetworkRulesCreateOrUpdateFuture) Result(client VirtualNetworkRulesClient) (vnr VirtualNetworkRule, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.VirtualNetworkRulesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1926,8 +2054,8 @@ func (future *VirtualNetworkRulesCreateOrUpdateFuture) Result(client VirtualNetw
 	return
 }
 
-// VirtualNetworkRulesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualNetworkRulesDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualNetworkRulesDeleteFuture struct {
 	azure.Future
 }
@@ -1936,7 +2064,7 @@ type VirtualNetworkRulesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *VirtualNetworkRulesDeleteFuture) Result(client VirtualNetworkRulesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "postgresql.VirtualNetworkRulesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return

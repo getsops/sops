@@ -28,7 +28,7 @@ func parseTime(layout, value string) *time.Time {
 // To retrieve multiple items from a table
 //
 // This example reads multiple items from the Music table using a batch of three GetItem
-// requests.  Only the AlbumTitle attribute is returned.
+// requests. Only the AlbumTitle attribute is returned.
 func ExampleDynamoDB_BatchGetItem_shared00() {
 	svc := dynamodb.New(session.New())
 	input := &dynamodb.BatchGetItemInput{
@@ -73,6 +73,8 @@ func ExampleDynamoDB_BatchGetItem_shared00() {
 				fmt.Println(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
 			case dynamodb.ErrCodeResourceNotFoundException:
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -157,6 +159,8 @@ func ExampleDynamoDB_BatchWriteItem_shared00() {
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
 			case dynamodb.ErrCodeItemCollectionSizeLimitExceededException:
 				fmt.Println(dynamodb.ErrCodeItemCollectionSizeLimitExceededException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -259,6 +263,10 @@ func ExampleDynamoDB_DeleteItem_shared00() {
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
 			case dynamodb.ErrCodeItemCollectionSizeLimitExceededException:
 				fmt.Println(dynamodb.ErrCodeItemCollectionSizeLimitExceededException, aerr.Error())
+			case dynamodb.ErrCodeTransactionConflictException:
+				fmt.Println(dynamodb.ErrCodeTransactionConflictException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -395,6 +403,8 @@ func ExampleDynamoDB_GetItem_shared00() {
 				fmt.Println(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
 			case dynamodb.ErrCodeResourceNotFoundException:
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -472,6 +482,10 @@ func ExampleDynamoDB_PutItem_shared00() {
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
 			case dynamodb.ErrCodeItemCollectionSizeLimitExceededException:
 				fmt.Println(dynamodb.ErrCodeItemCollectionSizeLimitExceededException, aerr.Error())
+			case dynamodb.ErrCodeTransactionConflictException:
+				fmt.Println(dynamodb.ErrCodeTransactionConflictException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -514,6 +528,8 @@ func ExampleDynamoDB_Query_shared00() {
 				fmt.Println(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
 			case dynamodb.ErrCodeResourceNotFoundException:
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -560,6 +576,8 @@ func ExampleDynamoDB_Scan_shared00() {
 				fmt.Println(dynamodb.ErrCodeProvisionedThroughputExceededException, aerr.Error())
 			case dynamodb.ErrCodeResourceNotFoundException:
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:
@@ -579,7 +597,7 @@ func ExampleDynamoDB_Scan_shared00() {
 // To update an item in a table
 //
 // This example updates an item in the Music table. It adds a new attribute (Year) and
-// modifies the AlbumTitle attribute.  All of the attributes in the item, as they appear
+// modifies the AlbumTitle attribute. All of the attributes in the item, as they appear
 // after the update, are returned in the response.
 func ExampleDynamoDB_UpdateItem_shared00() {
 	svc := dynamodb.New(session.New())
@@ -621,6 +639,10 @@ func ExampleDynamoDB_UpdateItem_shared00() {
 				fmt.Println(dynamodb.ErrCodeResourceNotFoundException, aerr.Error())
 			case dynamodb.ErrCodeItemCollectionSizeLimitExceededException:
 				fmt.Println(dynamodb.ErrCodeItemCollectionSizeLimitExceededException, aerr.Error())
+			case dynamodb.ErrCodeTransactionConflictException:
+				fmt.Println(dynamodb.ErrCodeTransactionConflictException, aerr.Error())
+			case dynamodb.ErrCodeRequestLimitExceeded:
+				fmt.Println(dynamodb.ErrCodeRequestLimitExceeded, aerr.Error())
 			case dynamodb.ErrCodeInternalServerError:
 				fmt.Println(dynamodb.ErrCodeInternalServerError, aerr.Error())
 			default:

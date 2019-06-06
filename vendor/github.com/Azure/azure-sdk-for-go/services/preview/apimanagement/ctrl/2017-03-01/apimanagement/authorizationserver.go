@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,6 +43,16 @@ func NewAuthorizationServerClient() AuthorizationServerClient {
 // authsid - identifier of the authorization server.
 // parameters - create or update parameters.
 func (client AuthorizationServerClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, authsid string, parameters AuthorizationServerContract) (result AuthorizationServerContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: authsid,
 			Constraints: []validation.Constraint{{Target: "authsid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -123,6 +134,16 @@ func (client AuthorizationServerClient) CreateOrUpdateResponder(resp *http.Respo
 // ifMatch - the entity state (Etag) version of the authentication server to delete. A value of "*" can be used
 // for If-Match to unconditionally apply the operation.
 func (client AuthorizationServerClient) Delete(ctx context.Context, apimBaseURL string, authsid string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: authsid,
 			Constraints: []validation.Constraint{{Target: "authsid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -200,6 +221,16 @@ func (client AuthorizationServerClient) DeleteResponder(resp *http.Response) (re
 // https://myapimservice.management.azure-api.net.
 // authsid - identifier of the authorization server.
 func (client AuthorizationServerClient) Get(ctx context.Context, apimBaseURL string, authsid string) (result AuthorizationServerContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: authsid,
 			Constraints: []validation.Constraint{{Target: "authsid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -282,6 +313,16 @@ func (client AuthorizationServerClient) GetResponder(resp *http.Response) (resul
 // top - number of records to return.
 // skip - number of records to skip.
 func (client AuthorizationServerClient) List(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result AuthorizationServerCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerClient.List")
+		defer func() {
+			sc := -1
+			if result.asc.Response.Response != nil {
+				sc = result.asc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -363,8 +404,8 @@ func (client AuthorizationServerClient) ListResponder(resp *http.Response) (resu
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AuthorizationServerClient) listNextResults(lastResults AuthorizationServerCollection) (result AuthorizationServerCollection, err error) {
-	req, err := lastResults.authorizationServerCollectionPreparer()
+func (client AuthorizationServerClient) listNextResults(ctx context.Context, lastResults AuthorizationServerCollection) (result AuthorizationServerCollection, err error) {
+	req, err := lastResults.authorizationServerCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.AuthorizationServerClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -385,6 +426,16 @@ func (client AuthorizationServerClient) listNextResults(lastResults Authorizatio
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AuthorizationServerClient) ListComplete(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result AuthorizationServerCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, apimBaseURL, filter, top, skip)
 	return
 }
@@ -398,6 +449,16 @@ func (client AuthorizationServerClient) ListComplete(ctx context.Context, apimBa
 // ifMatch - the entity state (Etag) version of the authorization server to update. A value of "*" can be used
 // for If-Match to unconditionally apply the operation.
 func (client AuthorizationServerClient) Update(ctx context.Context, apimBaseURL string, authsid string, parameters AuthorizationServerUpdateContract, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationServerClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: authsid,
 			Constraints: []validation.Constraint{{Target: "authsid", Name: validation.MaxLength, Rule: 256, Chain: nil},

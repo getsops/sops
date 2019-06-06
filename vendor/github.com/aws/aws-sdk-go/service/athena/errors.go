@@ -18,6 +18,12 @@ const (
 	// a required parameter may be missing or out of range.
 	ErrCodeInvalidRequestException = "InvalidRequestException"
 
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// A resource, such as a workgroup, was not found.
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
+
 	// ErrCodeTooManyRequestsException for service response error code
 	// "TooManyRequestsException".
 	//

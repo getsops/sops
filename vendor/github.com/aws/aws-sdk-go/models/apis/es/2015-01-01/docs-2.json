@@ -3,6 +3,7 @@
   "service": "<fullname>Amazon Elasticsearch Configuration Service</fullname> <p>Use the Amazon Elasticsearch configuration API to create, configure, and manage Elasticsearch domains.</p> <p>The endpoint for configuration service requests is region-specific: es.<i>region</i>.amazonaws.com. For example, es.us-east-1.amazonaws.com. For a current list of supported regions and endpoints, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticsearch-service-regions\" target=\"_blank\">Regions and Endpoints</a>.</p>",
   "operations": {
     "AddTags": "<p>Attaches tags to an existing Elasticsearch domain. Tags are a set of case-sensitive key value pairs. An Elasticsearch domain may have up to 10 tags. See <a href=\"http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains.html#es-managedomains-awsresorcetagging\" target=\"_blank\"> Tagging Amazon Elasticsearch Service Domains for more information.</a></p>",
+    "CancelElasticsearchServiceSoftwareUpdate": "<p>Cancels a scheduled service software update for an Amazon ES domain. You can only perform this operation before the <code>AutomatedUpdateDate</code> and when the <code>UpdateStatus</code> is in the <code>PENDING_UPDATE</code> state.</p>",
     "CreateElasticsearchDomain": "<p>Creates a new Elasticsearch domain. For more information, see <a href=\"http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomains\" target=\"_blank\">Creating Elasticsearch Domains</a> in the <i>Amazon Elasticsearch Service Developer Guide</i>.</p>",
     "DeleteElasticsearchDomain": "<p>Permanently deletes the specified Elasticsearch domain and all of its data. Once a domain is deleted, it cannot be recovered.</p>",
     "DeleteElasticsearchServiceRole": "<p>Deletes the service-linked role that Elasticsearch Service uses to manage and maintain VPC domains. Role deletion will fail if any existing VPC domains use the role. You must delete any such Elasticsearch domains before deleting the role. See <a href=\"http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-enabling-slr\" target=\"_blank\">Deleting Elasticsearch Service Role</a> in <i>VPC Endpoints for Amazon Elasticsearch Service Domains</i>.</p>",
@@ -21,6 +22,7 @@
     "ListTags": "<p>Returns all tags for the given Elasticsearch domain.</p>",
     "PurchaseReservedElasticsearchInstanceOffering": "<p>Allows you to purchase reserved Elasticsearch instances.</p>",
     "RemoveTags": "<p>Removes the specified set of tags from the specified Elasticsearch domain.</p>",
+    "StartElasticsearchServiceSoftwareUpdate": "<p>Schedules a service software update for an Amazon ES domain.</p>",
     "UpdateElasticsearchDomainConfig": "<p>Modifies the cluster configuration of the specified Elasticsearch domain, setting as setting the instance type and the number of instances. </p>",
     "UpgradeElasticsearchDomain": "<p>Allows you to either upgrade your domain or perform an Upgrade eligibility check to a compatible Elasticsearch version.</p>"
   },
@@ -90,9 +92,22 @@
         "ElasticsearchDomainStatus$UpgradeProcessing": "<p>The status of an Elasticsearch domain version upgrade. <code>True</code> if Amazon Elasticsearch Service is undergoing a version upgrade. <code>False</code> if the configuration is active.</p>",
         "EncryptionAtRestOptions$Enabled": "<p>Specifies the option to enable Encryption At Rest.</p>",
         "LogPublishingOption$Enabled": "<p> Specifies whether given log publishing option is enabled or not.</p>",
+        "NodeToNodeEncryptionOptions$Enabled": "<p>Specify true to enable node-to-node encryption.</p>",
         "OptionStatus$PendingDeletion": "<p>Indicates whether the Elasticsearch domain is being deleted.</p>",
+        "ServiceSoftwareOptions$UpdateAvailable": "<p><code>True</code> if you are able to update you service software version. <code>False</code> if you are not able to update your service software version. </p>",
+        "ServiceSoftwareOptions$Cancellable": "<p><code>True</code> if you are able to cancel your service software version update. <code>False</code> if you are not able to cancel your service software version. </p>",
         "UpgradeElasticsearchDomainRequest$PerformCheckOnly": "<p> This flag, when set to True, indicates that an Upgrade Eligibility Check needs to be performed. This will not actually perform the Upgrade. </p>",
         "UpgradeElasticsearchDomainResponse$PerformCheckOnly": "<p> This flag, when set to True, indicates that an Upgrade Eligibility Check needs to be performed. This will not actually perform the Upgrade. </p>"
+      }
+    },
+    "CancelElasticsearchServiceSoftwareUpdateRequest": {
+      "base": "<p>Container for the parameters to the <code><a>CancelElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to cancel a service software update on.</p>",
+      "refs": {
+      }
+    },
+    "CancelElasticsearchServiceSoftwareUpdateResponse": {
+      "base": "<p>The result of a <code>CancelElasticsearchServiceSoftwareUpdate</code> operation. Contains the status of the update.</p>",
+      "refs": {
       }
     },
     "CloudWatchLogsLogGroupArn": {
@@ -146,6 +161,18 @@
     "DeleteElasticsearchDomainResponse": {
       "base": "<p>The result of a <code>DeleteElasticsearchDomain</code> request. Contains the status of the pending deletion, or no status if the domain and all of its resources have been deleted.</p>",
       "refs": {
+      }
+    },
+    "DeploymentCloseDateTimeStamp": {
+      "base": null,
+      "refs": {
+        "ServiceSoftwareOptions$AutomatedUpdateDate": "<p>Timestamp, in Epoch time, until which you can manually request a service software update. After this date, we automatically update your service software.</p>"
+      }
+    },
+    "DeploymentStatus": {
+      "base": null,
+      "refs": {
+        "ServiceSoftwareOptions$UpdateStatus": "<p>The status of your service software update. This field can take the following values: <code>ELIGIBLE</code>, <code>PENDING_UPDATE</code>, <code>IN_PROGRESS</code>, <code>COMPLETED</code>, and <code>NOT_ELIGIBLE</code>.</p>"
       }
     },
     "DescribeElasticsearchDomainConfigRequest": {
@@ -234,6 +261,7 @@
     "DomainName": {
       "base": "<p>The name of an Elasticsearch domain. Domain names are unique across the domains owned by an account within an AWS region. Domain names start with a letter or number and can contain the following characters: a-z (lowercase), 0-9, and - (hyphen).</p>",
       "refs": {
+        "CancelElasticsearchServiceSoftwareUpdateRequest$DomainName": "<p>The name of the domain that you want to stop the latest service software update on.</p>",
         "CreateElasticsearchDomainRequest$DomainName": "<p>The name of the Elasticsearch domain that you are creating. Domain names are unique across the domains owned by an account within an AWS region. Domain names must start with a letter or number and can contain the following characters: a-z (lowercase), 0-9, and - (hyphen).</p>",
         "DeleteElasticsearchDomainRequest$DomainName": "<p>The name of the Elasticsearch domain that you want to permanently delete.</p>",
         "DescribeElasticsearchDomainConfigRequest$DomainName": "<p>The Elasticsearch domain that you want to get information about.</p>",
@@ -246,6 +274,7 @@
         "GetUpgradeHistoryRequest$DomainName": null,
         "GetUpgradeStatusRequest$DomainName": null,
         "ListElasticsearchInstanceTypesRequest$DomainName": "<p>DomainName represents the name of the Domain that we are trying to modify. This should be present only if we are querying for list of available Elasticsearch instance types when modifying existing domain. </p>",
+        "StartElasticsearchServiceSoftwareUpdateRequest$DomainName": "<p>The name of the domain that you want to update to the latest service software.</p>",
         "UpdateElasticsearchDomainConfigRequest$DomainName": "<p>The name of the Elasticsearch domain that you are updating. </p>",
         "UpgradeElasticsearchDomainRequest$DomainName": null,
         "UpgradeElasticsearchDomainResponse$DomainName": null
@@ -476,7 +505,8 @@
         "EBSOptions$Iops": "<p>Specifies the IOPD for a Provisioned IOPS EBS volume (SSD).</p>",
         "ElasticsearchClusterConfig$InstanceCount": "<p>The number of instances in the specified domain cluster.</p>",
         "ElasticsearchClusterConfig$DedicatedMasterCount": "<p>Total number of dedicated master nodes, active and on standby, for the cluster.</p>",
-        "SnapshotOptions$AutomatedSnapshotStartHour": "<p>Specifies the time, in UTC format, when the service takes a daily automated snapshot of the specified Elasticsearch domain. Default value is <code>0</code> hours.</p>"
+        "SnapshotOptions$AutomatedSnapshotStartHour": "<p>Specifies the time, in UTC format, when the service takes a daily automated snapshot of the specified Elasticsearch domain. Default value is <code>0</code> hours.</p>",
+        "ZoneAwarenessConfig$AvailabilityZoneCount": "<p>An integer value to indicate the number of availability zones for a domain when zone awareness is enabled. This should be equal to number of subnets if VPC endpoints is enabled</p>"
       }
     },
     "InternalException": {
@@ -641,6 +671,20 @@
         "ListElasticsearchVersionsResponse$NextToken": null
       }
     },
+    "NodeToNodeEncryptionOptions": {
+      "base": "<p>Specifies the node-to-node encryption options.</p>",
+      "refs": {
+        "CreateElasticsearchDomainRequest$NodeToNodeEncryptionOptions": "<p>Specifies the NodeToNodeEncryptionOptions.</p>",
+        "ElasticsearchDomainStatus$NodeToNodeEncryptionOptions": "<p>Specifies the status of the <code>NodeToNodeEncryptionOptions</code>.</p>",
+        "NodeToNodeEncryptionOptionsStatus$Options": "<p>Specifies the node-to-node encryption options for the specified Elasticsearch domain.</p>"
+      }
+    },
+    "NodeToNodeEncryptionOptionsStatus": {
+      "base": "<p>Status of the node-to-node encryption options for the specified Elasticsearch domain.</p>",
+      "refs": {
+        "ElasticsearchDomainConfig$NodeToNodeEncryptionOptions": "<p>Specifies the <code>NodeToNodeEncryptionOptions</code> for the Elasticsearch domain.</p>"
+      }
+    },
     "OptionState": {
       "base": "<p>The state of a requested change. One of the following:</p> <ul> <li>Processing: The request change is still in-process.</li> <li>Active: The request change is processed and deployed to the Elasticsearch domain.</li> </ul>",
       "refs": {
@@ -658,6 +702,7 @@
         "ElasticsearchVersionStatus$Status": "<p> Specifies the status of the Elasticsearch version options for the specified Elasticsearch domain.</p>",
         "EncryptionAtRestOptionsStatus$Status": "<p> Specifies the status of the Encryption At Rest options for the specified Elasticsearch domain.</p>",
         "LogPublishingOptionsStatus$Status": "<p>The status of the log publishing options for the Elasticsearch domain. See <code>OptionStatus</code> for the status information that's included. </p>",
+        "NodeToNodeEncryptionOptionsStatus$Status": "<p>Specifies the status of the node-to-node encryption options for the specified Elasticsearch domain.</p>",
         "SnapshotOptionsStatus$Status": "<p>Specifies the status of a daily automated snapshot.</p>",
         "VPCDerivedInfoStatus$Status": "<p> Specifies the status of the VPC options for the specified Elasticsearch domain.</p>"
       }
@@ -754,6 +799,14 @@
         "CognitoOptions$RoleArn": "<p>Specifies the role ARN that provides Elasticsearch permissions for accessing Cognito resources.</p>"
       }
     },
+    "ServiceSoftwareOptions": {
+      "base": "<p>The current options of an Elasticsearch domain service software options.</p>",
+      "refs": {
+        "CancelElasticsearchServiceSoftwareUpdateResponse$ServiceSoftwareOptions": "<p>The current status of the Elasticsearch service software update.</p>",
+        "ElasticsearchDomainStatus$ServiceSoftwareOptions": "<p>The current status of the Elasticsearch domain's service software.</p>",
+        "StartElasticsearchServiceSoftwareUpdateResponse$ServiceSoftwareOptions": "<p>The current status of the Elasticsearch service software update.</p>"
+      }
+    },
     "ServiceUrl": {
       "base": "<p>The endpoint to which service requests are submitted. For example, <code>search-imdb-movies-oopcnjfn6ugofer3zx5iadxxca.eu-west-1.es.amazonaws.com</code> or <code>doc-imdb-movies-oopcnjfn6ugofer3zx5iadxxca.eu-west-1.es.amazonaws.com</code>.</p>",
       "refs": {
@@ -774,6 +827,16 @@
       "base": "<p>Status of a daily automated snapshot.</p>",
       "refs": {
         "ElasticsearchDomainConfig$SnapshotOptions": "<p>Specifies the <code>SnapshotOptions</code> for the Elasticsearch domain.</p>"
+      }
+    },
+    "StartElasticsearchServiceSoftwareUpdateRequest": {
+      "base": "<p>Container for the parameters to the <code><a>StartElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to schedule a service software update on.</p>",
+      "refs": {
+      }
+    },
+    "StartElasticsearchServiceSoftwareUpdateResponse": {
+      "base": "<p>The result of a <code>StartElasticsearchServiceSoftwareUpdate</code> operation. Contains the status of the update.</p>",
+      "refs": {
       }
     },
     "StartTimestamp": {
@@ -831,6 +894,9 @@
         "ReservedElasticsearchInstance$CurrencyCode": "<p>The currency code for the reserved Elasticsearch instance offering.</p>",
         "ReservedElasticsearchInstance$State": "<p>The state of the reserved Elasticsearch instance.</p>",
         "ReservedElasticsearchInstanceOffering$CurrencyCode": "<p>The currency code for the reserved Elasticsearch instance offering.</p>",
+        "ServiceSoftwareOptions$CurrentVersion": "<p>The current service software version that is present on the domain.</p>",
+        "ServiceSoftwareOptions$NewVersion": "<p>The new service software version if one is available.</p>",
+        "ServiceSoftwareOptions$Description": "<p>The description of the <code>UpdateStatus</code>.</p>",
         "StringList$member": null,
         "VPCDerivedInfo$VPCId": "<p>The VPC Id for the Elasticsearch domain. Exists only if the domain was created with VPCOptions.</p>"
       }
@@ -986,6 +1052,12 @@
       "base": "<p> The type of EBS volume, standard, gp2, or io1. See <a href=\"http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs\" target=\"_blank\">Configuring EBS-based Storage</a>for more information.</p>",
       "refs": {
         "EBSOptions$VolumeType": "<p> Specifies the volume type for EBS-based storage.</p>"
+      }
+    },
+    "ZoneAwarenessConfig": {
+      "base": "<p>Specifies the zone awareness configuration for the domain cluster, such as the number of availability zones.</p>",
+      "refs": {
+        "ElasticsearchClusterConfig$ZoneAwarenessConfig": "<p>Specifies the zone awareness configuration for a domain when zone awareness is enabled.</p>"
       }
     }
   }

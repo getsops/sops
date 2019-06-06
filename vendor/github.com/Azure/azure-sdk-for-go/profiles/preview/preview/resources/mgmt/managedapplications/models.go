@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@
 
 package managedapplications
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/resources/mgmt/2016-09-01-preview/managedapplications"
+import (
+	"context"
 
-type ApplianceDefinitionsClient = original.ApplianceDefinitionsClient
-type AppliancesClient = original.AppliancesClient
+	original "github.com/Azure/azure-sdk-for-go/services/preview/resources/mgmt/2016-09-01-preview/managedapplications"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type ApplianceArtifactType = original.ApplianceArtifactType
 
 const (
@@ -73,6 +73,7 @@ type ApplianceDefinitionListResult = original.ApplianceDefinitionListResult
 type ApplianceDefinitionListResultIterator = original.ApplianceDefinitionListResultIterator
 type ApplianceDefinitionListResultPage = original.ApplianceDefinitionListResultPage
 type ApplianceDefinitionProperties = original.ApplianceDefinitionProperties
+type ApplianceDefinitionsClient = original.ApplianceDefinitionsClient
 type ApplianceDefinitionsCreateOrUpdateByIDFuture = original.ApplianceDefinitionsCreateOrUpdateByIDFuture
 type ApplianceDefinitionsCreateOrUpdateFuture = original.ApplianceDefinitionsCreateOrUpdateFuture
 type ApplianceDefinitionsDeleteByIDFuture = original.ApplianceDefinitionsDeleteByIDFuture
@@ -84,23 +85,45 @@ type AppliancePatchable = original.AppliancePatchable
 type ApplianceProperties = original.ApplianceProperties
 type AppliancePropertiesPatchable = original.AppliancePropertiesPatchable
 type ApplianceProviderAuthorization = original.ApplianceProviderAuthorization
+type AppliancesClient = original.AppliancesClient
 type AppliancesCreateOrUpdateByIDFuture = original.AppliancesCreateOrUpdateByIDFuture
 type AppliancesCreateOrUpdateFuture = original.AppliancesCreateOrUpdateFuture
 type AppliancesDeleteByIDFuture = original.AppliancesDeleteByIDFuture
 type AppliancesDeleteFuture = original.AppliancesDeleteFuture
+type BaseClient = original.BaseClient
 type ErrorResponse = original.ErrorResponse
 type GenericResource = original.GenericResource
 type Identity = original.Identity
+type Operation = original.Operation
+type OperationDisplay = original.OperationDisplay
+type OperationListResult = original.OperationListResult
+type OperationListResultIterator = original.OperationListResultIterator
+type OperationListResultPage = original.OperationListResultPage
 type Plan = original.Plan
 type PlanPatchable = original.PlanPatchable
 type Resource = original.Resource
 type Sku = original.Sku
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewApplianceDefinitionListResultIterator(page ApplianceDefinitionListResultPage) ApplianceDefinitionListResultIterator {
+	return original.NewApplianceDefinitionListResultIterator(page)
+}
+func NewApplianceDefinitionListResultPage(getNextPage func(context.Context, ApplianceDefinitionListResult) (ApplianceDefinitionListResult, error)) ApplianceDefinitionListResultPage {
+	return original.NewApplianceDefinitionListResultPage(getNextPage)
+}
 func NewApplianceDefinitionsClient(subscriptionID string) ApplianceDefinitionsClient {
 	return original.NewApplianceDefinitionsClient(subscriptionID)
 }
 func NewApplianceDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) ApplianceDefinitionsClient {
 	return original.NewApplianceDefinitionsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewApplianceListResultIterator(page ApplianceListResultPage) ApplianceListResultIterator {
+	return original.NewApplianceListResultIterator(page)
+}
+func NewApplianceListResultPage(getNextPage func(context.Context, ApplianceListResult) (ApplianceListResult, error)) ApplianceListResultPage {
+	return original.NewApplianceListResultPage(getNextPage)
 }
 func NewAppliancesClient(subscriptionID string) AppliancesClient {
 	return original.NewAppliancesClient(subscriptionID)
@@ -108,8 +131,11 @@ func NewAppliancesClient(subscriptionID string) AppliancesClient {
 func NewAppliancesClientWithBaseURI(baseURI string, subscriptionID string) AppliancesClient {
 	return original.NewAppliancesClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)

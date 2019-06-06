@@ -46,18 +46,18 @@ func TestImportPublicLink(t *testing.T) {
 	var _ mainpb.E = subpb.E(0)
 	_ = &mainpb.Public{
 		M: &mainpb.M{},
-		E: mainpb.E_ZERO,
+		E: mainpb.E_ZERO.Enum(),
 		Local: &mainpb.Local{
 			M: &mainpb.M{},
-			E: mainpb.E_ZERO,
+			E: mainpb.E_ZERO.Enum(),
 		},
 	}
 	_ = &mainpb.Public{
 		M: &subpb.M{},
-		E: subpb.E_ZERO,
+		E: subpb.E_ZERO.Enum(),
 		Local: &mainpb.Local{
 			M: &subpb.M{},
-			E: subpb.E_ZERO,
+			E: subpb.E_ZERO.Enum(),
 		},
 	}
 	_ = &mainpb.M{

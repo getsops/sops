@@ -58,7 +58,7 @@ func NewDecryptionClient(prov client.ConfigProvider, options ...func(*Decryption
 			}).decryptHandler,
 		},
 		CEKRegistry: map[string]CEKEntry{
-			AESGCMNoPadding:                                          newAESGCMContentCipher,
+			AESGCMNoPadding: newAESGCMContentCipher,
 			strings.Join([]string{AESCBC, AESCBCPadder.Name()}, "/"): newAESCBCContentCipher,
 		},
 		PadderRegistry: map[string]Padder{

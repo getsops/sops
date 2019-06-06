@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient 
 // filter - oData filter options.
 // skipToken - skipToken Filter.
 func (client JobsClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result JobResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")
+		defer func() {
+			sc := -1
+			if result.jrl.Response.Response != nil {
+				sc = result.jrl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter, skipToken)
 	if err != nil {
@@ -116,8 +127,8 @@ func (client JobsClient) ListResponder(resp *http.Response) (result JobResourceL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client JobsClient) listNextResults(lastResults JobResourceList) (result JobResourceList, err error) {
-	req, err := lastResults.jobResourceListPreparer()
+func (client JobsClient) listNextResults(ctx context.Context, lastResults JobResourceList) (result JobResourceList, err error) {
+	req, err := lastResults.jobResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "backup.JobsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -138,6 +149,16 @@ func (client JobsClient) listNextResults(lastResults JobResourceList) (result Jo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobsClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string, skipToken string) (result JobResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, vaultName, resourceGroupName, filter, skipToken)
 	return
 }

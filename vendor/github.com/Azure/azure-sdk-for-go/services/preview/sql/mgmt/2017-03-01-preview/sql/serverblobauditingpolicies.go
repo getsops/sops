@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewServerBlobAuditingPoliciesClientWithBaseURI(baseURI string, subscription
 // serverName - the name of the server.
 // parameters - properties of blob auditing policy
 func (client ServerBlobAuditingPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters ServerBlobAuditingPolicy) (result ServerBlobAuditingPoliciesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerBlobAuditingPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerBlobAuditingPoliciesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -96,10 +107,6 @@ func (client ServerBlobAuditingPoliciesClient) CreateOrUpdateSender(req *http.Re
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -123,6 +130,16 @@ func (client ServerBlobAuditingPoliciesClient) CreateOrUpdateResponder(resp *htt
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServerBlobAuditingPoliciesClient) Get(ctx context.Context, resourceGroupName string, serverName string) (result ServerBlobAuditingPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerBlobAuditingPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerBlobAuditingPoliciesClient", "Get", nil, "Failure preparing request")

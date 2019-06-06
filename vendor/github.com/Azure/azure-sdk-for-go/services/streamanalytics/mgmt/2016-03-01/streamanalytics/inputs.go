@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,10 +49,20 @@ func NewInputsClientWithBaseURI(baseURI string, subscriptionID string) InputsCli
 // jobName - the name of the streaming job.
 // inputName - the name of the input.
 // ifMatch - the ETag of the input. Omit this value to always overwrite the current input. Specify the
-// last-seen ETag value to prevent accidentally overwritting concurrent changes.
+// last-seen ETag value to prevent accidentally overwriting concurrent changes.
 // ifNoneMatch - set to '*' to allow a new input to be created, but to prevent updating an existing input.
 // Other values will result in a 412 Pre-condition Failed response.
 func (client InputsClient) CreateOrReplace(ctx context.Context, input Input, resourceGroupName string, jobName string, inputName string, ifMatch string, ifNoneMatch string) (result Input, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.CreateOrReplace")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrReplacePreparer(ctx, input, resourceGroupName, jobName, inputName, ifMatch, ifNoneMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.InputsClient", "CreateOrReplace", nil, "Failure preparing request")
@@ -132,6 +143,16 @@ func (client InputsClient) CreateOrReplaceResponder(resp *http.Response) (result
 // jobName - the name of the streaming job.
 // inputName - the name of the input.
 func (client InputsClient) Delete(ctx context.Context, resourceGroupName string, jobName string, inputName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, jobName, inputName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.InputsClient", "Delete", nil, "Failure preparing request")
@@ -201,6 +222,16 @@ func (client InputsClient) DeleteResponder(resp *http.Response) (result autorest
 // jobName - the name of the streaming job.
 // inputName - the name of the input.
 func (client InputsClient) Get(ctx context.Context, resourceGroupName string, jobName string, inputName string) (result Input, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, jobName, inputName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.InputsClient", "Get", nil, "Failure preparing request")
@@ -273,6 +304,16 @@ func (client InputsClient) GetResponder(resp *http.Response) (result Input, err 
 // to include in the response, or "*" to include all properties. By default, all properties are returned except
 // diagnostics. Currently only accepts '*' as a valid value.
 func (client InputsClient) ListByStreamingJob(ctx context.Context, resourceGroupName string, jobName string, selectParameter string) (result InputListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.ListByStreamingJob")
+		defer func() {
+			sc := -1
+			if result.ilr.Response.Response != nil {
+				sc = result.ilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByStreamingJobNextResults
 	req, err := client.ListByStreamingJobPreparer(ctx, resourceGroupName, jobName, selectParameter)
 	if err != nil {
@@ -340,8 +381,8 @@ func (client InputsClient) ListByStreamingJobResponder(resp *http.Response) (res
 }
 
 // listByStreamingJobNextResults retrieves the next set of results, if any.
-func (client InputsClient) listByStreamingJobNextResults(lastResults InputListResult) (result InputListResult, err error) {
-	req, err := lastResults.inputListResultPreparer()
+func (client InputsClient) listByStreamingJobNextResults(ctx context.Context, lastResults InputListResult) (result InputListResult, err error) {
+	req, err := lastResults.inputListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "streamanalytics.InputsClient", "listByStreamingJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -362,6 +403,16 @@ func (client InputsClient) listByStreamingJobNextResults(lastResults InputListRe
 
 // ListByStreamingJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client InputsClient) ListByStreamingJobComplete(ctx context.Context, resourceGroupName string, jobName string, selectParameter string) (result InputListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.ListByStreamingJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByStreamingJob(ctx, resourceGroupName, jobName, selectParameter)
 	return
 }
@@ -377,6 +428,16 @@ func (client InputsClient) ListByStreamingJobComplete(ctx context.Context, resou
 // existing input as is or if specified, the properties specified will overwrite the corresponding properties
 // in the existing input (exactly like a PATCH operation) and the resulting input will be tested.
 func (client InputsClient) Test(ctx context.Context, resourceGroupName string, jobName string, inputName string, input *Input) (result InputsTestFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.Test")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.TestPreparer(ctx, resourceGroupName, jobName, inputName, input)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.InputsClient", "Test", nil, "Failure preparing request")
@@ -428,10 +489,6 @@ func (client InputsClient) TestSender(req *http.Request) (future InputsTestFutur
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -461,8 +518,18 @@ func (client InputsClient) TestResponder(resp *http.Response) (result ResourceTe
 // jobName - the name of the streaming job.
 // inputName - the name of the input.
 // ifMatch - the ETag of the input. Omit this value to always overwrite the current input. Specify the
-// last-seen ETag value to prevent accidentally overwritting concurrent changes.
+// last-seen ETag value to prevent accidentally overwriting concurrent changes.
 func (client InputsClient) Update(ctx context.Context, input Input, resourceGroupName string, jobName string, inputName string, ifMatch string) (result Input, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InputsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, input, resourceGroupName, jobName, inputName, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.InputsClient", "Update", nil, "Failure preparing request")

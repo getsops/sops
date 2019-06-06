@@ -29,6 +29,24 @@ type Package struct {
 	files map[string][]byte
 }
 
+// LoadPackageErrorInfo provides extended information about certain LoadPackage() failures.
+type LoadPackageErrorInfo interface {
+	PkgCount() int
+}
+
+type errorInfo struct {
+	m string
+	c int
+}
+
+func (ei errorInfo) Error() string {
+	return ei.m
+}
+
+func (ei errorInfo) PkgCount() int {
+	return ei.c
+}
+
 // LoadPackage loads the package in the specified directory.
 // It's required there is only one package in the directory.
 func LoadPackage(dir string) (pkg Package, err error) {
@@ -39,11 +57,17 @@ func LoadPackage(dir string) (pkg Package, err error) {
 		return
 	}
 	if len(packages) < 1 {
-		err = fmt.Errorf("didn't find any packages in '%s'", dir)
+		err = errorInfo{
+			m: fmt.Sprintf("didn't find any packages in '%s'", dir),
+			c: len(packages),
+		}
 		return
 	}
 	if len(packages) > 1 {
-		err = fmt.Errorf("found more than one package in '%s'", dir)
+		err = errorInfo{
+			m: fmt.Sprintf("found more than one package in '%s'", dir),
+			c: len(packages),
+		}
 		return
 	}
 	for pn := range packages {

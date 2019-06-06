@@ -5,17 +5,17 @@ package api
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"path"
-	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
 	"text/template"
 	"unicode"
 )
+
+// SDKImportRoot is the root import path of the SDK.
+const SDKImportRoot = "github.com/aws/aws-sdk-go"
 
 // An API defines a service API's definition. and logic to serialize the definition.
 type API struct {
@@ -25,6 +25,7 @@ type API struct {
 	Waiters       []Waiter
 	Documentation string
 	Examples      Examples
+	SmokeTests    SmokeTestSuite
 
 	// Set to true to avoid removing unused shapes
 	NoRemoveUnusedShapes bool
@@ -47,7 +48,7 @@ type API struct {
 	// Set to true to not generate struct field accessors
 	NoGenStructFieldAccessors bool
 
-	SvcClientImportPath string
+	BaseImportPath string
 
 	initialized bool
 	imports     map[string]bool
@@ -57,6 +58,8 @@ type API struct {
 	BaseCrosslinkURL string
 
 	HasEventStream bool `json:"-"`
+
+	EndpointDiscoveryOp *Operation
 }
 
 // A Metadata is the metadata about an API's definition.
@@ -84,21 +87,14 @@ type ProtocolSettings struct {
 	HTTP2 string `json:"h2,omitempty"`
 }
 
-var serviceAliases map[string]string
-
-// Bootstrap loads SDK model customizations prior to the API model is parsed.
-func Bootstrap() error {
-	b, err := ioutil.ReadFile(filepath.Join("..", "models", "customizations", "service-aliases.json"))
-	if err != nil {
-		return err
-	}
-
-	return json.Unmarshal(b, &serviceAliases)
-}
-
 // PackageName name of the API package
 func (a *API) PackageName() string {
 	return strings.ToLower(a.StructName())
+}
+
+// ImportPath returns the client's full import path
+func (a *API) ImportPath() string {
+	return path.Join(a.BaseImportPath, a.PackageName())
 }
 
 // InterfacePackageName returns the package name for the interface.
@@ -146,11 +142,6 @@ func (a *API) StructName() string {
 
 	// Strip out spaces.
 	name = strings.Replace(name, " ", "", -1)
-
-	// Swap out for alias name if one is defined.
-	if alias, ok := serviceAliases[strings.ToLower(name)]; ok {
-		name = alias
-	}
 
 	a.name = name
 	return a.name
@@ -229,8 +220,8 @@ func (a *API) ShapeNames() []string {
 func (a *API) ShapeList() []*Shape {
 	list := make([]*Shape, 0, len(a.Shapes))
 	for _, n := range a.ShapeNames() {
-		// Ignore error shapes in list
-		if s := a.Shapes[n]; !s.IsError {
+		// Ignore non-eventstream exception shapes in list.
+		if s := a.Shapes[n]; !(s.Exception && len(s.EventFor) == 0) {
 			list = append(list, s)
 		}
 	}
@@ -242,7 +233,7 @@ func (a *API) ShapeListErrors() []*Shape {
 	list := []*Shape{}
 	for _, n := range a.ShapeNames() {
 		// Ignore error shapes in list
-		if s := a.Shapes[n]; s.IsError {
+		if s := a.Shapes[n]; s.Exception {
 			list = append(list, s)
 		}
 	}
@@ -251,9 +242,7 @@ func (a *API) ShapeListErrors() []*Shape {
 
 // resetImports resets the import map to default values.
 func (a *API) resetImports() {
-	a.imports = map[string]bool{
-		"github.com/aws/aws-sdk-go/aws": true,
-	}
+	a.imports = map[string]bool{}
 }
 
 // importsGoCode returns the generated Go import code.
@@ -305,22 +294,28 @@ var tplAPI = template.Must(template.New("api").Parse(`
 {{ end }}
 `))
 
+// AddImport adds the import path to the generated file's import.
+func (a *API) AddImport(v string) error {
+	a.imports[v] = true
+	return nil
+}
+
+// AddSDKImport adds a SDK package import to the generated file's import.
+func (a *API) AddSDKImport(v ...string) error {
+	e := make([]string, 0, 5)
+	e = append(e, SDKImportRoot)
+	e = append(e, v...)
+
+	a.imports[path.Join(e...)] = true
+	return nil
+}
+
 // APIGoCode renders the API in Go code. Returning it as a string
 func (a *API) APIGoCode() string {
 	a.resetImports()
-	a.imports["github.com/aws/aws-sdk-go/aws/awsutil"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/request"] = true
-	if a.OperationHasOutputPlaceholder() {
-		a.imports["github.com/aws/aws-sdk-go/private/protocol/"+a.ProtocolPackage()] = true
-		a.imports["github.com/aws/aws-sdk-go/private/protocol"] = true
-	}
-
-	for _, op := range a.Operations {
-		if op.AuthType == "none" {
-			a.imports["github.com/aws/aws-sdk-go/aws/credentials"] = true
-			break
-		}
-	}
+	a.AddSDKImport("aws")
+	a.AddSDKImport("aws/awsutil")
+	a.AddSDKImport("aws/request")
 
 	var buf bytes.Buffer
 	err := tplAPI.Execute(&buf, a)
@@ -419,7 +414,7 @@ var tplServiceDoc = template.Must(template.New("service docs").Funcs(template.Fu
 //
 // See the SDK's documentation for more information on how to use the SDK.
 // https://docs.aws.amazon.com/sdk-for-go/api/
-// 
+//
 // See aws.Config documentation for more information on configuring SDK clients.
 // https://docs.aws.amazon.com/sdk-for-go/api/aws/#Config
 //
@@ -493,6 +488,9 @@ var tplService = template.Must(template.New("service").Funcs(template.FuncMap{
 // modify mutate any of the struct's properties though.
 type {{ .StructName }} struct {
 	*client.Client
+	{{- if .EndpointDiscoveryOp }}
+	endpointCache *crr.EndpointCache
+	{{ end -}}
 }
 
 {{ if .UseInitMethods }}// Used for custom client initialization logic
@@ -554,10 +552,10 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
 			SigningRegion: signingRegion,
 			Endpoint:     endpoint,
 			APIVersion:   "{{ .Metadata.APIVersion }}",
-			{{ if .Metadata.JSONVersion -}}
+			{{ if and (.Metadata.JSONVersion) (eq .Metadata.Protocol "json") -}}
 				JSONVersion:  "{{ .Metadata.JSONVersion }}",
 			{{- end }}
-			{{ if .Metadata.TargetPrefix -}}
+			{{ if and (.Metadata.TargetPrefix) (eq .Metadata.Protocol "json") -}}
 				TargetPrefix: "{{ .Metadata.TargetPrefix }}",
 			{{- end }}
     		},
@@ -565,8 +563,22 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
     	),
     }
 
+	{{- if .EndpointDiscoveryOp }}
+	svc.endpointCache = crr.NewEndpointCache(10)
+	{{- end }}
+
 	// Handlers
-	svc.Handlers.Sign.PushBackNamed({{if eq .Metadata.SignatureVersion "v2"}}v2{{else}}v4{{end}}.SignRequestHandler)
+	svc.Handlers.Sign.PushBackNamed(
+		{{- if eq .Metadata.SignatureVersion "v2" -}}
+			v2.SignRequestHandler
+		{{- else if or (eq .Metadata.SignatureVersion "s3") (eq .Metadata.SignatureVersion "s3v4") -}}
+			v4.BuildNamedHandler(v4.SignRequestHandler.Name, func(s *v4.Signer) {
+				s.DisableURIPathEscaping = true
+			})
+		{{- else -}}
+			v4.SignRequestHandler
+		{{- end -}}
+	)
 	{{- if eq .Metadata.SignatureVersion "v2" }}
 		svc.Handlers.Sign.PushBackNamed(corehandlers.BuildContentLengthHandler)
 	{{- end }}
@@ -619,16 +631,20 @@ func (a *API) ServicePackageDoc() string {
 // ServiceGoCode renders service go code. Returning it as a string.
 func (a *API) ServiceGoCode() string {
 	a.resetImports()
-	a.imports["github.com/aws/aws-sdk-go/aws/client"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/client/metadata"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/request"] = true
+	a.AddSDKImport("aws")
+	a.AddSDKImport("aws/client")
+	a.AddSDKImport("aws/client/metadata")
+	a.AddSDKImport("aws/request")
 	if a.Metadata.SignatureVersion == "v2" {
-		a.imports["github.com/aws/aws-sdk-go/private/signer/v2"] = true
-		a.imports["github.com/aws/aws-sdk-go/aws/corehandlers"] = true
+		a.AddSDKImport("private/signer/v2")
+		a.AddSDKImport("aws/corehandlers")
 	} else {
-		a.imports["github.com/aws/aws-sdk-go/aws/signer/v4"] = true
+		a.AddSDKImport("aws/signer/v4")
 	}
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/"+a.ProtocolPackage()] = true
+	a.AddSDKImport("private/protocol", a.ProtocolPackage())
+	if a.EndpointDiscoveryOp != nil {
+		a.AddSDKImport("aws/crr")
+	}
 
 	var buf bytes.Buffer
 	err := tplService.Execute(&buf, a)
@@ -656,9 +672,9 @@ func (a *API) ExampleGoCode() string {
 		"bytes",
 		"fmt",
 		"time",
-		"github.com/aws/aws-sdk-go/aws",
-		"github.com/aws/aws-sdk-go/aws/session",
-		path.Join(a.SvcClientImportPath, a.PackageName()),
+		SDKImportRoot+"/aws",
+		SDKImportRoot+"/aws/session",
+		a.ImportPath(),
 	)
 	for k := range imports {
 		code += fmt.Sprintf("%q\n", k)
@@ -714,7 +730,7 @@ var tplInterface = template.Must(template.New("interface").Parse(`
 //
 // It is important to note that this interface will have breaking changes
 // when the service model is updated and adds new API operations, paginators,
-// and waiters. Its suggested to use the pattern above for testing, or using 
+// and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type {{ .StructName }}API interface {
     {{ range $_, $o := .OperationList }}
@@ -733,11 +749,9 @@ var _ {{ .StructName }}API = (*{{ .PackageName }}.{{ .StructName }})(nil)
 // package than the service API's package.
 func (a *API) InterfaceGoCode() string {
 	a.resetImports()
-	a.imports = map[string]bool{
-		"github.com/aws/aws-sdk-go/aws":                   true,
-		"github.com/aws/aws-sdk-go/aws/request":           true,
-		path.Join(a.SvcClientImportPath, a.PackageName()): true,
-	}
+	a.AddSDKImport("aws")
+	a.AddSDKImport("aws/request")
+	a.AddImport(a.ImportPath())
 
 	var buf bytes.Buffer
 	err := tplInterface.Execute(&buf, a)
@@ -775,7 +789,6 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 	children := []string{}
 	for _, name := range s.MemberNames() {
 		ref := s.MemberRefs[name]
-
 		if s.IsRequired(name) && !s.Validations.Has(ref, ShapeValidationRequired) {
 			s.Validations = append(s.Validations, ShapeValidation{
 				Name: name, Ref: ref, Type: ShapeValidationRequired,
@@ -783,6 +796,12 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 		}
 
 		if ref.Shape.Min != 0 && !s.Validations.Has(ref, ShapeValidationMinVal) {
+			s.Validations = append(s.Validations, ShapeValidation{
+				Name: name, Ref: ref, Type: ShapeValidationMinVal,
+			})
+		}
+
+		if !ref.CanBeEmpty() && !s.Validations.Has(ref, ShapeValidationMinVal) {
 			s.Validations = append(s.Validations, ShapeValidation{
 				Name: name, Ref: ref, Type: ShapeValidationMinVal,
 			})

@@ -238,11 +238,30 @@ func TestParser(t *testing.T) {
 	}
 }
 
+// Issue 16318
+func TestParserWithoutScripting(t *testing.T) {
+	text := `<noscript><img src='https://golang.org/doc/gopher/frontpage.png' /></noscript><p><img src='https://golang.org/doc/gopher/doc.png' /></p>`
+	want := `| <html>
+|   <head>
+|     <noscript>
+|   <body>
+|     "<img src='https://golang.org/doc/gopher/frontpage.png' />"
+|     <p>
+|       <img>
+|         src="https://golang.org/doc/gopher/doc.png"
+`
+	err := testParseCase(text, want, "", ParseOptionEnableScripting(false))
+
+	if err != nil {
+		t.Errorf("test with scripting is disabled, %q, %s", text, err)
+	}
+}
+
 // testParseCase tests one test case from the test files. If the test does not
 // pass, it returns an error that explains the failure.
 // text is the HTML to be parsed, want is a dump of the correct parse tree,
 // and context is the name of the context node, if any.
-func testParseCase(text, want, context string) (err error) {
+func testParseCase(text, want, context string, opts ...ParseOption) (err error) {
 	defer func() {
 		if x := recover(); x != nil {
 			switch e := x.(type) {
@@ -256,7 +275,7 @@ func testParseCase(text, want, context string) (err error) {
 
 	var doc *Node
 	if context == "" {
-		doc, err = Parse(strings.NewReader(text))
+		doc, err = ParseWithOptions(strings.NewReader(text), opts...)
 		if err != nil {
 			return err
 		}
@@ -266,7 +285,7 @@ func testParseCase(text, want, context string) (err error) {
 			DataAtom: atom.Lookup([]byte(context)),
 			Data:     context,
 		}
-		nodes, err := ParseFragment(strings.NewReader(text), contextNode)
+		nodes, err := ParseFragmentWithOptions(strings.NewReader(text), contextNode, opts...)
 		if err != nil {
 			return err
 		}
@@ -367,7 +386,8 @@ var renderTestBlacklist = map[string]bool{
 	`<script><!--<script </s`:                      true,
 	// Reconstructing the active formatting elements results in a <plaintext>
 	// element that contains an <a> element.
-	`<!doctype html><p><a><plaintext>b`: true,
+	`<!doctype html><p><a><plaintext>b`:         true,
+	`<table><math><select><mi><select></table>`: true,
 }
 
 func TestNodeConsistency(t *testing.T) {

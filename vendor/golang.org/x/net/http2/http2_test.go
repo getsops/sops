@@ -225,3 +225,66 @@ func waitErrCondition(waitFor, checkEvery time.Duration, fn func() error) error 
 	}
 	return err
 }
+
+func equalError(a, b error) bool {
+	if a == nil {
+		return b == nil
+	}
+	if b == nil {
+		return a == nil
+	}
+	return a.Error() == b.Error()
+}
+
+// Tests that http2.Server.IdleTimeout is initialized from
+// http.Server.{Idle,Read}Timeout. http.Server.IdleTimeout was
+// added in Go 1.8.
+func TestConfigureServerIdleTimeout_Go18(t *testing.T) {
+	const timeout = 5 * time.Second
+	const notThisOne = 1 * time.Second
+
+	// With a zero http2.Server, verify that it copies IdleTimeout:
+	{
+		s1 := &http.Server{
+			IdleTimeout: timeout,
+			ReadTimeout: notThisOne,
+		}
+		s2 := &Server{}
+		if err := ConfigureServer(s1, s2); err != nil {
+			t.Fatal(err)
+		}
+		if s2.IdleTimeout != timeout {
+			t.Errorf("s2.IdleTimeout = %v; want %v", s2.IdleTimeout, timeout)
+		}
+	}
+
+	// And that it falls back to ReadTimeout:
+	{
+		s1 := &http.Server{
+			ReadTimeout: timeout,
+		}
+		s2 := &Server{}
+		if err := ConfigureServer(s1, s2); err != nil {
+			t.Fatal(err)
+		}
+		if s2.IdleTimeout != timeout {
+			t.Errorf("s2.IdleTimeout = %v; want %v", s2.IdleTimeout, timeout)
+		}
+	}
+
+	// Verify that s1's IdleTimeout doesn't overwrite an existing setting:
+	{
+		s1 := &http.Server{
+			IdleTimeout: notThisOne,
+		}
+		s2 := &Server{
+			IdleTimeout: timeout,
+		}
+		if err := ConfigureServer(s1, s2); err != nil {
+			t.Fatal(err)
+		}
+		if s2.IdleTimeout != timeout {
+			t.Errorf("s2.IdleTimeout = %v; want %v", s2.IdleTimeout, timeout)
+		}
+	}
+}

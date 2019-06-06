@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewExportJobsOperationResultsClientWithBaseURI(baseURI string, subscription
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 // operationID - operationID which represents the export job.
 func (client ExportJobsOperationResultsClient) Get(ctx context.Context, vaultName string, resourceGroupName string, operationID string) (result OperationResultInfoBaseResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExportJobsOperationResultsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ExportJobsOperationResultsClient", "Get", nil, "Failure preparing request")

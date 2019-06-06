@@ -76,7 +76,7 @@
 GOOSARCH="${GOOS}_${GOARCH}"
 
 # defaults
-mksyscall="./mksyscall.pl"
+mksyscall="go run mksyscall.go"
 mkerrors="./mkerrors.sh"
 zerrors="zerrors_$GOOSARCH.go"
 mksysctl=""
@@ -114,7 +114,19 @@ _* | *_ | _)
 	;;
 plan9_386)
 	mkerrors=
-	mksyscall="./mksyscall.pl -l32 -plan9"
+	mksyscall="go run mksyscall.go -l32 -plan9 -tags plan9,386"
+	mksysnum="./mksysnum_plan9.sh /n/sources/plan9/sys/src/libc/9syscall/sys.h"
+	mktypes="XXX"
+	;;
+plan9_amd64)
+	mkerrors=
+	mksyscall="go run mksyscall.go -l32 -plan9 -tags plan9,amd64"
+	mksysnum="./mksysnum_plan9.sh /n/sources/plan9/sys/src/libc/9syscall/sys.h"
+	mktypes="XXX"
+	;;
+plan9_arm)
+	mkerrors=
+	mksyscall="go run mksyscall.go -l32 -plan9 -tags plan9,arm"
 	mksysnum="./mksysnum_plan9.sh /n/sources/plan9/sys/src/libc/9syscall/sys.h"
 	mktypes="XXX"
 	;;
@@ -129,7 +141,7 @@ esac
 	case "$GOOS" in
 	plan9)
 		syscall_goos="syscall_$GOOS.go"
-		if [ -n "$mksyscall" ]; then echo "$mksyscall $syscall_goos syscall_$GOOSARCH.go |gofmt >zsyscall_$GOOSARCH.go"; fi
+		if [ -n "$mksyscall" ]; then echo "$mksyscall $syscall_goos |gofmt >zsyscall_$GOOSARCH.go"; fi
 		;;
 	esac
 	if [ -n "$mksysctl" ]; then echo "$mksysctl |gofmt >$zsysctl"; fi

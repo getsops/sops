@@ -209,6 +209,28 @@ func TestGetCertificate_trailingDot(t *testing.T) {
 	testGetCertificate(t, man, "example.org", hello)
 }
 
+func TestGetCertificate_unicodeIDN(t *testing.T) {
+	man := &Manager{Prompt: AcceptTOS}
+	defer man.stopRenew()
+
+	hello := clientHelloInfo("σσσ.com", true)
+	testGetCertificate(t, man, "xn--4xaaa.com", hello)
+
+	hello = clientHelloInfo("σςΣ.com", true)
+	testGetCertificate(t, man, "xn--4xaaa.com", hello)
+}
+
+func TestGetCertificate_mixedcase(t *testing.T) {
+	man := &Manager{Prompt: AcceptTOS}
+	defer man.stopRenew()
+
+	hello := clientHelloInfo("example.org", true)
+	testGetCertificate(t, man, "example.org", hello)
+
+	hello = clientHelloInfo("EXAMPLE.ORG", true)
+	testGetCertificate(t, man, "example.org", hello)
+}
+
 func TestGetCertificate_ForceRSA(t *testing.T) {
 	man := &Manager{
 		Prompt:   AcceptTOS,
@@ -906,13 +928,14 @@ func TestCache(t *testing.T) {
 }
 
 func TestHostWhitelist(t *testing.T) {
-	policy := HostWhitelist("example.com", "example.org", "*.example.net")
+	policy := HostWhitelist("example.com", "EXAMPLE.ORG", "*.example.net", "σςΣ.com")
 	tt := []struct {
 		host  string
 		allow bool
 	}{
 		{"example.com", true},
 		{"example.org", true},
+		{"xn--4xaaa.com", true},
 		{"one.example.com", false},
 		{"two.example.org", false},
 		{"three.example.net", false},

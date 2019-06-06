@@ -15,6 +15,7 @@
 package storage_test
 
 import (
+	"context"
 	"fmt"
 	"hash/crc32"
 	"io"
@@ -24,7 +25,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )
@@ -145,7 +145,7 @@ func ExampleClient_Buckets() {
 	if err != nil {
 		// TODO: handle error.
 	}
-	it := client.Bucket("my-bucket")
+	it := client.Buckets(ctx, "my-bucket")
 	_ = it // TODO: iterate using Next or iterator.Pager.
 }
 

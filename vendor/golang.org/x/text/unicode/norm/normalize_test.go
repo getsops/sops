@@ -437,7 +437,7 @@ var quickSpanNFCTests = []spanTest{
 	{"abc\u00C0", true, 5, nil},
 	// correctly ordered combining characters
 	// TODO: b may combine with modifiers, which is why this fails. We could
-	// make a more precise test that that actually checks whether last
+	// make a more precise test that actually checks whether last
 	// characters combines. Probably not worth it.
 	{"ab\u0300", true, 1, transform.ErrEndOfSpan},
 	{"ab\u0300cd", true, 1, transform.ErrEndOfSpan},

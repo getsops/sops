@@ -4,6 +4,12 @@ package acm
 
 const (
 
+	// ErrCodeInvalidArgsException for service response error code
+	// "InvalidArgsException".
+	//
+	// One or more of of request parameters specified is not valid.
+	ErrCodeInvalidArgsException = "InvalidArgsException"
+
 	// ErrCodeInvalidArnException for service response error code
 	// "InvalidArnException".
 	//

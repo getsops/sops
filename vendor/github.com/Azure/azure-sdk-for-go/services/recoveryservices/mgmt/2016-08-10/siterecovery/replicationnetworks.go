@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewReplicationNetworksClientWithBaseURI(baseURI string, subscriptionID stri
 // fabricName - server Id.
 // networkName - primary network name.
 func (client ReplicationNetworksClient) Get(ctx context.Context, fabricName string, networkName string) (result Network, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationNetworksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, fabricName, networkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationNetworksClient", "Get", nil, "Failure preparing request")
@@ -110,6 +121,16 @@ func (client ReplicationNetworksClient) GetResponder(resp *http.Response) (resul
 
 // List lists the networks available in a vault
 func (client ReplicationNetworksClient) List(ctx context.Context) (result NetworkCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationNetworksClient.List")
+		defer func() {
+			sc := -1
+			if result.nc.Response.Response != nil {
+				sc = result.nc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -174,8 +195,8 @@ func (client ReplicationNetworksClient) ListResponder(resp *http.Response) (resu
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationNetworksClient) listNextResults(lastResults NetworkCollection) (result NetworkCollection, err error) {
-	req, err := lastResults.networkCollectionPreparer()
+func (client ReplicationNetworksClient) listNextResults(ctx context.Context, lastResults NetworkCollection) (result NetworkCollection, err error) {
+	req, err := lastResults.networkCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationNetworksClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -196,6 +217,16 @@ func (client ReplicationNetworksClient) listNextResults(lastResults NetworkColle
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationNetworksClient) ListComplete(ctx context.Context) (result NetworkCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationNetworksClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -204,6 +235,16 @@ func (client ReplicationNetworksClient) ListComplete(ctx context.Context) (resul
 // Parameters:
 // fabricName - fabric name
 func (client ReplicationNetworksClient) ListByReplicationFabrics(ctx context.Context, fabricName string) (result NetworkCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationNetworksClient.ListByReplicationFabrics")
+		defer func() {
+			sc := -1
+			if result.nc.Response.Response != nil {
+				sc = result.nc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReplicationFabricsNextResults
 	req, err := client.ListByReplicationFabricsPreparer(ctx, fabricName)
 	if err != nil {
@@ -269,8 +310,8 @@ func (client ReplicationNetworksClient) ListByReplicationFabricsResponder(resp *
 }
 
 // listByReplicationFabricsNextResults retrieves the next set of results, if any.
-func (client ReplicationNetworksClient) listByReplicationFabricsNextResults(lastResults NetworkCollection) (result NetworkCollection, err error) {
-	req, err := lastResults.networkCollectionPreparer()
+func (client ReplicationNetworksClient) listByReplicationFabricsNextResults(ctx context.Context, lastResults NetworkCollection) (result NetworkCollection, err error) {
+	req, err := lastResults.networkCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationNetworksClient", "listByReplicationFabricsNextResults", nil, "Failure preparing next results request")
 	}
@@ -291,6 +332,16 @@ func (client ReplicationNetworksClient) listByReplicationFabricsNextResults(last
 
 // ListByReplicationFabricsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationNetworksClient) ListByReplicationFabricsComplete(ctx context.Context, fabricName string) (result NetworkCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationNetworksClient.ListByReplicationFabrics")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReplicationFabrics(ctx, fabricName)
 	return
 }

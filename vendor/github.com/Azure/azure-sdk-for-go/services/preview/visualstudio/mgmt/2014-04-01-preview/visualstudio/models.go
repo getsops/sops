@@ -18,26 +18,30 @@ package visualstudio
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"net/http"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/visualstudio/mgmt/2014-04-01-preview/visualstudio"
+
 // AccountResource the response to an account resource GET request.
 type AccountResource struct {
 	autorest.Response `json:"-"`
 	// Properties - Resource properties.
 	Properties map[string]*string `json:"properties"`
-	// ID - Unique identifier of the resource.
+	// ID - READ-ONLY; Unique identifier of the resource.
 	ID *string `json:"id,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -47,20 +51,11 @@ func (ar AccountResource) MarshalJSON() ([]byte, error) {
 	if ar.Properties != nil {
 		objectMap["properties"] = ar.Properties
 	}
-	if ar.ID != nil {
-		objectMap["id"] = ar.ID
-	}
 	if ar.Location != nil {
 		objectMap["location"] = ar.Location
 	}
-	if ar.Name != nil {
-		objectMap["name"] = ar.Name
-	}
 	if ar.Tags != nil {
 		objectMap["tags"] = ar.Tags
-	}
-	if ar.Type != nil {
-		objectMap["type"] = ar.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -95,12 +90,29 @@ func (arr AccountResourceRequest) MarshalJSON() ([]byte, error) {
 	if arr.Location != nil {
 		objectMap["location"] = arr.Location
 	}
-	objectMap["operationType"] = arr.OperationType
+	if arr.OperationType != nil {
+		objectMap["operationType"] = arr.OperationType
+	}
 	if arr.Properties != nil {
 		objectMap["properties"] = arr.Properties
 	}
 	if arr.Tags != nil {
 		objectMap["tags"] = arr.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
+// AccountTagRequest the body of a Patch request to add tags to a Visual Studio account resource.
+type AccountTagRequest struct {
+	// Tags - The custom tags of the resource.
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for AccountTagRequest.
+func (atr AccountTagRequest) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if atr.Tags != nil {
+		objectMap["tags"] = atr.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -129,15 +141,15 @@ type ExtensionResource struct {
 	Plan *ExtensionResourcePlan `json:"plan,omitempty"`
 	// Properties - Resource properties.
 	Properties map[string]*string `json:"properties"`
-	// ID - Unique identifier of the resource.
+	// ID - READ-ONLY; Unique identifier of the resource.
 	ID *string `json:"id,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -150,20 +162,11 @@ func (er ExtensionResource) MarshalJSON() ([]byte, error) {
 	if er.Properties != nil {
 		objectMap["properties"] = er.Properties
 	}
-	if er.ID != nil {
-		objectMap["id"] = er.ID
-	}
 	if er.Location != nil {
 		objectMap["location"] = er.Location
 	}
-	if er.Name != nil {
-		objectMap["name"] = er.Name
-	}
 	if er.Tags != nil {
 		objectMap["tags"] = er.Tags
-	}
-	if er.Type != nil {
-		objectMap["type"] = er.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -251,15 +254,15 @@ type ProjectResource struct {
 	autorest.Response `json:"-"`
 	// Properties - Key/value pair of resource properties.
 	Properties map[string]*string `json:"properties"`
-	// ID - Unique identifier of the resource.
+	// ID - READ-ONLY; Unique identifier of the resource.
 	ID *string `json:"id,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -269,33 +272,25 @@ func (pr ProjectResource) MarshalJSON() ([]byte, error) {
 	if pr.Properties != nil {
 		objectMap["properties"] = pr.Properties
 	}
-	if pr.ID != nil {
-		objectMap["id"] = pr.ID
-	}
 	if pr.Location != nil {
 		objectMap["location"] = pr.Location
-	}
-	if pr.Name != nil {
-		objectMap["name"] = pr.Name
 	}
 	if pr.Tags != nil {
 		objectMap["tags"] = pr.Tags
 	}
-	if pr.Type != nil {
-		objectMap["type"] = pr.Type
-	}
 	return json.Marshal(objectMap)
 }
 
-// ProjectResourceListResult the response to a request to list Team Services project resources in a resource
-// group/account.
+// ProjectResourceListResult the response to a request to list Team Services project resources in a
+// resource group/account.
 type ProjectResourceListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of project resource details.
 	Value *[]ProjectResource `json:"value,omitempty"`
 }
 
-// ProjectsCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ProjectsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ProjectsCreateFuture struct {
 	azure.Future
 }
@@ -304,7 +299,7 @@ type ProjectsCreateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ProjectsCreateFuture) Result(client ProjectsClient) (pr ProjectResource, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.ProjectsCreateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -325,35 +320,26 @@ func (future *ProjectsCreateFuture) Result(client ProjectsClient) (pr ProjectRes
 
 // Resource a generic Azure Resource Manager resource.
 type Resource struct {
-	// ID - Unique identifier of the resource.
+	// ID - READ-ONLY; Unique identifier of the resource.
 	ID *string `json:"id,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
 	if r.Tags != nil {
 		objectMap["tags"] = r.Tags
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
 	}
 	return json.Marshal(objectMap)
 }

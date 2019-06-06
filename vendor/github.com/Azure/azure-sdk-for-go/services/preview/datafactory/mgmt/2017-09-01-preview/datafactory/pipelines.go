@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewPipelinesClientWithBaseURI(baseURI string, subscriptionID string) Pipeli
 // ifMatch - eTag of the pipeline entity.  Should only be specified for update, for which it should match
 // existing entity or can be * for unconditional update.
 func (client PipelinesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, pipeline PipelineResource, ifMatch string) (result PipelineResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelinesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -147,6 +158,16 @@ func (client PipelinesClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // pipelineName - the pipeline name.
 // parameters - parameters of the pipeline run.
 func (client PipelinesClient) CreateRun(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, parameters map[string]interface{}) (result CreateRunResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelinesClient.CreateRun")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -237,6 +258,16 @@ func (client PipelinesClient) CreateRunResponder(resp *http.Response) (result Cr
 // factoryName - the factory name.
 // pipelineName - the pipeline name.
 func (client PipelinesClient) Delete(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelinesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -321,6 +352,16 @@ func (client PipelinesClient) DeleteResponder(resp *http.Response) (result autor
 // factoryName - the factory name.
 // pipelineName - the pipeline name.
 func (client PipelinesClient) Get(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string) (result PipelineResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelinesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -405,6 +446,16 @@ func (client PipelinesClient) GetResponder(resp *http.Response) (result Pipeline
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client PipelinesClient) ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result PipelineListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelinesClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.plr.Response.Response != nil {
+				sc = result.plr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -481,8 +532,8 @@ func (client PipelinesClient) ListByFactoryResponder(resp *http.Response) (resul
 }
 
 // listByFactoryNextResults retrieves the next set of results, if any.
-func (client PipelinesClient) listByFactoryNextResults(lastResults PipelineListResponse) (result PipelineListResponse, err error) {
-	req, err := lastResults.pipelineListResponsePreparer()
+func (client PipelinesClient) listByFactoryNextResults(ctx context.Context, lastResults PipelineListResponse) (result PipelineListResponse, err error) {
+	req, err := lastResults.pipelineListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.PipelinesClient", "listByFactoryNextResults", nil, "Failure preparing next results request")
 	}
@@ -503,6 +554,16 @@ func (client PipelinesClient) listByFactoryNextResults(lastResults PipelineListR
 
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PipelinesClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result PipelineListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PipelinesClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }

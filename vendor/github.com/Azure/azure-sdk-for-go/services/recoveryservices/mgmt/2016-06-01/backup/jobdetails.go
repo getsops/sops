@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewJobDetailsClientWithBaseURI(baseURI string, subscriptionID string) JobDe
 // resourceGroupName - the name of the resource group associated with the Recovery Services vault.
 // jobName - name of the job associated with this GET operation.
 func (client JobDetailsClient) Get(ctx context.Context, vaultName string, resourceGroupName string, jobName string) (result JobResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobDetailsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.JobDetailsClient", "Get", nil, "Failure preparing request")

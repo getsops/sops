@@ -19,6 +19,7 @@
 package alts
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -30,7 +31,6 @@ import (
 	"runtime"
 	"strings"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/peer"
 )
 

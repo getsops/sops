@@ -3,16 +3,16 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/plus.login": {
-          "description": "Know the list of people in your circles, your age range, and language"
+          "description": "View your basic profile info, including your age range and language"
         },
         "https://www.googleapis.com/auth/plus.me": {
-          "description": "Know who you are on Google"
+          "description": "Associate you with your personal info on Google"
         },
         "https://www.googleapis.com/auth/userinfo.email": {
           "description": "View your email address"
         },
         "https://www.googleapis.com/auth/userinfo.profile": {
-          "description": "View your basic profile info"
+          "description": "See your personal info, including any personal info you've made publicly available"
         }
       }
     }
@@ -23,7 +23,7 @@
   "description": "Builds on top of the Google+ platform.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/+/api/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/JrsYLf9d9OaWSxddgOqy4ZuMKS4\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/BGvS9ROO3WMr9gxwUJcPfXjWOrs\"",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/gplus-16.png",
     "x32": "http://www.google.com/images/icons/product/gplus-32.png"
@@ -83,7 +83,7 @@
     "activities": {
       "methods": {
         "get": {
-          "description": "Get an activity.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.activities.get",
           "parameterOrder": [
@@ -107,7 +107,7 @@
           ]
         },
         "list": {
-          "description": "List all of the activities in the specified collection for a particular user.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.activities.list",
           "parameterOrder": [
@@ -158,7 +158,7 @@
           ]
         },
         "search": {
-          "description": "Search public activities.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.activities.search",
           "parameterOrder": [
@@ -220,7 +220,7 @@
     "comments": {
       "methods": {
         "get": {
-          "description": "Get a comment.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.comments.get",
           "parameterOrder": [
@@ -244,7 +244,7 @@
           ]
         },
         "list": {
-          "description": "List all of the comments for an activity.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.comments.list",
           "parameterOrder": [
@@ -392,7 +392,7 @@
           ]
         },
         "listByActivity": {
-          "description": "List all of the people in the specified collection for a particular activity.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.people.listByActivity",
           "parameterOrder": [
@@ -445,7 +445,7 @@
           ]
         },
         "search": {
-          "description": "Search all public profiles.",
+          "description": "Shut down. See https://developers.google.com/+/api-shutdown for more details.",
           "httpMethod": "GET",
           "id": "plus.people.search",
           "parameterOrder": [
@@ -491,7 +491,7 @@
       }
     }
   },
-  "revision": "20180424",
+  "revision": "20190415",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Acl": {

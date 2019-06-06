@@ -67,6 +67,10 @@ type RPCServiceAPI interface {
 	GetEventStream(*rpcservice.GetEventStreamInput) (*rpcservice.GetEventStreamOutput, error)
 	GetEventStreamWithContext(aws.Context, *rpcservice.GetEventStreamInput, ...request.Option) (*rpcservice.GetEventStreamOutput, error)
 	GetEventStreamRequest(*rpcservice.GetEventStreamInput) (*request.Request, *rpcservice.GetEventStreamOutput)
+
+	OtherOperation(*rpcservice.OtherOperationInput) (*rpcservice.OtherOperationOutput, error)
+	OtherOperationWithContext(aws.Context, *rpcservice.OtherOperationInput, ...request.Option) (*rpcservice.OtherOperationOutput, error)
+	OtherOperationRequest(*rpcservice.OtherOperationInput) (*request.Request, *rpcservice.OtherOperationOutput)
 }
 
 var _ RPCServiceAPI = (*rpcservice.RPCService)(nil)

@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"reflect"
 	"sync"
@@ -901,4 +902,53 @@ func TestDoRetryForStatusCodes_NilResponseFatalError(t *testing.T) {
 	if err == nil || client.Attempts() > 1 {
 		t.Fatalf("autorest: Sender#TestDoRetryForStatusCodes_NilResponseFatalError -- Got: nil error or wrong number of attempts - %v", err)
 	}
+}
+
+func TestDoRetryForStatusCodes_Cancel429(t *testing.T) {
+	retries := 6
+	client := mocks.NewSender()
+	resp := mocks.NewResponseWithStatus("429 Too many requests", http.StatusTooManyRequests)
+	client.AppendAndRepeatResponse(resp, retries)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(retries/2)*time.Second)
+	defer cancel()
+	req := mocks.NewRequest().WithContext(ctx)
+	r, err := SendWithSender(client, req,
+		DoRetryForStatusCodes(1, time.Duration(time.Second), http.StatusTooManyRequests),
+	)
+
+	if err == nil {
+		t.Fatal("unexpected nil-error")
+	}
+	if r == nil {
+		t.Fatal("unexpected nil response")
+	}
+	if r.StatusCode != http.StatusTooManyRequests {
+		t.Fatalf("expected status code 429, got: %d", r.StatusCode)
+	}
+	if client.Attempts() >= retries {
+		t.Fatalf("too many attempts: %d", client.Attempts())
+	}
+}
+
+func TestDoRetryForStatusCodes_Race(t *testing.T) {
+	// cannot use the mock sender as it's not safe for concurrent use
+	s := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {}))
+	defer s.Close()
+
+	sender := DecorateSender(s.Client(),
+		DoRetryForStatusCodes(0, 0, http.StatusRequestTimeout))
+
+	var wg sync.WaitGroup
+	for i := 0; i < 2; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			req, _ := http.NewRequest(http.MethodGet, s.URL, nil)
+			if _, err := sender.Do(req); err != nil {
+				t.Fatal(err)
+			}
+		}()
+	}
+	wg.Wait()
 }

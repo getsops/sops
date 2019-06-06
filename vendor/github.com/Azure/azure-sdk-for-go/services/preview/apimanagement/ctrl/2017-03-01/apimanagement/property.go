@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,6 +43,16 @@ func NewPropertyClient() PropertyClient {
 // propID - identifier of the property.
 // parameters - create parameters.
 func (client PropertyClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, propID string, parameters PropertyContract) (result PropertyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: propID,
 			Constraints: []validation.Constraint{{Target: "propID", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -115,7 +126,7 @@ func (client PropertyClient) CreateOrUpdateResponder(resp *http.Response) (resul
 	return
 }
 
-// Delete deletes specific property from the the API Management service instance.
+// Delete deletes specific property from the API Management service instance.
 // Parameters:
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
@@ -123,6 +134,16 @@ func (client PropertyClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // ifMatch - the entity state (Etag) version of the property to delete. A value of "*" can be used for If-Match
 // to unconditionally apply the operation.
 func (client PropertyClient) Delete(ctx context.Context, apimBaseURL string, propID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: propID,
 			Constraints: []validation.Constraint{{Target: "propID", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -200,6 +221,16 @@ func (client PropertyClient) DeleteResponder(resp *http.Response) (result autore
 // https://myapimservice.management.azure-api.net.
 // propID - identifier of the property.
 func (client PropertyClient) Get(ctx context.Context, apimBaseURL string, propID string) (result PropertyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: propID,
 			Constraints: []validation.Constraint{{Target: "propID", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -282,6 +313,16 @@ func (client PropertyClient) GetResponder(resp *http.Response) (result PropertyC
 // top - number of records to return.
 // skip - number of records to skip.
 func (client PropertyClient) List(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result PropertyCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.List")
+		defer func() {
+			sc := -1
+			if result.pc.Response.Response != nil {
+				sc = result.pc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -363,8 +404,8 @@ func (client PropertyClient) ListResponder(resp *http.Response) (result Property
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client PropertyClient) listNextResults(lastResults PropertyCollection) (result PropertyCollection, err error) {
-	req, err := lastResults.propertyCollectionPreparer()
+func (client PropertyClient) listNextResults(ctx context.Context, lastResults PropertyCollection) (result PropertyCollection, err error) {
+	req, err := lastResults.propertyCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.PropertyClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -385,6 +426,16 @@ func (client PropertyClient) listNextResults(lastResults PropertyCollection) (re
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PropertyClient) ListComplete(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result PropertyCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, apimBaseURL, filter, top, skip)
 	return
 }
@@ -398,6 +449,16 @@ func (client PropertyClient) ListComplete(ctx context.Context, apimBaseURL strin
 // ifMatch - the entity state (Etag) version of the property to update. A value of "*" can be used for If-Match
 // to unconditionally apply the operation.
 func (client PropertyClient) Update(ctx context.Context, apimBaseURL string, propID string, parameters PropertyUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PropertyClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: propID,
 			Constraints: []validation.Constraint{{Target: "propID", Name: validation.MaxLength, Rule: 256, Chain: nil},

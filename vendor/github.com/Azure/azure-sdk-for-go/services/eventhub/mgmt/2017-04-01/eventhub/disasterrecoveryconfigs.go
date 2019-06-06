@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewDisasterRecoveryConfigsClientWithBaseURI(baseURI string, subscriptionID 
 // namespaceName - the Namespace name
 // alias - the Disaster Recovery configuration name
 func (client DisasterRecoveryConfigsClient) BreakPairing(ctx context.Context, resourceGroupName string, namespaceName string, alias string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.BreakPairing")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -128,6 +139,16 @@ func (client DisasterRecoveryConfigsClient) BreakPairingResponder(resp *http.Res
 // namespaceName - the Namespace name
 // parameters - parameters to check availability of the given Alias name
 func (client DisasterRecoveryConfigsClient) CheckNameAvailability(ctx context.Context, resourceGroupName string, namespaceName string, parameters CheckNameAvailabilityParameter) (result CheckNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -211,6 +232,16 @@ func (client DisasterRecoveryConfigsClient) CheckNameAvailabilityResponder(resp 
 // alias - the Disaster Recovery configuration name
 // parameters - parameters required to create an Alias(Disaster Recovery configuration)
 func (client DisasterRecoveryConfigsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, namespaceName string, alias string, parameters ArmDisasterRecovery) (result ArmDisasterRecovery, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -295,6 +326,16 @@ func (client DisasterRecoveryConfigsClient) CreateOrUpdateResponder(resp *http.R
 // namespaceName - the Namespace name
 // alias - the Disaster Recovery configuration name
 func (client DisasterRecoveryConfigsClient) Delete(ctx context.Context, resourceGroupName string, namespaceName string, alias string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -370,12 +411,22 @@ func (client DisasterRecoveryConfigsClient) DeleteResponder(resp *http.Response)
 	return
 }
 
-// FailOver envokes GEO DR failover and reconfigure the alias to point to the secondary namespace
+// FailOver invokes GEO DR failover and reconfigure the alias to point to the secondary namespace
 // Parameters:
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 // alias - the Disaster Recovery configuration name
 func (client DisasterRecoveryConfigsClient) FailOver(ctx context.Context, resourceGroupName string, namespaceName string, alias string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.FailOver")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -457,6 +508,16 @@ func (client DisasterRecoveryConfigsClient) FailOverResponder(resp *http.Respons
 // namespaceName - the Namespace name
 // alias - the Disaster Recovery configuration name
 func (client DisasterRecoveryConfigsClient) Get(ctx context.Context, resourceGroupName string, namespaceName string, alias string) (result ArmDisasterRecovery, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -540,6 +601,16 @@ func (client DisasterRecoveryConfigsClient) GetResponder(resp *http.Response) (r
 // alias - the Disaster Recovery configuration name
 // authorizationRuleName - the authorization rule name.
 func (client DisasterRecoveryConfigsClient) GetAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, alias string, authorizationRuleName string) (result AuthorizationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.GetAuthorizationRule")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -624,6 +695,16 @@ func (client DisasterRecoveryConfigsClient) GetAuthorizationRuleResponder(resp *
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 func (client DisasterRecoveryConfigsClient) List(ctx context.Context, resourceGroupName string, namespaceName string) (result ArmDisasterRecoveryListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.List")
+		defer func() {
+			sc := -1
+			if result.adrlr.Response.Response != nil {
+				sc = result.adrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -698,8 +779,8 @@ func (client DisasterRecoveryConfigsClient) ListResponder(resp *http.Response) (
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client DisasterRecoveryConfigsClient) listNextResults(lastResults ArmDisasterRecoveryListResult) (result ArmDisasterRecoveryListResult, err error) {
-	req, err := lastResults.armDisasterRecoveryListResultPreparer()
+func (client DisasterRecoveryConfigsClient) listNextResults(ctx context.Context, lastResults ArmDisasterRecoveryListResult) (result ArmDisasterRecoveryListResult, err error) {
+	req, err := lastResults.armDisasterRecoveryListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "eventhub.DisasterRecoveryConfigsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -720,6 +801,16 @@ func (client DisasterRecoveryConfigsClient) listNextResults(lastResults ArmDisas
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DisasterRecoveryConfigsClient) ListComplete(ctx context.Context, resourceGroupName string, namespaceName string) (result ArmDisasterRecoveryListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, namespaceName)
 	return
 }
@@ -730,6 +821,16 @@ func (client DisasterRecoveryConfigsClient) ListComplete(ctx context.Context, re
 // namespaceName - the Namespace name
 // alias - the Disaster Recovery configuration name
 func (client DisasterRecoveryConfigsClient) ListAuthorizationRules(ctx context.Context, resourceGroupName string, namespaceName string, alias string) (result AuthorizationRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.arlr.Response.Response != nil {
+				sc = result.arlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -808,8 +909,8 @@ func (client DisasterRecoveryConfigsClient) ListAuthorizationRulesResponder(resp
 }
 
 // listAuthorizationRulesNextResults retrieves the next set of results, if any.
-func (client DisasterRecoveryConfigsClient) listAuthorizationRulesNextResults(lastResults AuthorizationRuleListResult) (result AuthorizationRuleListResult, err error) {
-	req, err := lastResults.authorizationRuleListResultPreparer()
+func (client DisasterRecoveryConfigsClient) listAuthorizationRulesNextResults(ctx context.Context, lastResults AuthorizationRuleListResult) (result AuthorizationRuleListResult, err error) {
+	req, err := lastResults.authorizationRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "eventhub.DisasterRecoveryConfigsClient", "listAuthorizationRulesNextResults", nil, "Failure preparing next results request")
 	}
@@ -830,6 +931,16 @@ func (client DisasterRecoveryConfigsClient) listAuthorizationRulesNextResults(la
 
 // ListAuthorizationRulesComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DisasterRecoveryConfigsClient) ListAuthorizationRulesComplete(ctx context.Context, resourceGroupName string, namespaceName string, alias string) (result AuthorizationRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.ListAuthorizationRules")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAuthorizationRules(ctx, resourceGroupName, namespaceName, alias)
 	return
 }
@@ -841,6 +952,16 @@ func (client DisasterRecoveryConfigsClient) ListAuthorizationRulesComplete(ctx c
 // alias - the Disaster Recovery configuration name
 // authorizationRuleName - the authorization rule name.
 func (client DisasterRecoveryConfigsClient) ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, alias string, authorizationRuleName string) (result AccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DisasterRecoveryConfigsClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

@@ -46,7 +46,8 @@ const (
 	// ErrCodeInvalidStateException for service response error code
 	// "InvalidStateException".
 	//
-	// The private CA is in a state during which a report cannot be generated.
+	// The private CA is in a state during which a report or certificate cannot
+	// be generated.
 	ErrCodeInvalidStateException = "InvalidStateException"
 
 	// ErrCodeInvalidTagException for service response error code
@@ -74,6 +75,12 @@ const (
 	//
 	// One or more fields in the certificate are invalid.
 	ErrCodeMalformedCertificateException = "MalformedCertificateException"
+
+	// ErrCodePermissionAlreadyExistsException for service response error code
+	// "PermissionAlreadyExistsException".
+	//
+	// The designated permission has already been given to the user.
+	ErrCodePermissionAlreadyExistsException = "PermissionAlreadyExistsException"
 
 	// ErrCodeRequestAlreadyProcessedException for service response error code
 	// "RequestAlreadyProcessedException".

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewSubscriptionsClientWithBaseURI(baseURI string) SubscriptionsClient {
 // Parameters:
 // subscriptionID - the ID of the target subscription.
 func (client SubscriptionsClient) Get(ctx context.Context, subscriptionID string) (result Model, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, subscriptionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "subscription.SubscriptionsClient", "Get", nil, "Failure preparing request")
@@ -105,6 +116,16 @@ func (client SubscriptionsClient) GetResponder(resp *http.Response) (result Mode
 
 // List gets all subscriptions for a tenant.
 func (client SubscriptionsClient) List(ctx context.Context) (result ListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.List")
+		defer func() {
+			sc := -1
+			if result.lr.Response.Response != nil {
+				sc = result.lr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -163,8 +184,8 @@ func (client SubscriptionsClient) ListResponder(resp *http.Response) (result Lis
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client SubscriptionsClient) listNextResults(lastResults ListResult) (result ListResult, err error) {
-	req, err := lastResults.listResultPreparer()
+func (client SubscriptionsClient) listNextResults(ctx context.Context, lastResults ListResult) (result ListResult, err error) {
+	req, err := lastResults.listResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "subscription.SubscriptionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -185,6 +206,16 @@ func (client SubscriptionsClient) listNextResults(lastResults ListResult) (resul
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client SubscriptionsClient) ListComplete(ctx context.Context) (result ListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -194,6 +225,16 @@ func (client SubscriptionsClient) ListComplete(ctx context.Context) (result List
 // Parameters:
 // subscriptionID - the ID of the target subscription.
 func (client SubscriptionsClient) ListLocations(ctx context.Context, subscriptionID string) (result LocationListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.ListLocations")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListLocationsPreparer(ctx, subscriptionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "subscription.SubscriptionsClient", "ListLocations", nil, "Failure preparing request")

@@ -30,7 +30,7 @@ RUN export GOROOT_BOOTSTRAP=$GOLANG_BOOTSTRAP_PATH/go \
 	&& git clone "$GOLANG_SRC_REPO_URL" /usr/local/go \
 	&& cd /usr/local/go/src \
 	&& ./make.bash \
-	&& rm -rf "$GOLANG_BOOTSTRAP_PATH" /usr/local/go/pkg/bootstrap 
+	&& rm -rf "$GOLANG_BOOTSTRAP_PATH" /usr/local/go/pkg/bootstrap
 
 # Build Go workspace and environment
 ENV GOPATH /go

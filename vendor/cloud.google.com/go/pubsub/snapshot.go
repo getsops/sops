@@ -15,12 +15,12 @@
 package pubsub
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"golang.org/x/net/context"
 	pb "google.golang.org/genproto/googleapis/pubsub/v1"
 )
 
@@ -84,8 +84,8 @@ func (snaps *SnapshotConfigIterator) Next() (*SnapshotConfig, error) {
 }
 
 // Delete deletes a snapshot.
-func (snap *Snapshot) Delete(ctx context.Context) error {
-	return snap.c.subc.DeleteSnapshot(ctx, &pb.DeleteSnapshotRequest{Snapshot: snap.name})
+func (s *Snapshot) Delete(ctx context.Context) error {
+	return s.c.subc.DeleteSnapshot(ctx, &pb.DeleteSnapshotRequest{Snapshot: s.name})
 }
 
 // SeekToTime seeks the subscription to a point in time.

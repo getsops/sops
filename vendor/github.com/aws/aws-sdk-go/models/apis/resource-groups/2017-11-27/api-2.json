@@ -342,12 +342,56 @@
     },
     "GroupArn":{
       "type":"string",
-      "pattern":"arn:aws:resource-groups:[a-z]{2}-[a-z]+-\\d{1}:[0-9]{12}:group/[a-zA-Z0-9_\\.-]{1,128}"
+      "max":1600,
+      "min":12,
+      "pattern":"arn:aws(-[a-z]+)*:resource-groups:[a-z]{2}-[a-z]+-\\d{1}:[0-9]{12}:group/[a-zA-Z0-9_\\.-]{1,128}"
     },
     "GroupDescription":{
       "type":"string",
       "max":512,
       "pattern":"[\\sa-zA-Z0-9_\\.-]*"
+    },
+    "GroupFilter":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Values"
+      ],
+      "members":{
+        "Name":{"shape":"GroupFilterName"},
+        "Values":{"shape":"GroupFilterValues"}
+      }
+    },
+    "GroupFilterList":{
+      "type":"list",
+      "member":{"shape":"GroupFilter"}
+    },
+    "GroupFilterName":{
+      "type":"string",
+      "enum":["resource-type"]
+    },
+    "GroupFilterValue":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"AWS::(AllSupported|[a-zA-Z0-9]+::[a-zA-Z0-9]+)"
+    },
+    "GroupFilterValues":{
+      "type":"list",
+      "member":{"shape":"GroupFilterValue"},
+      "max":5,
+      "min":1
+    },
+    "GroupIdentifier":{
+      "type":"structure",
+      "members":{
+        "GroupName":{"shape":"GroupName"},
+        "GroupArn":{"shape":"GroupArn"}
+      }
+    },
+    "GroupIdentifierList":{
+      "type":"list",
+      "member":{"shape":"GroupIdentifier"}
     },
     "GroupList":{
       "type":"list",
@@ -404,12 +448,14 @@
       "type":"structure",
       "members":{
         "ResourceIdentifiers":{"shape":"ResourceIdentifierList"},
-        "NextToken":{"shape":"NextToken"}
+        "NextToken":{"shape":"NextToken"},
+        "QueryErrors":{"shape":"QueryErrorList"}
       }
     },
     "ListGroupsInput":{
       "type":"structure",
       "members":{
+        "Filters":{"shape":"GroupFilterList"},
         "MaxResults":{
           "shape":"MaxResults",
           "location":"querystring",
@@ -425,7 +471,12 @@
     "ListGroupsOutput":{
       "type":"structure",
       "members":{
-        "Groups":{"shape":"GroupList"},
+        "GroupIdentifiers":{"shape":"GroupIdentifierList"},
+        "Groups":{
+          "shape":"GroupList",
+          "deprecated":true,
+          "deprecatedMessage":"This field is deprecated, use GroupIdentifiers instead."
+        },
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -442,7 +493,12 @@
       "error":{"httpStatusCode":405},
       "exception":true
     },
-    "NextToken":{"type":"string"},
+    "NextToken":{
+      "type":"string",
+      "max":8192,
+      "min":0,
+      "pattern":"^[a-zA-Z0-9+/]*={0,2}$"
+    },
     "NotFoundException":{
       "type":"structure",
       "members":{
@@ -453,15 +509,41 @@
     },
     "Query":{
       "type":"string",
-      "max":2048
+      "max":4096,
+      "pattern":"[\\s\\S]*"
     },
+    "QueryError":{
+      "type":"structure",
+      "members":{
+        "ErrorCode":{"shape":"QueryErrorCode"},
+        "Message":{"shape":"QueryErrorMessage"}
+      }
+    },
+    "QueryErrorCode":{
+      "type":"string",
+      "enum":[
+        "CLOUDFORMATION_STACK_INACTIVE",
+        "CLOUDFORMATION_STACK_NOT_EXISTING"
+      ]
+    },
+    "QueryErrorList":{
+      "type":"list",
+      "member":{"shape":"QueryError"}
+    },
+    "QueryErrorMessage":{"type":"string"},
     "QueryType":{
       "type":"string",
-      "enum":["TAG_FILTERS_1_0"]
+      "enum":[
+        "TAG_FILTERS_1_0",
+        "CLOUDFORMATION_STACK_1_0"
+      ],
+      "max":128,
+      "min":1,
+      "pattern":"^\\w+$"
     },
     "ResourceArn":{
       "type":"string",
-      "pattern":"arn:aws:[a-z0-9\\-]*:([a-z]{2}-[a-z]+-\\d{1})?:([0-9]{12})?:.+"
+      "pattern":"arn:aws(-[a-z]+)*:[a-z0-9\\-]*:([a-z]{2}-[a-z]+-\\d{1})?:([0-9]{12})?:.+"
     },
     "ResourceFilter":{
       "type":"structure",
@@ -533,7 +615,8 @@
       "type":"structure",
       "members":{
         "ResourceIdentifiers":{"shape":"ResourceIdentifierList"},
-        "NextToken":{"shape":"NextToken"}
+        "NextToken":{"shape":"NextToken"},
+        "QueryErrors":{"shape":"QueryErrorList"}
       }
     },
     "TagInput":{

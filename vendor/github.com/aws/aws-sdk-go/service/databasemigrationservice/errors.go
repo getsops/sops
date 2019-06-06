@@ -7,7 +7,8 @@ const (
 	// ErrCodeAccessDeniedFault for service response error code
 	// "AccessDeniedFault".
 	//
-	// AWS DMS was denied access to the endpoint.
+	// AWS DMS was denied access to the endpoint. Check that the role is correctly
+	// configured.
 	ErrCodeAccessDeniedFault = "AccessDeniedFault"
 
 	// ErrCodeInsufficientResourceCapacityFault for service response error code
@@ -35,11 +36,42 @@ const (
 	// The subnet provided is invalid.
 	ErrCodeInvalidSubnet = "InvalidSubnet"
 
+	// ErrCodeKMSAccessDeniedFault for service response error code
+	// "KMSAccessDeniedFault".
+	//
+	// The ciphertext references a key that doesn't exist or DMS account doesn't
+	// have an access to
+	ErrCodeKMSAccessDeniedFault = "KMSAccessDeniedFault"
+
+	// ErrCodeKMSDisabledFault for service response error code
+	// "KMSDisabledFault".
+	//
+	// The specified master key (CMK) isn't enabled.
+	ErrCodeKMSDisabledFault = "KMSDisabledFault"
+
+	// ErrCodeKMSInvalidStateFault for service response error code
+	// "KMSInvalidStateFault".
+	//
+	// The state of the specified KMS resource isn't valid for this request.
+	ErrCodeKMSInvalidStateFault = "KMSInvalidStateFault"
+
 	// ErrCodeKMSKeyNotAccessibleFault for service response error code
 	// "KMSKeyNotAccessibleFault".
 	//
 	// AWS DMS cannot access the KMS key.
 	ErrCodeKMSKeyNotAccessibleFault = "KMSKeyNotAccessibleFault"
+
+	// ErrCodeKMSNotFoundFault for service response error code
+	// "KMSNotFoundFault".
+	//
+	// The specified KMS entity or resource can't be found.
+	ErrCodeKMSNotFoundFault = "KMSNotFoundFault"
+
+	// ErrCodeKMSThrottlingFault for service response error code
+	// "KMSThrottlingFault".
+	//
+	// This request triggered KMS request throttling.
+	ErrCodeKMSThrottlingFault = "KMSThrottlingFault"
 
 	// ErrCodeReplicationSubnetGroupDoesNotCoverEnoughAZs for service response error code
 	// "ReplicationSubnetGroupDoesNotCoverEnoughAZs".

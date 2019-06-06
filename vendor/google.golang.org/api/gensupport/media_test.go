@@ -1,4 +1,4 @@
-// Copyright 2015 Google Inc. All rights reserved.
+// Copyright 2015 Google LLC
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -6,9 +6,10 @@ package gensupport
 
 import (
 	"bytes"
-	"crypto/rand"
+	cryptorand "crypto/rand"
 	"io"
 	"io/ioutil"
+	mathrand "math/rand"
 	"net/http"
 	"reflect"
 	"strings"
@@ -272,20 +273,14 @@ func TestUploadRequestGetBody(t *testing.T) {
 	// Test that a single chunk results in a getBody function that is non-nil, and
 	// that produces the same content as the original body.
 
-	// Mock out rand.Reader so we use the same multipart boundary every time.
-	rr := rand.Reader
-	rand.Reader = &nullReader{1000}
-	defer func() {
-		rand.Reader = rr
-	}()
+	// Restore the crypto/rand.Reader mocked out below.
+	defer func(old io.Reader) { cryptorand.Reader = old }(cryptorand.Reader)
 
-	for _, test := range []struct {
-		desc            string
-		r               io.Reader
-		chunkSize       int
-		wantGetBody     bool
-		wantContentType string
-		wantUploadType  string
+	for i, test := range []struct {
+		desc        string
+		r           io.Reader
+		chunkSize   int
+		wantGetBody bool
 	}{
 		{
 			desc:        "chunk size of zero: no getBody",
@@ -308,6 +303,8 @@ func TestUploadRequestGetBody(t *testing.T) {
 			wantGetBody: false,
 		},
 	} {
+		cryptorand.Reader = mathrand.New(mathrand.NewSource(int64(i)))
+
 		mi := NewInfoFromMedia(test.r, []googleapi.MediaOption{googleapi.ChunkSize(test.chunkSize)})
 		r, getBody, _ := mi.UploadRequest(http.Header{}, bytes.NewBuffer([]byte("body")))
 		if got, want := (getBody != nil), test.wantGetBody; got != want {

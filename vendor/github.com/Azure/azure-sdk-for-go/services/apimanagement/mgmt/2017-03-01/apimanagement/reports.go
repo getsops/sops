@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewReportsClientWithBaseURI(baseURI string, subscriptionID string) ReportsC
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByAPI(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -133,8 +144,8 @@ func (client ReportsClient) ListByAPIResponder(resp *http.Response) (result Repo
 }
 
 // listByAPINextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByAPINextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByAPINextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByAPINextResults", nil, "Failure preparing next results request")
 	}
@@ -155,11 +166,21 @@ func (client ReportsClient) listByAPINextResults(lastResults ReportCollection) (
 
 // ListByAPIComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByAPIComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAPI(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
 
-// ListByGeo lists report records by GeoGraphy.
+// ListByGeo lists report records by geography.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
@@ -167,6 +188,16 @@ func (client ReportsClient) ListByAPIComplete(ctx context.Context, resourceGroup
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByGeo(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByGeo")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -254,8 +285,8 @@ func (client ReportsClient) ListByGeoResponder(resp *http.Response) (result Repo
 }
 
 // listByGeoNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByGeoNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByGeoNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByGeoNextResults", nil, "Failure preparing next results request")
 	}
@@ -276,6 +307,16 @@ func (client ReportsClient) listByGeoNextResults(lastResults ReportCollection) (
 
 // ListByGeoComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByGeoComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByGeo")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByGeo(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -288,6 +329,16 @@ func (client ReportsClient) ListByGeoComplete(ctx context.Context, resourceGroup
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByOperation(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -373,8 +424,8 @@ func (client ReportsClient) ListByOperationResponder(resp *http.Response) (resul
 }
 
 // listByOperationNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByOperationNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByOperationNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByOperationNextResults", nil, "Failure preparing next results request")
 	}
@@ -395,6 +446,16 @@ func (client ReportsClient) listByOperationNextResults(lastResults ReportCollect
 
 // ListByOperationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByOperationComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByOperation(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -407,6 +468,16 @@ func (client ReportsClient) ListByOperationComplete(ctx context.Context, resourc
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -492,8 +563,8 @@ func (client ReportsClient) ListByProductResponder(resp *http.Response) (result 
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByProductNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByProductNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -514,6 +585,16 @@ func (client ReportsClient) listByProductNextResults(lastResults ReportCollectio
 
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -526,6 +607,16 @@ func (client ReportsClient) ListByProductComplete(ctx context.Context, resourceG
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByRequest(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result RequestReportCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByRequest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -617,6 +708,16 @@ func (client ReportsClient) ListByRequestResponder(resp *http.Response) (result 
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListBySubscription(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -704,8 +805,8 @@ func (client ReportsClient) ListBySubscriptionResponder(resp *http.Response) (re
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listBySubscriptionNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listBySubscriptionNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -726,6 +827,16 @@ func (client ReportsClient) listBySubscriptionNextResults(lastResults ReportColl
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListBySubscriptionComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -736,11 +847,21 @@ func (client ReportsClient) ListBySubscriptionComplete(ctx context.Context, reso
 // serviceName - the name of the API Management service.
 // interval - by time interval. Interval must be multiple of 15 minutes and may not be zero. The value should
 // be in ISO  8601 format (http://en.wikipedia.org/wiki/ISO_8601#Durations).This code can be used to convert
-// TimeSpan to a valid interval string: XmlConvert.ToString(new TimeSpan(hours, minutes, secconds))
+// TimeSpan to a valid interval string: XmlConvert.ToString(new TimeSpan(hours, minutes, seconds))
 // filter - the filter to apply on the operation.
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByTime(ctx context.Context, resourceGroupName string, serviceName string, interval string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByTime")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -829,8 +950,8 @@ func (client ReportsClient) ListByTimeResponder(resp *http.Response) (result Rep
 }
 
 // listByTimeNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByTimeNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByTimeNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByTimeNextResults", nil, "Failure preparing next results request")
 	}
@@ -851,6 +972,16 @@ func (client ReportsClient) listByTimeNextResults(lastResults ReportCollection) 
 
 // ListByTimeComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByTimeComplete(ctx context.Context, resourceGroupName string, serviceName string, interval string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByTime")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByTime(ctx, resourceGroupName, serviceName, interval, filter, top, skip)
 	return
 }
@@ -863,6 +994,16 @@ func (client ReportsClient) ListByTimeComplete(ctx context.Context, resourceGrou
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ReportsClient) ListByUser(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByUser")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -948,8 +1089,8 @@ func (client ReportsClient) ListByUserResponder(resp *http.Response) (result Rep
 }
 
 // listByUserNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByUserNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByUserNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByUserNextResults", nil, "Failure preparing next results request")
 	}
@@ -970,6 +1111,16 @@ func (client ReportsClient) listByUserNextResults(lastResults ReportCollection) 
 
 // ListByUserComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByUserComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByUser")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByUser(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }

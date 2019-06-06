@@ -281,6 +281,10 @@ type DeviceFarmAPI interface {
 	ListSuitesPages(*devicefarm.ListSuitesInput, func(*devicefarm.ListSuitesOutput, bool) bool) error
 	ListSuitesPagesWithContext(aws.Context, *devicefarm.ListSuitesInput, func(*devicefarm.ListSuitesOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*devicefarm.ListTagsForResourceInput) (*devicefarm.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *devicefarm.ListTagsForResourceInput, ...request.Option) (*devicefarm.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*devicefarm.ListTagsForResourceInput) (*request.Request, *devicefarm.ListTagsForResourceOutput)
+
 	ListTests(*devicefarm.ListTestsInput) (*devicefarm.ListTestsOutput, error)
 	ListTestsWithContext(aws.Context, *devicefarm.ListTestsInput, ...request.Option) (*devicefarm.ListTestsOutput, error)
 	ListTestsRequest(*devicefarm.ListTestsInput) (*request.Request, *devicefarm.ListTestsOutput)
@@ -329,6 +333,14 @@ type DeviceFarmAPI interface {
 	StopRun(*devicefarm.StopRunInput) (*devicefarm.StopRunOutput, error)
 	StopRunWithContext(aws.Context, *devicefarm.StopRunInput, ...request.Option) (*devicefarm.StopRunOutput, error)
 	StopRunRequest(*devicefarm.StopRunInput) (*request.Request, *devicefarm.StopRunOutput)
+
+	TagResource(*devicefarm.TagResourceInput) (*devicefarm.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *devicefarm.TagResourceInput, ...request.Option) (*devicefarm.TagResourceOutput, error)
+	TagResourceRequest(*devicefarm.TagResourceInput) (*request.Request, *devicefarm.TagResourceOutput)
+
+	UntagResource(*devicefarm.UntagResourceInput) (*devicefarm.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *devicefarm.UntagResourceInput, ...request.Option) (*devicefarm.UntagResourceOutput, error)
+	UntagResourceRequest(*devicefarm.UntagResourceInput) (*request.Request, *devicefarm.UntagResourceOutput)
 
 	UpdateDeviceInstance(*devicefarm.UpdateDeviceInstanceInput) (*devicefarm.UpdateDeviceInstanceOutput, error)
 	UpdateDeviceInstanceWithContext(aws.Context, *devicefarm.UpdateDeviceInstanceInput, ...request.Option) (*devicefarm.UpdateDeviceInstanceOutput, error)

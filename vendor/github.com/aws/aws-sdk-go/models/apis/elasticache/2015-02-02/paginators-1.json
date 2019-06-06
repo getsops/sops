@@ -66,11 +66,23 @@
       "output_token": "Marker",
       "result_key": "ReservedCacheNodesOfferings"
     },
+    "DescribeServiceUpdates": {
+      "input_token": "Marker",
+      "limit_key": "MaxRecords",
+      "output_token": "Marker",
+      "result_key": "ServiceUpdates"
+    },
     "DescribeSnapshots": {
       "input_token": "Marker",
       "limit_key": "MaxRecords",
       "output_token": "Marker",
       "result_key": "Snapshots"
+    },
+    "DescribeUpdateActions": {
+      "input_token": "Marker",
+      "limit_key": "MaxRecords",
+      "output_token": "Marker",
+      "result_key": "UpdateActions"
     }
   }
 }
