@@ -113,6 +113,43 @@
   "resources": {
     "projects": {
       "methods": {
+        "deleteSnapshots": {
+          "description": "Deletes a snapshot.",
+          "flatPath": "v1b3/projects/{projectId}/snapshots",
+          "httpMethod": "DELETE",
+          "id": "dataflow.projects.deleteSnapshots",
+          "parameterOrder": [
+            "projectId"
+          ],
+          "parameters": {
+            "location": {
+              "description": "The location that contains this snapshot.",
+              "location": "query",
+              "type": "string"
+            },
+            "projectId": {
+              "description": "The ID of the Cloud Platform project that the snapshot belongs to.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "snapshotId": {
+              "description": "The ID of the snapshot.",
+              "location": "query",
+              "type": "string"
+            }
+          },
+          "path": "v1b3/projects/{projectId}/snapshots",
+          "response": {
+            "$ref": "DeleteSnapshotResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/compute",
+            "https://www.googleapis.com/auth/compute.readonly",
+            "https://www.googleapis.com/auth/userinfo.email"
+          ]
+        },
         "workerMessages": {
           "description": "Send a worker_message to the service.",
           "flatPath": "v1b3/projects/{projectId}/WorkerMessages",
@@ -168,7 +205,7 @@
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location that contains this job.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                   "location": "query",
                   "type": "string"
                 },
@@ -213,7 +250,7 @@
               ]
             },
             "create": {
-              "description": "Creates a Cloud Dataflow job.",
+              "description": "Creates a Cloud Dataflow job.\n\nTo create a job, we recommend using `projects.locations.jobs.create` with a\n[regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.create` is not recommended, as your job will always start\nin `us-central1`.",
               "flatPath": "v1b3/projects/{projectId}/jobs",
               "httpMethod": "POST",
               "id": "dataflow.projects.jobs.create",
@@ -222,7 +259,7 @@
               ],
               "parameters": {
                 "location": {
-                  "description": "The location that contains this job.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                   "location": "query",
                   "type": "string"
                 },
@@ -264,7 +301,7 @@
               ]
             },
             "get": {
-              "description": "Gets the state of the specified Cloud Dataflow job.",
+              "description": "Gets the state of the specified Cloud Dataflow job.\n\nTo get the state of a job, we recommend using `projects.locations.jobs.get`\nwith a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.get` is not recommended, as you can only get the state of\njobs that are running in `us-central1`.",
               "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}",
               "httpMethod": "GET",
               "id": "dataflow.projects.jobs.get",
@@ -280,7 +317,7 @@
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location that contains this job.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                   "location": "query",
                   "type": "string"
                 },
@@ -314,7 +351,7 @@
               ]
             },
             "getMetrics": {
-              "description": "Request the job status.",
+              "description": "Request the job status.\n\nTo request the status of a job, we recommend using\n`projects.locations.jobs.getMetrics` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.getMetrics` is not recommended, as you can only request the\nstatus of jobs that are running in `us-central1`.",
               "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}/metrics",
               "httpMethod": "GET",
               "id": "dataflow.projects.jobs.getMetrics",
@@ -330,7 +367,7 @@
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location which contains the job specified by job_id.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
                   "location": "query",
                   "type": "string"
                 },
@@ -359,7 +396,7 @@
               ]
             },
             "list": {
-              "description": "List the jobs of a project in a given region.",
+              "description": "List the jobs of a project.\n\nTo list the jobs of a project in a region, we recommend using\n`projects.locations.jobs.get` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). To\nlist the all jobs across all regions, use `projects.jobs.aggregated`. Using\n`projects.jobs.list` is not recommended, as you can only get the list of\njobs that are running in `us-central1`.",
               "flatPath": "v1b3/projects/{projectId}/jobs",
               "httpMethod": "GET",
               "id": "dataflow.projects.jobs.list",
@@ -379,7 +416,7 @@
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location that contains this job.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                   "location": "query",
                   "type": "string"
                 },
@@ -423,8 +460,45 @@
                 "https://www.googleapis.com/auth/userinfo.email"
               ]
             },
+            "snapshot": {
+              "description": "Snapshot the state of a streaming job.",
+              "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}:snapshot",
+              "httpMethod": "POST",
+              "id": "dataflow.projects.jobs.snapshot",
+              "parameterOrder": [
+                "projectId",
+                "jobId"
+              ],
+              "parameters": {
+                "jobId": {
+                  "description": "The job to be snapshotted.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "projectId": {
+                  "description": "The project which owns the job to be snapshotted.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1b3/projects/{projectId}/jobs/{jobId}:snapshot",
+              "request": {
+                "$ref": "SnapshotJobRequest"
+              },
+              "response": {
+                "$ref": "Snapshot"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/compute",
+                "https://www.googleapis.com/auth/compute.readonly",
+                "https://www.googleapis.com/auth/userinfo.email"
+              ]
+            },
             "update": {
-              "description": "Updates the state of an existing Cloud Dataflow job.",
+              "description": "Updates the state of an existing Cloud Dataflow job.\n\nTo update the state of an existing job, we recommend using\n`projects.locations.jobs.update` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.update` is not recommended, as you can only update the state\nof jobs that are running in `us-central1`.",
               "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}",
               "httpMethod": "PUT",
               "id": "dataflow.projects.jobs.update",
@@ -440,7 +514,7 @@
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location that contains this job.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                   "location": "query",
                   "type": "string"
                 },
@@ -548,7 +622,7 @@
             "messages": {
               "methods": {
                 "list": {
-                  "description": "Request the job status.",
+                  "description": "Request the job status.\n\nTo request the status of a job, we recommend using\n`projects.locations.jobs.messages.list` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.messages.list` is not recommended, as you can only request\nthe status of jobs that are running in `us-central1`.",
                   "flatPath": "v1b3/projects/{projectId}/jobs/{jobId}/messages",
                   "httpMethod": "GET",
                   "id": "dataflow.projects.jobs.messages.list",
@@ -570,7 +644,7 @@
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location which contains the job specified by job_id.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
                       "location": "query",
                       "type": "string"
                     },
@@ -717,7 +791,7 @@
               ],
               "parameters": {
                 "location": {
-                  "description": "The location which contains the job",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -748,7 +822,7 @@
             "jobs": {
               "methods": {
                 "create": {
-                  "description": "Creates a Cloud Dataflow job.",
+                  "description": "Creates a Cloud Dataflow job.\n\nTo create a job, we recommend using `projects.locations.jobs.create` with a\n[regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.create` is not recommended, as your job will always start\nin `us-central1`.",
                   "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs",
                   "httpMethod": "POST",
                   "id": "dataflow.projects.locations.jobs.create",
@@ -758,7 +832,7 @@
                   ],
                   "parameters": {
                     "location": {
-                      "description": "The location that contains this job.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -801,7 +875,7 @@
                   ]
                 },
                 "get": {
-                  "description": "Gets the state of the specified Cloud Dataflow job.",
+                  "description": "Gets the state of the specified Cloud Dataflow job.\n\nTo get the state of a job, we recommend using `projects.locations.jobs.get`\nwith a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.get` is not recommended, as you can only get the state of\njobs that are running in `us-central1`.",
                   "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}",
                   "httpMethod": "GET",
                   "id": "dataflow.projects.locations.jobs.get",
@@ -818,7 +892,7 @@
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location that contains this job.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -853,7 +927,7 @@
                   ]
                 },
                 "getMetrics": {
-                  "description": "Request the job status.",
+                  "description": "Request the job status.\n\nTo request the status of a job, we recommend using\n`projects.locations.jobs.getMetrics` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.getMetrics` is not recommended, as you can only request the\nstatus of jobs that are running in `us-central1`.",
                   "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}/metrics",
                   "httpMethod": "GET",
                   "id": "dataflow.projects.locations.jobs.getMetrics",
@@ -870,7 +944,7 @@
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location which contains the job specified by job_id.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -900,7 +974,7 @@
                   ]
                 },
                 "list": {
-                  "description": "List the jobs of a project in a given region.",
+                  "description": "List the jobs of a project.\n\nTo list the jobs of a project in a region, we recommend using\n`projects.locations.jobs.get` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). To\nlist the all jobs across all regions, use `projects.jobs.aggregated`. Using\n`projects.jobs.list` is not recommended, as you can only get the list of\njobs that are running in `us-central1`.",
                   "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs",
                   "httpMethod": "GET",
                   "id": "dataflow.projects.locations.jobs.list",
@@ -921,7 +995,7 @@
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location that contains this job.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -966,8 +1040,52 @@
                     "https://www.googleapis.com/auth/userinfo.email"
                   ]
                 },
+                "snapshot": {
+                  "description": "Snapshot the state of a streaming job.",
+                  "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}:snapshot",
+                  "httpMethod": "POST",
+                  "id": "dataflow.projects.locations.jobs.snapshot",
+                  "parameterOrder": [
+                    "projectId",
+                    "location",
+                    "jobId"
+                  ],
+                  "parameters": {
+                    "jobId": {
+                      "description": "The job to be snapshotted.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "location": {
+                      "description": "The location that contains this job.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "description": "The project which owns the job to be snapshotted.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}:snapshot",
+                  "request": {
+                    "$ref": "SnapshotJobRequest"
+                  },
+                  "response": {
+                    "$ref": "Snapshot"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/compute",
+                    "https://www.googleapis.com/auth/compute.readonly",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                },
                 "update": {
-                  "description": "Updates the state of an existing Cloud Dataflow job.",
+                  "description": "Updates the state of an existing Cloud Dataflow job.\n\nTo update the state of an existing job, we recommend using\n`projects.locations.jobs.update` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.update` is not recommended, as you can only update the state\nof jobs that are running in `us-central1`.",
                   "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}",
                   "httpMethod": "PUT",
                   "id": "dataflow.projects.locations.jobs.update",
@@ -984,7 +1102,7 @@
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location that contains this job.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -1032,7 +1150,7 @@
                           "type": "string"
                         },
                         "location": {
-                          "description": "The location which contains the job specified by job_id.",
+                          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
                           "location": "path",
                           "required": true,
                           "type": "string"
@@ -1076,7 +1194,7 @@
                           "type": "string"
                         },
                         "location": {
-                          "description": "The location which contains the job specified by job_id.",
+                          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
                           "location": "path",
                           "required": true,
                           "type": "string"
@@ -1107,7 +1225,7 @@
                 "messages": {
                   "methods": {
                     "list": {
-                      "description": "Request the job status.",
+                      "description": "Request the job status.\n\nTo request the status of a job, we recommend using\n`projects.locations.jobs.messages.list` with a [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints). Using\n`projects.jobs.messages.list` is not recommended, as you can only request\nthe status of jobs that are running in `us-central1`.",
                       "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}/messages",
                       "httpMethod": "GET",
                       "id": "dataflow.projects.locations.jobs.messages.list",
@@ -1130,7 +1248,7 @@
                           "type": "string"
                         },
                         "location": {
-                          "description": "The location which contains the job specified by job_id.",
+                          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
                           "location": "path",
                           "required": true,
                           "type": "string"
@@ -1185,6 +1303,51 @@
                     }
                   }
                 },
+                "snapshots": {
+                  "methods": {
+                    "list": {
+                      "description": "Lists snapshots.",
+                      "flatPath": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}/snapshots",
+                      "httpMethod": "GET",
+                      "id": "dataflow.projects.locations.jobs.snapshots.list",
+                      "parameterOrder": [
+                        "projectId",
+                        "location",
+                        "jobId"
+                      ],
+                      "parameters": {
+                        "jobId": {
+                          "description": "If specified, list snapshots created from this job.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "location": {
+                          "description": "The location to list snapshots in.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        },
+                        "projectId": {
+                          "description": "The project ID to list snapshots for.",
+                          "location": "path",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1b3/projects/{projectId}/locations/{location}/jobs/{jobId}/snapshots",
+                      "response": {
+                        "$ref": "ListSnapshotsResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/compute",
+                        "https://www.googleapis.com/auth/compute.readonly",
+                        "https://www.googleapis.com/auth/userinfo.email"
+                      ]
+                    }
+                  }
+                },
                 "workItems": {
                   "methods": {
                     "lease": {
@@ -1205,7 +1368,7 @@
                           "type": "string"
                         },
                         "location": {
-                          "description": "The location which contains the WorkItem's job.",
+                          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the WorkItem's job.",
                           "location": "path",
                           "required": true,
                           "type": "string"
@@ -1249,7 +1412,7 @@
                           "type": "string"
                         },
                         "location": {
-                          "description": "The location which contains the WorkItem's job.",
+                          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the WorkItem's job.",
                           "location": "path",
                           "required": true,
                           "type": "string"
@@ -1279,6 +1442,172 @@
                 }
               }
             },
+            "snapshots": {
+              "methods": {
+                "delete": {
+                  "description": "Deletes a snapshot.",
+                  "flatPath": "v1b3/projects/{projectId}/locations/{location}/snapshots/{snapshotId}",
+                  "httpMethod": "DELETE",
+                  "id": "dataflow.projects.locations.snapshots.delete",
+                  "parameterOrder": [
+                    "projectId",
+                    "location",
+                    "snapshotId"
+                  ],
+                  "parameters": {
+                    "location": {
+                      "description": "The location that contains this snapshot.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "description": "The ID of the Cloud Platform project that the snapshot belongs to.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "snapshotId": {
+                      "description": "The ID of the snapshot.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1b3/projects/{projectId}/locations/{location}/snapshots/{snapshotId}",
+                  "response": {
+                    "$ref": "DeleteSnapshotResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/compute",
+                    "https://www.googleapis.com/auth/compute.readonly",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                },
+                "get": {
+                  "description": "Gets information about a snapshot.",
+                  "flatPath": "v1b3/projects/{projectId}/locations/{location}/snapshots/{snapshotId}",
+                  "httpMethod": "GET",
+                  "id": "dataflow.projects.locations.snapshots.get",
+                  "parameterOrder": [
+                    "projectId",
+                    "location",
+                    "snapshotId"
+                  ],
+                  "parameters": {
+                    "location": {
+                      "description": "The location that contains this snapshot.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "description": "The ID of the Cloud Platform project that the snapshot belongs to.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "snapshotId": {
+                      "description": "The ID of the snapshot.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1b3/projects/{projectId}/locations/{location}/snapshots/{snapshotId}",
+                  "response": {
+                    "$ref": "Snapshot"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/compute",
+                    "https://www.googleapis.com/auth/compute.readonly",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                },
+                "list": {
+                  "description": "Lists snapshots.",
+                  "flatPath": "v1b3/projects/{projectId}/locations/{location}/snapshots",
+                  "httpMethod": "GET",
+                  "id": "dataflow.projects.locations.snapshots.list",
+                  "parameterOrder": [
+                    "projectId",
+                    "location"
+                  ],
+                  "parameters": {
+                    "jobId": {
+                      "description": "If specified, list snapshots created from this job.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "location": {
+                      "description": "The location to list snapshots in.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "description": "The project ID to list snapshots for.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1b3/projects/{projectId}/locations/{location}/snapshots",
+                  "response": {
+                    "$ref": "ListSnapshotsResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/compute",
+                    "https://www.googleapis.com/auth/compute.readonly",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                }
+              }
+            },
+            "sql": {
+              "methods": {
+                "validate": {
+                  "description": "Validates a GoogleSQL query for Cloud Dataflow syntax. Will always\nconfirm the given query parses correctly, and if able to look up\nschema information from DataCatalog, will validate that the query\nanalyzes properly as well.",
+                  "flatPath": "v1b3/projects/{projectId}/locations/{location}/sql:validate",
+                  "httpMethod": "GET",
+                  "id": "dataflow.projects.locations.sql.validate",
+                  "parameterOrder": [
+                    "projectId",
+                    "location"
+                  ],
+                  "parameters": {
+                    "location": {
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "projectId": {
+                      "description": "Required. The ID of the Cloud Platform project that the job belongs to.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "query": {
+                      "description": "The sql query to validate.",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1b3/projects/{projectId}/locations/{location}/sql:validate",
+                  "response": {
+                    "$ref": "ValidateResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/userinfo.email"
+                  ]
+                }
+              }
+            },
             "templates": {
               "methods": {
                 "create": {
@@ -1292,7 +1621,7 @@
                   ],
                   "parameters": {
                     "location": {
-                      "description": "The location to which to direct the request.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -1329,12 +1658,12 @@
                   ],
                   "parameters": {
                     "gcsPath": {
-                      "description": "Required. A Cloud Storage path to the template from which to\ncreate the job.\nMust be a valid Cloud Storage URL, beginning with `gs://`.",
+                      "description": "Required. A Cloud Storage path to the template from which to\ncreate the job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
                       "location": "query",
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location to which to direct the request.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -1375,13 +1704,23 @@
                     "location"
                   ],
                   "parameters": {
+                    "dynamicTemplate.gcsPath": {
+                      "description": "Path to dynamic template spec file on GCS.\nThe file must be a Json serialized DynamicTemplateFieSpec object.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "dynamicTemplate.stagingLocation": {
+                      "description": "Cloud Storage path for staging dependencies.\nMust be a valid Cloud Storage URL, beginning with `gs://`.",
+                      "location": "query",
+                      "type": "string"
+                    },
                     "gcsPath": {
-                      "description": "Required. A Cloud Storage path to the template from which to create\nthe job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
+                      "description": "A Cloud Storage path to the template from which to create\nthe job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
                       "location": "query",
                       "type": "string"
                     },
                     "location": {
-                      "description": "The location to which to direct the request.",
+                      "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
                       "location": "path",
                       "required": true,
                       "type": "string"
@@ -1413,6 +1752,86 @@
                   ]
                 }
               }
+            }
+          }
+        },
+        "snapshots": {
+          "methods": {
+            "get": {
+              "description": "Gets information about a snapshot.",
+              "flatPath": "v1b3/projects/{projectId}/snapshots/{snapshotId}",
+              "httpMethod": "GET",
+              "id": "dataflow.projects.snapshots.get",
+              "parameterOrder": [
+                "projectId",
+                "snapshotId"
+              ],
+              "parameters": {
+                "location": {
+                  "description": "The location that contains this snapshot.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "projectId": {
+                  "description": "The ID of the Cloud Platform project that the snapshot belongs to.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "snapshotId": {
+                  "description": "The ID of the snapshot.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1b3/projects/{projectId}/snapshots/{snapshotId}",
+              "response": {
+                "$ref": "Snapshot"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/compute",
+                "https://www.googleapis.com/auth/compute.readonly",
+                "https://www.googleapis.com/auth/userinfo.email"
+              ]
+            },
+            "list": {
+              "description": "Lists snapshots.",
+              "flatPath": "v1b3/projects/{projectId}/snapshots",
+              "httpMethod": "GET",
+              "id": "dataflow.projects.snapshots.list",
+              "parameterOrder": [
+                "projectId"
+              ],
+              "parameters": {
+                "jobId": {
+                  "description": "If specified, list snapshots created from this job.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "location": {
+                  "description": "The location to list snapshots in.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "projectId": {
+                  "description": "The project ID to list snapshots for.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1b3/projects/{projectId}/snapshots",
+              "response": {
+                "$ref": "ListSnapshotsResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/compute",
+                "https://www.googleapis.com/auth/compute.readonly",
+                "https://www.googleapis.com/auth/userinfo.email"
+              ]
             }
           }
         },
@@ -1458,12 +1877,12 @@
               ],
               "parameters": {
                 "gcsPath": {
-                  "description": "Required. A Cloud Storage path to the template from which to\ncreate the job.\nMust be a valid Cloud Storage URL, beginning with `gs://`.",
+                  "description": "Required. A Cloud Storage path to the template from which to\ncreate the job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
                   "location": "query",
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location to which to direct the request.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
                   "location": "query",
                   "type": "string"
                 },
@@ -1502,13 +1921,23 @@
                 "projectId"
               ],
               "parameters": {
+                "dynamicTemplate.gcsPath": {
+                  "description": "Path to dynamic template spec file on GCS.\nThe file must be a Json serialized DynamicTemplateFieSpec object.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "dynamicTemplate.stagingLocation": {
+                  "description": "Cloud Storage path for staging dependencies.\nMust be a valid Cloud Storage URL, beginning with `gs://`.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "gcsPath": {
-                  "description": "Required. A Cloud Storage path to the template from which to create\nthe job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
+                  "description": "A Cloud Storage path to the template from which to create\nthe job.\nMust be valid Cloud Storage URL, beginning with 'gs://'.",
                   "location": "query",
                   "type": "string"
                 },
                 "location": {
-                  "description": "The location to which to direct the request.",
+                  "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
                   "location": "query",
                   "type": "string"
                 },
@@ -1543,7 +1972,7 @@
       }
     }
   },
-  "revision": "20180828",
+  "revision": "20190519",
   "rootUrl": "https://dataflow.googleapis.com/",
   "schemas": {
     "ApproximateProgress": {
@@ -1597,6 +2026,11 @@
       "properties": {
         "fractionConsumed": {
           "description": "A fraction at which to split the work item, from 0.0 (beginning of the\ninput) to 1.0 (end of the input).",
+          "format": "double",
+          "type": "number"
+        },
+        "fractionOfRemainder": {
+          "description": "The fraction of the remainder of work to split the work item at, from 0.0\n(split at the current position) to 1.0 (end of the input).",
           "format": "double",
           "type": "number"
         },
@@ -2076,7 +2510,7 @@
           "type": "string"
         },
         "location": {
-          "description": "The location to which to direct the request.",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) to\nwhich to direct the request.",
           "type": "string"
         },
         "parameters": {
@@ -2131,6 +2565,12 @@
           "type": "string"
         }
       },
+      "type": "object"
+    },
+    "DeleteSnapshotResponse": {
+      "description": "Response from deleting a snapshot.",
+      "id": "DeleteSnapshotResponse",
+      "properties": {},
       "type": "object"
     },
     "DerivedSource": {
@@ -2305,6 +2745,20 @@
           },
           "type": "array"
         },
+        "flexResourceSchedulingGoal": {
+          "description": "Which Flexible Resource Scheduling mode to run in.",
+          "enum": [
+            "FLEXRS_UNSPECIFIED",
+            "FLEXRS_SPEED_OPTIMIZED",
+            "FLEXRS_COST_OPTIMIZED"
+          ],
+          "enumDescriptions": [
+            "Run in the default mode.",
+            "Optimize for lower execution time.",
+            "Optimize for lower cost."
+          ],
+          "type": "string"
+        },
         "internalExperiments": {
           "additionalProperties": {
             "description": "Properties of the object. Contains field @type with type URL.",
@@ -2323,6 +2777,10 @@
         },
         "serviceAccountEmail": {
           "description": "Identity to run virtual machines as. Defaults to the default account.",
+          "type": "string"
+        },
+        "serviceKmsKeyName": {
+          "description": "If set, contains the Cloud KMS key identifier used to encrypt data\nat rest, AKA a Customer Managed Encryption Key (CMEK).\n\nFormat:\n  projects/PROJECT_ID/locations/LOCATION/keyRings/KEY_RING/cryptoKeys/KEY",
           "type": "string"
         },
         "tempStoragePrefix": {
@@ -2473,11 +2931,11 @@
       "type": "object"
     },
     "FailedLocation": {
-      "description": "Indicates which location failed to respond to a request for data.",
+      "description": "Indicates which [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) failed\nto respond to a request for data.",
       "id": "FailedLocation",
       "properties": {
         "name": {
-          "description": "The name of the failed location.",
+          "description": "The name of the [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\nfailed to respond.",
           "type": "string"
         }
       },
@@ -2548,7 +3006,7 @@
           "type": "string"
         },
         "location": {
-          "description": "The location which contains the job specified by job_id.",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
           "type": "string"
         },
         "workerId": {
@@ -2714,6 +3172,10 @@
           "format": "google-datetime",
           "type": "string"
         },
+        "createdFromSnapshotId": {
+          "description": "If this is specified, the job's initial state is populated from the given\nsnapshot.",
+          "type": "string"
+        },
         "currentState": {
           "description": "The current state of the job.\n\nJobs are created in the `JOB_STATE_STOPPED` state unless otherwise\nspecified.\n\nA job in the `JOB_STATE_RUNNING` state may asynchronously enter a\nterminal state. After a job has reached a terminal state, no\nfurther state updates may be made.\n\nThis field may be mutated by the Cloud Dataflow service;\ncallers cannot mutate it.",
           "enum": [
@@ -2775,7 +3237,7 @@
           "type": "object"
         },
         "location": {
-          "description": "The location that contains this job.",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains this job.",
           "type": "string"
         },
         "name": {
@@ -2837,12 +3299,21 @@
           },
           "type": "array"
         },
+        "startTime": {
+          "description": "The timestamp when the job was started (transitioned to JOB_STATE_PENDING).\nFlexible resource scheduling jobs are started with some delay after job\ncreation, so start_time is unset before start and is updated when the\njob is started by the Cloud Dataflow service. For other jobs, start_time\nalways equals to create_time and is immutable and set by the Cloud Dataflow\nservice.",
+          "format": "google-datetime",
+          "type": "string"
+        },
         "steps": {
-          "description": "The top-level steps that constitute the entire job.",
+          "description": "Exactly one of step or steps_location should be specified.\n\nThe top-level steps that constitute the entire job.",
           "items": {
             "$ref": "Step"
           },
           "type": "array"
+        },
+        "stepsLocation": {
+          "description": "The GCS location where the steps are stored.",
+          "type": "string"
         },
         "tempFiles": {
           "description": "A set of files the system should be aware of that are used\nfor temporary storage. These temporary files will be\nremoved on job completion.\nNo duplicates are allowed.\nNo file patterns are supported.\n\nThe supported files are:\n\nGoogle Cloud Storage:\n\n   storage.googleapis.com/{bucket}/{object}\n   bucket.storage.googleapis.com/{object}",
@@ -2944,7 +3415,7 @@
       "type": "object"
     },
     "JobMetadata": {
-      "description": "Metadata available primarily for filtering jobs. Will be included in the\nListJob response and Job SUMMARY view+.",
+      "description": "Metadata available primarily for filtering jobs. Will be included in the\nListJob response and Job SUMMARY view.",
       "id": "JobMetadata",
       "properties": {
         "bigTableDetails": {
@@ -2997,7 +3468,7 @@
       "type": "object"
     },
     "JobMetrics": {
-      "description": "JobMetrics contains a collection of metrics descibing the detailed progress\nof a Dataflow job. Metrics correspond to user-defined and system-defined\nmetrics in the job.\n\nThis resource captures only the most recent values of each metric;\ntime-series data can be queried for them (under the same metric names)\nfrom Cloud Monitoring.",
+      "description": "JobMetrics contains a collection of metrics describing the detailed progress\nof a Dataflow job. Metrics correspond to user-defined and system-defined\nmetrics in the job.\n\nThis resource captures only the most recent values of each metric;\ntime-series data can be queried for them (under the same metric names)\nfrom Cloud Monitoring.",
       "id": "JobMetrics",
       "properties": {
         "metricTime": {
@@ -3104,13 +3575,21 @@
           "type": "string"
         },
         "location": {
-          "description": "The location which contains the WorkItem's job.",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the WorkItem's job.",
           "type": "string"
         },
         "requestedLeaseDuration": {
           "description": "The initial lease period.",
           "format": "google-duration",
           "type": "string"
+        },
+        "unifiedWorkerRequest": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Untranslated bag-of-bytes WorkRequest from UnifiedWorker.",
+          "type": "object"
         },
         "workItemTypes": {
           "description": "Filter for WorkItem type.",
@@ -3137,6 +3616,14 @@
       "description": "Response to a request to lease WorkItems.",
       "id": "LeaseWorkItemResponse",
       "properties": {
+        "unifiedWorkerResponse": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Untranslated bag-of-bytes WorkResponse for UnifiedWorker.",
+          "type": "object"
+        },
         "workItems": {
           "description": "A list of the leased WorkItems.",
           "items": {
@@ -3177,7 +3664,7 @@
       "id": "ListJobsResponse",
       "properties": {
         "failedLocation": {
-          "description": "Zero or more messages describing locations that failed to respond.",
+          "description": "Zero or more messages describing the [regional endpoints]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\nfailed to respond.",
           "items": {
             "$ref": "FailedLocation"
           },
@@ -3197,10 +3684,28 @@
       },
       "type": "object"
     },
+    "ListSnapshotsResponse": {
+      "description": "List of snapshots.",
+      "id": "ListSnapshotsResponse",
+      "properties": {
+        "snapshots": {
+          "description": "Returned snapshots.",
+          "items": {
+            "$ref": "Snapshot"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "MapTask": {
       "description": "MapTask consists of an ordered set of instructions, each of which\ndescribes one particular low-level operation for the worker to\nperform in order to accomplish the MapTask's WorkItem.\n\nEach instruction must appear in the list before any instructions which\ndepends on its output.",
       "id": "MapTask",
       "properties": {
+        "counterPrefix": {
+          "description": "Counter prefix that can be used to prefix counters. Not currently used in\nDataflow.",
+          "type": "string"
+        },
         "instructions": {
           "description": "The instructions in the MapTask.",
           "items": {
@@ -3558,7 +4063,7 @@
       "type": "object"
     },
     "PipelineDescription": {
-      "description": "A descriptive representation of submitted pipeline as well as the executed\nform.  This data is provided by the Dataflow service for ease of visualizing\nthe pipeline and interpretting Dataflow provided metrics.",
+      "description": "A descriptive representation of submitted pipeline as well as the executed\nform.  This data is provided by the Dataflow service for ease of visualizing\nthe pipeline and interpreting Dataflow provided metrics.",
       "id": "PipelineDescription",
       "properties": {
         "displayData": {
@@ -3689,8 +4194,16 @@
           "type": "string"
         },
         "location": {
-          "description": "The location which contains the WorkItem's job.",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the WorkItem's job.",
           "type": "string"
+        },
+        "unifiedWorkerRequest": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Untranslated bag-of-bytes WorkProgressUpdateRequest from UnifiedWorker.",
+          "type": "object"
         },
         "workItemStatuses": {
           "description": "The order is unimportant, except that the order of the\nWorkItemServiceState messages in the ReportWorkItemStatusResponse\ncorresponds to the order of WorkItemStatus messages here.",
@@ -3710,6 +4223,14 @@
       "description": "Response from a request to report the status of WorkItems.",
       "id": "ReportWorkItemStatusResponse",
       "properties": {
+        "unifiedWorkerResponse": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Untranslated bag-of-bytes WorkProgressUpdateResponse for UnifiedWorker.",
+          "type": "object"
+        },
         "workItemServiceStates": {
           "description": "A set of messages indicating the service-side state for each\nWorkItem whose status was reported, in the same order as the\nWorkItemStatus messages in the ReportWorkItemStatusRequest which\nresulting in this response.",
           "items": {
@@ -3767,6 +4288,13 @@
           },
           "type": "array"
         },
+        "additionalUserLabels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Additional user labels to be specified for the job.\nKeys and values should follow the restrictions specified in the [labeling\nrestrictions](https://cloud.google.com/compute/docs/labeling-resources#restrictions)\npage.",
+          "type": "object"
+        },
         "bypassTempDirValidation": {
           "description": "Whether to bypass the safety checks for the job's temporary directory.\nUse with caution.",
           "type": "boolean"
@@ -3783,6 +4311,11 @@
         "network": {
           "description": "Network to which VMs will be assigned.  If empty or unspecified,\nthe service will use the network \"default\".",
           "type": "string"
+        },
+        "numWorkers": {
+          "description": "The initial number of Google Compute Engine instnaces for the job.",
+          "format": "int32",
+          "type": "integer"
         },
         "serviceAccountEmail": {
           "description": "The email address of the service account to run the job as.",
@@ -3804,7 +4337,7 @@
       "type": "object"
     },
     "SdkVersion": {
-      "description": "The version of the SDK used to run the jobl",
+      "description": "The version of the SDK used to run the job.",
       "id": "SdkVersion",
       "properties": {
         "sdkSupportStatus": {
@@ -3830,7 +4363,7 @@
           "type": "string"
         },
         "versionDisplayName": {
-          "description": "A readable string describing the version of the sdk.",
+          "description": "A readable string describing the version of the SDK.",
           "type": "string"
         }
       },
@@ -3849,7 +4382,7 @@
           "type": "string"
         },
         "location": {
-          "description": "The location which contains the job specified by job_id.",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job specified by job_id.",
           "type": "string"
         },
         "workerId": {
@@ -3870,7 +4403,7 @@
       "id": "SendWorkerMessagesRequest",
       "properties": {
         "location": {
-          "description": "The location which contains the job",
+          "description": "The [regional endpoint]\n(https://cloud.google.com/dataflow/docs/concepts/regional-endpoints) that\ncontains the job.",
           "type": "string"
         },
         "workerMessages": {
@@ -4014,6 +4547,71 @@
           },
           "description": "The sink to write to, plus its parameters.",
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "Snapshot": {
+      "description": "Represents a snapshot of a job.",
+      "id": "Snapshot",
+      "properties": {
+        "creationTime": {
+          "description": "The time this snapshot was created.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "id": {
+          "description": "The unique ID of this snapshot.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "The project this snapshot belongs to.",
+          "type": "string"
+        },
+        "sourceJobId": {
+          "description": "The job this snapshot was created from.",
+          "type": "string"
+        },
+        "state": {
+          "description": "State of the snapshot.",
+          "enum": [
+            "UNKNOWN_SNAPSHOT_STATE",
+            "PENDING",
+            "RUNNING",
+            "READY",
+            "FAILED",
+            "DELETED"
+          ],
+          "enumDescriptions": [
+            "Unknown state.",
+            "Snapshot intent to create has been persisted, snapshotting of state has not\nyet started.",
+            "Snapshotting is being performed.",
+            "Snapshot has been created and is ready to be used.",
+            "Snapshot failed to be created.",
+            "Snapshot has been deleted."
+          ],
+          "type": "string"
+        },
+        "ttl": {
+          "description": "The time after which this snapshot will be automatically deleted.",
+          "format": "google-duration",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SnapshotJobRequest": {
+      "description": "Request to create a snapshot of a job.",
+      "id": "SnapshotJobRequest",
+      "properties": {
+        "location": {
+          "description": "The location that contains this job.",
+          "type": "string"
+        },
+        "ttl": {
+          "description": "TTL for the snapshot.",
+          "format": "google-duration",
+          "type": "string"
         }
       },
       "type": "object"
@@ -4341,7 +4939,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {
@@ -4413,6 +5011,21 @@
       },
       "type": "object"
     },
+    "StreamingApplianceSnapshotConfig": {
+      "description": "Streaming appliance snapshot configuration.",
+      "id": "StreamingApplianceSnapshotConfig",
+      "properties": {
+        "importStateEndpoint": {
+          "description": "Indicates which endpoint is used to import appliance state.",
+          "type": "string"
+        },
+        "snapshotId": {
+          "description": "If set, indicates the snapshot id for the snapshot being performed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "StreamingComputationConfig": {
       "description": "Configuration information for a single streaming computation.",
       "id": "StreamingComputationConfig",
@@ -4435,6 +5048,13 @@
         "systemName": {
           "description": "System defined name for this computation.",
           "type": "string"
+        },
+        "transformUserNameToStateFamily": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Map from user name of stateful transforms in this stage to their state\nfamily.",
+          "type": "object"
         }
       },
       "type": "object"
@@ -4496,6 +5116,11 @@
       "description": "A task that carries configuration information for streaming computations.",
       "id": "StreamingConfigTask",
       "properties": {
+        "maxWorkItemCommitBytes": {
+          "description": "Maximum size for work item commit supported windmill storage layer.",
+          "format": "int64",
+          "type": "string"
+        },
         "streamingComputationConfigs": {
           "description": "Set of computation configuration information.",
           "items": {
@@ -4534,6 +5159,10 @@
           "description": "The TCP port on which the worker should listen for messages from\nother streaming computation workers.",
           "format": "int32",
           "type": "integer"
+        },
+        "snapshotConfig": {
+          "$ref": "StreamingApplianceSnapshotConfig",
+          "description": "Configures streaming appliance snapshot."
         },
         "streamingComputationTopology": {
           "$ref": "TopologyConfig",
@@ -4592,7 +5221,7 @@
       "id": "StructuredMessage",
       "properties": {
         "messageKey": {
-          "description": "Idenfier for this message type.  Used by external systems to\ninternationalize or personalize message.",
+          "description": "Identifier for this message type.  Used by external systems to\ninternationalize or personalize message.",
           "type": "string"
         },
         "messageText": {
@@ -4817,6 +5446,17 @@
       },
       "type": "object"
     },
+    "ValidateResponse": {
+      "description": "Response to the validation request.",
+      "id": "ValidateResponse",
+      "properties": {
+        "errorMessage": {
+          "description": "Will be empty if validation succeeds.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "WorkItem": {
       "description": "WorkItem represents basic information about a WorkItem to be executed\nin the cloud.",
       "id": "WorkItem",
@@ -5019,6 +5659,10 @@
       "description": "WorkerHealthReport contains information about the health of a worker.\n\nThe VM should be identified by the labels attached to the WorkerMessage that\nthis health ping belongs to.",
       "id": "WorkerHealthReport",
       "properties": {
+        "msg": {
+          "description": "A message describing any unusual health reports.",
+          "type": "string"
+        },
         "pods": {
           "description": "The pods running on the worker. See:\nhttp://kubernetes.io/v1.1/docs/api-reference/v1/definitions.html#_v1_pod\n\nThis field is used by the worker to send the status of the indvidual\ncontainers running on each worker.",
           "items": {
@@ -5035,8 +5679,12 @@
           "format": "google-duration",
           "type": "string"
         },
+        "vmIsBroken": {
+          "description": "Whether the VM is in a permanently broken state.\nBroken VMs should be abandoned or deleted ASAP to avoid assigning or\ncompleting any work.",
+          "type": "boolean"
+        },
         "vmIsHealthy": {
-          "description": "Whether the VM is healthy.",
+          "description": "Whether the VM is currently healthy.",
           "type": "boolean"
         },
         "vmStartupTime": {

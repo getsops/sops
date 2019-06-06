@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) Account
 // accountName - the name of the storage account within the specified resource group. Storage account names
 // must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 func (client AccountsClient) CheckNameAvailability(ctx context.Context, accountName AccountCheckNameAvailabilityParameters) (result CheckNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CheckNameAvailabilityPreparer(ctx, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "CheckNameAvailability", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client AccountsClient) CheckNameAvailabilityResponder(resp *http.Response)
 // must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 // parameters - the parameters to provide for the created account.
 func (client AccountsClient) Create(ctx context.Context, resourceGroupName string, accountName string, parameters AccountCreateParameters) (result AccountsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "Create", nil, "Failure preparing request")
@@ -162,10 +183,6 @@ func (client AccountsClient) CreateSender(req *http.Request) (future AccountsCre
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -189,6 +206,16 @@ func (client AccountsClient) CreateResponder(resp *http.Response) (result Accoun
 // accountName - the name of the storage account within the specified resource group. Storage account names
 // must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 func (client AccountsClient) Delete(ctx context.Context, resourceGroupName string, accountName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "Delete", nil, "Failure preparing request")
@@ -257,6 +284,16 @@ func (client AccountsClient) DeleteResponder(resp *http.Response) (result autore
 // accountName - the name of the storage account within the specified resource group. Storage account names
 // must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 func (client AccountsClient) GetProperties(ctx context.Context, resourceGroupName string, accountName string) (result Account, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.GetProperties")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPropertiesPreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "GetProperties", nil, "Failure preparing request")
@@ -322,6 +359,16 @@ func (client AccountsClient) GetPropertiesResponder(resp *http.Response) (result
 // List lists all the storage accounts available under the subscription. Note that storage keys are not returned; use
 // the ListKeys operation for this.
 func (client AccountsClient) List(ctx context.Context) (result AccountListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.List")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -384,8 +431,8 @@ func (client AccountsClient) ListResponder(resp *http.Response) (result AccountL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AccountsClient) listNextResults(lastResults AccountListResult) (result AccountListResult, err error) {
-	req, err := lastResults.accountListResultPreparer()
+func (client AccountsClient) listNextResults(ctx context.Context, lastResults AccountListResult) (result AccountListResult, err error) {
+	req, err := lastResults.accountListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "storage.AccountsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -406,6 +453,16 @@ func (client AccountsClient) listNextResults(lastResults AccountListResult) (res
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AccountsClient) ListComplete(ctx context.Context) (result AccountListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -415,6 +472,16 @@ func (client AccountsClient) ListComplete(ctx context.Context) (result AccountLi
 // Parameters:
 // resourceGroupName - the name of the resource group within the user's subscription.
 func (client AccountsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AccountListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -478,8 +545,8 @@ func (client AccountsClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AccountsClient) listByResourceGroupNextResults(lastResults AccountListResult) (result AccountListResult, err error) {
-	req, err := lastResults.accountListResultPreparer()
+func (client AccountsClient) listByResourceGroupNextResults(ctx context.Context, lastResults AccountListResult) (result AccountListResult, err error) {
+	req, err := lastResults.accountListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "storage.AccountsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -500,6 +567,16 @@ func (client AccountsClient) listByResourceGroupNextResults(lastResults AccountL
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AccountsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result AccountListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -509,6 +586,16 @@ func (client AccountsClient) ListByResourceGroupComplete(ctx context.Context, re
 // resourceGroupName - the name of the resource group.
 // accountName - the name of the storage account.
 func (client AccountsClient) ListKeys(ctx context.Context, resourceGroupName string, accountName string) (result AccountKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListKeysPreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "ListKeys", nil, "Failure preparing request")
@@ -578,6 +665,16 @@ func (client AccountsClient) ListKeysResponder(resp *http.Response) (result Acco
 // must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 // regenerateKey - specifies name of the key which should be regenerated.
 func (client AccountsClient) RegenerateKey(ctx context.Context, resourceGroupName string, accountName string, regenerateKey AccountRegenerateKeyParameters) (result AccountKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.RegenerateKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateKeyPreparer(ctx, resourceGroupName, accountName, regenerateKey)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "RegenerateKey", nil, "Failure preparing request")
@@ -655,6 +752,16 @@ func (client AccountsClient) RegenerateKeyResponder(resp *http.Response) (result
 // parameters - the parameters to update on the account. Note that only one property can be changed at a time
 // using this API.
 func (client AccountsClient) Update(ctx context.Context, resourceGroupName string, accountName string, parameters AccountUpdateParameters) (result Account, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.AccountsClient", "Update", nil, "Failure preparing request")

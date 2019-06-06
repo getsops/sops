@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -52,6 +53,16 @@ func NewJobExecutionsClientWithBaseURI(baseURI string, subscriptionID string) Jo
 // jobName - the name of the job.
 // jobExecutionID - the id of the job execution to cancel.
 func (client JobExecutionsClient) Cancel(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobExecutionsClient", "Cancel", nil, "Failure preparing request")
@@ -124,6 +135,16 @@ func (client JobExecutionsClient) CancelResponder(resp *http.Response) (result a
 // jobAgentName - the name of the job agent.
 // jobName - the name of the job to get.
 func (client JobExecutionsClient) Create(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result JobExecutionsCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobExecutionsClient", "Create", nil, "Failure preparing request")
@@ -171,10 +192,6 @@ func (client JobExecutionsClient) CreateSender(req *http.Request) (future JobExe
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -192,7 +209,7 @@ func (client JobExecutionsClient) CreateResponder(resp *http.Response) (result J
 	return
 }
 
-// CreateOrUpdate creates or updatess a job execution.
+// CreateOrUpdate creates or updates a job execution.
 // Parameters:
 // resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
 // from the Azure Resource Manager API or the portal.
@@ -201,6 +218,16 @@ func (client JobExecutionsClient) CreateResponder(resp *http.Response) (result J
 // jobName - the name of the job to get.
 // jobExecutionID - the job execution id to create the job execution under.
 func (client JobExecutionsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID uuid.UUID) (result JobExecutionsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobExecutionsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -249,10 +276,6 @@ func (client JobExecutionsClient) CreateOrUpdateSender(req *http.Request) (futur
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -279,6 +302,16 @@ func (client JobExecutionsClient) CreateOrUpdateResponder(resp *http.Response) (
 // jobName - the name of the job.
 // jobExecutionID - the id of the job execution
 func (client JobExecutionsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID uuid.UUID) (result JobExecution, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobExecutionsClient", "Get", nil, "Failure preparing request")
@@ -358,6 +391,16 @@ func (client JobExecutionsClient) GetResponder(resp *http.Response) (result JobE
 // skip - the number of elements in the collection to skip.
 // top - the number of elements to return from the collection.
 func (client JobExecutionsClient) ListByAgent(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, createTimeMin *date.Time, createTimeMax *date.Time, endTimeMin *date.Time, endTimeMax *date.Time, isActive *bool, skip *int32, top *int32) (result JobExecutionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.ListByAgent")
+		defer func() {
+			sc := -1
+			if result.jelr.Response.Response != nil {
+				sc = result.jelr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByAgentNextResults
 	req, err := client.ListByAgentPreparer(ctx, resourceGroupName, serverName, jobAgentName, createTimeMin, createTimeMax, endTimeMin, endTimeMax, isActive, skip, top)
 	if err != nil {
@@ -444,8 +487,8 @@ func (client JobExecutionsClient) ListByAgentResponder(resp *http.Response) (res
 }
 
 // listByAgentNextResults retrieves the next set of results, if any.
-func (client JobExecutionsClient) listByAgentNextResults(lastResults JobExecutionListResult) (result JobExecutionListResult, err error) {
-	req, err := lastResults.jobExecutionListResultPreparer()
+func (client JobExecutionsClient) listByAgentNextResults(ctx context.Context, lastResults JobExecutionListResult) (result JobExecutionListResult, err error) {
+	req, err := lastResults.jobExecutionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobExecutionsClient", "listByAgentNextResults", nil, "Failure preparing next results request")
 	}
@@ -466,6 +509,16 @@ func (client JobExecutionsClient) listByAgentNextResults(lastResults JobExecutio
 
 // ListByAgentComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobExecutionsClient) ListByAgentComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, createTimeMin *date.Time, createTimeMax *date.Time, endTimeMin *date.Time, endTimeMax *date.Time, isActive *bool, skip *int32, top *int32) (result JobExecutionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.ListByAgent")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAgent(ctx, resourceGroupName, serverName, jobAgentName, createTimeMin, createTimeMax, endTimeMin, endTimeMax, isActive, skip, top)
 	return
 }
@@ -485,6 +538,16 @@ func (client JobExecutionsClient) ListByAgentComplete(ctx context.Context, resou
 // skip - the number of elements in the collection to skip.
 // top - the number of elements to return from the collection.
 func (client JobExecutionsClient) ListByJob(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, createTimeMin *date.Time, createTimeMax *date.Time, endTimeMin *date.Time, endTimeMax *date.Time, isActive *bool, skip *int32, top *int32) (result JobExecutionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.jelr.Response.Response != nil {
+				sc = result.jelr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByJobNextResults
 	req, err := client.ListByJobPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, createTimeMin, createTimeMax, endTimeMin, endTimeMax, isActive, skip, top)
 	if err != nil {
@@ -572,8 +635,8 @@ func (client JobExecutionsClient) ListByJobResponder(resp *http.Response) (resul
 }
 
 // listByJobNextResults retrieves the next set of results, if any.
-func (client JobExecutionsClient) listByJobNextResults(lastResults JobExecutionListResult) (result JobExecutionListResult, err error) {
-	req, err := lastResults.jobExecutionListResultPreparer()
+func (client JobExecutionsClient) listByJobNextResults(ctx context.Context, lastResults JobExecutionListResult) (result JobExecutionListResult, err error) {
+	req, err := lastResults.jobExecutionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobExecutionsClient", "listByJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -594,6 +657,16 @@ func (client JobExecutionsClient) listByJobNextResults(lastResults JobExecutionL
 
 // ListByJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobExecutionsClient) ListByJobComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, createTimeMin *date.Time, createTimeMax *date.Time, endTimeMin *date.Time, endTimeMax *date.Time, isActive *bool, skip *int32, top *int32) (result JobExecutionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobExecutionsClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByJob(ctx, resourceGroupName, serverName, jobAgentName, jobName, createTimeMin, createTimeMax, endTimeMin, endTimeMax, isActive, skip, top)
 	return
 }

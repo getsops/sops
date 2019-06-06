@@ -24,7 +24,7 @@
 //
 //   func() (RetrieveFn func() (key, secret, token string, err error), IsExpiredFn func() bool)
 //
-// Plugin Implementation Exmaple
+// Plugin Implementation Example
 //
 // The following is an example implementation of a SDK credential provider using
 // the plugin provider in this package. See the SDK's example/aws/credential/plugincreds/plugin

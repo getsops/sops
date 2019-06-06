@@ -21,10 +21,11 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// DimensionsClient is the REST APIs for Azure Active Drectory Connect Health
+// DimensionsClient is the REST APIs for Azure Active Directory Connect Health
 type DimensionsClient struct {
 	BaseClient
 }
@@ -44,6 +45,16 @@ func NewDimensionsClientWithBaseURI(baseURI string) DimensionsClient {
 // serviceName - the name of the service.
 // dimension - the dimension type.
 func (client DimensionsClient) ListAddsDimensions(ctx context.Context, serviceName string, dimension string) (result DimensionsPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DimensionsClient.ListAddsDimensions")
+		defer func() {
+			sc := -1
+			if result.d.Response.Response != nil {
+				sc = result.d.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAddsDimensionsNextResults
 	req, err := client.ListAddsDimensionsPreparer(ctx, serviceName, dimension)
 	if err != nil {
@@ -107,8 +118,8 @@ func (client DimensionsClient) ListAddsDimensionsResponder(resp *http.Response) 
 }
 
 // listAddsDimensionsNextResults retrieves the next set of results, if any.
-func (client DimensionsClient) listAddsDimensionsNextResults(lastResults Dimensions) (result Dimensions, err error) {
-	req, err := lastResults.dimensionsPreparer()
+func (client DimensionsClient) listAddsDimensionsNextResults(ctx context.Context, lastResults Dimensions) (result Dimensions, err error) {
+	req, err := lastResults.dimensionsPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.DimensionsClient", "listAddsDimensionsNextResults", nil, "Failure preparing next results request")
 	}
@@ -129,6 +140,16 @@ func (client DimensionsClient) listAddsDimensionsNextResults(lastResults Dimensi
 
 // ListAddsDimensionsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DimensionsClient) ListAddsDimensionsComplete(ctx context.Context, serviceName string, dimension string) (result DimensionsIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DimensionsClient.ListAddsDimensions")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAddsDimensions(ctx, serviceName, dimension)
 	return
 }

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -42,6 +43,16 @@ func NewPatternClient(endpoint string) PatternClient {
 // versionID - the version ID.
 // pattern - the input pattern.
 func (client PatternClient) AddPattern(ctx context.Context, appID uuid.UUID, versionID string, pattern PatternRuleCreateObject) (result PatternRuleInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.AddPattern")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddPatternPreparer(ctx, appID, versionID, pattern)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "AddPattern", nil, "Failure preparing request")
@@ -109,6 +120,16 @@ func (client PatternClient) AddPatternResponder(resp *http.Response) (result Pat
 // versionID - the version ID.
 // patterns - a JSON array containing patterns.
 func (client PatternClient) BatchAddPatterns(ctx context.Context, appID uuid.UUID, versionID string, patterns []PatternRuleCreateObject) (result ListPatternRuleInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.BatchAddPatterns")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: patterns,
 			Constraints: []validation.Constraint{{Target: "patterns", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -182,6 +203,16 @@ func (client PatternClient) BatchAddPatternsResponder(resp *http.Response) (resu
 // versionID - the version ID.
 // patternID - the pattern ID.
 func (client PatternClient) DeletePattern(ctx context.Context, appID uuid.UUID, versionID string, patternID uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.DeletePattern")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePatternPreparer(ctx, appID, versionID, patternID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "DeletePattern", nil, "Failure preparing request")
@@ -248,6 +279,16 @@ func (client PatternClient) DeletePatternResponder(resp *http.Response) (result 
 // versionID - the version ID.
 // patternIds - the patterns IDs.
 func (client PatternClient) DeletePatterns(ctx context.Context, appID uuid.UUID, versionID string, patternIds []uuid.UUID) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.DeletePatterns")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: patternIds,
 			Constraints: []validation.Constraint{{Target: "patternIds", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -315,14 +356,24 @@ func (client PatternClient) DeletePatternsResponder(resp *http.Response) (result
 	return
 }
 
-// GetIntentPatterns sends the get intent patterns request.
+// ListIntentPatterns sends the list intent patterns request.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // intentID - the intent classifier ID.
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
-func (client PatternClient) GetIntentPatterns(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, skip *int32, take *int32) (result ListPatternRuleInfo, err error) {
+func (client PatternClient) ListIntentPatterns(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, skip *int32, take *int32) (result ListPatternRuleInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.ListIntentPatterns")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -332,32 +383,32 @@ func (client PatternClient) GetIntentPatterns(ctx context.Context, appID uuid.UU
 				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: int64(500), Chain: nil},
 					{Target: "take", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
 				}}}}}); err != nil {
-		return result, validation.NewError("authoring.PatternClient", "GetIntentPatterns", err.Error())
+		return result, validation.NewError("authoring.PatternClient", "ListIntentPatterns", err.Error())
 	}
 
-	req, err := client.GetIntentPatternsPreparer(ctx, appID, versionID, intentID, skip, take)
+	req, err := client.ListIntentPatternsPreparer(ctx, appID, versionID, intentID, skip, take)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "GetIntentPatterns", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "ListIntentPatterns", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.GetIntentPatternsSender(req)
+	resp, err := client.ListIntentPatternsSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "GetIntentPatterns", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "ListIntentPatterns", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.GetIntentPatternsResponder(resp)
+	result, err = client.ListIntentPatternsResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "GetIntentPatterns", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "ListIntentPatterns", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// GetIntentPatternsPreparer prepares the GetIntentPatterns request.
-func (client PatternClient) GetIntentPatternsPreparer(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, skip *int32, take *int32) (*http.Request, error) {
+// ListIntentPatternsPreparer prepares the ListIntentPatterns request.
+func (client PatternClient) ListIntentPatternsPreparer(ctx context.Context, appID uuid.UUID, versionID string, intentID uuid.UUID, skip *int32, take *int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"Endpoint": client.Endpoint,
 	}
@@ -388,16 +439,16 @@ func (client PatternClient) GetIntentPatternsPreparer(ctx context.Context, appID
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// GetIntentPatternsSender sends the GetIntentPatterns request. The method will close the
+// ListIntentPatternsSender sends the ListIntentPatterns request. The method will close the
 // http.Response Body if it receives an error.
-func (client PatternClient) GetIntentPatternsSender(req *http.Request) (*http.Response, error) {
+func (client PatternClient) ListIntentPatternsSender(req *http.Request) (*http.Response, error) {
 	return autorest.SendWithSender(client, req,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// GetIntentPatternsResponder handles the response to the GetIntentPatterns request. The method always
+// ListIntentPatternsResponder handles the response to the ListIntentPatterns request. The method always
 // closes the http.Response Body.
-func (client PatternClient) GetIntentPatternsResponder(resp *http.Response) (result ListPatternRuleInfo, err error) {
+func (client PatternClient) ListIntentPatternsResponder(resp *http.Response) (result ListPatternRuleInfo, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -408,13 +459,23 @@ func (client PatternClient) GetIntentPatternsResponder(resp *http.Response) (res
 	return
 }
 
-// GetPatterns sends the get patterns request.
+// ListPatterns sends the list patterns request.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
-func (client PatternClient) GetPatterns(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPatternRuleInfo, err error) {
+func (client PatternClient) ListPatterns(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPatternRuleInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.ListPatterns")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -424,32 +485,32 @@ func (client PatternClient) GetPatterns(ctx context.Context, appID uuid.UUID, ve
 				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: int64(500), Chain: nil},
 					{Target: "take", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
 				}}}}}); err != nil {
-		return result, validation.NewError("authoring.PatternClient", "GetPatterns", err.Error())
+		return result, validation.NewError("authoring.PatternClient", "ListPatterns", err.Error())
 	}
 
-	req, err := client.GetPatternsPreparer(ctx, appID, versionID, skip, take)
+	req, err := client.ListPatternsPreparer(ctx, appID, versionID, skip, take)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "GetPatterns", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "ListPatterns", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.GetPatternsSender(req)
+	resp, err := client.ListPatternsSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "GetPatterns", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "ListPatterns", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.GetPatternsResponder(resp)
+	result, err = client.ListPatternsResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "GetPatterns", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "ListPatterns", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// GetPatternsPreparer prepares the GetPatterns request.
-func (client PatternClient) GetPatternsPreparer(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (*http.Request, error) {
+// ListPatternsPreparer prepares the ListPatterns request.
+func (client PatternClient) ListPatternsPreparer(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"Endpoint": client.Endpoint,
 	}
@@ -479,16 +540,16 @@ func (client PatternClient) GetPatternsPreparer(ctx context.Context, appID uuid.
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// GetPatternsSender sends the GetPatterns request. The method will close the
+// ListPatternsSender sends the ListPatterns request. The method will close the
 // http.Response Body if it receives an error.
-func (client PatternClient) GetPatternsSender(req *http.Request) (*http.Response, error) {
+func (client PatternClient) ListPatternsSender(req *http.Request) (*http.Response, error) {
 	return autorest.SendWithSender(client, req,
 		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
 }
 
-// GetPatternsResponder handles the response to the GetPatterns request. The method always
+// ListPatternsResponder handles the response to the ListPatterns request. The method always
 // closes the http.Response Body.
-func (client PatternClient) GetPatternsResponder(resp *http.Response) (result ListPatternRuleInfo, err error) {
+func (client PatternClient) ListPatternsResponder(resp *http.Response) (result ListPatternRuleInfo, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
@@ -506,6 +567,16 @@ func (client PatternClient) GetPatternsResponder(resp *http.Response) (result Li
 // patternID - the pattern ID.
 // pattern - an object representing a pattern.
 func (client PatternClient) UpdatePattern(ctx context.Context, appID uuid.UUID, versionID string, patternID uuid.UUID, pattern PatternRuleUpdateObject) (result PatternRuleInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.UpdatePattern")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePatternPreparer(ctx, appID, versionID, patternID, pattern)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.PatternClient", "UpdatePattern", nil, "Failure preparing request")
@@ -574,6 +645,16 @@ func (client PatternClient) UpdatePatternResponder(resp *http.Response) (result 
 // versionID - the version ID.
 // patterns - an array represents the patterns.
 func (client PatternClient) UpdatePatterns(ctx context.Context, appID uuid.UUID, versionID string, patterns []PatternRuleUpdateObject) (result ListPatternRuleInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PatternClient.UpdatePatterns")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: patterns,
 			Constraints: []validation.Constraint{{Target: "patterns", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {

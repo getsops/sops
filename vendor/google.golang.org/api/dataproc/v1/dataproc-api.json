@@ -108,8 +108,186 @@
       "resources": {
         "locations": {
           "resources": {
+            "autoscalingPolicies": {
+              "methods": {
+                "getIamPolicy": {
+                  "description": "Gets the access control policy for a resource. Returns an empty policy if the resource exists and does not have a policy set.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/autoscalingPolicies/{autoscalingPoliciesId}:getIamPolicy",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.locations.autoscalingPolicies.getIamPolicy",
+                  "parameterOrder": [
+                    "resource"
+                  ],
+                  "parameters": {
+                    "resource": {
+                      "description": "REQUIRED: The resource for which the policy is being requested. See the operation documentation for the appropriate value for this field.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/autoscalingPolicies/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+resource}:getIamPolicy",
+                  "request": {
+                    "$ref": "GetIamPolicyRequest"
+                  },
+                  "response": {
+                    "$ref": "Policy"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "setIamPolicy": {
+                  "description": "Sets the access control policy on the specified resource. Replaces any existing policy.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/autoscalingPolicies/{autoscalingPoliciesId}:setIamPolicy",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.locations.autoscalingPolicies.setIamPolicy",
+                  "parameterOrder": [
+                    "resource"
+                  ],
+                  "parameters": {
+                    "resource": {
+                      "description": "REQUIRED: The resource for which the policy is being specified. See the operation documentation for the appropriate value for this field.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/autoscalingPolicies/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+resource}:setIamPolicy",
+                  "request": {
+                    "$ref": "SetIamPolicyRequest"
+                  },
+                  "response": {
+                    "$ref": "Policy"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "testIamPermissions": {
+                  "description": "Returns permissions that a caller has on the specified resource. If the resource does not exist, this will return an empty set of permissions, not a NOT_FOUND error.Note: This operation is designed to be used for building permission-aware UIs and command-line tools, not for authorization checking. This operation may \"fail open\" without warning.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/autoscalingPolicies/{autoscalingPoliciesId}:testIamPermissions",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.locations.autoscalingPolicies.testIamPermissions",
+                  "parameterOrder": [
+                    "resource"
+                  ],
+                  "parameters": {
+                    "resource": {
+                      "description": "REQUIRED: The resource for which the policy detail is being requested. See the operation documentation for the appropriate value for this field.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/autoscalingPolicies/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+resource}:testIamPermissions",
+                  "request": {
+                    "$ref": "TestIamPermissionsRequest"
+                  },
+                  "response": {
+                    "$ref": "TestIamPermissionsResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                }
+              }
+            },
             "workflowTemplates": {
               "methods": {
+                "create": {
+                  "description": "Creates new workflow template.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.locations.workflowTemplates.create",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "Required. The \"resource name\" of the region, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/workflowTemplates",
+                  "request": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "response": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "delete": {
+                  "description": "Deletes a workflow template. It does not cancel in-progress workflows.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates/{workflowTemplatesId}",
+                  "httpMethod": "DELETE",
+                  "id": "dataproc.projects.locations.workflowTemplates.delete",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Required. The \"resource name\" of the workflow template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "Optional. The version of workflow template to delete. If specified, will only delete the template if the current server version matches specified version.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "Empty"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "get": {
+                  "description": "Retrieves the latest workflow template.Can retrieve previously instantiated template by specifying optional version parameter.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates/{workflowTemplatesId}",
+                  "httpMethod": "GET",
+                  "id": "dataproc.projects.locations.workflowTemplates.get",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Required. The \"resource name\" of the workflow template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "Optional. The version of workflow template to retrieve. Only previously instatiated versions can be retrieved.If unspecified, retrieves the current version.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
                 "getIamPolicy": {
                   "description": "Gets the access control policy for a resource. Returns an empty policy if the resource exists and does not have a policy set.",
                   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates/{workflowTemplatesId}:getIamPolicy",
@@ -133,6 +311,103 @@
                   },
                   "response": {
                     "$ref": "Policy"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "instantiate": {
+                  "description": "Instantiates a template and begins execution.The returned Operation can be used to track execution of workflow by polling operations.get. The Operation will complete when entire workflow is finished.The running workflow can be aborted via operations.cancel. This will cause any inflight jobs to be cancelled and workflow-owned clusters to be deleted.The Operation.metadata will be WorkflowMetadata.On successful completion, Operation.response will be Empty.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates/{workflowTemplatesId}:instantiate",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.locations.workflowTemplates.instantiate",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Required. The \"resource name\" of the workflow template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}:instantiate",
+                  "request": {
+                    "$ref": "InstantiateWorkflowTemplateRequest"
+                  },
+                  "response": {
+                    "$ref": "Operation"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "instantiateInline": {
+                  "description": "Instantiates a template and begins execution.This method is equivalent to executing the sequence CreateWorkflowTemplate, InstantiateWorkflowTemplate, DeleteWorkflowTemplate.The returned Operation can be used to track execution of workflow by polling operations.get. The Operation will complete when entire workflow is finished.The running workflow can be aborted via operations.cancel. This will cause any inflight jobs to be cancelled and workflow-owned clusters to be deleted.The Operation.metadata will be WorkflowMetadata.On successful completion, Operation.response will be Empty.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates:instantiateInline",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.locations.workflowTemplates.instantiateInline",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "Required. The \"resource name\" of the workflow template region, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/workflowTemplates:instantiateInline",
+                  "request": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "response": {
+                    "$ref": "Operation"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "list": {
+                  "description": "Lists workflows that match the specified filter in the request.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates",
+                  "httpMethod": "GET",
+                  "id": "dataproc.projects.locations.workflowTemplates.list",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "pageSize": {
+                      "description": "Optional. The maximum number of results to return in each response.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
+                    "pageToken": {
+                      "description": "Optional. The page token, returned by a previous call, to request the next page of results.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "parent": {
+                      "description": "Required. The \"resource name\" of the region, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/workflowTemplates",
+                  "response": {
+                    "$ref": "ListWorkflowTemplatesResponse"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform"
@@ -193,6 +468,34 @@
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform"
                   ]
+                },
+                "update": {
+                  "description": "Updates (replaces) workflow template. The updated template must contain version that matches the current server version.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/workflowTemplates/{workflowTemplatesId}",
+                  "httpMethod": "PUT",
+                  "id": "dataproc.projects.locations.workflowTemplates.update",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Output only. The \"resource name\" of the template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "request": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "response": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
                 }
               }
             }
@@ -200,6 +503,94 @@
         },
         "regions": {
           "resources": {
+            "autoscalingPolicies": {
+              "methods": {
+                "getIamPolicy": {
+                  "description": "Gets the access control policy for a resource. Returns an empty policy if the resource exists and does not have a policy set.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/autoscalingPolicies/{autoscalingPoliciesId}:getIamPolicy",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.regions.autoscalingPolicies.getIamPolicy",
+                  "parameterOrder": [
+                    "resource"
+                  ],
+                  "parameters": {
+                    "resource": {
+                      "description": "REQUIRED: The resource for which the policy is being requested. See the operation documentation for the appropriate value for this field.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/autoscalingPolicies/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+resource}:getIamPolicy",
+                  "request": {
+                    "$ref": "GetIamPolicyRequest"
+                  },
+                  "response": {
+                    "$ref": "Policy"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "setIamPolicy": {
+                  "description": "Sets the access control policy on the specified resource. Replaces any existing policy.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/autoscalingPolicies/{autoscalingPoliciesId}:setIamPolicy",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.regions.autoscalingPolicies.setIamPolicy",
+                  "parameterOrder": [
+                    "resource"
+                  ],
+                  "parameters": {
+                    "resource": {
+                      "description": "REQUIRED: The resource for which the policy is being specified. See the operation documentation for the appropriate value for this field.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/autoscalingPolicies/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+resource}:setIamPolicy",
+                  "request": {
+                    "$ref": "SetIamPolicyRequest"
+                  },
+                  "response": {
+                    "$ref": "Policy"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "testIamPermissions": {
+                  "description": "Returns permissions that a caller has on the specified resource. If the resource does not exist, this will return an empty set of permissions, not a NOT_FOUND error.Note: This operation is designed to be used for building permission-aware UIs and command-line tools, not for authorization checking. This operation may \"fail open\" without warning.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/autoscalingPolicies/{autoscalingPoliciesId}:testIamPermissions",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.regions.autoscalingPolicies.testIamPermissions",
+                  "parameterOrder": [
+                    "resource"
+                  ],
+                  "parameters": {
+                    "resource": {
+                      "description": "REQUIRED: The resource for which the policy detail is being requested. See the operation documentation for the appropriate value for this field.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/autoscalingPolicies/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+resource}:testIamPermissions",
+                  "request": {
+                    "$ref": "TestIamPermissionsRequest"
+                  },
+                  "response": {
+                    "$ref": "TestIamPermissionsResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                }
+              }
+            },
             "clusters": {
               "methods": {
                 "create": {
@@ -1113,6 +1504,96 @@
             },
             "workflowTemplates": {
               "methods": {
+                "create": {
+                  "description": "Creates new workflow template.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.regions.workflowTemplates.create",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "Required. The \"resource name\" of the region, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/workflowTemplates",
+                  "request": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "response": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "delete": {
+                  "description": "Deletes a workflow template. It does not cancel in-progress workflows.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates/{workflowTemplatesId}",
+                  "httpMethod": "DELETE",
+                  "id": "dataproc.projects.regions.workflowTemplates.delete",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Required. The \"resource name\" of the workflow template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "Optional. The version of workflow template to delete. If specified, will only delete the template if the current server version matches specified version.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "Empty"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "get": {
+                  "description": "Retrieves the latest workflow template.Can retrieve previously instantiated template by specifying optional version parameter.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates/{workflowTemplatesId}",
+                  "httpMethod": "GET",
+                  "id": "dataproc.projects.regions.workflowTemplates.get",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Required. The \"resource name\" of the workflow template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "version": {
+                      "description": "Optional. The version of workflow template to retrieve. Only previously instatiated versions can be retrieved.If unspecified, retrieves the current version.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "response": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
                 "getIamPolicy": {
                   "description": "Gets the access control policy for a resource. Returns an empty policy if the resource exists and does not have a policy set.",
                   "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates/{workflowTemplatesId}:getIamPolicy",
@@ -1136,6 +1617,103 @@
                   },
                   "response": {
                     "$ref": "Policy"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "instantiate": {
+                  "description": "Instantiates a template and begins execution.The returned Operation can be used to track execution of workflow by polling operations.get. The Operation will complete when entire workflow is finished.The running workflow can be aborted via operations.cancel. This will cause any inflight jobs to be cancelled and workflow-owned clusters to be deleted.The Operation.metadata will be WorkflowMetadata.On successful completion, Operation.response will be Empty.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates/{workflowTemplatesId}:instantiate",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.regions.workflowTemplates.instantiate",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Required. The \"resource name\" of the workflow template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}:instantiate",
+                  "request": {
+                    "$ref": "InstantiateWorkflowTemplateRequest"
+                  },
+                  "response": {
+                    "$ref": "Operation"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "instantiateInline": {
+                  "description": "Instantiates a template and begins execution.This method is equivalent to executing the sequence CreateWorkflowTemplate, InstantiateWorkflowTemplate, DeleteWorkflowTemplate.The returned Operation can be used to track execution of workflow by polling operations.get. The Operation will complete when entire workflow is finished.The running workflow can be aborted via operations.cancel. This will cause any inflight jobs to be cancelled and workflow-owned clusters to be deleted.The Operation.metadata will be WorkflowMetadata.On successful completion, Operation.response will be Empty.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates:instantiateInline",
+                  "httpMethod": "POST",
+                  "id": "dataproc.projects.regions.workflowTemplates.instantiateInline",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "Required. The \"resource name\" of the workflow template region, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "requestId": {
+                      "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+                      "location": "query",
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/workflowTemplates:instantiateInline",
+                  "request": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "response": {
+                    "$ref": "Operation"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "list": {
+                  "description": "Lists workflows that match the specified filter in the request.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates",
+                  "httpMethod": "GET",
+                  "id": "dataproc.projects.regions.workflowTemplates.list",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "pageSize": {
+                      "description": "Optional. The maximum number of results to return in each response.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
+                    "pageToken": {
+                      "description": "Optional. The page token, returned by a previous call, to request the next page of results.",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "parent": {
+                      "description": "Required. The \"resource name\" of the region, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}/workflowTemplates",
+                  "response": {
+                    "$ref": "ListWorkflowTemplatesResponse"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform"
@@ -1196,6 +1774,34 @@
                   "scopes": [
                     "https://www.googleapis.com/auth/cloud-platform"
                   ]
+                },
+                "update": {
+                  "description": "Updates (replaces) workflow template. The updated template must contain version that matches the current server version.",
+                  "flatPath": "v1/projects/{projectsId}/regions/{regionsId}/workflowTemplates/{workflowTemplatesId}",
+                  "httpMethod": "PUT",
+                  "id": "dataproc.projects.regions.workflowTemplates.update",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "parameters": {
+                    "name": {
+                      "description": "Output only. The \"resource name\" of the template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/regions/[^/]+/workflowTemplates/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+name}",
+                  "request": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "response": {
+                    "$ref": "WorkflowTemplate"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
                 }
               }
             }
@@ -1204,7 +1810,7 @@
       }
     }
   },
-  "revision": "20180824",
+  "revision": "20190511",
   "rootUrl": "https://dataproc.googleapis.com/",
   "schemas": {
     "AcceleratorConfig": {
@@ -1229,10 +1835,10 @@
       "properties": {
         "condition": {
           "$ref": "Expr",
-          "description": "Unimplemented. The condition that is associated with this binding. NOTE: an unsatisfied condition will not allow user access via current binding. Different bindings, including their conditions, are examined independently."
+          "description": "The condition that is associated with this binding. NOTE: An unsatisfied condition will not allow user access via current binding. Different bindings, including their conditions, are examined independently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource. members can have the following values:\nallUsers: A special identifier that represents anyone who is  on the internet; with or without a Google account.\nallAuthenticatedUsers: A special identifier that represents anyone  who is authenticated with a Google account or a service account.\nuser:{emailid}: An email address that represents a specific Google  account. For example, alice@gmail.com .\nserviceAccount:{emailid}: An email address that represents a service  account. For example, my-other-app@appspot.gserviceaccount.com.\ngroup:{emailid}: An email address that represents a Google group.  For example, admins@example.com.\ndomain:{domain}: A Google Apps domain name that represents all the  users of that domain. For example, google.com or example.com.",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource. members can have the following values:\nallUsers: A special identifier that represents anyone who is  on the internet; with or without a Google account.\nallAuthenticatedUsers: A special identifier that represents anyone  who is authenticated with a Google account or a service account.\nuser:{emailid}: An email address that represents a specific Google  account. For example, alice@gmail.com .\nserviceAccount:{emailid}: An email address that represents a service  account. For example, my-other-app@appspot.gserviceaccount.com.\ngroup:{emailid}: An email address that represents a Google group.  For example, admins@example.com.\ndomain:{domain}: The G Suite domain (primary) that represents all the  users of that domain. For example, google.com or example.com.",
           "items": {
             "type": "string"
           },
@@ -1301,7 +1907,7 @@
       "id": "ClusterConfig",
       "properties": {
         "configBucket": {
-          "description": "Optional. A Cloud Storage staging bucket used for sharing generated SSH keys and config. If you do not specify a staging bucket, Cloud Dataproc will determine an appropriate Cloud Storage location (US, ASIA, or EU) for your cluster's staging bucket according to the Google Compute Engine zone where your cluster is deployed, and then it will create and manage this project-level, per-location bucket for you.",
+          "description": "Optional. A Google Cloud Storage bucket used to stage job dependencies, config files, and job driver console output. If you do not specify a staging bucket, Cloud Dataproc will determine a Cloud Storage location (US, ASIA, or EU) for your cluster's staging bucket according to the Google Compute Engine zone where your cluster is deployed, and then create and manage this project-level, per-location bucket (see Cloud Dataproc staging bucket).",
           "type": "string"
         },
         "encryptionConfig": {
@@ -1310,10 +1916,10 @@
         },
         "gceClusterConfig": {
           "$ref": "GceClusterConfig",
-          "description": "Required. The shared Compute Engine config settings for all instances in a cluster."
+          "description": "Optional. The shared Compute Engine config settings for all instances in a cluster."
         },
         "initializationActions": {
-          "description": "Optional. Commands to execute on each node after config is completed. By default, executables are run on master and all worker nodes. You can test a node's role metadata to run an executable on a master or worker node, as shown below using curl (you can also use wget):\nROLE=$(curl -H Metadata-Flavor:Google http://metadata/computeMetadata/v1/instance/attributes/dataproc-role)\nif [[ \"${ROLE}\" == 'Master' ]]; then\n  ... master specific actions ...\nelse\n  ... worker specific actions ...\nfi\n",
+          "description": "Optional. Commands to execute on each node after config is completed. By default, executables are run on master and all worker nodes. You can test a node's role metadata to run an executable on a master or worker node, as shown below using curl (you can also use wget):\nROLE=$(curl -H Metadata-Flavor:Google\nhttp://metadata/computeMetadata/v1/instance/attributes/dataproc-role)\nif [[ \"${ROLE}\" == 'Master' ]]; then\n  ... master specific actions ...\nelse\n  ... worker specific actions ...\nfi\n",
           "items": {
             "$ref": "NodeInitializationAction"
           },
@@ -1459,6 +2065,24 @@
         "stateStartTime": {
           "description": "Output only. The time this state was entered.",
           "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ClusterSelector": {
+      "description": "A selector that chooses target cluster for jobs based on metadata.",
+      "id": "ClusterSelector",
+      "properties": {
+        "clusterLabels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Required. The cluster labels. Cluster must have all labels to match.",
+          "type": "object"
+        },
+        "zone": {
+          "description": "Optional. The zone where workflow process executes. This parameter does not affect the selection of the cluster.If unspecified, the zone of the first cluster matching the selector is used.",
           "type": "string"
         }
       },
@@ -1623,7 +2247,7 @@
           "type": "array"
         },
         "subnetworkUri": {
-          "description": "Optional. The Compute Engine subnetwork to be used for machine communications. Cannot be specified with network_uri.A full URL, partial URI, or short name are valid. Examples:\nhttps://www.googleapis.com/compute/v1/projects/[project_id]/regions/us-east1/sub0\nprojects/[project_id]/regions/us-east1/sub0\nsub0",
+          "description": "Optional. The Compute Engine subnetwork to be used for machine communications. Cannot be specified with network_uri.A full URL, partial URI, or short name are valid. Examples:\nhttps://www.googleapis.com/compute/v1/projects/[project_id]/regions/us-east1/subnetworks/sub0\nprojects/[project_id]/regions/us-east1/subnetworks/sub0\nsub0",
           "type": "string"
         },
         "tags": {
@@ -1786,6 +2410,29 @@
       },
       "type": "object"
     },
+    "InstantiateWorkflowTemplateRequest": {
+      "description": "A request to instantiate a workflow template.",
+      "id": "InstantiateWorkflowTemplateRequest",
+      "properties": {
+        "parameters": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. Map from parameter names to values that should be used for those parameters. Values may not exceed 100 characters.",
+          "type": "object"
+        },
+        "requestId": {
+          "description": "Optional. A tag that prevents multiple concurrent workflow instances with the same tag from running. This mitigates risk of concurrent instances started due to retries.It is recommended to always set this value to a UUID (https://en.wikipedia.org/wiki/Universally_unique_identifier).The tag must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.",
+          "type": "string"
+        },
+        "version": {
+          "description": "Optional. The version of workflow template to instantiate. If specified, the workflow will be instantiated only if the current version of the workflow template has the supplied version.This option cannot be used to instantiate a previous version of workflow template.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "Job": {
       "description": "A Cloud Dataproc job resource.",
       "id": "Job",
@@ -1805,6 +2452,10 @@
         "hiveJob": {
           "$ref": "HiveJob",
           "description": "Job is a Hive job."
+        },
+        "jobUuid": {
+          "description": "Output only. A UUID that uniquely identifies a job within the project over time. This is in contrast to a user-settable reference.job_id that may be reused over time.",
+          "type": "string"
         },
         "labels": {
           "additionalProperties": {
@@ -1882,7 +2533,7 @@
       "id": "JobReference",
       "properties": {
         "jobId": {
-          "description": "Optional. The job ID, which must be unique within the project. The job ID is generated by the server upon job submission or provided by the user as a means to perform retries without creating duplicate jobs. The ID must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), or hyphens (-). The maximum length is 100 characters.",
+          "description": "Optional. The job ID, which must be unique within the project.The ID must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), or hyphens (-). The maximum length is 100 characters.If not specified by the caller, the job ID will be provided by the server.",
           "type": "string"
         },
         "projectId": {
@@ -2018,6 +2669,24 @@
       },
       "type": "object"
     },
+    "ListWorkflowTemplatesResponse": {
+      "description": "A response to a request to list workflow templates in a project.",
+      "id": "ListWorkflowTemplatesResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Output only. This token is included in the response if there are more results to fetch. To fetch additional results, provide this value as the page_token in a subsequent \u003ccode\u003eListWorkflowTemplatesRequest\u003c/code\u003e.",
+          "type": "string"
+        },
+        "templates": {
+          "description": "Output only. WorkflowTemplates list.",
+          "items": {
+            "$ref": "WorkflowTemplate"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "LoggingConfig": {
       "description": "The runtime logging config of the job.",
       "id": "LoggingConfig",
@@ -2038,6 +2707,28 @@
             "type": "string"
           },
           "description": "The per-package log levels for the driver. This may include \"root\" package name to configure rootLogger. Examples:  'com.google = FATAL', 'root = INFO', 'org.apache = DEBUG'",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ManagedCluster": {
+      "description": "Cluster that is managed by the workflow.",
+      "id": "ManagedCluster",
+      "properties": {
+        "clusterName": {
+          "description": "Required. The cluster name prefix. A unique cluster name will be formed by appending a random suffix.The name must contain only lower-case letters (a-z), numbers (0-9), and hyphens (-). Must begin with a letter. Cannot begin or end with hyphen. Must consist of between 2 and 35 characters.",
+          "type": "string"
+        },
+        "config": {
+          "$ref": "ClusterConfig",
+          "description": "Required. The cluster configuration."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. The labels to associate with this cluster.Label keys must be between 1 and 63 characters long, and must conform to the following PCRE regular expression: \\p{Ll}\\p{Lo}{0,62}Label values must be between 1 and 63 characters long, and must conform to the following PCRE regular expression: \\p{Ll}\\p{Lo}\\p{N}_-{0,63}No more than 32 labels can be associated with a given cluster.",
           "type": "object"
         }
       },
@@ -2095,7 +2786,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the name should have the format of operations/some/unique/name.",
+          "description": "The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the name should be a resource name ending with operations/{unique_id}.",
           "type": "string"
         },
         "response": {
@@ -2105,6 +2796,74 @@
           },
           "description": "The normal response of the operation in case of success. If the original method returns no data on success, such as Delete, the response is google.protobuf.Empty. If the original method is standard Get/Create/Update, the response should be the resource. For other methods, the response should have the type XxxResponse, where Xxx is the original method name. For example, if the original method name is TakeSnapshot(), the inferred response type is TakeSnapshotResponse.",
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "OrderedJob": {
+      "description": "A job executed by the workflow.",
+      "id": "OrderedJob",
+      "properties": {
+        "hadoopJob": {
+          "$ref": "HadoopJob",
+          "description": "Job is a Hadoop job."
+        },
+        "hiveJob": {
+          "$ref": "HiveJob",
+          "description": "Job is a Hive job."
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. The labels to associate with this job.Label keys must be between 1 and 63 characters long, and must conform to the following regular expression: \\p{Ll}\\p{Lo}{0,62}Label values must be between 1 and 63 characters long, and must conform to the following regular expression: \\p{Ll}\\p{Lo}\\p{N}_-{0,63}No more than 32 labels can be associated with a given job.",
+          "type": "object"
+        },
+        "pigJob": {
+          "$ref": "PigJob",
+          "description": "Job is a Pig job."
+        },
+        "prerequisiteStepIds": {
+          "description": "Optional. The optional list of prerequisite job step_ids. If not specified, the job will start at the beginning of workflow.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "pysparkJob": {
+          "$ref": "PySparkJob",
+          "description": "Job is a Pyspark job."
+        },
+        "scheduling": {
+          "$ref": "JobScheduling",
+          "description": "Optional. Job scheduling configuration."
+        },
+        "sparkJob": {
+          "$ref": "SparkJob",
+          "description": "Job is a Spark job."
+        },
+        "sparkSqlJob": {
+          "$ref": "SparkSqlJob",
+          "description": "Job is a SparkSql job."
+        },
+        "stepId": {
+          "description": "Required. The step id. The id must be unique among all jobs within the template.The step id is used as prefix for job id, as job goog-dataproc-workflow-step-id label, and in prerequisiteStepIds field from other steps.The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). Cannot begin or end with underscore or hyphen. Must consist of between 3 and 50 characters.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ParameterValidation": {
+      "description": "Configuration for parameter validation.",
+      "id": "ParameterValidation",
+      "properties": {
+        "regex": {
+          "$ref": "RegexValidation",
+          "description": "Validation based on regular expressions."
+        },
+        "values": {
+          "$ref": "ValueValidation",
+          "description": "Validation based on a list of allowed values."
         }
       },
       "type": "object"
@@ -2248,6 +3007,20 @@
       },
       "type": "object"
     },
+    "RegexValidation": {
+      "description": "Validation based on regular expressions.",
+      "id": "RegexValidation",
+      "properties": {
+        "regexes": {
+          "description": "Required. RE2 regular expressions used to validate the parameter's value. The value must match the regex in its entirety (substring matches are not sufficient).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "SetIamPolicyRequest": {
       "description": "Request message for SetIamPolicy method.",
       "id": "SetIamPolicyRequest",
@@ -2264,14 +3037,35 @@
       "id": "SoftwareConfig",
       "properties": {
         "imageVersion": {
-          "description": "Optional. The version of software inside the cluster. It must be one of the supported Cloud Dataproc Versions, such as \"1.2\" (including a subminor version, such as \"1.2.29\"), or the \"preview\" version. If unspecified, it defaults to the latest version.",
+          "description": "Optional. The version of software inside the cluster. It must be one of the supported Cloud Dataproc Versions, such as \"1.2\" (including a subminor version, such as \"1.2.29\"), or the \"preview\" version. If unspecified, it defaults to the latest Debian version.",
           "type": "string"
+        },
+        "optionalComponents": {
+          "description": "The set of optional components to activate on the cluster.",
+          "enumDescriptions": [
+            "Unspecified component.",
+            "The Anaconda python distribution.",
+            "The Hive Web HCatalog (the REST service for accessing HCatalog).",
+            "The Jupyter Notebook.",
+            "The Zeppelin notebook."
+          ],
+          "items": {
+            "enum": [
+              "COMPONENT_UNSPECIFIED",
+              "ANACONDA",
+              "HIVE_WEBHCAT",
+              "JUPYTER",
+              "ZEPPELIN"
+            ],
+            "type": "string"
+          },
+          "type": "array"
         },
         "properties": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Optional. The properties to set on daemon config files.Property keys are specified in prefix:property format, such as core:fs.defaultFS. The following are supported prefixes and their mappings:\ncapacity-scheduler: capacity-scheduler.xml\ncore: core-site.xml\ndistcp: distcp-default.xml\nhdfs: hdfs-site.xml\nhive: hive-site.xml\nmapred: mapred-site.xml\npig: pig.properties\nspark: spark-defaults.conf\nyarn: yarn-site.xmlFor more information, see Cluster properties.",
+          "description": "Optional. The properties to set on daemon config files.Property keys are specified in prefix:property format, for example core:hadoop.tmp.dir. The following are supported prefixes and their mappings:\ncapacity-scheduler: capacity-scheduler.xml\ncore: core-site.xml\ndistcp: distcp-default.xml\nhdfs: hdfs-site.xml\nhive: hive-site.xml\nmapred: mapred-site.xml\npig: pig.properties\nspark: spark-defaults.conf\nyarn: yarn-site.xmlFor more information, see Cluster properties.",
           "type": "object"
         }
       },
@@ -2413,6 +3207,32 @@
       },
       "type": "object"
     },
+    "TemplateParameter": {
+      "description": "A configurable parameter that replaces one or more fields in the template. Parameterizable fields: - Labels - File uris - Job properties - Job arguments - Script variables - Main class (in HadoopJob and SparkJob) - Zone (in ClusterSelector)",
+      "id": "TemplateParameter",
+      "properties": {
+        "description": {
+          "description": "Optional. Brief description of the parameter. Must not exceed 1024 characters.",
+          "type": "string"
+        },
+        "fields": {
+          "description": "Required. Paths to all fields that the parameter replaces. A field is allowed to appear in at most one parameter's list of field paths.A field path is similar in syntax to a google.protobuf.FieldMask. For example, a field path that references the zone field of a workflow template's cluster selector would be specified as placement.clusterSelector.zone.Also, field paths can reference fields using the following syntax:\nValues in maps can be referenced by key:\nlabels'key'\nplacement.clusterSelector.clusterLabels'key'\nplacement.managedCluster.labels'key'\nplacement.clusterSelector.clusterLabels'key'\njobs'step-id'.labels'key'\nJobs in the jobs list can be referenced by step-id:\njobs'step-id'.hadoopJob.mainJarFileUri\njobs'step-id'.hiveJob.queryFileUri\njobs'step-id'.pySparkJob.mainPythonFileUri\njobs'step-id'.hadoopJob.jarFileUris0\njobs'step-id'.hadoopJob.archiveUris0\njobs'step-id'.hadoopJob.fileUris0\njobs'step-id'.pySparkJob.pythonFileUris0\nItems in repeated fields can be referenced by a zero-based index:\njobs'step-id'.sparkJob.args0\nOther examples:\njobs'step-id'.hadoopJob.properties'key'\njobs'step-id'.hadoopJob.args0\njobs'step-id'.hiveJob.scriptVariables'key'\njobs'step-id'.hadoopJob.mainJarFileUri\nplacement.clusterSelector.zoneIt may not be possible to parameterize maps and repeated fields in their entirety since only individual map values and individual items in repeated fields can be referenced. For example, the following field paths are invalid:\nplacement.clusterSelector.clusterLabels\njobs'step-id'.sparkJob.args",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "Required. Parameter name. The parameter name is used as the key, and paired with the parameter value, which are passed to the template when the template is instantiated. The name must contain only capital letters (A-Z), numbers (0-9), and underscores (_), and must not start with a number. The maximum length is 40 characters.",
+          "type": "string"
+        },
+        "validation": {
+          "$ref": "ParameterValidation",
+          "description": "Optional. Validation rules to be applied to this parameter's value."
+        }
+      },
+      "type": "object"
+    },
     "TestIamPermissionsRequest": {
       "description": "Request message for TestIamPermissions method.",
       "id": "TestIamPermissionsRequest",
@@ -2441,6 +3261,20 @@
       },
       "type": "object"
     },
+    "ValueValidation": {
+      "description": "Validation based on a list of allowed values.",
+      "id": "ValueValidation",
+      "properties": {
+        "values": {
+          "description": "Required. List of allowed values for the parameter.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "WorkflowGraph": {
       "description": "The workflow graph.",
       "id": "WorkflowGraph",
@@ -2460,7 +3294,11 @@
       "id": "WorkflowMetadata",
       "properties": {
         "clusterName": {
-          "description": "Output only. The name of the managed cluster.",
+          "description": "Output only. The name of the target cluster.",
+          "type": "string"
+        },
+        "clusterUuid": {
+          "description": "Output only. The UUID of target cluster.",
           "type": "string"
         },
         "createCluster": {
@@ -2470,6 +3308,11 @@
         "deleteCluster": {
           "$ref": "ClusterOperation",
           "description": "Output only. The delete cluster operation metadata."
+        },
+        "endTime": {
+          "description": "Output only. Workflow end time.",
+          "format": "google-datetime",
+          "type": "string"
         },
         "graph": {
           "$ref": "WorkflowGraph",
@@ -2481,6 +3324,11 @@
           },
           "description": "Map from parameter names to values that were used for those parameters.",
           "type": "object"
+        },
+        "startTime": {
+          "description": "Output only. Workflow start time.",
+          "format": "google-datetime",
+          "type": "string"
         },
         "state": {
           "description": "Output only. The workflow state.",
@@ -2552,6 +3400,76 @@
         "stepId": {
           "description": "Output only. The name of the node.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WorkflowTemplate": {
+      "description": "A Cloud Dataproc workflow template resource.",
+      "id": "WorkflowTemplate",
+      "properties": {
+        "createTime": {
+          "description": "Output only. The time template was created.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "id": {
+          "description": "Required. The template id.The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). Cannot begin or end with underscore or hyphen. Must consist of between 3 and 50 characters.",
+          "type": "string"
+        },
+        "jobs": {
+          "description": "Required. The Directed Acyclic Graph of Jobs to submit.",
+          "items": {
+            "$ref": "OrderedJob"
+          },
+          "type": "array"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Optional. The labels to associate with this template. These labels will be propagated to all jobs and clusters created by the workflow instance.Label keys must contain 1 to 63 characters, and must conform to RFC 1035 (https://www.ietf.org/rfc/rfc1035.txt).Label values may be empty, but, if present, must contain 1 to 63 characters, and must conform to RFC 1035 (https://www.ietf.org/rfc/rfc1035.txt).No more than 32 labels can be associated with a template.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Output only. The \"resource name\" of the template, as described in https://cloud.google.com/apis/design/resource_names of the form projects/{project_id}/regions/{region}/workflowTemplates/{template_id}",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "Optional. Template parameters whose values are substituted into the template. Values for parameters must be provided when the template is instantiated.",
+          "items": {
+            "$ref": "TemplateParameter"
+          },
+          "type": "array"
+        },
+        "placement": {
+          "$ref": "WorkflowTemplatePlacement",
+          "description": "Required. WorkflowTemplate scheduling information."
+        },
+        "updateTime": {
+          "description": "Output only. The time template was last updated.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "version": {
+          "description": "Optional. Used to perform a consistent read-modify-write.This field should be left blank for a CreateWorkflowTemplate request. It is required for an UpdateWorkflowTemplate request, and must match the current server version. A typical update template flow would fetch the current template with a GetWorkflowTemplate request, which will return the current template with the version field filled in with the current server version. The user updates other fields in the template, then returns it as part of the UpdateWorkflowTemplate request.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "WorkflowTemplatePlacement": {
+      "description": "Specifies workflow execution target.Either managed_cluster or cluster_selector is required.",
+      "id": "WorkflowTemplatePlacement",
+      "properties": {
+        "clusterSelector": {
+          "$ref": "ClusterSelector",
+          "description": "Optional. A selector that chooses target cluster for jobs based on metadata.The selector is evaluated at the time each job is submitted."
+        },
+        "managedCluster": {
+          "$ref": "ManagedCluster",
+          "description": "Optional. A cluster that is managed by the workflow."
         }
       },
       "type": "object"

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewWorkspaceCollectionsClientWithBaseURI(baseURI string, subscriptionID str
 // location - azure location
 // body - check name availability request
 func (client WorkspaceCollectionsClient) CheckNameAvailability(ctx context.Context, location string, body CheckNameRequest) (result CheckNameResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CheckNameAvailabilityPreparer(ctx, location, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "CheckNameAvailability", nil, "Failure preparing request")
@@ -116,6 +127,16 @@ func (client WorkspaceCollectionsClient) CheckNameAvailabilityResponder(resp *ht
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 // body - create workspace collection request
 func (client WorkspaceCollectionsClient) Create(ctx context.Context, resourceGroupName string, workspaceCollectionName string, body CreateWorkspaceCollectionRequest) (result WorkspaceCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.Sku", Name: validation.Null, Rule: false,
@@ -194,6 +215,16 @@ func (client WorkspaceCollectionsClient) CreateResponder(resp *http.Response) (r
 // resourceGroupName - azure resource group
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 func (client WorkspaceCollectionsClient) Delete(ctx context.Context, resourceGroupName string, workspaceCollectionName string) (result WorkspaceCollectionsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, workspaceCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "Delete", nil, "Failure preparing request")
@@ -239,10 +270,6 @@ func (client WorkspaceCollectionsClient) DeleteSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -264,6 +291,16 @@ func (client WorkspaceCollectionsClient) DeleteResponder(resp *http.Response) (r
 // resourceGroupName - azure resource group
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 func (client WorkspaceCollectionsClient) GetAccessKeys(ctx context.Context, resourceGroupName string, workspaceCollectionName string) (result WorkspaceCollectionAccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.GetAccessKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAccessKeysPreparer(ctx, resourceGroupName, workspaceCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "GetAccessKeys", nil, "Failure preparing request")
@@ -331,6 +368,16 @@ func (client WorkspaceCollectionsClient) GetAccessKeysResponder(resp *http.Respo
 // resourceGroupName - azure resource group
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 func (client WorkspaceCollectionsClient) GetByName(ctx context.Context, resourceGroupName string, workspaceCollectionName string) (result WorkspaceCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.GetByName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByNamePreparer(ctx, resourceGroupName, workspaceCollectionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "GetByName", nil, "Failure preparing request")
@@ -397,6 +444,16 @@ func (client WorkspaceCollectionsClient) GetByNameResponder(resp *http.Response)
 // Parameters:
 // resourceGroupName - azure resource group
 func (client WorkspaceCollectionsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result WorkspaceCollectionList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -460,6 +517,16 @@ func (client WorkspaceCollectionsClient) ListByResourceGroupResponder(resp *http
 
 // ListBySubscription retrieves all existing Power BI workspace collections in the specified subscription.
 func (client WorkspaceCollectionsClient) ListBySubscription(ctx context.Context) (result WorkspaceCollectionList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "ListBySubscription", nil, "Failure preparing request")
@@ -525,6 +592,16 @@ func (client WorkspaceCollectionsClient) ListBySubscriptionResponder(resp *http.
 // resourceGroupName - azure resource group
 // body - workspace migration request
 func (client WorkspaceCollectionsClient) Migrate(ctx context.Context, resourceGroupName string, body MigrateWorkspaceCollectionRequest) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.Migrate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.MigratePreparer(ctx, resourceGroupName, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "Migrate", nil, "Failure preparing request")
@@ -593,6 +670,16 @@ func (client WorkspaceCollectionsClient) MigrateResponder(resp *http.Response) (
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 // body - access key to regenerate
 func (client WorkspaceCollectionsClient) RegenerateKey(ctx context.Context, resourceGroupName string, workspaceCollectionName string, body WorkspaceCollectionAccessKey) (result WorkspaceCollectionAccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.RegenerateKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateKeyPreparer(ctx, resourceGroupName, workspaceCollectionName, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "RegenerateKey", nil, "Failure preparing request")
@@ -663,6 +750,16 @@ func (client WorkspaceCollectionsClient) RegenerateKeyResponder(resp *http.Respo
 // workspaceCollectionName - power BI Embedded Workspace Collection name
 // body - update workspace collection request
 func (client WorkspaceCollectionsClient) Update(ctx context.Context, resourceGroupName string, workspaceCollectionName string, body UpdateWorkspaceCollectionRequest) (result WorkspaceCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceCollectionsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, workspaceCollectionName, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "powerbiembedded.WorkspaceCollectionsClient", "Update", nil, "Failure preparing request")

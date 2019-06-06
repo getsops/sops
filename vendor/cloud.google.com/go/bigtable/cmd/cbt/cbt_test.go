@@ -62,59 +62,6 @@ func TestParseDuration(t *testing.T) {
 	}
 }
 
-func TestParseGCPolicy(t *testing.T) {
-	tests := []struct {
-		in   string
-		out  bigtable.GCPolicy
-		fail bool
-	}{
-		{in: "maxage=1h", out: bigtable.MaxAgePolicy(time.Hour * 1)},
-		{in: "maxversions=2", out: bigtable.MaxVersionsPolicy(int(2))},
-		{in: "maxversions=2 and maxage=1h", out: bigtable.IntersectionPolicy([]bigtable.GCPolicy{bigtable.MaxVersionsPolicy(int(2)), bigtable.MaxAgePolicy(time.Hour * 1)}...)},
-		{in: "maxversions=2 or maxage=1h", out: bigtable.UnionPolicy([]bigtable.GCPolicy{bigtable.MaxVersionsPolicy(int(2)), bigtable.MaxAgePolicy(time.Hour * 1)}...)},
-
-		{in: "maxage=1", fail: true},
-		{in: "maxage = 1h", fail: true},
-		{in: "maxage =1h", fail: true},
-		{in: "maxage= 1h", fail: true},
-		{in: "foomaxage=1h", fail: true},
-		{in: "maxversions=1h", fail: true},
-		{in: "maxversions= 1", fail: true},
-		{in: "maxversions = 1", fail: true},
-		{in: "maxversions =1", fail: true},
-		{in: "barmaxversions=1", fail: true},
-		{in: "maxage = 1h or maxversions=1h", fail: true},
-		{in: "foomaxversions=2 or maxage=1h", fail: true},
-		{in: "maxversions=2 or barmaxage=1h", fail: true},
-		{in: "foomaxversions=2 or barmaxage=1h", fail: true},
-		{in: "maxage = 1h and maxversions=1h", fail: true},
-		{in: "foomaxage=1h and maxversions=1", fail: true},
-		{in: "maxage=1h and barmaxversions=1", fail: true},
-		{in: "foomaxage=1h and barmaxversions=1", fail: true},
-		{in: "never", out: bigtable.NoGcPolicy()},
-		{in: "never=never", fail: true},
-	}
-	for _, tc := range tests {
-		got, err := parseGCPolicy(tc.in)
-		if !tc.fail && err != nil {
-			t.Errorf("parseGCPolicy(%q) unexpectedly failed: %v", tc.in, err)
-			continue
-		}
-		if tc.fail && err == nil {
-			t.Errorf("parseGCPolicy(%q) did not fail", tc.in)
-			continue
-		}
-		if tc.fail {
-			continue
-		}
-		var cmpOpts cmp.Options
-		cmpOpts = append(cmpOpts, cmp.AllowUnexported(bigtable.IntersectionPolicy([]bigtable.GCPolicy{}...)), cmp.AllowUnexported(bigtable.UnionPolicy([]bigtable.GCPolicy{}...)))
-		if !cmp.Equal(got, tc.out, cmpOpts) {
-			t.Errorf("parseGCPolicy(%q) =%v, want %v", tc.in, got, tc.out)
-		}
-	}
-}
-
 func TestParseArgs(t *testing.T) {
 	got, err := parseArgs([]string{"a=1", "b=2"}, []string{"a", "b"})
 	if err != nil {

@@ -20,7 +20,6 @@ import (
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-
 	bq "google.golang.org/api/bigquery/v2"
 )
 

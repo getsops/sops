@@ -30,10 +30,9 @@
 //
 //    * Consuming Applications – Browse for applications and view information
 //    about them, including source code and readme files. Also install, configure,
-//    and deploy applications of your choosing.
-//
-// Publishing Applications – Configure and upload applications to make them
-//    available to other developers, and publish new versions of applications.
+//    and deploy applications of your choosing. Publishing Applications –
+//    Configure and upload applications to make them available to other developers,
+//    and publish new versions of applications.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/serverlessrepo-2017-09-08 for more information on this service.
 //

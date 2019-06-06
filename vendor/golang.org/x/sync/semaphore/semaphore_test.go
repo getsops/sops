@@ -5,13 +5,13 @@
 package semaphore_test
 
 import (
+	"context"
 	"math/rand"
 	"runtime"
 	"sync"
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/sync/semaphore"
 )

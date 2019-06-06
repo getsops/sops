@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,19 +45,29 @@ func NewBackendClientWithBaseURI(baseURI string, subscriptionID string) BackendC
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
+// backendID - identifier of the Backend entity. Must be unique in the current API Management service instance.
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
-func (client BackendClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters BackendContract, ifMatch string) (result BackendContract, err error) {
+func (client BackendClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, backendID string, parameters BackendContract, ifMatch string) (result BackendContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
-		{TargetValue: backendid,
-			Constraints: []validation.Constraint{{Target: "backendid", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "backendid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "backendid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+		{TargetValue: backendID,
+			Constraints: []validation.Constraint{{Target: "backendID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "backendID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "backendID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.BackendContractProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.BackendContractProperties.URL", Name: validation.Null, Rule: true,
@@ -67,7 +78,7 @@ func (client BackendClient) CreateOrUpdate(ctx context.Context, resourceGroupNam
 		return result, validation.NewError("apimanagement.BackendClient", "CreateOrUpdate", err.Error())
 	}
 
-	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, backendid, parameters, ifMatch)
+	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, backendID, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.BackendClient", "CreateOrUpdate", nil, "Failure preparing request")
 		return
@@ -89,9 +100,9 @@ func (client BackendClient) CreateOrUpdate(ctx context.Context, resourceGroupNam
 }
 
 // CreateOrUpdatePreparer prepares the CreateOrUpdate request.
-func (client BackendClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters BackendContract, ifMatch string) (*http.Request, error) {
+func (client BackendClient) CreateOrUpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, backendID string, parameters BackendContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"backendid":         autorest.Encode("path", backendid),
+		"backendId":         autorest.Encode("path", backendID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -106,7 +117,7 @@ func (client BackendClient) CreateOrUpdatePreparer(ctx context.Context, resource
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}", pathParameters),
 		autorest.WithJSON(parameters),
 		autorest.WithQueryParameters(queryParameters))
 	if len(ifMatch) > 0 {
@@ -140,23 +151,33 @@ func (client BackendClient) CreateOrUpdateResponder(resp *http.Response) (result
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
+// backendID - identifier of the Backend entity. Must be unique in the current API Management service instance.
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
-func (client BackendClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, backendid string, ifMatch string) (result autorest.Response, err error) {
+func (client BackendClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, backendID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
-		{TargetValue: backendid,
-			Constraints: []validation.Constraint{{Target: "backendid", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "backendid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "backendid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+		{TargetValue: backendID,
+			Constraints: []validation.Constraint{{Target: "backendID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "backendID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "backendID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.BackendClient", "Delete", err.Error())
 	}
 
-	req, err := client.DeletePreparer(ctx, resourceGroupName, serviceName, backendid, ifMatch)
+	req, err := client.DeletePreparer(ctx, resourceGroupName, serviceName, backendID, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.BackendClient", "Delete", nil, "Failure preparing request")
 		return
@@ -178,9 +199,9 @@ func (client BackendClient) Delete(ctx context.Context, resourceGroupName string
 }
 
 // DeletePreparer prepares the Delete request.
-func (client BackendClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, backendid string, ifMatch string) (*http.Request, error) {
+func (client BackendClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, backendID string, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"backendid":         autorest.Encode("path", backendid),
+		"backendId":         autorest.Encode("path", backendID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -194,7 +215,7 @@ func (client BackendClient) DeletePreparer(ctx context.Context, resourceGroupNam
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("If-Match", autorest.String(ifMatch)))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
@@ -223,21 +244,31 @@ func (client BackendClient) DeleteResponder(resp *http.Response) (result autores
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
-func (client BackendClient) Get(ctx context.Context, resourceGroupName string, serviceName string, backendid string) (result BackendContract, err error) {
+// backendID - identifier of the Backend entity. Must be unique in the current API Management service instance.
+func (client BackendClient) Get(ctx context.Context, resourceGroupName string, serviceName string, backendID string) (result BackendContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
-		{TargetValue: backendid,
-			Constraints: []validation.Constraint{{Target: "backendid", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "backendid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "backendid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+		{TargetValue: backendID,
+			Constraints: []validation.Constraint{{Target: "backendID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "backendID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "backendID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.BackendClient", "Get", err.Error())
 	}
 
-	req, err := client.GetPreparer(ctx, resourceGroupName, serviceName, backendid)
+	req, err := client.GetPreparer(ctx, resourceGroupName, serviceName, backendID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.BackendClient", "Get", nil, "Failure preparing request")
 		return
@@ -259,9 +290,9 @@ func (client BackendClient) Get(ctx context.Context, resourceGroupName string, s
 }
 
 // GetPreparer prepares the Get request.
-func (client BackendClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, backendid string) (*http.Request, error) {
+func (client BackendClient) GetPreparer(ctx context.Context, resourceGroupName string, serviceName string, backendID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"backendid":         autorest.Encode("path", backendid),
+		"backendId":         autorest.Encode("path", backendID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -275,7 +306,7 @@ func (client BackendClient) GetPreparer(ctx context.Context, resourceGroupName s
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -304,21 +335,31 @@ func (client BackendClient) GetResponder(resp *http.Response) (result BackendCon
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
-func (client BackendClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, backendid string) (result autorest.Response, err error) {
+// backendID - identifier of the Backend entity. Must be unique in the current API Management service instance.
+func (client BackendClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, backendID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
-		{TargetValue: backendid,
-			Constraints: []validation.Constraint{{Target: "backendid", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "backendid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "backendid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+		{TargetValue: backendID,
+			Constraints: []validation.Constraint{{Target: "backendID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "backendID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "backendID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.BackendClient", "GetEntityTag", err.Error())
 	}
 
-	req, err := client.GetEntityTagPreparer(ctx, resourceGroupName, serviceName, backendid)
+	req, err := client.GetEntityTagPreparer(ctx, resourceGroupName, serviceName, backendID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.BackendClient", "GetEntityTag", nil, "Failure preparing request")
 		return
@@ -340,9 +381,9 @@ func (client BackendClient) GetEntityTag(ctx context.Context, resourceGroupName 
 }
 
 // GetEntityTagPreparer prepares the GetEntityTag request.
-func (client BackendClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, backendid string) (*http.Request, error) {
+func (client BackendClient) GetEntityTagPreparer(ctx context.Context, resourceGroupName string, serviceName string, backendID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"backendid":         autorest.Encode("path", backendid),
+		"backendId":         autorest.Encode("path", backendID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -356,7 +397,7 @@ func (client BackendClient) GetEntityTagPreparer(ctx context.Context, resourceGr
 	preparer := autorest.CreatePreparer(
 		autorest.AsHead(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -384,13 +425,25 @@ func (client BackendClient) GetEntityTagResponder(resp *http.Response) (result a
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// filter - | Field | Supported operators    | Supported functions                         |
-// |-------|------------------------|---------------------------------------------|
-// | id    | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | host  | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |title | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |url | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
 func (client BackendClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result BackendCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.bc.Response.Response != nil {
+				sc = result.bc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -478,8 +531,8 @@ func (client BackendClient) ListByServiceResponder(resp *http.Response) (result 
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client BackendClient) listByServiceNextResults(lastResults BackendCollection) (result BackendCollection, err error) {
-	req, err := lastResults.backendCollectionPreparer()
+func (client BackendClient) listByServiceNextResults(ctx context.Context, lastResults BackendCollection) (result BackendCollection, err error) {
+	req, err := lastResults.backendCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.BackendClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -500,6 +553,16 @@ func (client BackendClient) listByServiceNextResults(lastResults BackendCollecti
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client BackendClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result BackendCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -509,22 +572,32 @@ func (client BackendClient) ListByServiceComplete(ctx context.Context, resourceG
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
+// backendID - identifier of the Backend entity. Must be unique in the current API Management service instance.
 // parameters - reconnect request parameters.
-func (client BackendClient) Reconnect(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters *BackendReconnectContract) (result autorest.Response, err error) {
+func (client BackendClient) Reconnect(ctx context.Context, resourceGroupName string, serviceName string, backendID string, parameters *BackendReconnectContract) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Reconnect")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
-		{TargetValue: backendid,
-			Constraints: []validation.Constraint{{Target: "backendid", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "backendid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "backendid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+		{TargetValue: backendID,
+			Constraints: []validation.Constraint{{Target: "backendID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "backendID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "backendID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.BackendClient", "Reconnect", err.Error())
 	}
 
-	req, err := client.ReconnectPreparer(ctx, resourceGroupName, serviceName, backendid, parameters)
+	req, err := client.ReconnectPreparer(ctx, resourceGroupName, serviceName, backendID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.BackendClient", "Reconnect", nil, "Failure preparing request")
 		return
@@ -546,9 +619,9 @@ func (client BackendClient) Reconnect(ctx context.Context, resourceGroupName str
 }
 
 // ReconnectPreparer prepares the Reconnect request.
-func (client BackendClient) ReconnectPreparer(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters *BackendReconnectContract) (*http.Request, error) {
+func (client BackendClient) ReconnectPreparer(ctx context.Context, resourceGroupName string, serviceName string, backendID string, parameters *BackendReconnectContract) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"backendid":         autorest.Encode("path", backendid),
+		"backendId":         autorest.Encode("path", backendID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -563,7 +636,7 @@ func (client BackendClient) ReconnectPreparer(ctx context.Context, resourceGroup
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendid}/reconnect", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}/reconnect", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	if parameters != nil {
 		preparer = autorest.DecoratePreparer(preparer,
@@ -595,24 +668,34 @@ func (client BackendClient) ReconnectResponder(resp *http.Response) (result auto
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// backendid - identifier of the Backend entity. Must be unique in the current API Management service instance.
+// backendID - identifier of the Backend entity. Must be unique in the current API Management service instance.
 // parameters - update parameters.
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
-func (client BackendClient) Update(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters BackendUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+func (client BackendClient) Update(ctx context.Context, resourceGroupName string, serviceName string, backendID string, parameters BackendUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackendClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
-		{TargetValue: backendid,
-			Constraints: []validation.Constraint{{Target: "backendid", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "backendid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "backendid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+		{TargetValue: backendID,
+			Constraints: []validation.Constraint{{Target: "backendID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "backendID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "backendID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.BackendClient", "Update", err.Error())
 	}
 
-	req, err := client.UpdatePreparer(ctx, resourceGroupName, serviceName, backendid, parameters, ifMatch)
+	req, err := client.UpdatePreparer(ctx, resourceGroupName, serviceName, backendID, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.BackendClient", "Update", nil, "Failure preparing request")
 		return
@@ -634,9 +717,9 @@ func (client BackendClient) Update(ctx context.Context, resourceGroupName string
 }
 
 // UpdatePreparer prepares the Update request.
-func (client BackendClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, backendid string, parameters BackendUpdateParameters, ifMatch string) (*http.Request, error) {
+func (client BackendClient) UpdatePreparer(ctx context.Context, resourceGroupName string, serviceName string, backendID string, parameters BackendUpdateParameters, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
-		"backendid":         autorest.Encode("path", backendid),
+		"backendId":         autorest.Encode("path", backendID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
@@ -651,7 +734,7 @@ func (client BackendClient) UpdatePreparer(ctx context.Context, resourceGroupNam
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPatch(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}", pathParameters),
 		autorest.WithJSON(parameters),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("If-Match", autorest.String(ifMatch)))

@@ -7,10 +7,10 @@
 package semaphore_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
-	"golang.org/x/net/context"
 	"golang.org/x/sync/semaphore"
 )
 

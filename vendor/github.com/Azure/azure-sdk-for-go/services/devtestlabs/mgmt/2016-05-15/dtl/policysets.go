@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewPolicySetsClientWithBaseURI(baseURI string, subscriptionID string) Polic
 // name - the name of the policy set.
 // evaluatePoliciesRequest - request body for evaluating a policy set.
 func (client PolicySetsClient) EvaluatePolicies(ctx context.Context, resourceGroupName string, labName string, name string, evaluatePoliciesRequest EvaluatePoliciesRequest) (result EvaluatePoliciesResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicySetsClient.EvaluatePolicies")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.EvaluatePoliciesPreparer(ctx, resourceGroupName, labName, name, evaluatePoliciesRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.PolicySetsClient", "EvaluatePolicies", nil, "Failure preparing request")

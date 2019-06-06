@@ -10,8 +10,8 @@ import (
 	"runtime"
 	"testing"
 
-	"golang.org/x/net/internal/nettest"
 	"golang.org/x/net/ipv4"
+	"golang.org/x/net/nettest"
 )
 
 var icmpStringTests = []struct {
@@ -66,8 +66,8 @@ func TestSetICMPFilter(t *testing.T) {
 	default:
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
-	if m, ok := nettest.SupportsRawIPSocket(); !ok {
-		t.Skip(m)
+	if !nettest.SupportsRawSocket() {
+		t.Skipf("not supported on %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
 
 	c, err := net.ListenPacket("ip4:icmp", "127.0.0.1")

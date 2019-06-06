@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) Service
 // serviceName - the name of the Search service to create or update.
 // parameters - the properties to set or update on the Search service.
 func (client ServicesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters ServiceCreateOrUpdateParameters) (result ServiceResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serviceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client ServicesClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group within the current subscription.
 // serviceName - the name of the Search service to delete.
 func (client ServicesClient) Delete(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "Delete", nil, "Failure preparing request")
@@ -180,6 +201,16 @@ func (client ServicesClient) DeleteResponder(resp *http.Response) (result autore
 // Parameters:
 // resourceGroupName - the name of the resource group within the current subscription.
 func (client ServicesClient) List(ctx context.Context, resourceGroupName string) (result ServiceListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "search.ServicesClient", "List", nil, "Failure preparing request")

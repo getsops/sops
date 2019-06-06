@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package dns
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/dns/mgmt/2018-03-01-preview/dns"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type RecordType = original.RecordType
 
 const (
@@ -48,9 +51,10 @@ const (
 	Public  ZoneType = original.Public
 )
 
-type AaaaRecord = original.AaaaRecord
 type ARecord = original.ARecord
+type AaaaRecord = original.AaaaRecord
 type AzureEntityResource = original.AzureEntityResource
+type BaseClient = original.BaseClient
 type CaaRecord = original.CaaRecord
 type CloudError = original.CloudError
 type CloudErrorBody = original.CloudErrorBody
@@ -65,6 +69,7 @@ type RecordSetListResultIterator = original.RecordSetListResultIterator
 type RecordSetListResultPage = original.RecordSetListResultPage
 type RecordSetProperties = original.RecordSetProperties
 type RecordSetUpdateParameters = original.RecordSetUpdateParameters
+type RecordSetsClient = original.RecordSetsClient
 type Resource = original.Resource
 type SoaRecord = original.SoaRecord
 type SrvRecord = original.SrvRecord
@@ -76,22 +81,18 @@ type ZoneListResult = original.ZoneListResult
 type ZoneListResultIterator = original.ZoneListResultIterator
 type ZoneListResultPage = original.ZoneListResultPage
 type ZoneProperties = original.ZoneProperties
-type ZonesDeleteFuture = original.ZonesDeleteFuture
 type ZoneUpdate = original.ZoneUpdate
-type RecordSetsClient = original.RecordSetsClient
 type ZonesClient = original.ZonesClient
+type ZonesDeleteFuture = original.ZonesDeleteFuture
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewRecordSetListResultIterator(page RecordSetListResultPage) RecordSetListResultIterator {
+	return original.NewRecordSetListResultIterator(page)
 }
-func PossibleRecordTypeValues() []RecordType {
-	return original.PossibleRecordTypeValues()
-}
-func PossibleZoneTypeValues() []ZoneType {
-	return original.PossibleZoneTypeValues()
+func NewRecordSetListResultPage(getNextPage func(context.Context, RecordSetListResult) (RecordSetListResult, error)) RecordSetListResultPage {
+	return original.NewRecordSetListResultPage(getNextPage)
 }
 func NewRecordSetsClient(subscriptionID string) RecordSetsClient {
 	return original.NewRecordSetsClient(subscriptionID)
@@ -99,15 +100,30 @@ func NewRecordSetsClient(subscriptionID string) RecordSetsClient {
 func NewRecordSetsClientWithBaseURI(baseURI string, subscriptionID string) RecordSetsClient {
 	return original.NewRecordSetsClientWithBaseURI(baseURI, subscriptionID)
 }
-func UserAgent() string {
-	return original.UserAgent() + " profiles/preview"
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
-func Version() string {
-	return original.Version()
+func NewZoneListResultIterator(page ZoneListResultPage) ZoneListResultIterator {
+	return original.NewZoneListResultIterator(page)
+}
+func NewZoneListResultPage(getNextPage func(context.Context, ZoneListResult) (ZoneListResult, error)) ZoneListResultPage {
+	return original.NewZoneListResultPage(getNextPage)
 }
 func NewZonesClient(subscriptionID string) ZonesClient {
 	return original.NewZonesClient(subscriptionID)
 }
 func NewZonesClientWithBaseURI(baseURI string, subscriptionID string) ZonesClient {
 	return original.NewZonesClientWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleRecordTypeValues() []RecordType {
+	return original.PossibleRecordTypeValues()
+}
+func PossibleZoneTypeValues() []ZoneType {
+	return original.PossibleZoneTypeValues()
+}
+func UserAgent() string {
+	return original.UserAgent() + " profiles/preview"
+}
+func Version() string {
+	return original.Version()
 }

@@ -16,12 +16,12 @@ limitations under the License.
 package bttest_test
 
 import (
+	"context"
 	"fmt"
 	"log"
 
 	"cloud.google.com/go/bigtable"
 	"cloud.google.com/go/bigtable/bttest"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 )

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build !windows
+// +build !windows,!solaris,!js
 
 package test
 
@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -217,6 +218,11 @@ func TestKeyChange(t *testing.T) {
 }
 
 func TestInvalidTerminalMode(t *testing.T) {
+	if runtime.GOOS == "aix" {
+		// On AIX, sshd cannot acquire /dev/pts/* if launched as
+		// a non-root user.
+		t.Skipf("skipping on %s", runtime.GOOS)
+	}
 	server := newServer(t)
 	defer server.Shutdown()
 	conn := server.Dial(clientConfig())
@@ -234,6 +240,11 @@ func TestInvalidTerminalMode(t *testing.T) {
 }
 
 func TestValidTerminalMode(t *testing.T) {
+	if runtime.GOOS == "aix" {
+		// On AIX, sshd cannot acquire /dev/pts/* if launched as
+		// a non-root user.
+		t.Skipf("skipping on %s", runtime.GOOS)
+	}
 	server := newServer(t)
 	defer server.Shutdown()
 	conn := server.Dial(clientConfig())
@@ -278,6 +289,11 @@ func TestValidTerminalMode(t *testing.T) {
 }
 
 func TestWindowChange(t *testing.T) {
+	if runtime.GOOS == "aix" {
+		// On AIX, sshd cannot acquire /dev/pts/* if launched as
+		// a non-root user.
+		t.Skipf("skipping on %s", runtime.GOOS)
+	}
 	server := newServer(t)
 	defer server.Shutdown()
 	conn := server.Dial(clientConfig())
@@ -351,7 +367,7 @@ func testOneCipher(t *testing.T, cipher string, cipherOrder []string) {
 		t.Fatalf("NewSession: %v", err)
 	}
 
-	out, err := session.Output(fmt.Sprintf("dd if=/dev/zero of=/dev/stdout bs=%d count=1", numBytes))
+	out, err := session.Output(fmt.Sprintf("dd if=/dev/zero bs=%d count=1", numBytes))
 	if err != nil {
 		t.Fatalf("Output: %v", err)
 	}
@@ -384,17 +400,19 @@ func TestMACs(t *testing.T) {
 	macOrder := config.MACs
 
 	for _, mac := range macOrder {
-		server := newServer(t)
-		defer server.Shutdown()
-		conf := clientConfig()
-		conf.MACs = []string{mac}
-		// Don't fail if sshd doesn't have the MAC.
-		conf.MACs = append(conf.MACs, macOrder...)
-		if conn, err := server.TryDial(conf); err == nil {
-			conn.Close()
-		} else {
-			t.Fatalf("failed for MAC %q", mac)
-		}
+		t.Run(mac, func(t *testing.T) {
+			server := newServer(t)
+			defer server.Shutdown()
+			conf := clientConfig()
+			conf.MACs = []string{mac}
+			// Don't fail if sshd doesn't have the MAC.
+			conf.MACs = append(conf.MACs, macOrder...)
+			if conn, err := server.TryDial(conf); err == nil {
+				conn.Close()
+			} else {
+				t.Fatalf("failed for MAC %q", mac)
+			}
+		})
 	}
 }
 
@@ -403,17 +421,19 @@ func TestKeyExchanges(t *testing.T) {
 	config.SetDefaults()
 	kexOrder := config.KeyExchanges
 	for _, kex := range kexOrder {
-		server := newServer(t)
-		defer server.Shutdown()
-		conf := clientConfig()
-		// Don't fail if sshd doesn't have the kex.
-		conf.KeyExchanges = append([]string{kex}, kexOrder...)
-		conn, err := server.TryDial(conf)
-		if err == nil {
-			conn.Close()
-		} else {
-			t.Errorf("failed for kex %q", kex)
-		}
+		t.Run(kex, func(t *testing.T) {
+			server := newServer(t)
+			defer server.Shutdown()
+			conf := clientConfig()
+			// Don't fail if sshd doesn't have the kex.
+			conf.KeyExchanges = append([]string{kex}, kexOrder...)
+			conn, err := server.TryDial(conf)
+			if err == nil {
+				conn.Close()
+			} else {
+				t.Errorf("failed for kex %q", kex)
+			}
+		})
 	}
 }
 
@@ -424,20 +444,22 @@ func TestClientAuthAlgorithms(t *testing.T) {
 		"ecdsa",
 		"ed25519",
 	} {
-		server := newServer(t)
-		conf := clientConfig()
-		conf.SetDefaults()
-		conf.Auth = []ssh.AuthMethod{
-			ssh.PublicKeys(testSigners[key]),
-		}
+		t.Run(key, func(t *testing.T) {
+			server := newServer(t)
+			conf := clientConfig()
+			conf.SetDefaults()
+			conf.Auth = []ssh.AuthMethod{
+				ssh.PublicKeys(testSigners[key]),
+			}
 
-		conn, err := server.TryDial(conf)
-		if err == nil {
-			conn.Close()
-		} else {
-			t.Errorf("failed for key %q", key)
-		}
+			conn, err := server.TryDial(conf)
+			if err == nil {
+				conn.Close()
+			} else {
+				t.Errorf("failed for key %q", key)
+			}
 
-		server.Shutdown()
+			server.Shutdown()
+		})
 	}
 }

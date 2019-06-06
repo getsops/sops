@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) Account
 // Parameters:
 // body - parameters describing the name to check availability for.
 func (client AccountsClient) CheckNameAvailability(ctx context.Context, body CheckNameAvailabilityParameter) (result CheckNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CheckNameAvailabilityPreparer(ctx, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "CheckNameAvailability", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client AccountsClient) CheckNameAvailabilityResponder(resp *http.Response)
 // body - the request data.
 // resourceName - name of the resource.
 func (client AccountsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, body AccountResourceRequest, resourceName string) (result AccountResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, body, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -184,6 +205,16 @@ func (client AccountsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // resourceGroupName - name of the resource group within the Azure subscription.
 // resourceName - name of the resource.
 func (client AccountsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "Delete", nil, "Failure preparing request")
@@ -250,6 +281,16 @@ func (client AccountsClient) DeleteResponder(resp *http.Response) (result autore
 // resourceGroupName - name of the resource group within the Azure subscription.
 // resourceName - name of the resource.
 func (client AccountsClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result AccountResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "Get", nil, "Failure preparing request")
@@ -317,6 +358,16 @@ func (client AccountsClient) GetResponder(resp *http.Response) (result AccountRe
 // Parameters:
 // resourceGroupName - name of the resource group within the Azure subscription.
 func (client AccountsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AccountResourceListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -372,6 +423,86 @@ func (client AccountsClient) ListByResourceGroupResponder(resp *http.Response) (
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// Update updates tags for Visual Studio Team Services account resource.
+// Parameters:
+// resourceGroupName - name of the resource group within the Azure subscription.
+// body - the request data.
+// resourceName - name of the resource.
+func (client AccountsClient) Update(ctx context.Context, resourceGroupName string, body AccountTagRequest, resourceName string) (result AccountResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.UpdatePreparer(ctx, resourceGroupName, body, resourceName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "Update", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "Update", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "visualstudio.AccountsClient", "Update", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdatePreparer prepares the Update request.
+func (client AccountsClient) UpdatePreparer(ctx context.Context, resourceGroupName string, body AccountTagRequest, resourceName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"resourceName":      autorest.Encode("path", resourceName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2014-04-01-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/microsoft.visualstudio/account/{resourceName}", pathParameters),
+		autorest.WithJSON(body),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateSender sends the Update request. The method will close the
+// http.Response Body if it receives an error.
+func (client AccountsClient) UpdateSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateResponder handles the response to the Update request. The method always
+// closes the http.Response Body.
+func (client AccountsClient) UpdateResponder(resp *http.Response) (result AccountResource, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNotFound),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}

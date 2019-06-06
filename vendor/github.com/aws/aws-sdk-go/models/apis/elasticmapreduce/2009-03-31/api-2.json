@@ -10,7 +10,6 @@
     "serviceId":"EMR",
     "signatureVersion":"v4",
     "targetPrefix":"ElasticMapReduce",
-    "timestampFormat":"unixTimestamp",
     "uid":"elasticmapreduce-2009-03-31"
   },
   "operations":{
@@ -1040,6 +1039,9 @@
         "RunningInstanceCount":{"shape":"Integer"},
         "Status":{"shape":"InstanceGroupStatus"},
         "Configurations":{"shape":"ConfigurationList"},
+        "ConfigurationsVersion":{"shape":"Long"},
+        "LastSuccessfullyAppliedConfigurations":{"shape":"ConfigurationList"},
+        "LastSuccessfullyAppliedConfigurationsVersion":{"shape":"Long"},
         "EbsBlockDevices":{"shape":"EbsBlockDeviceList"},
         "EbsOptimized":{"shape":"BooleanObject"},
         "ShrinkPolicy":{"shape":"ShrinkPolicy"},
@@ -1117,7 +1119,8 @@
         "InstanceGroupId":{"shape":"XmlStringMaxLen256"},
         "InstanceCount":{"shape":"Integer"},
         "EC2InstanceIdsToTerminate":{"shape":"EC2InstanceIdsToTerminateList"},
-        "ShrinkPolicy":{"shape":"ShrinkPolicy"}
+        "ShrinkPolicy":{"shape":"ShrinkPolicy"},
+        "Configurations":{"shape":"ConfigurationList"}
       }
     },
     "InstanceGroupModifyConfigList":{
@@ -1130,6 +1133,7 @@
         "PROVISIONING",
         "BOOTSTRAPPING",
         "RUNNING",
+        "RECONFIGURING",
         "RESIZING",
         "SUSPENDED",
         "TERMINATING",
@@ -1554,6 +1558,7 @@
         "Marker":{"shape":"Marker"}
       }
     },
+    "Long":{"type":"long"},
     "Marker":{"type":"string"},
     "MarketType":{
       "type":"string",

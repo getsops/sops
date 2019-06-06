@@ -15,7 +15,7 @@
   "description": "API for viewing and managing your reports in DoubleClick Bid Manager.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/bid-manager/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/wt31bQU3QIh3FtuHSYPOcRgOq78\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/xoxKVGyG96QSfwJ57MjgWSZsRxI\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -257,7 +257,7 @@
       }
     }
   },
-  "revision": "20180821",
+  "revision": "20190529",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "DownloadLineItemsRequest": {
@@ -321,20 +321,22 @@
       "type": "object"
     },
     "DownloadRequest": {
-      "description": "Request to fetch stored campaigns, insertion orders, line items, TrueView ad groups and ads.",
+      "description": "Request to fetch stored inventory sources, campaigns, insertion orders, line items, TrueView ad groups and ads.",
       "id": "DownloadRequest",
       "properties": {
         "fileTypes": {
-          "description": "File types that will be returned.\n\nAcceptable values are:  \n- \"AD\" \n- \"AD_GROUP\" \n- \"CAMPAIGN\" \n- \"INSERTION_ORDER\" \n- \"LINE_ITEM\"",
+          "description": "File types that will be returned. If INVENTORY_SOURCE is requested, no other file types may be requested.\n\nAcceptable values are:  \n- \"AD\" \n- \"AD_GROUP\" \n- \"CAMPAIGN\" \n- \"INSERTION_ORDER\" \n- \"INVENTORY_SOURCE\" \n- \"LINE_ITEM\"",
           "items": {
             "enum": [
               "AD",
               "AD_GROUP",
               "CAMPAIGN",
               "INSERTION_ORDER",
+              "INVENTORY_SOURCE",
               "LINE_ITEM"
             ],
             "enumDescriptions": [
+              "",
               "",
               "",
               "",
@@ -354,14 +356,18 @@
           "type": "array"
         },
         "filterType": {
-          "description": "Filter type used to filter entities to fetch.",
+          "description": "Filter type used to filter entities to fetch. PARTNER_ID and INVENTORY_SOURCE_ID may only be used when downloading inventory sources.",
           "enum": [
             "ADVERTISER_ID",
             "CAMPAIGN_ID",
             "INSERTION_ORDER_ID",
-            "LINE_ITEM_ID"
+            "INVENTORY_SOURCE_ID",
+            "LINE_ITEM_ID",
+            "PARTNER_ID"
           ],
           "enumDescriptions": [
+            "",
+            "",
             "",
             "",
             "",
@@ -396,6 +402,9 @@
           "description": "Retrieved insertion orders in SDF format.",
           "type": "string"
         },
+        "inventorySources": {
+          "type": "string"
+        },
         "lineItems": {
           "description": "Retrieved line items in SDF format.",
           "type": "string"
@@ -428,6 +437,7 @@
             "FILTER_COMPANION_CREATIVE_ID",
             "FILTER_CONVERSION_DELAY",
             "FILTER_COUNTRY",
+            "FILTER_CREATIVE_ATTRIBUTE",
             "FILTER_CREATIVE_HEIGHT",
             "FILTER_CREATIVE_ID",
             "FILTER_CREATIVE_SIZE",
@@ -447,7 +457,10 @@
             "FILTER_FLOODLIGHT_PIXEL_ID",
             "FILTER_GENDER",
             "FILTER_INSERTION_ORDER",
+            "FILTER_INVENTORY_COMMITMENT_TYPE",
+            "FILTER_INVENTORY_DELIVERY_METHOD",
             "FILTER_INVENTORY_FORMAT",
+            "FILTER_INVENTORY_RATE_TYPE",
             "FILTER_INVENTORY_SOURCE",
             "FILTER_INVENTORY_SOURCE_TYPE",
             "FILTER_KEYWORD",
@@ -659,6 +672,10 @@
             "",
             "",
             "",
+            "",
+            "",
+            "",
+            "",
             ""
           ],
           "type": "string"
@@ -741,6 +758,7 @@
               "FILTER_COMPANION_CREATIVE_ID",
               "FILTER_CONVERSION_DELAY",
               "FILTER_COUNTRY",
+              "FILTER_CREATIVE_ATTRIBUTE",
               "FILTER_CREATIVE_HEIGHT",
               "FILTER_CREATIVE_ID",
               "FILTER_CREATIVE_SIZE",
@@ -760,7 +778,10 @@
               "FILTER_FLOODLIGHT_PIXEL_ID",
               "FILTER_GENDER",
               "FILTER_INSERTION_ORDER",
+              "FILTER_INVENTORY_COMMITMENT_TYPE",
+              "FILTER_INVENTORY_DELIVERY_METHOD",
               "FILTER_INVENTORY_FORMAT",
+              "FILTER_INVENTORY_RATE_TYPE",
               "FILTER_INVENTORY_SOURCE",
               "FILTER_INVENTORY_SOURCE_TYPE",
               "FILTER_KEYWORD",
@@ -972,6 +993,10 @@
               "",
               "",
               "",
+              "",
+              "",
+              "",
+              "",
               ""
             ],
             "type": "string"
@@ -979,7 +1004,7 @@
           "type": "array"
         },
         "includeInviteData": {
-          "description": "Whether to include data from Invite Media.",
+          "description": "Deprecated. This field is no longer in use.",
           "type": "boolean"
         },
         "metrics": {
@@ -1014,6 +1039,7 @@
               "METRIC_BILLABLE_COST_ADVERTISER",
               "METRIC_BILLABLE_COST_PARTNER",
               "METRIC_BILLABLE_COST_USD",
+              "METRIC_BILLABLE_IMPRESSIONS",
               "METRIC_CLICKS",
               "METRIC_CLICK_TO_POST_CLICK_CONVERSION_RATE",
               "METRIC_CM_POST_CLICK_REVENUE",
@@ -1300,6 +1326,7 @@
               "METRIC_VIEWABLE_BID_REQUESTS"
             ],
             "enumDescriptions": [
+              "",
               "",
               "",
               "",

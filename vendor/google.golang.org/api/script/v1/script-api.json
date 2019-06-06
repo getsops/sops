@@ -3,13 +3,13 @@
     "oauth2": {
       "scopes": {
         "https://mail.google.com/": {
-          "description": "Read, send, delete, and manage your email"
+          "description": "Read, compose, send, and permanently delete all your email from Gmail"
         },
         "https://www.google.com/calendar/feeds": {
-          "description": "Manage your calendars"
+          "description": "See, edit, share, and permanently delete all the calendars you can access using Google Calendar"
         },
         "https://www.google.com/m8/feeds": {
-          "description": "Manage your contacts"
+          "description": "See, edit, download, and permanently delete your contacts"
         },
         "https://www.googleapis.com/auth/admin.directory.group": {
           "description": "View and manage the provisioning of groups on your domain"
@@ -21,7 +21,7 @@
           "description": "View and manage your Google Docs documents"
         },
         "https://www.googleapis.com/auth/drive": {
-          "description": "View and manage the files in your Google Drive"
+          "description": "See, edit, create, and delete all of your Google Drive files"
         },
         "https://www.googleapis.com/auth/forms": {
           "description": "View and manage your forms in Google Drive"
@@ -32,8 +32,26 @@
         "https://www.googleapis.com/auth/groups": {
           "description": "View and manage your Google Groups"
         },
+        "https://www.googleapis.com/auth/script.deployments": {
+          "description": "Create and update Google Apps Script deployments"
+        },
+        "https://www.googleapis.com/auth/script.deployments.readonly": {
+          "description": "View Google Apps Script deployments"
+        },
+        "https://www.googleapis.com/auth/script.metrics": {
+          "description": "View Google Apps Script project's metrics"
+        },
+        "https://www.googleapis.com/auth/script.processes": {
+          "description": "View Google Apps Script processes"
+        },
+        "https://www.googleapis.com/auth/script.projects": {
+          "description": "Create and update Google Apps Script projects"
+        },
+        "https://www.googleapis.com/auth/script.projects.readonly": {
+          "description": "View Google Apps Script projects"
+        },
         "https://www.googleapis.com/auth/spreadsheets": {
-          "description": "View and manage your spreadsheets in Google Drive"
+          "description": "See, edit, create, and delete your spreadsheets in Google Drive"
         },
         "https://www.googleapis.com/auth/userinfo.email": {
           "description": "View your email address"
@@ -45,7 +63,7 @@
   "baseUrl": "https://script.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Script",
-  "description": "An API for managing and executing Google Apps Script projects.\n",
+  "description": "Manages and executes Google Apps Script projects.\n",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/apps-script/api/",
   "fullyEncodeReservedExpansion": true,
@@ -217,7 +235,8 @@
                 "WEBAPP",
                 "EDITOR",
                 "SIMPLE_TRIGGER",
-                "MENU"
+                "MENU",
+                "BATCH_TASK"
               ],
               "location": "query",
               "repeated": true,
@@ -240,7 +259,10 @@
           "path": "v1/processes",
           "response": {
             "$ref": "ListUserProcessesResponse"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.processes"
+          ]
         },
         "listScriptProcesses": {
           "description": "List information about a script's executed processes, such as process type\nand current status.",
@@ -315,7 +337,8 @@
                 "WEBAPP",
                 "EDITOR",
                 "SIMPLE_TRIGGER",
-                "MENU"
+                "MENU",
+                "BATCH_TASK"
               ],
               "location": "query",
               "repeated": true,
@@ -338,7 +361,10 @@
           "path": "v1/processes:listScriptProcesses",
           "response": {
             "$ref": "ListScriptProcessesResponse"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.processes"
+          ]
         }
       }
     },
@@ -357,7 +383,10 @@
           },
           "response": {
             "$ref": "Project"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects"
+          ]
         },
         "get": {
           "description": "Gets a script project's metadata.",
@@ -378,7 +407,11 @@
           "path": "v1/projects/{scriptId}",
           "response": {
             "$ref": "Project"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects",
+            "https://www.googleapis.com/auth/script.projects.readonly"
+          ]
         },
         "getContent": {
           "description": "Gets the content of the script project, including the code source and\nmetadata for each script file.",
@@ -405,7 +438,11 @@
           "path": "v1/projects/{scriptId}/content",
           "response": {
             "$ref": "Content"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects",
+            "https://www.googleapis.com/auth/script.projects.readonly"
+          ]
         },
         "getMetrics": {
           "description": "Get metrics data for scripts, such as number of executions and\nactive users.",
@@ -441,7 +478,10 @@
           "path": "v1/projects/{scriptId}/metrics",
           "response": {
             "$ref": "Metrics"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.metrics"
+          ]
         },
         "updateContent": {
           "description": "Updates the content of the specified script project.\nThis content is stored as the HEAD version, and is used when the script is\nexecuted as a trigger, in the script editor, in add-on preview mode, or as\na web app or Apps Script API in development mode. This clears all the\nexisting files in the project.",
@@ -465,7 +505,10 @@
           },
           "response": {
             "$ref": "Content"
-          }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects"
+          ]
         }
       },
       "resources": {
@@ -493,7 +536,10 @@
               },
               "response": {
                 "$ref": "Deployment"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments"
+              ]
             },
             "delete": {
               "description": "Deletes a deployment of an Apps Script project.",
@@ -521,7 +567,10 @@
               "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
               "response": {
                 "$ref": "Empty"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments"
+              ]
             },
             "get": {
               "description": "Gets a deployment of an Apps Script project.",
@@ -549,7 +598,11 @@
               "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
               "response": {
                 "$ref": "Deployment"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments",
+                "https://www.googleapis.com/auth/script.deployments.readonly"
+              ]
             },
             "list": {
               "description": "Lists the deployments of an Apps Script project.",
@@ -581,7 +634,11 @@
               "path": "v1/projects/{scriptId}/deployments",
               "response": {
                 "$ref": "ListDeploymentsResponse"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments",
+                "https://www.googleapis.com/auth/script.deployments.readonly"
+              ]
             },
             "update": {
               "description": "Updates a deployment of an Apps Script project.",
@@ -612,7 +669,10 @@
               },
               "response": {
                 "$ref": "Deployment"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments"
+              ]
             }
           }
         },
@@ -640,7 +700,10 @@
               },
               "response": {
                 "$ref": "Version"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.projects"
+              ]
             },
             "get": {
               "description": "Gets a version of a script project.",
@@ -669,7 +732,11 @@
               "path": "v1/projects/{scriptId}/versions/{versionNumber}",
               "response": {
                 "$ref": "Version"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.projects",
+                "https://www.googleapis.com/auth/script.projects.readonly"
+              ]
             },
             "list": {
               "description": "List the versions of a script project.",
@@ -701,7 +768,11 @@
               "path": "v1/projects/{scriptId}/versions",
               "response": {
                 "$ref": "ListVersionsResponse"
-              }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.projects",
+                "https://www.googleapis.com/auth/script.projects.readonly"
+              ]
             }
           }
         }
@@ -710,7 +781,7 @@
     "scripts": {
       "methods": {
         "run": {
-          "description": "Runs a function in an Apps Script project. The project must be deployed\nfor use with the Apps Script API.\n\nThis method requires authorization with an OAuth 2.0 token that includes at\nleast one of the scopes listed in the [Authorization](#authorization)\nsection; script projects that do not require authorization cannot be\nexecuted through this API. To find the correct scopes to include in the\nauthentication token, open the project in the script editor, then select\n**File \u003e Project properties** and click the **Scopes** tab.",
+          "description": "Runs a function in an Apps Script project. The script project must be\ndeployed for use with the Apps Script API and the calling application must\nshare the same Cloud Platform project.\n\nThis method requires authorization with an OAuth 2.0 token that includes at\nleast one of the scopes listed in the [Authorization](#authorization)\nsection; script projects that do not require authorization cannot be\nexecuted through this API. To find the correct scopes to include in the\nauthentication token, open the project in the script editor, then select\n**File \u003e Project properties** and click the **Scopes** tab.\n\nThe error `403, PERMISSION_DENIED: The caller does not have permission`\nindicates that the Cloud Platform project used to authorize the request is\nnot the same as the one used by the script.",
           "flatPath": "v1/scripts/{scriptId}:run",
           "httpMethod": "POST",
           "id": "script.scripts.run",
@@ -750,7 +821,7 @@
       }
     }
   },
-  "revision": "20180802",
+  "revision": "20190514",
   "rootUrl": "https://script.googleapis.com/",
   "schemas": {
     "Content": {
@@ -878,6 +949,17 @@
       },
       "type": "object"
     },
+    "ExecuteStreamResponse": {
+      "description": "The response for executing or debugging a function in an Apps Script project.",
+      "id": "ExecuteStreamResponse",
+      "properties": {
+        "result": {
+          "$ref": "ScriptExecutionResult",
+          "description": "The result of the execution.\nTODO (johnlattin): Add debugging and logging."
+        }
+      },
+      "type": "object"
+    },
     "ExecutionError": {
       "description": "An object that provides information about the nature of an error resulting\nfrom an attempted execution of a script function using the Apps Script API.\nIf a run call\nsucceeds but the script function (or Apps Script itself) throws an exception,\nthe response body's error field\ncontains a\nStatus object. The `Status` object's `details` field\ncontains an array with a single one of these `ExecutionError` objects.",
       "id": "ExecutionError",
@@ -909,7 +991,7 @@
           "type": "boolean"
         },
         "function": {
-          "description": "The name of the function to execute in the given script. The name does not\ninclude parentheses or parameters.",
+          "description": "The name of the function to execute in the given script. The name does not\ninclude parentheses or parameters. It can reference a function in an\nincluded library such as `Library.libFunction1`.",
           "type": "string"
         },
         "parameters": {
@@ -920,7 +1002,7 @@
           "type": "array"
         },
         "sessionState": {
-          "description": "For Android add-ons only. An ID that represents the user's current session\nin the Android app for Google Docs or Sheets, included as extra data in the\n[Intent](https://developer.android.com/guide/components/intents-filters.html)\nthat launches the add-on. When an Android add-on is run with a session\nstate, it gains the privileges of a\n[bound](https://developers.google.com/apps-script/guides/bound)\nscript\u0026mdash;that is, it can access information like the user's current\ncursor position (in Docs) or selected cell (in Sheets). To retrieve the\nstate, call\n`Intent.getStringExtra(\"com.google.android.apps.docs.addons.SessionState\")`.\nOptional.",
+          "description": "\u003cb\u003eDeprecated\u003c/b\u003e. For use with Android add-ons only. An ID that represents\nthe user's current session in the Android app for Google Docs or Sheets,\nincluded as extra data in the\n[Intent](https://developer.android.com/guide/components/intents-filters.html)\nthat launches the add-on. When an Android add-on is run with a session\nstate, it gains the privileges of a\n[bound](https://developers.google.com/apps-script/guides/bound)\nscript\u0026mdash;that is, it can access information like the user's current\ncursor position (in Docs) or selected cell (in Sheets). To retrieve the\nstate, call\n`Intent.getStringExtra(\"com.google.android.apps.docs.addons.SessionState\")`.\nOptional.",
           "type": "string"
         }
       },
@@ -1097,10 +1179,6 @@
           "format": "google-duration",
           "type": "string"
         },
-        "executingUser": {
-          "description": "User-facing name for the user executing the script.",
-          "type": "string"
-        },
         "functionName": {
           "description": "Name of the function the started the execution.",
           "type": "string"
@@ -1142,7 +1220,8 @@
             "WEBAPP",
             "EDITOR",
             "SIMPLE_TRIGGER",
-            "MENU"
+            "MENU",
+            "BATCH_TASK"
           ],
           "enumDescriptions": [
             "Unspecified type.",
@@ -1153,7 +1232,8 @@
             "The process was started from a web app entry point.",
             "The process was started using the Apps Script IDE.",
             "The process was started from a G Suite simple trigger.",
-            "The process was started from a G Suite menu item."
+            "The process was started from a G Suite menu item.",
+            "The process was started as a task in a batch job."
           ],
           "type": "string"
         },
@@ -1318,6 +1398,20 @@
       },
       "type": "object"
     },
+    "ListValue": {
+      "description": "`ListValue` is a wrapper around a repeated field of values.\nBased on LustValue at:\ngoogle3/apps/maestro/api/struct.proto?q=message%5c%20ListValue",
+      "id": "ListValue",
+      "properties": {
+        "values": {
+          "description": "Repeated field of dynamically typed values.",
+          "items": {
+            "$ref": "Value"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "ListVersionsResponse": {
       "description": "Response with the list of the versions for the specified script project.",
       "id": "ListVersionsResponse",
@@ -1446,6 +1540,17 @@
       },
       "type": "object"
     },
+    "ScriptExecutionResult": {
+      "description": "The result of an execution\nBased on ScriptExecutionResult at:\ngoogle3/apps/maestro/api/frontend_execution_common.proto?q=message%5c%20ScriptExecutionResult",
+      "id": "ScriptExecutionResult",
+      "properties": {
+        "returnValue": {
+          "$ref": "Value",
+          "description": "The returned value of the execution.\nTODO (johnlattin): Add HtmlResponse\nTODO (johnlattin): Add ExceptionResponse\nTODO (johlnattin): Add TextResponse"
+        }
+      },
+      "type": "object"
+    },
     "ScriptStackTraceElement": {
       "description": "A stack trace through the script that shows where the execution failed.",
       "id": "ScriptStackTraceElement",
@@ -1489,6 +1594,20 @@
       },
       "type": "object"
     },
+    "Struct": {
+      "description": "`Struct` represents a structured data value, consisting of fields which map\nto dynamically typed values.\nBased on Struct at:\ngoogle3/apps/maestro/api/struct.proto?q=message%5c%20Struct",
+      "id": "Struct",
+      "properties": {
+        "fields": {
+          "additionalProperties": {
+            "$ref": "Value"
+          },
+          "description": "Unordered map of dynamically typed values.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "UpdateDeploymentRequest": {
       "description": "Request with deployment information to update an existing deployment.",
       "id": "UpdateDeploymentRequest",
@@ -1496,6 +1615,62 @@
         "deploymentConfig": {
           "$ref": "DeploymentConfig",
           "description": "The deployment configuration."
+        }
+      },
+      "type": "object"
+    },
+    "Value": {
+      "description": "`Value` represents a dynamically typed value which is the outcome of an\nexecuted script\nBased on Value at:\ngoogle3/apps/maestro/api/struct.proto?q=message%5c%20Value",
+      "id": "Value",
+      "properties": {
+        "boolValue": {
+          "description": "Represents a boolean value.",
+          "type": "boolean"
+        },
+        "bytesValue": {
+          "description": "Represents raw byte values.",
+          "format": "byte",
+          "type": "string"
+        },
+        "dateValue": {
+          "description": "Represents a date in ms since the epoch.",
+          "format": "int64",
+          "type": "string"
+        },
+        "listValue": {
+          "$ref": "ListValue",
+          "description": "Represents a repeated `Value`."
+        },
+        "nullValue": {
+          "description": "Represents a null value.",
+          "enum": [
+            "NULL_VALUE"
+          ],
+          "enumDescriptions": [
+            "Null value."
+          ],
+          "type": "string"
+        },
+        "numberValue": {
+          "description": "Represents a double value.",
+          "format": "double",
+          "type": "number"
+        },
+        "protoValue": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Represents a structured proto value.",
+          "type": "object"
+        },
+        "stringValue": {
+          "description": "Represents a string value.",
+          "type": "string"
+        },
+        "structValue": {
+          "$ref": "Struct",
+          "description": "Represents a structured value."
         }
       },
       "type": "object"

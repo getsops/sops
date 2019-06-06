@@ -1,10 +1,11 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS Database Migration Service</fullname> <p>AWS Database Migration Service (AWS DMS) can migrate your data to and from the most widely used commercial and open-source databases such as Oracle, PostgreSQL, Microsoft SQL Server, Amazon Redshift, MariaDB, Amazon Aurora, MySQL, and SAP Adaptive Server Enterprise (ASE). The service supports homogeneous migrations such as Oracle to Oracle, as well as heterogeneous migrations between different database platforms, such as Oracle to MySQL or SQL Server to PostgreSQL.</p> <p>For more information about AWS DMS, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/Welcome.html\"> What Is AWS Database Migration Service? </a> </p>",
+  "service": "<fullname>AWS Database Migration Service</fullname> <p>AWS Database Migration Service (AWS DMS) can migrate your data to and from the most widely used commercial and open-source databases such as Oracle, PostgreSQL, Microsoft SQL Server, Amazon Redshift, MariaDB, Amazon Aurora, MySQL, and SAP Adaptive Server Enterprise (ASE). The service supports homogeneous migrations such as Oracle to Oracle, as well as heterogeneous migrations between different database platforms, such as Oracle to MySQL or SQL Server to PostgreSQL.</p> <p>For more information about AWS DMS, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/Welcome.html\">What Is AWS Database Migration Service?</a> in the <i>AWS Database Migration User Guide.</i> </p>",
   "operations": {
     "AddTagsToResource": "<p>Adds metadata tags to an AWS DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>",
+    "ApplyPendingMaintenanceAction": "<p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>",
     "CreateEndpoint": "<p>Creates an endpoint using the provided settings.</p>",
-    "CreateEventSubscription": "<p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>",
+    "CreateEventSubscription": "<p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
     "CreateReplicationInstance": "<p>Creates the replication instance using the specified parameters.</p>",
     "CreateReplicationSubnetGroup": "<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>",
     "CreateReplicationTask": "<p>Creates a replication task using the specified parameters.</p>",
@@ -19,10 +20,11 @@
     "DescribeConnections": "<p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>",
     "DescribeEndpointTypes": "<p>Returns information about the type of endpoints available.</p>",
     "DescribeEndpoints": "<p>Returns information about the endpoints for your account in the current region.</p>",
-    "DescribeEventCategories": "<p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>",
+    "DescribeEventCategories": "<p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
     "DescribeEventSubscriptions": "<p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>",
-    "DescribeEvents": "<p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a>. </p>",
+    "DescribeEvents": "<p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>",
     "DescribeOrderableReplicationInstances": "<p>Returns information about the replication instance types that can be created in the specified region.</p>",
+    "DescribePendingMaintenanceActions": "<p>For internal use only</p>",
     "DescribeRefreshSchemasStatus": "<p>Returns the status of the RefreshSchemas operation.</p>",
     "DescribeReplicationInstanceTaskLogs": "<p>Returns information about the task logs for the specified task.</p>",
     "DescribeReplicationInstances": "<p>Returns information about replication instances for your account in the current region.</p>",
@@ -37,19 +39,19 @@
     "ModifyEventSubscription": "<p>Modifies an existing AWS DMS event notification subscription. </p>",
     "ModifyReplicationInstance": "<p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/>",
     "ModifyReplicationSubnetGroup": "<p>Modifies the settings for the specified replication subnet group.</p>",
-    "ModifyReplicationTask": "<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>",
+    "ModifyReplicationTask": "<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>",
     "RebootReplicationInstance": "<p>Reboots a replication instance. Rebooting results in a momentary outage, until the replication instance becomes available again.</p>",
     "RefreshSchemas": "<p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>",
     "ReloadTables": "<p>Reloads the target database table with the source data. </p>",
     "RemoveTagsFromResource": "<p>Removes metadata tags from a DMS resource.</p>",
-    "StartReplicationTask": "<p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>",
+    "StartReplicationTask": "<p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
     "StartReplicationTaskAssessment": "<p> Starts the replication task assessment for unsupported data types in the source database. </p>",
     "StopReplicationTask": "<p>Stops the replication task.</p> <p/>",
     "TestConnection": "<p>Tests the connection between the replication instance and the endpoint.</p>"
   },
   "shapes": {
     "AccessDeniedFault": {
-      "base": "<p>AWS DMS was denied access to the endpoint.</p>",
+      "base": "<p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>",
       "refs": {
       }
     },
@@ -75,6 +77,16 @@
       "refs": {
       }
     },
+    "ApplyPendingMaintenanceActionMessage": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
+    "ApplyPendingMaintenanceActionResponse": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
     "AuthMechanismValue": {
       "base": null,
       "refs": {
@@ -93,6 +105,12 @@
         "Subnet$SubnetAvailabilityZone": "<p>The Availability Zone of the subnet.</p>"
       }
     },
+    "AvailabilityZonesList": {
+      "base": null,
+      "refs": {
+        "OrderableReplicationInstance$AvailabilityZones": "<p>List of availability zones for this replication instance.</p>"
+      }
+    },
     "Boolean": {
       "base": null,
       "refs": {
@@ -108,15 +126,23 @@
     "BooleanOptional": {
       "base": null,
       "refs": {
-        "CreateEventSubscriptionMessage$Enabled": "<p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>",
+        "CreateEventSubscriptionMessage$Enabled": "<p> A Boolean value; set to <code>true</code> to activate the subscription, or set to <code>false</code> to create the subscription but not activate it. </p>",
         "CreateReplicationInstanceMessage$MultiAZ": "<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>",
         "CreateReplicationInstanceMessage$AutoMinorVersionUpgrade": "<p>Indicates that minor engine upgrades will be applied automatically to the replication instance during the maintenance window.</p> <p>Default: <code>true</code> </p>",
         "CreateReplicationInstanceMessage$PubliclyAccessible": "<p> Specifies the accessibility options for the replication instance. A value of <code>true</code> represents an instance with a public IP address. A value of <code>false</code> represents an instance with a private IP address. The default value is <code>true</code>. </p>",
+        "DescribeReplicationTasksMessage$WithoutSettings": "<p>Set this flag to avoid returning setting information. Use this to reduce overhead when settings are too large. Choose TRUE to use this flag, otherwise choose FALSE (default).</p>",
         "ModifyEventSubscriptionMessage$Enabled": "<p> A Boolean value; set to <b>true</b> to activate the subscription. </p>",
         "ModifyReplicationInstanceMessage$MultiAZ": "<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>",
         "ModifyReplicationInstanceMessage$AutoMinorVersionUpgrade": "<p> Indicates that minor version upgrades will be applied automatically to the replication instance during the maintenance window. Changing this parameter does not result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and AWS DMS has enabled auto patching for that engine version. </p>",
         "RebootReplicationInstanceMessage$ForceFailover": "<p>If this parameter is <code>true</code>, the reboot is conducted through a Multi-AZ failover. (If the instance isn't configured for Multi-AZ, then you can't specify <code>true</code>.)</p>",
-        "ReplicationPendingModifiedValues$MultiAZ": "<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>"
+        "RedshiftSettings$AcceptAnyDate": "<p>Allows any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose TRUE or FALSE (default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data does not match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>",
+        "RedshiftSettings$EmptyAsNull": "<p>Specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL. A value of TRUE sets empty CHAR and VARCHAR fields to null. The default is FALSE.</p>",
+        "RedshiftSettings$RemoveQuotes": "<p>Removes surrounding quotation marks from strings in the incoming data. All characters within the quotation marks, including delimiters, are retained. Choose TRUE to remove quotation marks. The default is FALSE.</p>",
+        "RedshiftSettings$TrimBlanks": "<p>Removes the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose TRUE to remove unneeded white space. The default is FALSE.</p>",
+        "RedshiftSettings$TruncateColumns": "<p>Truncates data in columns to the appropriate number of characters, so that it fits in the column. Applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose TRUE to truncate data. The default is FALSE.</p>",
+        "ReplicationPendingModifiedValues$MultiAZ": "<p> Specifies if the replication instance is a Multi-AZ deployment. You cannot set the <code>AvailabilityZone</code> parameter if the Multi-AZ parameter is set to <code>true</code>. </p>",
+        "S3Settings$EnableStatistics": "<p>Enables statistics for Parquet pages and rowGroups. Choose <code>TRUE</code> to enable statistics, choose <code>FALSE</code> to disable. Statistics include <code>NULL</code>, <code>DISTINCT</code>, <code>MAX</code>, and <code>MIN</code> values. Defaults to <code>TRUE</code>. For <code>PARQUET</code> format only.</p>",
+        "S3Settings$CdcInsertsOnly": "<p>Option to write only <code>INSERT</code> operations to the comma-separated value (CSV) output files. By default, the first field in a CSV record contains the letter <code>I</code> (insert), <code>U</code> (update) or <code>D</code> (delete) to indicate whether the row was inserted, updated, or deleted at the source database. If <code>cdcInsertsOnly</code> is set to true, then only <code>INSERT</code>s are recorded in the CSV file, without the <code>I</code> annotation on each line. Valid values are <code>TRUE</code> and <code>FALSE</code>.</p>"
       }
     },
     "Certificate": {
@@ -143,7 +169,7 @@
     "CompressionTypeValue": {
       "base": null,
       "refs": {
-        "S3Settings$CompressionType": "<p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. </p>"
+        "S3Settings$CompressionType": "<p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both CSV and PARQUET data formats. </p>"
       }
     },
     "Connection": {
@@ -207,6 +233,12 @@
     "CreateReplicationTaskResponse": {
       "base": "<p/>",
       "refs": {
+      }
+    },
+    "DataFormatValue": {
+      "base": null,
+      "refs": {
+        "S3Settings$DataFormat": "<p>The format of the data which you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>CSV</code> : This is a row-based format with comma-separated values. </p> </li> <li> <p> <code>PARQUET</code> : Apache Parquet is a columnar storage format that features efficient compression and provides faster query response. </p> </li> </ul>"
       }
     },
     "DeleteCertificateMessage": {
@@ -359,6 +391,16 @@
       "refs": {
       }
     },
+    "DescribePendingMaintenanceActionsMessage": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
+    "DescribePendingMaintenanceActionsResponse": {
+      "base": "<p/>",
+      "refs": {
+      }
+    },
     "DescribeRefreshSchemasStatusMessage": {
       "base": "<p/>",
       "refs": {
@@ -442,7 +484,7 @@
     "DmsSslModeValue": {
       "base": null,
       "refs": {
-        "CreateEndpointMessage$SslMode": "<p>The SSL mode to use for the SSL connection.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>",
+        "CreateEndpointMessage$SslMode": "<p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The SSL mode can be one of four values: <code>none</code>, <code>require</code>, <code>verify-ca</code>, <code>verify-full</code>. The default value is <code>none</code>.</p>",
         "Endpoint$SslMode": "<p>The SSL mode used to connect to the endpoint.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>",
         "ModifyEndpointMessage$SslMode": "<p>The SSL mode to be used.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>"
       }
@@ -450,17 +492,38 @@
     "DmsTransferSettings": {
       "base": "<p> The settings in JSON format for the DMS Transfer type source endpoint. </p>",
       "refs": {
-        "CreateEndpointMessage$DmsTransferSettings": "<p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>bucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { \"ServiceAccessRoleArn\": \"string\", \"BucketName\": \"string\", \"CompressionType\": \"none\"|\"gzip\" } </p>",
-        "Endpoint$DmsTransferSettings": "<p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>bucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { \"ServiceAccessRoleArn\": \"string\", \"BucketName\": \"string\", \"CompressionType\": \"none\"|\"gzip\" } </p>",
-        "ModifyEndpointMessage$DmsTransferSettings": "<p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { \"ServiceAccessRoleArn\": \"string\", \"BucketName\": \"string\", \"CompressionType\": \"none\"|\"gzip\" } </p>"
+        "CreateEndpointMessage$DmsTransferSettings": "<p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value. </p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ \"ServiceAccessRoleArn\": \"string\", \"BucketName\": \"string\", \"CompressionType\": \"none\"|\"gzip\" } </code> </p>",
+        "Endpoint$DmsTransferSettings": "<p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ \"ServiceAccessRoleArn\": \"string\", \"BucketName\": \"string\", \"CompressionType\": \"none\"|\"gzip\" } </code> </p>",
+        "ModifyEndpointMessage$DmsTransferSettings": "<p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Attributes include the following:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { \"ServiceAccessRoleArn\": \"string\", \"BucketName\": \"string\", \"CompressionType\": \"none\"|\"gzip\" } </p>"
       }
     },
     "DynamoDbSettings": {
       "base": "<p/>",
       "refs": {
-        "CreateEndpointMessage$DynamoDbSettings": "<p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html\"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>",
+        "CreateEndpointMessage$DynamoDbSettings": "<p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html\">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
         "Endpoint$DynamoDbSettings": "<p>The settings for the target DynamoDB database. For more information, see the <code>DynamoDBSettings</code> structure.</p>",
-        "ModifyEndpointMessage$DynamoDbSettings": "<p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html\"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>"
+        "ModifyEndpointMessage$DynamoDbSettings": "<p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html\">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>"
+      }
+    },
+    "ElasticsearchSettings": {
+      "base": "<p/>",
+      "refs": {
+        "CreateEndpointMessage$ElasticsearchSettings": "<p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration\">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>",
+        "Endpoint$ElasticsearchSettings": "<p>The settings for the Elasticsearch source endpoint. For more information, see the <code>ElasticsearchSettings</code> structure.</p>",
+        "ModifyEndpointMessage$ElasticsearchSettings": "<p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration\">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>"
+      }
+    },
+    "EncodingTypeValue": {
+      "base": null,
+      "refs": {
+        "S3Settings$EncodingType": "<p>The type of encoding you are using: <code>RLE_DICTIONARY</code> (default), <code>PLAIN</code>, or <code>PLAIN_DICTIONARY</code>.</p> <ul> <li> <p> <code>RLE_DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently.</p> </li> <li> <p> <code>PLAIN</code> does not use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN_DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul>"
+      }
+    },
+    "EncryptionModeValue": {
+      "base": null,
+      "refs": {
+        "RedshiftSettings$EncryptionMode": "<p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either SSE_S3 (default) or SSE_KMS. To use SSE_S3, create an IAM role with a policy that allows <code>\"arn:aws:s3:::*\"</code> to use the following actions: <code>\"s3:PutObject\", \"s3:ListBucket\"</code>.</p>",
+        "S3Settings$EncryptionMode": "<p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE_S3</code> (default) or <code>SSE_KMS</code>. To use <code>SSE_S3</code>, you need an IAM role with permission to allow <code>\"arn:aws:s3:::dms-*\"</code> to use the following actions:</p> <ul> <li> <p>s3:CreateBucket</p> </li> <li> <p>s3:ListBucket</p> </li> <li> <p>s3:DeleteBucket</p> </li> <li> <p>s3:GetBucketLocation</p> </li> <li> <p>s3:GetObject</p> </li> <li> <p>s3:PutObject</p> </li> <li> <p>s3:DeleteObject</p> </li> <li> <p>s3:GetObjectVersion</p> </li> <li> <p>s3:GetBucketPolicy</p> </li> <li> <p>s3:PutBucketPolicy</p> </li> <li> <p>s3:DeleteBucketPolicy</p> </li> </ul>"
       }
     },
     "Endpoint": {
@@ -487,7 +550,7 @@
     "EventCategoriesList": {
       "base": null,
       "refs": {
-        "CreateEventSubscriptionMessage$EventCategories": "<p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <b>DescribeEventCategories</b> action or in the topic <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications</a> in the AWS Database Migration Service User Guide. </p>",
+        "CreateEventSubscriptionMessage$EventCategories": "<p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <code>DescribeEventCategories</code> action or in the topic <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
         "DescribeEventsMessage$EventCategories": "<p>A list of event categories for a source type that you want to subscribe to.</p>",
         "Event$EventCategories": "<p>The event categories available for the specified source type.</p>",
         "EventCategoryGroup$EventCategories": "<p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>",
@@ -536,7 +599,12 @@
         "InvalidCertificateFault$message": null,
         "InvalidResourceStateFault$message": "<p/>",
         "InvalidSubnet$message": "<p/>",
+        "KMSAccessDeniedFault$message": null,
+        "KMSDisabledFault$message": null,
+        "KMSInvalidStateFault$message": null,
         "KMSKeyNotAccessibleFault$message": "<p/>",
+        "KMSNotFoundFault$message": null,
+        "KMSThrottlingFault$message": null,
         "ReplicationSubnetGroupDoesNotCoverEnoughAZs$message": "<p/>",
         "ResourceAlreadyExistsFault$message": "<p/>",
         "ResourceNotFoundFault$message": "<p/>",
@@ -564,6 +632,7 @@
         "DescribeEventCategoriesMessage$Filters": "<p>Filters applied to the action.</p>",
         "DescribeEventSubscriptionsMessage$Filters": "<p>Filters applied to the action.</p>",
         "DescribeEventsMessage$Filters": "<p>Filters applied to the action.</p>",
+        "DescribePendingMaintenanceActionsMessage$Filters": "<p/>",
         "DescribeReplicationInstancesMessage$Filters": "<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>",
         "DescribeReplicationSubnetGroupsMessage$Filters": "<p>Filters applied to the describe action.</p>",
         "DescribeReplicationTasksMessage$Filters": "<p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>",
@@ -620,6 +689,7 @@
         "DescribeEventsMessage$Duration": "<p>The duration of the events to be listed.</p>",
         "DescribeEventsMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
         "DescribeOrderableReplicationInstancesMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
+        "DescribePendingMaintenanceActionsMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
         "DescribeReplicationInstanceTaskLogsMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
         "DescribeReplicationInstancesMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
         "DescribeReplicationSubnetGroupsMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
@@ -627,11 +697,22 @@
         "DescribeReplicationTasksMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
         "DescribeSchemasMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>",
         "DescribeTableStatisticsMessage$MaxRecords": "<p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 500.</p>",
+        "ElasticsearchSettings$FullLoadErrorPercentage": "<p>The maximum percentage of records that can fail to be written before a full load operation stops. </p>",
+        "ElasticsearchSettings$ErrorRetryDuration": "<p>The maximum number of seconds that DMS retries failed API requests to the Elasticsearch cluster.</p>",
         "Endpoint$Port": "<p>The port value used to access the endpoint.</p>",
         "ModifyEndpointMessage$Port": "<p>The port used by the endpoint database.</p>",
         "ModifyReplicationInstanceMessage$AllocatedStorage": "<p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>",
         "MongoDbSettings$Port": "<p> The port value for the MongoDB source endpoint. </p>",
-        "ReplicationPendingModifiedValues$AllocatedStorage": "<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>"
+        "RedshiftSettings$ConnectionTimeout": "<p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you initially establish a connection.</p>",
+        "RedshiftSettings$FileTransferUploadStreams": "<p>Specifies the number of threads used to upload a single file. This accepts a value between 1 and 64. It defaults to 10.</p>",
+        "RedshiftSettings$LoadTimeout": "<p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you begin loading.</p>",
+        "RedshiftSettings$MaxFileSize": "<p>Specifies the maximum size (in KB) of any CSV file used to transfer data to Amazon Redshift. This accepts a value between 1 and 1048576. It defaults to 32768 KB (32 MB).</p>",
+        "RedshiftSettings$Port": "<p>The port number for Amazon Redshift. The default value is 5439.</p>",
+        "RedshiftSettings$WriteBufferSize": "<p>The size of the write buffer to use in rows. Valid values range from 1 to 2048. Defaults to 1024. Use this setting to tune performance. </p>",
+        "ReplicationPendingModifiedValues$AllocatedStorage": "<p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>",
+        "S3Settings$DictPageSizeLimit": "<p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. Defaults to 1024 * 1024 bytes (1MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. For <code>PARQUET</code> format only. </p>",
+        "S3Settings$RowGroupLength": "<p>The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. Defaults to 10,000 (ten thousand) rows. For <code>PARQUET</code> format only. </p> <p>If you choose a value larger than the maximum, <code>RowGroupLength</code> is set to the max row group length in bytes (64 * 1024 * 1024). </p>",
+        "S3Settings$DataPageSize": "<p>The size of one data page in bytes. Defaults to 1024 * 1024 bytes (1MiB). For <code>PARQUET</code> format only. </p>"
       }
     },
     "InvalidCertificateFault": {
@@ -649,8 +730,33 @@
       "refs": {
       }
     },
+    "KMSAccessDeniedFault": {
+      "base": "<p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>",
+      "refs": {
+      }
+    },
+    "KMSDisabledFault": {
+      "base": "<p>The specified master key (CMK) isn't enabled.</p>",
+      "refs": {
+      }
+    },
+    "KMSInvalidStateFault": {
+      "base": "<p>The state of the specified KMS resource isn't valid for this request.</p>",
+      "refs": {
+      }
+    },
     "KMSKeyNotAccessibleFault": {
       "base": "<p>AWS DMS cannot access the KMS key.</p>",
+      "refs": {
+      }
+    },
+    "KMSNotFoundFault": {
+      "base": "<p>The specified KMS entity or resource can't be found.</p>",
+      "refs": {
+      }
+    },
+    "KMSThrottlingFault": {
+      "base": "<p>This request triggered KMS request throttling.</p>",
       "refs": {
       }
     },
@@ -658,6 +764,14 @@
       "base": null,
       "refs": {
         "RemoveTagsFromResourceMessage$TagKeys": "<p>The tag key (name) of the tag to be removed.</p>"
+      }
+    },
+    "KinesisSettings": {
+      "base": "<p/>",
+      "refs": {
+        "CreateEndpointMessage$KinesisSettings": "<p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping \">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>",
+        "Endpoint$KinesisSettings": "<p>The settings for the Amazon Kinesis source endpoint. For more information, see the <code>KinesisSettings</code> structure.</p>",
+        "ModifyEndpointMessage$KinesisSettings": "<p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping \">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>"
       }
     },
     "ListTagsForResourceMessage": {
@@ -687,6 +801,12 @@
         "TableStatistics$ValidationPendingRecords": "<p>The number of records that have yet to be validated.</p>",
         "TableStatistics$ValidationFailedRecords": "<p>The number of records that failed validation.</p>",
         "TableStatistics$ValidationSuspendedRecords": "<p>The number of records that could not be validated.</p>"
+      }
+    },
+    "MessageFormatValue": {
+      "base": null,
+      "refs": {
+        "KinesisSettings$MessageFormat": "<p>The output format for the records created on the endpoint. The message format is <code>JSON</code>.</p>"
       }
     },
     "MigrationTypeValue": {
@@ -750,9 +870,9 @@
     "MongoDbSettings": {
       "base": "<p/>",
       "refs": {
-        "CreateEndpointMessage$MongoDbSettings": "<p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html\"> Using MongoDB as a Target for AWS Database Migration Service</a>. </p>",
+        "CreateEndpointMessage$MongoDbSettings": "<p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html\"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
         "Endpoint$MongoDbSettings": "<p>The settings for the MongoDB source endpoint. For more information, see the <code>MongoDbSettings</code> structure.</p>",
-        "ModifyEndpointMessage$MongoDbSettings": "<p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"
+        "ModifyEndpointMessage$MongoDbSettings": "<p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html\"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>"
       }
     },
     "NestingLevelValue": {
@@ -773,6 +893,30 @@
         "DescribeOrderableReplicationInstancesResponse$OrderableReplicationInstances": "<p>The order-able replication instances available.</p>"
       }
     },
+    "ParquetVersionValue": {
+      "base": null,
+      "refs": {
+        "S3Settings$ParquetVersion": "<p>The version of Apache Parquet format you want to use: <code>PARQUET_1_0</code> (default) or <code>PARQUET_2_0</code>.</p>"
+      }
+    },
+    "PendingMaintenanceAction": {
+      "base": "<p/>",
+      "refs": {
+        "PendingMaintenanceActionDetails$member": null
+      }
+    },
+    "PendingMaintenanceActionDetails": {
+      "base": null,
+      "refs": {
+        "ResourcePendingMaintenanceActions$PendingMaintenanceActionDetails": "<p>Detailed information about the pending maintenance action.</p>"
+      }
+    },
+    "PendingMaintenanceActions": {
+      "base": null,
+      "refs": {
+        "DescribePendingMaintenanceActionsResponse$PendingMaintenanceActions": "<p>The pending maintenance action.</p>"
+      }
+    },
     "RebootReplicationInstanceMessage": {
       "base": null,
       "refs": {
@@ -781,6 +925,14 @@
     "RebootReplicationInstanceResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "RedshiftSettings": {
+      "base": "<p/>",
+      "refs": {
+        "CreateEndpointMessage$RedshiftSettings": null,
+        "Endpoint$RedshiftSettings": "<p>Settings for the Amazon Redshift endpoint</p>",
+        "ModifyEndpointMessage$RedshiftSettings": null
       }
     },
     "RefreshSchemasMessage": {
@@ -948,9 +1100,22 @@
       "refs": {
       }
     },
+    "ResourceArn": {
+      "base": null,
+      "refs": {
+        "ResourceAlreadyExistsFault$resourceArn": null
+      }
+    },
     "ResourceNotFoundFault": {
       "base": "<p>The resource could not be found.</p>",
       "refs": {
+      }
+    },
+    "ResourcePendingMaintenanceActions": {
+      "base": "<p/>",
+      "refs": {
+        "ApplyPendingMaintenanceActionResponse$ResourcePendingMaintenanceActions": "<p>The AWS DMS resource that the pending maintenance action will be applied to.</p>",
+        "PendingMaintenanceActions$member": null
       }
     },
     "ResourceQuotaExceededFault": {
@@ -959,11 +1124,11 @@
       }
     },
     "S3Settings": {
-      "base": "<p/>",
+      "base": "<p>Settings for exporting data to Amazon S3. </p>",
       "refs": {
-        "CreateEndpointMessage$S3Settings": "<p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>",
+        "CreateEndpointMessage$S3Settings": "<p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring\">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>",
         "Endpoint$S3Settings": "<p>The settings for the S3 target endpoint. For more information, see the <code>S3Settings</code> structure.</p>",
-        "ModifyEndpointMessage$S3Settings": "<p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html\"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>"
+        "ModifyEndpointMessage$S3Settings": "<p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring\">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>"
       }
     },
     "SNSInvalidTopicFault": {
@@ -985,9 +1150,10 @@
     "SecretString": {
       "base": null,
       "refs": {
-        "CreateEndpointMessage$Password": "<p>The password to be used to login to the endpoint database.</p>",
+        "CreateEndpointMessage$Password": "<p>The password to be used to log in to the endpoint database.</p>",
         "ModifyEndpointMessage$Password": "<p>The password to be used to login to the endpoint database.</p>",
-        "MongoDbSettings$Password": "<p> The password for the user account you use to access the MongoDB source endpoint. </p>"
+        "MongoDbSettings$Password": "<p> The password for the user account you use to access the MongoDB source endpoint. </p>",
+        "RedshiftSettings$Password": "<p>The password for the user named in the username property.</p>"
       }
     },
     "SourceIdsList": {
@@ -1050,7 +1216,11 @@
       "refs": {
         "AccountQuota$AccountQuotaName": "<p>The name of the AWS DMS quota for this AWS account.</p>",
         "AddTagsToResourceMessage$ResourceArn": "<p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>",
+        "ApplyPendingMaintenanceActionMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the AWS DMS resource that the pending maintenance action applies to.</p>",
+        "ApplyPendingMaintenanceActionMessage$ApplyAction": "<p>The pending maintenance action to apply to this resource.</p>",
+        "ApplyPendingMaintenanceActionMessage$OptInType": "<p>A value that specifies the type of opt-in request, or undoes an opt-in request. An opt-in request of type <code>immediate</code> cannot be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul>",
         "AvailabilityZone$Name": "<p>The name of the availability zone.</p>",
+        "AvailabilityZonesList$member": null,
         "Certificate$CertificateIdentifier": "<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>",
         "Certificate$CertificatePem": "<p>The contents of the .pem X.509 certificate file for the certificate.</p>",
         "Certificate$CertificateArn": "<p>The Amazon Resource Name (ARN) for the certificate.</p>",
@@ -1063,14 +1233,14 @@
         "Connection$EndpointIdentifier": "<p>The identifier of the endpoint. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
         "Connection$ReplicationInstanceIdentifier": "<p>The replication instance identifier. This parameter is stored as a lowercase string.</p>",
         "CreateEndpointMessage$EndpointIdentifier": "<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
-        "CreateEndpointMessage$EngineName": "<p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>",
-        "CreateEndpointMessage$Username": "<p>The user name to be used to login to the endpoint database.</p>",
+        "CreateEndpointMessage$EngineName": "<p>The type of engine for the endpoint. Valid values, depending on the <code>EndPointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>",
+        "CreateEndpointMessage$Username": "<p>The user name to be used to log in to the endpoint database.</p>",
         "CreateEndpointMessage$ServerName": "<p>The name of the server where the endpoint database resides.</p>",
         "CreateEndpointMessage$DatabaseName": "<p>The name of the endpoint database.</p>",
         "CreateEndpointMessage$ExtraConnectionAttributes": "<p>Additional attributes associated with the connection.</p>",
-        "CreateEndpointMessage$KmsKeyId": "<p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>",
+        "CreateEndpointMessage$KmsKeyId": "<p>The AWS KMS key identifier to use to encrypt the connection parameters. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>",
         "CreateEndpointMessage$CertificateArn": "<p>The Amazon Resource Name (ARN) for the certificate.</p>",
-        "CreateEndpointMessage$ServiceAccessRoleArn": "<p> The Amazon Resource Name (ARN) for the service access role you want to use to create the endpoint. </p>",
+        "CreateEndpointMessage$ServiceAccessRoleArn": "<p> The Amazon Resource Name (ARN) for the service access role that you want to use to create the endpoint. </p>",
         "CreateEndpointMessage$ExternalTableDefinition": "<p>The external table definition. </p>",
         "CreateEventSubscriptionMessage$SubscriptionName": "<p>The name of the AWS DMS event notification subscription. </p> <p>Constraints: The name must be less than 255 characters. </p>",
         "CreateEventSubscriptionMessage$SnsTopicArn": "<p> The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it. </p>",
@@ -1081,7 +1251,8 @@
         "CreateReplicationInstanceMessage$ReplicationSubnetGroupIdentifier": "<p>A subnet group to associate with the replication instance.</p>",
         "CreateReplicationInstanceMessage$PreferredMaintenanceWindow": "<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Default: A 30-minute window selected at random from an 8-hour block of time per region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>",
         "CreateReplicationInstanceMessage$EngineVersion": "<p>The engine version number of the replication instance.</p>",
-        "CreateReplicationInstanceMessage$KmsKeyId": "<p>The KMS key identifier that will be used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>",
+        "CreateReplicationInstanceMessage$KmsKeyId": "<p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>",
+        "CreateReplicationInstanceMessage$DnsNameServers": "<p>A list of DNS name servers supported for the replication instance.</p>",
         "CreateReplicationSubnetGroupMessage$ReplicationSubnetGroupIdentifier": "<p>The name for the replication subnet group. This value is stored as a lowercase string.</p> <p>Constraints: Must contain no more than 255 alphanumeric characters, periods, spaces, underscores, or hyphens. Must not be \"default\".</p> <p>Example: <code>mySubnetgroup</code> </p>",
         "CreateReplicationSubnetGroupMessage$ReplicationSubnetGroupDescription": "<p>The description for the subnet group.</p>",
         "CreateReplicationTaskMessage$ReplicationTaskIdentifier": "<p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>",
@@ -1089,7 +1260,7 @@
         "CreateReplicationTaskMessage$TargetEndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "CreateReplicationTaskMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
         "CreateReplicationTaskMessage$TableMappings": "<p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with \"file://\". When working with the DMS API, provide the JSON as the parameter value.</p> <p>For example, --table-mappings file://mappingfile.json</p>",
-        "CreateReplicationTaskMessage$ReplicationTaskSettings": "<p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html\">Task Settings for AWS Database Migration Service Tasks</a>.</p>",
+        "CreateReplicationTaskMessage$ReplicationTaskSettings": "<p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href=\"https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html\">Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>",
         "CreateReplicationTaskMessage$CdcStartPosition": "<p>Indicates when you want a change data capture (CDC) operation to start. Use either CdcStartPosition or CdcStartTime to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p> The value can be in date, checkpoint, or LSN/SCN format.</p> <p>Date Example: --cdc-start-position “2018-03-08T12:12:12”</p> <p>Checkpoint Example: --cdc-start-position \"checkpoint:V1#27#mysql-bin-changelog.157832:1975:-1:2002:677883278264080:mysql-bin-changelog.157832:1876#0#0#*#0#93\"</p> <p>LSN Example: --cdc-start-position “mysql-bin-changelog.000024:373”</p>",
         "CreateReplicationTaskMessage$CdcStopPosition": "<p>Indicates when you want a change data capture (CDC) operation to stop. The value can be either server time or commit time.</p> <p>Server time example: --cdc-stop-position “server_time:3018-02-09T12:12:12”</p> <p>Commit time example: --cdc-stop-position “commit_time: 3018-02-09T12:12:12 “</p>",
         "DeleteCertificateMessage$CertificateArn": "<p>The Amazon Resource Name (ARN) of the deleted certificate.</p>",
@@ -1115,6 +1286,9 @@
         "DescribeEventsResponse$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>",
         "DescribeOrderableReplicationInstancesMessage$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>",
         "DescribeOrderableReplicationInstancesResponse$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>",
+        "DescribePendingMaintenanceActionsMessage$ReplicationInstanceArn": "<p>The ARN of the replication instance.</p>",
+        "DescribePendingMaintenanceActionsMessage$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>",
+        "DescribePendingMaintenanceActionsResponse$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>",
         "DescribeRefreshSchemasStatusMessage$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "DescribeReplicationInstanceTaskLogsMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
         "DescribeReplicationInstanceTaskLogsMessage$Marker": "<p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>",
@@ -1140,6 +1314,8 @@
         "DmsTransferSettings$ServiceAccessRoleArn": "<p> The IAM role that has permission to access the Amazon S3 bucket. </p>",
         "DmsTransferSettings$BucketName": "<p> The name of the S3 bucket to use. </p>",
         "DynamoDbSettings$ServiceAccessRoleArn": "<p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>",
+        "ElasticsearchSettings$ServiceAccessRoleArn": "<p>The Amazon Resource Name (ARN) used by service to access the IAM role.</p>",
+        "ElasticsearchSettings$EndpointUri": "<p>The endpoint for the ElasticSearch cluster.</p>",
         "Endpoint$EndpointIdentifier": "<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
         "Endpoint$EngineName": "<p>The database engine name. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, sybase, dynamodb, mongodb, and sqlserver.</p>",
         "Endpoint$EngineDisplayName": "<p>The expanded name for the engine name. For example, if the <code>EngineName</code> parameter is \"aurora,\" this value would be \"Amazon Aurora MySQL.\"</p>",
@@ -1148,7 +1324,7 @@
         "Endpoint$DatabaseName": "<p>The name of the database at the endpoint.</p>",
         "Endpoint$ExtraConnectionAttributes": "<p>Additional connection attributes used to connect to the endpoint.</p>",
         "Endpoint$Status": "<p>The status of the endpoint.</p>",
-        "Endpoint$KmsKeyId": "<p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>",
+        "Endpoint$KmsKeyId": "<p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>",
         "Endpoint$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "Endpoint$CertificateArn": "<p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>",
         "Endpoint$ServiceAccessRoleArn": "<p>The Amazon Resource Name (ARN) used by the service access IAM role.</p>",
@@ -1169,6 +1345,8 @@
         "ImportCertificateMessage$CertificateIdentifier": "<p>The customer-assigned name of the certificate. Valid characters are A-z and 0-9.</p>",
         "ImportCertificateMessage$CertificatePem": "<p>The contents of the .pem X.509 certificate file for the certificate.</p>",
         "KeyList$member": null,
+        "KinesisSettings$StreamArn": "<p>The Amazon Resource Name (ARN) for the Amazon Kinesis Data Streams endpoint.</p>",
+        "KinesisSettings$ServiceAccessRoleArn": "<p>The Amazon Resource Name (ARN) for the IAM role that DMS uses to write to the Amazon Kinesis data stream.</p>",
         "ListTagsForResourceMessage$ResourceArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>",
         "ModifyEndpointMessage$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "ModifyEndpointMessage$EndpointIdentifier": "<p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>",
@@ -1202,11 +1380,26 @@
         "MongoDbSettings$ExtractDocId": "<p> Specifies the document ID. Use this attribute when <code>NestingLevel</code> is set to NONE. </p> <p>Default value is false. </p>",
         "MongoDbSettings$DocsToInvestigate": "<p> Indicates the number of documents to preview to determine the document organization. Use this attribute when <code>NestingLevel</code> is set to ONE. </p> <p>Must be a positive value greater than 0. Default value is 1000.</p>",
         "MongoDbSettings$AuthSource": "<p> The MongoDB database name. This attribute is not used when <code>authType=NO</code>. </p> <p>The default is admin.</p>",
-        "MongoDbSettings$KmsKeyId": "<p> The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region. </p>",
+        "MongoDbSettings$KmsKeyId": "<p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>",
         "OrderableReplicationInstance$EngineVersion": "<p>The version of the replication engine.</p>",
         "OrderableReplicationInstance$ReplicationInstanceClass": "<p>The compute and memory capacity of the replication instance.</p> <p> Valid Values: <code>dms.t2.micro | dms.t2.small | dms.t2.medium | dms.t2.large | dms.c4.large | dms.c4.xlarge | dms.c4.2xlarge | dms.c4.4xlarge </code> </p>",
         "OrderableReplicationInstance$StorageType": "<p>The type of storage used by the replication instance.</p>",
+        "PendingMaintenanceAction$Action": "<p>The type of pending maintenance action that is available for the resource.</p>",
+        "PendingMaintenanceAction$OptInStatus": "<p>Indicates the type of opt-in request that has been received for the resource.</p>",
+        "PendingMaintenanceAction$Description": "<p>A description providing more detail about the maintenance action.</p>",
         "RebootReplicationInstanceMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
+        "RedshiftSettings$AfterConnectScript": "<p>Code to run after connecting. This should be the code, not a filename.</p>",
+        "RedshiftSettings$BucketFolder": "<p>The location where the CSV files are stored before being uploaded to the S3 bucket. </p>",
+        "RedshiftSettings$BucketName": "<p>The name of the S3 bucket you want to use</p>",
+        "RedshiftSettings$DatabaseName": "<p>The name of the Amazon Redshift data warehouse (service) you are working with.</p>",
+        "RedshiftSettings$DateFormat": "<p>The date format you are using. Valid values are <code>auto</code> (case-sensitive), your date format string enclosed in quotes, or NULL. If this is left unset (NULL), it defaults to a format of 'YYYY-MM-DD'. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a date format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>",
+        "RedshiftSettings$ReplaceInvalidChars": "<p>A list of chars you want to replace. Use with <code>ReplaceChars</code>.</p>",
+        "RedshiftSettings$ReplaceChars": "<p>Replaces invalid characters specified in <code>ReplaceInvalidChars</code>, substituting the specified value instead. The default is \"?\".</p>",
+        "RedshiftSettings$ServerName": "<p>The name of the Amazon Redshift cluster you are using.</p>",
+        "RedshiftSettings$ServiceAccessRoleArn": "<p>The ARN of the role that has access to the Redshift service.</p>",
+        "RedshiftSettings$ServerSideEncryptionKmsKeyId": "<p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p>",
+        "RedshiftSettings$TimeFormat": "<p>The time format you want to use. Valid values are <code>auto</code> (case-sensitive), 'timeformat_string', 'epochsecs', or 'epochmillisecs'. It defaults to 10. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a time format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>",
+        "RedshiftSettings$Username": "<p>An Amazon Redshift user name for a registered user.</p>",
         "RefreshSchemasMessage$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
         "RefreshSchemasMessage$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
         "RefreshSchemasStatus$EndpointArn": "<p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>",
@@ -1221,11 +1414,12 @@
         "ReplicationInstance$AvailabilityZone": "<p>The Availability Zone for the instance.</p>",
         "ReplicationInstance$PreferredMaintenanceWindow": "<p>The maintenance window times for the replication instance.</p>",
         "ReplicationInstance$EngineVersion": "<p>The engine version number of the replication instance.</p>",
-        "ReplicationInstance$KmsKeyId": "<p>The KMS key identifier that is used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>",
+        "ReplicationInstance$KmsKeyId": "<p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>",
         "ReplicationInstance$ReplicationInstanceArn": "<p>The Amazon Resource Name (ARN) of the replication instance.</p>",
         "ReplicationInstance$ReplicationInstancePublicIpAddress": "<p>The public IP address of the replication instance.</p>",
         "ReplicationInstance$ReplicationInstancePrivateIpAddress": "<p>The private IP address of the replication instance.</p>",
         "ReplicationInstance$SecondaryAvailabilityZone": "<p>The availability zone of the standby replication instance in a Multi-AZ deployment.</p>",
+        "ReplicationInstance$DnsNameServers": "<p>The DNS name servers for the replication instance.</p>",
         "ReplicationInstancePrivateIpAddressList$member": null,
         "ReplicationInstancePublicIpAddressList$member": null,
         "ReplicationInstanceTaskLog$ReplicationTaskName": "<p>The name of the replication task.</p>",
@@ -1255,12 +1449,14 @@
         "ReplicationTaskAssessmentResult$AssessmentResultsFile": "<p> The file containing the results of the task assessment. </p>",
         "ReplicationTaskAssessmentResult$AssessmentResults": "<p> The task assessment results in JSON format. </p>",
         "ReplicationTaskAssessmentResult$S3ObjectUrl": "<p> The URL of the S3 object containing the task assessment results. </p>",
+        "ResourcePendingMaintenanceActions$ResourceIdentifier": "<p>The Amazon Resource Name (ARN) of the DMS resource that the pending maintenance action applies to. For information about creating an ARN, see <a href=\"https://docs.aws.amazon.com/dms/latest/UserGuide/USER_Tagging.html#USER_Tagging.ARN\"> Constructing an Amazon Resource Name (ARN)</a> in the DMS documentation.</p>",
         "S3Settings$ServiceAccessRoleArn": "<p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>",
         "S3Settings$ExternalTableDefinition": "<p> The external table definition. </p>",
-        "S3Settings$CsvRowDelimiter": "<p> The delimiter used to separate rows in the source files. The default is a carriage return (\\n). </p>",
+        "S3Settings$CsvRowDelimiter": "<p> The delimiter used to separate rows in the source files. The default is a carriage return (<code>\\n</code>). </p>",
         "S3Settings$CsvDelimiter": "<p> The delimiter used to separate columns in the source files. The default is a comma. </p>",
-        "S3Settings$BucketFolder": "<p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path &lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/. If this parameter is not specified, then the path used is &lt;schema_name&gt;/&lt;table_name&gt;/. </p>",
+        "S3Settings$BucketFolder": "<p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code>&lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/</code>. If this parameter is not specified, then the path used is <code>&lt;schema_name&gt;/&lt;table_name&gt;/</code>. </p>",
         "S3Settings$BucketName": "<p> The name of the S3 bucket. </p>",
+        "S3Settings$ServerSideEncryptionKmsKeyId": "<p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p> <p>Here is a CLI example: <code>aws dms create-endpoint --endpoint-identifier &lt;value&gt; --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn=&lt;value&gt;,BucketFolder=&lt;value&gt;,BucketName=&lt;value&gt;,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId=&lt;value&gt; </code> </p>",
         "SchemaList$member": null,
         "SourceIdsList$member": null,
         "StartReplicationTaskAssessmentMessage$ReplicationTaskArn": "<p> The Amazon Resource Name (ARN) of the replication task. </p>",
@@ -1336,6 +1532,9 @@
         "DescribeEventsMessage$EndTime": "<p>The end time for the events to be listed.</p>",
         "Event$Date": "<p>The date of the event.</p>",
         "ModifyReplicationTaskMessage$CdcStartTime": "<p>Indicates the start time for a change data capture (CDC) operation. Use either CdcStartTime or CdcStartPosition to specify when you want a CDC operation to start. Specifying both values results in an error.</p> <p>Timestamp Example: --cdc-start-time “2018-03-08T12:12:12”</p>",
+        "PendingMaintenanceAction$AutoAppliedAfterDate": "<p>The date of the maintenance window when the action will be applied. The maintenance action will be applied to the resource during its first maintenance window after this date. If this date is specified, any <code>next-maintenance</code> opt-in requests are ignored.</p>",
+        "PendingMaintenanceAction$ForcedApplyDate": "<p>The date when the maintenance action will be automatically applied. The maintenance action will be applied to the resource on this date regardless of the maintenance window for the resource. If this date is specified, any <code>immediate</code> opt-in requests are ignored.</p>",
+        "PendingMaintenanceAction$CurrentApplyDate": "<p>The effective date when the pending maintenance action will be applied to the resource. This date takes into account opt-in requests received from the <code>ApplyPendingMaintenanceAction</code> API, the <code>AutoAppliedAfterDate</code>, and the <code>ForcedApplyDate</code>. This value is blank if an opt-in request has not been received and nothing has been specified as <code>AutoAppliedAfterDate</code> or <code>ForcedApplyDate</code>.</p>",
         "RefreshSchemasStatus$LastRefreshDate": "<p>The date the schema was last refreshed.</p>",
         "ReplicationInstance$InstanceCreateTime": "<p>The time the replication instance was created.</p>",
         "ReplicationInstance$FreeUntil": "<p> The expiration date of the free replication instance that is part of the Free DMS program. </p>",

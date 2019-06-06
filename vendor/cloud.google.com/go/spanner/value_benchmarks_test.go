@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.7
-
 package spanner
 
 import (
@@ -112,13 +110,13 @@ func BenchmarkDecodeArray(b *testing.B) {
 				name   string
 				decode func(*proto3.ListValue)
 			}{
-				{"DateDirect", decodeArray_Date_direct},
-				{"DateFunc", decodeArray_Date_func},
-				{"DateReflect", decodeArray_Date_reflect},
+				{"DateDirect", decodeArrayDateDirect},
+				{"DateFunc", decodeArrayDateFunc},
+				{"DateReflect", decodeArrayDateReflect},
 				{"StringDecodeStringArray", decodeStringArrayWrap},
-				{"StringDirect", decodeArray_String_direct},
-				{"StringFunc", decodeArray_String_func},
-				{"StringReflect", decodeArray_String_reflect},
+				{"StringDirect", decodeArrayStringDirect},
+				{"StringFunc", decodeArrayStringFunc},
+				{"StringReflect", decodeArrayStringReflect},
 			} {
 				b.Run(s.name, func(b *testing.B) {
 					for i := 0; i < b.N; i++ {
@@ -131,7 +129,7 @@ func BenchmarkDecodeArray(b *testing.B) {
 	}
 }
 
-func decodeArray_Date_direct(pb *proto3.ListValue) {
+func decodeArrayDateDirect(pb *proto3.ListValue) {
 	a := make([]civil.Date, len(pb.Values))
 	t := dateType()
 	for i, v := range pb.Values {
@@ -141,16 +139,16 @@ func decodeArray_Date_direct(pb *proto3.ListValue) {
 	}
 }
 
-func decodeArray_Date_func(pb *proto3.ListValue) {
+func decodeArrayDateFunc(pb *proto3.ListValue) {
 	a := make([]civil.Date, len(pb.Values))
-	if err := decodeArray_func(pb, "DATE", dateType(), func(i int) interface{} { return &a[i] }); err != nil {
+	if err := decodeArrayFunc(pb, "DATE", dateType(), func(i int) interface{} { return &a[i] }); err != nil {
 		panic(err)
 	}
 }
 
-func decodeArray_Date_reflect(pb *proto3.ListValue) {
+func decodeArrayDateReflect(pb *proto3.ListValue) {
 	var a []civil.Date
-	if err := decodeArray_reflect(pb, "DATE", dateType(), &a); err != nil {
+	if err := decodeArrayReflect(pb, "DATE", dateType(), &a); err != nil {
 		panic(err)
 	}
 }
@@ -161,7 +159,7 @@ func decodeStringArrayWrap(pb *proto3.ListValue) {
 	}
 }
 
-func decodeArray_String_direct(pb *proto3.ListValue) {
+func decodeArrayStringDirect(pb *proto3.ListValue) {
 	a := make([]string, len(pb.Values))
 	t := stringType()
 	for i, v := range pb.Values {
@@ -171,22 +169,21 @@ func decodeArray_String_direct(pb *proto3.ListValue) {
 	}
 }
 
-func decodeArray_String_func(pb *proto3.ListValue) {
-
+func decodeArrayStringFunc(pb *proto3.ListValue) {
 	a := make([]string, len(pb.Values))
-	if err := decodeArray_func(pb, "STRING", stringType(), func(i int) interface{} { return &a[i] }); err != nil {
+	if err := decodeArrayFunc(pb, "STRING", stringType(), func(i int) interface{} { return &a[i] }); err != nil {
 		panic(err)
 	}
 }
 
-func decodeArray_String_reflect(pb *proto3.ListValue) {
+func decodeArrayStringReflect(pb *proto3.ListValue) {
 	var a []string
-	if err := decodeArray_reflect(pb, "STRING", stringType(), &a); err != nil {
+	if err := decodeArrayReflect(pb, "STRING", stringType(), &a); err != nil {
 		panic(err)
 	}
 }
 
-func decodeArray_func(pb *proto3.ListValue, name string, typ *sppb.Type, elptr func(int) interface{}) error {
+func decodeArrayFunc(pb *proto3.ListValue, name string, typ *sppb.Type, elptr func(int) interface{}) error {
 	if pb == nil {
 		return errNilListValue(name)
 	}
@@ -198,7 +195,7 @@ func decodeArray_func(pb *proto3.ListValue, name string, typ *sppb.Type, elptr f
 	return nil
 }
 
-func decodeArray_reflect(pb *proto3.ListValue, name string, typ *sppb.Type, aptr interface{}) error {
+func decodeArrayReflect(pb *proto3.ListValue, name string, typ *sppb.Type, aptr interface{}) error {
 	if pb == nil {
 		return errNilListValue(name)
 	}

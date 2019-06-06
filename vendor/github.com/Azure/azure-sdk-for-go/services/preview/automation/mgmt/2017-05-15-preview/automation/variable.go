@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewVariableClientWithBaseURI(baseURI string, subscriptionID string) Variabl
 // variableName - the variable name.
 // parameters - the parameters supplied to the create or update variable operation.
 func (client VariableClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, variableName string, parameters VariableCreateOrUpdateParameters) (result Variable, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VariableClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -129,6 +140,16 @@ func (client VariableClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // automationAccountName - the name of the automation account.
 // variableName - the name of variable.
 func (client VariableClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, variableName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VariableClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -205,6 +226,16 @@ func (client VariableClient) DeleteResponder(resp *http.Response) (result autore
 // automationAccountName - the name of the automation account.
 // variableName - the name of variable.
 func (client VariableClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, variableName string) (result Variable, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VariableClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -281,6 +312,16 @@ func (client VariableClient) GetResponder(resp *http.Response) (result Variable,
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client VariableClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result VariableListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VariableClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.vlr.Response.Response != nil {
+				sc = result.vlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -353,8 +394,8 @@ func (client VariableClient) ListByAutomationAccountResponder(resp *http.Respons
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client VariableClient) listByAutomationAccountNextResults(lastResults VariableListResult) (result VariableListResult, err error) {
-	req, err := lastResults.variableListResultPreparer()
+func (client VariableClient) listByAutomationAccountNextResults(ctx context.Context, lastResults VariableListResult) (result VariableListResult, err error) {
+	req, err := lastResults.variableListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.VariableClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -375,6 +416,16 @@ func (client VariableClient) listByAutomationAccountNextResults(lastResults Vari
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VariableClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result VariableListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VariableClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }
@@ -386,6 +437,16 @@ func (client VariableClient) ListByAutomationAccountComplete(ctx context.Context
 // variableName - the variable name.
 // parameters - the parameters supplied to the update variable operation.
 func (client VariableClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, variableName string, parameters VariableUpdateParameters) (result Variable, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VariableClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

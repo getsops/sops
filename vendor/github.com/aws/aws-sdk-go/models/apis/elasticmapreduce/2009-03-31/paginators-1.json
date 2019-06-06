@@ -28,6 +28,11 @@
       "output_token": "Marker",
       "result_key": "Instances"
     },
+    "ListSecurityConfigurations": {
+      "input_token": "Marker",
+      "output_token": "Marker",
+      "result_key": "SecurityConfigurations"
+    },
     "ListSteps": {
       "input_token": "Marker",
       "output_token": "Marker",

@@ -173,7 +173,7 @@ div#mobile-nav {
 }
 
 div#logo_container {
-	height:100%; 
+	height:100%;
 	display:table-cell;
 	float:left;
 	vertical-align:middle;
@@ -772,10 +772,10 @@ a.error {
 	div#mobile-nav {
 		display:inline-block;
 		float:right;
-		border-bottom: 13px double white; 
-		border-top: 4px solid white; 
+		border-bottom: 13px double white;
+		border-top: 4px solid white;
 		content:"";
-		height: 5px; 
+		height: 5px;
 		width:30px;
 	}
 
@@ -827,10 +827,10 @@ a.error {
 	div#mobile-nav {
 		display:inline-block;
 		float:right;
-		border-bottom: 13px double white; 
-		border-top: 4px solid white; 
+		border-bottom: 13px double white;
+		border-top: 4px solid white;
 		content:"";
-		height: 5px; 
+		height: 5px;
 		width:30px;
 		padding-left:20px;
 		padding-top:10px;
@@ -876,10 +876,10 @@ a.error {
 	div#mobile-nav {
 		display:inline-block;
 		float:right;
-		border-bottom: 13px double white; 
-		border-top: 4px solid white; 
+		border-bottom: 13px double white;
+		border-top: 4px solid white;
 		content:"";
-		height: 5px; 
+		height: 5px;
 		width:30px;
 	}
 }
@@ -985,10 +985,10 @@ a.error {
 	div#mobile-nav {
 		display:inline-block;
 		float:right;
-		border-bottom: 13px double white; 
-		border-top: 4px solid white; 
+		border-bottom: 13px double white;
+		border-top: 4px solid white;
 		content:"";
-		height: 5px; 
+		height: 5px;
 		width:30px;
 	}
 }
@@ -1030,10 +1030,10 @@ a.error {
 	div#mobile-nav {
 		display:inline-block;
 		float:right;
-		border-bottom: 13px double white; 
-		border-top: 4px solid white; 
+		border-bottom: 13px double white;
+		border-top: 4px solid white;
 		content:"";
-		height: 5px; 
+		height: 5px;
 		width:30px;
 	}
 }

@@ -29,6 +29,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"io"
 	"net/http"
 )
@@ -52,27 +53,41 @@ func NewWithoutDefaults(endpoint string) BaseClient {
 	}
 }
 
-// AnalyzeImage this operation extracts a rich set of visual features based on the image content. Two input methods are
-// supported -- (1) Uploading an image or (2) specifying an image URL.  Within your request, there is an optional
-// parameter to allow you to choose which features to return.  By default, image categories are returned in the
-// response.
+// AnalyzeImage this operation extracts a rich set of visual features based on the image content.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL. Within your request, there
+// is an optional parameter to allow you to choose which features to return. By default, image categories are returned
+// in the response.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
 // Parameters:
 // imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
 // visualFeatures - a string indicating what visual feature types to return. Multiple values should be
-// comma-separated. Valid visual feature types include:Categories - categorizes image content according to a
+// comma-separated. Valid visual feature types include: Categories - categorizes image content according to a
 // taxonomy defined in documentation. Tags - tags the image with a detailed list of words related to the image
 // content. Description - describes the image content with a complete English sentence. Faces - detects if
 // faces are present. If present, generate coordinates, gender and age. ImageType - detects if image is clipart
-// or a line drawing. Color - determines the accent color, dominant color, and whether an image is
-// black&white.Adult - detects if the image is pornographic in nature (depicts nudity or a sex act).  Sexually
-// suggestive content is also detected.
+// or a line drawing. Color - determines the accent color, dominant color, and whether an image is black&white.
+// Adult - detects if the image is pornographic in nature (depicts nudity or a sex act).  Sexually suggestive
+// content is also detected. Objects - detects various objects within an image, including the approximate
+// location. The Objects argument is only available in English. Brands - detects various brands within an
+// image, including the approximate location. The Brands argument is only available in English.
 // details - a string indicating which domain-specific details to return. Multiple values should be
-// comma-separated. Valid visual feature types include:Celebrities - identifies celebrities if detected in the
-// image.
+// comma-separated. Valid visual feature types include: Celebrities - identifies celebrities if detected in the
+// image, Landmarks - identifies notable landmarks in the image.
 // language - the desired language for output generation. If this parameter is not specified, the default value
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) AnalyzeImage(ctx context.Context, imageURL ImageURL, visualFeatures []VisualFeatureTypes, details []Details, language string) (result ImageAnalysis, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.AnalyzeImage")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -149,10 +164,11 @@ func (client BaseClient) AnalyzeImageResponder(resp *http.Response) (result Imag
 	return
 }
 
-// AnalyzeImageByDomain this operation recognizes content within an image by applying a domain-specific model.  The
-// list of domain-specific models that are supported by the Computer Vision API can be retrieved using the /models GET
-// request.  Currently, the API only provides a single domain-specific model: celebrities. Two input methods are
-// supported -- (1) Uploading an image or (2) specifying an image URL. A successful response will be returned in JSON.
+// AnalyzeImageByDomain this operation recognizes content within an image by applying a domain-specific model. The list
+// of domain-specific models that are supported by the Computer Vision API can be retrieved using the /models GET
+// request. Currently, the API provides following domain-specific models: celebrities, landmarks.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON.
 // If the request failed, the response will contain an error code and a message to help understand what went wrong.
 // Parameters:
 // model - the domain-specific content to recognize.
@@ -161,6 +177,16 @@ func (client BaseClient) AnalyzeImageResponder(resp *http.Response) (result Imag
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) AnalyzeImageByDomain(ctx context.Context, model string, imageURL ImageURL, language string) (result DomainModelResults, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.AnalyzeImageByDomain")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -237,8 +263,9 @@ func (client BaseClient) AnalyzeImageByDomainResponder(resp *http.Response) (res
 
 // AnalyzeImageByDomainInStream this operation recognizes content within an image by applying a domain-specific model.
 // The list of domain-specific models that are supported by the Computer Vision API can be retrieved using the /models
-// GET request.  Currently, the API only provides a single domain-specific model: celebrities. Two input methods are
-// supported -- (1) Uploading an image or (2) specifying an image URL. A successful response will be returned in JSON.
+// GET request. Currently, the API provides following domain-specific models: celebrities, landmarks.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON.
 // If the request failed, the response will contain an error code and a message to help understand what went wrong.
 // Parameters:
 // model - the domain-specific content to recognize.
@@ -247,6 +274,16 @@ func (client BaseClient) AnalyzeImageByDomainResponder(resp *http.Response) (res
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) AnalyzeImageByDomainInStream(ctx context.Context, model string, imageParameter io.ReadCloser, language string) (result DomainModelResults, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.AnalyzeImageByDomainInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AnalyzeImageByDomainInStreamPreparer(ctx, model, imageParameter, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "AnalyzeImageByDomainInStream", nil, "Failure preparing request")
@@ -316,23 +353,40 @@ func (client BaseClient) AnalyzeImageByDomainInStreamResponder(resp *http.Respon
 }
 
 // AnalyzeImageInStream this operation extracts a rich set of visual features based on the image content.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL. Within your request, there
+// is an optional parameter to allow you to choose which features to return. By default, image categories are returned
+// in the response.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
 // Parameters:
 // imageParameter - an image stream.
 // visualFeatures - a string indicating what visual feature types to return. Multiple values should be
-// comma-separated. Valid visual feature types include:Categories - categorizes image content according to a
+// comma-separated. Valid visual feature types include: Categories - categorizes image content according to a
 // taxonomy defined in documentation. Tags - tags the image with a detailed list of words related to the image
 // content. Description - describes the image content with a complete English sentence. Faces - detects if
 // faces are present. If present, generate coordinates, gender and age. ImageType - detects if image is clipart
-// or a line drawing. Color - determines the accent color, dominant color, and whether an image is
-// black&white.Adult - detects if the image is pornographic in nature (depicts nudity or a sex act).  Sexually
-// suggestive content is also detected.
+// or a line drawing. Color - determines the accent color, dominant color, and whether an image is black&white.
+// Adult - detects if the image is pornographic in nature (depicts nudity or a sex act).  Sexually suggestive
+// content is also detected. Objects - detects various objects within an image, including the approximate
+// location. The Objects argument is only available in English. Brands - detects various brands within an
+// image, including the approximate location. The Brands argument is only available in English.
 // details - a string indicating which domain-specific details to return. Multiple values should be
-// comma-separated. Valid visual feature types include:Celebrities - identifies celebrities if detected in the
-// image.
+// comma-separated. Valid visual feature types include: Celebrities - identifies celebrities if detected in the
+// image, Landmarks - identifies notable landmarks in the image.
 // language - the desired language for output generation. If this parameter is not specified, the default value
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) AnalyzeImageInStream(ctx context.Context, imageParameter io.ReadCloser, visualFeatures []VisualFeatureTypes, details []Details, language string) (result ImageAnalysis, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.AnalyzeImageInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AnalyzeImageInStreamPreparer(ctx, imageParameter, visualFeatures, details, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "AnalyzeImageInStream", nil, "Failure preparing request")
@@ -403,11 +457,162 @@ func (client BaseClient) AnalyzeImageInStreamResponder(resp *http.Response) (res
 	return
 }
 
+// BatchReadFile use this interface to get the result of a Read operation, employing the state-of-the-art Optical
+// Character Recognition (OCR) algorithms optimized for text-heavy documents. When you use the Read File interface, the
+// response contains a field called 'Operation-Location'. The 'Operation-Location' field contains the URL that you must
+// use for your 'GetReadOperationResult' operation to access OCR results.​
+// Parameters:
+// imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
+func (client BaseClient) BatchReadFile(ctx context.Context, imageURL ImageURL) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.BatchReadFile")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: imageURL,
+			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("computervision.BaseClient", "BatchReadFile", err.Error())
+	}
+
+	req, err := client.BatchReadFilePreparer(ctx, imageURL)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "BatchReadFile", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.BatchReadFileSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "BatchReadFile", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.BatchReadFileResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "BatchReadFile", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// BatchReadFilePreparer prepares the BatchReadFile request.
+func (client BaseClient) BatchReadFilePreparer(ctx context.Context, imageURL ImageURL) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPath("/read/core/asyncBatchAnalyze"),
+		autorest.WithJSON(imageURL))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// BatchReadFileSender sends the BatchReadFile request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) BatchReadFileSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// BatchReadFileResponder handles the response to the BatchReadFile request. The method always
+// closes the http.Response Body.
+func (client BaseClient) BatchReadFileResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
+// BatchReadFileInStream use this interface to get the result of a Read Document operation, employing the
+// state-of-the-art Optical Character Recognition (OCR) algorithms optimized for text-heavy documents. When you use the
+// Read Document interface, the response contains a field called 'Operation-Location'. The 'Operation-Location' field
+// contains the URL that you must use for your 'Get Read Result operation' to access OCR results.​
+// Parameters:
+// imageParameter - an image stream.
+func (client BaseClient) BatchReadFileInStream(ctx context.Context, imageParameter io.ReadCloser) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.BatchReadFileInStream")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.BatchReadFileInStreamPreparer(ctx, imageParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "BatchReadFileInStream", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.BatchReadFileInStreamSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "BatchReadFileInStream", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.BatchReadFileInStreamResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "BatchReadFileInStream", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// BatchReadFileInStreamPreparer prepares the BatchReadFileInStream request.
+func (client BaseClient) BatchReadFileInStreamPreparer(ctx context.Context, imageParameter io.ReadCloser) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/octet-stream"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPath("/read/core/asyncBatchAnalyze"),
+		autorest.WithFile(imageParameter))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// BatchReadFileInStreamSender sends the BatchReadFileInStream request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) BatchReadFileInStreamSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// BatchReadFileInStreamResponder handles the response to the BatchReadFileInStream request. The method always
+// closes the http.Response Body.
+func (client BaseClient) BatchReadFileInStreamResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
 // DescribeImage this operation generates a description of an image in human readable language with complete sentences.
 // The description is based on a collection of content tags, which are also returned by the operation. More than one
-// description can be generated for each image.  Descriptions are ordered by their confidence score. All descriptions
-// are in English. Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.A
-// successful response will be returned in JSON.  If the request failed, the response will contain an error code and a
+// description can be generated for each image. Descriptions are ordered by their confidence score. All descriptions
+// are in English.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
 // message to help understand what went wrong.
 // Parameters:
 // imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
@@ -416,6 +621,16 @@ func (client BaseClient) AnalyzeImageInStreamResponder(resp *http.Response) (res
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) DescribeImage(ctx context.Context, imageURL ImageURL, maxCandidates *int32, language string) (result ImageDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DescribeImage")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -492,11 +707,12 @@ func (client BaseClient) DescribeImageResponder(resp *http.Response) (result Ima
 }
 
 // DescribeImageInStream this operation generates a description of an image in human readable language with complete
-// sentences.  The description is based on a collection of content tags, which are also returned by the operation. More
-// than one description can be generated for each image.  Descriptions are ordered by their confidence score. All
-// descriptions are in English. Two input methods are supported -- (1) Uploading an image or (2) specifying an image
-// URL.A successful response will be returned in JSON.  If the request failed, the response will contain an error code
-// and a message to help understand what went wrong.
+// sentences. The description is based on a collection of content tags, which are also returned by the operation. More
+// than one description can be generated for each image. Descriptions are ordered by their confidence score. All
+// descriptions are in English.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
 // Parameters:
 // imageParameter - an image stream.
 // maxCandidates - maximum number of candidate descriptions to be returned.  The default is 1.
@@ -504,6 +720,16 @@ func (client BaseClient) DescribeImageResponder(resp *http.Response) (result Ima
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) DescribeImageInStream(ctx context.Context, imageParameter io.ReadCloser, maxCandidates *int32, language string) (result ImageDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DescribeImageInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DescribeImageInStreamPreparer(ctx, imageParameter, maxCandidates, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DescribeImageInStream", nil, "Failure preparing request")
@@ -573,23 +799,188 @@ func (client BaseClient) DescribeImageInStreamResponder(resp *http.Response) (re
 	return
 }
 
+// DetectObjects performs object detection on the specified image.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
+// Parameters:
+// imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
+func (client BaseClient) DetectObjects(ctx context.Context, imageURL ImageURL) (result DetectResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DetectObjects")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: imageURL,
+			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("computervision.BaseClient", "DetectObjects", err.Error())
+	}
+
+	req, err := client.DetectObjectsPreparer(ctx, imageURL)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DetectObjects", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.DetectObjectsSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DetectObjects", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.DetectObjectsResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DetectObjects", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// DetectObjectsPreparer prepares the DetectObjects request.
+func (client BaseClient) DetectObjectsPreparer(ctx context.Context, imageURL ImageURL) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPath("/detect"),
+		autorest.WithJSON(imageURL))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// DetectObjectsSender sends the DetectObjects request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) DetectObjectsSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// DetectObjectsResponder handles the response to the DetectObjects request. The method always
+// closes the http.Response Body.
+func (client BaseClient) DetectObjectsResponder(resp *http.Response) (result DetectResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// DetectObjectsInStream performs object detection on the specified image.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
+// Parameters:
+// imageParameter - an image stream.
+func (client BaseClient) DetectObjectsInStream(ctx context.Context, imageParameter io.ReadCloser) (result DetectResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.DetectObjectsInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.DetectObjectsInStreamPreparer(ctx, imageParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DetectObjectsInStream", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.DetectObjectsInStreamSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DetectObjectsInStream", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.DetectObjectsInStreamResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "DetectObjectsInStream", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// DetectObjectsInStreamPreparer prepares the DetectObjectsInStream request.
+func (client BaseClient) DetectObjectsInStreamPreparer(ctx context.Context, imageParameter io.ReadCloser) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/octet-stream"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPath("/detect"),
+		autorest.WithFile(imageParameter))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// DetectObjectsInStreamSender sends the DetectObjectsInStream request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) DetectObjectsInStreamSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// DetectObjectsInStreamResponder handles the response to the DetectObjectsInStream request. The method always
+// closes the http.Response Body.
+func (client BaseClient) DetectObjectsInStreamResponder(resp *http.Response) (result DetectResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // GenerateThumbnail this operation generates a thumbnail image with the user-specified width and height. By default,
 // the service analyzes the image, identifies the region of interest (ROI), and generates smart cropping coordinates
-// based on the ROI. Smart cropping helps when you specify an aspect ratio that differs from that of the input image. A
-// successful response contains the thumbnail image binary. If the request failed, the response contains an error code
-// and a message to help determine what went wrong.
+// based on the ROI. Smart cropping helps when you specify an aspect ratio that differs from that of the input image.
+// A successful response contains the thumbnail image binary. If the request failed, the response contains an error
+// code and a message to help determine what went wrong.
+// Upon failure, the error code and an error message are returned. The error code could be one of InvalidImageUrl,
+// InvalidImageFormat, InvalidImageSize, InvalidThumbnailSize, NotSupportedImage, FailedToProcess, Timeout, or
+// InternalServerError.
 // Parameters:
-// width - width of the thumbnail. It must be between 1 and 1024. Recommended minimum of 50.
-// height - height of the thumbnail. It must be between 1 and 1024. Recommended minimum of 50.
+// width - width of the thumbnail, in pixels. It must be between 1 and 1024. Recommended minimum of 50.
+// height - height of the thumbnail, in pixels. It must be between 1 and 1024. Recommended minimum of 50.
 // imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
 // smartCropping - boolean flag for enabling smart cropping.
 func (client BaseClient) GenerateThumbnail(ctx context.Context, width int32, height int32, imageURL ImageURL, smartCropping *bool) (result ReadCloser, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GenerateThumbnail")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: width,
-			Constraints: []validation.Constraint{{Target: "width", Name: validation.InclusiveMaximum, Rule: int64(1023), Chain: nil},
+			Constraints: []validation.Constraint{{Target: "width", Name: validation.InclusiveMaximum, Rule: int64(1024), Chain: nil},
 				{Target: "width", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}},
 		{TargetValue: height,
-			Constraints: []validation.Constraint{{Target: "height", Name: validation.InclusiveMaximum, Rule: int64(1023), Chain: nil},
+			Constraints: []validation.Constraint{{Target: "height", Name: validation.InclusiveMaximum, Rule: int64(1024), Chain: nil},
 				{Target: "height", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}},
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -665,20 +1056,34 @@ func (client BaseClient) GenerateThumbnailResponder(resp *http.Response) (result
 // GenerateThumbnailInStream this operation generates a thumbnail image with the user-specified width and height. By
 // default, the service analyzes the image, identifies the region of interest (ROI), and generates smart cropping
 // coordinates based on the ROI. Smart cropping helps when you specify an aspect ratio that differs from that of the
-// input image. A successful response contains the thumbnail image binary. If the request failed, the response contains
-// an error code and a message to help determine what went wrong.
+// input image.
+// A successful response contains the thumbnail image binary. If the request failed, the response contains an error
+// code and a message to help determine what went wrong.
+// Upon failure, the error code and an error message are returned. The error code could be one of InvalidImageUrl,
+// InvalidImageFormat, InvalidImageSize, InvalidThumbnailSize, NotSupportedImage, FailedToProcess, Timeout, or
+// InternalServerError.
 // Parameters:
-// width - width of the thumbnail. It must be between 1 and 1024. Recommended minimum of 50.
-// height - height of the thumbnail. It must be between 1 and 1024. Recommended minimum of 50.
+// width - width of the thumbnail, in pixels. It must be between 1 and 1024. Recommended minimum of 50.
+// height - height of the thumbnail, in pixels. It must be between 1 and 1024. Recommended minimum of 50.
 // imageParameter - an image stream.
 // smartCropping - boolean flag for enabling smart cropping.
 func (client BaseClient) GenerateThumbnailInStream(ctx context.Context, width int32, height int32, imageParameter io.ReadCloser, smartCropping *bool) (result ReadCloser, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GenerateThumbnailInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: width,
-			Constraints: []validation.Constraint{{Target: "width", Name: validation.InclusiveMaximum, Rule: int64(1023), Chain: nil},
+			Constraints: []validation.Constraint{{Target: "width", Name: validation.InclusiveMaximum, Rule: int64(1024), Chain: nil},
 				{Target: "width", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}},
 		{TargetValue: height,
-			Constraints: []validation.Constraint{{Target: "height", Name: validation.InclusiveMaximum, Rule: int64(1023), Chain: nil},
+			Constraints: []validation.Constraint{{Target: "height", Name: validation.InclusiveMaximum, Rule: int64(1024), Chain: nil},
 				{Target: "height", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("computervision.BaseClient", "GenerateThumbnailInStream", err.Error())
 	}
@@ -749,11 +1154,248 @@ func (client BaseClient) GenerateThumbnailInStreamResponder(resp *http.Response)
 	return
 }
 
+// GetAreaOfInterest this operation returns a bounding box around the most important area of the image.
+// A successful response will be returned in JSON. If the request failed, the response contains an error code and a
+// message to help determine what went wrong.
+// Upon failure, the error code and an error message are returned. The error code could be one of InvalidImageUrl,
+// InvalidImageFormat, InvalidImageSize, NotSupportedImage, FailedToProcess, Timeout, or InternalServerError.
+// Parameters:
+// imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
+func (client BaseClient) GetAreaOfInterest(ctx context.Context, imageURL ImageURL) (result AreaOfInterestResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetAreaOfInterest")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: imageURL,
+			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("computervision.BaseClient", "GetAreaOfInterest", err.Error())
+	}
+
+	req, err := client.GetAreaOfInterestPreparer(ctx, imageURL)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetAreaOfInterest", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetAreaOfInterestSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetAreaOfInterest", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetAreaOfInterestResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetAreaOfInterest", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetAreaOfInterestPreparer prepares the GetAreaOfInterest request.
+func (client BaseClient) GetAreaOfInterestPreparer(ctx context.Context, imageURL ImageURL) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPath("/areaOfInterest"),
+		autorest.WithJSON(imageURL))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetAreaOfInterestSender sends the GetAreaOfInterest request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) GetAreaOfInterestSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// GetAreaOfInterestResponder handles the response to the GetAreaOfInterest request. The method always
+// closes the http.Response Body.
+func (client BaseClient) GetAreaOfInterestResponder(resp *http.Response) (result AreaOfInterestResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// GetAreaOfInterestInStream this operation returns a bounding box around the most important area of the image.
+// A successful response will be returned in JSON. If the request failed, the response contains an error code and a
+// message to help determine what went wrong.
+// Upon failure, the error code and an error message are returned. The error code could be one of InvalidImageUrl,
+// InvalidImageFormat, InvalidImageSize, NotSupportedImage, FailedToProcess, Timeout, or InternalServerError.
+// Parameters:
+// imageParameter - an image stream.
+func (client BaseClient) GetAreaOfInterestInStream(ctx context.Context, imageParameter io.ReadCloser) (result AreaOfInterestResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetAreaOfInterestInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.GetAreaOfInterestInStreamPreparer(ctx, imageParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetAreaOfInterestInStream", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetAreaOfInterestInStreamSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetAreaOfInterestInStream", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetAreaOfInterestInStreamResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetAreaOfInterestInStream", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetAreaOfInterestInStreamPreparer prepares the GetAreaOfInterestInStream request.
+func (client BaseClient) GetAreaOfInterestInStreamPreparer(ctx context.Context, imageParameter io.ReadCloser) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/octet-stream"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPath("/areaOfInterest"),
+		autorest.WithFile(imageParameter))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetAreaOfInterestInStreamSender sends the GetAreaOfInterestInStream request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) GetAreaOfInterestInStreamSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// GetAreaOfInterestInStreamResponder handles the response to the GetAreaOfInterestInStream request. The method always
+// closes the http.Response Body.
+func (client BaseClient) GetAreaOfInterestInStreamResponder(resp *http.Response) (result AreaOfInterestResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// GetReadOperationResult this interface is used for getting OCR results of Read operation. The URL to this interface
+// should be retrieved from 'Operation-Location' field returned from Batch Read File interface.
+// Parameters:
+// operationID - id of read operation returned in the response of the 'Batch Read File' interface.
+func (client BaseClient) GetReadOperationResult(ctx context.Context, operationID string) (result ReadOperationResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetReadOperationResult")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.GetReadOperationResultPreparer(ctx, operationID)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetReadOperationResult", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetReadOperationResultSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetReadOperationResult", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetReadOperationResultResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetReadOperationResult", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetReadOperationResultPreparer prepares the GetReadOperationResult request.
+func (client BaseClient) GetReadOperationResultPreparer(ctx context.Context, operationID string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	pathParameters := map[string]interface{}{
+		"operationId": autorest.Encode("path", operationID),
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithCustomBaseURL("{Endpoint}/vision/v2.0", urlParameters),
+		autorest.WithPathParameters("/read/operations/{operationId}", pathParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetReadOperationResultSender sends the GetReadOperationResult request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) GetReadOperationResultSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// GetReadOperationResultResponder handles the response to the GetReadOperationResult request. The method always
+// closes the http.Response Body.
+func (client BaseClient) GetReadOperationResultResponder(resp *http.Response) (result ReadOperationResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // GetTextOperationResult this interface is used for getting text operation result. The URL to this interface should be
 // retrieved from 'Operation-Location' field returned from Recognize Text interface.
 // Parameters:
 // operationID - id of the text operation returned in the response of the 'Recognize Text'
 func (client BaseClient) GetTextOperationResult(ctx context.Context, operationID string) (result TextOperationResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetTextOperationResult")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetTextOperationResultPreparer(ctx, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "GetTextOperationResult", nil, "Failure preparing request")
@@ -813,10 +1455,20 @@ func (client BaseClient) GetTextOperationResultResponder(resp *http.Response) (r
 }
 
 // ListModels this operation returns the list of domain-specific models that are supported by the Computer Vision API.
-// Currently, the API only supports one domain-specific model: a celebrity recognizer. A successful response will be
-// returned in JSON.  If the request failed, the response will contain an error code and a message to help understand
-// what went wrong.
+// Currently, the API supports following domain-specific models: celebrity recognizer, landmark recognizer.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
 func (client BaseClient) ListModels(ctx context.Context) (result ListModelsResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.ListModels")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListModelsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "ListModels", nil, "Failure preparing request")
@@ -871,18 +1523,29 @@ func (client BaseClient) ListModelsResponder(resp *http.Response) (result ListMo
 	return
 }
 
-// RecognizePrintedText optical Character Recognition (OCR) detects printed text in an image and extracts the
-// recognized characters into a machine-usable character stream.   Upon success, the OCR results will be returned. Upon
-// failure, the error code together with an error message will be returned. The error code can be one of
-// InvalidImageUrl, InvalidImageFormat, InvalidImageSize, NotSupportedImage,  NotSupportedLanguage, or
+// RecognizePrintedText optical Character Recognition (OCR) detects text in an image and extracts the recognized
+// characters into a machine-usable character stream.
+// Upon success, the OCR results will be returned.
+// Upon failure, the error code together with an error message will be returned. The error code can be one of
+// InvalidImageUrl, InvalidImageFormat, InvalidImageSize, NotSupportedImage, NotSupportedLanguage, or
 // InternalServerError.
 // Parameters:
 // detectOrientation - whether detect the text orientation in the image. With detectOrientation=true the OCR
 // service tries to detect the image orientation and correct it before further processing (e.g. if it's
 // upside-down).
 // imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
-// language - the BCP-47 language code of the text to be detected in the image. The default value is 'unk'
+// language - the BCP-47 language code of the text to be detected in the image. The default value is 'unk'.
 func (client BaseClient) RecognizePrintedText(ctx context.Context, detectOrientation bool, imageURL ImageURL, language OcrLanguages) (result OcrResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecognizePrintedText")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -955,18 +1618,29 @@ func (client BaseClient) RecognizePrintedTextResponder(resp *http.Response) (res
 	return
 }
 
-// RecognizePrintedTextInStream optical Character Recognition (OCR) detects printed text in an image and extracts the
-// recognized characters into a machine-usable character stream.   Upon success, the OCR results will be returned. Upon
-// failure, the error code together with an error message will be returned. The error code can be one of
-// InvalidImageUrl, InvalidImageFormat, InvalidImageSize, NotSupportedImage,  NotSupportedLanguage, or
+// RecognizePrintedTextInStream optical Character Recognition (OCR) detects text in an image and extracts the
+// recognized characters into a machine-usable character stream.
+// Upon success, the OCR results will be returned.
+// Upon failure, the error code together with an error message will be returned. The error code can be one of
+// InvalidImageUrl, InvalidImageFormat, InvalidImageSize, NotSupportedImage, NotSupportedLanguage, or
 // InternalServerError.
 // Parameters:
 // detectOrientation - whether detect the text orientation in the image. With detectOrientation=true the OCR
 // service tries to detect the image orientation and correct it before further processing (e.g. if it's
 // upside-down).
 // imageParameter - an image stream.
-// language - the BCP-47 language code of the text to be detected in the image. The default value is 'unk'
+// language - the BCP-47 language code of the text to be detected in the image. The default value is 'unk'.
 func (client BaseClient) RecognizePrintedTextInStream(ctx context.Context, detectOrientation bool, imageParameter io.ReadCloser, language OcrLanguages) (result OcrResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecognizePrintedTextInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RecognizePrintedTextInStreamPreparer(ctx, detectOrientation, imageParameter, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "RecognizePrintedTextInStream", nil, "Failure preparing request")
@@ -1040,6 +1714,16 @@ func (client BaseClient) RecognizePrintedTextInStreamResponder(resp *http.Respon
 // imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
 // mode - type of text to recognize.
 func (client BaseClient) RecognizeText(ctx context.Context, imageURL ImageURL, mode TextRecognitionMode) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecognizeText")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -1113,6 +1797,16 @@ func (client BaseClient) RecognizeTextResponder(resp *http.Response) (result aut
 // imageParameter - an image stream.
 // mode - type of text to recognize.
 func (client BaseClient) RecognizeTextInStream(ctx context.Context, imageParameter io.ReadCloser, mode TextRecognitionMode) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.RecognizeTextInStream")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RecognizeTextInStreamPreparer(ctx, imageParameter, mode)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "RecognizeTextInStream", nil, "Failure preparing request")
@@ -1176,14 +1870,27 @@ func (client BaseClient) RecognizeTextInStreamResponder(resp *http.Response) (re
 // TagImage this operation generates a list of words, or tags, that are relevant to the content of the supplied image.
 // The Computer Vision API can return tags based on objects, living beings, scenery or actions found in images. Unlike
 // categories, tags are not organized according to a hierarchical classification system, but correspond to image
-// content. Tags may contain hints to avoid ambiguity or provide context, for example the tag 'cello' may be
-// accompanied by the hint 'musical instrument'. All tags are in English.
+// content. Tags may contain hints to avoid ambiguity or provide context, for example the tag "cello" may be
+// accompanied by the hint "musical instrument". All tags are in English.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
 // Parameters:
 // imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
 // language - the desired language for output generation. If this parameter is not specified, the default value
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) TagImage(ctx context.Context, imageURL ImageURL, language string) (result TagResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.TagImage")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: imageURL,
 			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -1257,14 +1964,27 @@ func (client BaseClient) TagImageResponder(resp *http.Response) (result TagResul
 // TagImageInStream this operation generates a list of words, or tags, that are relevant to the content of the supplied
 // image. The Computer Vision API can return tags based on objects, living beings, scenery or actions found in images.
 // Unlike categories, tags are not organized according to a hierarchical classification system, but correspond to image
-// content. Tags may contain hints to avoid ambiguity or provide context, for example the tag 'cello' may be
-// accompanied by the hint 'musical instrument'. All tags are in English.
+// content. Tags may contain hints to avoid ambiguity or provide context, for example the tag "cello" may be
+// accompanied by the hint "musical instrument". All tags are in English.
+// Two input methods are supported -- (1) Uploading an image or (2) specifying an image URL.
+// A successful response will be returned in JSON. If the request failed, the response will contain an error code and a
+// message to help understand what went wrong.
 // Parameters:
 // imageParameter - an image stream.
 // language - the desired language for output generation. If this parameter is not specified, the default value
 // is &quot;en&quot;.Supported languages:en - English, Default. es - Spanish, ja - Japanese, pt - Portuguese,
 // zh - Simplified Chinese.
 func (client BaseClient) TagImageInStream(ctx context.Context, imageParameter io.ReadCloser, language string) (result TagResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.TagImageInStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.TagImageInStreamPreparer(ctx, imageParameter, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "computervision.BaseClient", "TagImageInStream", nil, "Failure preparing request")

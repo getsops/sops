@@ -598,7 +598,31 @@ func TestMarshalAnyJSONPBMarshaler(t *testing.T) {
 	if str != expected {
 		t.Errorf("marshalling JSON produced incorrect output: got %s, wanted %s", str, expected)
 	}
+
+	// Do it again, but this time with indentation:
+
+	marshaler := Marshaler{Indent: "  "}
+	str, err = marshaler.MarshalToString(a)
+	if err != nil {
+		t.Errorf("an unexpected error occurred when marshalling Any to JSON: %v", err)
+	}
+	// same as expected above, but pretty-printed w/ indentation
+	expected =
+`{
+  "@type": "type.googleapis.com/` + dynamicMessageName + `",
+  "baz": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "foo": "bar"
+}`
+	if str != expected {
+		t.Errorf("marshalling JSON produced incorrect output: got %s, wanted %s", str, expected)
+	}
 }
+
 
 func TestMarshalWithCustomValidation(t *testing.T) {
 	msg := dynamicMessage{RawJson: `{ "foo": "bar", "baz": [0, 1, 2, 3] }`, Dummy: &dynamicMessage{}}

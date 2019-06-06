@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,21 +19,16 @@
 
 package media
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/mediaservices/mgmt/2018-06-01-preview/media"
+import (
+	"context"
 
-type AssetsClient = original.AssetsClient
+	original "github.com/Azure/azure-sdk-for-go/services/preview/mediaservices/mgmt/2018-06-01-preview/media"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ContentKeyPoliciesClient = original.ContentKeyPoliciesClient
-type JobsClient = original.JobsClient
-type LiveEventsClient = original.LiveEventsClient
-type LiveOutputsClient = original.LiveOutputsClient
-type LocationsClient = original.LocationsClient
-type MediaservicesClient = original.MediaservicesClient
 type AacAudioProfile = original.AacAudioProfile
 
 const (
@@ -377,6 +372,13 @@ const (
 	Secondary StorageAccountType = original.Secondary
 )
 
+type StreamOptionsFlag = original.StreamOptionsFlag
+
+const (
+	Default    StreamOptionsFlag = original.Default
+	LowLatency StreamOptionsFlag = original.LowLatency
+)
+
 type StreamingEndpointResourceState = original.StreamingEndpointResourceState
 
 const (
@@ -405,13 +407,6 @@ const (
 	StreamingPolicyStreamingProtocolSmoothStreaming StreamingPolicyStreamingProtocol = original.StreamingPolicyStreamingProtocolSmoothStreaming
 )
 
-type StreamOptionsFlag = original.StreamOptionsFlag
-
-const (
-	Default    StreamOptionsFlag = original.Default
-	LowLatency StreamOptionsFlag = original.LowLatency
-)
-
 type StretchMode = original.StretchMode
 
 const (
@@ -434,10 +429,10 @@ const (
 	TrackPropertyTypeUnknown TrackPropertyType = original.TrackPropertyTypeUnknown
 )
 
+type APIError = original.APIError
 type AacAudio = original.AacAudio
 type AkamaiAccessControl = original.AkamaiAccessControl
 type AkamaiSignatureHeaderAuthenticationKey = original.AkamaiSignatureHeaderAuthenticationKey
-type APIError = original.APIError
 type Asset = original.Asset
 type AssetCollection = original.AssetCollection
 type AssetCollectionIterator = original.AssetCollectionIterator
@@ -445,25 +440,43 @@ type AssetCollectionPage = original.AssetCollectionPage
 type AssetContainerSas = original.AssetContainerSas
 type AssetProperties = original.AssetProperties
 type AssetStorageEncryptionKey = original.AssetStorageEncryptionKey
-type BasicAudio = original.BasicAudio
+type AssetsClient = original.AssetsClient
 type Audio = original.Audio
-type BasicAudioAnalyzerPreset = original.BasicAudioAnalyzerPreset
 type AudioAnalyzerPreset = original.AudioAnalyzerPreset
 type AudioOverlay = original.AudioOverlay
+type BaseClient = original.BaseClient
+type BasicAudio = original.BasicAudio
+type BasicAudioAnalyzerPreset = original.BasicAudioAnalyzerPreset
+type BasicCodec = original.BasicCodec
+type BasicContentKeyPolicyConfiguration = original.BasicContentKeyPolicyConfiguration
+type BasicContentKeyPolicyPlayReadyContentKeyLocation = original.BasicContentKeyPolicyPlayReadyContentKeyLocation
+type BasicContentKeyPolicyRestriction = original.BasicContentKeyPolicyRestriction
+type BasicContentKeyPolicyRestrictionTokenKey = original.BasicContentKeyPolicyRestrictionTokenKey
+type BasicFormat = original.BasicFormat
+type BasicImage = original.BasicImage
+type BasicImageFormat = original.BasicImageFormat
+type BasicJobInput = original.BasicJobInput
+type BasicJobInputClip = original.BasicJobInputClip
+type BasicJobOutput = original.BasicJobOutput
+type BasicLayer = original.BasicLayer
+type BasicMultiBitrateFormat = original.BasicMultiBitrateFormat
+type BasicOverlay = original.BasicOverlay
+type BasicPreset = original.BasicPreset
+type BasicVideo = original.BasicVideo
+type BasicVideoLayer = original.BasicVideoLayer
 type BuiltInStandardEncoderPreset = original.BuiltInStandardEncoderPreset
 type CbcsDrmConfiguration = original.CbcsDrmConfiguration
 type CencDrmConfiguration = original.CencDrmConfiguration
 type CheckNameAvailabilityInput = original.CheckNameAvailabilityInput
-type BasicCodec = original.BasicCodec
 type Codec = original.Codec
 type CommonEncryptionCbcs = original.CommonEncryptionCbcs
 type CommonEncryptionCenc = original.CommonEncryptionCenc
+type ContentKeyPoliciesClient = original.ContentKeyPoliciesClient
 type ContentKeyPolicy = original.ContentKeyPolicy
 type ContentKeyPolicyClearKeyConfiguration = original.ContentKeyPolicyClearKeyConfiguration
 type ContentKeyPolicyCollection = original.ContentKeyPolicyCollection
 type ContentKeyPolicyCollectionIterator = original.ContentKeyPolicyCollectionIterator
 type ContentKeyPolicyCollectionPage = original.ContentKeyPolicyCollectionPage
-type BasicContentKeyPolicyConfiguration = original.BasicContentKeyPolicyConfiguration
 type ContentKeyPolicyConfiguration = original.ContentKeyPolicyConfiguration
 type ContentKeyPolicyFairPlayConfiguration = original.ContentKeyPolicyFairPlayConfiguration
 type ContentKeyPolicyOpenRestriction = original.ContentKeyPolicyOpenRestriction
@@ -471,15 +484,12 @@ type ContentKeyPolicyOption = original.ContentKeyPolicyOption
 type ContentKeyPolicyPlayReadyConfiguration = original.ContentKeyPolicyPlayReadyConfiguration
 type ContentKeyPolicyPlayReadyContentEncryptionKeyFromHeader = original.ContentKeyPolicyPlayReadyContentEncryptionKeyFromHeader
 type ContentKeyPolicyPlayReadyContentEncryptionKeyFromKeyIdentifier = original.ContentKeyPolicyPlayReadyContentEncryptionKeyFromKeyIdentifier
-type BasicContentKeyPolicyPlayReadyContentKeyLocation = original.BasicContentKeyPolicyPlayReadyContentKeyLocation
 type ContentKeyPolicyPlayReadyContentKeyLocation = original.ContentKeyPolicyPlayReadyContentKeyLocation
 type ContentKeyPolicyPlayReadyExplicitAnalogTelevisionRestriction = original.ContentKeyPolicyPlayReadyExplicitAnalogTelevisionRestriction
 type ContentKeyPolicyPlayReadyLicense = original.ContentKeyPolicyPlayReadyLicense
 type ContentKeyPolicyPlayReadyPlayRight = original.ContentKeyPolicyPlayReadyPlayRight
 type ContentKeyPolicyProperties = original.ContentKeyPolicyProperties
-type BasicContentKeyPolicyRestriction = original.BasicContentKeyPolicyRestriction
 type ContentKeyPolicyRestriction = original.ContentKeyPolicyRestriction
-type BasicContentKeyPolicyRestrictionTokenKey = original.BasicContentKeyPolicyRestrictionTokenKey
 type ContentKeyPolicyRestrictionTokenKey = original.ContentKeyPolicyRestrictionTokenKey
 type ContentKeyPolicyRsaTokenKey = original.ContentKeyPolicyRsaTokenKey
 type ContentKeyPolicySymmetricTokenKey = original.ContentKeyPolicySymmetricTokenKey
@@ -498,38 +508,32 @@ type EnabledProtocols = original.EnabledProtocols
 type EntityNameAvailabilityCheckOutput = original.EntityNameAvailabilityCheckOutput
 type EnvelopeEncryption = original.EnvelopeEncryption
 type Filters = original.Filters
-type BasicFormat = original.BasicFormat
 type Format = original.Format
 type H264Layer = original.H264Layer
 type H264Video = original.H264Video
 type Hls = original.Hls
-type BasicImage = original.BasicImage
-type Image = original.Image
-type BasicImageFormat = original.BasicImageFormat
-type ImageFormat = original.ImageFormat
 type IPAccessControl = original.IPAccessControl
 type IPRange = original.IPRange
+type Image = original.Image
+type ImageFormat = original.ImageFormat
 type Job = original.Job
 type JobCollection = original.JobCollection
 type JobCollectionIterator = original.JobCollectionIterator
 type JobCollectionPage = original.JobCollectionPage
 type JobError = original.JobError
 type JobErrorDetail = original.JobErrorDetail
-type BasicJobInput = original.BasicJobInput
 type JobInput = original.JobInput
 type JobInputAsset = original.JobInputAsset
-type BasicJobInputClip = original.BasicJobInputClip
 type JobInputClip = original.JobInputClip
 type JobInputHTTP = original.JobInputHTTP
 type JobInputs = original.JobInputs
-type BasicJobOutput = original.BasicJobOutput
 type JobOutput = original.JobOutput
 type JobOutputAsset = original.JobOutputAsset
 type JobProperties = original.JobProperties
+type JobsClient = original.JobsClient
 type JpgFormat = original.JpgFormat
 type JpgImage = original.JpgImage
 type JpgLayer = original.JpgLayer
-type BasicLayer = original.BasicLayer
 type Layer = original.Layer
 type ListContainerSasInput = original.ListContainerSasInput
 type ListContentKeysResponse = original.ListContentKeysResponse
@@ -545,6 +549,7 @@ type LiveEventListResultPage = original.LiveEventListResultPage
 type LiveEventPreview = original.LiveEventPreview
 type LiveEventPreviewAccessControl = original.LiveEventPreviewAccessControl
 type LiveEventProperties = original.LiveEventProperties
+type LiveEventsClient = original.LiveEventsClient
 type LiveEventsCreateFuture = original.LiveEventsCreateFuture
 type LiveEventsDeleteFuture = original.LiveEventsDeleteFuture
 type LiveEventsResetFuture = original.LiveEventsResetFuture
@@ -556,11 +561,13 @@ type LiveOutputListResult = original.LiveOutputListResult
 type LiveOutputListResultIterator = original.LiveOutputListResultIterator
 type LiveOutputListResultPage = original.LiveOutputListResultPage
 type LiveOutputProperties = original.LiveOutputProperties
+type LiveOutputsClient = original.LiveOutputsClient
 type LiveOutputsCreateFuture = original.LiveOutputsCreateFuture
 type LiveOutputsDeleteFuture = original.LiveOutputsDeleteFuture
 type Location = original.Location
+type LocationsClient = original.LocationsClient
+type MediaservicesClient = original.MediaservicesClient
 type Mp4Format = original.Mp4Format
-type BasicMultiBitrateFormat = original.BasicMultiBitrateFormat
 type MultiBitrateFormat = original.MultiBitrateFormat
 type NoEncryption = original.NoEncryption
 type ODataError = original.ODataError
@@ -569,13 +576,12 @@ type OperationCollection = original.OperationCollection
 type OperationCollectionIterator = original.OperationCollectionIterator
 type OperationCollectionPage = original.OperationCollectionPage
 type OperationDisplay = original.OperationDisplay
+type OperationsClient = original.OperationsClient
 type OutputFile = original.OutputFile
-type BasicOverlay = original.BasicOverlay
 type Overlay = original.Overlay
 type PngFormat = original.PngFormat
 type PngImage = original.PngImage
 type PngLayer = original.PngLayer
-type BasicPreset = original.BasicPreset
 type Preset = original.Preset
 type Provider = original.Provider
 type ProxyResource = original.ProxyResource
@@ -594,6 +600,7 @@ type StreamingEndpointListResult = original.StreamingEndpointListResult
 type StreamingEndpointListResultIterator = original.StreamingEndpointListResultIterator
 type StreamingEndpointListResultPage = original.StreamingEndpointListResultPage
 type StreamingEndpointProperties = original.StreamingEndpointProperties
+type StreamingEndpointsClient = original.StreamingEndpointsClient
 type StreamingEndpointsCreateFuture = original.StreamingEndpointsCreateFuture
 type StreamingEndpointsDeleteFuture = original.StreamingEndpointsDeleteFuture
 type StreamingEndpointsScaleFuture = original.StreamingEndpointsScaleFuture
@@ -607,7 +614,9 @@ type StreamingLocatorCollectionIterator = original.StreamingLocatorCollectionIte
 type StreamingLocatorCollectionPage = original.StreamingLocatorCollectionPage
 type StreamingLocatorContentKey = original.StreamingLocatorContentKey
 type StreamingLocatorProperties = original.StreamingLocatorProperties
+type StreamingLocatorsClient = original.StreamingLocatorsClient
 type StreamingPath = original.StreamingPath
+type StreamingPoliciesClient = original.StreamingPoliciesClient
 type StreamingPolicy = original.StreamingPolicy
 type StreamingPolicyCollection = original.StreamingPolicyCollection
 type StreamingPolicyCollectionIterator = original.StreamingPolicyCollectionIterator
@@ -623,39 +632,36 @@ type SubscriptionMediaServiceCollection = original.SubscriptionMediaServiceColle
 type SubscriptionMediaServiceCollectionIterator = original.SubscriptionMediaServiceCollectionIterator
 type SubscriptionMediaServiceCollectionPage = original.SubscriptionMediaServiceCollectionPage
 type SyncStorageKeysInput = original.SyncStorageKeysInput
-type TrackedResource = original.TrackedResource
 type TrackPropertyCondition = original.TrackPropertyCondition
 type TrackSelection = original.TrackSelection
+type TrackedResource = original.TrackedResource
 type Transform = original.Transform
 type TransformCollection = original.TransformCollection
 type TransformCollectionIterator = original.TransformCollectionIterator
 type TransformCollectionPage = original.TransformCollectionPage
 type TransformOutput = original.TransformOutput
 type TransformProperties = original.TransformProperties
+type TransformsClient = original.TransformsClient
 type TransportStreamFormat = original.TransportStreamFormat
-type BasicVideo = original.BasicVideo
 type Video = original.Video
 type VideoAnalyzerPreset = original.VideoAnalyzerPreset
-type BasicVideoLayer = original.BasicVideoLayer
 type VideoLayer = original.VideoLayer
 type VideoOverlay = original.VideoOverlay
-type OperationsClient = original.OperationsClient
-type StreamingEndpointsClient = original.StreamingEndpointsClient
-type StreamingLocatorsClient = original.StreamingLocatorsClient
-type StreamingPoliciesClient = original.StreamingPoliciesClient
-type TransformsClient = original.TransformsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewAssetCollectionIterator(page AssetCollectionPage) AssetCollectionIterator {
+	return original.NewAssetCollectionIterator(page)
+}
+func NewAssetCollectionPage(getNextPage func(context.Context, AssetCollection) (AssetCollection, error)) AssetCollectionPage {
+	return original.NewAssetCollectionPage(getNextPage)
+}
 func NewAssetsClient(subscriptionID string) AssetsClient {
 	return original.NewAssetsClient(subscriptionID)
 }
 func NewAssetsClientWithBaseURI(baseURI string, subscriptionID string) AssetsClient {
 	return original.NewAssetsClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewContentKeyPoliciesClient(subscriptionID string) ContentKeyPoliciesClient {
 	return original.NewContentKeyPoliciesClient(subscriptionID)
@@ -663,17 +669,41 @@ func NewContentKeyPoliciesClient(subscriptionID string) ContentKeyPoliciesClient
 func NewContentKeyPoliciesClientWithBaseURI(baseURI string, subscriptionID string) ContentKeyPoliciesClient {
 	return original.NewContentKeyPoliciesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewContentKeyPolicyCollectionIterator(page ContentKeyPolicyCollectionPage) ContentKeyPolicyCollectionIterator {
+	return original.NewContentKeyPolicyCollectionIterator(page)
+}
+func NewContentKeyPolicyCollectionPage(getNextPage func(context.Context, ContentKeyPolicyCollection) (ContentKeyPolicyCollection, error)) ContentKeyPolicyCollectionPage {
+	return original.NewContentKeyPolicyCollectionPage(getNextPage)
+}
+func NewJobCollectionIterator(page JobCollectionPage) JobCollectionIterator {
+	return original.NewJobCollectionIterator(page)
+}
+func NewJobCollectionPage(getNextPage func(context.Context, JobCollection) (JobCollection, error)) JobCollectionPage {
+	return original.NewJobCollectionPage(getNextPage)
+}
 func NewJobsClient(subscriptionID string) JobsClient {
 	return original.NewJobsClient(subscriptionID)
 }
 func NewJobsClientWithBaseURI(baseURI string, subscriptionID string) JobsClient {
 	return original.NewJobsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewLiveEventListResultIterator(page LiveEventListResultPage) LiveEventListResultIterator {
+	return original.NewLiveEventListResultIterator(page)
+}
+func NewLiveEventListResultPage(getNextPage func(context.Context, LiveEventListResult) (LiveEventListResult, error)) LiveEventListResultPage {
+	return original.NewLiveEventListResultPage(getNextPage)
+}
 func NewLiveEventsClient(subscriptionID string) LiveEventsClient {
 	return original.NewLiveEventsClient(subscriptionID)
 }
 func NewLiveEventsClientWithBaseURI(baseURI string, subscriptionID string) LiveEventsClient {
 	return original.NewLiveEventsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewLiveOutputListResultIterator(page LiveOutputListResultPage) LiveOutputListResultIterator {
+	return original.NewLiveOutputListResultIterator(page)
+}
+func NewLiveOutputListResultPage(getNextPage func(context.Context, LiveOutputListResult) (LiveOutputListResult, error)) LiveOutputListResultPage {
+	return original.NewLiveOutputListResultPage(getNextPage)
 }
 func NewLiveOutputsClient(subscriptionID string) LiveOutputsClient {
 	return original.NewLiveOutputsClient(subscriptionID)
@@ -692,6 +722,81 @@ func NewMediaservicesClient(subscriptionID string) MediaservicesClient {
 }
 func NewMediaservicesClientWithBaseURI(baseURI string, subscriptionID string) MediaservicesClient {
 	return original.NewMediaservicesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationCollectionIterator(page OperationCollectionPage) OperationCollectionIterator {
+	return original.NewOperationCollectionIterator(page)
+}
+func NewOperationCollectionPage(getNextPage func(context.Context, OperationCollection) (OperationCollection, error)) OperationCollectionPage {
+	return original.NewOperationCollectionPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewServiceCollectionIterator(page ServiceCollectionPage) ServiceCollectionIterator {
+	return original.NewServiceCollectionIterator(page)
+}
+func NewServiceCollectionPage(getNextPage func(context.Context, ServiceCollection) (ServiceCollection, error)) ServiceCollectionPage {
+	return original.NewServiceCollectionPage(getNextPage)
+}
+func NewStreamingEndpointListResultIterator(page StreamingEndpointListResultPage) StreamingEndpointListResultIterator {
+	return original.NewStreamingEndpointListResultIterator(page)
+}
+func NewStreamingEndpointListResultPage(getNextPage func(context.Context, StreamingEndpointListResult) (StreamingEndpointListResult, error)) StreamingEndpointListResultPage {
+	return original.NewStreamingEndpointListResultPage(getNextPage)
+}
+func NewStreamingEndpointsClient(subscriptionID string) StreamingEndpointsClient {
+	return original.NewStreamingEndpointsClient(subscriptionID)
+}
+func NewStreamingEndpointsClientWithBaseURI(baseURI string, subscriptionID string) StreamingEndpointsClient {
+	return original.NewStreamingEndpointsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewStreamingLocatorCollectionIterator(page StreamingLocatorCollectionPage) StreamingLocatorCollectionIterator {
+	return original.NewStreamingLocatorCollectionIterator(page)
+}
+func NewStreamingLocatorCollectionPage(getNextPage func(context.Context, StreamingLocatorCollection) (StreamingLocatorCollection, error)) StreamingLocatorCollectionPage {
+	return original.NewStreamingLocatorCollectionPage(getNextPage)
+}
+func NewStreamingLocatorsClient(subscriptionID string) StreamingLocatorsClient {
+	return original.NewStreamingLocatorsClient(subscriptionID)
+}
+func NewStreamingLocatorsClientWithBaseURI(baseURI string, subscriptionID string) StreamingLocatorsClient {
+	return original.NewStreamingLocatorsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewStreamingPoliciesClient(subscriptionID string) StreamingPoliciesClient {
+	return original.NewStreamingPoliciesClient(subscriptionID)
+}
+func NewStreamingPoliciesClientWithBaseURI(baseURI string, subscriptionID string) StreamingPoliciesClient {
+	return original.NewStreamingPoliciesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewStreamingPolicyCollectionIterator(page StreamingPolicyCollectionPage) StreamingPolicyCollectionIterator {
+	return original.NewStreamingPolicyCollectionIterator(page)
+}
+func NewStreamingPolicyCollectionPage(getNextPage func(context.Context, StreamingPolicyCollection) (StreamingPolicyCollection, error)) StreamingPolicyCollectionPage {
+	return original.NewStreamingPolicyCollectionPage(getNextPage)
+}
+func NewSubscriptionMediaServiceCollectionIterator(page SubscriptionMediaServiceCollectionPage) SubscriptionMediaServiceCollectionIterator {
+	return original.NewSubscriptionMediaServiceCollectionIterator(page)
+}
+func NewSubscriptionMediaServiceCollectionPage(getNextPage func(context.Context, SubscriptionMediaServiceCollection) (SubscriptionMediaServiceCollection, error)) SubscriptionMediaServiceCollectionPage {
+	return original.NewSubscriptionMediaServiceCollectionPage(getNextPage)
+}
+func NewTransformCollectionIterator(page TransformCollectionPage) TransformCollectionIterator {
+	return original.NewTransformCollectionIterator(page)
+}
+func NewTransformCollectionPage(getNextPage func(context.Context, TransformCollection) (TransformCollection, error)) TransformCollectionPage {
+	return original.NewTransformCollectionPage(getNextPage)
+}
+func NewTransformsClient(subscriptionID string) TransformsClient {
+	return original.NewTransformsClient(subscriptionID)
+}
+func NewTransformsClientWithBaseURI(baseURI string, subscriptionID string) TransformsClient {
+	return original.NewTransformsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAacAudioProfileValues() []AacAudioProfile {
 	return original.PossibleAacAudioProfileValues()
@@ -762,20 +867,17 @@ func PossibleLiveEventResourceStateValues() []LiveEventResourceState {
 func PossibleLiveOutputResourceStateValues() []LiveOutputResourceState {
 	return original.PossibleLiveOutputResourceStateValues()
 }
-func PossibleOdataTypeValues() []OdataType {
-	return original.PossibleOdataTypeValues()
-}
 func PossibleOdataTypeBasicCodecValues() []OdataTypeBasicCodec {
 	return original.PossibleOdataTypeBasicCodecValues()
 }
 func PossibleOdataTypeBasicContentKeyPolicyConfigurationValues() []OdataTypeBasicContentKeyPolicyConfiguration {
 	return original.PossibleOdataTypeBasicContentKeyPolicyConfigurationValues()
 }
-func PossibleOdataTypeBasicContentKeyPolicyRestrictionValues() []OdataTypeBasicContentKeyPolicyRestriction {
-	return original.PossibleOdataTypeBasicContentKeyPolicyRestrictionValues()
-}
 func PossibleOdataTypeBasicContentKeyPolicyRestrictionTokenKeyValues() []OdataTypeBasicContentKeyPolicyRestrictionTokenKey {
 	return original.PossibleOdataTypeBasicContentKeyPolicyRestrictionTokenKeyValues()
+}
+func PossibleOdataTypeBasicContentKeyPolicyRestrictionValues() []OdataTypeBasicContentKeyPolicyRestriction {
+	return original.PossibleOdataTypeBasicContentKeyPolicyRestrictionValues()
 }
 func PossibleOdataTypeBasicFormatValues() []OdataTypeBasicFormat {
 	return original.PossibleOdataTypeBasicFormatValues()
@@ -795,6 +897,9 @@ func PossibleOdataTypeBasicOverlayValues() []OdataTypeBasicOverlay {
 func PossibleOdataTypeBasicPresetValues() []OdataTypeBasicPreset {
 	return original.PossibleOdataTypeBasicPresetValues()
 }
+func PossibleOdataTypeValues() []OdataType {
+	return original.PossibleOdataTypeValues()
+}
 func PossibleOnErrorTypeValues() []OnErrorType {
 	return original.PossibleOnErrorTypeValues()
 }
@@ -807,6 +912,9 @@ func PossibleRotationValues() []Rotation {
 func PossibleStorageAccountTypeValues() []StorageAccountType {
 	return original.PossibleStorageAccountTypeValues()
 }
+func PossibleStreamOptionsFlagValues() []StreamOptionsFlag {
+	return original.PossibleStreamOptionsFlagValues()
+}
 func PossibleStreamingEndpointResourceStateValues() []StreamingEndpointResourceState {
 	return original.PossibleStreamingEndpointResourceStateValues()
 }
@@ -816,9 +924,6 @@ func PossibleStreamingLocatorContentKeyTypeValues() []StreamingLocatorContentKey
 func PossibleStreamingPolicyStreamingProtocolValues() []StreamingPolicyStreamingProtocol {
 	return original.PossibleStreamingPolicyStreamingProtocolValues()
 }
-func PossibleStreamOptionsFlagValues() []StreamOptionsFlag {
-	return original.PossibleStreamOptionsFlagValues()
-}
 func PossibleStretchModeValues() []StretchMode {
 	return original.PossibleStretchModeValues()
 }
@@ -827,36 +932,6 @@ func PossibleTrackPropertyCompareOperationValues() []TrackPropertyCompareOperati
 }
 func PossibleTrackPropertyTypeValues() []TrackPropertyType {
 	return original.PossibleTrackPropertyTypeValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStreamingEndpointsClient(subscriptionID string) StreamingEndpointsClient {
-	return original.NewStreamingEndpointsClient(subscriptionID)
-}
-func NewStreamingEndpointsClientWithBaseURI(baseURI string, subscriptionID string) StreamingEndpointsClient {
-	return original.NewStreamingEndpointsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStreamingLocatorsClient(subscriptionID string) StreamingLocatorsClient {
-	return original.NewStreamingLocatorsClient(subscriptionID)
-}
-func NewStreamingLocatorsClientWithBaseURI(baseURI string, subscriptionID string) StreamingLocatorsClient {
-	return original.NewStreamingLocatorsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStreamingPoliciesClient(subscriptionID string) StreamingPoliciesClient {
-	return original.NewStreamingPoliciesClient(subscriptionID)
-}
-func NewStreamingPoliciesClientWithBaseURI(baseURI string, subscriptionID string) StreamingPoliciesClient {
-	return original.NewStreamingPoliciesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewTransformsClient(subscriptionID string) TransformsClient {
-	return original.NewTransformsClient(subscriptionID)
-}
-func NewTransformsClientWithBaseURI(baseURI string, subscriptionID string) TransformsClient {
-	return original.NewTransformsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

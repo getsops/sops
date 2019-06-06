@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewAssetsClientWithBaseURI(baseURI string, subscriptionID string) AssetsCli
 // assetName - the Asset name.
 // parameters - the request parameters
 func (client AssetsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, assetName string, parameters Asset) (result Asset, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, accountName, assetName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.AssetsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client AssetsClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // accountName - the Media Services account name.
 // assetName - the Asset name.
 func (client AssetsClient) Delete(ctx context.Context, resourceGroupName string, accountName string, assetName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName, assetName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.AssetsClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client AssetsClient) DeleteResponder(resp *http.Response) (result autorest
 // accountName - the Media Services account name.
 // assetName - the Asset name.
 func (client AssetsClient) Get(ctx context.Context, resourceGroupName string, accountName string, assetName string) (result Asset, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName, assetName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.AssetsClient", "Get", nil, "Failure preparing request")
@@ -255,6 +286,16 @@ func (client AssetsClient) GetResponder(resp *http.Response) (result Asset, err 
 // accountName - the Media Services account name.
 // assetName - the Asset name.
 func (client AssetsClient) GetEncryptionKey(ctx context.Context, resourceGroupName string, accountName string, assetName string) (result AssetStorageEncryptionKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.GetEncryptionKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetEncryptionKeyPreparer(ctx, resourceGroupName, accountName, assetName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.AssetsClient", "GetEncryptionKey", nil, "Failure preparing request")
@@ -327,6 +368,16 @@ func (client AssetsClient) GetEncryptionKeyResponder(resp *http.Response) (resul
 // service returns the number of available items up to but not greater than the specified value n.
 // orderby - specifies the the key by which the result collection should be ordered.
 func (client AssetsClient) List(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, orderby string) (result AssetCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.List")
+		defer func() {
+			sc := -1
+			if result.ac.Response.Response != nil {
+				sc = result.ac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, accountName, filter, top, orderby)
 	if err != nil {
@@ -400,8 +451,8 @@ func (client AssetsClient) ListResponder(resp *http.Response) (result AssetColle
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AssetsClient) listNextResults(lastResults AssetCollection) (result AssetCollection, err error) {
-	req, err := lastResults.assetCollectionPreparer()
+func (client AssetsClient) listNextResults(ctx context.Context, lastResults AssetCollection) (result AssetCollection, err error) {
+	req, err := lastResults.assetCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.AssetsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -422,6 +473,16 @@ func (client AssetsClient) listNextResults(lastResults AssetCollection) (result 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AssetsClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, orderby string) (result AssetCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, accountName, filter, top, orderby)
 	return
 }
@@ -434,6 +495,16 @@ func (client AssetsClient) ListComplete(ctx context.Context, resourceGroupName s
 // assetName - the Asset name.
 // parameters - the request parameters
 func (client AssetsClient) ListContainerSas(ctx context.Context, resourceGroupName string, accountName string, assetName string, parameters ListContainerSasInput) (result AssetContainerSas, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.ListContainerSas")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListContainerSasPreparer(ctx, resourceGroupName, accountName, assetName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.AssetsClient", "ListContainerSas", nil, "Failure preparing request")
@@ -506,6 +577,16 @@ func (client AssetsClient) ListContainerSasResponder(resp *http.Response) (resul
 // assetName - the Asset name.
 // parameters - the request parameters
 func (client AssetsClient) Update(ctx context.Context, resourceGroupName string, accountName string, assetName string, parameters Asset) (result Asset, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AssetsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, accountName, assetName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.AssetsClient", "Update", nil, "Failure preparing request")

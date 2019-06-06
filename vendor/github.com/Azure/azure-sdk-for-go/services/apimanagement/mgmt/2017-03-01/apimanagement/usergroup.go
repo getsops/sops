@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -53,6 +54,16 @@ func NewUserGroupClientWithBaseURI(baseURI string, subscriptionID string) UserGr
 // top - number of records to return.
 // skip - number of records to skip.
 func (client UserGroupClient) List(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (result GroupCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.gc.Response.Response != nil {
+				sc = result.gc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -145,8 +156,8 @@ func (client UserGroupClient) ListResponder(resp *http.Response) (result GroupCo
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UserGroupClient) listNextResults(lastResults GroupCollection) (result GroupCollection, err error) {
-	req, err := lastResults.groupCollectionPreparer()
+func (client UserGroupClient) listNextResults(ctx context.Context, lastResults GroupCollection) (result GroupCollection, err error) {
+	req, err := lastResults.groupCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.UserGroupClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -167,6 +178,16 @@ func (client UserGroupClient) listNextResults(lastResults GroupCollection) (resu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UserGroupClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (result GroupCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, UID, filter, top, skip)
 	return
 }

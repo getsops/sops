@@ -1,30 +1,30 @@
-default:
-  deps: [test]
+version: '2'
 
-update-deps:
-  desc: Updates dependencies
-  cmds:
-    - dep ensure
-    - dep ensure -update
+env:
+  GOFLAGS: -mod=vendor
 
-lint:
-  desc: Checks code style
-  cmds:
-    - gofmt -d -s *.go
-    - go vet .
-  silent: true
+tasks:
+  default:
+    deps: [test]
 
-lint-fix:
-  desc: Fixes code style
-  cmds:
-    - gofmt -w -s *.go
+  lint:
+    desc: Checks code style
+    cmds:
+      - gofmt -d -s *.go
+      - go vet ./...
+    silent: true
 
-test:
-  desc: Runs go tests
-  cmds:
-    - go test -race  .
+  lint-fix:
+    desc: Fixes code style
+    cmds:
+      - gofmt -w -s *.go
 
-test-coverage:
-  desc: Runs go tests and calucates test coverage
-  cmds:
-    - go test -coverprofile=c.out .
+  test:
+    desc: Runs go tests
+    cmds:
+      - go test -race  ./...
+
+  test-coverage:
+    desc: Runs go tests and calucates test coverage
+    cmds:
+      - go test -race -coverprofile=c.out ./...

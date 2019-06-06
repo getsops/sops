@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,11 +44,27 @@ func NewComponentsClientWithBaseURI(baseURI string, subscriptionID string) Compo
 // CreateOrUpdate creates (or updates) an Application Insights component. Note: You cannot specify a different value
 // for InstrumentationKey nor AppId in the Put operation.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // insightProperties - properties that need to be specified to create an Application Insights component.
 func (client ComponentsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, insightProperties ApplicationInsightsComponent) (result ApplicationInsightsComponent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: insightProperties,
 			Constraints: []validation.Constraint{{Target: "insightProperties.Kind", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("insights.ComponentsClient", "CreateOrUpdate", err.Error())
@@ -119,9 +136,29 @@ func (client ComponentsClient) CreateOrUpdateResponder(resp *http.Response) (res
 
 // Delete deletes an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 func (client ComponentsClient) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentsClient", "Delete", err.Error())
+	}
+
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ComponentsClient", "Delete", nil, "Failure preparing request")
@@ -185,9 +222,29 @@ func (client ComponentsClient) DeleteResponder(resp *http.Response) (result auto
 
 // Get returns an Application Insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 func (client ComponentsClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result ApplicationInsightsComponent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentsClient", "Get", err.Error())
+	}
+
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ComponentsClient", "Get", nil, "Failure preparing request")
@@ -252,10 +309,30 @@ func (client ComponentsClient) GetResponder(resp *http.Response) (result Applica
 
 // GetPurgeStatus get status for an ongoing purge operation.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // purgeID - in a purge status request, this is the Id of the operation the status of which is returned.
 func (client ComponentsClient) GetPurgeStatus(ctx context.Context, resourceGroupName string, resourceName string, purgeID string) (result ComponentPurgeStatusResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.GetPurgeStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentsClient", "GetPurgeStatus", err.Error())
+	}
+
 	req, err := client.GetPurgeStatusPreparer(ctx, resourceGroupName, resourceName, purgeID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ComponentsClient", "GetPurgeStatus", nil, "Failure preparing request")
@@ -321,6 +398,22 @@ func (client ComponentsClient) GetPurgeStatusResponder(resp *http.Response) (res
 
 // List gets a list of all Application Insights components within a subscription.
 func (client ComponentsClient) List(ctx context.Context) (result ApplicationInsightsComponentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.List")
+		defer func() {
+			sc := -1
+			if result.aiclr.Response.Response != nil {
+				sc = result.aiclr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentsClient", "List", err.Error())
+	}
+
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -383,8 +476,8 @@ func (client ComponentsClient) ListResponder(resp *http.Response) (result Applic
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ComponentsClient) listNextResults(lastResults ApplicationInsightsComponentListResult) (result ApplicationInsightsComponentListResult, err error) {
-	req, err := lastResults.applicationInsightsComponentListResultPreparer()
+func (client ComponentsClient) listNextResults(ctx context.Context, lastResults ApplicationInsightsComponentListResult) (result ApplicationInsightsComponentListResult, err error) {
+	req, err := lastResults.applicationInsightsComponentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.ComponentsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -405,14 +498,44 @@ func (client ComponentsClient) listNextResults(lastResults ApplicationInsightsCo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ComponentsClient) ListComplete(ctx context.Context) (result ApplicationInsightsComponentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
 
 // ListByResourceGroup gets a list of Application Insights components within a resource group.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 func (client ComponentsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ApplicationInsightsComponentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.aiclr.Response.Response != nil {
+				sc = result.aiclr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentsClient", "ListByResourceGroup", err.Error())
+	}
+
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -476,8 +599,8 @@ func (client ComponentsClient) ListByResourceGroupResponder(resp *http.Response)
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ComponentsClient) listByResourceGroupNextResults(lastResults ApplicationInsightsComponentListResult) (result ApplicationInsightsComponentListResult, err error) {
-	req, err := lastResults.applicationInsightsComponentListResultPreparer()
+func (client ComponentsClient) listByResourceGroupNextResults(ctx context.Context, lastResults ApplicationInsightsComponentListResult) (result ApplicationInsightsComponentListResult, err error) {
+	req, err := lastResults.applicationInsightsComponentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.ComponentsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -498,17 +621,43 @@ func (client ComponentsClient) listByResourceGroupNextResults(lastResults Applic
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ComponentsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ApplicationInsightsComponentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // Purge purges data in an Application Insights component by a set of user-defined filters.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // body - describes the body of a request to purge data in a single table of an Application Insights component
 func (client ComponentsClient) Purge(ctx context.Context, resourceGroupName string, resourceName string, body ComponentPurgeBody) (result ComponentPurgeResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.Purge")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: body,
 			Constraints: []validation.Constraint{{Target: "body.Table", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "body.Filters", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -581,10 +730,30 @@ func (client ComponentsClient) PurgeResponder(resp *http.Response) (result Compo
 
 // UpdateTags updates an existing component's tags. To update other fields use the CreateOrUpdate method.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 // componentTags - updated tag information to set into the component instance.
 func (client ComponentsClient) UpdateTags(ctx context.Context, resourceGroupName string, resourceName string, componentTags TagsResource) (result ApplicationInsightsComponent, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentsClient.UpdateTags")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentsClient", "UpdateTags", err.Error())
+	}
+
 	req, err := client.UpdateTagsPreparer(ctx, resourceGroupName, resourceName, componentTags)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ComponentsClient", "UpdateTags", nil, "Failure preparing request")

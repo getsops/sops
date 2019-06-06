@@ -88,6 +88,10 @@ type CloudWatchEventsAPI interface {
 	ListRulesWithContext(aws.Context, *cloudwatchevents.ListRulesInput, ...request.Option) (*cloudwatchevents.ListRulesOutput, error)
 	ListRulesRequest(*cloudwatchevents.ListRulesInput) (*request.Request, *cloudwatchevents.ListRulesOutput)
 
+	ListTagsForResource(*cloudwatchevents.ListTagsForResourceInput) (*cloudwatchevents.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *cloudwatchevents.ListTagsForResourceInput, ...request.Option) (*cloudwatchevents.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*cloudwatchevents.ListTagsForResourceInput) (*request.Request, *cloudwatchevents.ListTagsForResourceOutput)
+
 	ListTargetsByRule(*cloudwatchevents.ListTargetsByRuleInput) (*cloudwatchevents.ListTargetsByRuleOutput, error)
 	ListTargetsByRuleWithContext(aws.Context, *cloudwatchevents.ListTargetsByRuleInput, ...request.Option) (*cloudwatchevents.ListTargetsByRuleOutput, error)
 	ListTargetsByRuleRequest(*cloudwatchevents.ListTargetsByRuleInput) (*request.Request, *cloudwatchevents.ListTargetsByRuleOutput)
@@ -116,9 +120,17 @@ type CloudWatchEventsAPI interface {
 	RemoveTargetsWithContext(aws.Context, *cloudwatchevents.RemoveTargetsInput, ...request.Option) (*cloudwatchevents.RemoveTargetsOutput, error)
 	RemoveTargetsRequest(*cloudwatchevents.RemoveTargetsInput) (*request.Request, *cloudwatchevents.RemoveTargetsOutput)
 
+	TagResource(*cloudwatchevents.TagResourceInput) (*cloudwatchevents.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *cloudwatchevents.TagResourceInput, ...request.Option) (*cloudwatchevents.TagResourceOutput, error)
+	TagResourceRequest(*cloudwatchevents.TagResourceInput) (*request.Request, *cloudwatchevents.TagResourceOutput)
+
 	TestEventPattern(*cloudwatchevents.TestEventPatternInput) (*cloudwatchevents.TestEventPatternOutput, error)
 	TestEventPatternWithContext(aws.Context, *cloudwatchevents.TestEventPatternInput, ...request.Option) (*cloudwatchevents.TestEventPatternOutput, error)
 	TestEventPatternRequest(*cloudwatchevents.TestEventPatternInput) (*request.Request, *cloudwatchevents.TestEventPatternOutput)
+
+	UntagResource(*cloudwatchevents.UntagResourceInput) (*cloudwatchevents.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *cloudwatchevents.UntagResourceInput, ...request.Option) (*cloudwatchevents.UntagResourceOutput, error)
+	UntagResourceRequest(*cloudwatchevents.UntagResourceInput) (*request.Request, *cloudwatchevents.UntagResourceOutput)
 }
 
 var _ CloudWatchEventsAPI = (*cloudwatchevents.CloudWatchEvents)(nil)

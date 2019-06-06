@@ -43,7 +43,7 @@ Note: This page exists for demonstration purposes. For the actual cmd/go docs, g
 <div style="padding:20px">
 
 
-<a href="https://{{.HTTPSHost}}/serverpush">HTTP/2 with Server Push</a> | <a href="http://{{.HTTPHost}}/serverpush">HTTP only</a>
+<a href="https://{{.HTTPSHost}}/serverpush">HTTP/2 with Server Push</a> | <a href="{{.HTTP1Prefix}}/serverpush">HTTP only</a>
 <div id="loadtimes"></div>
 
 </div>

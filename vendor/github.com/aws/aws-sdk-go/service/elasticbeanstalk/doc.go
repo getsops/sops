@@ -18,7 +18,7 @@
 // Endpoints
 //
 // For a list of region-specific endpoints that AWS Elastic Beanstalk supports,
-// go to Regions and Endpoints (http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticbeanstalk_region)
+// go to Regions and Endpoints (https://docs.aws.amazon.com/general/latest/gr/rande.html#elasticbeanstalk_region)
 // in the Amazon Web Services Glossary.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/elasticbeanstalk-2010-12-01 for more information on this service.

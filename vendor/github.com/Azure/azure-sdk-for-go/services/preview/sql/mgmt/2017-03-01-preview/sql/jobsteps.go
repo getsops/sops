@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,6 +53,16 @@ func NewJobStepsClientWithBaseURI(baseURI string, subscriptionID string) JobStep
 // stepName - the name of the job step.
 // parameters - the requested state of the job step.
 func (client JobStepsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, stepName string, parameters JobStep) (result JobStep, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.JobStepProperties", Name: validation.Null, Rule: false,
@@ -145,6 +156,16 @@ func (client JobStepsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // jobName - the name of the job.
 // stepName - the name of the job step to delete.
 func (client JobStepsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, stepName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, stepName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobStepsClient", "Delete", nil, "Failure preparing request")
@@ -218,6 +239,16 @@ func (client JobStepsClient) DeleteResponder(resp *http.Response) (result autore
 // jobName - the name of the job.
 // stepName - the name of the job step.
 func (client JobStepsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, stepName string) (result JobStep, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, stepName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobStepsClient", "Get", nil, "Failure preparing request")
@@ -293,6 +324,16 @@ func (client JobStepsClient) GetResponder(resp *http.Response) (result JobStep, 
 // jobVersion - the version of the job to get.
 // stepName - the name of the job step.
 func (client JobStepsClient) GetByVersion(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobVersion int32, stepName string) (result JobStep, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.GetByVersion")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByVersionPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobVersion, stepName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobStepsClient", "GetByVersion", nil, "Failure preparing request")
@@ -367,6 +408,16 @@ func (client JobStepsClient) GetByVersionResponder(resp *http.Response) (result 
 // jobAgentName - the name of the job agent.
 // jobName - the name of the job to get.
 func (client JobStepsClient) ListByJob(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result JobStepListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.jslr.Response.Response != nil {
+				sc = result.jslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByJobNextResults
 	req, err := client.ListByJobPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	if err != nil {
@@ -433,8 +484,8 @@ func (client JobStepsClient) ListByJobResponder(resp *http.Response) (result Job
 }
 
 // listByJobNextResults retrieves the next set of results, if any.
-func (client JobStepsClient) listByJobNextResults(lastResults JobStepListResult) (result JobStepListResult, err error) {
-	req, err := lastResults.jobStepListResultPreparer()
+func (client JobStepsClient) listByJobNextResults(ctx context.Context, lastResults JobStepListResult) (result JobStepListResult, err error) {
+	req, err := lastResults.jobStepListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobStepsClient", "listByJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -455,6 +506,16 @@ func (client JobStepsClient) listByJobNextResults(lastResults JobStepListResult)
 
 // ListByJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobStepsClient) ListByJobComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result JobStepListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByJob(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	return
 }
@@ -468,6 +529,16 @@ func (client JobStepsClient) ListByJobComplete(ctx context.Context, resourceGrou
 // jobName - the name of the job to get.
 // jobVersion - the version of the job to get.
 func (client JobStepsClient) ListByVersion(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobVersion int32) (result JobStepListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.ListByVersion")
+		defer func() {
+			sc := -1
+			if result.jslr.Response.Response != nil {
+				sc = result.jslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByVersionNextResults
 	req, err := client.ListByVersionPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobVersion)
 	if err != nil {
@@ -535,8 +606,8 @@ func (client JobStepsClient) ListByVersionResponder(resp *http.Response) (result
 }
 
 // listByVersionNextResults retrieves the next set of results, if any.
-func (client JobStepsClient) listByVersionNextResults(lastResults JobStepListResult) (result JobStepListResult, err error) {
-	req, err := lastResults.jobStepListResultPreparer()
+func (client JobStepsClient) listByVersionNextResults(ctx context.Context, lastResults JobStepListResult) (result JobStepListResult, err error) {
+	req, err := lastResults.jobStepListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobStepsClient", "listByVersionNextResults", nil, "Failure preparing next results request")
 	}
@@ -557,6 +628,16 @@ func (client JobStepsClient) listByVersionNextResults(lastResults JobStepListRes
 
 // ListByVersionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobStepsClient) ListByVersionComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobVersion int32) (result JobStepListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepsClient.ListByVersion")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByVersion(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobVersion)
 	return
 }

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewSignInSettingsClientWithBaseURI(baseURI string, subscriptionID string) S
 // serviceName - the name of the API Management service.
 // parameters - create or update parameters.
 func (client SignInSettingsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalSigninSettings) (result PortalSigninSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -123,6 +134,16 @@ func (client SignInSettingsClient) CreateOrUpdateResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client SignInSettingsClient) Get(ctx context.Context, resourceGroupName string, serviceName string) (result PortalSigninSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -198,6 +219,16 @@ func (client SignInSettingsClient) GetResponder(resp *http.Response) (result Por
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client SignInSettingsClient) Head(ctx context.Context, resourceGroupName string, serviceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.Head")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -275,6 +306,16 @@ func (client SignInSettingsClient) HeadResponder(resp *http.Response) (result au
 // ifMatch - the entity state (Etag) version of the property to update. A value of "*" can be used for If-Match
 // to unconditionally apply the operation.
 func (client SignInSettingsClient) Update(ctx context.Context, resourceGroupName string, serviceName string, parameters PortalSigninSettings, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SignInSettingsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

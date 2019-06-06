@@ -14,7 +14,6 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/query"
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 	"github.com/aws/aws-sdk-go/private/protocol/restxml"
-	"github.com/stretchr/testify/assert"
 )
 
 type mockCloser struct {
@@ -34,16 +33,24 @@ func TestUnmarshalDrainBody(t *testing.T) {
 	}}
 
 	protocol.UnmarshalDiscardBody(r)
-	assert.NoError(t, r.Error)
-	assert.Equal(t, 0, b.Len())
-	assert.True(t, b.Closed)
+	if err := r.Error; err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
+	if e, a := 0, b.Len(); e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+	if !b.Closed {
+		t.Errorf("expect true")
+	}
 }
 
 func TestUnmarshalDrainBodyNoBody(t *testing.T) {
 	r := &request.Request{HTTPResponse: &http.Response{}}
 
 	protocol.UnmarshalDiscardBody(r)
-	assert.NoError(t, r.Error)
+	if err := r.Error; err != nil {
+		t.Errorf("expect nil, %v", err)
+	}
 }
 
 func TestUnmarshalSeriaizationError(t *testing.T) {
@@ -69,7 +76,7 @@ func TestUnmarshalSeriaizationError(t *testing.T) {
 			},
 			unmarshalFn: jsonrpc.Unmarshal,
 			expectedError: awserr.NewRequestFailure(
-				awserr.New("SerializationError", "", nil),
+				awserr.New(request.ErrCodeSerialization, "", nil),
 				502,
 				"",
 			),
@@ -85,7 +92,7 @@ func TestUnmarshalSeriaizationError(t *testing.T) {
 			},
 			unmarshalFn: ec2query.Unmarshal,
 			expectedError: awserr.NewRequestFailure(
-				awserr.New("SerializationError", "", nil),
+				awserr.New(request.ErrCodeSerialization, "", nil),
 				111,
 				"",
 			),
@@ -104,7 +111,7 @@ func TestUnmarshalSeriaizationError(t *testing.T) {
 			},
 			unmarshalFn: query.Unmarshal,
 			expectedError: awserr.NewRequestFailure(
-				awserr.New("SerializationError", "", nil),
+				awserr.New(request.ErrCodeSerialization, "", nil),
 				1,
 				"",
 			),
@@ -120,7 +127,7 @@ func TestUnmarshalSeriaizationError(t *testing.T) {
 			},
 			unmarshalFn: restjson.Unmarshal,
 			expectedError: awserr.NewRequestFailure(
-				awserr.New("SerializationError", "", nil),
+				awserr.New(request.ErrCodeSerialization, "", nil),
 				123,
 				"",
 			),
@@ -136,7 +143,7 @@ func TestUnmarshalSeriaizationError(t *testing.T) {
 			},
 			unmarshalFn: restxml.Unmarshal,
 			expectedError: awserr.NewRequestFailure(
-				awserr.New("SerializationError", "", nil),
+				awserr.New(request.ErrCodeSerialization, "", nil),
 				456,
 				"",
 			),

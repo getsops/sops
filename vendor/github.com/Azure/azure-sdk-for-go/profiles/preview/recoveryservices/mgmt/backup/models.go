@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,24 +19,16 @@
 
 package backup
 
-import original "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2017-07-01/backup"
+import (
+	"context"
 
-type BackupsClient = original.BackupsClient
+	original "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2017-07-01/backup"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type EnginesClient = original.EnginesClient
-type ExportJobsOperationResultsClient = original.ExportJobsOperationResultsClient
-type FeatureSupportClient = original.FeatureSupportClient
-type ItemLevelRecoveryConnectionsClient = original.ItemLevelRecoveryConnectionsClient
-type JobCancellationsClient = original.JobCancellationsClient
-type JobDetailsClient = original.JobDetailsClient
-type JobOperationResultsClient = original.JobOperationResultsClient
-type JobsClient = original.JobsClient
-type JobsGroupClient = original.JobsGroupClient
 type AzureFileShareType = original.AzureFileShareType
 
 const (
@@ -111,6 +103,7 @@ const (
 	DataSourceTypeFileFolder        DataSourceType = original.DataSourceTypeFileFolder
 	DataSourceTypeGenericDataSource DataSourceType = original.DataSourceTypeGenericDataSource
 	DataSourceTypeInvalid           DataSourceType = original.DataSourceTypeInvalid
+	DataSourceTypeSAPAseDatabase    DataSourceType = original.DataSourceTypeSAPAseDatabase
 	DataSourceTypeSAPHanaDatabase   DataSourceType = original.DataSourceTypeSAPHanaDatabase
 	DataSourceTypeSharepoint        DataSourceType = original.DataSourceTypeSharepoint
 	DataSourceTypeSQLDataBase       DataSourceType = original.DataSourceTypeSQLDataBase
@@ -161,24 +154,6 @@ const (
 	FeatureTypeAzureBackupGoals      FeatureType = original.FeatureTypeAzureBackupGoals
 	FeatureTypeAzureVMResourceBackup FeatureType = original.FeatureTypeAzureVMResourceBackup
 	FeatureTypeFeatureSupportRequest FeatureType = original.FeatureTypeFeatureSupportRequest
-)
-
-type HealthState = original.HealthState
-
-const (
-	HealthStateActionRequired  HealthState = original.HealthStateActionRequired
-	HealthStateActionSuggested HealthState = original.HealthStateActionSuggested
-	HealthStateInvalid         HealthState = original.HealthStateInvalid
-	HealthStatePassed          HealthState = original.HealthStatePassed
-)
-
-type HealthStatus = original.HealthStatus
-
-const (
-	HealthStatusActionRequired  HealthStatus = original.HealthStatusActionRequired
-	HealthStatusActionSuggested HealthStatus = original.HealthStatusActionSuggested
-	HealthStatusInvalid         HealthStatus = original.HealthStatusInvalid
-	HealthStatusPassed          HealthStatus = original.HealthStatusPassed
 )
 
 type HTTPStatusCode = original.HTTPStatusCode
@@ -233,12 +208,38 @@ const (
 	UseProxy                     HTTPStatusCode = original.UseProxy
 )
 
+type HealthState = original.HealthState
+
+const (
+	HealthStateActionRequired  HealthState = original.HealthStateActionRequired
+	HealthStateActionSuggested HealthState = original.HealthStateActionSuggested
+	HealthStateInvalid         HealthState = original.HealthStateInvalid
+	HealthStatePassed          HealthState = original.HealthStatePassed
+)
+
+type HealthStatus = original.HealthStatus
+
+const (
+	HealthStatusActionRequired  HealthStatus = original.HealthStatusActionRequired
+	HealthStatusActionSuggested HealthStatus = original.HealthStatusActionSuggested
+	HealthStatusInvalid         HealthStatus = original.HealthStatusInvalid
+	HealthStatusPassed          HealthStatus = original.HealthStatusPassed
+)
+
 type InquiryStatus = original.InquiryStatus
 
 const (
 	InquiryStatusFailed  InquiryStatus = original.InquiryStatusFailed
 	InquiryStatusInvalid InquiryStatus = original.InquiryStatusInvalid
 	InquiryStatusSuccess InquiryStatus = original.InquiryStatusSuccess
+)
+
+type IntentItemType = original.IntentItemType
+
+const (
+	IntentItemTypeInvalid                       IntentItemType = original.IntentItemTypeInvalid
+	IntentItemTypeSQLAvailabilityGroupContainer IntentItemType = original.IntentItemTypeSQLAvailabilityGroupContainer
+	IntentItemTypeSQLInstance                   IntentItemType = original.IntentItemTypeSQLInstance
 )
 
 type ItemType = original.ItemType
@@ -251,6 +252,7 @@ const (
 	ItemTypeFileFolder        ItemType = original.ItemTypeFileFolder
 	ItemTypeGenericDataSource ItemType = original.ItemTypeGenericDataSource
 	ItemTypeInvalid           ItemType = original.ItemTypeInvalid
+	ItemTypeSAPAseDatabase    ItemType = original.ItemTypeSAPAseDatabase
 	ItemTypeSAPHanaDatabase   ItemType = original.ItemTypeSAPHanaDatabase
 	ItemTypeSharepoint        ItemType = original.ItemTypeSharepoint
 	ItemTypeSQLDataBase       ItemType = original.ItemTypeSQLDataBase
@@ -385,15 +387,6 @@ const (
 	ObjectTypeOperationResultInfoBase       ObjectType = original.ObjectTypeOperationResultInfoBase
 )
 
-type ObjectTypeBasicBackupRequest = original.ObjectTypeBasicBackupRequest
-
-const (
-	ObjectTypeAzureFileShareBackupRequest ObjectTypeBasicBackupRequest = original.ObjectTypeAzureFileShareBackupRequest
-	ObjectTypeAzureWorkloadBackupRequest  ObjectTypeBasicBackupRequest = original.ObjectTypeAzureWorkloadBackupRequest
-	ObjectTypeBackupRequest               ObjectTypeBasicBackupRequest = original.ObjectTypeBackupRequest
-	ObjectTypeIaasVMBackupRequest         ObjectTypeBasicBackupRequest = original.ObjectTypeIaasVMBackupRequest
-)
-
 type ObjectTypeBasicILRRequest = original.ObjectTypeBasicILRRequest
 
 const (
@@ -414,6 +407,7 @@ type ObjectTypeBasicRecoveryPoint = original.ObjectTypeBasicRecoveryPoint
 
 const (
 	ObjectTypeAzureFileShareRecoveryPoint                  ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureFileShareRecoveryPoint
+	ObjectTypeAzureWorkloadPointInTimeRecoveryPoint        ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadPointInTimeRecoveryPoint
 	ObjectTypeAzureWorkloadRecoveryPoint                   ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadRecoveryPoint
 	ObjectTypeAzureWorkloadSAPHanaPointInTimeRecoveryPoint ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSAPHanaPointInTimeRecoveryPoint
 	ObjectTypeAzureWorkloadSAPHanaRecoveryPoint            ObjectTypeBasicRecoveryPoint = original.ObjectTypeAzureWorkloadSAPHanaRecoveryPoint
@@ -424,10 +418,20 @@ const (
 	ObjectTypeRecoveryPoint                                ObjectTypeBasicRecoveryPoint = original.ObjectTypeRecoveryPoint
 )
 
+type ObjectTypeBasicRequest = original.ObjectTypeBasicRequest
+
+const (
+	ObjectTypeAzureFileShareBackupRequest ObjectTypeBasicRequest = original.ObjectTypeAzureFileShareBackupRequest
+	ObjectTypeAzureWorkloadBackupRequest  ObjectTypeBasicRequest = original.ObjectTypeAzureWorkloadBackupRequest
+	ObjectTypeBackupRequest               ObjectTypeBasicRequest = original.ObjectTypeBackupRequest
+	ObjectTypeIaasVMBackupRequest         ObjectTypeBasicRequest = original.ObjectTypeIaasVMBackupRequest
+)
+
 type ObjectTypeBasicRestoreRequest = original.ObjectTypeBasicRestoreRequest
 
 const (
 	ObjectTypeAzureFileShareRestoreRequest                  ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureFileShareRestoreRequest
+	ObjectTypeAzureWorkloadPointInTimeRestoreRequest        ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadPointInTimeRestoreRequest
 	ObjectTypeAzureWorkloadRestoreRequest                   ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadRestoreRequest
 	ObjectTypeAzureWorkloadSAPHanaPointInTimeRestoreRequest ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSAPHanaPointInTimeRestoreRequest
 	ObjectTypeAzureWorkloadSAPHanaRestoreRequest            ObjectTypeBasicRestoreRequest = original.ObjectTypeAzureWorkloadSAPHanaRestoreRequest
@@ -455,12 +459,30 @@ const (
 	OperationStatusValuesSucceeded  OperationStatusValues = original.OperationStatusValuesSucceeded
 )
 
+type OperationType = original.OperationType
+
+const (
+	OperationTypeInvalid    OperationType = original.OperationTypeInvalid
+	OperationTypeRegister   OperationType = original.OperationTypeRegister
+	OperationTypeReregister OperationType = original.OperationTypeReregister
+)
+
 type OverwriteOptions = original.OverwriteOptions
 
 const (
 	OverwriteOptionsFailOnConflict OverwriteOptions = original.OverwriteOptionsFailOnConflict
 	OverwriteOptionsInvalid        OverwriteOptions = original.OverwriteOptionsInvalid
 	OverwriteOptionsOverwrite      OverwriteOptions = original.OverwriteOptionsOverwrite
+)
+
+type PolicyType = original.PolicyType
+
+const (
+	PolicyTypeCopyOnlyFull PolicyType = original.PolicyTypeCopyOnlyFull
+	PolicyTypeDifferential PolicyType = original.PolicyTypeDifferential
+	PolicyTypeFull         PolicyType = original.PolicyTypeFull
+	PolicyTypeInvalid      PolicyType = original.PolicyTypeInvalid
+	PolicyTypeLog          PolicyType = original.PolicyTypeLog
 )
 
 type ProtectableContainerType = original.ProtectableContainerType
@@ -479,6 +501,8 @@ const (
 	ProtectableItemTypeIaaSVMProtectableItem                  ProtectableItemType = original.ProtectableItemTypeIaaSVMProtectableItem
 	ProtectableItemTypeMicrosoftClassicComputevirtualMachines ProtectableItemType = original.ProtectableItemTypeMicrosoftClassicComputevirtualMachines
 	ProtectableItemTypeMicrosoftComputevirtualMachines        ProtectableItemType = original.ProtectableItemTypeMicrosoftComputevirtualMachines
+	ProtectableItemTypeSAPAseDatabase                         ProtectableItemType = original.ProtectableItemTypeSAPAseDatabase
+	ProtectableItemTypeSAPAseSystem                           ProtectableItemType = original.ProtectableItemTypeSAPAseSystem
 	ProtectableItemTypeSAPHanaDatabase                        ProtectableItemType = original.ProtectableItemTypeSAPHanaDatabase
 	ProtectableItemTypeSAPHanaSystem                          ProtectableItemType = original.ProtectableItemTypeSAPHanaSystem
 	ProtectableItemTypeSQLAvailabilityGroupContainer          ProtectableItemType = original.ProtectableItemTypeSQLAvailabilityGroupContainer
@@ -514,6 +538,7 @@ const (
 	ProtectedItemTypeAzureFileShareProtectedItem            ProtectedItemType = original.ProtectedItemTypeAzureFileShareProtectedItem
 	ProtectedItemTypeAzureIaaSVMProtectedItem               ProtectedItemType = original.ProtectedItemTypeAzureIaaSVMProtectedItem
 	ProtectedItemTypeAzureVMWorkloadProtectedItem           ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadProtectedItem
+	ProtectedItemTypeAzureVMWorkloadSAPAseDatabase          ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadSAPAseDatabase
 	ProtectedItemTypeAzureVMWorkloadSAPHanaDatabase         ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadSAPHanaDatabase
 	ProtectedItemTypeAzureVMWorkloadSQLDatabase             ProtectedItemType = original.ProtectedItemTypeAzureVMWorkloadSQLDatabase
 	ProtectedItemTypeDPMProtectedItem                       ProtectedItemType = original.ProtectedItemTypeDPMProtectedItem
@@ -636,6 +661,14 @@ const (
 	RetentionScheduleFormatWeekly  RetentionScheduleFormat = original.RetentionScheduleFormatWeekly
 )
 
+type SQLDataDirectoryType = original.SQLDataDirectoryType
+
+const (
+	SQLDataDirectoryTypeData    SQLDataDirectoryType = original.SQLDataDirectoryTypeData
+	SQLDataDirectoryTypeInvalid SQLDataDirectoryType = original.SQLDataDirectoryTypeInvalid
+	SQLDataDirectoryTypeLog     SQLDataDirectoryType = original.SQLDataDirectoryTypeLog
+)
+
 type SchedulePolicyType = original.SchedulePolicyType
 
 const (
@@ -651,14 +684,6 @@ const (
 	ScheduleRunTypeDaily   ScheduleRunType = original.ScheduleRunTypeDaily
 	ScheduleRunTypeInvalid ScheduleRunType = original.ScheduleRunTypeInvalid
 	ScheduleRunTypeWeekly  ScheduleRunType = original.ScheduleRunTypeWeekly
-)
-
-type SQLDataDirectoryType = original.SQLDataDirectoryType
-
-const (
-	SQLDataDirectoryTypeData    SQLDataDirectoryType = original.SQLDataDirectoryTypeData
-	SQLDataDirectoryTypeInvalid SQLDataDirectoryType = original.SQLDataDirectoryTypeInvalid
-	SQLDataDirectoryTypeLog     SQLDataDirectoryType = original.SQLDataDirectoryTypeLog
 )
 
 type StorageType = original.StorageType
@@ -739,6 +764,8 @@ type WorkloadItemType = original.WorkloadItemType
 
 const (
 	WorkloadItemTypeInvalid         WorkloadItemType = original.WorkloadItemTypeInvalid
+	WorkloadItemTypeSAPAseDatabase  WorkloadItemType = original.WorkloadItemTypeSAPAseDatabase
+	WorkloadItemTypeSAPAseSystem    WorkloadItemType = original.WorkloadItemTypeSAPAseSystem
 	WorkloadItemTypeSAPHanaDatabase WorkloadItemType = original.WorkloadItemTypeSAPHanaDatabase
 	WorkloadItemTypeSAPHanaSystem   WorkloadItemType = original.WorkloadItemTypeSAPHanaSystem
 	WorkloadItemTypeSQLDataBase     WorkloadItemType = original.WorkloadItemTypeSQLDataBase
@@ -749,6 +776,8 @@ type WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeBasicWorkloadI
 
 const (
 	WorkloadItemTypeAzureVMWorkloadItem WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeAzureVMWorkloadItem
+	WorkloadItemTypeSAPAseDatabase1     WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSAPAseDatabase1
+	WorkloadItemTypeSAPAseSystem1       WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSAPAseSystem1
 	WorkloadItemTypeSAPHanaDatabase1    WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSAPHanaDatabase1
 	WorkloadItemTypeSAPHanaSystem1      WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSAPHanaSystem1
 	WorkloadItemTypeSQLDataBase1        WorkloadItemTypeBasicWorkloadItem = original.WorkloadItemTypeSQLDataBase1
@@ -766,6 +795,7 @@ const (
 	WorkloadTypeFileFolder        WorkloadType = original.WorkloadTypeFileFolder
 	WorkloadTypeGenericDataSource WorkloadType = original.WorkloadTypeGenericDataSource
 	WorkloadTypeInvalid           WorkloadType = original.WorkloadTypeInvalid
+	WorkloadTypeSAPAseDatabase    WorkloadType = original.WorkloadTypeSAPAseDatabase
 	WorkloadTypeSAPHanaDatabase   WorkloadType = original.WorkloadTypeSAPHanaDatabase
 	WorkloadTypeSharepoint        WorkloadType = original.WorkloadTypeSharepoint
 	WorkloadTypeSQLDataBase       WorkloadType = original.WorkloadTypeSQLDataBase
@@ -780,11 +810,11 @@ type AzureBackupServerContainer = original.AzureBackupServerContainer
 type AzureBackupServerEngine = original.AzureBackupServerEngine
 type AzureFileShareBackupRequest = original.AzureFileShareBackupRequest
 type AzureFileShareProtectableItem = original.AzureFileShareProtectableItem
-type AzureFileshareProtectedItem = original.AzureFileshareProtectedItem
-type AzureFileshareProtectedItemExtendedInfo = original.AzureFileshareProtectedItemExtendedInfo
 type AzureFileShareProtectionPolicy = original.AzureFileShareProtectionPolicy
 type AzureFileShareRecoveryPoint = original.AzureFileShareRecoveryPoint
 type AzureFileShareRestoreRequest = original.AzureFileShareRestoreRequest
+type AzureFileshareProtectedItem = original.AzureFileshareProtectedItem
+type AzureFileshareProtectedItemExtendedInfo = original.AzureFileshareProtectedItemExtendedInfo
 type AzureIaaSClassicComputeVMContainer = original.AzureIaaSClassicComputeVMContainer
 type AzureIaaSClassicComputeVMProtectableItem = original.AzureIaaSClassicComputeVMProtectableItem
 type AzureIaaSClassicComputeVMProtectedItem = original.AzureIaaSClassicComputeVMProtectedItem
@@ -796,11 +826,9 @@ type AzureIaaSVMHealthDetails = original.AzureIaaSVMHealthDetails
 type AzureIaaSVMJob = original.AzureIaaSVMJob
 type AzureIaaSVMJobExtendedInfo = original.AzureIaaSVMJobExtendedInfo
 type AzureIaaSVMJobTaskDetails = original.AzureIaaSVMJobTaskDetails
-type BasicAzureIaaSVMProtectedItem = original.BasicAzureIaaSVMProtectedItem
 type AzureIaaSVMProtectedItem = original.AzureIaaSVMProtectedItem
 type AzureIaaSVMProtectedItemExtendedInfo = original.AzureIaaSVMProtectedItemExtendedInfo
 type AzureIaaSVMProtectionPolicy = original.AzureIaaSVMProtectionPolicy
-type BasicAzureRecoveryServiceVaultProtectionIntent = original.BasicAzureRecoveryServiceVaultProtectionIntent
 type AzureRecoveryServiceVaultProtectionIntent = original.AzureRecoveryServiceVaultProtectionIntent
 type AzureResourceProtectionIntent = original.AzureResourceProtectionIntent
 type AzureSQLAGWorkloadContainerProtectionContainer = original.AzureSQLAGWorkloadContainerProtectionContainer
@@ -818,14 +846,16 @@ type AzureVMAppContainerProtectableContainer = original.AzureVMAppContainerProte
 type AzureVMAppContainerProtectionContainer = original.AzureVMAppContainerProtectionContainer
 type AzureVMResourceFeatureSupportRequest = original.AzureVMResourceFeatureSupportRequest
 type AzureVMResourceFeatureSupportResponse = original.AzureVMResourceFeatureSupportResponse
-type BasicAzureVMWorkloadItem = original.BasicAzureVMWorkloadItem
 type AzureVMWorkloadItem = original.AzureVMWorkloadItem
-type BasicAzureVMWorkloadProtectableItem = original.BasicAzureVMWorkloadProtectableItem
 type AzureVMWorkloadProtectableItem = original.AzureVMWorkloadProtectableItem
-type BasicAzureVMWorkloadProtectedItem = original.BasicAzureVMWorkloadProtectedItem
 type AzureVMWorkloadProtectedItem = original.AzureVMWorkloadProtectedItem
 type AzureVMWorkloadProtectedItemExtendedInfo = original.AzureVMWorkloadProtectedItemExtendedInfo
 type AzureVMWorkloadProtectionPolicy = original.AzureVMWorkloadProtectionPolicy
+type AzureVMWorkloadSAPAseDatabaseProtectableItem = original.AzureVMWorkloadSAPAseDatabaseProtectableItem
+type AzureVMWorkloadSAPAseDatabaseProtectedItem = original.AzureVMWorkloadSAPAseDatabaseProtectedItem
+type AzureVMWorkloadSAPAseDatabaseWorkloadItem = original.AzureVMWorkloadSAPAseDatabaseWorkloadItem
+type AzureVMWorkloadSAPAseSystemProtectableItem = original.AzureVMWorkloadSAPAseSystemProtectableItem
+type AzureVMWorkloadSAPAseSystemWorkloadItem = original.AzureVMWorkloadSAPAseSystemWorkloadItem
 type AzureVMWorkloadSAPHanaDatabaseProtectableItem = original.AzureVMWorkloadSAPHanaDatabaseProtectableItem
 type AzureVMWorkloadSAPHanaDatabaseProtectedItem = original.AzureVMWorkloadSAPHanaDatabaseProtectedItem
 type AzureVMWorkloadSAPHanaDatabaseWorkloadItem = original.AzureVMWorkloadSAPHanaDatabaseWorkloadItem
@@ -837,33 +867,27 @@ type AzureVMWorkloadSQLDatabaseProtectedItem = original.AzureVMWorkloadSQLDataba
 type AzureVMWorkloadSQLDatabaseWorkloadItem = original.AzureVMWorkloadSQLDatabaseWorkloadItem
 type AzureVMWorkloadSQLInstanceProtectableItem = original.AzureVMWorkloadSQLInstanceProtectableItem
 type AzureVMWorkloadSQLInstanceWorkloadItem = original.AzureVMWorkloadSQLInstanceWorkloadItem
-type BasicAzureWorkloadAutoProtectionIntent = original.BasicAzureWorkloadAutoProtectionIntent
 type AzureWorkloadAutoProtectionIntent = original.AzureWorkloadAutoProtectionIntent
 type AzureWorkloadBackupRequest = original.AzureWorkloadBackupRequest
-type BasicAzureWorkloadContainer = original.BasicAzureWorkloadContainer
 type AzureWorkloadContainer = original.AzureWorkloadContainer
 type AzureWorkloadContainerExtendedInfo = original.AzureWorkloadContainerExtendedInfo
 type AzureWorkloadErrorInfo = original.AzureWorkloadErrorInfo
 type AzureWorkloadJob = original.AzureWorkloadJob
 type AzureWorkloadJobExtendedInfo = original.AzureWorkloadJobExtendedInfo
 type AzureWorkloadJobTaskDetails = original.AzureWorkloadJobTaskDetails
-type BasicAzureWorkloadRecoveryPoint = original.BasicAzureWorkloadRecoveryPoint
+type AzureWorkloadPointInTimeRecoveryPoint = original.AzureWorkloadPointInTimeRecoveryPoint
+type AzureWorkloadPointInTimeRestoreRequest = original.AzureWorkloadPointInTimeRestoreRequest
 type AzureWorkloadRecoveryPoint = original.AzureWorkloadRecoveryPoint
-type BasicAzureWorkloadRestoreRequest = original.BasicAzureWorkloadRestoreRequest
 type AzureWorkloadRestoreRequest = original.AzureWorkloadRestoreRequest
 type AzureWorkloadSAPHanaPointInTimeRecoveryPoint = original.AzureWorkloadSAPHanaPointInTimeRecoveryPoint
 type AzureWorkloadSAPHanaPointInTimeRestoreRequest = original.AzureWorkloadSAPHanaPointInTimeRestoreRequest
-type BasicAzureWorkloadSAPHanaRecoveryPoint = original.BasicAzureWorkloadSAPHanaRecoveryPoint
 type AzureWorkloadSAPHanaRecoveryPoint = original.AzureWorkloadSAPHanaRecoveryPoint
-type BasicAzureWorkloadSAPHanaRestoreRequest = original.BasicAzureWorkloadSAPHanaRestoreRequest
 type AzureWorkloadSAPHanaRestoreRequest = original.AzureWorkloadSAPHanaRestoreRequest
 type AzureWorkloadSQLAutoProtectionIntent = original.AzureWorkloadSQLAutoProtectionIntent
 type AzureWorkloadSQLPointInTimeRecoveryPoint = original.AzureWorkloadSQLPointInTimeRecoveryPoint
 type AzureWorkloadSQLPointInTimeRestoreRequest = original.AzureWorkloadSQLPointInTimeRestoreRequest
-type BasicAzureWorkloadSQLRecoveryPoint = original.BasicAzureWorkloadSQLRecoveryPoint
 type AzureWorkloadSQLRecoveryPoint = original.AzureWorkloadSQLRecoveryPoint
 type AzureWorkloadSQLRecoveryPointExtendedInfo = original.AzureWorkloadSQLRecoveryPointExtendedInfo
-type BasicAzureWorkloadSQLRestoreRequest = original.BasicAzureWorkloadSQLRestoreRequest
 type AzureWorkloadSQLRestoreRequest = original.AzureWorkloadSQLRestoreRequest
 type BEKDetails = original.BEKDetails
 type BMSBackupEngineQueryObject = original.BMSBackupEngineQueryObject
@@ -872,9 +896,47 @@ type BMSBackupSummariesQueryObject = original.BMSBackupSummariesQueryObject
 type BMSContainerQueryObject = original.BMSContainerQueryObject
 type BMSContainersInquiryQueryObject = original.BMSContainersInquiryQueryObject
 type BMSPOQueryObject = original.BMSPOQueryObject
-type BMSRefreshContainersQueryObject = original.BMSRefreshContainersQueryObject
 type BMSRPQueryObject = original.BMSRPQueryObject
+type BMSRefreshContainersQueryObject = original.BMSRefreshContainersQueryObject
 type BMSWorkloadItemQueryObject = original.BMSWorkloadItemQueryObject
+type BackupsClient = original.BackupsClient
+type BaseClient = original.BaseClient
+type BasicAzureIaaSVMProtectedItem = original.BasicAzureIaaSVMProtectedItem
+type BasicAzureRecoveryServiceVaultProtectionIntent = original.BasicAzureRecoveryServiceVaultProtectionIntent
+type BasicAzureVMWorkloadItem = original.BasicAzureVMWorkloadItem
+type BasicAzureVMWorkloadProtectableItem = original.BasicAzureVMWorkloadProtectableItem
+type BasicAzureVMWorkloadProtectedItem = original.BasicAzureVMWorkloadProtectedItem
+type BasicAzureWorkloadAutoProtectionIntent = original.BasicAzureWorkloadAutoProtectionIntent
+type BasicAzureWorkloadContainer = original.BasicAzureWorkloadContainer
+type BasicAzureWorkloadPointInTimeRecoveryPoint = original.BasicAzureWorkloadPointInTimeRecoveryPoint
+type BasicAzureWorkloadRecoveryPoint = original.BasicAzureWorkloadRecoveryPoint
+type BasicAzureWorkloadRestoreRequest = original.BasicAzureWorkloadRestoreRequest
+type BasicAzureWorkloadSAPHanaRestoreRequest = original.BasicAzureWorkloadSAPHanaRestoreRequest
+type BasicAzureWorkloadSQLRecoveryPoint = original.BasicAzureWorkloadSQLRecoveryPoint
+type BasicAzureWorkloadSQLRestoreRequest = original.BasicAzureWorkloadSQLRestoreRequest
+type BasicDpmContainer = original.BasicDpmContainer
+type BasicEngineBase = original.BasicEngineBase
+type BasicFeatureSupportRequest = original.BasicFeatureSupportRequest
+type BasicILRRequest = original.BasicILRRequest
+type BasicIaaSVMContainer = original.BasicIaaSVMContainer
+type BasicIaaSVMProtectableItem = original.BasicIaaSVMProtectableItem
+type BasicJob = original.BasicJob
+type BasicOperationResultInfoBase = original.BasicOperationResultInfoBase
+type BasicOperationStatusExtendedInfo = original.BasicOperationStatusExtendedInfo
+type BasicProtectableContainer = original.BasicProtectableContainer
+type BasicProtectedItem = original.BasicProtectedItem
+type BasicProtectionContainer = original.BasicProtectionContainer
+type BasicProtectionIntent = original.BasicProtectionIntent
+type BasicProtectionPolicy = original.BasicProtectionPolicy
+type BasicRecoveryPoint = original.BasicRecoveryPoint
+type BasicRequest = original.BasicRequest
+type BasicRestoreRequest = original.BasicRestoreRequest
+type BasicRetentionPolicy = original.BasicRetentionPolicy
+type BasicSchedulePolicy = original.BasicSchedulePolicy
+type BasicValidateOperationRequest = original.BasicValidateOperationRequest
+type BasicValidateRestoreOperationRequest = original.BasicValidateRestoreOperationRequest
+type BasicWorkloadItem = original.BasicWorkloadItem
+type BasicWorkloadProtectableItem = original.BasicWorkloadProtectableItem
 type ClientDiscoveryDisplay = original.ClientDiscoveryDisplay
 type ClientDiscoveryForLogSpecification = original.ClientDiscoveryForLogSpecification
 type ClientDiscoveryForProperties = original.ClientDiscoveryForProperties
@@ -885,30 +947,31 @@ type ClientDiscoveryResponsePage = original.ClientDiscoveryResponsePage
 type ClientDiscoveryValueForSingleAPI = original.ClientDiscoveryValueForSingleAPI
 type ClientScriptForConnect = original.ClientScriptForConnect
 type ContainerIdentityInfo = original.ContainerIdentityInfo
+type DPMContainerExtendedInfo = original.DPMContainerExtendedInfo
+type DPMProtectedItem = original.DPMProtectedItem
+type DPMProtectedItemExtendedInfo = original.DPMProtectedItemExtendedInfo
 type DailyRetentionFormat = original.DailyRetentionFormat
 type DailyRetentionSchedule = original.DailyRetentionSchedule
 type Day = original.Day
 type DistributedNodesInfo = original.DistributedNodesInfo
 type DpmBackupEngine = original.DpmBackupEngine
 type DpmContainer = original.DpmContainer
-type DPMContainerExtendedInfo = original.DPMContainerExtendedInfo
 type DpmErrorInfo = original.DpmErrorInfo
 type DpmJob = original.DpmJob
 type DpmJobExtendedInfo = original.DpmJobExtendedInfo
 type DpmJobTaskDetails = original.DpmJobTaskDetails
-type DPMProtectedItem = original.DPMProtectedItem
-type DPMProtectedItemExtendedInfo = original.DPMProtectedItemExtendedInfo
 type EncryptionDetails = original.EncryptionDetails
-type BasicEngineBase = original.BasicEngineBase
 type EngineBase = original.EngineBase
 type EngineBaseResource = original.EngineBaseResource
 type EngineBaseResourceList = original.EngineBaseResourceList
 type EngineBaseResourceListIterator = original.EngineBaseResourceListIterator
 type EngineBaseResourceListPage = original.EngineBaseResourceListPage
 type EngineExtendedInfo = original.EngineExtendedInfo
+type EnginesClient = original.EnginesClient
 type ErrorDetail = original.ErrorDetail
 type ExportJobsOperationResultInfo = original.ExportJobsOperationResultInfo
-type BasicFeatureSupportRequest = original.BasicFeatureSupportRequest
+type ExportJobsOperationResultsClient = original.ExportJobsOperationResultsClient
+type FeatureSupportClient = original.FeatureSupportClient
 type FeatureSupportRequest = original.FeatureSupportRequest
 type GenericContainer = original.GenericContainer
 type GenericContainerExtendedInfo = original.GenericContainerExtendedInfo
@@ -916,35 +979,37 @@ type GenericProtectedItem = original.GenericProtectedItem
 type GenericProtectionPolicy = original.GenericProtectionPolicy
 type GenericRecoveryPoint = original.GenericRecoveryPoint
 type GetProtectedItemQueryObject = original.GetProtectedItemQueryObject
-type IaasVMBackupRequest = original.IaasVMBackupRequest
-type BasicIaaSVMContainer = original.BasicIaaSVMContainer
-type IaaSVMContainer = original.IaaSVMContainer
-type IaasVMILRRegistrationRequest = original.IaasVMILRRegistrationRequest
-type BasicIaaSVMProtectableItem = original.BasicIaaSVMProtectableItem
-type IaaSVMProtectableItem = original.IaaSVMProtectableItem
-type IaasVMRecoveryPoint = original.IaasVMRecoveryPoint
-type IaasVMRestoreRequest = original.IaasVMRestoreRequest
-type BasicILRRequest = original.BasicILRRequest
 type ILRRequest = original.ILRRequest
 type ILRRequestResource = original.ILRRequestResource
+type IaaSVMContainer = original.IaaSVMContainer
+type IaaSVMProtectableItem = original.IaaSVMProtectableItem
+type IaasVMBackupRequest = original.IaasVMBackupRequest
+type IaasVMILRRegistrationRequest = original.IaasVMILRRegistrationRequest
+type IaasVMRecoveryPoint = original.IaasVMRecoveryPoint
+type IaasVMRestoreRequest = original.IaasVMRestoreRequest
 type InquiryInfo = original.InquiryInfo
 type InquiryValidation = original.InquiryValidation
 type InstantItemRecoveryTarget = original.InstantItemRecoveryTarget
-type BasicJob = original.BasicJob
+type ItemLevelRecoveryConnectionsClient = original.ItemLevelRecoveryConnectionsClient
 type Job = original.Job
+type JobCancellationsClient = original.JobCancellationsClient
+type JobDetailsClient = original.JobDetailsClient
+type JobOperationResultsClient = original.JobOperationResultsClient
 type JobQueryObject = original.JobQueryObject
 type JobResource = original.JobResource
 type JobResourceList = original.JobResourceList
 type JobResourceListIterator = original.JobResourceListIterator
 type JobResourceListPage = original.JobResourceListPage
+type JobsClient = original.JobsClient
+type JobsGroupClient = original.JobsGroupClient
 type KEKDetails = original.KEKDetails
 type KeyAndSecretDetails = original.KeyAndSecretDetails
 type LogSchedulePolicy = original.LogSchedulePolicy
 type LongTermRetentionPolicy = original.LongTermRetentionPolicy
 type LongTermSchedulePolicy = original.LongTermSchedulePolicy
+type MABContainerHealthDetails = original.MABContainerHealthDetails
 type MabContainer = original.MabContainer
 type MabContainerExtendedInfo = original.MabContainerExtendedInfo
-type MABContainerHealthDetails = original.MABContainerHealthDetails
 type MabErrorInfo = original.MabErrorInfo
 type MabFileFolderProtectedItem = original.MabFileFolderProtectedItem
 type MabFileFolderProtectedItemExtendedInfo = original.MabFileFolderProtectedItemExtendedInfo
@@ -956,149 +1021,147 @@ type ManagementUsage = original.ManagementUsage
 type ManagementUsageList = original.ManagementUsageList
 type MonthlyRetentionSchedule = original.MonthlyRetentionSchedule
 type NameInfo = original.NameInfo
+type OperationClient = original.OperationClient
 type OperationResultInfo = original.OperationResultInfo
-type BasicOperationResultInfoBase = original.BasicOperationResultInfoBase
 type OperationResultInfoBase = original.OperationResultInfoBase
 type OperationResultInfoBaseResource = original.OperationResultInfoBaseResource
+type OperationResultsClient = original.OperationResultsClient
 type OperationStatus = original.OperationStatus
 type OperationStatusError = original.OperationStatusError
-type BasicOperationStatusExtendedInfo = original.BasicOperationStatusExtendedInfo
 type OperationStatusExtendedInfo = original.OperationStatusExtendedInfo
 type OperationStatusJobExtendedInfo = original.OperationStatusJobExtendedInfo
 type OperationStatusJobsExtendedInfo = original.OperationStatusJobsExtendedInfo
 type OperationStatusProvisionILRExtendedInfo = original.OperationStatusProvisionILRExtendedInfo
+type OperationStatusesClient = original.OperationStatusesClient
 type OperationWorkerResponse = original.OperationWorkerResponse
+type OperationsClient = original.OperationsClient
 type PointInTimeRange = original.PointInTimeRange
+type PoliciesClient = original.PoliciesClient
 type PreBackupValidation = original.PreBackupValidation
 type PreValidateEnableBackupRequest = original.PreValidateEnableBackupRequest
 type PreValidateEnableBackupResponse = original.PreValidateEnableBackupResponse
-type BasicProtectableContainer = original.BasicProtectableContainer
 type ProtectableContainer = original.ProtectableContainer
 type ProtectableContainerResource = original.ProtectableContainerResource
 type ProtectableContainerResourceList = original.ProtectableContainerResourceList
 type ProtectableContainerResourceListIterator = original.ProtectableContainerResourceListIterator
 type ProtectableContainerResourceListPage = original.ProtectableContainerResourceListPage
-type BasicProtectedItem = original.BasicProtectedItem
+type ProtectableContainersClient = original.ProtectableContainersClient
+type ProtectableItemsClient = original.ProtectableItemsClient
 type ProtectedItem = original.ProtectedItem
+type ProtectedItemOperationResultsClient = original.ProtectedItemOperationResultsClient
+type ProtectedItemOperationStatusesClient = original.ProtectedItemOperationStatusesClient
 type ProtectedItemQueryObject = original.ProtectedItemQueryObject
 type ProtectedItemResource = original.ProtectedItemResource
 type ProtectedItemResourceList = original.ProtectedItemResourceList
 type ProtectedItemResourceListIterator = original.ProtectedItemResourceListIterator
 type ProtectedItemResourceListPage = original.ProtectedItemResourceListPage
-type BasicProtectionContainer = original.BasicProtectionContainer
+type ProtectedItemsClient = original.ProtectedItemsClient
+type ProtectedItemsGroupClient = original.ProtectedItemsGroupClient
 type ProtectionContainer = original.ProtectionContainer
+type ProtectionContainerOperationResultsClient = original.ProtectionContainerOperationResultsClient
+type ProtectionContainerRefreshOperationResultsClient = original.ProtectionContainerRefreshOperationResultsClient
 type ProtectionContainerResource = original.ProtectionContainerResource
 type ProtectionContainerResourceList = original.ProtectionContainerResourceList
 type ProtectionContainerResourceListIterator = original.ProtectionContainerResourceListIterator
 type ProtectionContainerResourceListPage = original.ProtectionContainerResourceListPage
-type BasicProtectionIntent = original.BasicProtectionIntent
+type ProtectionContainersClient = original.ProtectionContainersClient
+type ProtectionContainersGroupClient = original.ProtectionContainersGroupClient
 type ProtectionIntent = original.ProtectionIntent
+type ProtectionIntentClient = original.ProtectionIntentClient
+type ProtectionIntentGroupClient = original.ProtectionIntentGroupClient
+type ProtectionIntentQueryObject = original.ProtectionIntentQueryObject
 type ProtectionIntentResource = original.ProtectionIntentResource
-type BasicProtectionPolicy = original.BasicProtectionPolicy
+type ProtectionIntentResourceList = original.ProtectionIntentResourceList
+type ProtectionIntentResourceListIterator = original.ProtectionIntentResourceListIterator
+type ProtectionIntentResourceListPage = original.ProtectionIntentResourceListPage
+type ProtectionPoliciesClient = original.ProtectionPoliciesClient
 type ProtectionPolicy = original.ProtectionPolicy
+type ProtectionPolicyOperationResultsClient = original.ProtectionPolicyOperationResultsClient
+type ProtectionPolicyOperationStatusesClient = original.ProtectionPolicyOperationStatusesClient
 type ProtectionPolicyQueryObject = original.ProtectionPolicyQueryObject
 type ProtectionPolicyResource = original.ProtectionPolicyResource
 type ProtectionPolicyResourceList = original.ProtectionPolicyResourceList
 type ProtectionPolicyResourceListIterator = original.ProtectionPolicyResourceListIterator
 type ProtectionPolicyResourceListPage = original.ProtectionPolicyResourceListPage
-type BasicRecoveryPoint = original.BasicRecoveryPoint
 type RecoveryPoint = original.RecoveryPoint
 type RecoveryPointResource = original.RecoveryPointResource
 type RecoveryPointResourceList = original.RecoveryPointResourceList
 type RecoveryPointResourceListIterator = original.RecoveryPointResourceListIterator
 type RecoveryPointResourceListPage = original.RecoveryPointResourceListPage
 type RecoveryPointTierInformation = original.RecoveryPointTierInformation
-type BasicRequest = original.BasicRequest
+type RecoveryPointsClient = original.RecoveryPointsClient
 type Request = original.Request
 type RequestResource = original.RequestResource
 type Resource = original.Resource
 type ResourceConfig = original.ResourceConfig
 type ResourceConfigResource = original.ResourceConfigResource
 type ResourceList = original.ResourceList
+type ResourceStorageConfigsClient = original.ResourceStorageConfigsClient
 type ResourceVaultConfig = original.ResourceVaultConfig
 type ResourceVaultConfigResource = original.ResourceVaultConfigResource
+type ResourceVaultConfigsClient = original.ResourceVaultConfigsClient
 type RestoreFileSpecs = original.RestoreFileSpecs
-type BasicRestoreRequest = original.BasicRestoreRequest
 type RestoreRequest = original.RestoreRequest
 type RestoreRequestResource = original.RestoreRequestResource
+type RestoresClient = original.RestoresClient
 type RetentionDuration = original.RetentionDuration
-type BasicRetentionPolicy = original.BasicRetentionPolicy
 type RetentionPolicy = original.RetentionPolicy
-type BasicSchedulePolicy = original.BasicSchedulePolicy
+type SQLDataDirectory = original.SQLDataDirectory
+type SQLDataDirectoryMapping = original.SQLDataDirectoryMapping
 type SchedulePolicy = original.SchedulePolicy
+type SecurityPINsClient = original.SecurityPINsClient
 type Settings = original.Settings
 type SimpleRetentionPolicy = original.SimpleRetentionPolicy
 type SimpleSchedulePolicy = original.SimpleSchedulePolicy
-type SQLDataDirectory = original.SQLDataDirectory
-type SQLDataDirectoryMapping = original.SQLDataDirectoryMapping
+type StatusClient = original.StatusClient
 type StatusRequest = original.StatusRequest
 type StatusResponse = original.StatusResponse
 type SubProtectionPolicy = original.SubProtectionPolicy
 type TargetAFSRestoreInfo = original.TargetAFSRestoreInfo
 type TargetRestoreInfo = original.TargetRestoreInfo
 type TokenInformation = original.TokenInformation
+type UsageSummariesClient = original.UsageSummariesClient
 type ValidateIaasVMRestoreOperationRequest = original.ValidateIaasVMRestoreOperationRequest
-type BasicValidateOperationRequest = original.BasicValidateOperationRequest
 type ValidateOperationRequest = original.ValidateOperationRequest
 type ValidateOperationResponse = original.ValidateOperationResponse
 type ValidateOperationsResponse = original.ValidateOperationsResponse
-type BasicValidateRestoreOperationRequest = original.BasicValidateRestoreOperationRequest
 type ValidateRestoreOperationRequest = original.ValidateRestoreOperationRequest
 type WeeklyRetentionFormat = original.WeeklyRetentionFormat
 type WeeklyRetentionSchedule = original.WeeklyRetentionSchedule
 type WorkloadInquiryDetails = original.WorkloadInquiryDetails
-type BasicWorkloadItem = original.BasicWorkloadItem
 type WorkloadItem = original.WorkloadItem
 type WorkloadItemResource = original.WorkloadItemResource
 type WorkloadItemResourceList = original.WorkloadItemResourceList
 type WorkloadItemResourceListIterator = original.WorkloadItemResourceListIterator
 type WorkloadItemResourceListPage = original.WorkloadItemResourceListPage
-type BasicWorkloadProtectableItem = original.BasicWorkloadProtectableItem
+type WorkloadItemsClient = original.WorkloadItemsClient
 type WorkloadProtectableItem = original.WorkloadProtectableItem
 type WorkloadProtectableItemResource = original.WorkloadProtectableItemResource
 type WorkloadProtectableItemResourceList = original.WorkloadProtectableItemResourceList
 type WorkloadProtectableItemResourceListIterator = original.WorkloadProtectableItemResourceListIterator
 type WorkloadProtectableItemResourceListPage = original.WorkloadProtectableItemResourceListPage
 type YearlyRetentionSchedule = original.YearlyRetentionSchedule
-type OperationClient = original.OperationClient
-type OperationResultsClient = original.OperationResultsClient
-type OperationsClient = original.OperationsClient
-type OperationStatusesClient = original.OperationStatusesClient
-type PoliciesClient = original.PoliciesClient
-type ProtectableContainersClient = original.ProtectableContainersClient
-type ProtectableItemsClient = original.ProtectableItemsClient
-type ProtectedItemOperationResultsClient = original.ProtectedItemOperationResultsClient
-type ProtectedItemOperationStatusesClient = original.ProtectedItemOperationStatusesClient
-type ProtectedItemsClient = original.ProtectedItemsClient
-type ProtectedItemsGroupClient = original.ProtectedItemsGroupClient
-type ProtectionContainerOperationResultsClient = original.ProtectionContainerOperationResultsClient
-type ProtectionContainerRefreshOperationResultsClient = original.ProtectionContainerRefreshOperationResultsClient
-type ProtectionContainersClient = original.ProtectionContainersClient
-type ProtectionContainersGroupClient = original.ProtectionContainersGroupClient
-type ProtectionIntentClient = original.ProtectionIntentClient
-type ProtectionPoliciesClient = original.ProtectionPoliciesClient
-type ProtectionPolicyOperationResultsClient = original.ProtectionPolicyOperationResultsClient
-type ProtectionPolicyOperationStatusesClient = original.ProtectionPolicyOperationStatusesClient
-type RecoveryPointsClient = original.RecoveryPointsClient
-type ResourceStorageConfigsClient = original.ResourceStorageConfigsClient
-type ResourceVaultConfigsClient = original.ResourceVaultConfigsClient
-type RestoresClient = original.RestoresClient
-type SecurityPINsClient = original.SecurityPINsClient
-type StatusClient = original.StatusClient
-type UsageSummariesClient = original.UsageSummariesClient
-type WorkloadItemsClient = original.WorkloadItemsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewBackupsClient(subscriptionID string) BackupsClient {
 	return original.NewBackupsClient(subscriptionID)
 }
 func NewBackupsClientWithBaseURI(baseURI string, subscriptionID string) BackupsClient {
 	return original.NewBackupsClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewClientDiscoveryResponseIterator(page ClientDiscoveryResponsePage) ClientDiscoveryResponseIterator {
+	return original.NewClientDiscoveryResponseIterator(page)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewClientDiscoveryResponsePage(getNextPage func(context.Context, ClientDiscoveryResponse) (ClientDiscoveryResponse, error)) ClientDiscoveryResponsePage {
+	return original.NewClientDiscoveryResponsePage(getNextPage)
+}
+func NewEngineBaseResourceListIterator(page EngineBaseResourceListPage) EngineBaseResourceListIterator {
+	return original.NewEngineBaseResourceListIterator(page)
+}
+func NewEngineBaseResourceListPage(getNextPage func(context.Context, EngineBaseResourceList) (EngineBaseResourceList, error)) EngineBaseResourceListPage {
+	return original.NewEngineBaseResourceListPage(getNextPage)
 }
 func NewEnginesClient(subscriptionID string) EnginesClient {
 	return original.NewEnginesClient(subscriptionID)
@@ -1142,6 +1205,12 @@ func NewJobOperationResultsClient(subscriptionID string) JobOperationResultsClie
 func NewJobOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) JobOperationResultsClient {
 	return original.NewJobOperationResultsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewJobResourceListIterator(page JobResourceListPage) JobResourceListIterator {
+	return original.NewJobResourceListIterator(page)
+}
+func NewJobResourceListPage(getNextPage func(context.Context, JobResourceList) (JobResourceList, error)) JobResourceListPage {
+	return original.NewJobResourceListPage(getNextPage)
+}
 func NewJobsClient(subscriptionID string) JobsClient {
 	return original.NewJobsClient(subscriptionID)
 }
@@ -1154,14 +1223,233 @@ func NewJobsGroupClient(subscriptionID string) JobsGroupClient {
 func NewJobsGroupClientWithBaseURI(baseURI string, subscriptionID string) JobsGroupClient {
 	return original.NewJobsGroupClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewOperationClient(subscriptionID string) OperationClient {
+	return original.NewOperationClient(subscriptionID)
+}
+func NewOperationClientWithBaseURI(baseURI string, subscriptionID string) OperationClient {
+	return original.NewOperationClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationResultsClient(subscriptionID string) OperationResultsClient {
+	return original.NewOperationResultsClient(subscriptionID)
+}
+func NewOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) OperationResultsClient {
+	return original.NewOperationResultsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationStatusesClient(subscriptionID string) OperationStatusesClient {
+	return original.NewOperationStatusesClient(subscriptionID)
+}
+func NewOperationStatusesClientWithBaseURI(baseURI string, subscriptionID string) OperationStatusesClient {
+	return original.NewOperationStatusesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPoliciesClient(subscriptionID string) PoliciesClient {
+	return original.NewPoliciesClient(subscriptionID)
+}
+func NewPoliciesClientWithBaseURI(baseURI string, subscriptionID string) PoliciesClient {
+	return original.NewPoliciesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectableContainerResourceListIterator(page ProtectableContainerResourceListPage) ProtectableContainerResourceListIterator {
+	return original.NewProtectableContainerResourceListIterator(page)
+}
+func NewProtectableContainerResourceListPage(getNextPage func(context.Context, ProtectableContainerResourceList) (ProtectableContainerResourceList, error)) ProtectableContainerResourceListPage {
+	return original.NewProtectableContainerResourceListPage(getNextPage)
+}
+func NewProtectableContainersClient(subscriptionID string) ProtectableContainersClient {
+	return original.NewProtectableContainersClient(subscriptionID)
+}
+func NewProtectableContainersClientWithBaseURI(baseURI string, subscriptionID string) ProtectableContainersClient {
+	return original.NewProtectableContainersClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectableItemsClient(subscriptionID string) ProtectableItemsClient {
+	return original.NewProtectableItemsClient(subscriptionID)
+}
+func NewProtectableItemsClientWithBaseURI(baseURI string, subscriptionID string) ProtectableItemsClient {
+	return original.NewProtectableItemsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectedItemOperationResultsClient(subscriptionID string) ProtectedItemOperationResultsClient {
+	return original.NewProtectedItemOperationResultsClient(subscriptionID)
+}
+func NewProtectedItemOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemOperationResultsClient {
+	return original.NewProtectedItemOperationResultsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectedItemOperationStatusesClient(subscriptionID string) ProtectedItemOperationStatusesClient {
+	return original.NewProtectedItemOperationStatusesClient(subscriptionID)
+}
+func NewProtectedItemOperationStatusesClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemOperationStatusesClient {
+	return original.NewProtectedItemOperationStatusesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectedItemResourceListIterator(page ProtectedItemResourceListPage) ProtectedItemResourceListIterator {
+	return original.NewProtectedItemResourceListIterator(page)
+}
+func NewProtectedItemResourceListPage(getNextPage func(context.Context, ProtectedItemResourceList) (ProtectedItemResourceList, error)) ProtectedItemResourceListPage {
+	return original.NewProtectedItemResourceListPage(getNextPage)
+}
+func NewProtectedItemsClient(subscriptionID string) ProtectedItemsClient {
+	return original.NewProtectedItemsClient(subscriptionID)
+}
+func NewProtectedItemsClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemsClient {
+	return original.NewProtectedItemsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectedItemsGroupClient(subscriptionID string) ProtectedItemsGroupClient {
+	return original.NewProtectedItemsGroupClient(subscriptionID)
+}
+func NewProtectedItemsGroupClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemsGroupClient {
+	return original.NewProtectedItemsGroupClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionContainerOperationResultsClient(subscriptionID string) ProtectionContainerOperationResultsClient {
+	return original.NewProtectionContainerOperationResultsClient(subscriptionID)
+}
+func NewProtectionContainerOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainerOperationResultsClient {
+	return original.NewProtectionContainerOperationResultsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionContainerRefreshOperationResultsClient(subscriptionID string) ProtectionContainerRefreshOperationResultsClient {
+	return original.NewProtectionContainerRefreshOperationResultsClient(subscriptionID)
+}
+func NewProtectionContainerRefreshOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainerRefreshOperationResultsClient {
+	return original.NewProtectionContainerRefreshOperationResultsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionContainerResourceListIterator(page ProtectionContainerResourceListPage) ProtectionContainerResourceListIterator {
+	return original.NewProtectionContainerResourceListIterator(page)
+}
+func NewProtectionContainerResourceListPage(getNextPage func(context.Context, ProtectionContainerResourceList) (ProtectionContainerResourceList, error)) ProtectionContainerResourceListPage {
+	return original.NewProtectionContainerResourceListPage(getNextPage)
+}
+func NewProtectionContainersClient(subscriptionID string) ProtectionContainersClient {
+	return original.NewProtectionContainersClient(subscriptionID)
+}
+func NewProtectionContainersClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainersClient {
+	return original.NewProtectionContainersClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionContainersGroupClient(subscriptionID string) ProtectionContainersGroupClient {
+	return original.NewProtectionContainersGroupClient(subscriptionID)
+}
+func NewProtectionContainersGroupClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainersGroupClient {
+	return original.NewProtectionContainersGroupClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionIntentClient(subscriptionID string) ProtectionIntentClient {
+	return original.NewProtectionIntentClient(subscriptionID)
+}
+func NewProtectionIntentClientWithBaseURI(baseURI string, subscriptionID string) ProtectionIntentClient {
+	return original.NewProtectionIntentClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionIntentGroupClient(subscriptionID string) ProtectionIntentGroupClient {
+	return original.NewProtectionIntentGroupClient(subscriptionID)
+}
+func NewProtectionIntentGroupClientWithBaseURI(baseURI string, subscriptionID string) ProtectionIntentGroupClient {
+	return original.NewProtectionIntentGroupClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionIntentResourceListIterator(page ProtectionIntentResourceListPage) ProtectionIntentResourceListIterator {
+	return original.NewProtectionIntentResourceListIterator(page)
+}
+func NewProtectionIntentResourceListPage(getNextPage func(context.Context, ProtectionIntentResourceList) (ProtectionIntentResourceList, error)) ProtectionIntentResourceListPage {
+	return original.NewProtectionIntentResourceListPage(getNextPage)
+}
+func NewProtectionPoliciesClient(subscriptionID string) ProtectionPoliciesClient {
+	return original.NewProtectionPoliciesClient(subscriptionID)
+}
+func NewProtectionPoliciesClientWithBaseURI(baseURI string, subscriptionID string) ProtectionPoliciesClient {
+	return original.NewProtectionPoliciesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionPolicyOperationResultsClient(subscriptionID string) ProtectionPolicyOperationResultsClient {
+	return original.NewProtectionPolicyOperationResultsClient(subscriptionID)
+}
+func NewProtectionPolicyOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectionPolicyOperationResultsClient {
+	return original.NewProtectionPolicyOperationResultsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionPolicyOperationStatusesClient(subscriptionID string) ProtectionPolicyOperationStatusesClient {
+	return original.NewProtectionPolicyOperationStatusesClient(subscriptionID)
+}
+func NewProtectionPolicyOperationStatusesClientWithBaseURI(baseURI string, subscriptionID string) ProtectionPolicyOperationStatusesClient {
+	return original.NewProtectionPolicyOperationStatusesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProtectionPolicyResourceListIterator(page ProtectionPolicyResourceListPage) ProtectionPolicyResourceListIterator {
+	return original.NewProtectionPolicyResourceListIterator(page)
+}
+func NewProtectionPolicyResourceListPage(getNextPage func(context.Context, ProtectionPolicyResourceList) (ProtectionPolicyResourceList, error)) ProtectionPolicyResourceListPage {
+	return original.NewProtectionPolicyResourceListPage(getNextPage)
+}
+func NewRecoveryPointResourceListIterator(page RecoveryPointResourceListPage) RecoveryPointResourceListIterator {
+	return original.NewRecoveryPointResourceListIterator(page)
+}
+func NewRecoveryPointResourceListPage(getNextPage func(context.Context, RecoveryPointResourceList) (RecoveryPointResourceList, error)) RecoveryPointResourceListPage {
+	return original.NewRecoveryPointResourceListPage(getNextPage)
+}
+func NewRecoveryPointsClient(subscriptionID string) RecoveryPointsClient {
+	return original.NewRecoveryPointsClient(subscriptionID)
+}
+func NewRecoveryPointsClientWithBaseURI(baseURI string, subscriptionID string) RecoveryPointsClient {
+	return original.NewRecoveryPointsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceStorageConfigsClient(subscriptionID string) ResourceStorageConfigsClient {
+	return original.NewResourceStorageConfigsClient(subscriptionID)
+}
+func NewResourceStorageConfigsClientWithBaseURI(baseURI string, subscriptionID string) ResourceStorageConfigsClient {
+	return original.NewResourceStorageConfigsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResourceVaultConfigsClient(subscriptionID string) ResourceVaultConfigsClient {
+	return original.NewResourceVaultConfigsClient(subscriptionID)
+}
+func NewResourceVaultConfigsClientWithBaseURI(baseURI string, subscriptionID string) ResourceVaultConfigsClient {
+	return original.NewResourceVaultConfigsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRestoresClient(subscriptionID string) RestoresClient {
+	return original.NewRestoresClient(subscriptionID)
+}
+func NewRestoresClientWithBaseURI(baseURI string, subscriptionID string) RestoresClient {
+	return original.NewRestoresClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSecurityPINsClient(subscriptionID string) SecurityPINsClient {
+	return original.NewSecurityPINsClient(subscriptionID)
+}
+func NewSecurityPINsClientWithBaseURI(baseURI string, subscriptionID string) SecurityPINsClient {
+	return original.NewSecurityPINsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewStatusClient(subscriptionID string) StatusClient {
+	return original.NewStatusClient(subscriptionID)
+}
+func NewStatusClientWithBaseURI(baseURI string, subscriptionID string) StatusClient {
+	return original.NewStatusClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewUsageSummariesClient(subscriptionID string) UsageSummariesClient {
+	return original.NewUsageSummariesClient(subscriptionID)
+}
+func NewUsageSummariesClientWithBaseURI(baseURI string, subscriptionID string) UsageSummariesClient {
+	return original.NewUsageSummariesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func NewWorkloadItemResourceListIterator(page WorkloadItemResourceListPage) WorkloadItemResourceListIterator {
+	return original.NewWorkloadItemResourceListIterator(page)
+}
+func NewWorkloadItemResourceListPage(getNextPage func(context.Context, WorkloadItemResourceList) (WorkloadItemResourceList, error)) WorkloadItemResourceListPage {
+	return original.NewWorkloadItemResourceListPage(getNextPage)
+}
+func NewWorkloadItemsClient(subscriptionID string) WorkloadItemsClient {
+	return original.NewWorkloadItemsClient(subscriptionID)
+}
+func NewWorkloadItemsClientWithBaseURI(baseURI string, subscriptionID string) WorkloadItemsClient {
+	return original.NewWorkloadItemsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWorkloadProtectableItemResourceListIterator(page WorkloadProtectableItemResourceListPage) WorkloadProtectableItemResourceListIterator {
+	return original.NewWorkloadProtectableItemResourceListIterator(page)
+}
+func NewWorkloadProtectableItemResourceListPage(getNextPage func(context.Context, WorkloadProtectableItemResourceList) (WorkloadProtectableItemResourceList, error)) WorkloadProtectableItemResourceListPage {
+	return original.NewWorkloadProtectableItemResourceListPage(getNextPage)
+}
 func PossibleAzureFileShareTypeValues() []AzureFileShareType {
 	return original.PossibleAzureFileShareTypeValues()
 }
-func PossibleContainerTypeValues() []ContainerType {
-	return original.PossibleContainerTypeValues()
-}
 func PossibleContainerTypeBasicProtectionContainerValues() []ContainerTypeBasicProtectionContainer {
 	return original.PossibleContainerTypeBasicProtectionContainerValues()
+}
+func PossibleContainerTypeValues() []ContainerType {
+	return original.PossibleContainerTypeValues()
 }
 func PossibleCopyOptionsValues() []CopyOptions {
 	return original.PossibleCopyOptionsValues()
@@ -1187,17 +1475,20 @@ func PossibleFabricNameValues() []FabricName {
 func PossibleFeatureTypeValues() []FeatureType {
 	return original.PossibleFeatureTypeValues()
 }
+func PossibleHTTPStatusCodeValues() []HTTPStatusCode {
+	return original.PossibleHTTPStatusCodeValues()
+}
 func PossibleHealthStateValues() []HealthState {
 	return original.PossibleHealthStateValues()
 }
 func PossibleHealthStatusValues() []HealthStatus {
 	return original.PossibleHealthStatusValues()
 }
-func PossibleHTTPStatusCodeValues() []HTTPStatusCode {
-	return original.PossibleHTTPStatusCodeValues()
-}
 func PossibleInquiryStatusValues() []InquiryStatus {
 	return original.PossibleInquiryStatusValues()
+}
+func PossibleIntentItemTypeValues() []IntentItemType {
+	return original.PossibleIntentItemTypeValues()
 }
 func PossibleItemTypeValues() []ItemType {
 	return original.PossibleItemTypeValues()
@@ -1220,20 +1511,14 @@ func PossibleLastBackupStatusValues() []LastBackupStatus {
 func PossibleMabServerTypeValues() []MabServerType {
 	return original.PossibleMabServerTypeValues()
 }
-func PossibleManagementTypeValues() []ManagementType {
-	return original.PossibleManagementTypeValues()
-}
 func PossibleManagementTypeBasicProtectionPolicyValues() []ManagementTypeBasicProtectionPolicy {
 	return original.PossibleManagementTypeBasicProtectionPolicyValues()
 }
+func PossibleManagementTypeValues() []ManagementType {
+	return original.PossibleManagementTypeValues()
+}
 func PossibleMonthOfYearValues() []MonthOfYear {
 	return original.PossibleMonthOfYearValues()
-}
-func PossibleObjectTypeValues() []ObjectType {
-	return original.PossibleObjectTypeValues()
-}
-func PossibleObjectTypeBasicBackupRequestValues() []ObjectTypeBasicBackupRequest {
-	return original.PossibleObjectTypeBasicBackupRequestValues()
 }
 func PossibleObjectTypeBasicILRRequestValues() []ObjectTypeBasicILRRequest {
 	return original.PossibleObjectTypeBasicILRRequestValues()
@@ -1244,17 +1529,29 @@ func PossibleObjectTypeBasicOperationStatusExtendedInfoValues() []ObjectTypeBasi
 func PossibleObjectTypeBasicRecoveryPointValues() []ObjectTypeBasicRecoveryPoint {
 	return original.PossibleObjectTypeBasicRecoveryPointValues()
 }
+func PossibleObjectTypeBasicRequestValues() []ObjectTypeBasicRequest {
+	return original.PossibleObjectTypeBasicRequestValues()
+}
 func PossibleObjectTypeBasicRestoreRequestValues() []ObjectTypeBasicRestoreRequest {
 	return original.PossibleObjectTypeBasicRestoreRequestValues()
 }
 func PossibleObjectTypeBasicValidateOperationRequestValues() []ObjectTypeBasicValidateOperationRequest {
 	return original.PossibleObjectTypeBasicValidateOperationRequestValues()
 }
+func PossibleObjectTypeValues() []ObjectType {
+	return original.PossibleObjectTypeValues()
+}
 func PossibleOperationStatusValuesValues() []OperationStatusValues {
 	return original.PossibleOperationStatusValuesValues()
 }
+func PossibleOperationTypeValues() []OperationType {
+	return original.PossibleOperationTypeValues()
+}
 func PossibleOverwriteOptionsValues() []OverwriteOptions {
 	return original.PossibleOverwriteOptionsValues()
+}
+func PossiblePolicyTypeValues() []PolicyType {
+	return original.PossiblePolicyTypeValues()
 }
 func PossibleProtectableContainerTypeValues() []ProtectableContainerType {
 	return original.PossibleProtectableContainerTypeValues()
@@ -1307,29 +1604,29 @@ func PossibleRetentionPolicyTypeValues() []RetentionPolicyType {
 func PossibleRetentionScheduleFormatValues() []RetentionScheduleFormat {
 	return original.PossibleRetentionScheduleFormatValues()
 }
+func PossibleSQLDataDirectoryTypeValues() []SQLDataDirectoryType {
+	return original.PossibleSQLDataDirectoryTypeValues()
+}
 func PossibleSchedulePolicyTypeValues() []SchedulePolicyType {
 	return original.PossibleSchedulePolicyTypeValues()
 }
 func PossibleScheduleRunTypeValues() []ScheduleRunType {
 	return original.PossibleScheduleRunTypeValues()
 }
-func PossibleSQLDataDirectoryTypeValues() []SQLDataDirectoryType {
-	return original.PossibleSQLDataDirectoryTypeValues()
+func PossibleStorageTypeStateValues() []StorageTypeState {
+	return original.PossibleStorageTypeStateValues()
 }
 func PossibleStorageTypeValues() []StorageType {
 	return original.PossibleStorageTypeValues()
 }
-func PossibleStorageTypeStateValues() []StorageTypeState {
-	return original.PossibleStorageTypeStateValues()
-}
 func PossibleSupportStatusValues() []SupportStatus {
 	return original.PossibleSupportStatusValues()
 }
-func PossibleTypeValues() []Type {
-	return original.PossibleTypeValues()
-}
 func PossibleTypeEnumValues() []TypeEnum {
 	return original.PossibleTypeEnumValues()
+}
+func PossibleTypeValues() []Type {
+	return original.PossibleTypeValues()
 }
 func PossibleUsagesUnitValues() []UsagesUnit {
 	return original.PossibleUsagesUnitValues()
@@ -1340,180 +1637,18 @@ func PossibleValidationStatusValues() []ValidationStatus {
 func PossibleWeekOfMonthValues() []WeekOfMonth {
 	return original.PossibleWeekOfMonthValues()
 }
-func PossibleWorkloadItemTypeValues() []WorkloadItemType {
-	return original.PossibleWorkloadItemTypeValues()
-}
 func PossibleWorkloadItemTypeBasicWorkloadItemValues() []WorkloadItemTypeBasicWorkloadItem {
 	return original.PossibleWorkloadItemTypeBasicWorkloadItemValues()
 }
+func PossibleWorkloadItemTypeValues() []WorkloadItemType {
+	return original.PossibleWorkloadItemTypeValues()
+}
 func PossibleWorkloadTypeValues() []WorkloadType {
 	return original.PossibleWorkloadTypeValues()
-}
-func NewOperationClient(subscriptionID string) OperationClient {
-	return original.NewOperationClient(subscriptionID)
-}
-func NewOperationClientWithBaseURI(baseURI string, subscriptionID string) OperationClient {
-	return original.NewOperationClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOperationResultsClient(subscriptionID string) OperationResultsClient {
-	return original.NewOperationResultsClient(subscriptionID)
-}
-func NewOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) OperationResultsClient {
-	return original.NewOperationResultsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewOperationStatusesClient(subscriptionID string) OperationStatusesClient {
-	return original.NewOperationStatusesClient(subscriptionID)
-}
-func NewOperationStatusesClientWithBaseURI(baseURI string, subscriptionID string) OperationStatusesClient {
-	return original.NewOperationStatusesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewPoliciesClient(subscriptionID string) PoliciesClient {
-	return original.NewPoliciesClient(subscriptionID)
-}
-func NewPoliciesClientWithBaseURI(baseURI string, subscriptionID string) PoliciesClient {
-	return original.NewPoliciesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectableContainersClient(subscriptionID string) ProtectableContainersClient {
-	return original.NewProtectableContainersClient(subscriptionID)
-}
-func NewProtectableContainersClientWithBaseURI(baseURI string, subscriptionID string) ProtectableContainersClient {
-	return original.NewProtectableContainersClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectableItemsClient(subscriptionID string) ProtectableItemsClient {
-	return original.NewProtectableItemsClient(subscriptionID)
-}
-func NewProtectableItemsClientWithBaseURI(baseURI string, subscriptionID string) ProtectableItemsClient {
-	return original.NewProtectableItemsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectedItemOperationResultsClient(subscriptionID string) ProtectedItemOperationResultsClient {
-	return original.NewProtectedItemOperationResultsClient(subscriptionID)
-}
-func NewProtectedItemOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemOperationResultsClient {
-	return original.NewProtectedItemOperationResultsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectedItemOperationStatusesClient(subscriptionID string) ProtectedItemOperationStatusesClient {
-	return original.NewProtectedItemOperationStatusesClient(subscriptionID)
-}
-func NewProtectedItemOperationStatusesClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemOperationStatusesClient {
-	return original.NewProtectedItemOperationStatusesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectedItemsClient(subscriptionID string) ProtectedItemsClient {
-	return original.NewProtectedItemsClient(subscriptionID)
-}
-func NewProtectedItemsClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemsClient {
-	return original.NewProtectedItemsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectedItemsGroupClient(subscriptionID string) ProtectedItemsGroupClient {
-	return original.NewProtectedItemsGroupClient(subscriptionID)
-}
-func NewProtectedItemsGroupClientWithBaseURI(baseURI string, subscriptionID string) ProtectedItemsGroupClient {
-	return original.NewProtectedItemsGroupClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionContainerOperationResultsClient(subscriptionID string) ProtectionContainerOperationResultsClient {
-	return original.NewProtectionContainerOperationResultsClient(subscriptionID)
-}
-func NewProtectionContainerOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainerOperationResultsClient {
-	return original.NewProtectionContainerOperationResultsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionContainerRefreshOperationResultsClient(subscriptionID string) ProtectionContainerRefreshOperationResultsClient {
-	return original.NewProtectionContainerRefreshOperationResultsClient(subscriptionID)
-}
-func NewProtectionContainerRefreshOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainerRefreshOperationResultsClient {
-	return original.NewProtectionContainerRefreshOperationResultsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionContainersClient(subscriptionID string) ProtectionContainersClient {
-	return original.NewProtectionContainersClient(subscriptionID)
-}
-func NewProtectionContainersClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainersClient {
-	return original.NewProtectionContainersClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionContainersGroupClient(subscriptionID string) ProtectionContainersGroupClient {
-	return original.NewProtectionContainersGroupClient(subscriptionID)
-}
-func NewProtectionContainersGroupClientWithBaseURI(baseURI string, subscriptionID string) ProtectionContainersGroupClient {
-	return original.NewProtectionContainersGroupClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionIntentClient(subscriptionID string) ProtectionIntentClient {
-	return original.NewProtectionIntentClient(subscriptionID)
-}
-func NewProtectionIntentClientWithBaseURI(baseURI string, subscriptionID string) ProtectionIntentClient {
-	return original.NewProtectionIntentClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionPoliciesClient(subscriptionID string) ProtectionPoliciesClient {
-	return original.NewProtectionPoliciesClient(subscriptionID)
-}
-func NewProtectionPoliciesClientWithBaseURI(baseURI string, subscriptionID string) ProtectionPoliciesClient {
-	return original.NewProtectionPoliciesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionPolicyOperationResultsClient(subscriptionID string) ProtectionPolicyOperationResultsClient {
-	return original.NewProtectionPolicyOperationResultsClient(subscriptionID)
-}
-func NewProtectionPolicyOperationResultsClientWithBaseURI(baseURI string, subscriptionID string) ProtectionPolicyOperationResultsClient {
-	return original.NewProtectionPolicyOperationResultsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProtectionPolicyOperationStatusesClient(subscriptionID string) ProtectionPolicyOperationStatusesClient {
-	return original.NewProtectionPolicyOperationStatusesClient(subscriptionID)
-}
-func NewProtectionPolicyOperationStatusesClientWithBaseURI(baseURI string, subscriptionID string) ProtectionPolicyOperationStatusesClient {
-	return original.NewProtectionPolicyOperationStatusesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRecoveryPointsClient(subscriptionID string) RecoveryPointsClient {
-	return original.NewRecoveryPointsClient(subscriptionID)
-}
-func NewRecoveryPointsClientWithBaseURI(baseURI string, subscriptionID string) RecoveryPointsClient {
-	return original.NewRecoveryPointsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewResourceStorageConfigsClient(subscriptionID string) ResourceStorageConfigsClient {
-	return original.NewResourceStorageConfigsClient(subscriptionID)
-}
-func NewResourceStorageConfigsClientWithBaseURI(baseURI string, subscriptionID string) ResourceStorageConfigsClient {
-	return original.NewResourceStorageConfigsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewResourceVaultConfigsClient(subscriptionID string) ResourceVaultConfigsClient {
-	return original.NewResourceVaultConfigsClient(subscriptionID)
-}
-func NewResourceVaultConfigsClientWithBaseURI(baseURI string, subscriptionID string) ResourceVaultConfigsClient {
-	return original.NewResourceVaultConfigsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRestoresClient(subscriptionID string) RestoresClient {
-	return original.NewRestoresClient(subscriptionID)
-}
-func NewRestoresClientWithBaseURI(baseURI string, subscriptionID string) RestoresClient {
-	return original.NewRestoresClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewSecurityPINsClient(subscriptionID string) SecurityPINsClient {
-	return original.NewSecurityPINsClient(subscriptionID)
-}
-func NewSecurityPINsClientWithBaseURI(baseURI string, subscriptionID string) SecurityPINsClient {
-	return original.NewSecurityPINsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStatusClient(subscriptionID string) StatusClient {
-	return original.NewStatusClient(subscriptionID)
-}
-func NewStatusClientWithBaseURI(baseURI string, subscriptionID string) StatusClient {
-	return original.NewStatusClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewUsageSummariesClient(subscriptionID string) UsageSummariesClient {
-	return original.NewUsageSummariesClient(subscriptionID)
-}
-func NewUsageSummariesClientWithBaseURI(baseURI string, subscriptionID string) UsageSummariesClient {
-	return original.NewUsageSummariesClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewWorkloadItemsClient(subscriptionID string) WorkloadItemsClient {
-	return original.NewWorkloadItemsClient(subscriptionID)
-}
-func NewWorkloadItemsClientWithBaseURI(baseURI string, subscriptionID string) WorkloadItemsClient {
-	return original.NewWorkloadItemsClientWithBaseURI(baseURI, subscriptionID)
 }

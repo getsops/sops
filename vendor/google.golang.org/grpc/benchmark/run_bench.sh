@@ -163,6 +163,7 @@ while [ $# -gt 0 ]; do
       echo "-req              req size in bytes, default value is 1"
       echo "-resp             resp size in bytes, default value is 1"
       echo "-rpc_type         valid values are unary|streaming, default is unary"
+      exit 0
       ;;
     *)
       echo "Incorrect option $1"

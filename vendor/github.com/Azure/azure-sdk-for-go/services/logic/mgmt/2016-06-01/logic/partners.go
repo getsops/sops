@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewPartnersClientWithBaseURI(baseURI string, subscriptionID string) Partner
 // partnerName - the integration account partner name.
 // partner - the integration account partner.
 func (client PartnersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, partnerName string, partner IntegrationAccountPartner) (result IntegrationAccountPartner, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: partner,
 			Constraints: []validation.Constraint{{Target: "partner.IntegrationAccountPartnerProperties", Name: validation.Null, Rule: true,
@@ -125,6 +136,16 @@ func (client PartnersClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // integrationAccountName - the integration account name.
 // partnerName - the integration account partner name.
 func (client PartnersClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, partnerName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, partnerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.PartnersClient", "Delete", nil, "Failure preparing request")
@@ -193,6 +214,16 @@ func (client PartnersClient) DeleteResponder(resp *http.Response) (result autore
 // integrationAccountName - the integration account name.
 // partnerName - the integration account partner name.
 func (client PartnersClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, partnerName string) (result IntegrationAccountPartner, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, partnerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.PartnersClient", "Get", nil, "Failure preparing request")
@@ -263,6 +294,16 @@ func (client PartnersClient) GetResponder(resp *http.Response) (result Integrati
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation. Options for filters include: PartnerType.
 func (client PartnersClient) ListByIntegrationAccounts(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountPartnerListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnersClient.ListByIntegrationAccounts")
+		defer func() {
+			sc := -1
+			if result.iaplr.Response.Response != nil {
+				sc = result.iaplr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByIntegrationAccountsNextResults
 	req, err := client.ListByIntegrationAccountsPreparer(ctx, resourceGroupName, integrationAccountName, top, filter)
 	if err != nil {
@@ -333,8 +374,8 @@ func (client PartnersClient) ListByIntegrationAccountsResponder(resp *http.Respo
 }
 
 // listByIntegrationAccountsNextResults retrieves the next set of results, if any.
-func (client PartnersClient) listByIntegrationAccountsNextResults(lastResults IntegrationAccountPartnerListResult) (result IntegrationAccountPartnerListResult, err error) {
-	req, err := lastResults.integrationAccountPartnerListResultPreparer()
+func (client PartnersClient) listByIntegrationAccountsNextResults(ctx context.Context, lastResults IntegrationAccountPartnerListResult) (result IntegrationAccountPartnerListResult, err error) {
+	req, err := lastResults.integrationAccountPartnerListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.PartnersClient", "listByIntegrationAccountsNextResults", nil, "Failure preparing next results request")
 	}
@@ -355,6 +396,16 @@ func (client PartnersClient) listByIntegrationAccountsNextResults(lastResults In
 
 // ListByIntegrationAccountsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PartnersClient) ListByIntegrationAccountsComplete(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountPartnerListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnersClient.ListByIntegrationAccounts")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByIntegrationAccounts(ctx, resourceGroupName, integrationAccountName, top, filter)
 	return
 }
@@ -365,6 +416,16 @@ func (client PartnersClient) ListByIntegrationAccountsComplete(ctx context.Conte
 // integrationAccountName - the integration account name.
 // partnerName - the integration account partner name.
 func (client PartnersClient) ListContentCallbackURL(ctx context.Context, resourceGroupName string, integrationAccountName string, partnerName string, listContentCallbackURL GetCallbackURLParameters) (result WorkflowTriggerCallbackURL, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnersClient.ListContentCallbackURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListContentCallbackURLPreparer(ctx, resourceGroupName, integrationAccountName, partnerName, listContentCallbackURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.PartnersClient", "ListContentCallbackURL", nil, "Failure preparing request")

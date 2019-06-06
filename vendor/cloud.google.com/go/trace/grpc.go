@@ -15,11 +15,11 @@
 package trace
 
 import (
+	"context"
 	"encoding/hex"
 	"fmt"
 
 	"cloud.google.com/go/internal/tracecontext"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 )
@@ -33,6 +33,7 @@ const grpcMetadataKey = "grpc-trace-bin"
 // passes through the request.
 //
 // The functionality in gRPC that this feature relies on is currently experimental.
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (c *Client) GRPCClientInterceptor() grpc.UnaryClientInterceptor {
 	if c == nil {
 		return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
@@ -84,6 +85,8 @@ func (c *Client) grpcUnaryInterceptor(ctx context.Context, method string, req, r
 // If the client is nil, then the interceptor just invokes the handler.
 //
 // The functionality in gRPC that this feature relies on is currently experimental.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (c *Client) GRPCServerInterceptor() grpc.UnaryServerInterceptor {
 	if c == nil {
 		return func(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {

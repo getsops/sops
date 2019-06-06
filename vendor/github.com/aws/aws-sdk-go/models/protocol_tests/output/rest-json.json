@@ -488,6 +488,26 @@
     ]
   },
   {
+    "description": "Ignores undefined output",
+    "metadata": {
+      "protocol": "rest-json"
+    },
+    "shapes": {},
+    "cases": [
+      {
+        "given": {
+          "name": "OperationName"
+        },
+        "result": {},
+        "response": {
+          "status_code": 200,
+          "headers": {},
+          "body": "OK"
+        }
+      }
+    ]
+  },
+  {
     "description": "Supports header maps",
     "metadata": {
       "protocol": "rest-json"

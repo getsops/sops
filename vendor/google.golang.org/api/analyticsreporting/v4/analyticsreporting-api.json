@@ -18,6 +18,7 @@
   "description": "Accesses Analytics report data.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/analytics/devguides/reporting/core/v4/",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -128,11 +129,121 @@
           ]
         }
       }
+    },
+    "userActivity": {
+      "methods": {
+        "search": {
+          "description": "Returns User Activity data.",
+          "flatPath": "v4/userActivity:search",
+          "httpMethod": "POST",
+          "id": "analyticsreporting.userActivity.search",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v4/userActivity:search",
+          "request": {
+            "$ref": "SearchUserActivityRequest"
+          },
+          "response": {
+            "$ref": "SearchUserActivityResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/analytics",
+            "https://www.googleapis.com/auth/analytics.readonly"
+          ]
+        }
+      }
     }
   },
-  "revision": "20180725",
+  "revision": "20190318",
   "rootUrl": "https://analyticsreporting.googleapis.com/",
   "schemas": {
+    "Activity": {
+      "description": "An Activity represents data for an activity of a user. Note that an\nActivity is different from a hit.\nA hit might result in multiple Activity's. For example, if a hit\nincludes a transaction and a goal completion, there will be two\nActivity protos for this hit, one for ECOMMERCE and one for GOAL.\nConversely, multiple hits can also construct one Activity. In classic\ne-commerce, data for one transaction might be sent through multiple hits.\nThese hits will be merged into one ECOMMERCE Activity.",
+      "id": "Activity",
+      "properties": {
+        "activityTime": {
+          "description": "Timestamp of the activity.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "activityType": {
+          "description": "Type of this activity.",
+          "enum": [
+            "ACTIVITY_TYPE_UNSPECIFIED",
+            "PAGEVIEW",
+            "SCREENVIEW",
+            "GOAL",
+            "ECOMMERCE",
+            "EVENT"
+          ],
+          "enumDescriptions": [
+            "ActivityType will never have this value in the response. Using this type in\nthe request will result in an error.",
+            "Used when the activity resulted out of a visitor viewing a page.",
+            "Used when the activity resulted out of a visitor using an application on a\nmobile device.",
+            "Used to denote that a goal type activity.",
+            "An e-commerce transaction was performed by the visitor on the page.",
+            "Used when the activity is an event."
+          ],
+          "type": "string"
+        },
+        "appview": {
+          "$ref": "ScreenviewData",
+          "description": "This will be set if `activity_type` equals `SCREEN_VIEW`."
+        },
+        "campaign": {
+          "description": "For manual campaign tracking, it is the value of the utm_campaign campaign\ntracking parameter. For AdWords autotagging, it is the name(s) of the\nonline ad campaign(s) you use for the property. If you use neither, its\nvalue is (not set).",
+          "type": "string"
+        },
+        "channelGrouping": {
+          "description": "The Channel Group associated with an end user's session for this View\n(defined by the View's Channel Groupings).",
+          "type": "string"
+        },
+        "customDimension": {
+          "description": "A list of all custom dimensions associated with this activity.",
+          "items": {
+            "$ref": "CustomDimension"
+          },
+          "type": "array"
+        },
+        "ecommerce": {
+          "$ref": "EcommerceData",
+          "description": "This will be set if `activity_type` equals `ECOMMERCE`."
+        },
+        "event": {
+          "$ref": "EventData",
+          "description": "This field contains all the details pertaining to an event and will be\nset if `activity_type` equals `EVENT`."
+        },
+        "goals": {
+          "$ref": "GoalSetData",
+          "description": "This field contains a list of all the goals that were reached in this\nactivity when `activity_type` equals `GOAL`."
+        },
+        "hostname": {
+          "description": "The hostname from which the tracking request was made.",
+          "type": "string"
+        },
+        "keyword": {
+          "description": "For manual campaign tracking, it is the value of the utm_term campaign\ntracking parameter. For AdWords traffic, it contains the best matching\ntargeting criteria. For the display network, where multiple targeting\ncriteria could have caused the ad to show up, it returns the best matching\ntargeting criteria as selected by Ads. This could be display_keyword, site\nplacement, boomuserlist, user_interest, age, or gender. Otherwise its value\nis (not set).",
+          "type": "string"
+        },
+        "landingPagePath": {
+          "description": "The first page in users' sessions, or the landing page.",
+          "type": "string"
+        },
+        "medium": {
+          "description": "The type of referrals. For manual campaign tracking, it is the value of the\nutm_medium campaign tracking parameter. For AdWords autotagging, it is cpc.\nIf users came from a search engine detected by Google Analytics, it is\norganic. If the referrer is not a search engine, it is referral. If users\ncame directly to the property and document.referrer is empty, its value is\n(none).",
+          "type": "string"
+        },
+        "pageview": {
+          "$ref": "PageviewData",
+          "description": "This will be set if `activity_type` equals `PAGEVIEW`. This field\ncontains all the details about the visitor and the page that was visited."
+        },
+        "source": {
+          "description": "The source of referrals. For manual campaign tracking, it is the value of\nthe utm_source campaign tracking parameter. For AdWords autotagging, it is\ngoogle. If you use neither, it is the domain of the source\n(e.g., document.referrer) referring the users. It may also contain a port\naddress. If users arrived without a referrer, its value is (direct).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Cohort": {
       "description": "Defines a cohort. A cohort is a group of users who share a common\ncharacteristic. For example, all users with the same acquisition date\nbelong to the same cohort.",
       "id": "Cohort",
@@ -192,6 +303,22 @@
         "metricHeader": {
           "$ref": "MetricHeader",
           "description": "Metric headers for the metrics in the response."
+        }
+      },
+      "type": "object"
+    },
+    "CustomDimension": {
+      "description": "Custom dimension.",
+      "id": "CustomDimension",
+      "properties": {
+        "index": {
+          "description": "Slot number of custom dimension.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "value": {
+          "description": "Value of the custom dimension. Default value (i.e. empty string) indicates\nclearing sesion/visitor scope custom dimension value.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -352,6 +479,93 @@
       },
       "type": "object"
     },
+    "EcommerceData": {
+      "description": "E-commerce details associated with the user activity.",
+      "id": "EcommerceData",
+      "properties": {
+        "actionType": {
+          "description": "Action associated with this e-commerce action.",
+          "enum": [
+            "UNKNOWN",
+            "CLICK",
+            "DETAILS_VIEW",
+            "ADD_TO_CART",
+            "REMOVE_FROM_CART",
+            "CHECKOUT",
+            "PAYMENT",
+            "REFUND",
+            "CHECKOUT_OPTION"
+          ],
+          "enumDescriptions": [
+            "Action type is not known.",
+            "Click through of product lists.",
+            "Product detail views.",
+            "Add product(s) to cart.",
+            "Remove product(s) from cart.",
+            "Check out.",
+            "Completed purchase.",
+            "Refund of purchase.",
+            "Checkout options."
+          ],
+          "type": "string"
+        },
+        "ecommerceType": {
+          "description": "The type of this e-commerce activity.",
+          "enum": [
+            "ECOMMERCE_TYPE_UNSPECIFIED",
+            "CLASSIC",
+            "ENHANCED"
+          ],
+          "enumDescriptions": [
+            "Used when the e-commerce activity type is unspecified.",
+            "Used when activity has classic (non-enhanced) e-commerce information.",
+            "Used when activity has enhanced e-commerce information."
+          ],
+          "type": "string"
+        },
+        "products": {
+          "description": "Details of the products in this transaction.",
+          "items": {
+            "$ref": "ProductData"
+          },
+          "type": "array"
+        },
+        "transaction": {
+          "$ref": "TransactionData",
+          "description": "Transaction details of this e-commerce action."
+        }
+      },
+      "type": "object"
+    },
+    "EventData": {
+      "description": "Represents all the details pertaining to an event.",
+      "id": "EventData",
+      "properties": {
+        "eventAction": {
+          "description": "Type of interaction with the object. Eg: 'play'.",
+          "type": "string"
+        },
+        "eventCategory": {
+          "description": "The object on the page that was interacted with. Eg: 'Video'.",
+          "type": "string"
+        },
+        "eventCount": {
+          "description": "Number of such events in this activity.",
+          "format": "int64",
+          "type": "string"
+        },
+        "eventLabel": {
+          "description": "Label attached with the event.",
+          "type": "string"
+        },
+        "eventValue": {
+          "description": "Numeric value associated with the event.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "GetReportsRequest": {
       "description": "The batch request containing multiple report request.",
       "id": "GetReportsRequest",
@@ -389,6 +603,62 @@
         "resourceQuotasRemaining": {
           "$ref": "ResourceQuotasRemaining",
           "description": "The amount of resource quota remaining for the property."
+        }
+      },
+      "type": "object"
+    },
+    "GoalData": {
+      "description": "Represents all the details pertaining to a goal.",
+      "id": "GoalData",
+      "properties": {
+        "goalCompletionLocation": {
+          "description": "URL of the page where this goal was completed.",
+          "type": "string"
+        },
+        "goalCompletions": {
+          "description": "Total number of goal completions in this activity.",
+          "format": "int64",
+          "type": "string"
+        },
+        "goalIndex": {
+          "description": "This identifies the goal as configured for the profile.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "goalName": {
+          "description": "Name of the goal.",
+          "type": "string"
+        },
+        "goalPreviousStep1": {
+          "description": "URL of the page one step prior to the goal completion.",
+          "type": "string"
+        },
+        "goalPreviousStep2": {
+          "description": "URL of the page two steps prior to the goal completion.",
+          "type": "string"
+        },
+        "goalPreviousStep3": {
+          "description": "URL of the page three steps prior to the goal completion.",
+          "type": "string"
+        },
+        "goalValue": {
+          "description": "Value in this goal.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "GoalSetData": {
+      "description": "Represents a set of goals that were reached in an activity.",
+      "id": "GoalSetData",
+      "properties": {
+        "goals": {
+          "description": "All the goals that were reached in the current activity.",
+          "items": {
+            "$ref": "GoalData"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -604,6 +874,21 @@
       },
       "type": "object"
     },
+    "PageviewData": {
+      "description": "Represents details collected when the visitor views a page.",
+      "id": "PageviewData",
+      "properties": {
+        "pagePath": {
+          "description": "The URL of the page that the visitor viewed.",
+          "type": "string"
+        },
+        "pageTitle": {
+          "description": "The title of the page that the visitor viewed.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Pivot": {
       "description": "The Pivot describes the pivot section in the request.\nThe Pivot helps rearrange the information in the table for certain reports\nby pivoting your data on a second dimension.",
       "id": "Pivot",
@@ -696,6 +981,31 @@
             "type": "string"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ProductData": {
+      "description": "Details of the products in an e-commerce transaction.",
+      "id": "ProductData",
+      "properties": {
+        "itemRevenue": {
+          "description": "The total revenue from purchased product items.",
+          "format": "double",
+          "type": "number"
+        },
+        "productName": {
+          "description": "The product name, supplied by the e-commerce tracking application, for\nthe purchased items.",
+          "type": "string"
+        },
+        "productQuantity": {
+          "description": "Total number of this product units in the transaction.",
+          "format": "int64",
+          "type": "string"
+        },
+        "productSku": {
+          "description": "Unique code that represents the product.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -928,6 +1238,107 @@
         },
         "hourlyQuotaTokensRemaining": {
           "description": "Hourly resource quota tokens remaining.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ScreenviewData": {
+      "id": "ScreenviewData",
+      "properties": {
+        "appName": {
+          "description": "The application name.",
+          "type": "string"
+        },
+        "mobileDeviceBranding": {
+          "description": "Mobile manufacturer or branded name. Eg: \"Google\", \"Apple\" etc.",
+          "type": "string"
+        },
+        "mobileDeviceModel": {
+          "description": "Mobile device model. Eg: \"Pixel\", \"iPhone\" etc.",
+          "type": "string"
+        },
+        "screenName": {
+          "description": "The name of the screen.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SearchUserActivityRequest": {
+      "description": "The request to fetch User Report from Reporting API `userActivity:get` call.",
+      "id": "SearchUserActivityRequest",
+      "properties": {
+        "activityTypes": {
+          "description": "Set of all activity types being requested. Only acvities matching these\ntypes will be returned in the response. If empty, all activies will be\nreturned.",
+          "enumDescriptions": [
+            "ActivityType will never have this value in the response. Using this type in\nthe request will result in an error.",
+            "Used when the activity resulted out of a visitor viewing a page.",
+            "Used when the activity resulted out of a visitor using an application on a\nmobile device.",
+            "Used to denote that a goal type activity.",
+            "An e-commerce transaction was performed by the visitor on the page.",
+            "Used when the activity is an event."
+          ],
+          "items": {
+            "enum": [
+              "ACTIVITY_TYPE_UNSPECIFIED",
+              "PAGEVIEW",
+              "SCREENVIEW",
+              "GOAL",
+              "ECOMMERCE",
+              "EVENT"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dateRange": {
+          "$ref": "DateRange",
+          "description": "Date range for which to retrieve the user activity. If a date range is not\nprovided, the default date range is (startDate: current date - 7 days,\nendDate: current date - 1 day)."
+        },
+        "pageSize": {
+          "description": "Page size is for paging and specifies the maximum number of returned rows.\nPage size should be \u003e 0. If the value is 0 or if the field isn't specified,\nthe request returns the default of 1000 rows per page.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "pageToken": {
+          "description": "A continuation token to get the next page of the results. Adding this to\nthe request will return the rows after the pageToken. The pageToken should\nbe the value returned in the nextPageToken parameter in the response to\nthe [SearchUserActivityRequest](#SearchUserActivityRequest) request.",
+          "type": "string"
+        },
+        "user": {
+          "$ref": "User",
+          "description": "Required. Unique user Id to query for. Every\n[SearchUserActivityRequest](#SearchUserActivityRequest) must contain this\nfield."
+        },
+        "viewId": {
+          "description": "Required. The Analytics\n[view ID](https://support.google.com/analytics/answer/1009618)\nfrom which to retrieve data. Every\n[SearchUserActivityRequest](#SearchUserActivityRequest) must contain the\n`viewId`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SearchUserActivityResponse": {
+      "description": "The response from `userActivity:get` call.",
+      "id": "SearchUserActivityResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "This token should be passed to\n[SearchUserActivityRequest](#SearchUserActivityRequest) to retrieve the\nnext page.",
+          "type": "string"
+        },
+        "sampleRate": {
+          "description": "This field represents the\n[sampling rate](https://support.google.com/analytics/answer/2637192) for\nthe given request and is a number between 0.0 to 1.0. See\n[developer guide](/analytics/devguides/reporting/core/v4/basics#sampling)\nfor details.",
+          "format": "double",
+          "type": "number"
+        },
+        "sessions": {
+          "description": "Each record represents a session (device details, duration, etc).",
+          "items": {
+            "$ref": "UserActivitySession"
+          },
+          "type": "array"
+        },
+        "totalRows": {
+          "description": "Total rows returned by this query (across different pages).",
           "format": "int32",
           "type": "integer"
         }
@@ -1170,6 +1581,91 @@
             "$ref": "OrFiltersForSegment"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TransactionData": {
+      "description": "Represents details collected when the visitor performs a transaction on the\npage.",
+      "id": "TransactionData",
+      "properties": {
+        "transactionId": {
+          "description": "The transaction ID, supplied by the e-commerce tracking method, for the\npurchase in the shopping cart.",
+          "type": "string"
+        },
+        "transactionRevenue": {
+          "description": "The total sale revenue (excluding shipping and tax) of the transaction.",
+          "format": "double",
+          "type": "number"
+        },
+        "transactionShipping": {
+          "description": "Total cost of shipping.",
+          "format": "double",
+          "type": "number"
+        },
+        "transactionTax": {
+          "description": "Total tax for the transaction.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "User": {
+      "description": "Contains information to identify a particular user uniquely.",
+      "id": "User",
+      "properties": {
+        "type": {
+          "description": "Type of the user in the request. The field `userId` is associated with this\ntype.",
+          "enum": [
+            "USER_ID_TYPE_UNSPECIFIED",
+            "USER_ID",
+            "CLIENT_ID"
+          ],
+          "enumDescriptions": [
+            "When the User Id Type is not specified, the default type used will be\nCLIENT_ID.",
+            "A single user, like a signed-in user account, that may interact with\ncontent across one or more devices and / or browser instances.",
+            "Analytics assigned client_id."
+          ],
+          "type": "string"
+        },
+        "userId": {
+          "description": "Unique Id of the user for which the data is being requested.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UserActivitySession": {
+      "description": "This represents a user session performed on a specific device at a certain\ntime over a period of time.",
+      "id": "UserActivitySession",
+      "properties": {
+        "activities": {
+          "description": "Represents a detailed view into each of the activity in this session.",
+          "items": {
+            "$ref": "Activity"
+          },
+          "type": "array"
+        },
+        "dataSource": {
+          "description": "The data source of a hit. By default, hits sent from analytics.js are\nreported as \"web\" and hits sent from the mobile SDKs are reported as \"app\".\nThese values can be overridden in the Measurement Protocol.",
+          "type": "string"
+        },
+        "deviceCategory": {
+          "description": "The type of device used: \"mobile\", \"tablet\" etc.",
+          "type": "string"
+        },
+        "platform": {
+          "description": "Platform on which the activity happened: \"android\", \"ios\" etc.",
+          "type": "string"
+        },
+        "sessionDate": {
+          "description": "Date of this session in ISO-8601 format.",
+          "type": "string"
+        },
+        "sessionId": {
+          "description": "Unique ID of the session.",
+          "type": "string"
         }
       },
       "type": "object"

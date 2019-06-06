@@ -47,12 +47,6 @@ func TestParse(t *testing.T) {
 	testParse(t, clearsignInput2, "\r\n\r\n(This message has a couple of blank lines at the start and end.)\r\n\r\n", "\n\n(This message has a couple of blank lines at the start and end.)\n\n\n")
 }
 
-func TestParseInvalid(t *testing.T) {
-	if b, _ := Decode(clearsignInput3); b != nil {
-		t.Fatal("decoded a bad clearsigned message without any error")
-	}
-}
-
 func TestParseWithNoNewlineAtEnd(t *testing.T) {
 	input := clearsignInput
 	input = input[:len(input)-len("trailing")-1]
@@ -140,6 +134,10 @@ func (qr *quickRand) Read(p []byte) (int, error) {
 }
 
 func TestMultiSign(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping long test in -short mode")
+	}
+
 	zero := quickRand(0)
 	config := packet.Config{Rand: &zero}
 
@@ -193,6 +191,59 @@ func TestMultiSign(t *testing.T) {
 	}
 }
 
+const signatureBlock = `
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPrivacy 0.99
+
+yDgBO22WxBHv7O8X7O/jygAEzol56iUKiXmV+XmpCtmpqQUKiQrFqclFqUDBovzS
+vBSFjNSiVHsuAA==
+=njUN
+-----END PGP SIGNATURE-----
+`
+
+var invalidInputs = []string{
+	`
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+(This message was truncated.)
+`,
+	`
+-----BEGIN PGP SIGNED MESSAGE-----garbage
+Hash: SHA256
+
+_o/
+` + signatureBlock,
+	`
+garbage-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+_o/
+` + signatureBlock,
+	`
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA` + "\x0b\x0b" + `256
+
+_o/
+` + signatureBlock,
+	`
+-----BEGIN PGP SIGNED MESSAGE-----
+NotHash: SHA256
+
+_o/
+` + signatureBlock,
+}
+
+func TestParseInvalid(t *testing.T) {
+	for i, input := range invalidInputs {
+		if b, rest := Decode([]byte(input)); b != nil {
+			t.Errorf("#%d: decoded a bad clearsigned message without any error", i)
+		} else if string(rest) != input {
+			t.Errorf("#%d: did not return all data with a bad message", i)
+		}
+	}
+}
+
 var clearsignInput = []byte(`
 ;lasjlkfdsa
 
@@ -234,13 +285,6 @@ qZg6BaTvOxepqOxnhVU=
 -----END PGP SIGNATURE-----
 
 trailing`)
-
-var clearsignInput3 = []byte(`
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
-
-(This message was truncated.)
-`)
 
 var signingKey = `-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: GnuPG v1.4.10 (GNU/Linux)

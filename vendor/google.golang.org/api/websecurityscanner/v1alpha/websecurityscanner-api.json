@@ -12,7 +12,7 @@
   "baseUrl": "https://websecurityscanner.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "WebSecurityScanner",
-  "description": "Web Security Scanner API (under development).",
+  "description": "Scans your Compute and App Engine apps for common web vulnerabilities.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/security-scanner/",
   "fullyEncodeReservedExpansion": true,
@@ -525,7 +525,7 @@
       }
     }
   },
-  "revision": "20180906",
+  "revision": "20190114",
   "rootUrl": "https://websecurityscanner.googleapis.com/",
   "schemas": {
     "Authentication": {
@@ -865,7 +865,7 @@
       "type": "object"
     },
     "ScanConfig": {
-      "description": "A ScanConfig resource contains the configurations to launch a scan.",
+      "description": "A ScanConfig resource contains the configurations to launch a scan.\nnext id: 12",
       "id": "ScanConfig",
       "properties": {
         "authentication": {
@@ -882,6 +882,10 @@
         "displayName": {
           "description": "Required.\nThe user provided display name of the ScanConfig.",
           "type": "string"
+        },
+        "latestRun": {
+          "$ref": "ScanRun",
+          "description": "Latest ScanRun if available."
         },
         "maxQps": {
           "description": "The maximum QPS during scanning. A valid value ranges from 5 to 20\ninclusively. If the field is unspecified or its value is set 0, server will\ndefault to 15. Other values outside of [5, 20] range will be rejected with\nINVALID_ARGUMENT error.",

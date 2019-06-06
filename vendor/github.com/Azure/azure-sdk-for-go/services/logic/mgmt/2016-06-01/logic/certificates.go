@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewCertificatesClientWithBaseURI(baseURI string, subscriptionID string) Cer
 // certificateName - the integration account certificate name.
 // certificate - the integration account certificate.
 func (client CertificatesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, certificateName string, certificate IntegrationAccountCertificate) (result IntegrationAccountCertificate, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: certificate,
 			Constraints: []validation.Constraint{{Target: "certificate.IntegrationAccountCertificateProperties", Name: validation.Null, Rule: true,
@@ -129,6 +140,16 @@ func (client CertificatesClient) CreateOrUpdateResponder(resp *http.Response) (r
 // integrationAccountName - the integration account name.
 // certificateName - the integration account certificate name.
 func (client CertificatesClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, certificateName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, certificateName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.CertificatesClient", "Delete", nil, "Failure preparing request")
@@ -197,6 +218,16 @@ func (client CertificatesClient) DeleteResponder(resp *http.Response) (result au
 // integrationAccountName - the integration account name.
 // certificateName - the integration account certificate name.
 func (client CertificatesClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, certificateName string) (result IntegrationAccountCertificate, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, certificateName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.CertificatesClient", "Get", nil, "Failure preparing request")
@@ -266,6 +297,16 @@ func (client CertificatesClient) GetResponder(resp *http.Response) (result Integ
 // integrationAccountName - the integration account name.
 // top - the number of items to be included in the result.
 func (client CertificatesClient) ListByIntegrationAccounts(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32) (result IntegrationAccountCertificateListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.ListByIntegrationAccounts")
+		defer func() {
+			sc := -1
+			if result.iaclr.Response.Response != nil {
+				sc = result.iaclr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByIntegrationAccountsNextResults
 	req, err := client.ListByIntegrationAccountsPreparer(ctx, resourceGroupName, integrationAccountName, top)
 	if err != nil {
@@ -333,8 +374,8 @@ func (client CertificatesClient) ListByIntegrationAccountsResponder(resp *http.R
 }
 
 // listByIntegrationAccountsNextResults retrieves the next set of results, if any.
-func (client CertificatesClient) listByIntegrationAccountsNextResults(lastResults IntegrationAccountCertificateListResult) (result IntegrationAccountCertificateListResult, err error) {
-	req, err := lastResults.integrationAccountCertificateListResultPreparer()
+func (client CertificatesClient) listByIntegrationAccountsNextResults(ctx context.Context, lastResults IntegrationAccountCertificateListResult) (result IntegrationAccountCertificateListResult, err error) {
+	req, err := lastResults.integrationAccountCertificateListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.CertificatesClient", "listByIntegrationAccountsNextResults", nil, "Failure preparing next results request")
 	}
@@ -355,6 +396,16 @@ func (client CertificatesClient) listByIntegrationAccountsNextResults(lastResult
 
 // ListByIntegrationAccountsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CertificatesClient) ListByIntegrationAccountsComplete(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32) (result IntegrationAccountCertificateListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CertificatesClient.ListByIntegrationAccounts")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByIntegrationAccounts(ctx, resourceGroupName, integrationAccountName, top)
 	return
 }

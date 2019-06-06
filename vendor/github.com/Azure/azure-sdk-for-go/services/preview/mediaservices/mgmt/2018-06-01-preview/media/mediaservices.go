@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewMediaservicesClientWithBaseURI(baseURI string, subscriptionID string) Me
 // accountName - the Media Services account name.
 // parameters - the request parameters
 func (client MediaservicesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, parameters Service) (result Service, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.MediaservicesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client MediaservicesClient) CreateOrUpdateResponder(resp *http.Response) (
 // resourceGroupName - the name of the resource group within the Azure subscription.
 // accountName - the Media Services account name.
 func (client MediaservicesClient) Delete(ctx context.Context, resourceGroupName string, accountName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.MediaservicesClient", "Delete", nil, "Failure preparing request")
@@ -180,6 +201,16 @@ func (client MediaservicesClient) DeleteResponder(resp *http.Response) (result a
 // resourceGroupName - the name of the resource group within the Azure subscription.
 // accountName - the Media Services account name.
 func (client MediaservicesClient) Get(ctx context.Context, resourceGroupName string, accountName string) (result Service, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.MediaservicesClient", "Get", nil, "Failure preparing request")
@@ -246,6 +277,16 @@ func (client MediaservicesClient) GetResponder(resp *http.Response) (result Serv
 // Parameters:
 // accountName - the Media Services account name.
 func (client MediaservicesClient) GetBySubscription(ctx context.Context, accountName string) (result SubscriptionMediaService, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.GetBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetBySubscriptionPreparer(ctx, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.MediaservicesClient", "GetBySubscription", nil, "Failure preparing request")
@@ -311,6 +352,16 @@ func (client MediaservicesClient) GetBySubscriptionResponder(resp *http.Response
 // Parameters:
 // resourceGroupName - the name of the resource group within the Azure subscription.
 func (client MediaservicesClient) List(ctx context.Context, resourceGroupName string) (result ServiceCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.List")
+		defer func() {
+			sc := -1
+			if result.sc.Response.Response != nil {
+				sc = result.sc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -374,8 +425,8 @@ func (client MediaservicesClient) ListResponder(resp *http.Response) (result Ser
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client MediaservicesClient) listNextResults(lastResults ServiceCollection) (result ServiceCollection, err error) {
-	req, err := lastResults.serviceCollectionPreparer()
+func (client MediaservicesClient) listNextResults(ctx context.Context, lastResults ServiceCollection) (result ServiceCollection, err error) {
+	req, err := lastResults.serviceCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.MediaservicesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -396,12 +447,32 @@ func (client MediaservicesClient) listNextResults(lastResults ServiceCollection)
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client MediaservicesClient) ListComplete(ctx context.Context, resourceGroupName string) (result ServiceCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription list Media Services accounts in the subscription.
 func (client MediaservicesClient) ListBySubscription(ctx context.Context) (result SubscriptionMediaServiceCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.smsc.Response.Response != nil {
+				sc = result.smsc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -464,8 +535,8 @@ func (client MediaservicesClient) ListBySubscriptionResponder(resp *http.Respons
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client MediaservicesClient) listBySubscriptionNextResults(lastResults SubscriptionMediaServiceCollection) (result SubscriptionMediaServiceCollection, err error) {
-	req, err := lastResults.subscriptionMediaServiceCollectionPreparer()
+func (client MediaservicesClient) listBySubscriptionNextResults(ctx context.Context, lastResults SubscriptionMediaServiceCollection) (result SubscriptionMediaServiceCollection, err error) {
+	req, err := lastResults.subscriptionMediaServiceCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.MediaservicesClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -486,6 +557,16 @@ func (client MediaservicesClient) listBySubscriptionNextResults(lastResults Subs
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client MediaservicesClient) ListBySubscriptionComplete(ctx context.Context) (result SubscriptionMediaServiceCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -496,6 +577,16 @@ func (client MediaservicesClient) ListBySubscriptionComplete(ctx context.Context
 // accountName - the Media Services account name.
 // parameters - the request parameters
 func (client MediaservicesClient) SyncStorageKeys(ctx context.Context, resourceGroupName string, accountName string, parameters SyncStorageKeysInput) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.SyncStorageKeys")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.SyncStorageKeysPreparer(ctx, resourceGroupName, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.MediaservicesClient", "SyncStorageKeys", nil, "Failure preparing request")
@@ -565,6 +656,16 @@ func (client MediaservicesClient) SyncStorageKeysResponder(resp *http.Response) 
 // accountName - the Media Services account name.
 // parameters - the request parameters
 func (client MediaservicesClient) Update(ctx context.Context, resourceGroupName string, accountName string, parameters Service) (result Service, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MediaservicesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.MediaservicesClient", "Update", nil, "Failure preparing request")

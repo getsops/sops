@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewAPIIssueAttachmentClientWithBaseURI(baseURI string, subscriptionID strin
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueAttachmentClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string, parameters IssueAttachmentContract, ifMatch string) (result IssueAttachmentContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -158,6 +169,16 @@ func (client APIIssueAttachmentClient) CreateOrUpdateResponder(resp *http.Respon
 // ifMatch - eTag of the Issue Entity. ETag should match the current entity state from the header response of
 // the GET request or it should be * for unconditional update.
 func (client APIIssueAttachmentClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -251,6 +272,16 @@ func (client APIIssueAttachmentClient) DeleteResponder(resp *http.Response) (res
 // issueID - issue identifier. Must be unique in the current API Management service instance.
 // attachmentID - attachment identifier within an Issue. Must be unique in the current Issue.
 func (client APIIssueAttachmentClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, issueID string, attachmentID string) (result IssueAttachmentContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIIssueAttachmentClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

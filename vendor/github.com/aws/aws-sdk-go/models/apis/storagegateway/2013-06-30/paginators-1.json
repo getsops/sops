@@ -30,6 +30,15 @@
       "output_token": "Marker",
       "result_key": "VTLDevices"
     },
+    "ListFileShares": {
+      "input_token": "Marker",
+      "limit_key": "Limit",
+      "non_aggregate_keys": [
+        "Marker"
+      ],
+      "output_token": "NextMarker",
+      "result_key": "FileShareInfoList"
+    },
     "ListGateways": {
       "input_token": "Marker",
       "limit_key": "Limit",
@@ -38,6 +47,21 @@
     },
     "ListLocalDisks": {
       "result_key": "Disks"
+    },
+    "ListTagsForResource": {
+      "input_token": "Marker",
+      "limit_key": "Limit",
+      "non_aggregate_keys": [
+        "ResourceARN"
+      ],
+      "output_token": "Marker",
+      "result_key": "Tags"
+    },
+    "ListTapes": {
+      "input_token": "Marker",
+      "limit_key": "Limit",
+      "output_token": "Marker",
+      "result_key": "TapeInfos"
     },
     "ListVolumeRecoveryPoints": {
       "result_key": "VolumeRecoveryPointInfos"

@@ -1,5 +1,11 @@
 {
   "pagination": {
+    "DescribeRemediationExecutionStatus": {
+      "input_token": "NextToken",
+      "limit_key": "Limit",
+      "output_token": "NextToken",
+      "result_key": "RemediationExecutionStatuses"
+    },
     "GetResourceConfigHistory": {
       "input_token": "nextToken",
       "limit_key": "limit",

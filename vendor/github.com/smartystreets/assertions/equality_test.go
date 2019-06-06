@@ -26,10 +26,10 @@ func (this *AssertionsFixture) TestShouldEqual() {
 	this.pass(so(42, ShouldEqual, uint(42)))
 
 	this.fail(so(Thing1{"hi"}, ShouldEqual, Thing1{}), "{}|{hi}|Expected: '{}' Actual: '{hi}' (Should be equal)")
-	this.fail(so(Thing1{"hi"}, ShouldEqual, Thing1{"hi"}), "{hi}|{hi}|Expected: '{hi}' Actual: '{hi}' (Should be equal)")
-	this.fail(so(&Thing1{"hi"}, ShouldEqual, &Thing1{"hi"}), "&{hi}|&{hi}|Expected: '&{hi}' Actual: '&{hi}' (Should be equal)")
+	this.fail(so(Thing1{"hi"}, ShouldEqual, Thing1{"hi"}), "{hi}|{hi}|Both the actual and expected values render equally ('{hi}') and their types are the same. Try using ShouldResemble instead.")
+	this.fail(so(&Thing1{"hi"}, ShouldEqual, &Thing1{"hi"}), "&{hi}|&{hi}|Both the actual and expected values render equally ('&{hi}') and their types are the same. Try using ShouldResemble instead.")
 
-	this.fail(so(Thing1{}, ShouldEqual, Thing2{}), "{}|{}|Expected: '{}' Actual: '{}' (Should be equal)")
+	this.fail(so(Thing1{}, ShouldEqual, Thing2{}), "{}|{}|Expected: '{}' (assertions.Thing2) Actual: '{}' (assertions.Thing1) (Should be equal, type mismatch)")
 
 	this.pass(so(ThingWithEqualMethod{"hi"}, ShouldEqual, ThingWithEqualMethod{"hi"}))
 	this.fail(so(ThingWithEqualMethod{"hi"}, ShouldEqual, ThingWithEqualMethod{"bye"}),
@@ -137,7 +137,7 @@ func (this *AssertionsFixture) TestShouldResemble() {
 	this.fail(so(Thing1{"hi"}, ShouldResemble, Thing1{"hi"}, Thing1{"hi"}), "This assertion requires exactly 1 comparison values (you provided 2).")
 
 	this.pass(so(Thing1{"hi"}, ShouldResemble, Thing1{"hi"}))
-	this.fail(so(Thing1{"hi"}, ShouldResemble, Thing1{"bye"}), `{bye}|{hi}|Expected: 'assertions.Thing1{a:"bye"}' Actual: 'assertions.Thing1{a:"hi"}' (Should resemble)!`)
+	this.fail(so(Thing1{"hi"}, ShouldResemble, Thing1{"bye"}), `{bye}|{hi}|Expected: 'assertions.Thing1{a:"bye"}' Actual: 'assertions.Thing1{a:"hi"}' (Should resemble)! Diff: 'assertions.Thing1{a:"byehi"}'`)
 
 	var (
 		a []int
@@ -148,42 +148,13 @@ func (this *AssertionsFixture) TestShouldResemble() {
 	this.fail(so(2, ShouldResemble, 1), `1|2|Expected: '1' Actual: '2' (Should resemble)!`)
 
 	this.fail(so(StringStringMapAlias{"hi": "bye"}, ShouldResemble, map[string]string{"hi": "bye"}),
-		`map[hi:bye]|map[hi:bye]|Expected: 'map[string]string{"hi":"bye"}' Actual: 'assertions.StringStringMapAlias{"hi":"bye"}' (Should resemble)!`)
+		`map[hi:bye]|map[hi:bye]|Expected: 'map[string]string{"hi":"bye"}' Actual: 'assertions.StringStringMapAlias{"hi":"bye"}' (Should resemble)! Diff: 'map[ssertions.String]sStringMapAlias{"hi":"bye"}'`)
 	this.fail(so(StringSliceAlias{"hi", "bye"}, ShouldResemble, []string{"hi", "bye"}),
 		`[hi bye]|[hi bye]|Expected: '[]string{"hi", "bye"}' Actual: 'assertions.StringSliceAlias{"hi", "bye"}' (Should resemble)!`)
 
 	// some types come out looking the same when represented with "%#v" so we show type mismatch info:
 	this.fail(so(StringAlias("hi"), ShouldResemble, "hi"), `hi|hi|Expected: '"hi"' Actual: 'assertions.StringAlias("hi")' (Should resemble)!`)
 	this.fail(so(IntAlias(42), ShouldResemble, 42), `42|42|Expected: '42' Actual: 'assertions.IntAlias(42)' (Should resemble)!`)
-}
-
-func (this *AssertionsFixture) TestShouldEqualJSON() {
-	this.fail(so("hi", ShouldEqualJSON), "This assertion requires exactly 1 comparison values (you provided 0).")
-	this.fail(so("hi", ShouldEqualJSON, "hi", "hi"), "This assertion requires exactly 1 comparison values (you provided 2).")
-
-	// basic identity of keys/values
-	this.pass(so(`{"my":"val"}`, ShouldEqualJSON, `{"my":"val"}`))
-	this.fail(so(`{"my":"val"}`, ShouldEqualJSON, `{"your":"val"}`),
-		`{"your":"val"}|{"my":"val"}|Expected: '{"your":"val"}' Actual: '{"my":"val"}' (Should be equal)`)
-
-	// out of order values causes comparison failure:
-	this.pass(so(`{"key0":"val0","key1":"val1"}`, ShouldEqualJSON, `{"key1":"val1","key0":"val0"}`))
-	this.fail(so(`{"key0":"val0","key1":"val1"}`, ShouldEqualJSON, `{"key1":"val0","key0":"val0"}`),
-		`{"key0":"val0","key1":"val0"}|{"key0":"val0","key1":"val1"}|Expected: '{"key0":"val0","key1":"val0"}' Actual: '{"key0":"val0","key1":"val1"}' (Should be equal)`)
-
-	// missing values causes comparison failure:
-	this.fail(so(
-		`{"key0":"val0","key1":"val1"}`,
-		ShouldEqualJSON,
-		`{"key1":"val0"}`),
-		`{"key1":"val0"}|{"key0":"val0","key1":"val1"}|Expected: '{"key1":"val0"}' Actual: '{"key0":"val0","key1":"val1"}' (Should be equal)`)
-
-	// whitespace shouldn't interfere with comparison:
-	this.pass(so("\n{ \"my\"  :   \"val\"\n}", ShouldEqualJSON, `{"my":"val"}`))
-
-	// Invalid JSON for either actual or expected value is invalid:
-	this.fail(so("{}", ShouldEqualJSON, ""), "Expected value not valid JSON: unexpected end of JSON input")
-	this.fail(so("", ShouldEqualJSON, "{}"), "Actual value not valid JSON: unexpected end of JSON input")
 }
 
 func (this *AssertionsFixture) TestShouldNotResemble() {
@@ -198,6 +169,45 @@ func (this *AssertionsFixture) TestShouldNotResemble() {
 	this.pass(so(IntAlias(42), ShouldNotResemble, 42))
 
 	this.pass(so(StringSliceAlias{"hi", "bye"}, ShouldNotResemble, []string{"hi", "bye"}))
+}
+
+func (this *AssertionsFixture) TestShouldEqualJSON() {
+	this.fail(so("hi", ShouldEqualJSON), "This assertion requires exactly 1 comparison values (you provided 0).")
+	this.fail(so("hi", ShouldEqualJSON, "hi", "hi"), "This assertion requires exactly 1 comparison values (you provided 2).")
+
+	// basic identity of keys/values
+	this.pass(so(`{"my":"val"}`, ShouldEqualJSON, `{"my":"val"}`))
+	this.fail(so(`{"my":"val"}`, ShouldEqualJSON, `{"your":"val"}`),
+		`{"your":"val"}|{"my":"val"}|Expected: '{"your":"val"}' Actual: '{"my":"val"}' (Should be equal) Diff: '{"myour":"val"}'`)
+
+	// out of order values causes comparison failure:
+	this.pass(so(`{"key0":"val0","key1":"val1"}`, ShouldEqualJSON, `{"key1":"val1","key0":"val0"}`))
+	this.fail(so(`{"key0":"val0","key1":"val1"}`, ShouldEqualJSON, `{"key1":"val0","key0":"val0"}`),
+		`{"key0":"val0","key1":"val0"}|{"key0":"val0","key1":"val1"}|Expected: '{"key0":"val0","key1":"val0"}' Actual: '{"key0":"val0","key1":"val1"}' (Should be equal)  Diff: '{"key0":"val0","key1":"val01"}'`)
+
+	// missing values causes comparison failure:
+	this.fail(so(
+		`{"key0":"val0","key1":"val1"}`,
+		ShouldEqualJSON,
+		`{"key1":"val0"}`),
+		`{"key1":"val0"}|{"key0":"val0","key1":"val1"}|Expected: '{"key1":"val0"}' Actual: '{"key0":"val0","key1":"val1"}' (Should be equal)`)
+
+	// whitespace shouldn't interfere with comparison:
+	this.pass(so("\n{ \"my\"  :   \"val\"\n}", ShouldEqualJSON, `{"my":"val"}`))
+
+	// Invalid JSON for either actual or expected value is invalid:
+	this.fail(so("{}", ShouldEqualJSON, ""), "Expected value not valid JSON: unexpected end of JSON input")
+	this.fail(so("", ShouldEqualJSON, "{}"), "Actual value not valid JSON: unexpected end of JSON input")
+
+	// Support JSON array:
+	this.pass(so("[]", ShouldEqualJSON, "[]"))
+
+	// Support any JSON value:
+	this.pass(so(`"hi"`, ShouldEqualJSON, `"hi"`))
+	this.pass(so(`42`, ShouldEqualJSON, `42`))
+	this.pass(so(`true`, ShouldEqualJSON, `true`))
+	this.pass(so(`false`, ShouldEqualJSON, `false`))
+	this.pass(so(`null`, ShouldEqualJSON, `null`))
 }
 
 func (this *AssertionsFixture) TestShouldPointTo() {

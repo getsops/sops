@@ -32,7 +32,6 @@
   "description": "A data platform for customers to create, manage, share and query data.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/bigquery/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/QF07rEPTnP4y6xu7pxBI9RDU640\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/search-16.gif",
     "x32": "https://www.google.com/images/icons/product/search-32.gif"
@@ -317,7 +316,7 @@
               "type": "string"
             },
             "location": {
-              "description": "[Experimental] The geographic location of the job. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/dataset-locations#specifying_your_location.",
+              "description": "The geographic location of the job. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/locations#specifying_your_location.",
               "location": "query",
               "type": "string"
             },
@@ -353,7 +352,7 @@
               "type": "string"
             },
             "location": {
-              "description": "[Experimental] The geographic location of the job. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/dataset-locations#specifying_your_location.",
+              "description": "The geographic location of the job. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/locations#specifying_your_location.",
               "location": "query",
               "type": "string"
             },
@@ -390,7 +389,7 @@
               "type": "string"
             },
             "location": {
-              "description": "[Experimental] The geographic location where the job should run. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/dataset-locations#specifying_your_location.",
+              "description": "The geographic location where the job should run. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/locations#specifying_your_location.",
               "location": "query",
               "type": "string"
             },
@@ -588,6 +587,183 @@
             "https://www.googleapis.com/auth/bigquery",
             "https://www.googleapis.com/auth/cloud-platform",
             "https://www.googleapis.com/auth/cloud-platform.read-only"
+          ]
+        }
+      }
+    },
+    "models": {
+      "methods": {
+        "delete": {
+          "description": "Deletes the model specified by modelId from the dataset.",
+          "flatPath": "projects/{projectsId}/datasets/{datasetsId}/models/{modelsId}",
+          "httpMethod": "DELETE",
+          "id": "bigquery.models.delete",
+          "parameterOrder": [
+            "projectId",
+            "datasetId",
+            "modelId"
+          ],
+          "parameters": {
+            "datasetId": {
+              "description": "Dataset ID of the model to delete.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "modelId": {
+              "description": "Model ID of the model to delete.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "projectId": {
+              "description": "Project ID of the model to delete.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "projects/{+projectId}/datasets/{+datasetId}/models/{+modelId}",
+          "scopes": [
+            "https://www.googleapis.com/auth/bigquery",
+            "https://www.googleapis.com/auth/cloud-platform"
+          ]
+        },
+        "get": {
+          "description": "Gets the specified model resource by model ID.",
+          "flatPath": "projects/{projectsId}/datasets/{datasetsId}/models/{modelsId}",
+          "httpMethod": "GET",
+          "id": "bigquery.models.get",
+          "parameterOrder": [
+            "projectId",
+            "datasetId",
+            "modelId"
+          ],
+          "parameters": {
+            "datasetId": {
+              "description": "Dataset ID of the requested model.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "modelId": {
+              "description": "Model ID of the requested model.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "projectId": {
+              "description": "Project ID of the requested model.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "projects/{+projectId}/datasets/{+datasetId}/models/{+modelId}",
+          "response": {
+            "$ref": "Model"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/bigquery",
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/cloud-platform.read-only"
+          ]
+        },
+        "list": {
+          "description": "Lists all models in the specified dataset. Requires the READER dataset\nrole.",
+          "flatPath": "projects/{projectsId}/datasets/{datasetsId}/models",
+          "httpMethod": "GET",
+          "id": "bigquery.models.list",
+          "parameterOrder": [
+            "projectId",
+            "datasetId"
+          ],
+          "parameters": {
+            "datasetId": {
+              "description": "Dataset ID of the models to list.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "maxResults": {
+              "description": "The maximum number of results per page.",
+              "format": "uint32",
+              "location": "query",
+              "type": "integer"
+            },
+            "pageToken": {
+              "description": "Page token, returned by a previous call to request the next page of\nresults",
+              "location": "query",
+              "type": "string"
+            },
+            "projectId": {
+              "description": "Project ID of the models to list.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "projects/{+projectId}/datasets/{+datasetId}/models",
+          "response": {
+            "$ref": "ListModelsResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/bigquery",
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/cloud-platform.read-only"
+          ]
+        },
+        "patch": {
+          "description": "Patch specific fields in the specified model.",
+          "flatPath": "projects/{projectsId}/datasets/{datasetsId}/models/{modelsId}",
+          "httpMethod": "PATCH",
+          "id": "bigquery.models.patch",
+          "parameterOrder": [
+            "projectId",
+            "datasetId",
+            "modelId"
+          ],
+          "parameters": {
+            "datasetId": {
+              "description": "Dataset ID of the model to patch.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "modelId": {
+              "description": "Model ID of the model to patch.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            },
+            "projectId": {
+              "description": "Project ID of the model to patch.",
+              "location": "path",
+              "pattern": "^[^/]+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "projects/{+projectId}/datasets/{+datasetId}/models/{+modelId}",
+          "request": {
+            "$ref": "Model"
+          },
+          "response": {
+            "$ref": "Model"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/bigquery",
+            "https://www.googleapis.com/auth/cloud-platform"
           ]
         }
       }
@@ -998,9 +1174,51 @@
       }
     }
   },
-  "revision": "20180826",
+  "revision": "20190510",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
+    "AggregateClassificationMetrics": {
+      "description": "Aggregate metrics for classification/classifier models. For multi-class\nmodels, the metrics are either macro-averaged or micro-averaged. When\nmacro-averaged, the metrics are calculated for each label and then an\nunweighted average is taken of those values. When micro-averaged, the\nmetric is calculated globally by counting the total number of correctly\npredicted rows.",
+      "id": "AggregateClassificationMetrics",
+      "properties": {
+        "accuracy": {
+          "description": "Accuracy is the fraction of predictions given the correct label. For\nmulticlass this is a micro-averaged metric.",
+          "format": "double",
+          "type": "number"
+        },
+        "f1Score": {
+          "description": "The F1 score is an average of recall and precision. For multiclass\nthis is a macro-averaged metric.",
+          "format": "double",
+          "type": "number"
+        },
+        "logLoss": {
+          "description": "Logarithmic Loss. For multiclass this is a macro-averaged metric.",
+          "format": "double",
+          "type": "number"
+        },
+        "precision": {
+          "description": "Precision is the fraction of actual positive predictions that had\npositive actual labels. For multiclass this is a macro-averaged\nmetric treating each class as a binary classifier.",
+          "format": "double",
+          "type": "number"
+        },
+        "recall": {
+          "description": "Recall is the fraction of actual positive labels that were given a\npositive prediction. For multiclass this is a macro-averaged metric.",
+          "format": "double",
+          "type": "number"
+        },
+        "rocAuc": {
+          "description": "Area Under a ROC Curve. For multiclass this is a macro-averaged\nmetric.",
+          "format": "double",
+          "type": "number"
+        },
+        "threshold": {
+          "description": "Threshold at which the metrics are computed. For binary\nclassification models this is the positive class threshold.\nFor multi-class classfication models this is the confidence\nthreshold.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "BigQueryModelTraining": {
       "id": "BigQueryModelTraining",
       "properties": {
@@ -1097,6 +1315,180 @@
       },
       "type": "object"
     },
+    "BinaryClassificationMetrics": {
+      "description": "Evaluation metrics for binary classification/classifier models.",
+      "id": "BinaryClassificationMetrics",
+      "properties": {
+        "aggregateClassificationMetrics": {
+          "$ref": "AggregateClassificationMetrics",
+          "description": "Aggregate classification metrics."
+        },
+        "binaryConfusionMatrixList": {
+          "description": "Binary confusion matrix at multiple thresholds.",
+          "items": {
+            "$ref": "BinaryConfusionMatrix"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "BinaryConfusionMatrix": {
+      "description": "Confusion matrix for binary classification models.",
+      "id": "BinaryConfusionMatrix",
+      "properties": {
+        "falseNegatives": {
+          "description": "Number of false samples predicted as false.",
+          "format": "int64",
+          "type": "string"
+        },
+        "falsePositives": {
+          "description": "Number of false samples predicted as true.",
+          "format": "int64",
+          "type": "string"
+        },
+        "positiveClassThreshold": {
+          "description": "Threshold value used when computing each of the following metric.",
+          "format": "double",
+          "type": "number"
+        },
+        "precision": {
+          "description": "Aggregate precision.",
+          "format": "double",
+          "type": "number"
+        },
+        "recall": {
+          "description": "Aggregate recall.",
+          "format": "double",
+          "type": "number"
+        },
+        "trueNegatives": {
+          "description": "Number of true samples predicted as false.",
+          "format": "int64",
+          "type": "string"
+        },
+        "truePositives": {
+          "description": "Number of true samples predicted as true.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BqmlIterationResult": {
+      "id": "BqmlIterationResult",
+      "properties": {
+        "durationMs": {
+          "description": "[Output-only, Beta] Time taken to run the training iteration in milliseconds.",
+          "format": "int64",
+          "type": "string"
+        },
+        "evalLoss": {
+          "description": "[Output-only, Beta] Eval loss computed on the eval data at the end of the iteration. The eval loss is used for early stopping to avoid overfitting. No eval loss if eval_split_method option is specified as no_split or auto_split with input data size less than 500 rows.",
+          "format": "double",
+          "type": "number"
+        },
+        "index": {
+          "description": "[Output-only, Beta] Index of the ML training iteration, starting from zero for each training run.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "learnRate": {
+          "description": "[Output-only, Beta] Learning rate used for this iteration, it varies for different training iterations if learn_rate_strategy option is not constant.",
+          "format": "double",
+          "type": "number"
+        },
+        "trainingLoss": {
+          "description": "[Output-only, Beta] Training loss computed on the training data at the end of the iteration. The training loss function is defined by model type.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "BqmlTrainingRun": {
+      "id": "BqmlTrainingRun",
+      "properties": {
+        "iterationResults": {
+          "description": "[Output-only, Beta] List of each iteration results.",
+          "items": {
+            "$ref": "BqmlIterationResult"
+          },
+          "type": "array"
+        },
+        "startTime": {
+          "description": "[Output-only, Beta] Training run start time in milliseconds since the epoch.",
+          "format": "date-time",
+          "type": "string"
+        },
+        "state": {
+          "description": "[Output-only, Beta] Different state applicable for a training run. IN PROGRESS: Training run is in progress. FAILED: Training run ended due to a non-retryable failure. SUCCEEDED: Training run successfully completed. CANCELLED: Training run cancelled by the user.",
+          "type": "string"
+        },
+        "trainingOptions": {
+          "description": "[Output-only, Beta] Training options used by this training run. These options are mutable for subsequent training runs. Default values are explicitly stored for options not specified in the input query of the first training run. For subsequent training runs, any option not explicitly specified in the input query will be copied from the previous training run.",
+          "properties": {
+            "earlyStop": {
+              "type": "boolean"
+            },
+            "l1Reg": {
+              "format": "double",
+              "type": "number"
+            },
+            "l2Reg": {
+              "format": "double",
+              "type": "number"
+            },
+            "learnRate": {
+              "format": "double",
+              "type": "number"
+            },
+            "learnRateStrategy": {
+              "type": "string"
+            },
+            "lineSearchInitLearnRate": {
+              "format": "double",
+              "type": "number"
+            },
+            "maxIteration": {
+              "format": "int64",
+              "type": "string"
+            },
+            "minRelProgress": {
+              "format": "double",
+              "type": "number"
+            },
+            "warmStart": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ClusterInfo": {
+      "description": "Information about a single cluster for clustering model.",
+      "id": "ClusterInfo",
+      "properties": {
+        "centroidId": {
+          "description": "Centroid id.",
+          "format": "int64",
+          "type": "string"
+        },
+        "clusterRadius": {
+          "description": "Cluster radius, the average distance from centroid\nto each point assigned to the cluster.",
+          "format": "double",
+          "type": "number"
+        },
+        "clusterSize": {
+          "description": "Cluster size, the total number of points assigned to the cluster.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Clustering": {
       "id": "Clustering",
       "properties": {
@@ -1104,6 +1496,42 @@
           "description": "[Repeated] One or more fields on which data should be clustered. Only top-level, non-repeated, simple-type fields are supported. When you cluster a table using multiple columns, the order of columns you specify is important. The order of the specified columns determines the sort order of the data.",
           "items": {
             "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ClusteringMetrics": {
+      "description": "Evaluation metrics for clustering models.",
+      "id": "ClusteringMetrics",
+      "properties": {
+        "daviesBouldinIndex": {
+          "description": "Davies-Bouldin index.",
+          "format": "double",
+          "type": "number"
+        },
+        "meanSquaredDistance": {
+          "description": "Mean of squared distances between each sample to its cluster centroid.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "ConfusionMatrix": {
+      "description": "Confusion matrix for multi-class classification models.",
+      "id": "ConfusionMatrix",
+      "properties": {
+        "confidenceThreshold": {
+          "description": "Confidence threshold used when computing the entries of the\nconfusion matrix.",
+          "format": "double",
+          "type": "number"
+        },
+        "rows": {
+          "description": "One row per actual label.",
+          "items": {
+            "$ref": "Row"
           },
           "type": "array"
         }
@@ -1151,23 +1579,27 @@
           "items": {
             "properties": {
               "domain": {
-                "description": "[Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: \"example.com\".",
+                "description": "[Pick one] A domain to grant access to. Any users signed in with the domain specified will be granted the specified access. Example: \"example.com\". Maps to IAM policy member \"domain:DOMAIN\".",
                 "type": "string"
               },
               "groupByEmail": {
-                "description": "[Pick one] An email address of a Google Group to grant access to.",
+                "description": "[Pick one] An email address of a Google Group to grant access to. Maps to IAM policy member \"group:GROUP\".",
+                "type": "string"
+              },
+              "iamMember": {
+                "description": "[Pick one] Some other type of member that appears in the IAM Policy but isn't a user, group, domain, or special group.",
                 "type": "string"
               },
               "role": {
-                "description": "[Required] Describes the rights granted to the user specified by the other member of the access object. The following string values are supported: READER, WRITER, OWNER.",
+                "description": "[Required] An IAM role ID that should be granted to the user, group, or domain specified in this access entry. The following legacy mappings will be applied: OWNER  roles/bigquery.dataOwner WRITER  roles/bigquery.dataEditor READER  roles/bigquery.dataViewer This field will accept any of the above formats, but will return only the legacy format. For example, if you set this field to \"roles/bigquery.dataOwner\", it will be returned back as \"OWNER\".",
                 "type": "string"
               },
               "specialGroup": {
-                "description": "[Pick one] A special group to grant access to. Possible values include: projectOwners: Owners of the enclosing project. projectReaders: Readers of the enclosing project. projectWriters: Writers of the enclosing project. allAuthenticatedUsers: All authenticated BigQuery users.",
+                "description": "[Pick one] A special group to grant access to. Possible values include: projectOwners: Owners of the enclosing project. projectReaders: Readers of the enclosing project. projectWriters: Writers of the enclosing project. allAuthenticatedUsers: All authenticated BigQuery users. Maps to similarly-named IAM members.",
                 "type": "string"
               },
               "userByEmail": {
-                "description": "[Pick one] An email address of a user to grant access to. For example: fred@example.com.",
+                "description": "[Pick one] An email address of a user to grant access to. For example: fred@example.com. Maps to IAM policy member \"user:EMAIL\" or \"serviceAccount:EMAIL\".",
                 "type": "string"
               },
               "view": {
@@ -1232,7 +1664,7 @@
           "type": "string"
         },
         "location": {
-          "description": "The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/dataset-locations.",
+          "description": "The geographic location where the dataset should reside. The default value is US. See details at https://cloud.google.com/bigquery/docs/locations.",
           "type": "string"
         },
         "selfLink": {
@@ -1274,7 +1706,7 @@
                 "type": "object"
               },
               "location": {
-                "description": "[Experimental] The geographic location where the data resides.",
+                "description": "The geographic location where the data resides.",
                 "type": "string"
               }
             },
@@ -1332,6 +1764,13 @@
         "friendlyName": {
           "description": "[Optional] The friendly name for the destination table. This will only be used if the destination table is newly created. If the table already exists and a value different than the current friendly name is provided, the job will fail.",
           "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "[Optional] The labels associated with this table. You can use these to organize and group your tables. This will only be used if the destination table is newly created. If the table already exists and labels are different than the current labels are provided, the job will fail.",
+          "type": "object"
         }
       },
       "type": "object"
@@ -1341,6 +1780,22 @@
       "properties": {
         "kmsKeyName": {
           "description": "[Optional] Describes the Cloud KMS encryption key that will be used to protect destination BigQuery table. The BigQuery Service Account associated with your project requires access to this encryption key.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Entry": {
+      "description": "A single entry in the confusion matrix.",
+      "id": "Entry",
+      "properties": {
+        "itemCount": {
+          "description": "Number of items being predicted as this label.",
+          "format": "int64",
+          "type": "string"
+        },
+        "predictedLabel": {
+          "description": "The predicted label. For confidence_threshold \u003e 0, we will\nalso add an entry indicating the number of items under the\nconfidence threshold.",
           "type": "string"
         }
       },
@@ -1364,6 +1819,29 @@
         "reason": {
           "description": "A short error code that summarizes the error.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "EvaluationMetrics": {
+      "description": "Evaluation metrics of a model. These are either computed on all training\ndata or just the eval data based on whether eval data was used during\ntraining. These are not present for imported models.",
+      "id": "EvaluationMetrics",
+      "properties": {
+        "binaryClassificationMetrics": {
+          "$ref": "BinaryClassificationMetrics",
+          "description": "Populated for binary classification/classifier models."
+        },
+        "clusteringMetrics": {
+          "$ref": "ClusteringMetrics",
+          "description": "[Beta] Populated for clustering models."
+        },
+        "multiClassClassificationMetrics": {
+          "$ref": "MultiClassClassificationMetrics",
+          "description": "Populated for multi-class classification/classifier models."
+        },
+        "regressionMetrics": {
+          "$ref": "RegressionMetrics",
+          "description": "Populated for regression models."
         }
       },
       "type": "object"
@@ -1562,6 +2040,10 @@
           "$ref": "GoogleSheetsOptions",
           "description": "[Optional] Additional options if sourceFormat is set to GOOGLE_SHEETS."
         },
+        "hivePartitioningMode": {
+          "description": "[Optional, Experimental] If hive partitioning is enabled, which mode to use. Two modes are supported: - AUTO: automatically infer partition key name(s) and type(s). - STRINGS: automatic infer partition key name(s). All types are strings. Not all storage formats support hive partitioning -- requesting hive partitioning on an unsupported format will lead to an error.",
+          "type": "string"
+        },
         "ignoreUnknownValues": {
           "description": "[Optional] Indicates if BigQuery should allow extra values that are not represented in the table schema. If true, the extra values are ignored. If false, records with extra columns are treated as bad records, and if there are too many bad records, an invalid error is returned in the job result. The default value is false. The sourceFormat property determines what BigQuery treats as an extra value: CSV: Trailing columns JSON: Named values that don't match any column names Google Cloud Bigtable: This setting is ignored. Google Cloud Datastore backups: This setting is ignored. Avro: This setting is ignored.",
           "type": "boolean"
@@ -1672,7 +2154,7 @@
       "id": "GoogleSheetsOptions",
       "properties": {
         "range": {
-          "description": "[Beta] [Optional] Range of a sheet to query from. Only used when non-empty. Typical format: !:",
+          "description": "[Beta] [Optional] Range of a sheet to query from. Only used when non-empty. Typical format: sheet_name!top_left_cell_id:bottom_right_cell_id For example: sheet1!A1:B20",
           "type": "string"
         },
         "skipLeadingRows": {
@@ -1684,30 +2166,38 @@
       "type": "object"
     },
     "IterationResult": {
+      "description": "Information about a single iteration of the training run.",
       "id": "IterationResult",
       "properties": {
+        "clusterInfos": {
+          "description": "[Beta] Information about top clusters for clustering models.",
+          "items": {
+            "$ref": "ClusterInfo"
+          },
+          "type": "array"
+        },
         "durationMs": {
-          "description": "[Output-only, Beta] Time taken to run the training iteration in milliseconds.",
+          "description": "Time taken to run the iteration in milliseconds.",
           "format": "int64",
           "type": "string"
         },
         "evalLoss": {
-          "description": "[Output-only, Beta] Eval loss computed on the eval data at the end of the iteration. The eval loss is used for early stopping to avoid overfitting. No eval loss if eval_split_method option is specified as no_split or auto_split with input data size less than 500 rows.",
+          "description": "Loss computed on the eval data at the end of iteration.",
           "format": "double",
           "type": "number"
         },
         "index": {
-          "description": "[Output-only, Beta] Index of the ML training iteration, starting from zero for each training run.",
+          "description": "Index of the iteration, 0 based.",
           "format": "int32",
           "type": "integer"
         },
         "learnRate": {
-          "description": "[Output-only, Beta] Learning rate used for this iteration, it varies for different training iterations if learn_rate_strategy option is not constant.",
+          "description": "Learn rate used for this iteration.",
           "format": "double",
           "type": "number"
         },
         "trainingLoss": {
-          "description": "[Output-only, Beta] Training loss computed on the training data at the end of the iteration. The training loss function is defined by model type.",
+          "description": "Loss computed on the training data at the end of iteration.",
           "format": "double",
           "type": "number"
         }
@@ -1895,6 +2385,10 @@
           "description": "[Optional] The separator for fields in a CSV file. The separator can be any ISO-8859-1 single-byte character. To use a character in the range 128-255, you must encode the character as UTF8. BigQuery converts the string to ISO-8859-1 encoding, and then uses the first byte of the encoded string to split the data in its raw, binary state. BigQuery also supports the escape sequence \"\\t\" to specify a tab separator. The default value is a comma (',').",
           "type": "string"
         },
+        "hivePartitioningMode": {
+          "description": "[Optional, Experimental] If hive partitioning is enabled, which mode to use. Two modes are supported: - AUTO: automatically infer partition key name(s) and type(s). - STRINGS: automatic infer partition key name(s). All types are strings. Not all storage formats support hive partitioning -- requesting hive partitioning on an unsupported format will lead to an error.",
+          "type": "string"
+        },
         "ignoreUnknownValues": {
           "description": "[Optional] Indicates if BigQuery should allow extra values that are not represented in the table schema. If true, the extra values are ignored. If false, records with extra columns are treated as bad records, and if there are too many bad records, an invalid error is returned in the job result. The default value is false. The sourceFormat property determines what BigQuery treats as an extra value: CSV: Trailing columns JSON: Named values that don't match any column names",
           "type": "boolean"
@@ -1920,6 +2414,10 @@
           "description": "[Optional] The value that is used to quote data sections in a CSV file. BigQuery converts the string to ISO-8859-1 encoding, and then uses the first byte of the encoded string to split the data in its raw, binary state. The default value is a double-quote ('\"'). If your data does not contain quoted sections, set the property value to an empty string. If your data contains quoted newline characters, you must also set the allowQuotedNewlines property to true.",
           "pattern": ".?",
           "type": "string"
+        },
+        "rangePartitioning": {
+          "$ref": "RangePartitioning",
+          "description": "[TrustedTester] Range partitioning specification for this table. Only one of timePartitioning and rangePartitioning should be specified."
         },
         "schema": {
           "$ref": "TableSchema",
@@ -1958,7 +2456,11 @@
         },
         "timePartitioning": {
           "$ref": "TimePartitioning",
-          "description": "Time-based partitioning specification for the destination table."
+          "description": "Time-based partitioning specification for the destination table. Only one of timePartitioning and rangePartitioning should be specified."
+        },
+        "useAvroLogicalTypes": {
+          "description": "[Optional] If sourceFormat is set to \"AVRO\", indicates whether to enable interpreting logical types into their corresponding types (ie. TIMESTAMP), instead of only using their raw types (ie. INTEGER).",
+          "type": "boolean"
         },
         "writeDisposition": {
           "description": "[Optional] Specifies the action that occurs if the destination table already exists. The following values are supported: WRITE_TRUNCATE: If the table already exists, BigQuery overwrites the table data. WRITE_APPEND: If the table already exists, BigQuery appends the data to the table. WRITE_EMPTY: If the table already exists and contains data, a 'duplicate' error is returned in the job result. The default value is WRITE_APPEND. Each action is atomic and only occurs if BigQuery is able to complete the job successfully. Creation, truncation and append actions occur as one atomic update upon job completion.",
@@ -2034,6 +2536,10 @@
           },
           "type": "array"
         },
+        "rangePartitioning": {
+          "$ref": "RangePartitioning",
+          "description": "[TrustedTester] Range partitioning specification for this table. Only one of timePartitioning and rangePartitioning should be specified."
+        },
         "schemaUpdateOptions": {
           "description": "Allows the schema of the destination table to be updated as a side effect of the query job. Schema update options are supported in two cases: when writeDisposition is WRITE_APPEND; when writeDisposition is WRITE_TRUNCATE and the destination table is a partition of a table, specified by partition decorators. For normal tables, WRITE_TRUNCATE will always overwrite the schema. One or more of the following values are specified: ALLOW_FIELD_ADDITION: allow adding a nullable field to the schema. ALLOW_FIELD_RELAXATION: allow relaxing a required field in the original schema to nullable.",
           "items": {
@@ -2050,7 +2556,7 @@
         },
         "timePartitioning": {
           "$ref": "TimePartitioning",
-          "description": "Time-based partitioning specification for the destination table."
+          "description": "Time-based partitioning specification for the destination table. Only one of timePartitioning and rangePartitioning should be specified."
         },
         "useLegacySql": {
           "default": "true",
@@ -2187,7 +2693,7 @@
           "type": "string"
         },
         "location": {
-          "description": "The geographic location of the job. Required except for US and EU. See details at https://cloud.google.com/bigquery/docs/dataset-locations#specifying_your_location.",
+          "description": "The geographic location of the job. See details at https://cloud.google.com/bigquery/docs/locations#specifying_your_location.",
           "type": "string"
         },
         "projectId": {
@@ -2228,6 +2734,15 @@
           "$ref": "JobStatistics3",
           "description": "[Output-only] Statistics for a load job."
         },
+        "numChildJobs": {
+          "description": "[Output-only] Number of child jobs executed.",
+          "format": "int64",
+          "type": "string"
+        },
+        "parentJobId": {
+          "description": "[Output-only] If this is a child job, the id of the parent.",
+          "type": "string"
+        },
         "query": {
           "$ref": "JobStatistics2",
           "description": "[Output-only] Statistics for a query job."
@@ -2239,6 +2754,24 @@
           },
           "type": "array"
         },
+        "reservationUsage": {
+          "description": "[Output-only] Job resource usage breakdown by reservation.",
+          "items": {
+            "properties": {
+              "name": {
+                "description": "[Output-only] Reservation name or \"unreserved\" for on-demand resources usage.",
+                "type": "string"
+              },
+              "slotMs": {
+                "description": "[Output-only] Slot-milliseconds the job spent in the given reservation.",
+                "format": "int64",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
         "startTime": {
           "description": "[Output-only] Start time of this job, in milliseconds since the epoch. This field will be present when the job transitions from the PENDING state to either RUNNING or DONE.",
           "format": "int64",
@@ -2246,6 +2779,11 @@
         },
         "totalBytesProcessed": {
           "description": "[Output-only] [Deprecated] Use the bytes processed in the query statistics instead.",
+          "format": "int64",
+          "type": "string"
+        },
+        "totalSlotMs": {
+          "description": "[Output-only] Slot-milliseconds for the job.",
           "format": "int64",
           "type": "string"
         }
@@ -2267,6 +2805,10 @@
         "ddlOperationPerformed": {
           "description": "The DDL operation performed, possibly dependent on the pre-existence of the DDL target. Possible values (new values might be added in the future): \"CREATE\": The query created the DDL target. \"SKIP\": No-op. Example cases: the query is CREATE TABLE IF NOT EXISTS while the table already exists, or the query is DROP TABLE IF EXISTS while the table does not exist. \"REPLACE\": The query replaced the DDL target. Example case: the query is CREATE OR REPLACE TABLE, and the table already exists. \"DROP\": The query deleted the DDL target.",
           "type": "string"
+        },
+        "ddlTargetRoutine": {
+          "$ref": "RoutineReference",
+          "description": "The DDL target routine. Present only for CREATE/DROP FUNCTION/PROCEDURE queries."
         },
         "ddlTargetTable": {
           "$ref": "TableReference",
@@ -2333,7 +2875,7 @@
           "description": "[Output-only] The schema of the results. Present only for successful dry run of non-legacy SQL queries."
         },
         "statementType": {
-          "description": "The type of query statement, if valid. Possible values (new values might be added in the future): \"SELECT\": SELECT query. \"INSERT\": INSERT query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language \"UPDATE\": UPDATE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language \"DELETE\": DELETE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language \"MERGE\": MERGE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language \"CREATE_TABLE\": CREATE [OR REPLACE] TABLE without AS SELECT. \"CREATE_TABLE_AS_SELECT\": CREATE [OR REPLACE] TABLE ... AS SELECT ... \"DROP_TABLE\": DROP TABLE query. \"CREATE_VIEW\": CREATE [OR REPLACE] VIEW ... AS SELECT ... \"DROP_VIEW\": DROP VIEW query.",
+          "description": "The type of query statement, if valid. Possible values (new values might be added in the future): \"SELECT\": SELECT query. \"INSERT\": INSERT query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language. \"UPDATE\": UPDATE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language. \"DELETE\": DELETE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language. \"MERGE\": MERGE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language. \"ALTER_TABLE\": ALTER TABLE query. \"ALTER_VIEW\": ALTER VIEW query. \"CREATE_FUNCTION\": CREATE FUNCTION query. \"CREATE_MODEL\": CREATE [OR REPLACE] MODEL ... AS SELECT ... . \"CREATE_PROCEDURE\": CREATE PROCEDURE query. \"CREATE_TABLE\": CREATE [OR REPLACE] TABLE without AS SELECT. \"CREATE_TABLE_AS_SELECT\": CREATE [OR REPLACE] TABLE ... AS SELECT ... . \"CREATE_VIEW\": CREATE [OR REPLACE] VIEW ... AS SELECT ... . \"DROP_FUNCTION\" : DROP FUNCTION query. \"DROP_PROCEDURE\": DROP PROCEDURE query. \"DROP_TABLE\": DROP TABLE query. \"DROP_VIEW\": DROP VIEW query.",
           "type": "string"
         },
         "timeline": {
@@ -2351,6 +2893,10 @@
         "totalBytesProcessed": {
           "description": "[Output-only] Total bytes processed for the job.",
           "format": "int64",
+          "type": "string"
+        },
+        "totalBytesProcessedAccuracy": {
+          "description": "[Output-only] For dry-run jobs, totalBytesProcessed is an estimate and this field specifies the accuracy of the estimate. Possible values can be: UNKNOWN: accuracy of the estimate is unknown. PRECISE: estimate is precise. LOWER_BOUND: estimate is lower bound of what the query would cost. UPPER_BOUND: estimate is upper bound of what the query would cost.",
           "type": "string"
         },
         "totalPartitionsProcessed": {
@@ -2414,6 +2960,11 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "inputBytes": {
+          "description": "[Output-only] Number of user bytes extracted into the result. This is the byte count as computed by BigQuery for billing purposes.",
+          "format": "int64",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2451,6 +3002,136 @@
       "id": "JsonValue",
       "type": "any"
     },
+    "ListModelsResponse": {
+      "id": "ListModelsResponse",
+      "properties": {
+        "models": {
+          "description": "Models in the requested dataset. Only the following fields are populated:\nmodel_reference, model_type, creation_time, last_modified_time and\nlabels.",
+          "items": {
+            "$ref": "Model"
+          },
+          "type": "array"
+        },
+        "nextPageToken": {
+          "description": "A token to request the next page of results.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LocationMetadata": {
+      "description": "BigQuery-specific metadata about a location. This will be set on\ngoogle.cloud.location.Location.metadata in Cloud Location API\nresponses.",
+      "id": "LocationMetadata",
+      "properties": {
+        "legacyLocationId": {
+          "description": "The legacy BigQuery location ID, e.g. “EU” for the “europe” location.\nThis is for any API consumers that need the legacy “US” and “EU” locations.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MaterializedViewDefinition": {
+      "id": "MaterializedViewDefinition",
+      "properties": {
+        "lastRefreshTime": {
+          "description": "[Output-only] [TrustedTester] The time when this materialized view was last modified, in milliseconds since the epoch.",
+          "format": "int64",
+          "type": "string"
+        },
+        "query": {
+          "description": "[Required] A query whose result is persisted.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Model": {
+      "id": "Model",
+      "properties": {
+        "creationTime": {
+          "description": "Output only. The time when this model was created, in millisecs since the\nepoch.",
+          "format": "int64",
+          "type": "string"
+        },
+        "description": {
+          "description": "[Optional] A user-friendly description of this model.\n@mutable bigquery.models.patch",
+          "type": "string"
+        },
+        "etag": {
+          "description": "Output only. A hash of this resource.",
+          "type": "string"
+        },
+        "expirationTime": {
+          "description": "[Optional] The time when this model expires, in milliseconds since the\nepoch. If not present, the model will persist indefinitely. Expired models\nwill be deleted and their storage reclaimed.  The defaultTableExpirationMs\nproperty of the encapsulating dataset can be used to set a default\nexpirationTime on newly created models.\n@mutable bigquery.models.patch",
+          "format": "int64",
+          "type": "string"
+        },
+        "featureColumns": {
+          "description": "Output only. Input feature columns that were used to train this model.",
+          "items": {
+            "$ref": "StandardSqlField"
+          },
+          "type": "array"
+        },
+        "friendlyName": {
+          "description": "[Optional] A descriptive name for this model.\n@mutable bigquery.models.patch",
+          "type": "string"
+        },
+        "labelColumns": {
+          "description": "Output only. Label columns that were used to train this model.\nThe output of the model will have a \"predicted_\" prefix to these columns.",
+          "items": {
+            "$ref": "StandardSqlField"
+          },
+          "type": "array"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "[Optional] The labels associated with this model. You can use these to\norganize and group your models. Label keys and values can be no longer\nthan 63 characters, can only contain lowercase letters, numeric\ncharacters, underscores and dashes. International characters are allowed.\nLabel values are optional. Label keys must start with a letter and each\nlabel in the list must have a different key.\n@mutable bigquery.models.patch",
+          "type": "object"
+        },
+        "lastModifiedTime": {
+          "description": "Output only. The time when this model was last modified, in millisecs\nsince the epoch.",
+          "format": "int64",
+          "type": "string"
+        },
+        "location": {
+          "description": "Output only. The geographic location where the model resides. This value\nis inherited from the dataset.",
+          "type": "string"
+        },
+        "modelReference": {
+          "$ref": "ModelReference",
+          "description": "Required. Unique identifier for this model."
+        },
+        "modelType": {
+          "description": "Output only. Type of the model resource.",
+          "enum": [
+            "MODEL_TYPE_UNSPECIFIED",
+            "LINEAR_REGRESSION",
+            "LOGISTIC_REGRESSION",
+            "KMEANS",
+            "TENSORFLOW"
+          ],
+          "enumDescriptions": [
+            "",
+            "Linear regression model.",
+            "Logistic regression based classification model.",
+            "[Beta] K-means clustering model.",
+            "[Beta] An imported TensorFlow model."
+          ],
+          "type": "string"
+        },
+        "trainingRuns": {
+          "description": "Output only. Information for all training runs in increasing order of\nstart_time.",
+          "items": {
+            "$ref": "TrainingRun"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "ModelDefinition": {
       "id": "ModelDefinition",
       "properties": {
@@ -2475,7 +3156,44 @@
         "trainingRuns": {
           "description": "[Output-only, Beta] Information about ml training runs, each training run comprises of multiple iterations and there may be multiple training runs for the model if warm start is used or if a user decides to continue a previously cancelled query.",
           "items": {
-            "$ref": "TrainingRun"
+            "$ref": "BqmlTrainingRun"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ModelReference": {
+      "description": "Id path of a model.",
+      "id": "ModelReference",
+      "properties": {
+        "datasetId": {
+          "description": "[Required] The ID of the dataset containing this model.",
+          "type": "string"
+        },
+        "modelId": {
+          "description": "[Required] The ID of the model. The ID must contain only\nletters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum\nlength is 1,024 characters.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "[Required] The ID of the project containing this model.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MultiClassClassificationMetrics": {
+      "description": "Evaluation metrics for multi-class classification/classifier models.",
+      "id": "MultiClassClassificationMetrics",
+      "properties": {
+        "aggregateClassificationMetrics": {
+          "$ref": "AggregateClassificationMetrics",
+          "description": "Aggregate classification metrics."
+        },
+        "confusionMatrixList": {
+          "description": "Confusion matrix at different thresholds.",
+          "items": {
+            "$ref": "ConfusionMatrix"
           },
           "type": "array"
         }
@@ -2641,7 +3359,7 @@
           "type": "string"
         },
         "location": {
-          "description": "The geographic location where the job should run. Required except for US and EU.",
+          "description": "The geographic location where the job should run. See details at https://cloud.google.com/bigquery/docs/locations#specifying_your_location.",
           "type": "string"
         },
         "maxResults": {
@@ -2782,6 +3500,183 @@
       },
       "type": "object"
     },
+    "RangePartitioning": {
+      "id": "RangePartitioning",
+      "properties": {
+        "field": {
+          "description": "[TrustedTester] [Required] The table is partitioned by this field. The field must be a top-level NULLABLE/REQUIRED field. The only supported type is INTEGER/INT64.",
+          "type": "string"
+        },
+        "range": {
+          "description": "[TrustedTester] [Required] Defines the ranges for range partitioning.",
+          "properties": {
+            "end": {
+              "description": "[TrustedTester] [Required] The end of range partitioning, exclusive.",
+              "format": "int64",
+              "type": "string"
+            },
+            "interval": {
+              "description": "[TrustedTester] [Required] The width of each interval.",
+              "format": "int64",
+              "type": "string"
+            },
+            "start": {
+              "description": "[TrustedTester] [Required] The start of range partitioning, inclusive.",
+              "format": "int64",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "RegressionMetrics": {
+      "description": "Evaluation metrics for regression models.",
+      "id": "RegressionMetrics",
+      "properties": {
+        "meanAbsoluteError": {
+          "description": "Mean absolute error.",
+          "format": "double",
+          "type": "number"
+        },
+        "meanSquaredError": {
+          "description": "Mean squared error.",
+          "format": "double",
+          "type": "number"
+        },
+        "meanSquaredLogError": {
+          "description": "Mean squared log error.",
+          "format": "double",
+          "type": "number"
+        },
+        "medianAbsoluteError": {
+          "description": "Median absolute error.",
+          "format": "double",
+          "type": "number"
+        },
+        "rSquared": {
+          "description": "R^2 score.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "RoutineReference": {
+      "id": "RoutineReference",
+      "properties": {
+        "datasetId": {
+          "description": "[Required] The ID of the dataset containing this routine.",
+          "type": "string"
+        },
+        "projectId": {
+          "description": "[Required] The ID of the project containing this routine.",
+          "type": "string"
+        },
+        "routineId": {
+          "description": "[Required] The ID of the routine. The ID must contain only letters (a-z, A-Z), numbers (0-9), or underscores (_). The maximum length is 256 characters.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Row": {
+      "description": "A single row in the confusion matrix.",
+      "id": "Row",
+      "properties": {
+        "actualLabel": {
+          "description": "The original label of this row.",
+          "type": "string"
+        },
+        "entries": {
+          "description": "Info describing predicted label distribution.",
+          "items": {
+            "$ref": "Entry"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "StandardSqlDataType": {
+      "description": "The type of a variable, e.g., a function argument.\nExamples:\nINT64: {type_kind=\"INT64\"}\nARRAY\u003cSTRING\u003e: {type_kind=\"ARRAY\", array_element_type=\"STRING\"}\nSTRUCT\u003cx STRING, y ARRAY\u003cDATE\u003e\u003e:\n  {type_kind=\"STRUCT\",\n   struct_type={fields=[\n     {name=\"x\", type={type_kind=\"STRING\"}},\n     {name=\"y\", type={type_kind=\"ARRAY\", array_element_type=\"DATE\"}}\n   ]}}",
+      "id": "StandardSqlDataType",
+      "properties": {
+        "arrayElementType": {
+          "$ref": "StandardSqlDataType",
+          "description": "The type of the array's elements, if type_kind = \"ARRAY\"."
+        },
+        "structType": {
+          "$ref": "StandardSqlStructType",
+          "description": "The fields of this struct, in order, if type_kind = \"STRUCT\"."
+        },
+        "typeKind": {
+          "description": "Required. The top level type of this field.\nCan be any standard SQL data type (e.g., \"INT64\", \"DATE\", \"ARRAY\").",
+          "enum": [
+            "TYPE_KIND_UNSPECIFIED",
+            "INT64",
+            "BOOL",
+            "FLOAT64",
+            "STRING",
+            "BYTES",
+            "TIMESTAMP",
+            "DATE",
+            "TIME",
+            "DATETIME",
+            "GEOGRAPHY",
+            "NUMERIC",
+            "ARRAY",
+            "STRUCT"
+          ],
+          "enumDescriptions": [
+            "Invalid type.",
+            "Encoded as a string in decimal format.",
+            "Encoded as a boolean \"false\" or \"true\".",
+            "Encoded as a number, or string \"NaN\", \"Infinity\" or \"-Infinity\".",
+            "Encoded as a string value.",
+            "Encoded as a base64 string per RFC 4648, section 4.",
+            "Encoded as an RFC 3339 timestamp with mandatory \"Z\" time zone string:\n1985-04-12T23:20:50.52Z",
+            "Encoded as RFC 3339 full-date format string: 1985-04-12",
+            "Encoded as RFC 3339 partial-time format string: 23:20:50.52",
+            "Encoded as RFC 3339 full-date \"T\" partial-time: 1985-04-12T23:20:50.52",
+            "Encoded as WKT",
+            "Encoded as a decimal string.",
+            "Encoded as a list with types matching Type.array_type.",
+            "Encoded as a list with fields of type Type.struct_type[i]. List is used\nbecause a JSON object cannot have duplicate field names."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "StandardSqlField": {
+      "description": "A field or a column.",
+      "id": "StandardSqlField",
+      "properties": {
+        "name": {
+          "description": "Optional. The name of this field. Can be absent for struct fields.",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "StandardSqlDataType",
+          "description": "Optional. The type of this parameter. Absent if not explicitly\nspecified (e.g., CREATE FUNCTION statement can omit the return type;\nin this case the output parameter does not have this \"type\" field)."
+        }
+      },
+      "type": "object"
+    },
+    "StandardSqlStructType": {
+      "id": "StandardSqlStructType",
+      "properties": {
+        "fields": {
+          "items": {
+            "$ref": "StandardSqlField"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "Streamingbuffer": {
       "id": "Streamingbuffer",
       "properties": {
@@ -2808,7 +3703,7 @@
       "properties": {
         "clustering": {
           "$ref": "Clustering",
-          "description": "[Beta] Clustering specification for the table. Must be specified with time-based partitioning, data in the table will be first partitioned and subsequently clustered."
+          "description": "[Beta] Clustering specification for the table. Must be specified with partitioning, data in the table will be first partitioned and subsequently clustered."
         },
         "creationTime": {
           "description": "[Output-only] The time when this table was created, in milliseconds since the epoch.",
@@ -2865,6 +3760,10 @@
           "description": "[Output-only] The geographic location where the table resides. This value is inherited from the dataset.",
           "type": "string"
         },
+        "materializedView": {
+          "$ref": "MaterializedViewDefinition",
+          "description": "[Optional] Materialized view definition."
+        },
         "model": {
           "$ref": "ModelDefinition",
           "description": "[Output-only, Beta] Present iff this table represents a ML model. Describes the training information for the model, and it is required to run 'PREDICT' queries."
@@ -2879,10 +3778,24 @@
           "format": "int64",
           "type": "string"
         },
+        "numPhysicalBytes": {
+          "description": "[Output-only] [TrustedTester] The physical size of this table in bytes, excluding any data in the streaming buffer. This includes compression and storage used for time travel.",
+          "format": "int64",
+          "type": "string"
+        },
         "numRows": {
           "description": "[Output-only] The number of rows of data in this table, excluding any data in the streaming buffer.",
           "format": "uint64",
           "type": "string"
+        },
+        "rangePartitioning": {
+          "$ref": "RangePartitioning",
+          "description": "[TrustedTester] Range partitioning specification for this table. Only one of timePartitioning and rangePartitioning should be specified."
+        },
+        "requirePartitionFilter": {
+          "default": "false",
+          "description": "[Beta] [Optional] If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified.",
+          "type": "boolean"
         },
         "schema": {
           "$ref": "TableSchema",
@@ -2902,10 +3815,10 @@
         },
         "timePartitioning": {
           "$ref": "TimePartitioning",
-          "description": "Time-based partitioning specification for this table."
+          "description": "Time-based partitioning specification for this table. Only one of timePartitioning and rangePartitioning should be specified."
         },
         "type": {
-          "description": "[Output-only] Describes the table type. The following values are supported: TABLE: A normal BigQuery table. VIEW: A virtual table defined by a SQL query. EXTERNAL: A table that references data stored in an external storage system, such as Google Cloud Storage. The default value is TABLE.",
+          "description": "[Output-only] Describes the table type. The following values are supported: TABLE: A normal BigQuery table. VIEW: A virtual table defined by a SQL query. [TrustedTester] MATERIALIZED_VIEW: SQL query whose result is persisted. EXTERNAL: A table that references data stored in an external storage system, such as Google Cloud Storage. The default value is TABLE.",
           "type": "string"
         },
         "view": {
@@ -2958,7 +3871,7 @@
           "type": "boolean"
         },
         "templateSuffix": {
-          "description": "[Experimental] If specified, treats the destination table as a base template, and inserts the rows into an instance table named \"{destination}{templateSuffix}\". BigQuery will manage creation of the instance table, using the schema of the base template table. See https://cloud.google.com/bigquery/streaming-data-into-bigquery#template-tables for considerations when working with templates tables.",
+          "description": "If specified, treats the destination table as a base template, and inserts the rows into an instance table named \"{destination}{templateSuffix}\". BigQuery will manage creation of the instance table, using the schema of the base template table. See https://cloud.google.com/bigquery/streaming-data-into-bigquery#template-tables for considerations when working with templates tables.",
           "type": "string"
         }
       },
@@ -3030,6 +3943,19 @@
     "TableFieldSchema": {
       "id": "TableFieldSchema",
       "properties": {
+        "categories": {
+          "description": "[Optional] The categories attached to this field, used for field-level access control.",
+          "properties": {
+            "names": {
+              "description": "A list of category resource names. For example, \"projects/1/taxonomies/2/categories/3\". At most 5 categories are allowed.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
         "description": {
           "description": "[Optional] The field description. The maximum length is 1,024 characters.",
           "type": "string"
@@ -3217,8 +4143,6 @@
           "type": "string"
         },
         "requirePartitionFilter": {
-          "default": "false",
-          "description": "[Beta] [Optional] If set to true, queries over this table require a partition filter that can be used for partition elimination to be specified.",
           "type": "boolean"
         },
         "type": {
@@ -3228,63 +4152,182 @@
       },
       "type": "object"
     },
+    "TrainingOptions": {
+      "id": "TrainingOptions",
+      "properties": {
+        "dataSplitColumn": {
+          "description": "The column to split data with. This column won't be used as a\nfeature.\n1. When data_split_method is CUSTOM, the corresponding column should\nbe boolean. The rows with true value tag are eval data, and the false\nare training data.\n2. When data_split_method is SEQ, the first DATA_SPLIT_EVAL_FRACTION\nrows (from smallest to largest) in the corresponding column are used\nas training data, and the rest are eval data. It respects the order\nin Orderable data types:\nhttps://cloud.google.com/bigquery/docs/reference/standard-sql/data-types#data-type-properties",
+          "type": "string"
+        },
+        "dataSplitEvalFraction": {
+          "description": "The fraction of evaluation data over the whole input data. The rest\nof data will be used as training data. The format should be double.\nAccurate to two decimal places.\nDefault value is 0.2.",
+          "format": "double",
+          "type": "number"
+        },
+        "dataSplitMethod": {
+          "description": "The data split type for training and evaluation, e.g. RANDOM.",
+          "enum": [
+            "DATA_SPLIT_METHOD_UNSPECIFIED",
+            "RANDOM",
+            "CUSTOM",
+            "SEQUENTIAL",
+            "NO_SPLIT",
+            "AUTO_SPLIT"
+          ],
+          "enumDescriptions": [
+            "",
+            "Splits data randomly.",
+            "Splits data with the user provided tags.",
+            "Splits data sequentially.",
+            "Data split will be skipped.",
+            "Splits data automatically: Uses NO_SPLIT if the data size is small.\nOtherwise uses RANDOM."
+          ],
+          "type": "string"
+        },
+        "distanceType": {
+          "description": "[Beta] Distance type for clustering models.",
+          "enum": [
+            "DISTANCE_TYPE_UNSPECIFIED",
+            "EUCLIDEAN",
+            "COSINE"
+          ],
+          "enumDescriptions": [
+            "",
+            "Eculidean distance.",
+            "Cosine distance."
+          ],
+          "type": "string"
+        },
+        "earlyStop": {
+          "description": "Whether to stop early when the loss doesn't improve significantly\nany more (compared to min_relative_progress). Used only for iterative\ntraining algorithms.",
+          "type": "boolean"
+        },
+        "initialLearnRate": {
+          "description": "Specifies the initial learning rate for the line search learn rate\nstrategy.",
+          "format": "double",
+          "type": "number"
+        },
+        "inputLabelColumns": {
+          "description": "Name of input label columns in training data.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "l1Regularization": {
+          "description": "L1 regularization coefficient.",
+          "format": "double",
+          "type": "number"
+        },
+        "l2Regularization": {
+          "description": "L2 regularization coefficient.",
+          "format": "double",
+          "type": "number"
+        },
+        "labelClassWeights": {
+          "additionalProperties": {
+            "format": "double",
+            "type": "number"
+          },
+          "description": "Weights associated with each label class, for rebalancing the\ntraining data. Only applicable for classification models.",
+          "type": "object"
+        },
+        "learnRate": {
+          "description": "Learning rate in training. Used only for iterative training algorithms.",
+          "format": "double",
+          "type": "number"
+        },
+        "learnRateStrategy": {
+          "description": "The strategy to determine learn rate for the current iteration.",
+          "enum": [
+            "LEARN_RATE_STRATEGY_UNSPECIFIED",
+            "LINE_SEARCH",
+            "CONSTANT"
+          ],
+          "enumDescriptions": [
+            "",
+            "Use line search to determine learning rate.",
+            "Use a constant learning rate."
+          ],
+          "type": "string"
+        },
+        "lossType": {
+          "description": "Type of loss function used during training run.",
+          "enum": [
+            "LOSS_TYPE_UNSPECIFIED",
+            "MEAN_SQUARED_LOSS",
+            "MEAN_LOG_LOSS"
+          ],
+          "enumDescriptions": [
+            "",
+            "Mean squared loss, used for linear regression.",
+            "Mean log loss, used for logistic regression."
+          ],
+          "type": "string"
+        },
+        "maxIterations": {
+          "description": "The maximum number of iterations in training. Used only for iterative\ntraining algorithms.",
+          "format": "int64",
+          "type": "string"
+        },
+        "minRelativeProgress": {
+          "description": "When early_stop is true, stops training when accuracy improvement is\nless than 'min_relative_progress'. Used only for iterative training\nalgorithms.",
+          "format": "double",
+          "type": "number"
+        },
+        "modelUri": {
+          "description": "[Beta] Google Cloud Storage URI from which the model was imported. Only\napplicable for imported models.",
+          "type": "string"
+        },
+        "numClusters": {
+          "description": "[Beta] Number of clusters for clustering models.",
+          "format": "int64",
+          "type": "string"
+        },
+        "optimizationStrategy": {
+          "description": "Optimization strategy for training linear regression models.",
+          "enum": [
+            "OPTIMIZATION_STRATEGY_UNSPECIFIED",
+            "BATCH_GRADIENT_DESCENT",
+            "NORMAL_EQUATION"
+          ],
+          "enumDescriptions": [
+            "",
+            "Uses an iterative batch gradient descent algorithm.",
+            "Uses a normal equation to solve linear regression problem."
+          ],
+          "type": "string"
+        },
+        "warmStart": {
+          "description": "Whether to train a model from the last checkpoint.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "TrainingRun": {
+      "description": "Information about a single training query run for the model.",
       "id": "TrainingRun",
       "properties": {
-        "iterationResults": {
-          "description": "[Output-only, Beta] List of each iteration results.",
+        "evaluationMetrics": {
+          "$ref": "EvaluationMetrics",
+          "description": "The evaluation metrics over training/eval data that were computed at the\nend of training."
+        },
+        "results": {
+          "description": "Output of each iteration run, results.size() \u003c= max_iterations.",
           "items": {
             "$ref": "IterationResult"
           },
           "type": "array"
         },
         "startTime": {
-          "description": "[Output-only, Beta] Training run start time in milliseconds since the epoch.",
-          "format": "date-time",
-          "type": "string"
-        },
-        "state": {
-          "description": "[Output-only, Beta] Different state applicable for a training run. IN PROGRESS: Training run is in progress. FAILED: Training run ended due to a non-retryable failure. SUCCEEDED: Training run successfully completed. CANCELLED: Training run cancelled by the user.",
+          "description": "The start time of this training run.",
+          "format": "google-datetime",
           "type": "string"
         },
         "trainingOptions": {
-          "description": "[Output-only, Beta] Training options used by this training run. These options are mutable for subsequent training runs. Default values are explicitly stored for options not specified in the input query of the first training run. For subsequent training runs, any option not explicitly specified in the input query will be copied from the previous training run.",
-          "properties": {
-            "earlyStop": {
-              "type": "boolean"
-            },
-            "l1Reg": {
-              "format": "double",
-              "type": "number"
-            },
-            "l2Reg": {
-              "format": "double",
-              "type": "number"
-            },
-            "learnRate": {
-              "format": "double",
-              "type": "number"
-            },
-            "learnRateStrategy": {
-              "type": "string"
-            },
-            "lineSearchInitLearnRate": {
-              "format": "double",
-              "type": "number"
-            },
-            "maxIteration": {
-              "format": "int64",
-              "type": "string"
-            },
-            "minRelProgress": {
-              "format": "double",
-              "type": "number"
-            },
-            "warmStart": {
-              "type": "boolean"
-            }
-          },
-          "type": "object"
+          "$ref": "TrainingOptions",
+          "description": "Options that were used for this training run, includes\nuser specified and default options that were used."
         }
       },
       "type": "object"

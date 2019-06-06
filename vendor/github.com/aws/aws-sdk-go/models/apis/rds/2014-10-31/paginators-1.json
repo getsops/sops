@@ -12,6 +12,12 @@
       "output_token": "Marker",
       "result_key": "DBEngineVersions"
     },
+    "DescribeDBInstanceAutomatedBackups": {
+      "input_token": "Marker",
+      "limit_key": "MaxRecords",
+      "output_token": "Marker",
+      "result_key": "DBInstanceAutomatedBackups"
+    },
     "DescribeDBInstances": {
       "input_token": "Marker",
       "limit_key": "MaxRecords",
@@ -71,6 +77,12 @@
       "limit_key": "MaxRecords",
       "output_token": "Marker",
       "result_key": "Events"
+    },
+    "DescribeGlobalClusters": {
+      "input_token": "Marker",
+      "limit_key": "MaxRecords",
+      "output_token": "Marker",
+      "result_key": "GlobalClusters"
     },
     "DescribeOptionGroupOptions": {
       "input_token": "Marker",

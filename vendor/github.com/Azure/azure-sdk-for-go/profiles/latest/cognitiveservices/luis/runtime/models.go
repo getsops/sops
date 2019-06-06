@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ package runtime
 
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/luis/runtime"
 
-type BaseClient = original.BaseClient
 type APIError = original.APIError
+type BaseClient = original.BaseClient
 type CompositeChildModel = original.CompositeChildModel
 type CompositeEntityModel = original.CompositeEntityModel
 type EntityModel = original.EntityModel
@@ -30,17 +30,17 @@ type EntityWithResolution = original.EntityWithResolution
 type EntityWithScore = original.EntityWithScore
 type IntentModel = original.IntentModel
 type LuisResult = original.LuisResult
-type Sentiment = original.Sentiment
 type PredictionClient = original.PredictionClient
+type Sentiment = original.Sentiment
 
 func New(endpoint string) BaseClient {
 	return original.New(endpoint)
 }
-func NewWithoutDefaults(endpoint string) BaseClient {
-	return original.NewWithoutDefaults(endpoint)
-}
 func NewPredictionClient(endpoint string) PredictionClient {
 	return original.NewPredictionClient(endpoint)
+}
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

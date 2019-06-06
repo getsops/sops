@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,6 +41,16 @@ func NewPolicySnippetsClient() PolicySnippetsClient {
 // https://myapimservice.management.azure-api.net.
 // scope - policy scope.
 func (client PolicySnippetsClient) List(ctx context.Context, apimBaseURL string, scope PolicyScopeContract) (result PolicySnippetsCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicySnippetsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, apimBaseURL, scope)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicySnippetsClient", "List", nil, "Failure preparing request")

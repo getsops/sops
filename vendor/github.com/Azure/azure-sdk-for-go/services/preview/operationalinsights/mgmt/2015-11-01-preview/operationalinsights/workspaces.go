@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) Works
 // workspaceName - the name of the workspace.
 // parameters - the parameters required to create or update a workspace.
 func (client WorkspacesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace) (result WorkspacesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: workspaceName,
 			Constraints: []validation.Constraint{{Target: "workspaceName", Name: validation.MaxLength, Rule: 63, Chain: nil},
@@ -108,10 +119,6 @@ func (client WorkspacesClient) CreateOrUpdateSender(req *http.Request) (future W
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -134,6 +141,16 @@ func (client WorkspacesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // resourceGroupName - the resource group name of the workspace.
 // workspaceName - name of the Log Analytics Workspace.
 func (client WorkspacesClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, workspaceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.WorkspacesClient", "Delete", nil, "Failure preparing request")
@@ -201,6 +218,16 @@ func (client WorkspacesClient) DeleteResponder(resp *http.Response) (result auto
 // workspaceName - name of the Log Analytics Workspace.
 // intelligencePackName - the name of the intelligence pack to be disabled.
 func (client WorkspacesClient) DisableIntelligencePack(ctx context.Context, resourceGroupName string, workspaceName string, intelligencePackName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.DisableIntelligencePack")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -277,6 +304,16 @@ func (client WorkspacesClient) DisableIntelligencePackResponder(resp *http.Respo
 // workspaceName - name of the Log Analytics Workspace.
 // intelligencePackName - the name of the intelligence pack to be enabled.
 func (client WorkspacesClient) EnableIntelligencePack(ctx context.Context, resourceGroupName string, workspaceName string, intelligencePackName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.EnableIntelligencePack")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -352,6 +389,16 @@ func (client WorkspacesClient) EnableIntelligencePackResponder(resp *http.Respon
 // resourceGroupName - the resource group name of the workspace.
 // workspaceName - name of the Log Analytics Workspace.
 func (client WorkspacesClient) Get(ctx context.Context, resourceGroupName string, workspaceName string) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workspaceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.WorkspacesClient", "Get", nil, "Failure preparing request")
@@ -419,6 +466,16 @@ func (client WorkspacesClient) GetResponder(resp *http.Response) (result Workspa
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // workspaceName - name of the Log Analytics Workspace.
 func (client WorkspacesClient) GetSharedKeys(ctx context.Context, resourceGroupName string, workspaceName string) (result SharedKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.GetSharedKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -491,6 +548,16 @@ func (client WorkspacesClient) GetSharedKeysResponder(resp *http.Response) (resu
 
 // List gets the workspaces in a subscription.
 func (client WorkspacesClient) List(ctx context.Context) (result WorkspaceListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationalinsights.WorkspacesClient", "List", nil, "Failure preparing request")
@@ -555,6 +622,16 @@ func (client WorkspacesClient) ListResponder(resp *http.Response) (result Worksp
 // Parameters:
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 func (client WorkspacesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result WorkspaceListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -630,6 +707,16 @@ func (client WorkspacesClient) ListByResourceGroupResponder(resp *http.Response)
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // workspaceName - name of the Log Analytics Workspace.
 func (client WorkspacesClient) ListIntelligencePacks(ctx context.Context, resourceGroupName string, workspaceName string) (result ListIntelligencePack, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListIntelligencePacks")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -705,6 +792,16 @@ func (client WorkspacesClient) ListIntelligencePacksResponder(resp *http.Respons
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // workspaceName - the name of the workspace.
 func (client WorkspacesClient) ListManagementGroups(ctx context.Context, resourceGroupName string, workspaceName string) (result WorkspaceListManagementGroupsResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListManagementGroups")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -780,6 +877,16 @@ func (client WorkspacesClient) ListManagementGroupsResponder(resp *http.Response
 // resourceGroupName - the name of the resource group to get. The name is case insensitive.
 // workspaceName - the name of the workspace.
 func (client WorkspacesClient) ListUsages(ctx context.Context, resourceGroupName string, workspaceName string) (result WorkspaceListUsagesResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListUsages")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -856,6 +963,16 @@ func (client WorkspacesClient) ListUsagesResponder(resp *http.Response) (result 
 // workspaceName - the name of the workspace.
 // parameters - the parameters required to patch a workspace.
 func (client WorkspacesClient) Update(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: workspaceName,
 			Constraints: []validation.Constraint{{Target: "workspaceName", Name: validation.MaxLength, Rule: 63, Chain: nil},

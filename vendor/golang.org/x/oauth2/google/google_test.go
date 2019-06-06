@@ -110,7 +110,7 @@ func TestJWTConfigFromJSONNoTokenURL(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got, want := conf.TokenURL, "https://accounts.google.com/o/oauth2/token"; got != want {
+	if got, want := conf.TokenURL, "https://oauth2.googleapis.com/token"; got != want {
 		t.Errorf("TokenURL = %q; want %q", got, want)
 	}
 }

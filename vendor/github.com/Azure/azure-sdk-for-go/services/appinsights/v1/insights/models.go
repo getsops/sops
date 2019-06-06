@@ -23,6 +23,9 @@ import (
 	"github.com/Azure/go-autorest/autorest/date"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/appinsights/v1/insights"
+
 // EventType enumerates the values for event type.
 type EventType string
 
@@ -2359,6 +2362,69 @@ func (mri MetricsResultInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for MetricsResultInfo struct.
+func (mri *MetricsResultInfo) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if mri.AdditionalProperties == nil {
+					mri.AdditionalProperties = make(map[string]interface{})
+				}
+				mri.AdditionalProperties[k] = additionalProperties
+			}
+		case "start":
+			if v != nil {
+				var start date.Time
+				err = json.Unmarshal(*v, &start)
+				if err != nil {
+					return err
+				}
+				mri.Start = &start
+			}
+		case "end":
+			if v != nil {
+				var end date.Time
+				err = json.Unmarshal(*v, &end)
+				if err != nil {
+					return err
+				}
+				mri.End = &end
+			}
+		case "interval":
+			if v != nil {
+				var interval string
+				err = json.Unmarshal(*v, &interval)
+				if err != nil {
+					return err
+				}
+				mri.Interval = &interval
+			}
+		case "segments":
+			if v != nil {
+				var segments []MetricsSegmentInfo
+				err = json.Unmarshal(*v, &segments)
+				if err != nil {
+					return err
+				}
+				mri.Segments = &segments
+			}
+		}
+	}
+
+	return nil
+}
+
 // MetricsResultsItem ...
 type MetricsResultsItem struct {
 	// ID - The specified ID for this metric.
@@ -2399,6 +2465,60 @@ func (msi MetricsSegmentInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for MetricsSegmentInfo struct.
+func (msi *MetricsSegmentInfo) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if msi.AdditionalProperties == nil {
+					msi.AdditionalProperties = make(map[string]interface{})
+				}
+				msi.AdditionalProperties[k] = additionalProperties
+			}
+		case "start":
+			if v != nil {
+				var start date.Time
+				err = json.Unmarshal(*v, &start)
+				if err != nil {
+					return err
+				}
+				msi.Start = &start
+			}
+		case "end":
+			if v != nil {
+				var end date.Time
+				err = json.Unmarshal(*v, &end)
+				if err != nil {
+					return err
+				}
+				msi.End = &end
+			}
+		case "segments":
+			if v != nil {
+				var segments []MetricsSegmentInfo
+				err = json.Unmarshal(*v, &segments)
+				if err != nil {
+					return err
+				}
+				msi.Segments = &segments
+			}
+		}
+	}
+
+	return nil
+}
+
 // QueryBody the Analytics query. Learn more about the [Analytics query
 // syntax](https://azure.microsoft.com/documentation/articles/app-insights-analytics-reference/)
 type QueryBody struct {
@@ -2430,5 +2550,5 @@ type Table struct {
 	// Columns - The list of columns in this table.
 	Columns *[]Column `json:"columns,omitempty"`
 	// Rows - The resulting rows from this query.
-	Rows *[][]string `json:"rows,omitempty"`
+	Rows *[][]interface{} `json:"rows,omitempty"`
 }

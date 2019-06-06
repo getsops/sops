@@ -20,10 +20,10 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"time"
 
-	"golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/alts"
 	"google.golang.org/grpc/grpclog"

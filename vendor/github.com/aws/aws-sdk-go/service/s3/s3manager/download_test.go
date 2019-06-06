@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -582,10 +583,22 @@ func TestDownload_WithFailure(t *testing.T) {
 	svc := s3.New(unit.Session)
 	svc.Handlers.Send.Clear()
 
-	first := true
+	reqCount := int64(0)
+	startingByte := 0
 	svc.Handlers.Send.PushBack(func(r *request.Request) {
-		if first {
-			first = false
+		switch atomic.LoadInt64(&reqCount) {
+		case 1:
+			// Give a chance for the multipart chunks to be queued up
+			time.Sleep(1 * time.Second)
+
+			r.HTTPResponse = &http.Response{
+				Header: http.Header{},
+				Body:   ioutil.NopCloser(&bytes.Buffer{}),
+			}
+			r.Error = awserr.New("ConnectionError", "some connection error", nil)
+			r.Retryable = aws.Bool(false)
+
+		default:
 			body := bytes.NewReader(make([]byte, s3manager.DefaultDownloadPartSize))
 			r.HTTPResponse = &http.Response{
 				StatusCode:    http.StatusOK,
@@ -596,22 +609,18 @@ func TestDownload_WithFailure(t *testing.T) {
 			}
 			r.HTTPResponse.Header.Set("Content-Length", strconv.Itoa(body.Len()))
 			r.HTTPResponse.Header.Set("Content-Range",
-				fmt.Sprintf("bytes 0-%d/%d", body.Len()-1, body.Len()*10))
-			return
+				fmt.Sprintf("bytes %d-%d/%d", startingByte, body.Len()-1, body.Len()*10))
+
+			startingByte += body.Len()
+			if reqCount > 0 {
+				// sleep here to ensure context switching between goroutines
+				time.Sleep(25 * time.Millisecond)
+			}
 		}
 
-		// Give a chance for the multipart chunks to be queued up
-		time.Sleep(1 * time.Second)
-
-		r.HTTPResponse = &http.Response{
-			Header: http.Header{},
-			Body:   ioutil.NopCloser(&bytes.Buffer{}),
-		}
-		r.Error = awserr.New("ConnectionError", "some connection error", nil)
-		r.Retryable = aws.Bool(false)
+		atomic.AddInt64(&reqCount, 1)
 	})
 
-	start := time.Now()
 	d := s3manager.NewDownloaderWithClient(svc, func(d *s3manager.Downloader) {
 		d.Concurrency = 2
 	})
@@ -628,10 +637,8 @@ func TestDownload_WithFailure(t *testing.T) {
 		t.Fatalf("expect error, got none")
 	}
 
-	limit := start.Add(5 * time.Second)
-	dur := time.Now().Sub(start)
-	if time.Now().After(limit) {
-		t.Errorf("expect time to be less than %v, took %v", limit, dur)
+	if atomic.LoadInt64(&reqCount) > 3 {
+		t.Errorf("expect no more than 3 requests, but received %d", reqCount)
 	}
 }
 

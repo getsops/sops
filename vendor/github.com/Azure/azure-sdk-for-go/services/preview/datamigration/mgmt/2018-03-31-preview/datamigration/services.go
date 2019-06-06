@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) Service
 // serviceName - name of the service
 // parameters - requested name to validate
 func (client ServicesClient) CheckChildrenNameAvailability(ctx context.Context, groupName string, serviceName string, parameters NameAvailabilityRequest) (result NameAvailabilityResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CheckChildrenNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CheckChildrenNameAvailabilityPreparer(ctx, groupName, serviceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "CheckChildrenNameAvailability", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client ServicesClient) CheckChildrenNameAvailabilityResponder(resp *http.R
 // location - the Azure region of the operation
 // parameters - requested name to validate
 func (client ServicesClient) CheckNameAvailability(ctx context.Context, location string, parameters NameAvailabilityRequest) (result NameAvailabilityResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CheckNameAvailabilityPreparer(ctx, location, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "CheckNameAvailability", nil, "Failure preparing request")
@@ -184,6 +205,16 @@ func (client ServicesClient) CheckNameAvailabilityResponder(resp *http.Response)
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) CheckStatus(ctx context.Context, groupName string, serviceName string) (result ServiceStatusResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CheckStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CheckStatusPreparer(ctx, groupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "CheckStatus", nil, "Failure preparing request")
@@ -258,6 +289,16 @@ func (client ServicesClient) CheckStatusResponder(resp *http.Response) (result S
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) CreateOrUpdate(ctx context.Context, parameters Service, groupName string, serviceName string) (result ServicesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ServiceProperties", Name: validation.Null, Rule: false,
@@ -312,10 +353,6 @@ func (client ServicesClient) CreateOrUpdateSender(req *http.Request) (future Ser
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -340,6 +377,16 @@ func (client ServicesClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // serviceName - name of the service
 // deleteRunningTasks - delete the resource even if it contains running tasks
 func (client ServicesClient) Delete(ctx context.Context, groupName string, serviceName string, deleteRunningTasks *bool) (result ServicesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, groupName, serviceName, deleteRunningTasks)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "Delete", nil, "Failure preparing request")
@@ -388,10 +435,6 @@ func (client ServicesClient) DeleteSender(req *http.Request) (future ServicesDel
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -414,6 +457,16 @@ func (client ServicesClient) DeleteResponder(resp *http.Response) (result autore
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) Get(ctx context.Context, groupName string, serviceName string) (result Service, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, groupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "Get", nil, "Failure preparing request")
@@ -479,6 +532,16 @@ func (client ServicesClient) GetResponder(resp *http.Response) (result Service, 
 // List the services resource is the top-level resource that represents the Data Migration Service. This method returns
 // a list of service resources in a subscription.
 func (client ServicesClient) List(ctx context.Context) (result ServiceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.sl.Response.Response != nil {
+				sc = result.sl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -541,8 +604,8 @@ func (client ServicesClient) ListResponder(resp *http.Response) (result ServiceL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listNextResults(lastResults ServiceList) (result ServiceList, err error) {
-	req, err := lastResults.serviceListPreparer()
+func (client ServicesClient) listNextResults(ctx context.Context, lastResults ServiceList) (result ServiceList, err error) {
+	req, err := lastResults.serviceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.ServicesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -563,6 +626,16 @@ func (client ServicesClient) listNextResults(lastResults ServiceList) (result Se
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListComplete(ctx context.Context) (result ServiceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -572,6 +645,16 @@ func (client ServicesClient) ListComplete(ctx context.Context) (result ServiceLi
 // Parameters:
 // groupName - name of the resource group
 func (client ServicesClient) ListByResourceGroup(ctx context.Context, groupName string) (result ServiceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.sl.Response.Response != nil {
+				sc = result.sl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, groupName)
 	if err != nil {
@@ -635,8 +718,8 @@ func (client ServicesClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listByResourceGroupNextResults(lastResults ServiceList) (result ServiceList, err error) {
-	req, err := lastResults.serviceListPreparer()
+func (client ServicesClient) listByResourceGroupNextResults(ctx context.Context, lastResults ServiceList) (result ServiceList, err error) {
+	req, err := lastResults.serviceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.ServicesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -657,6 +740,16 @@ func (client ServicesClient) listByResourceGroupNextResults(lastResults ServiceL
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListByResourceGroupComplete(ctx context.Context, groupName string) (result ServiceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, groupName)
 	return
 }
@@ -667,6 +760,16 @@ func (client ServicesClient) ListByResourceGroupComplete(ctx context.Context, gr
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) ListSkus(ctx context.Context, groupName string, serviceName string) (result ServiceSkuListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListSkus")
+		defer func() {
+			sc := -1
+			if result.ssl.Response.Response != nil {
+				sc = result.ssl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listSkusNextResults
 	req, err := client.ListSkusPreparer(ctx, groupName, serviceName)
 	if err != nil {
@@ -731,8 +834,8 @@ func (client ServicesClient) ListSkusResponder(resp *http.Response) (result Serv
 }
 
 // listSkusNextResults retrieves the next set of results, if any.
-func (client ServicesClient) listSkusNextResults(lastResults ServiceSkuList) (result ServiceSkuList, err error) {
-	req, err := lastResults.serviceSkuListPreparer()
+func (client ServicesClient) listSkusNextResults(ctx context.Context, lastResults ServiceSkuList) (result ServiceSkuList, err error) {
+	req, err := lastResults.serviceSkuListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.ServicesClient", "listSkusNextResults", nil, "Failure preparing next results request")
 	}
@@ -753,6 +856,16 @@ func (client ServicesClient) listSkusNextResults(lastResults ServiceSkuList) (re
 
 // ListSkusComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServicesClient) ListSkusComplete(ctx context.Context, groupName string, serviceName string) (result ServiceSkuListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.ListSkus")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListSkus(ctx, groupName, serviceName)
 	return
 }
@@ -763,6 +876,16 @@ func (client ServicesClient) ListSkusComplete(ctx context.Context, groupName str
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) Start(ctx context.Context, groupName string, serviceName string) (result ServicesStartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Start")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.StartPreparer(ctx, groupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "Start", nil, "Failure preparing request")
@@ -808,10 +931,6 @@ func (client ServicesClient) StartSender(req *http.Request) (future ServicesStar
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -835,6 +954,16 @@ func (client ServicesClient) StartResponder(resp *http.Response) (result autores
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) Stop(ctx context.Context, groupName string, serviceName string) (result ServicesStopFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Stop")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.StopPreparer(ctx, groupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "Stop", nil, "Failure preparing request")
@@ -880,10 +1009,6 @@ func (client ServicesClient) StopSender(req *http.Request) (future ServicesStopF
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -908,6 +1033,16 @@ func (client ServicesClient) StopResponder(resp *http.Response) (result autorest
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ServicesClient) Update(ctx context.Context, parameters Service, groupName string, serviceName string) (result ServicesUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServicesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, parameters, groupName, serviceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ServicesClient", "Update", nil, "Failure preparing request")
@@ -952,10 +1087,6 @@ func (client ServicesClient) UpdateSender(req *http.Request) (future ServicesUpd
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

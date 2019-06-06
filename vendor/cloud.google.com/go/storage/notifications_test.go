@@ -15,10 +15,10 @@
 package storage
 
 import (
+	"context"
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-	"golang.org/x/net/context"
 	raw "google.golang.org/api/storage/v1"
 )
 

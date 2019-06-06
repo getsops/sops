@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewIntegrationRuntimeNodesClientWithBaseURI(baseURI string, subscriptionID 
 // integrationRuntimeName - the integration runtime name.
 // nodeName - the integration runtime node name.
 func (client IntegrationRuntimeNodesClient) Delete(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, nodeName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimeNodesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -138,6 +149,16 @@ func (client IntegrationRuntimeNodesClient) DeleteResponder(resp *http.Response)
 // integrationRuntimeName - the integration runtime name.
 // nodeName - the integration runtime node name.
 func (client IntegrationRuntimeNodesClient) Get(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, nodeName string) (result SelfHostedIntegrationRuntimeNode, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimeNodesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -229,6 +250,16 @@ func (client IntegrationRuntimeNodesClient) GetResponder(resp *http.Response) (r
 // integrationRuntimeName - the integration runtime name.
 // nodeName - the integration runtime node name.
 func (client IntegrationRuntimeNodesClient) GetIPAddress(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, nodeName string) (result IntegrationRuntimeNodeIPAddress, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimeNodesClient.GetIPAddress")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -321,6 +352,16 @@ func (client IntegrationRuntimeNodesClient) GetIPAddressResponder(resp *http.Res
 // nodeName - the integration runtime node name.
 // updateIntegrationRuntimeNodeRequest - the parameters for updating an integration runtime node.
 func (client IntegrationRuntimeNodesClient) Update(ctx context.Context, resourceGroupName string, factoryName string, integrationRuntimeName string, nodeName string, updateIntegrationRuntimeNodeRequest UpdateIntegrationRuntimeNodeRequest) (result SelfHostedIntegrationRuntimeNode, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationRuntimeNodesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

@@ -1,4 +1,4 @@
-// +build amd64,linux,!appengine,go1.7
+// +build amd64,linux,!appengine
 
 /*
  *

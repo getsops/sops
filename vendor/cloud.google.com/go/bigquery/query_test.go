@@ -18,10 +18,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
 	"cloud.google.com/go/internal/testutil"
-
+	"github.com/google/go-cmp/cmp"
 	bq "google.golang.org/api/bigquery/v2"
 )
 

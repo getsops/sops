@@ -21,6 +21,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -34,7 +35,6 @@ import (
 	"cloud.google.com/go/bigtable"
 	"cloud.google.com/go/bigtable/internal/cbtconfig"
 	"cloud.google.com/go/bigtable/internal/stat"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 )

@@ -84,6 +84,14 @@ type LightsailAPI interface {
 	CloseInstancePublicPortsWithContext(aws.Context, *lightsail.CloseInstancePublicPortsInput, ...request.Option) (*lightsail.CloseInstancePublicPortsOutput, error)
 	CloseInstancePublicPortsRequest(*lightsail.CloseInstancePublicPortsInput) (*request.Request, *lightsail.CloseInstancePublicPortsOutput)
 
+	CopySnapshot(*lightsail.CopySnapshotInput) (*lightsail.CopySnapshotOutput, error)
+	CopySnapshotWithContext(aws.Context, *lightsail.CopySnapshotInput, ...request.Option) (*lightsail.CopySnapshotOutput, error)
+	CopySnapshotRequest(*lightsail.CopySnapshotInput) (*request.Request, *lightsail.CopySnapshotOutput)
+
+	CreateCloudFormationStack(*lightsail.CreateCloudFormationStackInput) (*lightsail.CreateCloudFormationStackOutput, error)
+	CreateCloudFormationStackWithContext(aws.Context, *lightsail.CreateCloudFormationStackInput, ...request.Option) (*lightsail.CreateCloudFormationStackOutput, error)
+	CreateCloudFormationStackRequest(*lightsail.CreateCloudFormationStackInput) (*request.Request, *lightsail.CreateCloudFormationStackOutput)
+
 	CreateDisk(*lightsail.CreateDiskInput) (*lightsail.CreateDiskOutput, error)
 	CreateDiskWithContext(aws.Context, *lightsail.CreateDiskInput, ...request.Option) (*lightsail.CreateDiskOutput, error)
 	CreateDiskRequest(*lightsail.CreateDiskInput) (*request.Request, *lightsail.CreateDiskOutput)
@@ -128,6 +136,18 @@ type LightsailAPI interface {
 	CreateLoadBalancerTlsCertificateWithContext(aws.Context, *lightsail.CreateLoadBalancerTlsCertificateInput, ...request.Option) (*lightsail.CreateLoadBalancerTlsCertificateOutput, error)
 	CreateLoadBalancerTlsCertificateRequest(*lightsail.CreateLoadBalancerTlsCertificateInput) (*request.Request, *lightsail.CreateLoadBalancerTlsCertificateOutput)
 
+	CreateRelationalDatabase(*lightsail.CreateRelationalDatabaseInput) (*lightsail.CreateRelationalDatabaseOutput, error)
+	CreateRelationalDatabaseWithContext(aws.Context, *lightsail.CreateRelationalDatabaseInput, ...request.Option) (*lightsail.CreateRelationalDatabaseOutput, error)
+	CreateRelationalDatabaseRequest(*lightsail.CreateRelationalDatabaseInput) (*request.Request, *lightsail.CreateRelationalDatabaseOutput)
+
+	CreateRelationalDatabaseFromSnapshot(*lightsail.CreateRelationalDatabaseFromSnapshotInput) (*lightsail.CreateRelationalDatabaseFromSnapshotOutput, error)
+	CreateRelationalDatabaseFromSnapshotWithContext(aws.Context, *lightsail.CreateRelationalDatabaseFromSnapshotInput, ...request.Option) (*lightsail.CreateRelationalDatabaseFromSnapshotOutput, error)
+	CreateRelationalDatabaseFromSnapshotRequest(*lightsail.CreateRelationalDatabaseFromSnapshotInput) (*request.Request, *lightsail.CreateRelationalDatabaseFromSnapshotOutput)
+
+	CreateRelationalDatabaseSnapshot(*lightsail.CreateRelationalDatabaseSnapshotInput) (*lightsail.CreateRelationalDatabaseSnapshotOutput, error)
+	CreateRelationalDatabaseSnapshotWithContext(aws.Context, *lightsail.CreateRelationalDatabaseSnapshotInput, ...request.Option) (*lightsail.CreateRelationalDatabaseSnapshotOutput, error)
+	CreateRelationalDatabaseSnapshotRequest(*lightsail.CreateRelationalDatabaseSnapshotInput) (*request.Request, *lightsail.CreateRelationalDatabaseSnapshotOutput)
+
 	DeleteDisk(*lightsail.DeleteDiskInput) (*lightsail.DeleteDiskOutput, error)
 	DeleteDiskWithContext(aws.Context, *lightsail.DeleteDiskInput, ...request.Option) (*lightsail.DeleteDiskOutput, error)
 	DeleteDiskRequest(*lightsail.DeleteDiskInput) (*request.Request, *lightsail.DeleteDiskOutput)
@@ -156,6 +176,10 @@ type LightsailAPI interface {
 	DeleteKeyPairWithContext(aws.Context, *lightsail.DeleteKeyPairInput, ...request.Option) (*lightsail.DeleteKeyPairOutput, error)
 	DeleteKeyPairRequest(*lightsail.DeleteKeyPairInput) (*request.Request, *lightsail.DeleteKeyPairOutput)
 
+	DeleteKnownHostKeys(*lightsail.DeleteKnownHostKeysInput) (*lightsail.DeleteKnownHostKeysOutput, error)
+	DeleteKnownHostKeysWithContext(aws.Context, *lightsail.DeleteKnownHostKeysInput, ...request.Option) (*lightsail.DeleteKnownHostKeysOutput, error)
+	DeleteKnownHostKeysRequest(*lightsail.DeleteKnownHostKeysInput) (*request.Request, *lightsail.DeleteKnownHostKeysOutput)
+
 	DeleteLoadBalancer(*lightsail.DeleteLoadBalancerInput) (*lightsail.DeleteLoadBalancerOutput, error)
 	DeleteLoadBalancerWithContext(aws.Context, *lightsail.DeleteLoadBalancerInput, ...request.Option) (*lightsail.DeleteLoadBalancerOutput, error)
 	DeleteLoadBalancerRequest(*lightsail.DeleteLoadBalancerInput) (*request.Request, *lightsail.DeleteLoadBalancerOutput)
@@ -163,6 +187,14 @@ type LightsailAPI interface {
 	DeleteLoadBalancerTlsCertificate(*lightsail.DeleteLoadBalancerTlsCertificateInput) (*lightsail.DeleteLoadBalancerTlsCertificateOutput, error)
 	DeleteLoadBalancerTlsCertificateWithContext(aws.Context, *lightsail.DeleteLoadBalancerTlsCertificateInput, ...request.Option) (*lightsail.DeleteLoadBalancerTlsCertificateOutput, error)
 	DeleteLoadBalancerTlsCertificateRequest(*lightsail.DeleteLoadBalancerTlsCertificateInput) (*request.Request, *lightsail.DeleteLoadBalancerTlsCertificateOutput)
+
+	DeleteRelationalDatabase(*lightsail.DeleteRelationalDatabaseInput) (*lightsail.DeleteRelationalDatabaseOutput, error)
+	DeleteRelationalDatabaseWithContext(aws.Context, *lightsail.DeleteRelationalDatabaseInput, ...request.Option) (*lightsail.DeleteRelationalDatabaseOutput, error)
+	DeleteRelationalDatabaseRequest(*lightsail.DeleteRelationalDatabaseInput) (*request.Request, *lightsail.DeleteRelationalDatabaseOutput)
+
+	DeleteRelationalDatabaseSnapshot(*lightsail.DeleteRelationalDatabaseSnapshotInput) (*lightsail.DeleteRelationalDatabaseSnapshotOutput, error)
+	DeleteRelationalDatabaseSnapshotWithContext(aws.Context, *lightsail.DeleteRelationalDatabaseSnapshotInput, ...request.Option) (*lightsail.DeleteRelationalDatabaseSnapshotOutput, error)
+	DeleteRelationalDatabaseSnapshotRequest(*lightsail.DeleteRelationalDatabaseSnapshotInput) (*request.Request, *lightsail.DeleteRelationalDatabaseSnapshotOutput)
 
 	DetachDisk(*lightsail.DetachDiskInput) (*lightsail.DetachDiskOutput, error)
 	DetachDiskWithContext(aws.Context, *lightsail.DetachDiskInput, ...request.Option) (*lightsail.DetachDiskOutput, error)
@@ -180,6 +212,10 @@ type LightsailAPI interface {
 	DownloadDefaultKeyPairWithContext(aws.Context, *lightsail.DownloadDefaultKeyPairInput, ...request.Option) (*lightsail.DownloadDefaultKeyPairOutput, error)
 	DownloadDefaultKeyPairRequest(*lightsail.DownloadDefaultKeyPairInput) (*request.Request, *lightsail.DownloadDefaultKeyPairOutput)
 
+	ExportSnapshot(*lightsail.ExportSnapshotInput) (*lightsail.ExportSnapshotOutput, error)
+	ExportSnapshotWithContext(aws.Context, *lightsail.ExportSnapshotInput, ...request.Option) (*lightsail.ExportSnapshotOutput, error)
+	ExportSnapshotRequest(*lightsail.ExportSnapshotInput) (*request.Request, *lightsail.ExportSnapshotOutput)
+
 	GetActiveNames(*lightsail.GetActiveNamesInput) (*lightsail.GetActiveNamesOutput, error)
 	GetActiveNamesWithContext(aws.Context, *lightsail.GetActiveNamesInput, ...request.Option) (*lightsail.GetActiveNamesOutput, error)
 	GetActiveNamesRequest(*lightsail.GetActiveNamesInput) (*request.Request, *lightsail.GetActiveNamesOutput)
@@ -191,6 +227,10 @@ type LightsailAPI interface {
 	GetBundles(*lightsail.GetBundlesInput) (*lightsail.GetBundlesOutput, error)
 	GetBundlesWithContext(aws.Context, *lightsail.GetBundlesInput, ...request.Option) (*lightsail.GetBundlesOutput, error)
 	GetBundlesRequest(*lightsail.GetBundlesInput) (*request.Request, *lightsail.GetBundlesOutput)
+
+	GetCloudFormationStackRecords(*lightsail.GetCloudFormationStackRecordsInput) (*lightsail.GetCloudFormationStackRecordsOutput, error)
+	GetCloudFormationStackRecordsWithContext(aws.Context, *lightsail.GetCloudFormationStackRecordsInput, ...request.Option) (*lightsail.GetCloudFormationStackRecordsOutput, error)
+	GetCloudFormationStackRecordsRequest(*lightsail.GetCloudFormationStackRecordsInput) (*request.Request, *lightsail.GetCloudFormationStackRecordsOutput)
 
 	GetDisk(*lightsail.GetDiskInput) (*lightsail.GetDiskOutput, error)
 	GetDiskWithContext(aws.Context, *lightsail.GetDiskInput, ...request.Option) (*lightsail.GetDiskOutput, error)
@@ -215,6 +255,10 @@ type LightsailAPI interface {
 	GetDomains(*lightsail.GetDomainsInput) (*lightsail.GetDomainsOutput, error)
 	GetDomainsWithContext(aws.Context, *lightsail.GetDomainsInput, ...request.Option) (*lightsail.GetDomainsOutput, error)
 	GetDomainsRequest(*lightsail.GetDomainsInput) (*request.Request, *lightsail.GetDomainsOutput)
+
+	GetExportSnapshotRecords(*lightsail.GetExportSnapshotRecordsInput) (*lightsail.GetExportSnapshotRecordsOutput, error)
+	GetExportSnapshotRecordsWithContext(aws.Context, *lightsail.GetExportSnapshotRecordsInput, ...request.Option) (*lightsail.GetExportSnapshotRecordsOutput, error)
+	GetExportSnapshotRecordsRequest(*lightsail.GetExportSnapshotRecordsInput) (*request.Request, *lightsail.GetExportSnapshotRecordsOutput)
 
 	GetInstance(*lightsail.GetInstanceInput) (*lightsail.GetInstanceOutput, error)
 	GetInstanceWithContext(aws.Context, *lightsail.GetInstanceInput, ...request.Option) (*lightsail.GetInstanceOutput, error)
@@ -288,6 +332,54 @@ type LightsailAPI interface {
 	GetRegionsWithContext(aws.Context, *lightsail.GetRegionsInput, ...request.Option) (*lightsail.GetRegionsOutput, error)
 	GetRegionsRequest(*lightsail.GetRegionsInput) (*request.Request, *lightsail.GetRegionsOutput)
 
+	GetRelationalDatabase(*lightsail.GetRelationalDatabaseInput) (*lightsail.GetRelationalDatabaseOutput, error)
+	GetRelationalDatabaseWithContext(aws.Context, *lightsail.GetRelationalDatabaseInput, ...request.Option) (*lightsail.GetRelationalDatabaseOutput, error)
+	GetRelationalDatabaseRequest(*lightsail.GetRelationalDatabaseInput) (*request.Request, *lightsail.GetRelationalDatabaseOutput)
+
+	GetRelationalDatabaseBlueprints(*lightsail.GetRelationalDatabaseBlueprintsInput) (*lightsail.GetRelationalDatabaseBlueprintsOutput, error)
+	GetRelationalDatabaseBlueprintsWithContext(aws.Context, *lightsail.GetRelationalDatabaseBlueprintsInput, ...request.Option) (*lightsail.GetRelationalDatabaseBlueprintsOutput, error)
+	GetRelationalDatabaseBlueprintsRequest(*lightsail.GetRelationalDatabaseBlueprintsInput) (*request.Request, *lightsail.GetRelationalDatabaseBlueprintsOutput)
+
+	GetRelationalDatabaseBundles(*lightsail.GetRelationalDatabaseBundlesInput) (*lightsail.GetRelationalDatabaseBundlesOutput, error)
+	GetRelationalDatabaseBundlesWithContext(aws.Context, *lightsail.GetRelationalDatabaseBundlesInput, ...request.Option) (*lightsail.GetRelationalDatabaseBundlesOutput, error)
+	GetRelationalDatabaseBundlesRequest(*lightsail.GetRelationalDatabaseBundlesInput) (*request.Request, *lightsail.GetRelationalDatabaseBundlesOutput)
+
+	GetRelationalDatabaseEvents(*lightsail.GetRelationalDatabaseEventsInput) (*lightsail.GetRelationalDatabaseEventsOutput, error)
+	GetRelationalDatabaseEventsWithContext(aws.Context, *lightsail.GetRelationalDatabaseEventsInput, ...request.Option) (*lightsail.GetRelationalDatabaseEventsOutput, error)
+	GetRelationalDatabaseEventsRequest(*lightsail.GetRelationalDatabaseEventsInput) (*request.Request, *lightsail.GetRelationalDatabaseEventsOutput)
+
+	GetRelationalDatabaseLogEvents(*lightsail.GetRelationalDatabaseLogEventsInput) (*lightsail.GetRelationalDatabaseLogEventsOutput, error)
+	GetRelationalDatabaseLogEventsWithContext(aws.Context, *lightsail.GetRelationalDatabaseLogEventsInput, ...request.Option) (*lightsail.GetRelationalDatabaseLogEventsOutput, error)
+	GetRelationalDatabaseLogEventsRequest(*lightsail.GetRelationalDatabaseLogEventsInput) (*request.Request, *lightsail.GetRelationalDatabaseLogEventsOutput)
+
+	GetRelationalDatabaseLogStreams(*lightsail.GetRelationalDatabaseLogStreamsInput) (*lightsail.GetRelationalDatabaseLogStreamsOutput, error)
+	GetRelationalDatabaseLogStreamsWithContext(aws.Context, *lightsail.GetRelationalDatabaseLogStreamsInput, ...request.Option) (*lightsail.GetRelationalDatabaseLogStreamsOutput, error)
+	GetRelationalDatabaseLogStreamsRequest(*lightsail.GetRelationalDatabaseLogStreamsInput) (*request.Request, *lightsail.GetRelationalDatabaseLogStreamsOutput)
+
+	GetRelationalDatabaseMasterUserPassword(*lightsail.GetRelationalDatabaseMasterUserPasswordInput) (*lightsail.GetRelationalDatabaseMasterUserPasswordOutput, error)
+	GetRelationalDatabaseMasterUserPasswordWithContext(aws.Context, *lightsail.GetRelationalDatabaseMasterUserPasswordInput, ...request.Option) (*lightsail.GetRelationalDatabaseMasterUserPasswordOutput, error)
+	GetRelationalDatabaseMasterUserPasswordRequest(*lightsail.GetRelationalDatabaseMasterUserPasswordInput) (*request.Request, *lightsail.GetRelationalDatabaseMasterUserPasswordOutput)
+
+	GetRelationalDatabaseMetricData(*lightsail.GetRelationalDatabaseMetricDataInput) (*lightsail.GetRelationalDatabaseMetricDataOutput, error)
+	GetRelationalDatabaseMetricDataWithContext(aws.Context, *lightsail.GetRelationalDatabaseMetricDataInput, ...request.Option) (*lightsail.GetRelationalDatabaseMetricDataOutput, error)
+	GetRelationalDatabaseMetricDataRequest(*lightsail.GetRelationalDatabaseMetricDataInput) (*request.Request, *lightsail.GetRelationalDatabaseMetricDataOutput)
+
+	GetRelationalDatabaseParameters(*lightsail.GetRelationalDatabaseParametersInput) (*lightsail.GetRelationalDatabaseParametersOutput, error)
+	GetRelationalDatabaseParametersWithContext(aws.Context, *lightsail.GetRelationalDatabaseParametersInput, ...request.Option) (*lightsail.GetRelationalDatabaseParametersOutput, error)
+	GetRelationalDatabaseParametersRequest(*lightsail.GetRelationalDatabaseParametersInput) (*request.Request, *lightsail.GetRelationalDatabaseParametersOutput)
+
+	GetRelationalDatabaseSnapshot(*lightsail.GetRelationalDatabaseSnapshotInput) (*lightsail.GetRelationalDatabaseSnapshotOutput, error)
+	GetRelationalDatabaseSnapshotWithContext(aws.Context, *lightsail.GetRelationalDatabaseSnapshotInput, ...request.Option) (*lightsail.GetRelationalDatabaseSnapshotOutput, error)
+	GetRelationalDatabaseSnapshotRequest(*lightsail.GetRelationalDatabaseSnapshotInput) (*request.Request, *lightsail.GetRelationalDatabaseSnapshotOutput)
+
+	GetRelationalDatabaseSnapshots(*lightsail.GetRelationalDatabaseSnapshotsInput) (*lightsail.GetRelationalDatabaseSnapshotsOutput, error)
+	GetRelationalDatabaseSnapshotsWithContext(aws.Context, *lightsail.GetRelationalDatabaseSnapshotsInput, ...request.Option) (*lightsail.GetRelationalDatabaseSnapshotsOutput, error)
+	GetRelationalDatabaseSnapshotsRequest(*lightsail.GetRelationalDatabaseSnapshotsInput) (*request.Request, *lightsail.GetRelationalDatabaseSnapshotsOutput)
+
+	GetRelationalDatabases(*lightsail.GetRelationalDatabasesInput) (*lightsail.GetRelationalDatabasesOutput, error)
+	GetRelationalDatabasesWithContext(aws.Context, *lightsail.GetRelationalDatabasesInput, ...request.Option) (*lightsail.GetRelationalDatabasesOutput, error)
+	GetRelationalDatabasesRequest(*lightsail.GetRelationalDatabasesInput) (*request.Request, *lightsail.GetRelationalDatabasesOutput)
+
 	GetStaticIp(*lightsail.GetStaticIpInput) (*lightsail.GetStaticIpOutput, error)
 	GetStaticIpWithContext(aws.Context, *lightsail.GetStaticIpInput, ...request.Option) (*lightsail.GetStaticIpOutput, error)
 	GetStaticIpRequest(*lightsail.GetStaticIpInput) (*request.Request, *lightsail.GetStaticIpOutput)
@@ -320,6 +412,10 @@ type LightsailAPI interface {
 	RebootInstanceWithContext(aws.Context, *lightsail.RebootInstanceInput, ...request.Option) (*lightsail.RebootInstanceOutput, error)
 	RebootInstanceRequest(*lightsail.RebootInstanceInput) (*request.Request, *lightsail.RebootInstanceOutput)
 
+	RebootRelationalDatabase(*lightsail.RebootRelationalDatabaseInput) (*lightsail.RebootRelationalDatabaseOutput, error)
+	RebootRelationalDatabaseWithContext(aws.Context, *lightsail.RebootRelationalDatabaseInput, ...request.Option) (*lightsail.RebootRelationalDatabaseOutput, error)
+	RebootRelationalDatabaseRequest(*lightsail.RebootRelationalDatabaseInput) (*request.Request, *lightsail.RebootRelationalDatabaseOutput)
+
 	ReleaseStaticIp(*lightsail.ReleaseStaticIpInput) (*lightsail.ReleaseStaticIpOutput, error)
 	ReleaseStaticIpWithContext(aws.Context, *lightsail.ReleaseStaticIpInput, ...request.Option) (*lightsail.ReleaseStaticIpOutput, error)
 	ReleaseStaticIpRequest(*lightsail.ReleaseStaticIpInput) (*request.Request, *lightsail.ReleaseStaticIpOutput)
@@ -328,13 +424,29 @@ type LightsailAPI interface {
 	StartInstanceWithContext(aws.Context, *lightsail.StartInstanceInput, ...request.Option) (*lightsail.StartInstanceOutput, error)
 	StartInstanceRequest(*lightsail.StartInstanceInput) (*request.Request, *lightsail.StartInstanceOutput)
 
+	StartRelationalDatabase(*lightsail.StartRelationalDatabaseInput) (*lightsail.StartRelationalDatabaseOutput, error)
+	StartRelationalDatabaseWithContext(aws.Context, *lightsail.StartRelationalDatabaseInput, ...request.Option) (*lightsail.StartRelationalDatabaseOutput, error)
+	StartRelationalDatabaseRequest(*lightsail.StartRelationalDatabaseInput) (*request.Request, *lightsail.StartRelationalDatabaseOutput)
+
 	StopInstance(*lightsail.StopInstanceInput) (*lightsail.StopInstanceOutput, error)
 	StopInstanceWithContext(aws.Context, *lightsail.StopInstanceInput, ...request.Option) (*lightsail.StopInstanceOutput, error)
 	StopInstanceRequest(*lightsail.StopInstanceInput) (*request.Request, *lightsail.StopInstanceOutput)
 
+	StopRelationalDatabase(*lightsail.StopRelationalDatabaseInput) (*lightsail.StopRelationalDatabaseOutput, error)
+	StopRelationalDatabaseWithContext(aws.Context, *lightsail.StopRelationalDatabaseInput, ...request.Option) (*lightsail.StopRelationalDatabaseOutput, error)
+	StopRelationalDatabaseRequest(*lightsail.StopRelationalDatabaseInput) (*request.Request, *lightsail.StopRelationalDatabaseOutput)
+
+	TagResource(*lightsail.TagResourceInput) (*lightsail.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *lightsail.TagResourceInput, ...request.Option) (*lightsail.TagResourceOutput, error)
+	TagResourceRequest(*lightsail.TagResourceInput) (*request.Request, *lightsail.TagResourceOutput)
+
 	UnpeerVpc(*lightsail.UnpeerVpcInput) (*lightsail.UnpeerVpcOutput, error)
 	UnpeerVpcWithContext(aws.Context, *lightsail.UnpeerVpcInput, ...request.Option) (*lightsail.UnpeerVpcOutput, error)
 	UnpeerVpcRequest(*lightsail.UnpeerVpcInput) (*request.Request, *lightsail.UnpeerVpcOutput)
+
+	UntagResource(*lightsail.UntagResourceInput) (*lightsail.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *lightsail.UntagResourceInput, ...request.Option) (*lightsail.UntagResourceOutput, error)
+	UntagResourceRequest(*lightsail.UntagResourceInput) (*request.Request, *lightsail.UntagResourceOutput)
 
 	UpdateDomainEntry(*lightsail.UpdateDomainEntryInput) (*lightsail.UpdateDomainEntryOutput, error)
 	UpdateDomainEntryWithContext(aws.Context, *lightsail.UpdateDomainEntryInput, ...request.Option) (*lightsail.UpdateDomainEntryOutput, error)
@@ -343,6 +455,14 @@ type LightsailAPI interface {
 	UpdateLoadBalancerAttribute(*lightsail.UpdateLoadBalancerAttributeInput) (*lightsail.UpdateLoadBalancerAttributeOutput, error)
 	UpdateLoadBalancerAttributeWithContext(aws.Context, *lightsail.UpdateLoadBalancerAttributeInput, ...request.Option) (*lightsail.UpdateLoadBalancerAttributeOutput, error)
 	UpdateLoadBalancerAttributeRequest(*lightsail.UpdateLoadBalancerAttributeInput) (*request.Request, *lightsail.UpdateLoadBalancerAttributeOutput)
+
+	UpdateRelationalDatabase(*lightsail.UpdateRelationalDatabaseInput) (*lightsail.UpdateRelationalDatabaseOutput, error)
+	UpdateRelationalDatabaseWithContext(aws.Context, *lightsail.UpdateRelationalDatabaseInput, ...request.Option) (*lightsail.UpdateRelationalDatabaseOutput, error)
+	UpdateRelationalDatabaseRequest(*lightsail.UpdateRelationalDatabaseInput) (*request.Request, *lightsail.UpdateRelationalDatabaseOutput)
+
+	UpdateRelationalDatabaseParameters(*lightsail.UpdateRelationalDatabaseParametersInput) (*lightsail.UpdateRelationalDatabaseParametersOutput, error)
+	UpdateRelationalDatabaseParametersWithContext(aws.Context, *lightsail.UpdateRelationalDatabaseParametersInput, ...request.Option) (*lightsail.UpdateRelationalDatabaseParametersOutput, error)
+	UpdateRelationalDatabaseParametersRequest(*lightsail.UpdateRelationalDatabaseParametersInput) (*request.Request, *lightsail.UpdateRelationalDatabaseParametersOutput)
 }
 
 var _ LightsailAPI = (*lightsail.Lightsail)(nil)

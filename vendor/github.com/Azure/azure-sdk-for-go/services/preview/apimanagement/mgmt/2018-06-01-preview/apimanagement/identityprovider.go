@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewIdentityProviderClientWithBaseURI(baseURI string, subscriptionID string)
 // parameters - create parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client IdentityProviderClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderContract, ifMatch string) (result IdentityProviderContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -140,6 +151,16 @@ func (client IdentityProviderClient) CreateOrUpdateResponder(resp *http.Response
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client IdentityProviderClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -217,6 +238,16 @@ func (client IdentityProviderClient) DeleteResponder(resp *http.Response) (resul
 // serviceName - the name of the API Management service.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) Get(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (result IdentityProviderContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -294,6 +325,16 @@ func (client IdentityProviderClient) GetResponder(resp *http.Response) (result I
 // serviceName - the name of the API Management service.
 // identityProviderName - identity Provider Type identifier.
 func (client IdentityProviderClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -369,6 +410,16 @@ func (client IdentityProviderClient) GetEntityTagResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 func (client IdentityProviderClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string) (result IdentityProviderListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.ipl.Response.Response != nil {
+				sc = result.ipl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -441,8 +492,8 @@ func (client IdentityProviderClient) ListByServiceResponder(resp *http.Response)
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client IdentityProviderClient) listByServiceNextResults(lastResults IdentityProviderList) (result IdentityProviderList, err error) {
-	req, err := lastResults.identityProviderListPreparer()
+func (client IdentityProviderClient) listByServiceNextResults(ctx context.Context, lastResults IdentityProviderList) (result IdentityProviderList, err error) {
+	req, err := lastResults.identityProviderListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.IdentityProviderClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -463,6 +514,16 @@ func (client IdentityProviderClient) listByServiceNextResults(lastResults Identi
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IdentityProviderClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string) (result IdentityProviderListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName)
 	return
 }
@@ -476,6 +537,16 @@ func (client IdentityProviderClient) ListByServiceComplete(ctx context.Context, 
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client IdentityProviderClient) Update(ctx context.Context, resourceGroupName string, serviceName string, identityProviderName IdentityProviderType, parameters IdentityProviderUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IdentityProviderClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

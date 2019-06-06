@@ -22,7 +22,6 @@ import (
 
 	"cloud.google.com/go/internal/testutil"
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/api/googleapi"
 	raw "google.golang.org/api/storage/v1"
 )
@@ -34,11 +33,13 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 		ACL:  []ACLRule{{Entity: "bob@example.com", Role: RoleOwner, Domain: "d", Email: "e"}},
 		DefaultObjectACL: []ACLRule{{Entity: AllUsers, Role: RoleReader, EntityID: "eid",
 			ProjectTeam: &ProjectTeam{ProjectNumber: "17", Team: "t"}}},
+		Etag:         "Zkyw9ACJZUvcYmlFaKGChzhmtnE/dt1zHSfweiWpwzdGsqXwuJZqiD0",
 		Location:     "loc",
 		StorageClass: "class",
 		RetentionPolicy: &RetentionPolicy{
 			RetentionPeriod: 3 * time.Second,
 		},
+		BucketPolicyOnly:  BucketPolicyOnly{Enabled: true},
 		VersioningEnabled: false,
 		// should be ignored:
 		MetaGeneration: 39,
@@ -102,6 +103,11 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 		StorageClass: "class",
 		RetentionPolicy: &raw.BucketRetentionPolicy{
 			RetentionPeriod: 3,
+		},
+		IamConfiguration: &raw.BucketIamConfiguration{
+			BucketPolicyOnly: &raw.BucketIamConfigurationBucketPolicyOnly{
+				Enabled: true,
+			},
 		},
 		Versioning: nil, // ignore VersioningEnabled if false
 		Labels:     map[string]string{"label": "value"},
@@ -167,10 +173,12 @@ func TestBucketAttrsToRawBucket(t *testing.T) {
 func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 	t.Parallel()
 	au := &BucketAttrsToUpdate{
-		VersioningEnabled: false,
-		RequesterPays:     false,
-		RetentionPolicy:   &RetentionPolicy{RetentionPeriod: time.Hour},
-		Encryption:        &BucketEncryption{DefaultKMSKeyName: "key2"},
+		VersioningEnabled:     false,
+		RequesterPays:         false,
+		BucketPolicyOnly:      &BucketPolicyOnly{Enabled: false},
+		DefaultEventBasedHold: false,
+		RetentionPolicy:       &RetentionPolicy{RetentionPeriod: time.Hour},
+		Encryption:            &BucketEncryption{DefaultKMSKeyName: "key2"},
 		Lifecycle: &Lifecycle{
 			Rules: []LifecycleRule{
 				{
@@ -199,9 +207,15 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 			RequesterPays:   false,
 			ForceSendFields: []string{"RequesterPays"},
 		},
-		RetentionPolicy: &raw.BucketRetentionPolicy{RetentionPeriod: 3600},
-		Encryption:      &raw.BucketEncryption{DefaultKmsKeyName: "key2"},
-		NullFields:      []string{"Labels.b"},
+		DefaultEventBasedHold: false,
+		RetentionPolicy:       &raw.BucketRetentionPolicy{RetentionPeriod: 3600},
+		IamConfiguration: &raw.BucketIamConfiguration{
+			BucketPolicyOnly: &raw.BucketIamConfigurationBucketPolicyOnly{
+				Enabled: false,
+			},
+		},
+		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key2"},
+		NullFields: []string{"Labels.b"},
 		Lifecycle: &raw.BucketLifecycle{
 			Rule: []*raw.BucketLifecycleRule{
 				{
@@ -210,8 +224,9 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 				},
 			},
 		},
-		Logging: &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
-		Website: &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		Logging:         &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:         &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		ForceSendFields: []string{"DefaultEventBasedHold"},
 	}
 	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
@@ -340,15 +355,18 @@ func TestCallBuilders(t *testing.T) {
 func TestNewBucket(t *testing.T) {
 	labels := map[string]string{"a": "b"}
 	matchClasses := []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"}
+	aTime := time.Date(2017, 1, 2, 0, 0, 0, 0, time.UTC)
 	rb := &raw.Bucket{
-		Name:           "name",
-		Location:       "loc",
-		Metageneration: 3,
-		StorageClass:   "sc",
-		TimeCreated:    "2017-10-23T04:05:06Z",
-		Versioning:     &raw.BucketVersioning{Enabled: true},
-		Labels:         labels,
-		Billing:        &raw.BucketBilling{RequesterPays: true},
+		Name:                  "name",
+		Location:              "loc",
+		DefaultEventBasedHold: true,
+		Metageneration:        3,
+		StorageClass:          "sc",
+		TimeCreated:           "2017-10-23T04:05:06Z",
+		Versioning:            &raw.BucketVersioning{Enabled: true},
+		Labels:                labels,
+		Billing:               &raw.BucketBilling{RequesterPays: true},
+		Etag:                  "Zkyw9ACJZUvcYmlFaKGChzhmtnE/dt1zHSfweiWpwzdGsqXwuJZqiD0",
 		Lifecycle: &raw.BucketLifecycle{
 			Rule: []*raw.BucketLifecycleRule{{
 				Action: &raw.BucketLifecycleRuleAction{
@@ -366,7 +384,13 @@ func TestNewBucket(t *testing.T) {
 		},
 		RetentionPolicy: &raw.BucketRetentionPolicy{
 			RetentionPeriod: 3,
-			EffectiveTime:   time.Now().Format(time.RFC3339),
+			EffectiveTime:   aTime.Format(time.RFC3339),
+		},
+		IamConfiguration: &raw.BucketIamConfiguration{
+			BucketPolicyOnly: &raw.BucketIamConfigurationBucketPolicyOnly{
+				Enabled:    true,
+				LockedTime: aTime.Format(time.RFC3339),
+			},
 		},
 		Cors: []*raw.BucketCors{
 			{
@@ -384,14 +408,16 @@ func TestNewBucket(t *testing.T) {
 		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 	}
 	want := &BucketAttrs{
-		Name:              "name",
-		Location:          "loc",
-		MetaGeneration:    3,
-		StorageClass:      "sc",
-		Created:           time.Date(2017, 10, 23, 4, 5, 6, 0, time.UTC),
-		VersioningEnabled: true,
-		Labels:            labels,
-		RequesterPays:     true,
+		Name:                  "name",
+		Location:              "loc",
+		DefaultEventBasedHold: true,
+		MetaGeneration:        3,
+		StorageClass:          "sc",
+		Created:               time.Date(2017, 10, 23, 4, 5, 6, 0, time.UTC),
+		VersioningEnabled:     true,
+		Labels:                labels,
+		Etag:                  "Zkyw9ACJZUvcYmlFaKGChzhmtnE/dt1zHSfweiWpwzdGsqXwuJZqiD0",
+		RequesterPays:         true,
 		Lifecycle: Lifecycle{
 			Rules: []LifecycleRule{
 				{
@@ -410,8 +436,10 @@ func TestNewBucket(t *testing.T) {
 			},
 		},
 		RetentionPolicy: &RetentionPolicy{
+			EffectiveTime:   aTime,
 			RetentionPeriod: 3 * time.Second,
 		},
+		BucketPolicyOnly: BucketPolicyOnly{Enabled: true, LockedTime: aTime},
 		CORS: []CORS{
 			{
 				MaxAge:          time.Hour,
@@ -430,7 +458,7 @@ func TestNewBucket(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if diff := testutil.Diff(got, want, cmpopts.IgnoreTypes(time.Time{})); diff != "" {
+	if diff := testutil.Diff(got, want); diff != "" {
 		t.Errorf("got=-, want=+:\n%s", diff)
 	}
 }

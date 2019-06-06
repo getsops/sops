@@ -32,7 +32,7 @@
   "description": "Views and manages your Google Analytics data.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/analytics/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/ICz6S7dLg1NqZR9DoI37oXz6hEo\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/EwvGv8Qj93Dt7K3RwZo3AIm1iu8\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/analytics-16.png",
     "x32": "https://www.google.com/images/icons/product/analytics-32.png"
@@ -3158,7 +3158,7 @@
         "webPropertyAdWordsLinks": {
           "methods": {
             "delete": {
-              "description": "Deletes a web property-AdWords link.",
+              "description": "Deletes a web property-Google Ads link.",
               "httpMethod": "DELETE",
               "id": "analytics.management.webPropertyAdWordsLinks.delete",
               "parameterOrder": [
@@ -3174,13 +3174,13 @@
                   "type": "string"
                 },
                 "webPropertyAdWordsLinkId": {
-                  "description": "Web property AdWords link ID.",
+                  "description": "Web property Google Ads link ID.",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "webPropertyId": {
-                  "description": "Web property ID to delete the AdWords link for.",
+                  "description": "Web property ID to delete the Google Ads link for.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -3192,7 +3192,7 @@
               ]
             },
             "get": {
-              "description": "Returns a web property-AdWords link to which the user has access.",
+              "description": "Returns a web property-Google Ads link to which the user has access.",
               "httpMethod": "GET",
               "id": "analytics.management.webPropertyAdWordsLinks.get",
               "parameterOrder": [
@@ -3208,13 +3208,13 @@
                   "type": "string"
                 },
                 "webPropertyAdWordsLinkId": {
-                  "description": "Web property-AdWords link ID.",
+                  "description": "Web property-Google Ads link ID.",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "webPropertyId": {
-                  "description": "Web property ID to retrieve the AdWords link for.",
+                  "description": "Web property ID to retrieve the Google Ads link for.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -3230,7 +3230,7 @@
               ]
             },
             "insert": {
-              "description": "Creates a webProperty-AdWords link.",
+              "description": "Creates a webProperty-Google Ads link.",
               "httpMethod": "POST",
               "id": "analytics.management.webPropertyAdWordsLinks.insert",
               "parameterOrder": [
@@ -3263,7 +3263,7 @@
               ]
             },
             "list": {
-              "description": "Lists webProperty-AdWords links for a given web property.",
+              "description": "Lists webProperty-Google Ads links for a given web property.",
               "httpMethod": "GET",
               "id": "analytics.management.webPropertyAdWordsLinks.list",
               "parameterOrder": [
@@ -3279,20 +3279,20 @@
                   "type": "string"
                 },
                 "max-results": {
-                  "description": "The maximum number of webProperty-AdWords links to include in this response.",
+                  "description": "The maximum number of webProperty-Google Ads links to include in this response.",
                   "format": "int32",
                   "location": "query",
                   "type": "integer"
                 },
                 "start-index": {
-                  "description": "An index of the first webProperty-AdWords link to retrieve. Use this parameter as a pagination mechanism along with the max-results parameter.",
+                  "description": "An index of the first webProperty-Google Ads link to retrieve. Use this parameter as a pagination mechanism along with the max-results parameter.",
                   "format": "int32",
                   "location": "query",
                   "minimum": "1",
                   "type": "integer"
                 },
                 "webPropertyId": {
-                  "description": "Web property ID to retrieve the AdWords links for.",
+                  "description": "Web property ID to retrieve the Google Ads links for.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -3308,7 +3308,7 @@
               ]
             },
             "patch": {
-              "description": "Updates an existing webProperty-AdWords link. This method supports patch semantics.",
+              "description": "Updates an existing webProperty-Google Ads link. This method supports patch semantics.",
               "httpMethod": "PATCH",
               "id": "analytics.management.webPropertyAdWordsLinks.patch",
               "parameterOrder": [
@@ -3324,13 +3324,13 @@
                   "type": "string"
                 },
                 "webPropertyAdWordsLinkId": {
-                  "description": "Web property-AdWords link ID.",
+                  "description": "Web property-Google Ads link ID.",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "webPropertyId": {
-                  "description": "Web property ID to retrieve the AdWords link for.",
+                  "description": "Web property ID to retrieve the Google Ads link for.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -3348,7 +3348,7 @@
               ]
             },
             "update": {
-              "description": "Updates an existing webProperty-AdWords link.",
+              "description": "Updates an existing webProperty-Google Ads link.",
               "httpMethod": "PUT",
               "id": "analytics.management.webPropertyAdWordsLinks.update",
               "parameterOrder": [
@@ -3364,13 +3364,13 @@
                   "type": "string"
                 },
                 "webPropertyAdWordsLinkId": {
-                  "description": "Web property-AdWords link ID.",
+                  "description": "Web property-Google Ads link ID.",
                   "location": "path",
                   "required": true,
                   "type": "string"
                 },
                 "webPropertyId": {
-                  "description": "Web property ID to retrieve the AdWords link for.",
+                  "description": "Web property ID to retrieve the Google Ads link for.",
                   "location": "path",
                   "required": true,
                   "type": "string"
@@ -3805,6 +3805,7 @@
       }
     }
   },
+  "revision": "20180730",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -4019,23 +4020,6 @@
           },
           "type": "string"
         },
-        "accountSettings": {
-          "properties": {
-            "shareAnonymouslyWithOthers": {
-              "type": "boolean"
-            },
-            "shareWithGoogleProducts": {
-              "type": "boolean"
-            },
-            "shareWithSpecialists": {
-              "type": "boolean"
-            },
-            "shareWithSupport": {
-              "type": "boolean"
-            }
-          },
-          "type": "object"
-        },
         "kind": {
           "default": "analytics#accountTreeRequest",
           "description": "Resource type for account ticket.",
@@ -4083,23 +4067,6 @@
         "account": {
           "$ref": "Account",
           "description": "The account created."
-        },
-        "accountSettings": {
-          "properties": {
-            "shareAnonymouslyWithOthers": {
-              "type": "boolean"
-            },
-            "shareWithGoogleProducts": {
-              "type": "boolean"
-            },
-            "shareWithSpecialists": {
-              "type": "boolean"
-            },
-            "shareWithSupport": {
-              "type": "boolean"
-            }
-          },
-          "type": "object"
         },
         "kind": {
           "default": "analytics#accountTreeResponse",
@@ -4164,11 +4131,11 @@
       "type": "object"
     },
     "AdWordsAccount": {
-      "description": "JSON template for an AdWords account.",
+      "description": "JSON template for an Google Ads account.",
       "id": "AdWordsAccount",
       "properties": {
         "autoTaggingEnabled": {
-          "description": "True if auto-tagging is enabled on the AdWords account. Read-only after the insert operation.",
+          "description": "True if auto-tagging is enabled on the Google Ads account. Read-only after the insert operation.",
           "type": "boolean"
         },
         "customerId": {
@@ -4178,12 +4145,12 @@
               "analytics.management.webPropertyAdWordsLinks.update"
             ]
           },
-          "description": "Customer ID. This field is required when creating an AdWords link.",
+          "description": "Customer ID. This field is required when creating a Google Ads link.",
           "type": "string"
         },
         "kind": {
           "default": "analytics#adWordsAccount",
-          "description": "Resource type for AdWords account.",
+          "description": "Resource type for Google Ads account.",
           "type": "string"
         }
       },
@@ -4662,7 +4629,7 @@
       "type": "object"
     },
     "EntityAdWordsLink": {
-      "description": "JSON template for Analytics Entity AdWords Link.",
+      "description": "JSON template for Analytics Entity Google Ads Link.",
       "id": "EntityAdWordsLink",
       "properties": {
         "adWordsAccounts": {
@@ -4672,7 +4639,7 @@
               "analytics.management.webPropertyAdWordsLinks.update"
             ]
           },
-          "description": "A list of AdWords client accounts. These cannot be MCC accounts. This field is required when creating an AdWords link. It cannot be empty.",
+          "description": "A list of Google Ads client accounts. These cannot be MCC accounts. This field is required when creating a Google Ads link. It cannot be empty.",
           "items": {
             "$ref": "AdWordsAccount"
           },
@@ -4688,12 +4655,12 @@
           "type": "object"
         },
         "id": {
-          "description": "Entity AdWords link ID",
+          "description": "Entity Google Ads link ID",
           "type": "string"
         },
         "kind": {
           "default": "analytics#entityAdWordsLink",
-          "description": "Resource type for entity AdWords link.",
+          "description": "Resource type for entity Google Ads link.",
           "type": "string"
         },
         "name": {
@@ -4703,7 +4670,7 @@
               "analytics.management.webPropertyAdWordsLinks.update"
             ]
           },
-          "description": "Name of the link. This field is required when creating an AdWords link.",
+          "description": "Name of the link. This field is required when creating a Google Ads link.",
           "type": "string"
         },
         "profileIds": {
@@ -4714,18 +4681,18 @@
           "type": "array"
         },
         "selfLink": {
-          "description": "URL link for this Google Analytics - Google AdWords link.",
+          "description": "URL link for this Google Analytics - Google Ads link.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "EntityAdWordsLinks": {
-      "description": "An entity AdWords link collection provides a list of GA-AdWords links Each resource in this collection corresponds to a single link.",
+      "description": "An entity Google Ads link collection provides a list of GA-Google Ads links Each resource in this collection corresponds to a single link.",
       "id": "EntityAdWordsLinks",
       "properties": {
         "items": {
-          "description": "A list of entity AdWords links.",
+          "description": "A list of entity Google Ads links.",
           "items": {
             "$ref": "EntityAdWordsLink"
           },
@@ -4742,11 +4709,11 @@
           "type": "string"
         },
         "nextLink": {
-          "description": "Next link for this AdWords link collection.",
+          "description": "Next link for this Google Ads link collection.",
           "type": "string"
         },
         "previousLink": {
-          "description": "Previous link for this AdWords link collection.",
+          "description": "Previous link for this Google Ads link collection.",
           "type": "string"
         },
         "startIndex": {
@@ -5972,7 +5939,7 @@
           "type": "string"
         },
         "linkedAccountId": {
-          "description": "The foreign account ID. For example the an AdWords `linkedAccountId` has the following format XXX-XXX-XXXX.",
+          "description": "The foreign account ID. For example the an Google Ads `linkedAccountId` has the following format XXX-XXX-XXXX.",
           "type": "string"
         },
         "remarketingAudienceId": {

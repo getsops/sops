@@ -16,25 +16,24 @@ package rpcreplay
 
 import (
 	"bufio"
+	"context"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"os"
 	"sync"
-
-	"golang.org/x/net/context"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 
 	pb "cloud.google.com/go/rpcreplay/proto/rpcreplay"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	spb "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 // A Recorder records RPCs for later playback.
@@ -364,44 +363,69 @@ func (rep *Replayer) read(r io.Reader) error {
 
 // DialOptions returns the options that must be passed to grpc.Dial
 // to enable replaying.
-func (r *Replayer) DialOptions() []grpc.DialOption {
+func (rep *Replayer) DialOptions() []grpc.DialOption {
 	return []grpc.DialOption{
 		// On replay, we make no RPCs, which means the connection may be closed
 		// before the normally async Dial completes. Making the Dial synchronous
 		// fixes that.
 		grpc.WithBlock(),
-		grpc.WithUnaryInterceptor(r.interceptUnary),
-		grpc.WithStreamInterceptor(r.interceptStream),
+		grpc.WithUnaryInterceptor(rep.interceptUnary),
+		grpc.WithStreamInterceptor(rep.interceptStream),
 	}
+}
+
+// Connection returns a fake gRPC connection suitable for replaying.
+func (rep *Replayer) Connection() (*grpc.ClientConn, error) {
+	// We don't need an actual connection, not even a loopback one.
+	// But we do need something to attach gRPC interceptors to.
+	// So we start a local server and connect to it, then close it down.
+	srv := grpc.NewServer()
+	l, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		return nil, err
+	}
+	go func() {
+		if err := srv.Serve(l); err != nil {
+			panic(err) // we should never get an error because we just connect and stop
+		}
+	}()
+	conn, err := grpc.Dial(l.Addr().String(),
+		append([]grpc.DialOption{grpc.WithInsecure()}, rep.DialOptions()...)...)
+	if err != nil {
+		return nil, err
+	}
+	conn.Close()
+	srv.Stop()
+	return conn, nil
 }
 
 // Initial returns the initial state saved by the Recorder.
-func (r *Replayer) Initial() []byte { return r.initial }
+func (rep *Replayer) Initial() []byte { return rep.initial }
 
 // SetLogFunc sets a function to be used for debug logging. The function
 // should be safe to be called from multiple goroutines.
-func (r *Replayer) SetLogFunc(f func(format string, v ...interface{})) {
-	r.log = f
+func (rep *Replayer) SetLogFunc(f func(format string, v ...interface{})) {
+	rep.log = f
 }
 
 // Close closes the Replayer.
-func (r *Replayer) Close() error {
+func (rep *Replayer) Close() error {
 	return nil
 }
 
-func (r *Replayer) interceptUnary(_ context.Context, method string, req, res interface{}, _ *grpc.ClientConn, _ grpc.UnaryInvoker, _ ...grpc.CallOption) error {
+func (rep *Replayer) interceptUnary(_ context.Context, method string, req, res interface{}, _ *grpc.ClientConn, _ grpc.UnaryInvoker, _ ...grpc.CallOption) error {
 	mreq := req.(proto.Message)
-	if r.BeforeFunc != nil {
-		if err := r.BeforeFunc(method, mreq); err != nil {
+	if rep.BeforeFunc != nil {
+		if err := rep.BeforeFunc(method, mreq); err != nil {
 			return err
 		}
 	}
-	r.log("request %s (%s)", method, req)
-	call := r.extractCall(method, mreq)
+	rep.log("request %s (%s)", method, req)
+	call := rep.extractCall(method, mreq)
 	if call == nil {
 		return fmt.Errorf("replayer: request not found: %s", mreq)
 	}
-	r.log("returning %v", call.response)
+	rep.log("returning %v", call.response)
 	if call.response.err != nil {
 		return call.response.err
 	}
@@ -409,26 +433,26 @@ func (r *Replayer) interceptUnary(_ context.Context, method string, req, res int
 	return nil
 }
 
-func (r *Replayer) interceptStream(ctx context.Context, _ *grpc.StreamDesc, _ *grpc.ClientConn, method string, _ grpc.Streamer, _ ...grpc.CallOption) (grpc.ClientStream, error) {
-	r.log("create-stream %s", method)
-	str := r.extractStream(method)
-	if str == nil {
-		return nil, fmt.Errorf("replayer: stream not found for method %s", method)
-	}
-	if str.createErr != nil {
-		return nil, str.createErr
-	}
-	return &repClientStream{ctx: ctx, str: str}, nil
+func (rep *Replayer) interceptStream(ctx context.Context, _ *grpc.StreamDesc, _ *grpc.ClientConn, method string, _ grpc.Streamer, _ ...grpc.CallOption) (grpc.ClientStream, error) {
+	rep.log("create-stream %s", method)
+	return &repClientStream{ctx: ctx, rep: rep, method: method}, nil
 }
 
 type repClientStream struct {
-	ctx context.Context
-	str *stream
+	ctx    context.Context
+	rep    *Replayer
+	method string
+	str    *stream
 }
 
 func (rcs *repClientStream) Context() context.Context { return rcs.ctx }
 
-func (rcs *repClientStream) SendMsg(m interface{}) error {
+func (rcs *repClientStream) SendMsg(req interface{}) error {
+	if rcs.str == nil {
+		if err := rcs.setStream(rcs.method, req.(proto.Message)); err != nil {
+			return err
+		}
+	}
 	if len(rcs.str.sends) == 0 {
 		return fmt.Errorf("replayer: no more sends for stream %s, created at index %d",
 			rcs.str.method, rcs.str.createIndex)
@@ -439,7 +463,25 @@ func (rcs *repClientStream) SendMsg(m interface{}) error {
 	return msg.err
 }
 
+func (rcs *repClientStream) setStream(method string, req proto.Message) error {
+	str := rcs.rep.extractStream(method, req)
+	if str == nil {
+		return fmt.Errorf("replayer: stream not found for method %s and request %v", method, req)
+	}
+	if str.createErr != nil {
+		return str.createErr
+	}
+	rcs.str = str
+	return nil
+}
+
 func (rcs *repClientStream) RecvMsg(m interface{}) error {
+	if rcs.str == nil {
+		// Receive before send; fall back to matching stream by method only.
+		if err := rcs.setStream(rcs.method, nil); err != nil {
+			return err
+		}
+	}
 	if len(rcs.str.recvs) == 0 {
 		return fmt.Errorf("replayer: no more receives for stream %s, created at index %d",
 			rcs.str.method, rcs.str.createIndex)
@@ -469,32 +511,39 @@ func (rcs *repClientStream) CloseSend() error {
 
 // extractCall finds the first call in the list with the same method
 // and request. It returns nil if it can't find such a call.
-func (r *Replayer) extractCall(method string, req proto.Message) *call {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	for i, call := range r.calls {
+func (rep *Replayer) extractCall(method string, req proto.Message) *call {
+	rep.mu.Lock()
+	defer rep.mu.Unlock()
+	for i, call := range rep.calls {
 		if call == nil {
 			continue
 		}
 		if method == call.method && proto.Equal(req, call.request) {
-			r.calls[i] = nil // nil out this call so we don't reuse it
+			rep.calls[i] = nil // nil out this call so we don't reuse it
 			return call
 		}
 	}
 	return nil
 }
 
-func (r *Replayer) extractStream(method string) *stream {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	for i, stream := range r.streams {
-		if stream == nil {
+// extractStream find the first stream in the list with the same method and the same
+// first request sent. If req is nil, that means a receive occurred before a send, so
+// it matches only on method.
+func (rep *Replayer) extractStream(method string, req proto.Message) *stream {
+	rep.mu.Lock()
+	defer rep.mu.Unlock()
+	for i, stream := range rep.streams {
+		// Skip stream if it is nil (already extracted) or its method doesn't match.
+		if stream == nil || stream.method != method {
 			continue
 		}
-		if method == stream.method {
-			r.streams[i] = nil
-			return stream
+		// If there is a first request, skip stream if it has no requests or its first
+		// request doesn't match.
+		if req != nil && len(stream.sends) > 0 && !proto.Equal(req, stream.sends[0].msg) {
+			continue
 		}
+		rep.streams[i] = nil // nil out this stream so we don't reuse it
+		return stream
 	}
 	return nil
 }
@@ -527,18 +576,17 @@ func FprintReader(w io.Writer, r io.Reader) error {
 			return nil
 		}
 
-		s := "message"
-		if e.msg.err != nil {
-			s = "error"
-		}
-		fmt.Fprintf(w, "#%d: kind: %s, method: %s, ref index: %d, %s:\n",
-			i, e.kind, e.method, e.refIndex, s)
-		if e.msg.err == nil {
+		fmt.Fprintf(w, "#%d: kind: %s, method: %s, ref index: %d", i, e.kind, e.method, e.refIndex)
+		switch {
+		case e.msg.msg != nil:
+			fmt.Fprintf(w, ", message:\n")
 			if err := proto.MarshalText(w, e.msg.msg); err != nil {
 				return err
 			}
-		} else {
-			fmt.Fprintf(w, "%v\n", e.msg.err)
+		case e.msg.err != nil:
+			fmt.Fprintf(w, ", error: %v\n", e.msg.err)
+		default:
+			fmt.Fprintln(w)
 		}
 	}
 }

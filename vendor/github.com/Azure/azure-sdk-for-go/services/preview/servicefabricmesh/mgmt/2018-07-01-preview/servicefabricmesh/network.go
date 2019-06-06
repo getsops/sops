@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewNetworkClientWithBaseURI(baseURI string, subscriptionID string) NetworkC
 // networkName - the identity of the network.
 // networkResourceDescription - description for creating a network resource.
 func (client NetworkClient) Create(ctx context.Context, resourceGroupName string, networkName string, networkResourceDescription NetworkResourceDescription) (result NetworkResourceDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: networkResourceDescription,
 			Constraints: []validation.Constraint{{Target: "networkResourceDescription.NetworkResourceProperties", Name: validation.Null, Rule: true,
@@ -126,6 +137,16 @@ func (client NetworkClient) CreateResponder(resp *http.Response) (result Network
 // resourceGroupName - azure resource group name
 // networkName - the identity of the network.
 func (client NetworkClient) Delete(ctx context.Context, resourceGroupName string, networkName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, networkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabricmesh.NetworkClient", "Delete", nil, "Failure preparing request")
@@ -193,6 +214,16 @@ func (client NetworkClient) DeleteResponder(resp *http.Response) (result autores
 // resourceGroupName - azure resource group name
 // networkName - the identity of the network.
 func (client NetworkClient) Get(ctx context.Context, resourceGroupName string, networkName string) (result NetworkResourceDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, networkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabricmesh.NetworkClient", "Get", nil, "Failure preparing request")
@@ -260,6 +291,16 @@ func (client NetworkClient) GetResponder(resp *http.Response) (result NetworkRes
 // Parameters:
 // resourceGroupName - azure resource group name
 func (client NetworkClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result NetworkResourceDescriptionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.nrdl.Response.Response != nil {
+				sc = result.nrdl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -323,8 +364,8 @@ func (client NetworkClient) ListByResourceGroupResponder(resp *http.Response) (r
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client NetworkClient) listByResourceGroupNextResults(lastResults NetworkResourceDescriptionList) (result NetworkResourceDescriptionList, err error) {
-	req, err := lastResults.networkResourceDescriptionListPreparer()
+func (client NetworkClient) listByResourceGroupNextResults(ctx context.Context, lastResults NetworkResourceDescriptionList) (result NetworkResourceDescriptionList, err error) {
+	req, err := lastResults.networkResourceDescriptionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabricmesh.NetworkClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -345,6 +386,16 @@ func (client NetworkClient) listByResourceGroupNextResults(lastResults NetworkRe
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NetworkClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result NetworkResourceDescriptionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -352,6 +403,16 @@ func (client NetworkClient) ListByResourceGroupComplete(ctx context.Context, res
 // ListBySubscription gets the information about all network resources in a given subscription. The information
 // includes the network description and other runtime properties.
 func (client NetworkClient) ListBySubscription(ctx context.Context) (result NetworkResourceDescriptionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.nrdl.Response.Response != nil {
+				sc = result.nrdl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -414,8 +475,8 @@ func (client NetworkClient) ListBySubscriptionResponder(resp *http.Response) (re
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client NetworkClient) listBySubscriptionNextResults(lastResults NetworkResourceDescriptionList) (result NetworkResourceDescriptionList, err error) {
-	req, err := lastResults.networkResourceDescriptionListPreparer()
+func (client NetworkClient) listBySubscriptionNextResults(ctx context.Context, lastResults NetworkResourceDescriptionList) (result NetworkResourceDescriptionList, err error) {
+	req, err := lastResults.networkResourceDescriptionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabricmesh.NetworkClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -436,6 +497,16 @@ func (client NetworkClient) listBySubscriptionNextResults(lastResults NetworkRes
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client NetworkClient) ListBySubscriptionComplete(ctx context.Context) (result NetworkResourceDescriptionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NetworkClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }

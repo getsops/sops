@@ -69,7 +69,7 @@ to "".
 ```go
 func ShouldBeChronological(actual interface{}, expected ...interface{}) string
 ```
-ShouldBeChronological receives a []time.Time slice and asserts that the are in
+ShouldBeChronological receives a []time.Time slice and asserts that they are in
 chronological order starting with the first time.Time as the earliest.
 
 #### func  ShouldBeEmpty
@@ -344,6 +344,14 @@ func ShouldNotBeBlank(actual interface{}, expected ...interface{}) string
 ```
 ShouldNotBeBlank receives exactly 1 string parameter and ensures that it is
 equal to "".
+
+#### func  ShouldNotBeChronological
+
+```go
+func ShouldNotBeChronological(actual interface{}, expected ...interface{}) string
+```
+ShouldNotBeChronological receives a []time.Time slice and asserts that they are
+NOT in chronological order.
 
 #### func  ShouldNotBeEmpty
 

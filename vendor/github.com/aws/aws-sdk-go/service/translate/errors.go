@@ -20,35 +20,60 @@ const (
 	// An internal server error occurred. Retry your request.
 	ErrCodeInternalServerException = "InternalServerException"
 
+	// ErrCodeInvalidParameterValueException for service response error code
+	// "InvalidParameterValueException".
+	//
+	// The value of the parameter is invalid. Review the value of the parameter
+	// you are using to correct it, and then retry your operation.
+	ErrCodeInvalidParameterValueException = "InvalidParameterValueException"
+
 	// ErrCodeInvalidRequestException for service response error code
 	// "InvalidRequestException".
 	//
-	// The request is invalid.
+	// The request that you made is invalid. Check your request to determine why
+	// it's invalid and then retry the request.
 	ErrCodeInvalidRequestException = "InvalidRequestException"
+
+	// ErrCodeLimitExceededException for service response error code
+	// "LimitExceededException".
+	//
+	// The specified limit has been exceeded. Review your request and retry it with
+	// a quantity below the stated limit.
+	ErrCodeLimitExceededException = "LimitExceededException"
+
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// The resource you are looking for has not been found. Review the resource
+	// you're looking for and see if a different resource will accomplish your needs
+	// before retrying the revised request. .
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeServiceUnavailableException for service response error code
 	// "ServiceUnavailableException".
 	//
-	// Amazon Translate is unavailable. Retry your request later.
+	// The Amazon Translate service is temporarily unavailable. Please wait a bit
+	// and then retry your request.
 	ErrCodeServiceUnavailableException = "ServiceUnavailableException"
 
 	// ErrCodeTextSizeLimitExceededException for service response error code
 	// "TextSizeLimitExceededException".
 	//
-	// The size of the input text exceeds the length constraint for the Text field.
-	// Try again with a shorter text.
+	// The size of the text you submitted exceeds the size limit. Reduce the size
+	// of the text or use a smaller document and then retry your request.
 	ErrCodeTextSizeLimitExceededException = "TextSizeLimitExceededException"
 
 	// ErrCodeTooManyRequestsException for service response error code
 	// "TooManyRequestsException".
 	//
-	// The number of requests exceeds the limit. Resubmit your request later.
+	// You have made too many requests within a short period of time. Wait for a
+	// short time and then try your request again.
 	ErrCodeTooManyRequestsException = "TooManyRequestsException"
 
 	// ErrCodeUnsupportedLanguagePairException for service response error code
 	// "UnsupportedLanguagePairException".
 	//
-	// Amazon Translate cannot translate input text in the source language into
-	// this target language. For more information, see how-to-error-msg.
+	// Amazon Translate does not support translation from the language of the source
+	// text into the requested target language. For more information, see how-to-error-msg.
 	ErrCodeUnsupportedLanguagePairException = "UnsupportedLanguagePairException"
 )

@@ -17,17 +17,19 @@ package pubsub
 // This file provides a mock in-memory pubsub server for streaming pull testing.
 
 import (
+	"context"
 	"io"
 	"sync"
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
 	emptypb "github.com/golang/protobuf/ptypes/empty"
-	"golang.org/x/net/context"
 	pb "google.golang.org/genproto/googleapis/pubsub/v1"
 )
 
 type mockServer struct {
+	srv *testutil.Server
+
 	pb.SubscriberServer
 
 	Addr string
@@ -36,6 +38,8 @@ type mockServer struct {
 	Acked         map[string]bool  // acked message IDs
 	Deadlines     map[string]int32 // deadlines by message ID
 	pullResponses []*pullResponse
+	ackErrs       []error
+	modAckErrs    []error
 	wg            sync.WaitGroup
 	sub           *pb.Subscription
 }
@@ -45,12 +49,13 @@ type pullResponse struct {
 	err  error
 }
 
-func newMockServer() (*mockServer, error) {
-	srv, err := testutil.NewServer()
+func newMockServer(port int) (*mockServer, error) {
+	srv, err := testutil.NewServerWithPort(port)
 	if err != nil {
 		return nil, err
 	}
 	mock := &mockServer{
+		srv:       srv,
 		Addr:      srv.Addr,
 		Acked:     map[string]bool{},
 		Deadlines: map[string]int32{},
@@ -66,11 +71,27 @@ func newMockServer() (*mockServer, error) {
 
 // Each call to addStreamingPullMessages results in one StreamingPullResponse.
 func (s *mockServer) addStreamingPullMessages(msgs []*pb.ReceivedMessage) {
+	s.mu.Lock()
 	s.pullResponses = append(s.pullResponses, &pullResponse{msgs, nil})
+	s.mu.Unlock()
 }
 
 func (s *mockServer) addStreamingPullError(err error) {
+	s.mu.Lock()
 	s.pullResponses = append(s.pullResponses, &pullResponse{nil, err})
+	s.mu.Unlock()
+}
+
+func (s *mockServer) addAckResponse(err error) {
+	s.mu.Lock()
+	s.ackErrs = append(s.ackErrs, err)
+	s.mu.Unlock()
+}
+
+func (s *mockServer) addModAckResponse(err error) {
+	s.mu.Lock()
+	s.modAckErrs = append(s.modAckErrs, err)
+	s.mu.Unlock()
 }
 
 func (s *mockServer) wait() {
@@ -141,6 +162,16 @@ func (s *mockServer) StreamingPull(stream pb.Subscriber_StreamingPullServer) err
 }
 
 func (s *mockServer) Acknowledge(ctx context.Context, req *pb.AcknowledgeRequest) (*emptypb.Empty, error) {
+	var err error
+	s.mu.Lock()
+	if len(s.ackErrs) > 0 {
+		err = s.ackErrs[0]
+		s.ackErrs = s.ackErrs[1:]
+	}
+	s.mu.Unlock()
+	if err != nil {
+		return nil, err
+	}
 	for _, id := range req.AckIds {
 		s.Acked[id] = true
 	}
@@ -148,6 +179,16 @@ func (s *mockServer) Acknowledge(ctx context.Context, req *pb.AcknowledgeRequest
 }
 
 func (s *mockServer) ModifyAckDeadline(ctx context.Context, req *pb.ModifyAckDeadlineRequest) (*emptypb.Empty, error) {
+	var err error
+	s.mu.Lock()
+	if len(s.modAckErrs) > 0 {
+		err = s.modAckErrs[0]
+		s.modAckErrs = s.modAckErrs[1:]
+	}
+	s.mu.Unlock()
+	if err != nil {
+		return nil, err
+	}
 	for _, id := range req.AckIds {
 		s.Deadlines[id] = req.AckDeadlineSeconds
 	}

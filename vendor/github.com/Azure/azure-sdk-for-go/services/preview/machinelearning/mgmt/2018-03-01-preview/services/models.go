@@ -18,13 +18,18 @@ package services
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2018-03-01-preview/services"
 
 // ComputeType enumerates the values for compute type.
 type ComputeType string
@@ -36,13 +41,15 @@ const (
 	ComputeTypeBatchAI ComputeType = "BatchAI"
 	// ComputeTypeDataFactory ...
 	ComputeTypeDataFactory ComputeType = "DataFactory"
+	// ComputeTypeHDInsight ...
+	ComputeTypeHDInsight ComputeType = "HDInsight"
 	// ComputeTypeVirtualMachine ...
 	ComputeTypeVirtualMachine ComputeType = "VirtualMachine"
 )
 
 // PossibleComputeTypeValues returns an array of possible values for the ComputeType const type.
 func PossibleComputeTypeValues() []ComputeType {
-	return []ComputeType{ComputeTypeAKS, ComputeTypeBatchAI, ComputeTypeDataFactory, ComputeTypeVirtualMachine}
+	return []ComputeType{ComputeTypeAKS, ComputeTypeBatchAI, ComputeTypeDataFactory, ComputeTypeHDInsight, ComputeTypeVirtualMachine}
 }
 
 // ComputeTypeBasicCompute enumerates the values for compute type basic compute.
@@ -57,13 +64,15 @@ const (
 	ComputeTypeCompute ComputeTypeBasicCompute = "Compute"
 	// ComputeTypeDataFactory1 ...
 	ComputeTypeDataFactory1 ComputeTypeBasicCompute = "DataFactory"
+	// ComputeTypeHDInsight1 ...
+	ComputeTypeHDInsight1 ComputeTypeBasicCompute = "HDInsight"
 	// ComputeTypeVirtualMachine1 ...
 	ComputeTypeVirtualMachine1 ComputeTypeBasicCompute = "VirtualMachine"
 )
 
 // PossibleComputeTypeBasicComputeValues returns an array of possible values for the ComputeTypeBasicCompute const type.
 func PossibleComputeTypeBasicComputeValues() []ComputeTypeBasicCompute {
-	return []ComputeTypeBasicCompute{ComputeTypeAKS1, ComputeTypeBatchAI1, ComputeTypeCompute, ComputeTypeDataFactory1, ComputeTypeVirtualMachine1}
+	return []ComputeTypeBasicCompute{ComputeTypeAKS1, ComputeTypeBatchAI1, ComputeTypeCompute, ComputeTypeDataFactory1, ComputeTypeHDInsight1, ComputeTypeVirtualMachine1}
 }
 
 // ComputeTypeBasicComputeSecrets enumerates the values for compute type basic compute secrets.
@@ -140,19 +149,21 @@ func PossibleStatusValues() []Status {
 type AKS struct {
 	// Properties - AKS properties
 	Properties *AKSProperties `json:"properties,omitempty"`
-	// ProvisioningState - The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	// ComputeLocation - Location for the underlying compute
+	ComputeLocation *string `json:"computeLocation,omitempty"`
+	// ProvisioningState - READ-ONLY; The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Description - The description of the Machine Learning compute.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - The date and time when the compute was created.
+	// CreatedOn - READ-ONLY; The date and time when the compute was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - The date and time when the compute was last modified.
+	// ModifiedOn - READ-ONLY; The date and time when the compute was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
 	// ResourceID - ARM resource id of the compute
 	ResourceID *string `json:"resourceId,omitempty"`
-	// ProvisioningErrors - Errors during provisioning
+	// ProvisioningErrors - READ-ONLY; Errors during provisioning
 	ProvisioningErrors *[]MachineLearningServiceError `json:"provisioningErrors,omitempty"`
-	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeDataFactory1'
+	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeHDInsight1', 'ComputeTypeDataFactory1'
 	ComputeType ComputeTypeBasicCompute `json:"computeType,omitempty"`
 }
 
@@ -163,23 +174,14 @@ func (a AKS) MarshalJSON() ([]byte, error) {
 	if a.Properties != nil {
 		objectMap["properties"] = a.Properties
 	}
-	if a.ProvisioningState != "" {
-		objectMap["provisioningState"] = a.ProvisioningState
+	if a.ComputeLocation != nil {
+		objectMap["computeLocation"] = a.ComputeLocation
 	}
 	if a.Description != nil {
 		objectMap["description"] = a.Description
 	}
-	if a.CreatedOn != nil {
-		objectMap["createdOn"] = a.CreatedOn
-	}
-	if a.ModifiedOn != nil {
-		objectMap["modifiedOn"] = a.ModifiedOn
-	}
 	if a.ResourceID != nil {
 		objectMap["resourceId"] = a.ResourceID
-	}
-	if a.ProvisioningErrors != nil {
-		objectMap["provisioningErrors"] = a.ProvisioningErrors
 	}
 	if a.ComputeType != "" {
 		objectMap["computeType"] = a.ComputeType
@@ -199,6 +201,11 @@ func (a AKS) AsBatchAI() (*BatchAI, bool) {
 
 // AsVirtualMachine is the BasicCompute implementation for AKS.
 func (a AKS) AsVirtualMachine() (*VirtualMachine, bool) {
+	return nil, false
+}
+
+// AsHDInsight is the BasicCompute implementation for AKS.
+func (a AKS) AsHDInsight() (*HDInsight, bool) {
 	return nil, false
 }
 
@@ -286,19 +293,21 @@ type AKSProperties struct {
 type BatchAI struct {
 	// Properties - BatchAI properties
 	Properties *BatchAIProperties `json:"properties,omitempty"`
-	// ProvisioningState - The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	// ComputeLocation - Location for the underlying compute
+	ComputeLocation *string `json:"computeLocation,omitempty"`
+	// ProvisioningState - READ-ONLY; The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Description - The description of the Machine Learning compute.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - The date and time when the compute was created.
+	// CreatedOn - READ-ONLY; The date and time when the compute was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - The date and time when the compute was last modified.
+	// ModifiedOn - READ-ONLY; The date and time when the compute was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
 	// ResourceID - ARM resource id of the compute
 	ResourceID *string `json:"resourceId,omitempty"`
-	// ProvisioningErrors - Errors during provisioning
+	// ProvisioningErrors - READ-ONLY; Errors during provisioning
 	ProvisioningErrors *[]MachineLearningServiceError `json:"provisioningErrors,omitempty"`
-	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeDataFactory1'
+	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeHDInsight1', 'ComputeTypeDataFactory1'
 	ComputeType ComputeTypeBasicCompute `json:"computeType,omitempty"`
 }
 
@@ -309,23 +318,14 @@ func (ba BatchAI) MarshalJSON() ([]byte, error) {
 	if ba.Properties != nil {
 		objectMap["properties"] = ba.Properties
 	}
-	if ba.ProvisioningState != "" {
-		objectMap["provisioningState"] = ba.ProvisioningState
+	if ba.ComputeLocation != nil {
+		objectMap["computeLocation"] = ba.ComputeLocation
 	}
 	if ba.Description != nil {
 		objectMap["description"] = ba.Description
 	}
-	if ba.CreatedOn != nil {
-		objectMap["createdOn"] = ba.CreatedOn
-	}
-	if ba.ModifiedOn != nil {
-		objectMap["modifiedOn"] = ba.ModifiedOn
-	}
 	if ba.ResourceID != nil {
 		objectMap["resourceId"] = ba.ResourceID
-	}
-	if ba.ProvisioningErrors != nil {
-		objectMap["provisioningErrors"] = ba.ProvisioningErrors
 	}
 	if ba.ComputeType != "" {
 		objectMap["computeType"] = ba.ComputeType
@@ -345,6 +345,11 @@ func (ba BatchAI) AsBatchAI() (*BatchAI, bool) {
 
 // AsVirtualMachine is the BasicCompute implementation for BatchAI.
 func (ba BatchAI) AsVirtualMachine() (*VirtualMachine, bool) {
+	return nil, false
+}
+
+// AsHDInsight is the BasicCompute implementation for BatchAI.
+func (ba BatchAI) AsHDInsight() (*HDInsight, bool) {
 	return nil, false
 }
 
@@ -378,25 +383,28 @@ type BasicCompute interface {
 	AsAKS() (*AKS, bool)
 	AsBatchAI() (*BatchAI, bool)
 	AsVirtualMachine() (*VirtualMachine, bool)
+	AsHDInsight() (*HDInsight, bool)
 	AsDataFactory() (*DataFactory, bool)
 	AsCompute() (*Compute, bool)
 }
 
 // Compute machine Learning compute object.
 type Compute struct {
-	// ProvisioningState - The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	// ComputeLocation - Location for the underlying compute
+	ComputeLocation *string `json:"computeLocation,omitempty"`
+	// ProvisioningState - READ-ONLY; The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Description - The description of the Machine Learning compute.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - The date and time when the compute was created.
+	// CreatedOn - READ-ONLY; The date and time when the compute was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - The date and time when the compute was last modified.
+	// ModifiedOn - READ-ONLY; The date and time when the compute was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
 	// ResourceID - ARM resource id of the compute
 	ResourceID *string `json:"resourceId,omitempty"`
-	// ProvisioningErrors - Errors during provisioning
+	// ProvisioningErrors - READ-ONLY; Errors during provisioning
 	ProvisioningErrors *[]MachineLearningServiceError `json:"provisioningErrors,omitempty"`
-	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeDataFactory1'
+	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeHDInsight1', 'ComputeTypeDataFactory1'
 	ComputeType ComputeTypeBasicCompute `json:"computeType,omitempty"`
 }
 
@@ -420,6 +428,10 @@ func unmarshalBasicCompute(body []byte) (BasicCompute, error) {
 		var VM VirtualMachine
 		err := json.Unmarshal(body, &VM)
 		return VM, err
+	case string(ComputeTypeHDInsight1):
+		var hi HDInsight
+		err := json.Unmarshal(body, &hi)
+		return hi, err
 	case string(ComputeTypeDataFactory1):
 		var df DataFactory
 		err := json.Unmarshal(body, &df)
@@ -453,23 +465,14 @@ func unmarshalBasicComputeArray(body []byte) ([]BasicCompute, error) {
 func (c Compute) MarshalJSON() ([]byte, error) {
 	c.ComputeType = ComputeTypeCompute
 	objectMap := make(map[string]interface{})
-	if c.ProvisioningState != "" {
-		objectMap["provisioningState"] = c.ProvisioningState
+	if c.ComputeLocation != nil {
+		objectMap["computeLocation"] = c.ComputeLocation
 	}
 	if c.Description != nil {
 		objectMap["description"] = c.Description
 	}
-	if c.CreatedOn != nil {
-		objectMap["createdOn"] = c.CreatedOn
-	}
-	if c.ModifiedOn != nil {
-		objectMap["modifiedOn"] = c.ModifiedOn
-	}
 	if c.ResourceID != nil {
 		objectMap["resourceId"] = c.ResourceID
-	}
-	if c.ProvisioningErrors != nil {
-		objectMap["provisioningErrors"] = c.ProvisioningErrors
 	}
 	if c.ComputeType != "" {
 		objectMap["computeType"] = c.ComputeType
@@ -489,6 +492,11 @@ func (c Compute) AsBatchAI() (*BatchAI, bool) {
 
 // AsVirtualMachine is the BasicCompute implementation for Compute.
 func (c Compute) AsVirtualMachine() (*VirtualMachine, bool) {
+	return nil, false
+}
+
+// AsHDInsight is the BasicCompute implementation for Compute.
+func (c Compute) AsHDInsight() (*HDInsight, bool) {
 	return nil, false
 }
 
@@ -512,15 +520,15 @@ type ComputeResource struct {
 	autorest.Response `json:"-"`
 	// Properties - Compute properties
 	Properties BasicCompute `json:"properties,omitempty"`
-	// ID - Specifies the resource ID.
+	// ID - READ-ONLY; Specifies the resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Specifies the name of the resource.
+	// Name - READ-ONLY; Specifies the name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Identity - The identity of the resource.
+	// Identity - READ-ONLY; The identity of the resource.
 	Identity *Identity `json:"identity,omitempty"`
 	// Location - Specifies the location of the resource.
 	Location *string `json:"location,omitempty"`
-	// Type - Specifies the type of the resource.
+	// Type - READ-ONLY; Specifies the type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Tags - Contains resource tags defined as key/value pairs.
 	Tags map[string]*string `json:"tags"`
@@ -530,20 +538,8 @@ type ComputeResource struct {
 func (cr ComputeResource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	objectMap["properties"] = cr.Properties
-	if cr.ID != nil {
-		objectMap["id"] = cr.ID
-	}
-	if cr.Name != nil {
-		objectMap["name"] = cr.Name
-	}
-	if cr.Identity != nil {
-		objectMap["identity"] = cr.Identity
-	}
 	if cr.Location != nil {
 		objectMap["location"] = cr.Location
-	}
-	if cr.Type != nil {
-		objectMap["type"] = cr.Type
 	}
 	if cr.Tags != nil {
 		objectMap["tags"] = cr.Tags
@@ -732,19 +728,21 @@ func (csm *ComputeSecretsModel) UnmarshalJSON(body []byte) error {
 
 // DataFactory a DataFactory compute.
 type DataFactory struct {
-	// ProvisioningState - The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	// ComputeLocation - Location for the underlying compute
+	ComputeLocation *string `json:"computeLocation,omitempty"`
+	// ProvisioningState - READ-ONLY; The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Description - The description of the Machine Learning compute.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - The date and time when the compute was created.
+	// CreatedOn - READ-ONLY; The date and time when the compute was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - The date and time when the compute was last modified.
+	// ModifiedOn - READ-ONLY; The date and time when the compute was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
 	// ResourceID - ARM resource id of the compute
 	ResourceID *string `json:"resourceId,omitempty"`
-	// ProvisioningErrors - Errors during provisioning
+	// ProvisioningErrors - READ-ONLY; Errors during provisioning
 	ProvisioningErrors *[]MachineLearningServiceError `json:"provisioningErrors,omitempty"`
-	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeDataFactory1'
+	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeHDInsight1', 'ComputeTypeDataFactory1'
 	ComputeType ComputeTypeBasicCompute `json:"computeType,omitempty"`
 }
 
@@ -752,23 +750,14 @@ type DataFactory struct {
 func (df DataFactory) MarshalJSON() ([]byte, error) {
 	df.ComputeType = ComputeTypeDataFactory1
 	objectMap := make(map[string]interface{})
-	if df.ProvisioningState != "" {
-		objectMap["provisioningState"] = df.ProvisioningState
+	if df.ComputeLocation != nil {
+		objectMap["computeLocation"] = df.ComputeLocation
 	}
 	if df.Description != nil {
 		objectMap["description"] = df.Description
 	}
-	if df.CreatedOn != nil {
-		objectMap["createdOn"] = df.CreatedOn
-	}
-	if df.ModifiedOn != nil {
-		objectMap["modifiedOn"] = df.ModifiedOn
-	}
 	if df.ResourceID != nil {
 		objectMap["resourceId"] = df.ResourceID
-	}
-	if df.ProvisioningErrors != nil {
-		objectMap["provisioningErrors"] = df.ProvisioningErrors
 	}
 	if df.ComputeType != "" {
 		objectMap["computeType"] = df.ComputeType
@@ -788,6 +777,11 @@ func (df DataFactory) AsBatchAI() (*BatchAI, bool) {
 
 // AsVirtualMachine is the BasicCompute implementation for DataFactory.
 func (df DataFactory) AsVirtualMachine() (*VirtualMachine, bool) {
+	return nil, false
+}
+
+// AsHDInsight is the BasicCompute implementation for DataFactory.
+func (df DataFactory) AsHDInsight() (*HDInsight, bool) {
 	return nil, false
 }
 
@@ -824,11 +818,99 @@ type ErrorResponse struct {
 	Details *[]ErrorDetail `json:"details,omitempty"`
 }
 
+// HDInsight a HDInsight compute.
+type HDInsight struct {
+	Properties *HDInsightProperties `json:"properties,omitempty"`
+	// ComputeLocation - Location for the underlying compute
+	ComputeLocation *string `json:"computeLocation,omitempty"`
+	// ProvisioningState - READ-ONLY; The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
+	// Description - The description of the Machine Learning compute.
+	Description *string `json:"description,omitempty"`
+	// CreatedOn - READ-ONLY; The date and time when the compute was created.
+	CreatedOn *date.Time `json:"createdOn,omitempty"`
+	// ModifiedOn - READ-ONLY; The date and time when the compute was last modified.
+	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
+	// ResourceID - ARM resource id of the compute
+	ResourceID *string `json:"resourceId,omitempty"`
+	// ProvisioningErrors - READ-ONLY; Errors during provisioning
+	ProvisioningErrors *[]MachineLearningServiceError `json:"provisioningErrors,omitempty"`
+	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeHDInsight1', 'ComputeTypeDataFactory1'
+	ComputeType ComputeTypeBasicCompute `json:"computeType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for HDInsight.
+func (hi HDInsight) MarshalJSON() ([]byte, error) {
+	hi.ComputeType = ComputeTypeHDInsight1
+	objectMap := make(map[string]interface{})
+	if hi.Properties != nil {
+		objectMap["properties"] = hi.Properties
+	}
+	if hi.ComputeLocation != nil {
+		objectMap["computeLocation"] = hi.ComputeLocation
+	}
+	if hi.Description != nil {
+		objectMap["description"] = hi.Description
+	}
+	if hi.ResourceID != nil {
+		objectMap["resourceId"] = hi.ResourceID
+	}
+	if hi.ComputeType != "" {
+		objectMap["computeType"] = hi.ComputeType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsAKS is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsAKS() (*AKS, bool) {
+	return nil, false
+}
+
+// AsBatchAI is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsBatchAI() (*BatchAI, bool) {
+	return nil, false
+}
+
+// AsVirtualMachine is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsVirtualMachine() (*VirtualMachine, bool) {
+	return nil, false
+}
+
+// AsHDInsight is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsHDInsight() (*HDInsight, bool) {
+	return &hi, true
+}
+
+// AsDataFactory is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsDataFactory() (*DataFactory, bool) {
+	return nil, false
+}
+
+// AsCompute is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsCompute() (*Compute, bool) {
+	return nil, false
+}
+
+// AsBasicCompute is the BasicCompute implementation for HDInsight.
+func (hi HDInsight) AsBasicCompute() (BasicCompute, bool) {
+	return &hi, true
+}
+
+// HDInsightProperties ...
+type HDInsightProperties struct {
+	// SSHPort - Port open for ssh connections on the master node of the cluster.
+	SSHPort *int32 `json:"sshPort,omitempty"`
+	// Address - Public IP address of the master node of the cluster.
+	Address *string `json:"address,omitempty"`
+	// AdministratorAccount - Admin credentials for master node of the cluster
+	AdministratorAccount *VirtualMachineSSHCredentials `json:"administratorAccount,omitempty"`
+}
+
 // Identity identity for the resource.
 type Identity struct {
-	// PrincipalID - The principal ID of resource identity.
+	// PrincipalID - READ-ONLY; The principal ID of resource identity.
 	PrincipalID *string `json:"principalId,omitempty"`
-	// TenantID - The tenant ID of resource.
+	// TenantID - READ-ONLY; The tenant ID of resource.
 	TenantID *string `json:"tenantId,omitempty"`
 	// Type - The identity type. Possible values include: 'SystemAssigned'
 	Type ResourceIdentityType `json:"type,omitempty"`
@@ -836,11 +918,15 @@ type Identity struct {
 
 // ListWorkspaceKeysResult ...
 type ListWorkspaceKeysResult struct {
-	autorest.Response             `json:"-"`
-	UserStorageKey                *string                        `json:"userStorageKey,omitempty"`
-	UserStorageResourceID         *string                        `json:"userStorageResourceId,omitempty"`
-	AppInsightsInstrumentationKey *string                        `json:"appInsightsInstrumentationKey,omitempty"`
-	ContainerRegistryCredentials  *RegistryListCredentialsResult `json:"containerRegistryCredentials,omitempty"`
+	autorest.Response `json:"-"`
+	// UserStorageKey - READ-ONLY
+	UserStorageKey *string `json:"userStorageKey,omitempty"`
+	// UserStorageResourceID - READ-ONLY
+	UserStorageResourceID *string `json:"userStorageResourceId,omitempty"`
+	// AppInsightsInstrumentationKey - READ-ONLY
+	AppInsightsInstrumentationKey *string `json:"appInsightsInstrumentationKey,omitempty"`
+	// ContainerRegistryCredentials - READ-ONLY
+	ContainerRegistryCredentials *RegistryListCredentialsResult `json:"containerRegistryCredentials,omitempty"`
 }
 
 // MachineLearningComputeCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
@@ -853,7 +939,7 @@ type MachineLearningComputeCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *MachineLearningComputeCreateOrUpdateFuture) Result(client MachineLearningComputeClient) (cr ComputeResource, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.MachineLearningComputeCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -872,8 +958,8 @@ func (future *MachineLearningComputeCreateOrUpdateFuture) Result(client MachineL
 	return
 }
 
-// MachineLearningComputeDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// MachineLearningComputeDeleteFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type MachineLearningComputeDeleteFuture struct {
 	azure.Future
 }
@@ -882,13 +968,36 @@ type MachineLearningComputeDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *MachineLearningComputeDeleteFuture) Result(client MachineLearningComputeClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.MachineLearningComputeDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
 	}
 	if !done {
 		err = azure.NewAsyncOpIncompleteError("services.MachineLearningComputeDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
+// MachineLearningComputeSystemUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
+type MachineLearningComputeSystemUpdateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *MachineLearningComputeSystemUpdateFuture) Result(client MachineLearningComputeClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "services.MachineLearningComputeSystemUpdateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("services.MachineLearningComputeSystemUpdateFuture")
 		return
 	}
 	ar.Response = future.Response()
@@ -944,20 +1053,37 @@ type PaginatedComputeResourcesListIterator struct {
 	page PaginatedComputeResourcesListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PaginatedComputeResourcesListIterator) Next() error {
+func (iter *PaginatedComputeResourcesListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PaginatedComputeResourcesListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *PaginatedComputeResourcesListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -979,6 +1105,11 @@ func (iter PaginatedComputeResourcesListIterator) Value() ComputeResource {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the PaginatedComputeResourcesListIterator type.
+func NewPaginatedComputeResourcesListIterator(page PaginatedComputeResourcesListPage) PaginatedComputeResourcesListIterator {
+	return PaginatedComputeResourcesListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pcrl PaginatedComputeResourcesList) IsEmpty() bool {
 	return pcrl.Value == nil || len(*pcrl.Value) == 0
@@ -986,11 +1117,11 @@ func (pcrl PaginatedComputeResourcesList) IsEmpty() bool {
 
 // paginatedComputeResourcesListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pcrl PaginatedComputeResourcesList) paginatedComputeResourcesListPreparer() (*http.Request, error) {
+func (pcrl PaginatedComputeResourcesList) paginatedComputeResourcesListPreparer(ctx context.Context) (*http.Request, error) {
 	if pcrl.NextLink == nil || len(to.String(pcrl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pcrl.NextLink)))
@@ -998,19 +1129,36 @@ func (pcrl PaginatedComputeResourcesList) paginatedComputeResourcesListPreparer(
 
 // PaginatedComputeResourcesListPage contains a page of ComputeResource values.
 type PaginatedComputeResourcesListPage struct {
-	fn   func(PaginatedComputeResourcesList) (PaginatedComputeResourcesList, error)
+	fn   func(context.Context, PaginatedComputeResourcesList) (PaginatedComputeResourcesList, error)
 	pcrl PaginatedComputeResourcesList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PaginatedComputeResourcesListPage) Next() error {
-	next, err := page.fn(page.pcrl)
+func (page *PaginatedComputeResourcesListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PaginatedComputeResourcesListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pcrl)
 	if err != nil {
 		return err
 	}
 	page.pcrl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *PaginatedComputeResourcesListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1031,9 +1179,16 @@ func (page PaginatedComputeResourcesListPage) Values() []ComputeResource {
 	return *page.pcrl.Value
 }
 
+// Creates a new instance of the PaginatedComputeResourcesListPage type.
+func NewPaginatedComputeResourcesListPage(getNextPage func(context.Context, PaginatedComputeResourcesList) (PaginatedComputeResourcesList, error)) PaginatedComputeResourcesListPage {
+	return PaginatedComputeResourcesListPage{fn: getNextPage}
+}
+
 // Password ...
 type Password struct {
-	Name  *string `json:"name,omitempty"`
+	// Name - READ-ONLY
+	Name *string `json:"name,omitempty"`
+	// Value - READ-ONLY
 	Value *string `json:"value,omitempty"`
 }
 
@@ -1047,22 +1202,24 @@ type PrincipalCredentials struct {
 
 // RegistryListCredentialsResult ...
 type RegistryListCredentialsResult struct {
-	Location  *string     `json:"location,omitempty"`
+	// Location - READ-ONLY
+	Location *string `json:"location,omitempty"`
+	// Username - READ-ONLY
 	Username  *string     `json:"username,omitempty"`
 	Passwords *[]Password `json:"passwords,omitempty"`
 }
 
 // Resource azure Resource Manager resource envelope.
 type Resource struct {
-	// ID - Specifies the resource ID.
+	// ID - READ-ONLY; Specifies the resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Specifies the name of the resource.
+	// Name - READ-ONLY; Specifies the name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Identity - The identity of the resource.
+	// Identity - READ-ONLY; The identity of the resource.
 	Identity *Identity `json:"identity,omitempty"`
 	// Location - Specifies the location of the resource.
 	Location *string `json:"location,omitempty"`
-	// Type - Specifies the type of the resource.
+	// Type - READ-ONLY; Specifies the type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Tags - Contains resource tags defined as key/value pairs.
 	Tags map[string]*string `json:"tags"`
@@ -1071,20 +1228,8 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Identity != nil {
-		objectMap["identity"] = r.Identity
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
 	}
 	if r.Tags != nil {
 		objectMap["tags"] = r.Tags
@@ -1102,9 +1247,9 @@ type ScaleSettings struct {
 	AutoScaleEnabled *bool `json:"autoScaleEnabled,omitempty"`
 }
 
-// SslConfiguration the ssl configugation for scoring
+// SslConfiguration the SSL configuration for scoring
 type SslConfiguration struct {
-	// Status - Enable or disable ssl for scoring. Possible values include: 'Disabled', 'Enabled'
+	// Status - Enable or disable SSL for scoring. Possible values include: 'Disabled', 'Enabled'
 	Status Status `json:"status,omitempty"`
 	// Cert - Cert data
 	Cert *string `json:"cert,omitempty"`
@@ -1116,30 +1261,32 @@ type SslConfiguration struct {
 
 // SystemService a system service running on a compute.
 type SystemService struct {
-	// SystemServiceType - The type of this system service.
+	// SystemServiceType - READ-ONLY; The type of this system service.
 	SystemServiceType *string `json:"systemServiceType,omitempty"`
-	// PublicIPAddress - Public IP address
+	// PublicIPAddress - READ-ONLY; Public IP address
 	PublicIPAddress *string `json:"publicIpAddress,omitempty"`
-	// Version - The version for this type.
+	// Version - READ-ONLY; The version for this type.
 	Version *string `json:"version,omitempty"`
 }
 
 // VirtualMachine a Machine Learning compute based on Azure Virtual Machines.
 type VirtualMachine struct {
 	Properties *VirtualMachineProperties `json:"properties,omitempty"`
-	// ProvisioningState - The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	// ComputeLocation - Location for the underlying compute
+	ComputeLocation *string `json:"computeLocation,omitempty"`
+	// ProvisioningState - READ-ONLY; The provision state of the cluster. Valid values are Unknown, Updating, Provisioning, Succeeded, and Failed. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Description - The description of the Machine Learning compute.
 	Description *string `json:"description,omitempty"`
-	// CreatedOn - The date and time when the compute was created.
+	// CreatedOn - READ-ONLY; The date and time when the compute was created.
 	CreatedOn *date.Time `json:"createdOn,omitempty"`
-	// ModifiedOn - The date and time when the compute was last modified.
+	// ModifiedOn - READ-ONLY; The date and time when the compute was last modified.
 	ModifiedOn *date.Time `json:"modifiedOn,omitempty"`
 	// ResourceID - ARM resource id of the compute
 	ResourceID *string `json:"resourceId,omitempty"`
-	// ProvisioningErrors - Errors during provisioning
+	// ProvisioningErrors - READ-ONLY; Errors during provisioning
 	ProvisioningErrors *[]MachineLearningServiceError `json:"provisioningErrors,omitempty"`
-	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeDataFactory1'
+	// ComputeType - Possible values include: 'ComputeTypeCompute', 'ComputeTypeAKS1', 'ComputeTypeBatchAI1', 'ComputeTypeVirtualMachine1', 'ComputeTypeHDInsight1', 'ComputeTypeDataFactory1'
 	ComputeType ComputeTypeBasicCompute `json:"computeType,omitempty"`
 }
 
@@ -1150,23 +1297,14 @@ func (VM VirtualMachine) MarshalJSON() ([]byte, error) {
 	if VM.Properties != nil {
 		objectMap["properties"] = VM.Properties
 	}
-	if VM.ProvisioningState != "" {
-		objectMap["provisioningState"] = VM.ProvisioningState
+	if VM.ComputeLocation != nil {
+		objectMap["computeLocation"] = VM.ComputeLocation
 	}
 	if VM.Description != nil {
 		objectMap["description"] = VM.Description
 	}
-	if VM.CreatedOn != nil {
-		objectMap["createdOn"] = VM.CreatedOn
-	}
-	if VM.ModifiedOn != nil {
-		objectMap["modifiedOn"] = VM.ModifiedOn
-	}
 	if VM.ResourceID != nil {
 		objectMap["resourceId"] = VM.ResourceID
-	}
-	if VM.ProvisioningErrors != nil {
-		objectMap["provisioningErrors"] = VM.ProvisioningErrors
 	}
 	if VM.ComputeType != "" {
 		objectMap["computeType"] = VM.ComputeType
@@ -1189,6 +1327,11 @@ func (VM VirtualMachine) AsVirtualMachine() (*VirtualMachine, bool) {
 	return &VM, true
 }
 
+// AsHDInsight is the BasicCompute implementation for VirtualMachine.
+func (VM VirtualMachine) AsHDInsight() (*HDInsight, bool) {
+	return nil, false
+}
+
 // AsDataFactory is the BasicCompute implementation for VirtualMachine.
 func (VM VirtualMachine) AsDataFactory() (*DataFactory, bool) {
 	return nil, false
@@ -1208,13 +1351,17 @@ func (VM VirtualMachine) AsBasicCompute() (BasicCompute, bool) {
 type VirtualMachineProperties struct {
 	// VirtualMachineSize - Virtual Machine size
 	VirtualMachineSize *string `json:"virtualMachineSize,omitempty"`
+	// SSHPort - Port open for ssh connections.
+	SSHPort *int32 `json:"sshPort,omitempty"`
+	// Address - Public IP address of the virtual machine.
+	Address *string `json:"address,omitempty"`
 	// AdministratorAccount - Admin credentials for virtual machine
 	AdministratorAccount *VirtualMachineSSHCredentials `json:"administratorAccount,omitempty"`
 }
 
 // VirtualMachineSecrets secrets related to a Machine Learning compute based on AKS.
 type VirtualMachineSecrets struct {
-	// AdministratorAccount - Admin creadentials for virtual machine.
+	// AdministratorAccount - Admin credentials for virtual machine.
 	AdministratorAccount *VirtualMachineSSHCredentials `json:"administratorAccount,omitempty"`
 	// ComputeType - Possible values include: 'ComputeTypeBasicComputeSecretsComputeTypeComputeSecrets', 'ComputeTypeBasicComputeSecretsComputeTypeAKS', 'ComputeTypeBasicComputeSecretsComputeTypeVirtualMachine'
 	ComputeType ComputeTypeBasicComputeSecrets `json:"computeType,omitempty"`
@@ -1270,15 +1417,15 @@ type Workspace struct {
 	autorest.Response `json:"-"`
 	// WorkspaceProperties - The properties of the machine learning workspace.
 	*WorkspaceProperties `json:"properties,omitempty"`
-	// ID - Specifies the resource ID.
+	// ID - READ-ONLY; Specifies the resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Specifies the name of the resource.
+	// Name - READ-ONLY; Specifies the name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Identity - The identity of the resource.
+	// Identity - READ-ONLY; The identity of the resource.
 	Identity *Identity `json:"identity,omitempty"`
 	// Location - Specifies the location of the resource.
 	Location *string `json:"location,omitempty"`
-	// Type - Specifies the type of the resource.
+	// Type - READ-ONLY; Specifies the type of the resource.
 	Type *string `json:"type,omitempty"`
 	// Tags - Contains resource tags defined as key/value pairs.
 	Tags map[string]*string `json:"tags"`
@@ -1290,20 +1437,8 @@ func (w Workspace) MarshalJSON() ([]byte, error) {
 	if w.WorkspaceProperties != nil {
 		objectMap["properties"] = w.WorkspaceProperties
 	}
-	if w.ID != nil {
-		objectMap["id"] = w.ID
-	}
-	if w.Name != nil {
-		objectMap["name"] = w.Name
-	}
-	if w.Identity != nil {
-		objectMap["identity"] = w.Identity
-	}
 	if w.Location != nil {
 		objectMap["location"] = w.Location
-	}
-	if w.Type != nil {
-		objectMap["type"] = w.Type
 	}
 	if w.Tags != nil {
 		objectMap["tags"] = w.Tags
@@ -1404,20 +1539,37 @@ type WorkspaceListResultIterator struct {
 	page WorkspaceListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WorkspaceListResultIterator) Next() error {
+func (iter *WorkspaceListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WorkspaceListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1439,6 +1591,11 @@ func (iter WorkspaceListResultIterator) Value() Workspace {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WorkspaceListResultIterator type.
+func NewWorkspaceListResultIterator(page WorkspaceListResultPage) WorkspaceListResultIterator {
+	return WorkspaceListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wlr WorkspaceListResult) IsEmpty() bool {
 	return wlr.Value == nil || len(*wlr.Value) == 0
@@ -1446,11 +1603,11 @@ func (wlr WorkspaceListResult) IsEmpty() bool {
 
 // workspaceListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wlr WorkspaceListResult) workspaceListResultPreparer() (*http.Request, error) {
+func (wlr WorkspaceListResult) workspaceListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wlr.NextLink == nil || len(to.String(wlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wlr.NextLink)))
@@ -1458,19 +1615,36 @@ func (wlr WorkspaceListResult) workspaceListResultPreparer() (*http.Request, err
 
 // WorkspaceListResultPage contains a page of Workspace values.
 type WorkspaceListResultPage struct {
-	fn  func(WorkspaceListResult) (WorkspaceListResult, error)
+	fn  func(context.Context, WorkspaceListResult) (WorkspaceListResult, error)
 	wlr WorkspaceListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WorkspaceListResultPage) Next() error {
-	next, err := page.fn(page.wlr)
+func (page *WorkspaceListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspaceListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wlr)
 	if err != nil {
 		return err
 	}
 	page.wlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WorkspaceListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1491,16 +1665,23 @@ func (page WorkspaceListResultPage) Values() []Workspace {
 	return *page.wlr.Value
 }
 
+// Creates a new instance of the WorkspaceListResultPage type.
+func NewWorkspaceListResultPage(getNextPage func(context.Context, WorkspaceListResult) (WorkspaceListResult, error)) WorkspaceListResultPage {
+	return WorkspaceListResultPage{fn: getNextPage}
+}
+
 // WorkspaceProperties the properties of a machine learning workspace.
 type WorkspaceProperties struct {
-	// WorkspaceID - The immutable id associated with this workspace.
+	// WorkspaceID - READ-ONLY; The immutable id associated with this workspace.
 	WorkspaceID *string `json:"workspaceId,omitempty"`
 	// Description - The description of this workspace.
 	Description *string `json:"description,omitempty"`
 	// FriendlyName - The friendly name for this workspace. This name in mutable
 	FriendlyName *string `json:"friendlyName,omitempty"`
-	// CreationTime - The creation time of the machine learning workspace in ISO8601 format.
+	// CreationTime - READ-ONLY; The creation time of the machine learning workspace in ISO8601 format.
 	CreationTime *date.Time `json:"creationTime,omitempty"`
+	// BatchaiWorkspace - ARM id of the Batch AI workspace associated with this workspace. This cannot be changed once the workspace has been created
+	BatchaiWorkspace *string `json:"batchaiWorkspace,omitempty"`
 	// KeyVault - ARM id of the key vault associated with this workspace. This cannot be changed once the workspace has been created
 	KeyVault *string `json:"keyVault,omitempty"`
 	// ApplicationInsights - ARM id of the application insights associated with this workspace. This cannot be changed once the workspace has been created
@@ -1511,11 +1692,12 @@ type WorkspaceProperties struct {
 	StorageAccount *string `json:"storageAccount,omitempty"`
 	// DiscoveryURL - Url for the discovery service to identify regional endpoints for machine learning experimentation services
 	DiscoveryURL *string `json:"discoveryUrl,omitempty"`
-	// ProvisioningState - The current deployment state of workspace resource. The provisioningState is to indicate states for resource provisioning. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
+	// ProvisioningState - READ-ONLY; The current deployment state of workspace resource. The provisioningState is to indicate states for resource provisioning. Possible values include: 'Unknown', 'Updating', 'Creating', 'Deleting', 'Succeeded', 'Failed', 'Canceled'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 }
 
-// WorkspacePropertiesUpdateParameters the parameters for updating the properties of a machine learning workspace.
+// WorkspacePropertiesUpdateParameters the parameters for updating the properties of a machine learning
+// workspace.
 type WorkspacePropertiesUpdateParameters struct {
 	// Description - The description of this workspace.
 	Description *string `json:"description,omitempty"`

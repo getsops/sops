@@ -16,6 +16,10 @@ const (
 	// The pagination token passed to the operation is expired.
 	ErrCodeExpiredNextTokenException = "ExpiredNextTokenException"
 
+	// ErrCodeInternalFailureException for service response error code
+	// "InternalFailureException".
+	ErrCodeInternalFailureException = "InternalFailureException"
+
 	// ErrCodeInvalidArgumentException for service response error code
 	// "InvalidArgumentException".
 	//

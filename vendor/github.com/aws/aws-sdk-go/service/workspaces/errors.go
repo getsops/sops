@@ -75,6 +75,6 @@ const (
 	// "UnsupportedWorkspaceConfigurationException".
 	//
 	// The configuration of this WorkSpace is not supported for this operation.
-	// For more information, see the Amazon WorkSpaces Administration Guide (http://docs.aws.amazon.com/workspaces/latest/adminguide/).
+	// For more information, see the Amazon WorkSpaces Administration Guide (https://docs.aws.amazon.com/workspaces/latest/adminguide/).
 	ErrCodeUnsupportedWorkspaceConfigurationException = "UnsupportedWorkspaceConfigurationException"
 )

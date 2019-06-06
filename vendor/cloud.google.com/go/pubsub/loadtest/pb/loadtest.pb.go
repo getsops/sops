@@ -28,7 +28,8 @@ import google_protobuf "github.com/golang/protobuf/ptypes/duration"
 import google_protobuf1 "github.com/golang/protobuf/ptypes/timestamp"
 
 import (
-	context "golang.org/x/net/context"
+	"context"
+
 	grpc "google.golang.org/grpc"
 )
 

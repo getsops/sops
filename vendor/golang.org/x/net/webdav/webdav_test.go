@@ -5,6 +5,7 @@
 package webdav
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -18,8 +19,6 @@ import (
 	"sort"
 	"strings"
 	"testing"
-
-	"golang.org/x/net/context"
 )
 
 // TODO: add tests to check XML responses with the expected prefix path
@@ -285,7 +284,7 @@ func TestFilenameEscape(t *testing.T) {
 		wantDisplayName: `こんにちわ世界`,
 	}, {
 		name:            `/Program Files/`,
-		wantHref:        `/Program%20Files`,
+		wantHref:        `/Program%20Files/`,
 		wantDisplayName: `Program Files`,
 	}, {
 		name:            `/go+lang`,

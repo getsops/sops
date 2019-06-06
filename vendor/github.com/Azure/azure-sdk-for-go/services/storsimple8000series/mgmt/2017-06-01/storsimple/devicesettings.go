@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewDeviceSettingsClientWithBaseURI(baseURI string, subscriptionID string) D
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) CreateOrUpdateAlertSettings(ctx context.Context, deviceName string, parameters AlertSettings, resourceGroupName string, managerName string) (result DeviceSettingsCreateOrUpdateAlertSettingsFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.CreateOrUpdateAlertSettings")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.AlertNotificationProperties", Name: validation.Null, Rule: true, Chain: nil}}},
@@ -104,10 +115,6 @@ func (client DeviceSettingsClient) CreateOrUpdateAlertSettingsSender(req *http.R
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -132,6 +139,16 @@ func (client DeviceSettingsClient) CreateOrUpdateAlertSettingsResponder(resp *ht
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) CreateOrUpdateTimeSettings(ctx context.Context, deviceName string, parameters TimeSettings, resourceGroupName string, managerName string) (result DeviceSettingsCreateOrUpdateTimeSettingsFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.CreateOrUpdateTimeSettings")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.TimeSettingsProperties", Name: validation.Null, Rule: true,
@@ -190,10 +207,6 @@ func (client DeviceSettingsClient) CreateOrUpdateTimeSettingsSender(req *http.Re
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -217,6 +230,16 @@ func (client DeviceSettingsClient) CreateOrUpdateTimeSettingsResponder(resp *htt
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) GetAlertSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result AlertSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.GetAlertSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -293,6 +316,16 @@ func (client DeviceSettingsClient) GetAlertSettingsResponder(resp *http.Response
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) GetNetworkSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result NetworkSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.GetNetworkSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -369,6 +402,16 @@ func (client DeviceSettingsClient) GetNetworkSettingsResponder(resp *http.Respon
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) GetSecuritySettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result SecuritySettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.GetSecuritySettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -445,6 +488,16 @@ func (client DeviceSettingsClient) GetSecuritySettingsResponder(resp *http.Respo
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) GetTimeSettings(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result TimeSettings, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.GetTimeSettings")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -521,6 +574,16 @@ func (client DeviceSettingsClient) GetTimeSettingsResponder(resp *http.Response)
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) SyncRemotemanagementCertificate(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result DeviceSettingsSyncRemotemanagementCertificateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.SyncRemotemanagementCertificate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -574,10 +637,6 @@ func (client DeviceSettingsClient) SyncRemotemanagementCertificateSender(req *ht
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -601,6 +660,16 @@ func (client DeviceSettingsClient) SyncRemotemanagementCertificateResponder(resp
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) UpdateNetworkSettings(ctx context.Context, deviceName string, parameters NetworkSettingsPatch, resourceGroupName string, managerName string) (result DeviceSettingsUpdateNetworkSettingsFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.UpdateNetworkSettings")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -656,10 +725,6 @@ func (client DeviceSettingsClient) UpdateNetworkSettingsSender(req *http.Request
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -684,6 +749,16 @@ func (client DeviceSettingsClient) UpdateNetworkSettingsResponder(resp *http.Res
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client DeviceSettingsClient) UpdateSecuritySettings(ctx context.Context, deviceName string, parameters SecuritySettingsPatch, resourceGroupName string, managerName string) (result DeviceSettingsUpdateSecuritySettingsFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DeviceSettingsClient.UpdateSecuritySettings")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -736,10 +811,6 @@ func (client DeviceSettingsClient) UpdateSecuritySettingsSender(req *http.Reques
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

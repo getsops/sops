@@ -24,6 +24,21 @@
         {"shape":"InternalException"}
       ]
     },
+    "CancelElasticsearchServiceSoftwareUpdate":{
+      "name":"CancelElasticsearchServiceSoftwareUpdate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2015-01-01/es/serviceSoftwareUpdate/cancel"
+      },
+      "input":{"shape":"CancelElasticsearchServiceSoftwareUpdateRequest"},
+      "output":{"shape":"CancelElasticsearchServiceSoftwareUpdateResponse"},
+      "errors":[
+        {"shape":"BaseException"},
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ValidationException"}
+      ]
+    },
     "CreateElasticsearchDomain":{
       "name":"CreateElasticsearchDomain",
       "http":{
@@ -295,6 +310,21 @@
         {"shape":"InternalException"}
       ]
     },
+    "StartElasticsearchServiceSoftwareUpdate":{
+      "name":"StartElasticsearchServiceSoftwareUpdate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/2015-01-01/es/serviceSoftwareUpdate/start"
+      },
+      "input":{"shape":"StartElasticsearchServiceSoftwareUpdateRequest"},
+      "output":{"shape":"StartElasticsearchServiceSoftwareUpdateResponse"},
+      "errors":[
+        {"shape":"BaseException"},
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ValidationException"}
+      ]
+    },
     "UpdateElasticsearchDomainConfig":{
       "name":"UpdateElasticsearchDomainConfig",
       "http":{
@@ -389,6 +419,19 @@
       "exception":true
     },
     "Boolean":{"type":"boolean"},
+    "CancelElasticsearchServiceSoftwareUpdateRequest":{
+      "type":"structure",
+      "required":["DomainName"],
+      "members":{
+        "DomainName":{"shape":"DomainName"}
+      }
+    },
+    "CancelElasticsearchServiceSoftwareUpdateResponse":{
+      "type":"structure",
+      "members":{
+        "ServiceSoftwareOptions":{"shape":"ServiceSoftwareOptions"}
+      }
+    },
     "CloudWatchLogsLogGroupArn":{"type":"string"},
     "CognitoOptions":{
       "type":"structure",
@@ -434,6 +477,7 @@
         "VPCOptions":{"shape":"VPCOptions"},
         "CognitoOptions":{"shape":"CognitoOptions"},
         "EncryptionAtRestOptions":{"shape":"EncryptionAtRestOptions"},
+        "NodeToNodeEncryptionOptions":{"shape":"NodeToNodeEncryptionOptions"},
         "AdvancedOptions":{"shape":"AdvancedOptions"},
         "LogPublishingOptions":{"shape":"LogPublishingOptions"}
       }
@@ -460,6 +504,17 @@
       "members":{
         "DomainStatus":{"shape":"ElasticsearchDomainStatus"}
       }
+    },
+    "DeploymentCloseDateTimeStamp":{"type":"timestamp"},
+    "DeploymentStatus":{
+      "type":"string",
+      "enum":[
+        "PENDING_UPDATE",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "NOT_ELIGIBLE",
+        "ELIGIBLE"
+      ]
     },
     "DescribeElasticsearchDomainConfigRequest":{
       "type":"structure",
@@ -700,6 +755,7 @@
         "InstanceCount":{"shape":"IntegerClass"},
         "DedicatedMasterEnabled":{"shape":"Boolean"},
         "ZoneAwarenessEnabled":{"shape":"Boolean"},
+        "ZoneAwarenessConfig":{"shape":"ZoneAwarenessConfig"},
         "DedicatedMasterType":{"shape":"ESPartitionInstanceType"},
         "DedicatedMasterCount":{"shape":"IntegerClass"}
       }
@@ -726,6 +782,7 @@
         "VPCOptions":{"shape":"VPCDerivedInfoStatus"},
         "CognitoOptions":{"shape":"CognitoOptionsStatus"},
         "EncryptionAtRestOptions":{"shape":"EncryptionAtRestOptionsStatus"},
+        "NodeToNodeEncryptionOptions":{"shape":"NodeToNodeEncryptionOptionsStatus"},
         "AdvancedOptions":{"shape":"AdvancedOptionsStatus"},
         "LogPublishingOptions":{"shape":"LogPublishingOptionsStatus"}
       }
@@ -756,8 +813,10 @@
         "VPCOptions":{"shape":"VPCDerivedInfo"},
         "CognitoOptions":{"shape":"CognitoOptions"},
         "EncryptionAtRestOptions":{"shape":"EncryptionAtRestOptions"},
+        "NodeToNodeEncryptionOptions":{"shape":"NodeToNodeEncryptionOptions"},
         "AdvancedOptions":{"shape":"AdvancedOptions"},
-        "LogPublishingOptions":{"shape":"LogPublishingOptions"}
+        "LogPublishingOptions":{"shape":"LogPublishingOptions"},
+        "ServiceSoftwareOptions":{"shape":"ServiceSoftwareOptions"}
       }
     },
     "ElasticsearchDomainStatusList":{
@@ -1063,6 +1122,23 @@
     "MaximumInstanceCount":{"type":"integer"},
     "MinimumInstanceCount":{"type":"integer"},
     "NextToken":{"type":"string"},
+    "NodeToNodeEncryptionOptions":{
+      "type":"structure",
+      "members":{
+        "Enabled":{"shape":"Boolean"}
+      }
+    },
+    "NodeToNodeEncryptionOptionsStatus":{
+      "type":"structure",
+      "required":[
+        "Options",
+        "Status"
+      ],
+      "members":{
+        "Options":{"shape":"NodeToNodeEncryptionOptions"},
+        "Status":{"shape":"OptionStatus"}
+      }
+    },
     "OptionState":{
       "type":"string",
       "enum":[
@@ -1199,6 +1275,18 @@
       "max":2048,
       "min":20
     },
+    "ServiceSoftwareOptions":{
+      "type":"structure",
+      "members":{
+        "CurrentVersion":{"shape":"String"},
+        "NewVersion":{"shape":"String"},
+        "UpdateAvailable":{"shape":"Boolean"},
+        "Cancellable":{"shape":"Boolean"},
+        "UpdateStatus":{"shape":"DeploymentStatus"},
+        "Description":{"shape":"String"},
+        "AutomatedUpdateDate":{"shape":"DeploymentCloseDateTimeStamp"}
+      }
+    },
     "ServiceUrl":{"type":"string"},
     "SnapshotOptions":{
       "type":"structure",
@@ -1215,6 +1303,19 @@
       "members":{
         "Options":{"shape":"SnapshotOptions"},
         "Status":{"shape":"OptionStatus"}
+      }
+    },
+    "StartElasticsearchServiceSoftwareUpdateRequest":{
+      "type":"structure",
+      "required":["DomainName"],
+      "members":{
+        "DomainName":{"shape":"DomainName"}
+      }
+    },
+    "StartElasticsearchServiceSoftwareUpdateResponse":{
+      "type":"structure",
+      "members":{
+        "ServiceSoftwareOptions":{"shape":"ServiceSoftwareOptions"}
       }
     },
     "StartTimestamp":{"type":"timestamp"},
@@ -1415,6 +1516,12 @@
         "gp2",
         "io1"
       ]
+    },
+    "ZoneAwarenessConfig":{
+      "type":"structure",
+      "members":{
+        "AvailabilityZoneCount":{"shape":"IntegerClass"}
+      }
     }
   }
 }

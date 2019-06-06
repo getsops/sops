@@ -15,6 +15,7 @@
 package firestore
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -24,24 +25,26 @@ import (
 
 	"cloud.google.com/go/internal/btree"
 	"github.com/golang/protobuf/ptypes"
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
+	gax "github.com/googleapis/gax-go/v2"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 // LogWatchStreams controls whether watch stream status changes are logged.
 // This feature is EXPERIMENTAL and may disappear at any time.
-var LogWatchStreams bool = false
+var LogWatchStreams = false
 
 // DocumentChangeKind describes the kind of change to a document between
 // query snapshots.
 type DocumentChangeKind int
 
 const (
+	// DocumentAdded indicates that the document was added for the first time.
 	DocumentAdded DocumentChangeKind = iota
+	// DocumentRemoved indicates that the document was removed.
 	DocumentRemoved
+	// DocumentModified indicates that the document was modified.
 	DocumentModified
 )
 

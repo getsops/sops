@@ -34,8 +34,6 @@ var (
 	hsDialer = grpc.Dial
 )
 
-type dialer func(target string, opts ...grpc.DialOption) (*grpc.ClientConn, error)
-
 // Dial dials the handshake service in the hypervisor. If a connection has
 // already been established, this function returns it. Otherwise, a new
 // connection is created.

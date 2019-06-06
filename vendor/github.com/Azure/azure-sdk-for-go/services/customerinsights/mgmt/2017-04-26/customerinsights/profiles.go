@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) Profile
 // profileName - the name of the profile.
 // parameters - parameters supplied to the create/delete Profile type operation
 func (client ProfilesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, profileName string, parameters ProfileResourceFormat) (result ProfilesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: profileName,
 			Constraints: []validation.Constraint{{Target: "profileName", Name: validation.MaxLength, Rule: 128, Chain: nil},
@@ -105,10 +116,6 @@ func (client ProfilesClient) CreateOrUpdateSender(req *http.Request) (future Pro
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -133,6 +140,16 @@ func (client ProfilesClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // profileName - the name of the profile.
 // localeCode - locale of profile to retrieve, default is en-us.
 func (client ProfilesClient) Delete(ctx context.Context, resourceGroupName string, hubName string, profileName string, localeCode string) (result ProfilesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, hubName, profileName, localeCode)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.ProfilesClient", "Delete", nil, "Failure preparing request")
@@ -184,10 +201,6 @@ func (client ProfilesClient) DeleteSender(req *http.Request) (future ProfilesDel
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,6 +224,16 @@ func (client ProfilesClient) DeleteResponder(resp *http.Response) (result autore
 // profileName - the name of the profile.
 // localeCode - locale of profile to retrieve, default is en-us.
 func (client ProfilesClient) Get(ctx context.Context, resourceGroupName string, hubName string, profileName string, localeCode string) (result ProfileResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hubName, profileName, localeCode)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.ProfilesClient", "Get", nil, "Failure preparing request")
@@ -286,6 +309,16 @@ func (client ProfilesClient) GetResponder(resp *http.Response) (result ProfileRe
 // hubName - the name of the hub.
 // profileName - the name of the profile.
 func (client ProfilesClient) GetEnrichingKpis(ctx context.Context, resourceGroupName string, hubName string, profileName string) (result ListKpiDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.GetEnrichingKpis")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetEnrichingKpisPreparer(ctx, resourceGroupName, hubName, profileName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.ProfilesClient", "GetEnrichingKpis", nil, "Failure preparing request")
@@ -355,6 +388,16 @@ func (client ProfilesClient) GetEnrichingKpisResponder(resp *http.Response) (res
 // hubName - the name of the hub.
 // localeCode - locale of profile to retrieve, default is en-us.
 func (client ProfilesClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string, localeCode string) (result ProfileListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.plr.Response.Response != nil {
+				sc = result.plr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName, localeCode)
 	if err != nil {
@@ -424,8 +467,8 @@ func (client ProfilesClient) ListByHubResponder(resp *http.Response) (result Pro
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client ProfilesClient) listByHubNextResults(lastResults ProfileListResult) (result ProfileListResult, err error) {
-	req, err := lastResults.profileListResultPreparer()
+func (client ProfilesClient) listByHubNextResults(ctx context.Context, lastResults ProfileListResult) (result ProfileListResult, err error) {
+	req, err := lastResults.profileListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.ProfilesClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -446,6 +489,16 @@ func (client ProfilesClient) listByHubNextResults(lastResults ProfileListResult)
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProfilesClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string, localeCode string) (result ProfileListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName, localeCode)
 	return
 }

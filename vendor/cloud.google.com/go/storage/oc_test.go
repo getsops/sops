@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package storage
 
 import (
+	"context"
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-	"golang.org/x/net/context"
 )
 
 func TestIntegration_OCTracing(t *testing.T) {

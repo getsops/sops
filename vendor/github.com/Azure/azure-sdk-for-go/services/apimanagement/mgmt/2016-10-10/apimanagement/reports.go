@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,8 +52,18 @@ func NewReportsClientWithBaseURI(baseURI string, subscriptionID string) ReportsC
 // interval - by time interval. This value is only applicable to ByTime aggregation. Interval must be multiple
 // of 15 minutes and may not be zero. The value should be in ISO  8601 format
 // (http://en.wikipedia.org/wiki/ISO_8601#Durations).This code can be used to convert TimSpan to a valid
-// interval string: XmlConvert.ToString(new TimeSpan(hours, minutes, secconds))
+// interval string: XmlConvert.ToString(new TimeSpan(hours, minutes, seconds))
 func (client ReportsClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, aggregation ReportsAggregation, filter string, top *int32, skip *int32, interval *string) (result ReportCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -144,8 +155,8 @@ func (client ReportsClient) ListByServiceResponder(resp *http.Response) (result 
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client ReportsClient) listByServiceNextResults(lastResults ReportCollection) (result ReportCollection, err error) {
-	req, err := lastResults.reportCollectionPreparer()
+func (client ReportsClient) listByServiceNextResults(ctx context.Context, lastResults ReportCollection) (result ReportCollection, err error) {
+	req, err := lastResults.reportCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ReportsClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -166,6 +177,16 @@ func (client ReportsClient) listByServiceNextResults(lastResults ReportCollectio
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReportsClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, aggregation ReportsAggregation, filter string, top *int32, skip *int32, interval *string) (result ReportCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportsClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, aggregation, filter, top, skip, interval)
 	return
 }

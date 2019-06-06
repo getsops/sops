@@ -98,7 +98,7 @@
     "assets": {
       "methods": {
         "get": {
-          "description": "Returns detailed information about an asset given its name.\nPRIVATE assets are returned only if\n the currently authenticated user (via OAuth token) is the author of the asset.",
+          "description": "Returns detailed information about an asset given its name.\nPRIVATE assets are returned only if\n the currently authenticated user (via OAuth token) is the author of the\n asset.",
           "flatPath": "v1/assets/{assetsId}",
           "httpMethod": "GET",
           "id": "poly.assets.get",
@@ -120,14 +120,14 @@
           }
         },
         "list": {
-          "description": "Lists all public, remixable assets. These are assets with an access level of\nPUBLIC and published under the\nCC-By license.",
+          "description": "Lists all public, remixable assets. These are assets with an access level\nof PUBLIC and published under the\nCC-By license.",
           "flatPath": "v1/assets",
           "httpMethod": "GET",
           "id": "poly.assets.list",
           "parameterOrder": [],
           "parameters": {
             "category": {
-              "description": "Filter assets based on the specified category. Supported values are:\n`animals`, `architecture`, `art`, `food`, `nature`, `objects`, `people`, `scenes`,\n`technology`, and `transport`.",
+              "description": "Filter assets based on the specified category. Supported values are:\n`animals`, `architecture`, `art`, `food`, `nature`, `objects`, `people`,\n`scenes`, `technology`, and `transport`.",
               "location": "query",
               "type": "string"
             },
@@ -169,7 +169,7 @@
               "type": "integer"
             },
             "pageToken": {
-              "description": "Specifies a continuation token from a previous search whose results were\nsplit into multiple pages. To get the next page, submit the same request\nspecifying the value from next_page_token.",
+              "description": "Specifies a continuation token from a previous search whose results were\nsplit into multiple pages. To get the next page, submit the same request\nspecifying the value from\nnext_page_token.",
               "location": "query",
               "type": "string"
             }
@@ -223,7 +223,7 @@
                   "type": "string"
                 },
                 "visibility": {
-                  "description": "The visibility of the assets to be returned.\nDefaults to VISIBILITY_UNSPECIFIED which returns all assets.",
+                  "description": "The visibility of the assets to be returned.\nDefaults to\nVISIBILITY_UNSPECIFIED\nwhich returns all assets.",
                   "enum": [
                     "VISIBILITY_UNSPECIFIED",
                     "PUBLISHED",
@@ -290,7 +290,7 @@
       }
     }
   },
-  "revision": "20180808",
+  "revision": "20190409",
   "rootUrl": "https://poly.googleapis.com/",
   "schemas": {
     "Asset": {
@@ -435,11 +435,11 @@
       "id": "File",
       "properties": {
         "contentType": {
-          "description": "The MIME content-type, such as `image/png`.\nFor more information, see\n[MIME types](//developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).",
+          "description": "The MIME content-type, such as `image/png`.\nFor more information, see\n[MIME\ntypes](//developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).",
           "type": "string"
         },
         "relativePath": {
-          "description": "The path of the resource file relative to the root file.\nFor root or thumbnail files, this is just the filename.",
+          "description": "The path of the resource file relative to the\nroot file. For root or thumbnail files,\nthis is just the filename.",
           "type": "string"
         },
         "url": {
@@ -470,7 +470,7 @@
         },
         "root": {
           "$ref": "File",
-          "description": "The root of the file hierarchy. This will always be populated.\nFor some format_types - such as `TILT`, which are self-contained -\nthis is all of the data.\n\nOther types - such as `OBJ` - often reference other data elements.\nThese are contained in the resources field."
+          "description": "The root of the file hierarchy. This will always be populated.\nFor some format_types - such as `TILT`, which are\nself-contained - this is all of the data.\n\nOther types - such as `OBJ` - often reference other data elements.\nThese are contained in the resources field."
         }
       },
       "type": "object"
@@ -749,7 +749,7 @@
       "type": "object"
     },
     "StartAssetImportResponse": {
-      "description": "A response message from a request to startImport.\nThis is returned in the response field of the Operation.",
+      "description": "A response message from a request to\nstartImport. This is returned in the response\nfield of the Operation.",
       "id": "StartAssetImportResponse",
       "properties": {
         "assetId": {

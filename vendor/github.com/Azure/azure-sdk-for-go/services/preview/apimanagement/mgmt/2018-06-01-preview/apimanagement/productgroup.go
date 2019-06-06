@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,19 +48,29 @@ func NewProductGroupClientWithBaseURI(baseURI string, subscriptionID string) Pro
 // productID - product identifier. Must be unique in the current API Management service instance.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client ProductGroupClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, productID string, groupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: productID,
-			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "productID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "productID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupClient", "CheckEntityExists", err.Error())
 	}
 
@@ -120,7 +131,7 @@ func (client ProductGroupClient) CheckEntityExistsResponder(resp *http.Response)
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
-		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent, http.StatusNotFound),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNoContent),
 		autorest.ByClosing())
 	result.Response = resp
 	return
@@ -133,19 +144,29 @@ func (client ProductGroupClient) CheckEntityExistsResponder(resp *http.Response)
 // productID - product identifier. Must be unique in the current API Management service instance.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client ProductGroupClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, productID string, groupID string) (result GroupContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: productID,
-			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "productID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "productID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupClient", "CreateOrUpdate", err.Error())
 	}
 
@@ -220,19 +241,29 @@ func (client ProductGroupClient) CreateOrUpdateResponder(resp *http.Response) (r
 // productID - product identifier. Must be unique in the current API Management service instance.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client ProductGroupClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, productID string, groupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: productID,
-			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "productID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "productID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupClient", "Delete", err.Error())
 	}
 
@@ -304,24 +335,34 @@ func (client ProductGroupClient) DeleteResponder(resp *http.Response) (result au
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // productID - product identifier. Must be unique in the current API Management service instance.
-// filter - | Field       | Supported operators    | Supported functions                         |
-// |-------------|------------------------|---------------------------------------------|
-// | id          | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | name        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | description | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | type        | eq, ne                 | N/A                                         |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |name | ge, le, eq, ne, gt, lt |    |
+// |displayName | eq, ne |    |
+// |description | eq, ne |    |
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ProductGroupClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result GroupCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.gc.Response.Response != nil {
+				sc = result.gc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: productID,
-			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "productID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "productID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "productID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
@@ -405,8 +446,8 @@ func (client ProductGroupClient) ListByProductResponder(resp *http.Response) (re
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client ProductGroupClient) listByProductNextResults(lastResults GroupCollection) (result GroupCollection, err error) {
-	req, err := lastResults.groupCollectionPreparer()
+func (client ProductGroupClient) listByProductNextResults(ctx context.Context, lastResults GroupCollection) (result GroupCollection, err error) {
+	req, err := lastResults.groupCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ProductGroupClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -427,6 +468,16 @@ func (client ProductGroupClient) listByProductNextResults(lastResults GroupColle
 
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProductGroupClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result GroupCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, productID, filter, top, skip)
 	return
 }

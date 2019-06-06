@@ -15,7 +15,7 @@ const opCreateCluster = "CreateCluster"
 // CreateClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -57,13 +57,10 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 // Creates an Amazon EKS control plane.
 //
 // The Amazon EKS control plane consists of control plane instances that run
-// the Kubernetes software, like etcd and the API server. The control plane
+// the Kubernetes software, such as etcd and the API server. The control plane
 // runs in an account managed by AWS, and the Kubernetes API is exposed via
-// the Amazon EKS API server endpoint.
-//
-// Amazon EKS worker nodes run in your AWS account and connect to your cluster's
-// control plane via the Kubernetes API server endpoint and a certificate file
-// that is created for your cluster.
+// the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane
+// is single-tenant and unique and runs on its own set of Amazon EC2 instances.
 //
 // The cluster control plane is provisioned across multiple Availability Zones
 // and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS
@@ -71,11 +68,33 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 // connectivity from the control plane instances to the worker nodes (for example,
 // to support kubectl exec, logs, and proxy data flows).
 //
-// After you create an Amazon EKS cluster, you must configure your Kubernetes
-// tooling to communicate with the API server and launch worker nodes into your
-// cluster. For more information, see Managing Cluster Authentication (http://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html)
-// and Launching Amazon EKS Worker Nodes (http://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html)in
-// the Amazon EKS User Guide.
+// Amazon EKS worker nodes run in your AWS account and connect to your cluster's
+// control plane via the Kubernetes API server endpoint and a certificate file
+// that is created for your cluster.
+//
+// You can use the endpointPublicAccess and endpointPrivateAccess parameters
+// to enable or disable public and private access to your cluster's Kubernetes
+// API server endpoint. By default, public access is enabled, and private access
+// is disabled. For more information, see Amazon EKS Cluster Endpoint Access
+// Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+// in the Amazon EKS User Guide .
+//
+// You can use the logging parameter to enable or disable exporting the Kubernetes
+// control plane logs for your cluster to CloudWatch Logs. By default, cluster
+// control plane logs aren't exported to CloudWatch Logs. For more information,
+// see Amazon EKS Cluster Control Plane Logs (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)
+// in the Amazon EKS User Guide .
+//
+// CloudWatch Logs ingestion, archive storage, and data scanning rates apply
+// to exported control plane logs. For more information, see Amazon CloudWatch
+// Pricing (http://aws.amazon.com/cloudwatch/pricing/).
+//
+// Cluster creation typically takes between 10 and 15 minutes. After you create
+// an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate
+// with the API server and launch worker nodes into your cluster. For more information,
+// see Managing Cluster Authentication (https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html)
+// and Launching Amazon EKS Worker Nodes (https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html)
+// in the Amazon EKS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -96,9 +115,9 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 //   API request.
 //
 //   * ErrCodeClientException "ClientException"
-//   These errors are usually caused by a client action, such as using an action
-//   or resource on behalf of a user that doesn't have permissions to use the
-//   action or resource, or specifying an identifier that is not valid.
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
 //
 //   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server-side issue.
@@ -139,7 +158,7 @@ const opDeleteCluster = "DeleteCluster"
 // DeleteClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -184,7 +203,7 @@ func (c *EKS) DeleteClusterRequest(input *DeleteClusterInput) (req *request.Requ
 // balancer, you must delete those services before deleting the cluster so that
 // the load balancers are deleted properly. Otherwise, you can have orphaned
 // resources in your VPC that prevent you from being able to delete the VPC.
-// For more information, see Deleting a Cluster (http://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html)
+// For more information, see Deleting a Cluster (https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html)
 // in the Amazon EKS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -203,9 +222,9 @@ func (c *EKS) DeleteClusterRequest(input *DeleteClusterInput) (req *request.Requ
 //   with ListClusters. Amazon EKS clusters are Region-specific.
 //
 //   * ErrCodeClientException "ClientException"
-//   These errors are usually caused by a client action, such as using an action
-//   or resource on behalf of a user that doesn't have permissions to use the
-//   action or resource, or specifying an identifier that is not valid.
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
 //
 //   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server-side issue.
@@ -240,7 +259,7 @@ const opDescribeCluster = "DescribeCluster"
 // DescribeClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -284,10 +303,10 @@ func (c *EKS) DescribeClusterRequest(input *DescribeClusterInput) (req *request.
 // The API server endpoint and certificate authority data returned by this operation
 // are required for kubelet and kubectl to communicate with your Kubernetes
 // API server. For more information, see Create a kubeconfig for Amazon EKS
-// (http://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html).
+// (https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html).
 //
-// The API server endpoint and certificate authority data are not available
-// until the cluster reaches the ACTIVE state.
+// The API server endpoint and certificate authority data aren't available until
+// the cluster reaches the ACTIVE state.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -302,9 +321,9 @@ func (c *EKS) DescribeClusterRequest(input *DescribeClusterInput) (req *request.
 //   with ListClusters. Amazon EKS clusters are Region-specific.
 //
 //   * ErrCodeClientException "ClientException"
-//   These errors are usually caused by a client action, such as using an action
-//   or resource on behalf of a user that doesn't have permissions to use the
-//   action or resource, or specifying an identifier that is not valid.
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
 //
 //   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server-side issue.
@@ -334,12 +353,108 @@ func (c *EKS) DescribeClusterWithContext(ctx aws.Context, input *DescribeCluster
 	return out, req.Send()
 }
 
+const opDescribeUpdate = "DescribeUpdate"
+
+// DescribeUpdateRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeUpdate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeUpdate for more information on using the DescribeUpdate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeUpdateRequest method.
+//    req, resp := client.DescribeUpdateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeUpdate
+func (c *EKS) DescribeUpdateRequest(input *DescribeUpdateInput) (req *request.Request, output *DescribeUpdateOutput) {
+	op := &request.Operation{
+		Name:       opDescribeUpdate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/clusters/{name}/updates/{updateId}",
+	}
+
+	if input == nil {
+		input = &DescribeUpdateInput{}
+	}
+
+	output = &DescribeUpdateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeUpdate API operation for Amazon Elastic Container Service for Kubernetes.
+//
+// Returns descriptive information about an update against your Amazon EKS cluster.
+//
+// When the status of the update is Succeeded, the update is complete. If an
+// update fails, the status is Failed, and an error detail explains the reason
+// for the failure.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// API operation DescribeUpdate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ErrCodeClientException "ClientException"
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ErrCodeServerException "ServerException"
+//   These errors are usually caused by a server-side issue.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. Amazon EKS clusters are Region-specific.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/DescribeUpdate
+func (c *EKS) DescribeUpdate(input *DescribeUpdateInput) (*DescribeUpdateOutput, error) {
+	req, out := c.DescribeUpdateRequest(input)
+	return out, req.Send()
+}
+
+// DescribeUpdateWithContext is the same as DescribeUpdate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeUpdate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) DescribeUpdateWithContext(ctx aws.Context, input *DescribeUpdateInput, opts ...request.Option) (*DescribeUpdateOutput, error) {
+	req, out := c.DescribeUpdateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListClusters = "ListClusters"
 
 // ListClustersRequest generates a "aws/request.Request" representing the
 // client's request for the ListClusters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -393,9 +508,9 @@ func (c *EKS) ListClustersRequest(input *ListClustersInput) (req *request.Reques
 //   API request.
 //
 //   * ErrCodeClientException "ClientException"
-//   These errors are usually caused by a client action, such as using an action
-//   or resource on behalf of a user that doesn't have permissions to use the
-//   action or resource, or specifying an identifier that is not valid.
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
 //
 //   * ErrCodeServerException "ServerException"
 //   These errors are usually caused by a server-side issue.
@@ -425,11 +540,337 @@ func (c *EKS) ListClustersWithContext(ctx aws.Context, input *ListClustersInput,
 	return out, req.Send()
 }
 
+const opListUpdates = "ListUpdates"
+
+// ListUpdatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListUpdates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListUpdates for more information on using the ListUpdates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListUpdatesRequest method.
+//    req, resp := client.ListUpdatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/ListUpdates
+func (c *EKS) ListUpdatesRequest(input *ListUpdatesInput) (req *request.Request, output *ListUpdatesOutput) {
+	op := &request.Operation{
+		Name:       opListUpdates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/clusters/{name}/updates",
+	}
+
+	if input == nil {
+		input = &ListUpdatesInput{}
+	}
+
+	output = &ListUpdatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListUpdates API operation for Amazon Elastic Container Service for Kubernetes.
+//
+// Lists the updates associated with an Amazon EKS cluster in your AWS account,
+// in the specified Region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// API operation ListUpdates for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ErrCodeClientException "ClientException"
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ErrCodeServerException "ServerException"
+//   These errors are usually caused by a server-side issue.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. Amazon EKS clusters are Region-specific.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/ListUpdates
+func (c *EKS) ListUpdates(input *ListUpdatesInput) (*ListUpdatesOutput, error) {
+	req, out := c.ListUpdatesRequest(input)
+	return out, req.Send()
+}
+
+// ListUpdatesWithContext is the same as ListUpdates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListUpdates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) ListUpdatesWithContext(ctx aws.Context, input *ListUpdatesInput, opts ...request.Option) (*ListUpdatesOutput, error) {
+	req, out := c.ListUpdatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateClusterConfig = "UpdateClusterConfig"
+
+// UpdateClusterConfigRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateClusterConfig operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateClusterConfig for more information on using the UpdateClusterConfig
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateClusterConfigRequest method.
+//    req, resp := client.UpdateClusterConfigRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/UpdateClusterConfig
+func (c *EKS) UpdateClusterConfigRequest(input *UpdateClusterConfigInput) (req *request.Request, output *UpdateClusterConfigOutput) {
+	op := &request.Operation{
+		Name:       opUpdateClusterConfig,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/update-config",
+	}
+
+	if input == nil {
+		input = &UpdateClusterConfigInput{}
+	}
+
+	output = &UpdateClusterConfigOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateClusterConfig API operation for Amazon Elastic Container Service for Kubernetes.
+//
+// Updates an Amazon EKS cluster configuration. Your cluster continues to function
+// during the update. The response output includes an update ID that you can
+// use to track the status of your cluster update with the DescribeUpdate API
+// operation.
+//
+// You can use this API operation to enable or disable exporting the Kubernetes
+// control plane logs for your cluster to CloudWatch Logs. By default, cluster
+// control plane logs aren't exported to CloudWatch Logs. For more information,
+// see Amazon EKS Cluster Control Plane Logs (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)
+// in the Amazon EKS User Guide .
+//
+// CloudWatch Logs ingestion, archive storage, and data scanning rates apply
+// to exported control plane logs. For more information, see Amazon CloudWatch
+// Pricing (http://aws.amazon.com/cloudwatch/pricing/).
+//
+// You can also use this API operation to enable or disable public and private
+// access to your cluster's Kubernetes API server endpoint. By default, public
+// access is enabled, and private access is disabled. For more information,
+// see Amazon EKS Cluster Endpoint Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+// in the Amazon EKS User Guide .
+//
+// At this time, you can not update the subnets or security group IDs for an
+// existing cluster.
+//
+// Cluster updates are asynchronous, and they should finish within a few minutes.
+// During an update, the cluster status moves to UPDATING (this status transition
+// is eventually consistent). When the update is complete (either Failed or
+// Successful), the cluster status moves to Active.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// API operation UpdateClusterConfig for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ErrCodeClientException "ClientException"
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ErrCodeServerException "ServerException"
+//   These errors are usually caused by a server-side issue.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The specified resource is in use.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. Amazon EKS clusters are Region-specific.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/UpdateClusterConfig
+func (c *EKS) UpdateClusterConfig(input *UpdateClusterConfigInput) (*UpdateClusterConfigOutput, error) {
+	req, out := c.UpdateClusterConfigRequest(input)
+	return out, req.Send()
+}
+
+// UpdateClusterConfigWithContext is the same as UpdateClusterConfig with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateClusterConfig for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) UpdateClusterConfigWithContext(ctx aws.Context, input *UpdateClusterConfigInput, opts ...request.Option) (*UpdateClusterConfigOutput, error) {
+	req, out := c.UpdateClusterConfigRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateClusterVersion = "UpdateClusterVersion"
+
+// UpdateClusterVersionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateClusterVersion operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateClusterVersion for more information on using the UpdateClusterVersion
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateClusterVersionRequest method.
+//    req, resp := client.UpdateClusterVersionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/UpdateClusterVersion
+func (c *EKS) UpdateClusterVersionRequest(input *UpdateClusterVersionInput) (req *request.Request, output *UpdateClusterVersionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateClusterVersion,
+		HTTPMethod: "POST",
+		HTTPPath:   "/clusters/{name}/updates",
+	}
+
+	if input == nil {
+		input = &UpdateClusterVersionInput{}
+	}
+
+	output = &UpdateClusterVersionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateClusterVersion API operation for Amazon Elastic Container Service for Kubernetes.
+//
+// Updates an Amazon EKS cluster to the specified Kubernetes version. Your cluster
+// continues to function during the update. The response output includes an
+// update ID that you can use to track the status of your cluster update with
+// the DescribeUpdate API operation.
+//
+// Cluster updates are asynchronous, and they should finish within a few minutes.
+// During an update, the cluster status moves to UPDATING (this status transition
+// is eventually consistent). When the update is complete (either Failed or
+// Successful), the cluster status moves to Active.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// API operation UpdateClusterVersion for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   The specified parameter is invalid. Review the available parameters for the
+//   API request.
+//
+//   * ErrCodeClientException "ClientException"
+//   These errors are usually caused by a client action. Actions can include using
+//   an action or resource on behalf of a user that doesn't have permissions to
+//   use the action or resource or specifying an identifier that is not valid.
+//
+//   * ErrCodeServerException "ServerException"
+//   These errors are usually caused by a server-side issue.
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The specified resource is in use.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource could not be found. You can view your available clusters
+//   with ListClusters. Amazon EKS clusters are Region-specific.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is invalid given the state of the cluster. Check the state of
+//   the cluster and the associated operations.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/eks-2017-11-01/UpdateClusterVersion
+func (c *EKS) UpdateClusterVersion(input *UpdateClusterVersionInput) (*UpdateClusterVersionOutput, error) {
+	req, out := c.UpdateClusterVersionRequest(input)
+	return out, req.Send()
+}
+
+// UpdateClusterVersionWithContext is the same as UpdateClusterVersion with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateClusterVersion for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EKS) UpdateClusterVersionWithContext(ctx aws.Context, input *UpdateClusterVersionInput, opts ...request.Option) (*UpdateClusterVersionOutput, error) {
+	req, out := c.UpdateClusterVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // An object representing the certificate-authority-data for your cluster.
 type Certificate struct {
 	_ struct{} `type:"structure"`
 
-	// The base64 encoded certificate data required to communicate with your cluster.
+	// The Base64-encoded certificate data required to communicate with your cluster.
 	// Add this to the certificate-authority-data section of the kubeconfig file
 	// for your cluster.
 	Data *string `locationName:"data" type:"string"`
@@ -461,28 +902,31 @@ type Cluster struct {
 	// The certificate-authority-data for your cluster.
 	CertificateAuthority *Certificate `locationName:"certificateAuthority" type:"structure"`
 
-	// Unique, case-sensitive identifier you provide to ensure the idempotency of
-	// the request.
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
 	ClientRequestToken *string `locationName:"clientRequestToken" type:"string"`
 
-	// The Unix epoch time stamp in seconds for when the cluster was created.
+	// The Unix epoch timestamp in seconds for when the cluster was created.
 	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
 
 	// The endpoint for your Kubernetes API server.
 	Endpoint *string `locationName:"endpoint" type:"string"`
 
+	// The logging configuration for your cluster.
+	Logging *Logging `locationName:"logging" type:"structure"`
+
 	// The name of the cluster.
 	Name *string `locationName:"name" type:"string"`
 
 	// The platform version of your Amazon EKS cluster. For more information, see
-	// Platform Versions (eks/latest/userguide/platform-versions.html) in the Amazon
-	// EKS User Guide.
+	// Platform Versions (https://docs.aws.amazon.com/eks/latest/userguide/platform-versions.html)
+	// in the Amazon EKS User Guide .
 	PlatformVersion *string `locationName:"platformVersion" type:"string"`
 
-	// The VPC subnets and security groups used by the cluster control plane. Amazon
-	// EKS VPC resources have specific requirements to work properly with Kubernetes.
-	// For more information, see Cluster VPC Considerations (http://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
-	// and Cluster Security Group Considerations (http://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
+	// The VPC configuration used by the cluster control plane. Amazon EKS VPC resources
+	// have specific requirements to work properly with Kubernetes. For more information,
+	// see Cluster VPC Considerations (https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
+	// and Cluster Security Group Considerations (https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
 	// in the Amazon EKS User Guide.
 	ResourcesVpcConfig *VpcConfigResponse `locationName:"resourcesVpcConfig" type:"structure"`
 
@@ -538,6 +982,12 @@ func (s *Cluster) SetEndpoint(v string) *Cluster {
 	return s
 }
 
+// SetLogging sets the Logging field's value.
+func (s *Cluster) SetLogging(v *Logging) *Cluster {
+	s.Logging = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *Cluster) SetName(v string) *Cluster {
 	s.Name = &v
@@ -577,21 +1027,32 @@ func (s *Cluster) SetVersion(v string) *Cluster {
 type CreateClusterInput struct {
 	_ struct{} `type:"structure"`
 
-	// Unique, case-sensitive identifier you provide to ensure the idempotency of
-	// the request.
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
 	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// Enable or disable exporting the Kubernetes control plane logs for your cluster
+	// to CloudWatch Logs. By default, cluster control plane logs aren't exported
+	// to CloudWatch Logs. For more information, see Amazon EKS Cluster Control
+	// Plane Logs (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)
+	// in the Amazon EKS User Guide .
+	//
+	// CloudWatch Logs ingestion, archive storage, and data scanning rates apply
+	// to exported control plane logs. For more information, see Amazon CloudWatch
+	// Pricing (http://aws.amazon.com/cloudwatch/pricing/).
+	Logging *Logging `locationName:"logging" type:"structure"`
 
 	// The unique name to give to your cluster.
 	//
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The VPC subnets and security groups used by the cluster control plane. Amazon
-	// EKS VPC resources have specific requirements to work properly with Kubernetes.
-	// For more information, see Cluster VPC Considerations (http://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
-	// and Cluster Security Group Considerations (http://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
+	// The VPC configuration used by the cluster control plane. Amazon EKS VPC resources
+	// have specific requirements to work properly with Kubernetes. For more information,
+	// see Cluster VPC Considerations (https://docs.aws.amazon.com/eks/latest/userguide/network_reqs.html)
+	// and Cluster Security Group Considerations (https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html)
 	// in the Amazon EKS User Guide. You must specify at least two subnets. You
-	// may specify up to 5 security groups, but we recommend that you use a dedicated
+	// can specify up to five security groups, but we recommend that you use a dedicated
 	// security group for your cluster control plane.
 	//
 	// ResourcesVpcConfig is a required field
@@ -599,14 +1060,14 @@ type CreateClusterInput struct {
 
 	// The Amazon Resource Name (ARN) of the IAM role that provides permissions
 	// for Amazon EKS to make calls to other AWS API operations on your behalf.
-	// For more information, see Amazon EKS Service IAM Role (http://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html)
-	// in the Amazon EKS User Guide.
+	// For more information, see Amazon EKS Service IAM Role (https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html)
+	// in the Amazon EKS User Guide .
 	//
 	// RoleArn is a required field
 	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
 
-	// The desired Kubernetes version for your cluster. If you do not specify a
-	// value here, the latest version available in Amazon EKS is used.
+	// The desired Kubernetes version for your cluster. If you don't specify a value
+	// here, the latest version available in Amazon EKS is used.
 	Version *string `locationName:"version" type:"string"`
 }
 
@@ -635,11 +1096,6 @@ func (s *CreateClusterInput) Validate() error {
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
 	}
-	if s.ResourcesVpcConfig != nil {
-		if err := s.ResourcesVpcConfig.Validate(); err != nil {
-			invalidParams.AddNested("ResourcesVpcConfig", err.(request.ErrInvalidParams))
-		}
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -650,6 +1106,12 @@ func (s *CreateClusterInput) Validate() error {
 // SetClientRequestToken sets the ClientRequestToken field's value.
 func (s *CreateClusterInput) SetClientRequestToken(v string) *CreateClusterInput {
 	s.ClientRequestToken = &v
+	return s
+}
+
+// SetLogging sets the Logging field's value.
+func (s *CreateClusterInput) SetLogging(v *Logging) *CreateClusterInput {
+	s.Logging = v
 	return s
 }
 
@@ -725,6 +1187,9 @@ func (s *DeleteClusterInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -786,6 +1251,9 @@ func (s *DescribeClusterInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -822,15 +1290,157 @@ func (s *DescribeClusterOutput) SetCluster(v *Cluster) *DescribeClusterOutput {
 	return s
 }
 
+type DescribeUpdateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the Amazon EKS cluster to update.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The ID of the update to describe.
+	//
+	// UpdateId is a required field
+	UpdateId *string `location:"uri" locationName:"updateId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeUpdateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeUpdateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeUpdateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeUpdateInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.UpdateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UpdateId"))
+	}
+	if s.UpdateId != nil && len(*s.UpdateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UpdateId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeUpdateInput) SetName(v string) *DescribeUpdateInput {
+	s.Name = &v
+	return s
+}
+
+// SetUpdateId sets the UpdateId field's value.
+func (s *DescribeUpdateInput) SetUpdateId(v string) *DescribeUpdateInput {
+	s.UpdateId = &v
+	return s
+}
+
+type DescribeUpdateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The full description of the specified update.
+	Update *Update `locationName:"update" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeUpdateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeUpdateOutput) GoString() string {
+	return s.String()
+}
+
+// SetUpdate sets the Update field's value.
+func (s *DescribeUpdateOutput) SetUpdate(v *Update) *DescribeUpdateOutput {
+	s.Update = v
+	return s
+}
+
+// An object representing an error when an asynchronous operation fails.
+type ErrorDetail struct {
+	_ struct{} `type:"structure"`
+
+	// A brief description of the error.
+	//
+	//    * SubnetNotFound: We couldn't find one of the subnets associated with
+	//    the cluster.
+	//
+	//    * SecurityGroupNotFound: We couldn't find one of the security groups associated
+	//    with the cluster.
+	//
+	//    * EniLimitReached: You have reached the elastic network interface limit
+	//    for your account.
+	//
+	//    * IpNotAvailable: A subnet associated with the cluster doesn't have any
+	//    free IP addresses.
+	//
+	//    * AccessDenied: You don't have permissions to perform the specified operation.
+	//
+	//    * OperationNotPermitted: The service role associated with the cluster
+	//    doesn't have the required access permissions for Amazon EKS.
+	//
+	//    * VpcIdNotFound: We couldn't find the VPC associated with the cluster.
+	ErrorCode *string `locationName:"errorCode" type:"string" enum:"ErrorCode"`
+
+	// A more complete description of the error.
+	ErrorMessage *string `locationName:"errorMessage" type:"string"`
+
+	// An optional field that contains the resource IDs associated with the error.
+	ResourceIds []*string `locationName:"resourceIds" type:"list"`
+}
+
+// String returns the string representation
+func (s ErrorDetail) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ErrorDetail) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *ErrorDetail) SetErrorCode(v string) *ErrorDetail {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *ErrorDetail) SetErrorMessage(v string) *ErrorDetail {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetResourceIds sets the ResourceIds field's value.
+func (s *ErrorDetail) SetResourceIds(v []*string) *ErrorDetail {
+	s.ResourceIds = v
+	return s
+}
+
 type ListClustersInput struct {
 	_ struct{} `type:"structure"`
 
 	// The maximum number of cluster results returned by ListClusters in paginated
-	// output. When this parameter is used, ListClusters only returns maxResults
-	// results in a single page along with a nextToken response element. The remaining
-	// results of the initial request can be seen by sending another ListClusters
+	// output. When you use this parameter, ListClusters returns only maxResults
+	// results in a single page along with a nextToken response element. You can
+	// see the remaining results of the initial request by sending another ListClusters
 	// request with the returned nextToken value. This value can be between 1 and
-	// 100. If this parameter is not used, then ListClusters returns up to 100 results
+	// 100. If you don't use this parameter, ListClusters returns up to 100 results
 	// and a nextToken value if applicable.
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
@@ -839,7 +1449,7 @@ type ListClustersInput struct {
 	// Pagination continues from the end of the previous results that returned the
 	// nextToken value.
 	//
-	// This token should be treated as an opaque identifier that is only used to
+	// This token should be treated as an opaque identifier that is used only to
 	// retrieve the next items in a list and not for other programmatic purposes.
 	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
 }
@@ -886,7 +1496,7 @@ type ListClustersOutput struct {
 	Clusters []*string `locationName:"clusters" type:"list"`
 
 	// The nextToken value to include in a future ListClusters request. When the
-	// results of a ListClusters request exceed maxResults, this value can be used
+	// results of a ListClusters request exceed maxResults, you can use this value
 	// to retrieve the next page of results. This value is null when there are no
 	// more results to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
@@ -914,21 +1524,495 @@ func (s *ListClustersOutput) SetNextToken(v string) *ListClustersOutput {
 	return s
 }
 
-// An object representing an Amazon EKS cluster VPC configuration request.
+type ListUpdatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of update results returned by ListUpdates in paginated
+	// output. When you use this parameter, ListUpdates returns only maxResults
+	// results in a single page along with a nextToken response element. You can
+	// see the remaining results of the initial request by sending another ListUpdates
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If you don't use this parameter, ListUpdates returns up to 100 results
+	// and a nextToken value if applicable.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// The name of the Amazon EKS cluster to list updates for.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The nextToken value returned from a previous paginated ListUpdates request
+	// where maxResults was used and the results exceeded the value of that parameter.
+	// Pagination continues from the end of the previous results that returned the
+	// nextToken value.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListUpdatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListUpdatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListUpdatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListUpdatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListUpdatesInput) SetMaxResults(v int64) *ListUpdatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *ListUpdatesInput) SetName(v string) *ListUpdatesInput {
+	s.Name = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListUpdatesInput) SetNextToken(v string) *ListUpdatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListUpdatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The nextToken value to include in a future ListUpdates request. When the
+	// results of a ListUpdates request exceed maxResults, you can use this value
+	// to retrieve the next page of results. This value is null when there are no
+	// more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of all the updates for the specified cluster and Region.
+	UpdateIds []*string `locationName:"updateIds" type:"list"`
+}
+
+// String returns the string representation
+func (s ListUpdatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListUpdatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListUpdatesOutput) SetNextToken(v string) *ListUpdatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetUpdateIds sets the UpdateIds field's value.
+func (s *ListUpdatesOutput) SetUpdateIds(v []*string) *ListUpdatesOutput {
+	s.UpdateIds = v
+	return s
+}
+
+// An object representing the enabled or disabled Kubernetes control plane logs
+// for your cluster.
+type LogSetup struct {
+	_ struct{} `type:"structure"`
+
+	// If a log type is enabled, that log type exports its control plane logs to
+	// CloudWatch Logs. If a log type isn't enabled, that log type doesn't export
+	// its control plane logs. Each individual log type can be enabled or disabled
+	// independently.
+	Enabled *bool `locationName:"enabled" type:"boolean"`
+
+	// The available cluster control plane log types.
+	Types []*string `locationName:"types" type:"list"`
+}
+
+// String returns the string representation
+func (s LogSetup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LogSetup) GoString() string {
+	return s.String()
+}
+
+// SetEnabled sets the Enabled field's value.
+func (s *LogSetup) SetEnabled(v bool) *LogSetup {
+	s.Enabled = &v
+	return s
+}
+
+// SetTypes sets the Types field's value.
+func (s *LogSetup) SetTypes(v []*string) *LogSetup {
+	s.Types = v
+	return s
+}
+
+// An object representing the logging configuration for resources in your cluster.
+type Logging struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster control plane logging configuration for your cluster.
+	ClusterLogging []*LogSetup `locationName:"clusterLogging" type:"list"`
+}
+
+// String returns the string representation
+func (s Logging) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Logging) GoString() string {
+	return s.String()
+}
+
+// SetClusterLogging sets the ClusterLogging field's value.
+func (s *Logging) SetClusterLogging(v []*LogSetup) *Logging {
+	s.ClusterLogging = v
+	return s
+}
+
+// An object representing an asynchronous update.
+type Update struct {
+	_ struct{} `type:"structure"`
+
+	// The Unix epoch timestamp in seconds for when the update was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// Any errors associated with a Failed update.
+	Errors []*ErrorDetail `locationName:"errors" type:"list"`
+
+	// A UUID that is used to track the update.
+	Id *string `locationName:"id" type:"string"`
+
+	// A key-value map that contains the parameters associated with the update.
+	Params []*UpdateParam `locationName:"params" type:"list"`
+
+	// The current status of the update.
+	Status *string `locationName:"status" type:"string" enum:"UpdateStatus"`
+
+	// The type of the update.
+	Type *string `locationName:"type" type:"string" enum:"UpdateType"`
+}
+
+// String returns the string representation
+func (s Update) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Update) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *Update) SetCreatedAt(v time.Time) *Update {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetErrors sets the Errors field's value.
+func (s *Update) SetErrors(v []*ErrorDetail) *Update {
+	s.Errors = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *Update) SetId(v string) *Update {
+	s.Id = &v
+	return s
+}
+
+// SetParams sets the Params field's value.
+func (s *Update) SetParams(v []*UpdateParam) *Update {
+	s.Params = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *Update) SetStatus(v string) *Update {
+	s.Status = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *Update) SetType(v string) *Update {
+	s.Type = &v
+	return s
+}
+
+type UpdateClusterConfigInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// Enable or disable exporting the Kubernetes control plane logs for your cluster
+	// to CloudWatch Logs. By default, cluster control plane logs aren't exported
+	// to CloudWatch Logs. For more information, see Amazon EKS Cluster Control
+	// Plane Logs (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html)
+	// in the Amazon EKS User Guide .
+	//
+	// CloudWatch Logs ingestion, archive storage, and data scanning rates apply
+	// to exported control plane logs. For more information, see Amazon CloudWatch
+	// Pricing (http://aws.amazon.com/cloudwatch/pricing/).
+	Logging *Logging `locationName:"logging" type:"structure"`
+
+	// The name of the Amazon EKS cluster to update.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// An object representing the VPC configuration to use for an Amazon EKS cluster.
+	ResourcesVpcConfig *VpcConfigRequest `locationName:"resourcesVpcConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateClusterConfigInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateClusterConfigInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateClusterConfigInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateClusterConfigInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *UpdateClusterConfigInput) SetClientRequestToken(v string) *UpdateClusterConfigInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetLogging sets the Logging field's value.
+func (s *UpdateClusterConfigInput) SetLogging(v *Logging) *UpdateClusterConfigInput {
+	s.Logging = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateClusterConfigInput) SetName(v string) *UpdateClusterConfigInput {
+	s.Name = &v
+	return s
+}
+
+// SetResourcesVpcConfig sets the ResourcesVpcConfig field's value.
+func (s *UpdateClusterConfigInput) SetResourcesVpcConfig(v *VpcConfigRequest) *UpdateClusterConfigInput {
+	s.ResourcesVpcConfig = v
+	return s
+}
+
+type UpdateClusterConfigOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object representing an asynchronous update.
+	Update *Update `locationName:"update" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateClusterConfigOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateClusterConfigOutput) GoString() string {
+	return s.String()
+}
+
+// SetUpdate sets the Update field's value.
+func (s *UpdateClusterConfigOutput) SetUpdate(v *Update) *UpdateClusterConfigOutput {
+	s.Update = v
+	return s
+}
+
+type UpdateClusterVersionInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" type:"string" idempotencyToken:"true"`
+
+	// The name of the Amazon EKS cluster to update.
+	//
+	// Name is a required field
+	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The desired Kubernetes version following a successful update.
+	//
+	// Version is a required field
+	Version *string `locationName:"version" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateClusterVersionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateClusterVersionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateClusterVersionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateClusterVersionInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.Version == nil {
+		invalidParams.Add(request.NewErrParamRequired("Version"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *UpdateClusterVersionInput) SetClientRequestToken(v string) *UpdateClusterVersionInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateClusterVersionInput) SetName(v string) *UpdateClusterVersionInput {
+	s.Name = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *UpdateClusterVersionInput) SetVersion(v string) *UpdateClusterVersionInput {
+	s.Version = &v
+	return s
+}
+
+type UpdateClusterVersionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The full description of the specified update
+	Update *Update `locationName:"update" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateClusterVersionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateClusterVersionOutput) GoString() string {
+	return s.String()
+}
+
+// SetUpdate sets the Update field's value.
+func (s *UpdateClusterVersionOutput) SetUpdate(v *Update) *UpdateClusterVersionOutput {
+	s.Update = v
+	return s
+}
+
+// An object representing the details of an update request.
+type UpdateParam struct {
+	_ struct{} `type:"structure"`
+
+	// The keys associated with an update request.
+	Type *string `locationName:"type" type:"string" enum:"UpdateParamType"`
+
+	// The value of the keys submitted as part of an update request.
+	Value *string `locationName:"value" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateParam) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateParam) GoString() string {
+	return s.String()
+}
+
+// SetType sets the Type field's value.
+func (s *UpdateParam) SetType(v string) *UpdateParam {
+	s.Type = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *UpdateParam) SetValue(v string) *UpdateParam {
+	s.Value = &v
+	return s
+}
+
+// An object representing the VPC configuration to use for an Amazon EKS cluster.
 type VpcConfigRequest struct {
 	_ struct{} `type:"structure"`
 
+	// Set this value to true to enable private access for your cluster's Kubernetes
+	// API server endpoint. If you enable private access, Kubernetes API requests
+	// from within your cluster's VPC use the private VPC endpoint. The default
+	// value for this parameter is false, which disables private access for your
+	// Kubernetes API server. For more information, see Amazon EKS Cluster Endpoint
+	// Access Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+	// in the Amazon EKS User Guide .
+	EndpointPrivateAccess *bool `locationName:"endpointPrivateAccess" type:"boolean"`
+
+	// Set this value to false to disable public access for your cluster's Kubernetes
+	// API server endpoint. If you disable public access, your cluster's Kubernetes
+	// API server can receive only requests from within the cluster VPC. The default
+	// value for this parameter is true, which enables public access for your Kubernetes
+	// API server. For more information, see Amazon EKS Cluster Endpoint Access
+	// Control (https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html)
+	// in the Amazon EKS User Guide .
+	EndpointPublicAccess *bool `locationName:"endpointPublicAccess" type:"boolean"`
+
 	// Specify one or more security groups for the cross-account elastic network
 	// interfaces that Amazon EKS creates to use to allow communication between
-	// your worker nodes and the Kubernetes control plane.
+	// your worker nodes and the Kubernetes control plane. If you don't specify
+	// a security group, the default security group for your VPC is used.
 	SecurityGroupIds []*string `locationName:"securityGroupIds" type:"list"`
 
 	// Specify subnets for your Amazon EKS worker nodes. Amazon EKS creates cross-account
 	// elastic network interfaces in these subnets to allow communication between
 	// your worker nodes and the Kubernetes control plane.
-	//
-	// SubnetIds is a required field
-	SubnetIds []*string `locationName:"subnetIds" type:"list" required:"true"`
+	SubnetIds []*string `locationName:"subnetIds" type:"list"`
 }
 
 // String returns the string representation
@@ -941,17 +2025,16 @@ func (s VpcConfigRequest) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *VpcConfigRequest) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "VpcConfigRequest"}
-	if s.SubnetIds == nil {
-		invalidParams.Add(request.NewErrParamRequired("SubnetIds"))
-	}
+// SetEndpointPrivateAccess sets the EndpointPrivateAccess field's value.
+func (s *VpcConfigRequest) SetEndpointPrivateAccess(v bool) *VpcConfigRequest {
+	s.EndpointPrivateAccess = &v
+	return s
+}
 
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
+// SetEndpointPublicAccess sets the EndpointPublicAccess field's value.
+func (s *VpcConfigRequest) SetEndpointPublicAccess(v bool) *VpcConfigRequest {
+	s.EndpointPublicAccess = &v
+	return s
 }
 
 // SetSecurityGroupIds sets the SecurityGroupIds field's value.
@@ -969,6 +2052,18 @@ func (s *VpcConfigRequest) SetSubnetIds(v []*string) *VpcConfigRequest {
 // An object representing an Amazon EKS cluster VPC configuration response.
 type VpcConfigResponse struct {
 	_ struct{} `type:"structure"`
+
+	// This parameter indicates whether the Amazon EKS private API server endpoint
+	// is enabled. If the Amazon EKS private API server endpoint is enabled, Kubernetes
+	// API requests that originate from within your cluster's VPC use the private
+	// VPC endpoint instead of traversing the internet.
+	EndpointPrivateAccess *bool `locationName:"endpointPrivateAccess" type:"boolean"`
+
+	// This parameter indicates whether the Amazon EKS public API server endpoint
+	// is enabled. If the Amazon EKS public API server endpoint is disabled, your
+	// cluster's Kubernetes API server can receive only requests that originate
+	// from within the cluster VPC.
+	EndpointPublicAccess *bool `locationName:"endpointPublicAccess" type:"boolean"`
 
 	// The security groups associated with the cross-account elastic network interfaces
 	// that are used to allow communication between your worker nodes and the Kubernetes
@@ -990,6 +2085,18 @@ func (s VpcConfigResponse) String() string {
 // GoString returns the string representation
 func (s VpcConfigResponse) GoString() string {
 	return s.String()
+}
+
+// SetEndpointPrivateAccess sets the EndpointPrivateAccess field's value.
+func (s *VpcConfigResponse) SetEndpointPrivateAccess(v bool) *VpcConfigResponse {
+	s.EndpointPrivateAccess = &v
+	return s
+}
+
+// SetEndpointPublicAccess sets the EndpointPublicAccess field's value.
+func (s *VpcConfigResponse) SetEndpointPublicAccess(v bool) *VpcConfigResponse {
+	s.EndpointPublicAccess = &v
+	return s
 }
 
 // SetSecurityGroupIds sets the SecurityGroupIds field's value.
@@ -1022,4 +2129,89 @@ const (
 
 	// ClusterStatusFailed is a ClusterStatus enum value
 	ClusterStatusFailed = "FAILED"
+)
+
+const (
+	// ErrorCodeSubnetNotFound is a ErrorCode enum value
+	ErrorCodeSubnetNotFound = "SubnetNotFound"
+
+	// ErrorCodeSecurityGroupNotFound is a ErrorCode enum value
+	ErrorCodeSecurityGroupNotFound = "SecurityGroupNotFound"
+
+	// ErrorCodeEniLimitReached is a ErrorCode enum value
+	ErrorCodeEniLimitReached = "EniLimitReached"
+
+	// ErrorCodeIpNotAvailable is a ErrorCode enum value
+	ErrorCodeIpNotAvailable = "IpNotAvailable"
+
+	// ErrorCodeAccessDenied is a ErrorCode enum value
+	ErrorCodeAccessDenied = "AccessDenied"
+
+	// ErrorCodeOperationNotPermitted is a ErrorCode enum value
+	ErrorCodeOperationNotPermitted = "OperationNotPermitted"
+
+	// ErrorCodeVpcIdNotFound is a ErrorCode enum value
+	ErrorCodeVpcIdNotFound = "VpcIdNotFound"
+
+	// ErrorCodeUnknown is a ErrorCode enum value
+	ErrorCodeUnknown = "Unknown"
+)
+
+const (
+	// LogTypeApi is a LogType enum value
+	LogTypeApi = "api"
+
+	// LogTypeAudit is a LogType enum value
+	LogTypeAudit = "audit"
+
+	// LogTypeAuthenticator is a LogType enum value
+	LogTypeAuthenticator = "authenticator"
+
+	// LogTypeControllerManager is a LogType enum value
+	LogTypeControllerManager = "controllerManager"
+
+	// LogTypeScheduler is a LogType enum value
+	LogTypeScheduler = "scheduler"
+)
+
+const (
+	// UpdateParamTypeVersion is a UpdateParamType enum value
+	UpdateParamTypeVersion = "Version"
+
+	// UpdateParamTypePlatformVersion is a UpdateParamType enum value
+	UpdateParamTypePlatformVersion = "PlatformVersion"
+
+	// UpdateParamTypeEndpointPrivateAccess is a UpdateParamType enum value
+	UpdateParamTypeEndpointPrivateAccess = "EndpointPrivateAccess"
+
+	// UpdateParamTypeEndpointPublicAccess is a UpdateParamType enum value
+	UpdateParamTypeEndpointPublicAccess = "EndpointPublicAccess"
+
+	// UpdateParamTypeClusterLogging is a UpdateParamType enum value
+	UpdateParamTypeClusterLogging = "ClusterLogging"
+)
+
+const (
+	// UpdateStatusInProgress is a UpdateStatus enum value
+	UpdateStatusInProgress = "InProgress"
+
+	// UpdateStatusFailed is a UpdateStatus enum value
+	UpdateStatusFailed = "Failed"
+
+	// UpdateStatusCancelled is a UpdateStatus enum value
+	UpdateStatusCancelled = "Cancelled"
+
+	// UpdateStatusSuccessful is a UpdateStatus enum value
+	UpdateStatusSuccessful = "Successful"
+)
+
+const (
+	// UpdateTypeVersionUpdate is a UpdateType enum value
+	UpdateTypeVersionUpdate = "VersionUpdate"
+
+	// UpdateTypeEndpointAccessUpdate is a UpdateType enum value
+	UpdateTypeEndpointAccessUpdate = "EndpointAccessUpdate"
+
+	// UpdateTypeLoggingUpdate is a UpdateType enum value
+	UpdateTypeLoggingUpdate = "LoggingUpdate"
 )

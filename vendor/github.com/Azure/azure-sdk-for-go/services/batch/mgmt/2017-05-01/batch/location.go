@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewLocationClientWithBaseURI(baseURI string, subscriptionID string) Locatio
 // locationName - the desired region for the name check.
 // parameters - properties needed to check the availability of a name.
 func (client LocationClient) CheckNameAvailability(ctx context.Context, locationName string, parameters CheckNameAvailabilityParameters) (result CheckNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -119,6 +130,16 @@ func (client LocationClient) CheckNameAvailabilityResponder(resp *http.Response)
 // Parameters:
 // locationName - the region for which to retrieve Batch service quotas.
 func (client LocationClient) GetQuotas(ctx context.Context, locationName string) (result LocationQuota, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationClient.GetQuotas")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetQuotasPreparer(ctx, locationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "batch.LocationClient", "GetQuotas", nil, "Failure preparing request")

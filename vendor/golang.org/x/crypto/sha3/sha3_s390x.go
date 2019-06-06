@@ -12,6 +12,8 @@ package sha3
 
 import (
 	"hash"
+
+	"golang.org/x/sys/cpu"
 )
 
 // codes represent 7-bit KIMD/KLMD function codes as defined in
@@ -28,13 +30,6 @@ const (
 	shake_256      = 37
 	nopad          = 0x100
 )
-
-// hasMSA6 reports whether the machine supports the SHA-3 and SHAKE function
-// codes, as defined in message-security-assist extension 6.
-func hasMSA6() bool
-
-// hasAsm caches the result of hasMSA6 (which might be expensive to call).
-var hasAsm = hasMSA6()
 
 // kimd is a wrapper for the 'compute intermediate message digest' instruction.
 // src must be a multiple of the rate for the given function code.
@@ -237,7 +232,7 @@ func (s *asmState) Clone() ShakeHash {
 // new224Asm returns an assembly implementation of SHA3-224 if available,
 // otherwise it returns nil.
 func new224Asm() hash.Hash {
-	if hasAsm {
+	if cpu.S390X.HasSHA3 {
 		return newAsmState(sha3_224)
 	}
 	return nil
@@ -246,7 +241,7 @@ func new224Asm() hash.Hash {
 // new256Asm returns an assembly implementation of SHA3-256 if available,
 // otherwise it returns nil.
 func new256Asm() hash.Hash {
-	if hasAsm {
+	if cpu.S390X.HasSHA3 {
 		return newAsmState(sha3_256)
 	}
 	return nil
@@ -255,7 +250,7 @@ func new256Asm() hash.Hash {
 // new384Asm returns an assembly implementation of SHA3-384 if available,
 // otherwise it returns nil.
 func new384Asm() hash.Hash {
-	if hasAsm {
+	if cpu.S390X.HasSHA3 {
 		return newAsmState(sha3_384)
 	}
 	return nil
@@ -264,7 +259,7 @@ func new384Asm() hash.Hash {
 // new512Asm returns an assembly implementation of SHA3-512 if available,
 // otherwise it returns nil.
 func new512Asm() hash.Hash {
-	if hasAsm {
+	if cpu.S390X.HasSHA3 {
 		return newAsmState(sha3_512)
 	}
 	return nil
@@ -273,7 +268,7 @@ func new512Asm() hash.Hash {
 // newShake128Asm returns an assembly implementation of SHAKE-128 if available,
 // otherwise it returns nil.
 func newShake128Asm() ShakeHash {
-	if hasAsm {
+	if cpu.S390X.HasSHA3 {
 		return newAsmState(shake_128)
 	}
 	return nil
@@ -282,7 +277,7 @@ func newShake128Asm() ShakeHash {
 // newShake256Asm returns an assembly implementation of SHAKE-256 if available,
 // otherwise it returns nil.
 func newShake256Asm() ShakeHash {
-	if hasAsm {
+	if cpu.S390X.HasSHA3 {
 		return newAsmState(shake_256)
 	}
 	return nil

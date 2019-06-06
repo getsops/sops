@@ -306,7 +306,7 @@
       }
     }
   },
-  "revision": "20180711",
+  "revision": "20190421",
   "rootUrl": "https://datastore.googleapis.com/",
   "schemas": {
     "AllocateIdsRequest": {
@@ -342,7 +342,7 @@
       "id": "ArrayValue",
       "properties": {
         "values": {
-          "description": "Values in the array.\nThe order of this array may not be preserved if it contains a mix of\nindexed and unindexed values.",
+          "description": "Values in the array.\nThe order of values in an array is preserved as long as all values have\nidentical settings for 'exclude_from_indexes'.",
           "items": {
             "$ref": "Value"
           },
@@ -387,7 +387,7 @@
           ],
           "enumDescriptions": [
             "Unspecified. This value must not be used.",
-            "Transactional: The mutations are either all applied, or none are applied.\nLearn about transactions [here](https://cloud.google.com/datastore/docs/concepts/transactions).",
+            "Transactional: The mutations are either all applied, or none are applied.\nLearn about transactions\n[here](https://cloud.google.com/datastore/docs/concepts/transactions).",
             "Non-transactional: The mutations may not apply as all or none."
           ],
           "type": "string"
@@ -860,7 +860,7 @@
       "type": "object"
     },
     "GqlQuery": {
-      "description": "A [GQL query](https://cloud.google.com/datastore/docs/apis/gql/gql_reference).",
+      "description": "A [GQL\nquery](https://cloud.google.com/datastore/docs/apis/gql/gql_reference).",
       "id": "GqlQuery",
       "properties": {
         "allowLiterals": {
@@ -1175,7 +1175,7 @@
           "type": "array"
         },
         "endCursor": {
-          "description": "An ending point for the query results. Query cursors are\nreturned in query result batches and\n[can only be used to limit the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).",
+          "description": "An ending point for the query results. Query cursors are\nreturned in query result batches and\n[can only be used to limit the same\nquery](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).",
           "format": "byte",
           "type": "string"
         },
@@ -1215,7 +1215,7 @@
           "type": "array"
         },
         "startCursor": {
-          "description": "A starting point for the query results. Query cursors are\nreturned in query result batches and\n[can only be used to continue the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).",
+          "description": "A starting point for the query results. Query cursors are\nreturned in query result batches and\n[can only be used to continue the same\nquery](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).",
           "format": "byte",
           "type": "string"
         }

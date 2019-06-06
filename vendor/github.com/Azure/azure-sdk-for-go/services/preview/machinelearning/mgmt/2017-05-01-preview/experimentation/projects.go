@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string) Project
 // projectName - the name of the machine learning project under a team account workspace.
 // parameters - the parameters for creating or updating a project.
 func (client ProjectsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, workspaceName string, projectName string, parameters Project) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -141,6 +152,16 @@ func (client ProjectsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // workspaceName - the name of the machine learning team account workspace.
 // projectName - the name of the machine learning project under a team account workspace.
 func (client ProjectsClient) Delete(ctx context.Context, resourceGroupName string, accountName string, workspaceName string, projectName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -227,6 +248,16 @@ func (client ProjectsClient) DeleteResponder(resp *http.Response) (result autore
 // workspaceName - the name of the machine learning team account workspace.
 // projectName - the name of the machine learning project under a team account workspace.
 func (client ProjectsClient) Get(ctx context.Context, resourceGroupName string, accountName string, workspaceName string, projectName string) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -313,6 +344,16 @@ func (client ProjectsClient) GetResponder(resp *http.Response) (result Project, 
 // workspaceName - the name of the machine learning team account workspace.
 // resourceGroupName - the name of the resource group to which the machine learning team account belongs.
 func (client ProjectsClient) ListByWorkspace(ctx context.Context, accountName string, workspaceName string, resourceGroupName string) (result ProjectListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.plr.Response.Response != nil {
+				sc = result.plr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -390,8 +431,8 @@ func (client ProjectsClient) ListByWorkspaceResponder(resp *http.Response) (resu
 }
 
 // listByWorkspaceNextResults retrieves the next set of results, if any.
-func (client ProjectsClient) listByWorkspaceNextResults(lastResults ProjectListResult) (result ProjectListResult, err error) {
-	req, err := lastResults.projectListResultPreparer()
+func (client ProjectsClient) listByWorkspaceNextResults(ctx context.Context, lastResults ProjectListResult) (result ProjectListResult, err error) {
+	req, err := lastResults.projectListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "experimentation.ProjectsClient", "listByWorkspaceNextResults", nil, "Failure preparing next results request")
 	}
@@ -412,6 +453,16 @@ func (client ProjectsClient) listByWorkspaceNextResults(lastResults ProjectListR
 
 // ListByWorkspaceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProjectsClient) ListByWorkspaceComplete(ctx context.Context, accountName string, workspaceName string, resourceGroupName string) (result ProjectListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByWorkspace(ctx, accountName, workspaceName, resourceGroupName)
 	return
 }
@@ -424,6 +475,16 @@ func (client ProjectsClient) ListByWorkspaceComplete(ctx context.Context, accoun
 // projectName - the name of the machine learning project under a team account workspace.
 // parameters - the parameters for updating a machine learning team account.
 func (client ProjectsClient) Update(ctx context.Context, resourceGroupName string, accountName string, workspaceName string, projectName string, parameters ProjectUpdateParameters) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},

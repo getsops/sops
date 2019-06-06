@@ -121,15 +121,14 @@ func TestExample(t *testing.T) {
 		t.Fatalf("Delete failed: %s", err)
 	}
 
-	cmd := `Get-Eventlog -LogName Application -Newest 100` +
-		` | Where Source -eq "myservice"` +
-		` | Select -first 10` +
-		` | Format-table -HideTableHeaders -property ReplacementStrings`
-	out, err := exec.Command("powershell", "-Command", cmd).CombinedOutput()
+	out, err := exec.Command("wevtutil.exe", "qe", "Application", "/q:*[System[Provider[@Name='myservice']]]", "/rd:true", "/c:10").CombinedOutput()
 	if err != nil {
-		t.Fatalf("powershell failed: %v\n%v", err, string(out))
+		t.Fatalf("wevtutil failed: %v\n%v", err, string(out))
 	}
-	if want := strings.Join(append([]string{name}, args...), "-"); !strings.Contains(string(out), want) {
+	want := strings.Join(append([]string{name}, args...), "-")
+	// Test context passing (see servicemain in sys_386.s and sys_amd64.s).
+	want += "-123456"
+	if !strings.Contains(string(out), want) {
 		t.Errorf("%q string does not contain %q", string(out), want)
 	}
 }

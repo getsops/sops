@@ -212,7 +212,7 @@ func Test_GetAddedInterfaceMethods(t *testing.T) {
 
 func Test_GetNoChanges(t *testing.T) {
 	nc := delta.GetExports(nContent, nContent)
-	if !reflect.DeepEqual(nc, exports.NewContent()) {
+	if !reflect.DeepEqual(nc, delta.NewContent()) {
 		t.Log("expected empty exports")
 		t.Fail()
 	}

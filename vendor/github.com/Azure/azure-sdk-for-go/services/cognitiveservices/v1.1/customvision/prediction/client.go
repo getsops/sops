@@ -24,34 +24,30 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
 )
 
-const (
-	// DefaultBaseURI is the default URI used for the service Prediction
-	DefaultBaseURI = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction"
-)
-
 // BaseClient is the base client for Prediction.
 type BaseClient struct {
 	autorest.Client
-	BaseURI string
-	APIKey  string
+	APIKey   string
+	Endpoint string
 }
 
 // New creates an instance of the BaseClient client.
-func New(aPIKey string) BaseClient {
-	return NewWithBaseURI(DefaultBaseURI, aPIKey)
+func New(aPIKey string, endpoint string) BaseClient {
+	return NewWithoutDefaults(aPIKey, endpoint)
 }
 
-// NewWithBaseURI creates an instance of the BaseClient client.
-func NewWithBaseURI(baseURI string, aPIKey string) BaseClient {
+// NewWithoutDefaults creates an instance of the BaseClient client.
+func NewWithoutDefaults(aPIKey string, endpoint string) BaseClient {
 	return BaseClient{
-		Client:  autorest.NewClientWithUserAgent(UserAgent()),
-		BaseURI: baseURI,
-		APIKey:  aPIKey,
+		Client:   autorest.NewClientWithUserAgent(UserAgent()),
+		APIKey:   aPIKey,
+		Endpoint: endpoint,
 	}
 }
 
@@ -62,6 +58,16 @@ func NewWithBaseURI(baseURI string, aPIKey string) BaseClient {
 // The default iteration for the project will be used when not specified
 // application - optional. Specifies the name of application using the endpoint
 func (client BaseClient) PredictImage(ctx context.Context, projectID uuid.UUID, imageData io.ReadCloser, iterationID *uuid.UUID, application string) (result ImagePrediction, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PredictImage")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PredictImagePreparer(ctx, projectID, imageData, iterationID, application)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "prediction.BaseClient", "PredictImage", nil, "Failure preparing request")
@@ -85,6 +91,10 @@ func (client BaseClient) PredictImage(ctx context.Context, projectID uuid.UUID, 
 
 // PredictImagePreparer prepares the PredictImage request.
 func (client BaseClient) PredictImagePreparer(ctx context.Context, projectID uuid.UUID, imageData io.ReadCloser, iterationID *uuid.UUID, application string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	pathParameters := map[string]interface{}{
 		"projectId": autorest.Encode("path", projectID),
 	}
@@ -103,7 +113,7 @@ func (client BaseClient) PredictImagePreparer(ctx context.Context, projectID uui
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/customvision/v2.0/Prediction", urlParameters),
 		autorest.WithPathParameters("/{projectId}/image", pathParameters),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithMultiPartFormData(formDataParameters),
@@ -139,6 +149,16 @@ func (client BaseClient) PredictImageResponder(resp *http.Response) (result Imag
 // The default iteration for the project will be used when not specified
 // application - optional. Specifies the name of application using the endpoint
 func (client BaseClient) PredictImageURL(ctx context.Context, projectID uuid.UUID, imageURL ImageURL, iterationID *uuid.UUID, application string) (result ImagePrediction, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PredictImageURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PredictImageURLPreparer(ctx, projectID, imageURL, iterationID, application)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "prediction.BaseClient", "PredictImageURL", nil, "Failure preparing request")
@@ -162,6 +182,10 @@ func (client BaseClient) PredictImageURL(ctx context.Context, projectID uuid.UUI
 
 // PredictImageURLPreparer prepares the PredictImageURL request.
 func (client BaseClient) PredictImageURLPreparer(ctx context.Context, projectID uuid.UUID, imageURL ImageURL, iterationID *uuid.UUID, application string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	pathParameters := map[string]interface{}{
 		"projectId": autorest.Encode("path", projectID),
 	}
@@ -177,7 +201,7 @@ func (client BaseClient) PredictImageURLPreparer(ctx context.Context, projectID 
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/customvision/v2.0/Prediction", urlParameters),
 		autorest.WithPathParameters("/{projectId}/url", pathParameters),
 		autorest.WithJSON(imageURL),
 		autorest.WithQueryParameters(queryParameters),
@@ -213,6 +237,16 @@ func (client BaseClient) PredictImageURLResponder(resp *http.Response) (result I
 // The default iteration for the project will be used when not specified
 // application - optional. Specifies the name of application using the endpoint
 func (client BaseClient) PredictImageURLWithNoStore(ctx context.Context, projectID uuid.UUID, imageURL ImageURL, iterationID *uuid.UUID, application string) (result ImagePrediction, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PredictImageURLWithNoStore")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PredictImageURLWithNoStorePreparer(ctx, projectID, imageURL, iterationID, application)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "prediction.BaseClient", "PredictImageURLWithNoStore", nil, "Failure preparing request")
@@ -236,6 +270,10 @@ func (client BaseClient) PredictImageURLWithNoStore(ctx context.Context, project
 
 // PredictImageURLWithNoStorePreparer prepares the PredictImageURLWithNoStore request.
 func (client BaseClient) PredictImageURLWithNoStorePreparer(ctx context.Context, projectID uuid.UUID, imageURL ImageURL, iterationID *uuid.UUID, application string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	pathParameters := map[string]interface{}{
 		"projectId": autorest.Encode("path", projectID),
 	}
@@ -251,7 +289,7 @@ func (client BaseClient) PredictImageURLWithNoStorePreparer(ctx context.Context,
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/customvision/v2.0/Prediction", urlParameters),
 		autorest.WithPathParameters("/{projectId}/url/nostore", pathParameters),
 		autorest.WithJSON(imageURL),
 		autorest.WithQueryParameters(queryParameters),
@@ -286,6 +324,16 @@ func (client BaseClient) PredictImageURLWithNoStoreResponder(resp *http.Response
 // The default iteration for the project will be used when not specified
 // application - optional. Specifies the name of application using the endpoint
 func (client BaseClient) PredictImageWithNoStore(ctx context.Context, projectID uuid.UUID, imageData io.ReadCloser, iterationID *uuid.UUID, application string) (result ImagePrediction, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.PredictImageWithNoStore")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PredictImageWithNoStorePreparer(ctx, projectID, imageData, iterationID, application)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "prediction.BaseClient", "PredictImageWithNoStore", nil, "Failure preparing request")
@@ -309,6 +357,10 @@ func (client BaseClient) PredictImageWithNoStore(ctx context.Context, projectID 
 
 // PredictImageWithNoStorePreparer prepares the PredictImageWithNoStore request.
 func (client BaseClient) PredictImageWithNoStorePreparer(ctx context.Context, projectID uuid.UUID, imageData io.ReadCloser, iterationID *uuid.UUID, application string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	pathParameters := map[string]interface{}{
 		"projectId": autorest.Encode("path", projectID),
 	}
@@ -327,7 +379,7 @@ func (client BaseClient) PredictImageWithNoStorePreparer(ctx context.Context, pr
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/customvision/v2.0/Prediction", urlParameters),
 		autorest.WithPathParameters("/{projectId}/image/nostore", pathParameters),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithMultiPartFormData(formDataParameters),

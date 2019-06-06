@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewScriptActionsClientWithBaseURI(baseURI string, subscriptionID string) Sc
 // clusterName - the name of the cluster.
 // scriptName - the name of the script.
 func (client ScriptActionsClient) Delete(ctx context.Context, resourceGroupName string, clusterName string, scriptName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScriptActionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, clusterName, scriptName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.ScriptActionsClient", "Delete", nil, "Failure preparing request")
@@ -113,6 +124,16 @@ func (client ScriptActionsClient) DeleteResponder(resp *http.Response) (result a
 // clusterName - the name of the cluster.
 // scriptExecutionID - the script execution Id
 func (client ScriptActionsClient) GetExecutionDetail(ctx context.Context, resourceGroupName string, clusterName string, scriptExecutionID string) (result RuntimeScriptActionDetail, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScriptActionsClient.GetExecutionDetail")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetExecutionDetailPreparer(ctx, resourceGroupName, clusterName, scriptExecutionID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hdinsight.ScriptActionsClient", "GetExecutionDetail", nil, "Failure preparing request")
@@ -181,6 +202,16 @@ func (client ScriptActionsClient) GetExecutionDetailResponder(resp *http.Respons
 // resourceGroupName - the name of the resource group.
 // clusterName - the name of the cluster.
 func (client ScriptActionsClient) ListByCluster(ctx context.Context, resourceGroupName string, clusterName string) (result ScriptActionsListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScriptActionsClient.ListByCluster")
+		defer func() {
+			sc := -1
+			if result.sal.Response.Response != nil {
+				sc = result.sal.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByClusterNextResults
 	req, err := client.ListByClusterPreparer(ctx, resourceGroupName, clusterName)
 	if err != nil {
@@ -245,8 +276,8 @@ func (client ScriptActionsClient) ListByClusterResponder(resp *http.Response) (r
 }
 
 // listByClusterNextResults retrieves the next set of results, if any.
-func (client ScriptActionsClient) listByClusterNextResults(lastResults ScriptActionsList) (result ScriptActionsList, err error) {
-	req, err := lastResults.scriptActionsListPreparer()
+func (client ScriptActionsClient) listByClusterNextResults(ctx context.Context, lastResults ScriptActionsList) (result ScriptActionsList, err error) {
+	req, err := lastResults.scriptActionsListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "hdinsight.ScriptActionsClient", "listByClusterNextResults", nil, "Failure preparing next results request")
 	}
@@ -267,6 +298,16 @@ func (client ScriptActionsClient) listByClusterNextResults(lastResults ScriptAct
 
 // ListByClusterComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ScriptActionsClient) ListByClusterComplete(ctx context.Context, resourceGroupName string, clusterName string) (result ScriptActionsListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScriptActionsClient.ListByCluster")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByCluster(ctx, resourceGroupName, clusterName)
 	return
 }

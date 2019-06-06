@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) Works
 // workspaceName - name of Azure Machine Learning workspace.
 // parameters - the parameters for creating or updating a machine learning workspace.
 func (client WorkspacesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, parameters Workspace) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, workspaceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.WorkspacesClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client WorkspacesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // resourceGroupName - name of the resource group in which workspace is located.
 // workspaceName - name of Azure Machine Learning workspace.
 func (client WorkspacesClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, workspaceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.WorkspacesClient", "Delete", nil, "Failure preparing request")
@@ -180,6 +201,16 @@ func (client WorkspacesClient) DeleteResponder(resp *http.Response) (result auto
 // resourceGroupName - name of the resource group in which workspace is located.
 // workspaceName - name of Azure Machine Learning workspace.
 func (client WorkspacesClient) Get(ctx context.Context, resourceGroupName string, workspaceName string) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, workspaceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.WorkspacesClient", "Get", nil, "Failure preparing request")
@@ -247,6 +278,16 @@ func (client WorkspacesClient) GetResponder(resp *http.Response) (result Workspa
 // resourceGroupName - name of the resource group in which workspace is located.
 // skiptoken - continuation token for pagination.
 func (client WorkspacesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, skiptoken string) (result WorkspaceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.wlr.Response.Response != nil {
+				sc = result.wlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName, skiptoken)
 	if err != nil {
@@ -313,8 +354,8 @@ func (client WorkspacesClient) ListByResourceGroupResponder(resp *http.Response)
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client WorkspacesClient) listByResourceGroupNextResults(lastResults WorkspaceListResult) (result WorkspaceListResult, err error) {
-	req, err := lastResults.workspaceListResultPreparer()
+func (client WorkspacesClient) listByResourceGroupNextResults(ctx context.Context, lastResults WorkspaceListResult) (result WorkspaceListResult, err error) {
+	req, err := lastResults.workspaceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "services.WorkspacesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -335,6 +376,16 @@ func (client WorkspacesClient) listByResourceGroupNextResults(lastResults Worksp
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkspacesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, skiptoken string) (result WorkspaceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, skiptoken)
 	return
 }
@@ -343,6 +394,16 @@ func (client WorkspacesClient) ListByResourceGroupComplete(ctx context.Context, 
 // Parameters:
 // skiptoken - continuation token for pagination.
 func (client WorkspacesClient) ListBySubscription(ctx context.Context, skiptoken string) (result WorkspaceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.wlr.Response.Response != nil {
+				sc = result.wlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx, skiptoken)
 	if err != nil {
@@ -408,8 +469,8 @@ func (client WorkspacesClient) ListBySubscriptionResponder(resp *http.Response) 
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client WorkspacesClient) listBySubscriptionNextResults(lastResults WorkspaceListResult) (result WorkspaceListResult, err error) {
-	req, err := lastResults.workspaceListResultPreparer()
+func (client WorkspacesClient) listBySubscriptionNextResults(ctx context.Context, lastResults WorkspaceListResult) (result WorkspaceListResult, err error) {
+	req, err := lastResults.workspaceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "services.WorkspacesClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -430,6 +491,16 @@ func (client WorkspacesClient) listBySubscriptionNextResults(lastResults Workspa
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkspacesClient) ListBySubscriptionComplete(ctx context.Context, skiptoken string) (result WorkspaceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx, skiptoken)
 	return
 }
@@ -440,6 +511,16 @@ func (client WorkspacesClient) ListBySubscriptionComplete(ctx context.Context, s
 // resourceGroupName - name of the resource group in which workspace is located.
 // workspaceName - name of Azure Machine Learning workspace.
 func (client WorkspacesClient) ListKeys(ctx context.Context, resourceGroupName string, workspaceName string) (result ListWorkspaceKeysResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListKeysPreparer(ctx, resourceGroupName, workspaceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.WorkspacesClient", "ListKeys", nil, "Failure preparing request")
@@ -508,6 +589,16 @@ func (client WorkspacesClient) ListKeysResponder(resp *http.Response) (result Li
 // resourceGroupName - name of the resource group in which workspace is located.
 // workspaceName - name of Azure Machine Learning workspace.
 func (client WorkspacesClient) ResyncKeys(ctx context.Context, resourceGroupName string, workspaceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ResyncKeys")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ResyncKeysPreparer(ctx, resourceGroupName, workspaceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.WorkspacesClient", "ResyncKeys", nil, "Failure preparing request")
@@ -575,6 +666,16 @@ func (client WorkspacesClient) ResyncKeysResponder(resp *http.Response) (result 
 // workspaceName - name of Azure Machine Learning workspace.
 // parameters - the parameters for updating a machine learning workspace.
 func (client WorkspacesClient) Update(ctx context.Context, resourceGroupName string, workspaceName string, parameters WorkspaceUpdateParameters) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, workspaceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "services.WorkspacesClient", "Update", nil, "Failure preparing request")

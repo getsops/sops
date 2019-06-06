@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewTargetComputeSizesClientWithBaseURI(baseURI string, subscriptionID strin
 // protectionContainerName - protection container name.
 // replicatedProtectedItemName - replication protected item name.
 func (client TargetComputeSizesClient) ListByReplicationProtectedItems(ctx context.Context, fabricName string, protectionContainerName string, replicatedProtectedItemName string) (result TargetComputeSizeCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TargetComputeSizesClient.ListByReplicationProtectedItems")
+		defer func() {
+			sc := -1
+			if result.tcsc.Response.Response != nil {
+				sc = result.tcsc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReplicationProtectedItemsNextResults
 	req, err := client.ListByReplicationProtectedItemsPreparer(ctx, fabricName, protectionContainerName, replicatedProtectedItemName)
 	if err != nil {
@@ -112,8 +123,8 @@ func (client TargetComputeSizesClient) ListByReplicationProtectedItemsResponder(
 }
 
 // listByReplicationProtectedItemsNextResults retrieves the next set of results, if any.
-func (client TargetComputeSizesClient) listByReplicationProtectedItemsNextResults(lastResults TargetComputeSizeCollection) (result TargetComputeSizeCollection, err error) {
-	req, err := lastResults.targetComputeSizeCollectionPreparer()
+func (client TargetComputeSizesClient) listByReplicationProtectedItemsNextResults(ctx context.Context, lastResults TargetComputeSizeCollection) (result TargetComputeSizeCollection, err error) {
+	req, err := lastResults.targetComputeSizeCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.TargetComputeSizesClient", "listByReplicationProtectedItemsNextResults", nil, "Failure preparing next results request")
 	}
@@ -134,6 +145,16 @@ func (client TargetComputeSizesClient) listByReplicationProtectedItemsNextResult
 
 // ListByReplicationProtectedItemsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TargetComputeSizesClient) ListByReplicationProtectedItemsComplete(ctx context.Context, fabricName string, protectionContainerName string, replicatedProtectedItemName string) (result TargetComputeSizeCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TargetComputeSizesClient.ListByReplicationProtectedItems")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReplicationProtectedItems(ctx, fabricName, protectionContainerName, replicatedProtectedItemName)
 	return
 }

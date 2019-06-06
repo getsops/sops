@@ -15,8 +15,8 @@
 // about tagging, see Working with Tag Editor (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/tag-editor.html)
 // and Working with Resource Groups (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/resource-groups.html).
 // For more information about permissions you need to use the resource groups
-// tagging APIs, see Obtaining Permissions for Resource Groups  (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-resource-groups.html)
-// and Obtaining Permissions for Tagging  (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html).
+// tagging APIs, see Obtaining Permissions for Resource Groups (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-resource-groups.html)
+// and Obtaining Permissions for Tagging (http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html).
 //
 // You can use the resource groups tagging APIs to complete the following tasks:
 //

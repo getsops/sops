@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) Account
 // location - the resource location without whitespace.
 // parameters - parameters supplied to check the Data Lake Store account name availability.
 func (client AccountsClient) CheckNameAvailability(ctx context.Context, location string, parameters CheckNameAvailabilityParameters) (result NameAvailabilityInformation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Name", Name: validation.Null, Rule: true, Chain: nil},
@@ -121,6 +132,16 @@ func (client AccountsClient) CheckNameAvailabilityResponder(resp *http.Response)
 // accountName - the name of the Data Lake Store account.
 // parameters - parameters supplied to create the Data Lake Store account.
 func (client AccountsClient) Create(ctx context.Context, resourceGroupName string, accountName string, parameters CreateDataLakeStoreAccountParameters) (result AccountsCreateFutureType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.Location", Name: validation.Null, Rule: true, Chain: nil},
@@ -185,10 +206,6 @@ func (client AccountsClient) CreateSender(req *http.Request) (future AccountsCre
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,6 +228,16 @@ func (client AccountsClient) CreateResponder(resp *http.Response) (result DataLa
 // resourceGroupName - the name of the Azure resource group.
 // accountName - the name of the Data Lake Store account.
 func (client AccountsClient) Delete(ctx context.Context, resourceGroupName string, accountName string) (result AccountsDeleteFutureType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.AccountsClient", "Delete", nil, "Failure preparing request")
@@ -256,10 +283,6 @@ func (client AccountsClient) DeleteSender(req *http.Request) (future AccountsDel
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -281,6 +304,16 @@ func (client AccountsClient) DeleteResponder(resp *http.Response) (result autore
 // resourceGroupName - the name of the Azure resource group.
 // accountName - the name of the Data Lake Store account.
 func (client AccountsClient) EnableKeyVault(ctx context.Context, resourceGroupName string, accountName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.EnableKeyVault")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.EnableKeyVaultPreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.AccountsClient", "EnableKeyVault", nil, "Failure preparing request")
@@ -347,6 +380,16 @@ func (client AccountsClient) EnableKeyVaultResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the Azure resource group.
 // accountName - the name of the Data Lake Store account.
 func (client AccountsClient) Get(ctx context.Context, resourceGroupName string, accountName string) (result DataLakeStoreAccount, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.AccountsClient", "Get", nil, "Failure preparing request")
@@ -423,6 +466,16 @@ func (client AccountsClient) GetResponder(resp *http.Response) (result DataLakeS
 // count - the Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client AccountsClient) List(ctx context.Context, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result DataLakeStoreAccountListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.List")
+		defer func() {
+			sc := -1
+			if result.dlsalr.Response.Response != nil {
+				sc = result.dlsalr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -513,8 +566,8 @@ func (client AccountsClient) ListResponder(resp *http.Response) (result DataLake
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AccountsClient) listNextResults(lastResults DataLakeStoreAccountListResult) (result DataLakeStoreAccountListResult, err error) {
-	req, err := lastResults.dataLakeStoreAccountListResultPreparer()
+func (client AccountsClient) listNextResults(ctx context.Context, lastResults DataLakeStoreAccountListResult) (result DataLakeStoreAccountListResult, err error) {
+	req, err := lastResults.dataLakeStoreAccountListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "account.AccountsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -535,6 +588,16 @@ func (client AccountsClient) listNextResults(lastResults DataLakeStoreAccountLis
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AccountsClient) ListComplete(ctx context.Context, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result DataLakeStoreAccountListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter, top, skip, selectParameter, orderby, count)
 	return
 }
@@ -554,6 +617,16 @@ func (client AccountsClient) ListComplete(ctx context.Context, filter string, to
 // count - a Boolean value of true or false to request a count of the matching resources included with the
 // resources in the response, e.g. Categories?$count=true. Optional.
 func (client AccountsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result DataLakeStoreAccountListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.dlsalr.Response.Response != nil {
+				sc = result.dlsalr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -645,8 +718,8 @@ func (client AccountsClient) ListByResourceGroupResponder(resp *http.Response) (
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AccountsClient) listByResourceGroupNextResults(lastResults DataLakeStoreAccountListResult) (result DataLakeStoreAccountListResult, err error) {
-	req, err := lastResults.dataLakeStoreAccountListResultPreparer()
+func (client AccountsClient) listByResourceGroupNextResults(ctx context.Context, lastResults DataLakeStoreAccountListResult) (result DataLakeStoreAccountListResult, err error) {
+	req, err := lastResults.dataLakeStoreAccountListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "account.AccountsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -667,6 +740,16 @@ func (client AccountsClient) listByResourceGroupNextResults(lastResults DataLake
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AccountsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string, filter string, top *int32, skip *int32, selectParameter string, orderby string, count *bool) (result DataLakeStoreAccountListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName, filter, top, skip, selectParameter, orderby, count)
 	return
 }
@@ -677,6 +760,16 @@ func (client AccountsClient) ListByResourceGroupComplete(ctx context.Context, re
 // accountName - the name of the Data Lake Store account.
 // parameters - parameters supplied to update the Data Lake Store account.
 func (client AccountsClient) Update(ctx context.Context, resourceGroupName string, accountName string, parameters UpdateDataLakeStoreAccountParameters) (result AccountsUpdateFutureType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccountsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, accountName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.AccountsClient", "Update", nil, "Failure preparing request")
@@ -721,10 +814,6 @@ func (client AccountsClient) UpdateSender(req *http.Request) (future AccountsUpd
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
 	if err != nil {
 		return
 	}

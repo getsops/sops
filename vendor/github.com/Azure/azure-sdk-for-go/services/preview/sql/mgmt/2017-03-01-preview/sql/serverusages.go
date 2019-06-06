@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewServerUsagesClientWithBaseURI(baseURI string, subscriptionID string) Ser
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServerUsagesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result ServerUsageListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerUsagesClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerUsagesClient", "ListByServer", nil, "Failure preparing request")

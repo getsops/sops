@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewDatasetsClientWithBaseURI(baseURI string, subscriptionID string) Dataset
 // ifMatch - eTag of the dataset entity.  Should only be specified for update, for which it should match
 // existing entity or can be * for unconditional update.
 func (client DatasetsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, datasetName string, dataset DatasetResource, ifMatch string) (result DatasetResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -148,6 +159,16 @@ func (client DatasetsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // factoryName - the factory name.
 // datasetName - the dataset name.
 func (client DatasetsClient) Delete(ctx context.Context, resourceGroupName string, factoryName string, datasetName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -232,6 +253,16 @@ func (client DatasetsClient) DeleteResponder(resp *http.Response) (result autore
 // factoryName - the factory name.
 // datasetName - the dataset name.
 func (client DatasetsClient) Get(ctx context.Context, resourceGroupName string, factoryName string, datasetName string) (result DatasetResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -316,6 +347,16 @@ func (client DatasetsClient) GetResponder(resp *http.Response) (result DatasetRe
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client DatasetsClient) ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result DatasetListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetsClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.dlr.Response.Response != nil {
+				sc = result.dlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -392,8 +433,8 @@ func (client DatasetsClient) ListByFactoryResponder(resp *http.Response) (result
 }
 
 // listByFactoryNextResults retrieves the next set of results, if any.
-func (client DatasetsClient) listByFactoryNextResults(lastResults DatasetListResponse) (result DatasetListResponse, err error) {
-	req, err := lastResults.datasetListResponsePreparer()
+func (client DatasetsClient) listByFactoryNextResults(ctx context.Context, lastResults DatasetListResponse) (result DatasetListResponse, err error) {
+	req, err := lastResults.datasetListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.DatasetsClient", "listByFactoryNextResults", nil, "Failure preparing next results request")
 	}
@@ -414,6 +455,16 @@ func (client DatasetsClient) listByFactoryNextResults(lastResults DatasetListRes
 
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DatasetsClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result DatasetListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatasetsClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }

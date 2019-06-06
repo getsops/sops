@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewSuppressionsClientWithBaseURI(baseURI string, subscriptionID string) Sup
 // name - the name of the suppression.
 // suppressionContract - the snoozed or dismissed attribute; for example, the snooze duration.
 func (client SuppressionsClient) Create(ctx context.Context, resourceURI string, recommendationID string, name string, suppressionContract SuppressionContract) (result SuppressionContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SuppressionsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceURI, recommendationID, name, suppressionContract)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.SuppressionsClient", "Create", nil, "Failure preparing request")
@@ -120,6 +131,16 @@ func (client SuppressionsClient) CreateResponder(resp *http.Response) (result Su
 // recommendationID - the recommendation ID.
 // name - the name of the suppression.
 func (client SuppressionsClient) Delete(ctx context.Context, resourceURI string, recommendationID string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SuppressionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceURI, recommendationID, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.SuppressionsClient", "Delete", nil, "Failure preparing request")
@@ -188,6 +209,16 @@ func (client SuppressionsClient) DeleteResponder(resp *http.Response) (result au
 // recommendationID - the recommendation ID.
 // name - the name of the suppression.
 func (client SuppressionsClient) Get(ctx context.Context, resourceURI string, recommendationID string, name string) (result SuppressionContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SuppressionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceURI, recommendationID, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.SuppressionsClient", "Get", nil, "Failure preparing request")
@@ -253,6 +284,16 @@ func (client SuppressionsClient) GetResponder(resp *http.Response) (result Suppr
 // List retrieves the list of snoozed or dismissed suppressions for a subscription. The snoozed or dismissed attribute
 // of a recommendation is referred to as a suppression.
 func (client SuppressionsClient) List(ctx context.Context) (result ListSuppressionContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SuppressionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.SuppressionsClient", "List", nil, "Failure preparing request")

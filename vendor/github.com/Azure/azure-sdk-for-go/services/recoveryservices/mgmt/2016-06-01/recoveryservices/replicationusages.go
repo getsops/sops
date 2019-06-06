@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewReplicationUsagesClientWithBaseURI(baseURI string, subscriptionID string
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 // vaultName - the name of the recovery services vault.
 func (client ReplicationUsagesClient) List(ctx context.Context, resourceGroupName string, vaultName string) (result ReplicationUsageList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationUsagesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, vaultName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "recoveryservices.ReplicationUsagesClient", "List", nil, "Failure preparing request")

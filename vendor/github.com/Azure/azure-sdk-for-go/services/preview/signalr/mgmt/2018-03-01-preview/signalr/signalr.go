@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
 // location - the region
 // parameters - parameters supplied to the operation.
 func (client Client) CheckNameAvailability(ctx context.Context, location string, parameters *NameAvailabilityParameters) (result NameAvailability, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters", Name: validation.Null, Rule: false,
@@ -127,6 +138,16 @@ func (client Client) CheckNameAvailabilityResponder(resp *http.Response) (result
 // resourceName - the name of the SignalR resource.
 // parameters - parameters for the create or update operation
 func (client Client) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, parameters *CreateParameters) (result CreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters", Name: validation.Null, Rule: false,
@@ -184,10 +205,6 @@ func (client Client) CreateOrUpdateSender(req *http.Request) (future CreateOrUpd
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -211,6 +228,16 @@ func (client Client) CreateOrUpdateResponder(resp *http.Response) (result Resour
 // from the Azure Resource Manager API or the portal.
 // resourceName - the name of the SignalR resource.
 func (client Client) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result DeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "signalr.Client", "Delete", nil, "Failure preparing request")
@@ -256,10 +283,6 @@ func (client Client) DeleteSender(req *http.Request) (future DeleteFuture, err e
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -282,6 +305,16 @@ func (client Client) DeleteResponder(resp *http.Response) (result autorest.Respo
 // from the Azure Resource Manager API or the portal.
 // resourceName - the name of the SignalR resource.
 func (client Client) Get(ctx context.Context, resourceGroupName string, resourceName string) (result ResourceType, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "signalr.Client", "Get", nil, "Failure preparing request")
@@ -349,6 +382,16 @@ func (client Client) GetResponder(resp *http.Response) (result ResourceType, err
 // resourceGroupName - the name of the resource group that contains the resource. You can obtain this value
 // from the Azure Resource Manager API or the portal.
 func (client Client) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.rl.Response.Response != nil {
+				sc = result.rl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -412,8 +455,8 @@ func (client Client) ListByResourceGroupResponder(resp *http.Response) (result R
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client Client) listByResourceGroupNextResults(lastResults ResourceList) (result ResourceList, err error) {
-	req, err := lastResults.resourceListPreparer()
+func (client Client) listByResourceGroupNextResults(ctx context.Context, lastResults ResourceList) (result ResourceList, err error) {
+	req, err := lastResults.resourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "signalr.Client", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -434,12 +477,32 @@ func (client Client) listByResourceGroupNextResults(lastResults ResourceList) (r
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription handles requests to list all resources in a subscription.
 func (client Client) ListBySubscription(ctx context.Context) (result ResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.rl.Response.Response != nil {
+				sc = result.rl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -502,8 +565,8 @@ func (client Client) ListBySubscriptionResponder(resp *http.Response) (result Re
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client Client) listBySubscriptionNextResults(lastResults ResourceList) (result ResourceList, err error) {
-	req, err := lastResults.resourceListPreparer()
+func (client Client) listBySubscriptionNextResults(ctx context.Context, lastResults ResourceList) (result ResourceList, err error) {
+	req, err := lastResults.resourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "signalr.Client", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -524,6 +587,16 @@ func (client Client) listBySubscriptionNextResults(lastResults ResourceList) (re
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client Client) ListBySubscriptionComplete(ctx context.Context) (result ResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -534,6 +607,16 @@ func (client Client) ListBySubscriptionComplete(ctx context.Context) (result Res
 // from the Azure Resource Manager API or the portal.
 // resourceName - the name of the SignalR resource.
 func (client Client) ListKeys(ctx context.Context, resourceGroupName string, resourceName string) (result Keys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListKeysPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "signalr.Client", "ListKeys", nil, "Failure preparing request")
@@ -604,6 +687,16 @@ func (client Client) ListKeysResponder(resp *http.Response) (result Keys, err er
 // resourceName - the name of the SignalR resource.
 // parameters - parameter that describes the Regenerate Key Operation.
 func (client Client) RegenerateKey(ctx context.Context, resourceGroupName string, resourceName string, parameters *RegenerateKeyParameters) (result RegenerateKeyFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.RegenerateKey")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateKeyPreparer(ctx, resourceGroupName, resourceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "signalr.Client", "RegenerateKey", nil, "Failure preparing request")
@@ -654,10 +747,6 @@ func (client Client) RegenerateKeySender(req *http.Request) (future RegenerateKe
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -682,6 +771,16 @@ func (client Client) RegenerateKeyResponder(resp *http.Response) (result Keys, e
 // resourceName - the name of the SignalR resource.
 // parameters - parameters for the update operation
 func (client Client) Update(ctx context.Context, resourceGroupName string, resourceName string, parameters *UpdateParameters) (result UpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, resourceName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "signalr.Client", "Update", nil, "Failure preparing request")
@@ -729,10 +828,6 @@ func (client Client) UpdateSender(req *http.Request) (future UpdateFuture, err e
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

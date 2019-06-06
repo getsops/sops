@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewAutoscaleSettingsClientWithBaseURI(baseURI string, subscriptionID string
 // autoscaleSettingName - the autoscale setting name.
 // parameters - parameters supplied to the operation.
 func (client AutoscaleSettingsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, autoscaleSettingName string, parameters AutoscaleSettingResource) (result AutoscaleSettingResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.AutoscaleSetting", Name: validation.Null, Rule: true,
@@ -124,6 +135,16 @@ func (client AutoscaleSettingsClient) CreateOrUpdateResponder(resp *http.Respons
 // resourceGroupName - the name of the resource group.
 // autoscaleSettingName - the autoscale setting name.
 func (client AutoscaleSettingsClient) Delete(ctx context.Context, resourceGroupName string, autoscaleSettingName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, autoscaleSettingName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AutoscaleSettingsClient", "Delete", nil, "Failure preparing request")
@@ -190,6 +211,16 @@ func (client AutoscaleSettingsClient) DeleteResponder(resp *http.Response) (resu
 // resourceGroupName - the name of the resource group.
 // autoscaleSettingName - the autoscale setting name.
 func (client AutoscaleSettingsClient) Get(ctx context.Context, resourceGroupName string, autoscaleSettingName string) (result AutoscaleSettingResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, autoscaleSettingName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AutoscaleSettingsClient", "Get", nil, "Failure preparing request")
@@ -256,6 +287,16 @@ func (client AutoscaleSettingsClient) GetResponder(resp *http.Response) (result 
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client AutoscaleSettingsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AutoscaleSettingResourceCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.asrc.Response.Response != nil {
+				sc = result.asrc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -319,8 +360,8 @@ func (client AutoscaleSettingsClient) ListByResourceGroupResponder(resp *http.Re
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client AutoscaleSettingsClient) listByResourceGroupNextResults(lastResults AutoscaleSettingResourceCollection) (result AutoscaleSettingResourceCollection, err error) {
-	req, err := lastResults.autoscaleSettingResourceCollectionPreparer()
+func (client AutoscaleSettingsClient) listByResourceGroupNextResults(ctx context.Context, lastResults AutoscaleSettingResourceCollection) (result AutoscaleSettingResourceCollection, err error) {
+	req, err := lastResults.autoscaleSettingResourceCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.AutoscaleSettingsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -341,12 +382,32 @@ func (client AutoscaleSettingsClient) listByResourceGroupNextResults(lastResults
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AutoscaleSettingsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result AutoscaleSettingResourceCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription lists the autoscale settings for a subscription
 func (client AutoscaleSettingsClient) ListBySubscription(ctx context.Context) (result AutoscaleSettingResourceCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.asrc.Response.Response != nil {
+				sc = result.asrc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -409,8 +470,8 @@ func (client AutoscaleSettingsClient) ListBySubscriptionResponder(resp *http.Res
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client AutoscaleSettingsClient) listBySubscriptionNextResults(lastResults AutoscaleSettingResourceCollection) (result AutoscaleSettingResourceCollection, err error) {
-	req, err := lastResults.autoscaleSettingResourceCollectionPreparer()
+func (client AutoscaleSettingsClient) listBySubscriptionNextResults(ctx context.Context, lastResults AutoscaleSettingResourceCollection) (result AutoscaleSettingResourceCollection, err error) {
+	req, err := lastResults.autoscaleSettingResourceCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "insights.AutoscaleSettingsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -431,6 +492,16 @@ func (client AutoscaleSettingsClient) listBySubscriptionNextResults(lastResults 
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AutoscaleSettingsClient) ListBySubscriptionComplete(ctx context.Context) (result AutoscaleSettingResourceCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -441,6 +512,16 @@ func (client AutoscaleSettingsClient) ListBySubscriptionComplete(ctx context.Con
 // autoscaleSettingName - the autoscale setting name.
 // autoscaleSettingResource - parameters supplied to the operation.
 func (client AutoscaleSettingsClient) Update(ctx context.Context, resourceGroupName string, autoscaleSettingName string, autoscaleSettingResource AutoscaleSettingResourcePatch) (result AutoscaleSettingResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AutoscaleSettingsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, autoscaleSettingName, autoscaleSettingResource)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AutoscaleSettingsClient", "Update", nil, "Failure preparing request")

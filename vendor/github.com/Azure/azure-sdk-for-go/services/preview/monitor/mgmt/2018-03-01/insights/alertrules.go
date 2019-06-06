@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewAlertRulesClientWithBaseURI(baseURI string, subscriptionID string) Alert
 // ruleName - the name of the rule.
 // parameters - the parameters of the rule to create or update.
 func (client AlertRulesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, ruleName string, parameters AlertRuleResource) (result AlertRuleResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertRulesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.AlertRule", Name: validation.Null, Rule: true,
@@ -125,6 +136,16 @@ func (client AlertRulesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // resourceGroupName - the name of the resource group.
 // ruleName - the name of the rule.
 func (client AlertRulesClient) Delete(ctx context.Context, resourceGroupName string, ruleName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertRulesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, ruleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AlertRulesClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +212,16 @@ func (client AlertRulesClient) DeleteResponder(resp *http.Response) (result auto
 // resourceGroupName - the name of the resource group.
 // ruleName - the name of the rule.
 func (client AlertRulesClient) Get(ctx context.Context, resourceGroupName string, ruleName string) (result AlertRuleResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertRulesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, ruleName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AlertRulesClient", "Get", nil, "Failure preparing request")
@@ -257,6 +288,16 @@ func (client AlertRulesClient) GetResponder(resp *http.Response) (result AlertRu
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client AlertRulesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result AlertRuleResourceCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertRulesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AlertRulesClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -320,6 +361,16 @@ func (client AlertRulesClient) ListByResourceGroupResponder(resp *http.Response)
 
 // ListBySubscription list the alert rules within a subscription.
 func (client AlertRulesClient) ListBySubscription(ctx context.Context) (result AlertRuleResourceCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertRulesClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AlertRulesClient", "ListBySubscription", nil, "Failure preparing request")
@@ -386,6 +437,16 @@ func (client AlertRulesClient) ListBySubscriptionResponder(resp *http.Response) 
 // ruleName - the name of the rule.
 // alertRulesResource - parameters supplied to the operation.
 func (client AlertRulesClient) Update(ctx context.Context, resourceGroupName string, ruleName string, alertRulesResource AlertRuleResourcePatch) (result AlertRuleResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertRulesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, ruleName, alertRulesResource)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.AlertRulesClient", "Update", nil, "Failure preparing request")

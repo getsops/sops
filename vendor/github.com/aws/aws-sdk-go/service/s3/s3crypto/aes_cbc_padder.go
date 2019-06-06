@@ -7,7 +7,7 @@ const (
 var aescbcPadding = aescbcPadder{pkcs7Padder{16}}
 
 // AESCBCPadder is used to pad AES encrypted and decrypted data.
-// Altough it uses the pkcs5Padder, it isn't following the RFC
+// Although it uses the pkcs5Padder, it isn't following the RFC
 // for PKCS5. The only reason why it is called pkcs5Padder is
 // due to the Name returning PKCS5Padding.
 var AESCBCPadder = Padder(aescbcPadding)

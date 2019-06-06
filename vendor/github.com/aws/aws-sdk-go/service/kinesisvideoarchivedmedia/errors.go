@@ -21,13 +21,14 @@ const (
 	// ErrCodeInvalidCodecPrivateDataException for service response error code
 	// "InvalidCodecPrivateDataException".
 	//
-	// The Codec Private Data in the video stream is not valid for this operation.
+	// The codec private data in at least one of the tracks of the video stream
+	// is not valid for this operation.
 	ErrCodeInvalidCodecPrivateDataException = "InvalidCodecPrivateDataException"
 
 	// ErrCodeMissingCodecPrivateDataException for service response error code
 	// "MissingCodecPrivateDataException".
 	//
-	// No Codec Private Data was found in the video stream.
+	// No codec private data was found in at least one of tracks of the video stream.
 	ErrCodeMissingCodecPrivateDataException = "MissingCodecPrivateDataException"
 
 	// ErrCodeNoDataRetentionException for service response error code
@@ -59,7 +60,9 @@ const (
 	// ErrCodeUnsupportedStreamMediaTypeException for service response error code
 	// "UnsupportedStreamMediaTypeException".
 	//
-	// An HLS streaming session was requested for a stream with a media type that
-	// is not video/h264.
+	// The type of the media (for example, h.264 video or ACC audio) could not be
+	// determined from the codec IDs of the tracks in the first fragment for a playback
+	// session. The codec ID for track 1 should be V_MPEG/ISO/AVC and, optionally,
+	// the codec ID for track 2 should be A_AAC.
 	ErrCodeUnsupportedStreamMediaTypeException = "UnsupportedStreamMediaTypeException"
 )

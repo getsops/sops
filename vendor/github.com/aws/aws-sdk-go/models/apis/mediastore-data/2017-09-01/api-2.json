@@ -98,7 +98,7 @@
     },
     "ContentType":{
       "type":"string",
-      "pattern":"^[\\w\\-\\/\\.]{1,255}$"
+      "pattern":"^[\\w\\-\\/\\.\\+]{1,255}$"
     },
     "DeleteObjectRequest":{
       "type":"structure",
@@ -349,6 +349,11 @@
           "shape":"StorageClass",
           "location":"header",
           "locationName":"x-amz-storage-class"
+        },
+        "UploadAvailability":{
+          "shape":"UploadAvailability",
+          "location":"header",
+          "locationName":"x-amz-upload-availability"
         }
       },
       "payload":"Body"
@@ -387,6 +392,15 @@
     },
     "StringPrimitive":{"type":"string"},
     "TimeStamp":{"type":"timestamp"},
+    "UploadAvailability":{
+      "type":"string",
+      "enum":[
+        "STANDARD",
+        "STREAMING"
+      ],
+      "max":16,
+      "min":1
+    },
     "statusCode":{"type":"integer"}
   }
 }

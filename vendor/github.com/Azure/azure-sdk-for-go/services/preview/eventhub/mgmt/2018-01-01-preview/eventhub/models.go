@@ -18,13 +18,33 @@ package eventhub
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/eventhub/mgmt/2018-01-01-preview/eventhub"
+
+// DefaultAction enumerates the values for default action.
+type DefaultAction string
+
+const (
+	// Allow ...
+	Allow DefaultAction = "Allow"
+	// Deny ...
+	Deny DefaultAction = "Deny"
+)
+
+// PossibleDefaultActionValues returns an array of possible values for the DefaultAction const type.
+func PossibleDefaultActionValues() []DefaultAction {
+	return []DefaultAction{Allow, Deny}
+}
 
 // IPAction enumerates the values for ip action.
 type IPAction string
@@ -39,6 +59,19 @@ const (
 // PossibleIPActionValues returns an array of possible values for the IPAction const type.
 func PossibleIPActionValues() []IPAction {
 	return []IPAction{Accept, Reject}
+}
+
+// NetworkRuleIPAction enumerates the values for network rule ip action.
+type NetworkRuleIPAction string
+
+const (
+	// NetworkRuleIPActionAllow ...
+	NetworkRuleIPActionAllow NetworkRuleIPAction = "Allow"
+)
+
+// PossibleNetworkRuleIPActionValues returns an array of possible values for the NetworkRuleIPAction const type.
+func PossibleNetworkRuleIPActionValues() []NetworkRuleIPAction {
+	return []NetworkRuleIPAction{NetworkRuleIPActionAllow}
 }
 
 // SkuName enumerates the values for sku name.
@@ -71,6 +104,13 @@ func PossibleSkuTierValues() []SkuTier {
 	return []SkuTier{SkuTierBasic, SkuTierStandard}
 }
 
+// AvailableClustersList the response of the List Available Clusters operation.
+type AvailableClustersList struct {
+	autorest.Response `json:"-"`
+	// Value - The count of readily available and pre-provisioned Event Hubs Clusters per region.
+	Value *[]map[string]*int32 `json:"value,omitempty"`
+}
+
 // Cluster single Event Hubs Cluster resource in List or Get operations.
 type Cluster struct {
 	autorest.Response `json:"-"`
@@ -82,11 +122,11 @@ type Cluster struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -104,15 +144,6 @@ func (c Cluster) MarshalJSON() ([]byte, error) {
 	}
 	if c.Tags != nil {
 		objectMap["tags"] = c.Tags
-	}
-	if c.ID != nil {
-		objectMap["id"] = c.ID
-	}
-	if c.Name != nil {
-		objectMap["name"] = c.Name
-	}
-	if c.Type != nil {
-		objectMap["type"] = c.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -210,20 +241,37 @@ type ClusterListResultIterator struct {
 	page ClusterListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ClusterListResultIterator) Next() error {
+func (iter *ClusterListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ClusterListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -245,6 +293,11 @@ func (iter ClusterListResultIterator) Value() Cluster {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ClusterListResultIterator type.
+func NewClusterListResultIterator(page ClusterListResultPage) ClusterListResultIterator {
+	return ClusterListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (clr ClusterListResult) IsEmpty() bool {
 	return clr.Value == nil || len(*clr.Value) == 0
@@ -252,11 +305,11 @@ func (clr ClusterListResult) IsEmpty() bool {
 
 // clusterListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (clr ClusterListResult) clusterListResultPreparer() (*http.Request, error) {
+func (clr ClusterListResult) clusterListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if clr.NextLink == nil || len(to.String(clr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(clr.NextLink)))
@@ -264,19 +317,36 @@ func (clr ClusterListResult) clusterListResultPreparer() (*http.Request, error) 
 
 // ClusterListResultPage contains a page of Cluster values.
 type ClusterListResultPage struct {
-	fn  func(ClusterListResult) (ClusterListResult, error)
+	fn  func(context.Context, ClusterListResult) (ClusterListResult, error)
 	clr ClusterListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ClusterListResultPage) Next() error {
-	next, err := page.fn(page.clr)
+func (page *ClusterListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.clr)
 	if err != nil {
 		return err
 	}
 	page.clr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ClusterListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -297,13 +367,18 @@ func (page ClusterListResultPage) Values() []Cluster {
 	return *page.clr.Value
 }
 
+// Creates a new instance of the ClusterListResultPage type.
+func NewClusterListResultPage(getNextPage func(context.Context, ClusterListResult) (ClusterListResult, error)) ClusterListResultPage {
+	return ClusterListResultPage{fn: getNextPage}
+}
+
 // ClusterProperties event Hubs Cluster properties supplied in responses in List or Get operations.
 type ClusterProperties struct {
-	// Created - The UTC time when the Event Hubs Cluster was created.
+	// Created - READ-ONLY; The UTC time when the Event Hubs Cluster was created.
 	Created *string `json:"created,omitempty"`
-	// Updated - The UTC time when the Event Hubs Cluster was last updated.
+	// Updated - READ-ONLY; The UTC time when the Event Hubs Cluster was last updated.
 	Updated *string `json:"updated,omitempty"`
-	// MetricID - The metric ID of the cluster resource. Provided by the service and not modifiable by the user.
+	// MetricID - READ-ONLY; The metric ID of the cluster resource. Provided by the service and not modifiable by the user.
 	MetricID *string `json:"metricId,omitempty"`
 }
 
@@ -323,6 +398,29 @@ func (cqcp ClusterQuotaConfigurationProperties) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// ClustersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type ClustersDeleteFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ClustersDeleteFuture) Result(client ClustersClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "eventhub.ClustersDeleteFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("eventhub.ClustersDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
 // ClusterSku SKU parameters particular to a cluster instance.
 type ClusterSku struct {
 	// Name - Name of this SKU.
@@ -331,7 +429,8 @@ type ClusterSku struct {
 	Capacity *int32 `json:"capacity,omitempty"`
 }
 
-// ClustersPatchFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ClustersPatchFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ClustersPatchFuture struct {
 	azure.Future
 }
@@ -340,7 +439,7 @@ type ClustersPatchFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ClustersPatchFuture) Result(client ClustersClient) (c Cluster, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventhub.ClustersPatchFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -359,6 +458,34 @@ func (future *ClustersPatchFuture) Result(client ClustersClient) (c Cluster, err
 	return
 }
 
+// ClustersPutFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+type ClustersPutFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ClustersPutFuture) Result(client ClustersClient) (c Cluster, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "eventhub.ClustersPutFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("eventhub.ClustersPutFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if c.Response.Response, err = future.GetResult(sender); err == nil && c.Response.Response.StatusCode != http.StatusNoContent {
+		c, err = client.PutResponder(c.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "eventhub.ClustersPutFuture", "Result", c.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
 // EHNamespace single Namespace item in List or Get Operation
 type EHNamespace struct {
 	autorest.Response `json:"-"`
@@ -370,11 +497,11 @@ type EHNamespace struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -392,15 +519,6 @@ func (en EHNamespace) MarshalJSON() ([]byte, error) {
 	}
 	if en.Tags != nil {
 		objectMap["tags"] = en.Tags
-	}
-	if en.ID != nil {
-		objectMap["id"] = en.ID
-	}
-	if en.Name != nil {
-		objectMap["name"] = en.Name
-	}
-	if en.Type != nil {
-		objectMap["type"] = en.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -483,6 +601,18 @@ func (en *EHNamespace) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
+// EHNamespaceIDContainer the full ARM ID of an Event Hubs Namespace
+type EHNamespaceIDContainer struct {
+	ID *string `json:"id,omitempty"`
+}
+
+// EHNamespaceIDListResult the response of the List Namespace IDs operation
+type EHNamespaceIDListResult struct {
+	autorest.Response `json:"-"`
+	// Value - Result of the List Namespace IDs operation
+	Value *[]EHNamespaceIDContainer `json:"value,omitempty"`
+}
+
 // EHNamespaceListResult the response of the List Namespace operation
 type EHNamespaceListResult struct {
 	autorest.Response `json:"-"`
@@ -498,20 +628,37 @@ type EHNamespaceListResultIterator struct {
 	page EHNamespaceListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *EHNamespaceListResultIterator) Next() error {
+func (iter *EHNamespaceListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EHNamespaceListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *EHNamespaceListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -533,6 +680,11 @@ func (iter EHNamespaceListResultIterator) Value() EHNamespace {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the EHNamespaceListResultIterator type.
+func NewEHNamespaceListResultIterator(page EHNamespaceListResultPage) EHNamespaceListResultIterator {
+	return EHNamespaceListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (enlr EHNamespaceListResult) IsEmpty() bool {
 	return enlr.Value == nil || len(*enlr.Value) == 0
@@ -540,11 +692,11 @@ func (enlr EHNamespaceListResult) IsEmpty() bool {
 
 // eHNamespaceListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (enlr EHNamespaceListResult) eHNamespaceListResultPreparer() (*http.Request, error) {
+func (enlr EHNamespaceListResult) eHNamespaceListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if enlr.NextLink == nil || len(to.String(enlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(enlr.NextLink)))
@@ -552,19 +704,36 @@ func (enlr EHNamespaceListResult) eHNamespaceListResultPreparer() (*http.Request
 
 // EHNamespaceListResultPage contains a page of EHNamespace values.
 type EHNamespaceListResultPage struct {
-	fn   func(EHNamespaceListResult) (EHNamespaceListResult, error)
+	fn   func(context.Context, EHNamespaceListResult) (EHNamespaceListResult, error)
 	enlr EHNamespaceListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *EHNamespaceListResultPage) Next() error {
-	next, err := page.fn(page.enlr)
+func (page *EHNamespaceListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EHNamespaceListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.enlr)
 	if err != nil {
 		return err
 	}
 	page.enlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *EHNamespaceListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -585,21 +754,26 @@ func (page EHNamespaceListResultPage) Values() []EHNamespace {
 	return *page.enlr.Value
 }
 
+// Creates a new instance of the EHNamespaceListResultPage type.
+func NewEHNamespaceListResultPage(getNextPage func(context.Context, EHNamespaceListResult) (EHNamespaceListResult, error)) EHNamespaceListResultPage {
+	return EHNamespaceListResultPage{fn: getNextPage}
+}
+
 // EHNamespaceProperties namespace properties supplied for create namespace operation.
 type EHNamespaceProperties struct {
-	// ProvisioningState - Provisioning state of the Namespace.
+	// ProvisioningState - READ-ONLY; Provisioning state of the Namespace.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
-	// CreatedAt - The time the Namespace was created.
+	// CreatedAt - READ-ONLY; The time the Namespace was created.
 	CreatedAt *date.Time `json:"createdAt,omitempty"`
-	// UpdatedAt - The time the Namespace was updated.
+	// UpdatedAt - READ-ONLY; The time the Namespace was updated.
 	UpdatedAt *date.Time `json:"updatedAt,omitempty"`
-	// ServiceBusEndpoint - Endpoint you can use to perform Service Bus operations.
+	// ServiceBusEndpoint - READ-ONLY; Endpoint you can use to perform Service Bus operations.
 	ServiceBusEndpoint *string `json:"serviceBusEndpoint,omitempty"`
-	// MetricID - Identifier for Azure Insights metrics.
+	// MetricID - READ-ONLY; Identifier for Azure Insights metrics.
 	MetricID *string `json:"metricId,omitempty"`
 	// IsAutoInflateEnabled - Value that indicates whether AutoInflate is enabled for eventhub namespace.
 	IsAutoInflateEnabled *bool `json:"isAutoInflateEnabled,omitempty"`
-	// MaximumThroughputUnits - Upper limit of throughput units when AutoInflate is enabled, vaule should be within 0 to 20 throughput units. ( '0' if AutoInflateEnabled = true)
+	// MaximumThroughputUnits - Upper limit of throughput units when AutoInflate is enabled, value should be within 0 to 20 throughput units. ( '0' if AutoInflateEnabled = true)
 	MaximumThroughputUnits *int32 `json:"maximumThroughputUnits,omitempty"`
 	// KafkaEnabled - Value that indicates whether Kafka is enabled for eventhub namespace.
 	KafkaEnabled *bool `json:"kafkaEnabled,omitempty"`
@@ -607,8 +781,8 @@ type EHNamespaceProperties struct {
 	ZoneRedundant *bool `json:"zoneRedundant,omitempty"`
 }
 
-// ErrorResponse error response that indicates the service is not able to process the incoming request. The reason
-// is provided in the error message.
+// ErrorResponse error response that indicates the service is not able to process the incoming request. The
+// reason is provided in the error message.
 type ErrorResponse struct {
 	// Code - Error code.
 	Code *string `json:"code,omitempty"`
@@ -621,11 +795,11 @@ type IPFilterRule struct {
 	autorest.Response `json:"-"`
 	// IPFilterRuleProperties - Properties supplied to create or update IpFilterRules
 	*IPFilterRuleProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -634,15 +808,6 @@ func (ifr IPFilterRule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ifr.IPFilterRuleProperties != nil {
 		objectMap["properties"] = ifr.IPFilterRuleProperties
-	}
-	if ifr.ID != nil {
-		objectMap["id"] = ifr.ID
-	}
-	if ifr.Name != nil {
-		objectMap["name"] = ifr.Name
-	}
-	if ifr.Type != nil {
-		objectMap["type"] = ifr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -713,20 +878,37 @@ type IPFilterRuleListResultIterator struct {
 	page IPFilterRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *IPFilterRuleListResultIterator) Next() error {
+func (iter *IPFilterRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IPFilterRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *IPFilterRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -748,6 +930,11 @@ func (iter IPFilterRuleListResultIterator) Value() IPFilterRule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the IPFilterRuleListResultIterator type.
+func NewIPFilterRuleListResultIterator(page IPFilterRuleListResultPage) IPFilterRuleListResultIterator {
+	return IPFilterRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ifrlr IPFilterRuleListResult) IsEmpty() bool {
 	return ifrlr.Value == nil || len(*ifrlr.Value) == 0
@@ -755,11 +942,11 @@ func (ifrlr IPFilterRuleListResult) IsEmpty() bool {
 
 // iPFilterRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ifrlr IPFilterRuleListResult) iPFilterRuleListResultPreparer() (*http.Request, error) {
+func (ifrlr IPFilterRuleListResult) iPFilterRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if ifrlr.NextLink == nil || len(to.String(ifrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ifrlr.NextLink)))
@@ -767,19 +954,36 @@ func (ifrlr IPFilterRuleListResult) iPFilterRuleListResultPreparer() (*http.Requ
 
 // IPFilterRuleListResultPage contains a page of IPFilterRule values.
 type IPFilterRuleListResultPage struct {
-	fn    func(IPFilterRuleListResult) (IPFilterRuleListResult, error)
+	fn    func(context.Context, IPFilterRuleListResult) (IPFilterRuleListResult, error)
 	ifrlr IPFilterRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *IPFilterRuleListResultPage) Next() error {
-	next, err := page.fn(page.ifrlr)
+func (page *IPFilterRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IPFilterRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ifrlr)
 	if err != nil {
 		return err
 	}
 	page.ifrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *IPFilterRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -800,6 +1004,11 @@ func (page IPFilterRuleListResultPage) Values() []IPFilterRule {
 	return *page.ifrlr.Value
 }
 
+// Creates a new instance of the IPFilterRuleListResultPage type.
+func NewIPFilterRuleListResultPage(getNextPage func(context.Context, IPFilterRuleListResult) (IPFilterRuleListResult, error)) IPFilterRuleListResultPage {
+	return IPFilterRuleListResultPage{fn: getNextPage}
+}
+
 // IPFilterRuleProperties properties supplied to create or update IpFilterRules
 type IPFilterRuleProperties struct {
 	// IPMask - IP Mask
@@ -810,8 +1019,8 @@ type IPFilterRuleProperties struct {
 	FilterName *string `json:"filterName,omitempty"`
 }
 
-// NamespacesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// NamespacesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type NamespacesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -820,7 +1029,7 @@ type NamespacesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *NamespacesCreateOrUpdateFuture) Result(client NamespacesClient) (en EHNamespace, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventhub.NamespacesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -839,7 +1048,8 @@ func (future *NamespacesCreateOrUpdateFuture) Result(client NamespacesClient) (e
 	return
 }
 
-// NamespacesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// NamespacesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type NamespacesDeleteFuture struct {
 	azure.Future
 }
@@ -848,7 +1058,7 @@ type NamespacesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *NamespacesDeleteFuture) Result(client NamespacesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventhub.NamespacesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -861,9 +1071,108 @@ func (future *NamespacesDeleteFuture) Result(client NamespacesClient) (ar autore
 	return
 }
 
+// NetworkRuleSet description of topic resource.
+type NetworkRuleSet struct {
+	autorest.Response `json:"-"`
+	// NetworkRuleSetProperties - NetworkRuleSet properties
+	*NetworkRuleSetProperties `json:"properties,omitempty"`
+	// ID - READ-ONLY; Resource Id
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; Resource name
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; Resource type
+	Type *string `json:"type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for NetworkRuleSet.
+func (nrs NetworkRuleSet) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if nrs.NetworkRuleSetProperties != nil {
+		objectMap["properties"] = nrs.NetworkRuleSetProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for NetworkRuleSet struct.
+func (nrs *NetworkRuleSet) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var networkRuleSetProperties NetworkRuleSetProperties
+				err = json.Unmarshal(*v, &networkRuleSetProperties)
+				if err != nil {
+					return err
+				}
+				nrs.NetworkRuleSetProperties = &networkRuleSetProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				nrs.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				nrs.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				nrs.Type = &typeVar
+			}
+		}
+	}
+
+	return nil
+}
+
+// NetworkRuleSetProperties networkRuleSet properties
+type NetworkRuleSetProperties struct {
+	// DefaultAction - Default Action for Network Rule Set. Possible values include: 'Allow', 'Deny'
+	DefaultAction DefaultAction `json:"defaultAction,omitempty"`
+	// VirtualNetworkRules - List VirtualNetwork Rules
+	VirtualNetworkRules *[]NWRuleSetVirtualNetworkRules `json:"virtualNetworkRules,omitempty"`
+	// IPRules - List of IpRules
+	IPRules *[]NWRuleSetIPRules `json:"ipRules,omitempty"`
+}
+
+// NWRuleSetIPRules the response from the List namespace operation.
+type NWRuleSetIPRules struct {
+	// IPMask - IP Mask
+	IPMask *string `json:"ipMask,omitempty"`
+	// Action - The IP Filter Action. Possible values include: 'NetworkRuleIPActionAllow'
+	Action NetworkRuleIPAction `json:"action,omitempty"`
+}
+
+// NWRuleSetVirtualNetworkRules the response from the List namespace operation.
+type NWRuleSetVirtualNetworkRules struct {
+	// Subnet - Subnet properties
+	Subnet *Subnet `json:"subnet,omitempty"`
+	// IgnoreMissingVnetServiceEndpoint - Value that indicates whether to ignore missing Vnet Service Endpoint
+	IgnoreMissingVnetServiceEndpoint *bool `json:"ignoreMissingVnetServiceEndpoint,omitempty"`
+}
+
 // Operation a Event Hub REST API operation
 type Operation struct {
-	// Name - Operation name: {provider}/{resource}/{operation}
+	// Name - READ-ONLY; Operation name: {provider}/{resource}/{operation}
 	Name *string `json:"name,omitempty"`
 	// Display - The object that represents the operation.
 	Display *OperationDisplay `json:"display,omitempty"`
@@ -871,21 +1180,21 @@ type Operation struct {
 
 // OperationDisplay the object that represents the operation.
 type OperationDisplay struct {
-	// Provider - Service provider: Microsoft.EventHub
+	// Provider - READ-ONLY; Service provider: Microsoft.EventHub
 	Provider *string `json:"provider,omitempty"`
-	// Resource - Resource on which the operation is performed: Invoice, etc.
+	// Resource - READ-ONLY; Resource on which the operation is performed: Invoice, etc.
 	Resource *string `json:"resource,omitempty"`
-	// Operation - Operation type: Read, write, delete, etc.
+	// Operation - READ-ONLY; Operation type: Read, write, delete, etc.
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list Event Hub operations. It contains a list of operations and a
-// URL link to get the next set of results.
+// OperationListResult result of the request to list Event Hub operations. It contains a list of operations
+// and a URL link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
-	// Value - List of Event Hub operations supported by the Microsoft.EventHub resource provider.
+	// Value - READ-ONLY; List of Event Hub operations supported by the Microsoft.EventHub resource provider.
 	Value *[]Operation `json:"value,omitempty"`
-	// NextLink - URL to get the next set of operation list results if there are any.
+	// NextLink - READ-ONLY; URL to get the next set of operation list results if there are any.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -895,20 +1204,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -930,6 +1256,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -937,11 +1268,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -949,19 +1280,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -982,13 +1330,18 @@ func (page OperationListResultPage) Values() []Operation {
 	return *page.olr.Value
 }
 
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
+}
+
 // Resource the Resource definition
 type Resource struct {
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -998,8 +1351,14 @@ type Sku struct {
 	Name SkuName `json:"name,omitempty"`
 	// Tier - The billing tier of this particular SKU. Possible values include: 'SkuTierBasic', 'SkuTierStandard'
 	Tier SkuTier `json:"tier,omitempty"`
-	// Capacity - The Event Hubs throughput units, vaule should be 0 to 20 throughput units.
+	// Capacity - The Event Hubs throughput units, value should be 0 to 20 throughput units.
 	Capacity *int32 `json:"capacity,omitempty"`
+}
+
+// Subnet properties supplied for Subnet
+type Subnet struct {
+	// ID - Resource ID of Virtual Network Subnet
+	ID *string `json:"id,omitempty"`
 }
 
 // TrackedResource definition of an Azure resource.
@@ -1008,11 +1367,11 @@ type TrackedResource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1025,15 +1384,6 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	if tr.Tags != nil {
 		objectMap["tags"] = tr.Tags
 	}
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -1042,11 +1392,11 @@ type VirtualNetworkRule struct {
 	autorest.Response `json:"-"`
 	// VirtualNetworkRuleProperties - Properties supplied to create or update VirtualNetworkRules
 	*VirtualNetworkRuleProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1055,15 +1405,6 @@ func (vnr VirtualNetworkRule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if vnr.VirtualNetworkRuleProperties != nil {
 		objectMap["properties"] = vnr.VirtualNetworkRuleProperties
-	}
-	if vnr.ID != nil {
-		objectMap["id"] = vnr.ID
-	}
-	if vnr.Name != nil {
-		objectMap["name"] = vnr.Name
-	}
-	if vnr.Type != nil {
-		objectMap["type"] = vnr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1123,31 +1464,48 @@ func (vnr *VirtualNetworkRule) UnmarshalJSON(body []byte) error {
 type VirtualNetworkRuleListResult struct {
 	autorest.Response `json:"-"`
 	// Value - Result of the List VirtualNetwork Rules operation.
-	Value *[]IPFilterRule `json:"value,omitempty"`
+	Value *[]VirtualNetworkRule `json:"value,omitempty"`
 	// NextLink - Link to the next set of results. Not empty if Value contains an incomplete list of VirtualNetwork Rules
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// VirtualNetworkRuleListResultIterator provides access to a complete listing of IPFilterRule values.
+// VirtualNetworkRuleListResultIterator provides access to a complete listing of VirtualNetworkRule values.
 type VirtualNetworkRuleListResultIterator struct {
 	i    int
 	page VirtualNetworkRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *VirtualNetworkRuleListResultIterator) Next() error {
+func (iter *VirtualNetworkRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *VirtualNetworkRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1162,11 +1520,16 @@ func (iter VirtualNetworkRuleListResultIterator) Response() VirtualNetworkRuleLi
 
 // Value returns the current value or a zero-initialized value if the
 // iterator has advanced beyond the end of the collection.
-func (iter VirtualNetworkRuleListResultIterator) Value() IPFilterRule {
+func (iter VirtualNetworkRuleListResultIterator) Value() VirtualNetworkRule {
 	if !iter.page.NotDone() {
-		return IPFilterRule{}
+		return VirtualNetworkRule{}
 	}
 	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the VirtualNetworkRuleListResultIterator type.
+func NewVirtualNetworkRuleListResultIterator(page VirtualNetworkRuleListResultPage) VirtualNetworkRuleListResultIterator {
+	return VirtualNetworkRuleListResultIterator{page: page}
 }
 
 // IsEmpty returns true if the ListResult contains no values.
@@ -1176,31 +1539,48 @@ func (vnrlr VirtualNetworkRuleListResult) IsEmpty() bool {
 
 // virtualNetworkRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer() (*http.Request, error) {
+func (vnrlr VirtualNetworkRuleListResult) virtualNetworkRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if vnrlr.NextLink == nil || len(to.String(vnrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(vnrlr.NextLink)))
 }
 
-// VirtualNetworkRuleListResultPage contains a page of IPFilterRule values.
+// VirtualNetworkRuleListResultPage contains a page of VirtualNetworkRule values.
 type VirtualNetworkRuleListResultPage struct {
-	fn    func(VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)
+	fn    func(context.Context, VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)
 	vnrlr VirtualNetworkRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *VirtualNetworkRuleListResultPage) Next() error {
-	next, err := page.fn(page.vnrlr)
+func (page *VirtualNetworkRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.vnrlr)
 	if err != nil {
 		return err
 	}
 	page.vnrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *VirtualNetworkRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1214,11 +1594,16 @@ func (page VirtualNetworkRuleListResultPage) Response() VirtualNetworkRuleListRe
 }
 
 // Values returns the slice of values for the current page or nil if there are no values.
-func (page VirtualNetworkRuleListResultPage) Values() []IPFilterRule {
+func (page VirtualNetworkRuleListResultPage) Values() []VirtualNetworkRule {
 	if page.vnrlr.IsEmpty() {
 		return nil
 	}
 	return *page.vnrlr.Value
+}
+
+// Creates a new instance of the VirtualNetworkRuleListResultPage type.
+func NewVirtualNetworkRuleListResultPage(getNextPage func(context.Context, VirtualNetworkRuleListResult) (VirtualNetworkRuleListResult, error)) VirtualNetworkRuleListResultPage {
+	return VirtualNetworkRuleListResultPage{fn: getNextPage}
 }
 
 // VirtualNetworkRuleProperties properties supplied to create or update VirtualNetworkRules

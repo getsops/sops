@@ -19,6 +19,7 @@
 package naming
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"reflect"
@@ -250,6 +251,21 @@ func testResolver(t *testing.T, freq time.Duration, slp time.Duration) {
 		time.Sleep(slp)
 		w.Close()
 		wg.Wait()
+	}
+}
+
+func replaceNetFunc() func() {
+	oldLookupHost := lookupHost
+	oldLookupSRV := lookupSRV
+	lookupHost = func(ctx context.Context, host string) ([]string, error) {
+		return hostLookup(host)
+	}
+	lookupSRV = func(ctx context.Context, service, proto, name string) (string, []*net.SRV, error) {
+		return srvLookup(service, proto, name)
+	}
+	return func() {
+		lookupHost = oldLookupHost
+		lookupSRV = oldLookupSRV
 	}
 }
 

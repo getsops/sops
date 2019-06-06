@@ -16,6 +16,7 @@ package rpcreplay
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"io"
 	"strings"
@@ -23,10 +24,11 @@ import (
 
 	"cloud.google.com/go/internal/testutil"
 	ipb "cloud.google.com/go/rpcreplay/proto/intstore"
+	pb "cloud.google.com/go/rpcreplay/proto/intstore"
 	rpb "cloud.google.com/go/rpcreplay/proto/rpcreplay"
 	"github.com/golang/protobuf/proto"
 	"github.com/google/go-cmp/cmp"
-	"golang.org/x/net/context"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -107,9 +109,7 @@ func TestEntryIO(t *testing.T) {
 var initialState = []byte{1, 2, 3}
 
 func TestRecord(t *testing.T) {
-	srv := newIntStoreServer()
-	defer srv.stop()
-	buf := record(t, srv)
+	buf := record(t, testService)
 
 	gotIstate, err := readHeader(buf)
 	if err != nil {
@@ -243,41 +243,51 @@ func TestRecord(t *testing.T) {
 }
 
 func TestReplay(t *testing.T) {
+	buf := record(t, testService)
+	replay(t, buf, testService)
+}
+
+func record(t *testing.T, run func(*testing.T, *grpc.ClientConn)) *bytes.Buffer {
 	srv := newIntStoreServer()
 	defer srv.stop()
 
-	buf := record(t, srv)
-	rep, err := NewReplayerReader(buf)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got, want := rep.Initial(), initialState; !testutil.Equal(got, want) {
-		t.Fatalf("got %v, want %v", got, want)
-	}
-	// Replay the test.
-	testService(t, srv.Addr, rep.DialOptions())
-}
-
-func record(t *testing.T, srv *intStoreServer) *bytes.Buffer {
 	buf := &bytes.Buffer{}
 	rec, err := NewRecorderWriter(buf, initialState)
 	if err != nil {
 		t.Fatal(err)
 	}
-	testService(t, srv.Addr, rec.DialOptions())
+	conn, err := grpc.Dial(srv.Addr,
+		append([]grpc.DialOption{grpc.WithInsecure()}, rec.DialOptions()...)...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer conn.Close()
+	run(t, conn)
 	if err := rec.Close(); err != nil {
 		t.Fatal(err)
 	}
 	return buf
 }
 
-func testService(t *testing.T, addr string, opts []grpc.DialOption) {
-	conn, err := grpc.Dial(addr,
-		append([]grpc.DialOption{grpc.WithInsecure()}, opts...)...)
+func replay(t *testing.T, buf *bytes.Buffer, run func(*testing.T, *grpc.ClientConn)) {
+	rep, err := NewReplayerReader(buf)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer rep.Close()
+	if got, want := rep.Initial(), initialState; !testutil.Equal(got, want) {
+		t.Fatalf("got %v, want %v", got, want)
+	}
+	// Replay the test.
+	conn, err := rep.Connection()
 	if err != nil {
 		t.Fatal(err)
 	}
 	defer conn.Close()
+	run(t, conn)
+}
+
+func testService(t *testing.T, conn *grpc.ClientConn) {
 	client := ipb.NewIntStoreClient(conn)
 	ctx := context.Background()
 	item := &ipb.Item{Name: "a", Value: 1}
@@ -303,23 +313,8 @@ func testService(t *testing.T, addr string, opts []grpc.DialOption) {
 		t.Errorf("got error type %T, want a grpc/status.Status", err)
 	}
 
-	wantItems := []*ipb.Item{item}
-	lic, err := client.ListItems(ctx, &ipb.ListItemsRequest{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	for i := 0; ; i++ {
-		item, err := lic.Recv()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			t.Fatal(err)
-		}
-		if i >= len(wantItems) || !proto.Equal(item, wantItems[i]) {
-			t.Fatalf("%d: bad item", i)
-		}
-	}
+	gotItems := listItems(t, client, 0)
+	compareLists(t, gotItems, []*ipb.Item{item})
 
 	ssc, err := client.SetStream(ctx)
 	if err != nil {
@@ -361,6 +356,36 @@ func testService(t *testing.T, addr string, opts []grpc.DialOption) {
 	must(chatc.CloseSend())
 	if _, err := chatc.Recv(); err != io.EOF {
 		t.Fatalf("got %v, want EOF", err)
+	}
+}
+
+func listItems(t *testing.T, client ipb.IntStoreClient, greaterThan int) []*ipb.Item {
+	t.Helper()
+	lic, err := client.ListItems(context.Background(), &ipb.ListItemsRequest{GreaterThan: int32(greaterThan)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var items []*ipb.Item
+	for i := 0; ; i++ {
+		item, err := lic.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		items = append(items, item)
+	}
+	return items
+}
+
+func compareLists(t *testing.T, got, want []*pb.Item) {
+	t.Helper()
+	diff := cmp.Diff(got, want, cmp.Comparer(proto.Equal), cmpopts.SortSlices(func(i1, i2 *pb.Item) bool {
+		return i1.Value < i2.Value
+	}))
+	if diff != "" {
+		t.Error(diff)
 	}
 }
 
@@ -561,4 +586,39 @@ func TestReplayerBeforeFunc(t *testing.T) {
 			}
 		}()
 	}
+}
+
+func TestOutOfOrderStreamReplay(t *testing.T) {
+	// Check that streams are matched by method and first request sent, if any.
+
+	items := []*ipb.Item{
+		{Name: "a", Value: 1},
+		{Name: "b", Value: 2},
+		{Name: "c", Value: 3},
+	}
+	run := func(t *testing.T, conn *grpc.ClientConn, arg1, arg2 int) {
+		client := ipb.NewIntStoreClient(conn)
+		ctx := context.Background()
+		// Set some items.
+		for _, item := range items {
+			_, err := client.Set(ctx, item)
+			if err != nil {
+				t.Fatal(err)
+			}
+		}
+		// List them twice, with different requests.
+		compareLists(t, listItems(t, client, arg1), items[arg1:])
+		compareLists(t, listItems(t, client, arg2), items[arg2:])
+	}
+
+	srv := newIntStoreServer()
+	defer srv.stop()
+
+	// Replay in the same order.
+	buf := record(t, func(t *testing.T, conn *grpc.ClientConn) { run(t, conn, 1, 2) })
+	replay(t, buf, func(t *testing.T, conn *grpc.ClientConn) { run(t, conn, 1, 2) })
+
+	// Replay in a different order.
+	buf = record(t, func(t *testing.T, conn *grpc.ClientConn) { run(t, conn, 1, 2) })
+	replay(t, buf, func(t *testing.T, conn *grpc.ClientConn) { run(t, conn, 2, 1) })
 }

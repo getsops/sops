@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewSmartGroupsClientWithBaseURI(baseURI string, subscriptionID string, moni
 // smartGroupID - smart Group Id
 // newState - filter by state
 func (client SmartGroupsClient) ChangeState(ctx context.Context, smartGroupID string, newState AlertState) (result SmartGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsClient.ChangeState")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ChangeStatePreparer(ctx, smartGroupID, newState)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "ChangeState", nil, "Failure preparing request")
@@ -121,6 +132,16 @@ func (client SmartGroupsClient) ChangeStateResponder(resp *http.Response) (resul
 // sortOrder - sort the query results order in either ascending or descending, default value is 'desc' for time
 // fields and 'asc' for others.
 func (client SmartGroupsClient) GetAll(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorCondition MonitorCondition, severity Severity, smartGroupState AlertState, timeRange TimeRange, pageCount *int32, sortBy SmartGroupsSortByFields, sortOrder string) (result SmartGroupsList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsClient.GetAll")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAllPreparer(ctx, targetResource, targetResourceGroup, targetResourceType, monitorCondition, severity, smartGroupState, timeRange, pageCount, sortBy, sortOrder)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "GetAll", nil, "Failure preparing request")
@@ -218,6 +239,16 @@ func (client SmartGroupsClient) GetAllResponder(resp *http.Response) (result Sma
 // Parameters:
 // smartGroupID - smart Group Id
 func (client SmartGroupsClient) GetByID(ctx context.Context, smartGroupID string) (result SmartGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsClient.GetByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByIDPreparer(ctx, smartGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "GetByID", nil, "Failure preparing request")
@@ -283,6 +314,16 @@ func (client SmartGroupsClient) GetByIDResponder(resp *http.Response) (result Sm
 // Parameters:
 // smartGroupID - smart Group Id
 func (client SmartGroupsClient) GetHistory(ctx context.Context, smartGroupID string) (result SmartGroupModification, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsClient.GetHistory")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetHistoryPreparer(ctx, smartGroupID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.SmartGroupsClient", "GetHistory", nil, "Failure preparing request")

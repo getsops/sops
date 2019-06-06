@@ -1,11 +1,6 @@
 package contract
 
 import (
-	"path/filepath"
-	"strings"
-
-	"go/build"
-
 	"github.com/smartystreets/goconvey/convey/reporting"
 	"github.com/smartystreets/goconvey/web/server/messaging"
 )
@@ -24,10 +19,10 @@ type Package struct {
 	HasImportCycle bool
 }
 
-func NewPackage(folder *messaging.Folder, hasImportCycle bool) *Package {
+func NewPackage(folder *messaging.Folder, name string, hasImportCycle bool) *Package {
 	self := new(Package)
 	self.Path = folder.Path
-	self.Name = resolvePackageName(self.Path)
+	self.Name = name
 	self.Result = NewPackageResult(self.Name)
 	self.Ignored = folder.Ignored
 	self.Disabled = folder.Disabled
@@ -103,18 +98,3 @@ func NewTestResult(testName string) *TestResult {
 	self.TestName = testName
 	return self
 }
-
-func resolvePackageName(path string) string {
-	pkg, err := build.ImportDir(path, build.FindOnly)
-	if err == nil {
-		return pkg.ImportPath
-	}
-
-	nameArr := strings.Split(path, endGoPath)
-	return nameArr[len(nameArr)-1]
-}
-
-const (
-	separator = string(filepath.Separator)
-	endGoPath = separator + "src" + separator
-)

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewCapabilitiesClientWithBaseURI(baseURI string, subscriptionID string) Cap
 // locationName - the location name whose capabilities are retrieved.
 // include - if specified, restricts the response to only include the selected item.
 func (client CapabilitiesClient) ListByLocation(ctx context.Context, locationName string, include CapabilityGroup) (result LocationCapabilities, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CapabilitiesClient.ListByLocation")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByLocationPreparer(ctx, locationName, include)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.CapabilitiesClient", "ListByLocation", nil, "Failure preparing request")

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -53,6 +54,16 @@ func NewJobStepExecutionsClientWithBaseURI(baseURI string, subscriptionID string
 // jobExecutionID - the unique id of the job execution
 // stepName - the name of the step.
 func (client JobStepExecutionsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID uuid.UUID, stepName string) (result JobExecution, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepExecutionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, stepName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobStepExecutionsClient", "Get", nil, "Failure preparing request")
@@ -135,6 +146,16 @@ func (client JobStepExecutionsClient) GetResponder(resp *http.Response) (result 
 // skip - the number of elements in the collection to skip.
 // top - the number of elements to return from the collection.
 func (client JobStepExecutionsClient) ListByJobExecution(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID uuid.UUID, createTimeMin *date.Time, createTimeMax *date.Time, endTimeMin *date.Time, endTimeMax *date.Time, isActive *bool, skip *int32, top *int32) (result JobExecutionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepExecutionsClient.ListByJobExecution")
+		defer func() {
+			sc := -1
+			if result.jelr.Response.Response != nil {
+				sc = result.jelr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByJobExecutionNextResults
 	req, err := client.ListByJobExecutionPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, createTimeMin, createTimeMax, endTimeMin, endTimeMax, isActive, skip, top)
 	if err != nil {
@@ -223,8 +244,8 @@ func (client JobStepExecutionsClient) ListByJobExecutionResponder(resp *http.Res
 }
 
 // listByJobExecutionNextResults retrieves the next set of results, if any.
-func (client JobStepExecutionsClient) listByJobExecutionNextResults(lastResults JobExecutionListResult) (result JobExecutionListResult, err error) {
-	req, err := lastResults.jobExecutionListResultPreparer()
+func (client JobStepExecutionsClient) listByJobExecutionNextResults(ctx context.Context, lastResults JobExecutionListResult) (result JobExecutionListResult, err error) {
+	req, err := lastResults.jobExecutionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobStepExecutionsClient", "listByJobExecutionNextResults", nil, "Failure preparing next results request")
 	}
@@ -245,6 +266,16 @@ func (client JobStepExecutionsClient) listByJobExecutionNextResults(lastResults 
 
 // ListByJobExecutionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobStepExecutionsClient) ListByJobExecutionComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobExecutionID uuid.UUID, createTimeMin *date.Time, createTimeMax *date.Time, endTimeMin *date.Time, endTimeMax *date.Time, isActive *bool, skip *int32, top *int32) (result JobExecutionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStepExecutionsClient.ListByJobExecution")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByJobExecution(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobExecutionID, createTimeMin, createTimeMax, endTimeMin, endTimeMax, isActive, skip, top)
 	return
 }

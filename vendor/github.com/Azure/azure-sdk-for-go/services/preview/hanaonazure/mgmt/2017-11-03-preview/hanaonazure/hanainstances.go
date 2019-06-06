@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -39,11 +40,180 @@ func NewHanaInstancesClientWithBaseURI(baseURI string, subscriptionID string) Ha
 	return HanaInstancesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Create creates a SAP HANA instance for the specified subscription, resource group, and instance name.
+// Parameters:
+// resourceGroupName - name of the resource group.
+// hanaInstanceName - name of the SAP HANA on Azure instance.
+// hanaInstanceParameter - request body representing a HanaInstance
+func (client HanaInstancesClient) Create(ctx context.Context, resourceGroupName string, hanaInstanceName string, hanaInstanceParameter HanaInstance) (result HanaInstancesCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.CreatePreparer(ctx, resourceGroupName, hanaInstanceName, hanaInstanceParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Create", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.CreateSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Create", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// CreatePreparer prepares the Create request.
+func (client HanaInstancesClient) CreatePreparer(ctx context.Context, resourceGroupName string, hanaInstanceName string, hanaInstanceParameter HanaInstance) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"hanaInstanceName":  autorest.Encode("path", hanaInstanceName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-11-03-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPut(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HanaOnAzure/hanaInstances/{hanaInstanceName}", pathParameters),
+		autorest.WithJSON(hanaInstanceParameter),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CreateSender sends the Create request. The method will close the
+// http.Response Body if it receives an error.
+func (client HanaInstancesClient) CreateSender(req *http.Request) (future HanaInstancesCreateFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// CreateResponder handles the response to the Create request. The method always
+// closes the http.Response Body.
+func (client HanaInstancesClient) CreateResponder(resp *http.Response) (result HanaInstance, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// EnableMonitoring the operation to add a monitor to an SAP HANA instance.
+// Parameters:
+// resourceGroupName - name of the resource group.
+// hanaInstanceName - name of the SAP HANA on Azure instance.
+// monitoringParameter - request body that only contains monitoring attributes
+func (client HanaInstancesClient) EnableMonitoring(ctx context.Context, resourceGroupName string, hanaInstanceName string, monitoringParameter MonitoringDetails) (result HanaInstancesEnableMonitoringFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.EnableMonitoring")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.EnableMonitoringPreparer(ctx, resourceGroupName, hanaInstanceName, monitoringParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "EnableMonitoring", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.EnableMonitoringSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "EnableMonitoring", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// EnableMonitoringPreparer prepares the EnableMonitoring request.
+func (client HanaInstancesClient) EnableMonitoringPreparer(ctx context.Context, resourceGroupName string, hanaInstanceName string, monitoringParameter MonitoringDetails) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"hanaInstanceName":  autorest.Encode("path", hanaInstanceName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-11-03-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HanaOnAzure/hanaInstances/{hanaInstanceName}/monitoring", pathParameters),
+		autorest.WithJSON(monitoringParameter),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// EnableMonitoringSender sends the EnableMonitoring request. The method will close the
+// http.Response Body if it receives an error.
+func (client HanaInstancesClient) EnableMonitoringSender(req *http.Request) (future HanaInstancesEnableMonitoringFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// EnableMonitoringResponder handles the response to the EnableMonitoring request. The method always
+// closes the http.Response Body.
+func (client HanaInstancesClient) EnableMonitoringResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
 // Get gets properties of a SAP HANA instance for the specified subscription, resource group, and instance name.
 // Parameters:
 // resourceGroupName - name of the resource group.
 // hanaInstanceName - name of the SAP HANA on Azure instance.
 func (client HanaInstancesClient) Get(ctx context.Context, resourceGroupName string, hanaInstanceName string) (result HanaInstance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hanaInstanceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Get", nil, "Failure preparing request")
@@ -109,6 +279,16 @@ func (client HanaInstancesClient) GetResponder(resp *http.Response) (result Hana
 // List gets a list of SAP HANA instances in the specified subscription. The operations returns various properties of
 // each SAP HANA on Azure instance.
 func (client HanaInstancesClient) List(ctx context.Context) (result HanaInstancesListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.List")
+		defer func() {
+			sc := -1
+			if result.hilr.Response.Response != nil {
+				sc = result.hilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -171,8 +351,8 @@ func (client HanaInstancesClient) ListResponder(resp *http.Response) (result Han
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client HanaInstancesClient) listNextResults(lastResults HanaInstancesListResult) (result HanaInstancesListResult, err error) {
-	req, err := lastResults.hanaInstancesListResultPreparer()
+func (client HanaInstancesClient) listNextResults(ctx context.Context, lastResults HanaInstancesListResult) (result HanaInstancesListResult, err error) {
+	req, err := lastResults.hanaInstancesListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -193,6 +373,16 @@ func (client HanaInstancesClient) listNextResults(lastResults HanaInstancesListR
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client HanaInstancesClient) ListComplete(ctx context.Context) (result HanaInstancesListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -202,6 +392,16 @@ func (client HanaInstancesClient) ListComplete(ctx context.Context) (result Hana
 // Parameters:
 // resourceGroupName - name of the resource group.
 func (client HanaInstancesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result HanaInstancesListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.hilr.Response.Response != nil {
+				sc = result.hilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -265,8 +465,8 @@ func (client HanaInstancesClient) ListByResourceGroupResponder(resp *http.Respon
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client HanaInstancesClient) listByResourceGroupNextResults(lastResults HanaInstancesListResult) (result HanaInstancesListResult, err error) {
-	req, err := lastResults.hanaInstancesListResultPreparer()
+func (client HanaInstancesClient) listByResourceGroupNextResults(ctx context.Context, lastResults HanaInstancesListResult) (result HanaInstancesListResult, err error) {
+	req, err := lastResults.hanaInstancesListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -287,6 +487,173 @@ func (client HanaInstancesClient) listByResourceGroupNextResults(lastResults Han
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client HanaInstancesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result HanaInstancesListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
+	return
+}
+
+// Restart the operation to restart a SAP HANA instance.
+// Parameters:
+// resourceGroupName - name of the resource group.
+// hanaInstanceName - name of the SAP HANA on Azure instance.
+func (client HanaInstancesClient) Restart(ctx context.Context, resourceGroupName string, hanaInstanceName string) (result HanaInstancesRestartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.Restart")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.RestartPreparer(ctx, resourceGroupName, hanaInstanceName)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Restart", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.RestartSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Restart", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// RestartPreparer prepares the Restart request.
+func (client HanaInstancesClient) RestartPreparer(ctx context.Context, resourceGroupName string, hanaInstanceName string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"hanaInstanceName":  autorest.Encode("path", hanaInstanceName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-11-03-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HanaOnAzure/hanaInstances/{hanaInstanceName}/restart", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// RestartSender sends the Restart request. The method will close the
+// http.Response Body if it receives an error.
+func (client HanaInstancesClient) RestartSender(req *http.Request) (future HanaInstancesRestartFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// RestartResponder handles the response to the Restart request. The method always
+// closes the http.Response Body.
+func (client HanaInstancesClient) RestartResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
+// Update patches the Tags field of a SAP HANA instance for the specified subscription, resource group, and instance
+// name.
+// Parameters:
+// resourceGroupName - name of the resource group.
+// hanaInstanceName - name of the SAP HANA on Azure instance.
+// tagsParameter - request body that only contains the new Tags field
+func (client HanaInstancesClient) Update(ctx context.Context, resourceGroupName string, hanaInstanceName string, tagsParameter Tags) (result HanaInstance, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HanaInstancesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.UpdatePreparer(ctx, resourceGroupName, hanaInstanceName, tagsParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Update", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.UpdateSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Update", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.UpdateResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesClient", "Update", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// UpdatePreparer prepares the Update request.
+func (client HanaInstancesClient) UpdatePreparer(ctx context.Context, resourceGroupName string, hanaInstanceName string, tagsParameter Tags) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"hanaInstanceName":  autorest.Encode("path", hanaInstanceName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2017-11-03-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPatch(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.HanaOnAzure/hanaInstances/{hanaInstanceName}", pathParameters),
+		autorest.WithJSON(tagsParameter),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// UpdateSender sends the Update request. The method will close the
+// http.Response Body if it receives an error.
+func (client HanaInstancesClient) UpdateSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// UpdateResponder handles the response to the Update request. The method always
+// closes the http.Response Body.
+func (client HanaInstancesClient) UpdateResponder(resp *http.Response) (result HanaInstance, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
 	return
 }

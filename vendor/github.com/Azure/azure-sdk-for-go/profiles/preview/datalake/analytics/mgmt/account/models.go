@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,19 +19,16 @@
 
 package account
 
-import original "github.com/Azure/azure-sdk-for-go/services/datalake/analytics/mgmt/2016-11-01/account"
+import (
+	"context"
 
-type AccountsClient = original.AccountsClient
+	original "github.com/Azure/azure-sdk-for-go/services/datalake/analytics/mgmt/2016-11-01/account"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ComputePoliciesClient = original.ComputePoliciesClient
-type DataLakeStoreAccountsClient = original.DataLakeStoreAccountsClient
-type FirewallRulesClient = original.FirewallRulesClient
-type LocationsClient = original.LocationsClient
 type AADObjectType = original.AADObjectType
 
 const (
@@ -109,6 +106,7 @@ const (
 	Consumption             TierType = original.Consumption
 )
 
+type AccountsClient = original.AccountsClient
 type AccountsCreateFutureType = original.AccountsCreateFutureType
 type AccountsDeleteFutureType = original.AccountsDeleteFutureType
 type AccountsUpdateFutureType = original.AccountsUpdateFutureType
@@ -118,8 +116,10 @@ type AddDataLakeStoreWithAccountParameters = original.AddDataLakeStoreWithAccoun
 type AddStorageAccountParameters = original.AddStorageAccountParameters
 type AddStorageAccountProperties = original.AddStorageAccountProperties
 type AddStorageAccountWithAccountParameters = original.AddStorageAccountWithAccountParameters
+type BaseClient = original.BaseClient
 type CapabilityInformation = original.CapabilityInformation
 type CheckNameAvailabilityParameters = original.CheckNameAvailabilityParameters
+type ComputePoliciesClient = original.ComputePoliciesClient
 type ComputePolicy = original.ComputePolicy
 type ComputePolicyListResult = original.ComputePolicyListResult
 type ComputePolicyListResultIterator = original.ComputePolicyListResultIterator
@@ -145,15 +145,19 @@ type DataLakeStoreAccountInformationListResult = original.DataLakeStoreAccountIn
 type DataLakeStoreAccountInformationListResultIterator = original.DataLakeStoreAccountInformationListResultIterator
 type DataLakeStoreAccountInformationListResultPage = original.DataLakeStoreAccountInformationListResultPage
 type DataLakeStoreAccountInformationProperties = original.DataLakeStoreAccountInformationProperties
+type DataLakeStoreAccountsClient = original.DataLakeStoreAccountsClient
 type FirewallRule = original.FirewallRule
 type FirewallRuleListResult = original.FirewallRuleListResult
 type FirewallRuleListResultIterator = original.FirewallRuleListResultIterator
 type FirewallRuleListResultPage = original.FirewallRuleListResultPage
 type FirewallRuleProperties = original.FirewallRuleProperties
+type FirewallRulesClient = original.FirewallRulesClient
+type LocationsClient = original.LocationsClient
 type NameAvailabilityInformation = original.NameAvailabilityInformation
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type Resource = original.Resource
 type SasTokenInformation = original.SasTokenInformation
 type SasTokenInformationListResult = original.SasTokenInformationListResult
@@ -164,6 +168,7 @@ type StorageAccountInformationListResult = original.StorageAccountInformationLis
 type StorageAccountInformationListResultIterator = original.StorageAccountInformationListResultIterator
 type StorageAccountInformationListResultPage = original.StorageAccountInformationListResultPage
 type StorageAccountInformationProperties = original.StorageAccountInformationProperties
+type StorageAccountsClient = original.StorageAccountsClient
 type StorageContainer = original.StorageContainer
 type StorageContainerListResult = original.StorageContainerListResult
 type StorageContainerListResultIterator = original.StorageContainerListResultIterator
@@ -183,20 +188,15 @@ type UpdateFirewallRuleWithAccountParameters = original.UpdateFirewallRuleWithAc
 type UpdateStorageAccountParameters = original.UpdateStorageAccountParameters
 type UpdateStorageAccountProperties = original.UpdateStorageAccountProperties
 type UpdateStorageAccountWithAccountParameters = original.UpdateStorageAccountWithAccountParameters
-type OperationsClient = original.OperationsClient
-type StorageAccountsClient = original.StorageAccountsClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAccountsClient(subscriptionID string) AccountsClient {
 	return original.NewAccountsClient(subscriptionID)
 }
 func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) AccountsClient {
 	return original.NewAccountsClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewComputePoliciesClient(subscriptionID string) ComputePoliciesClient {
 	return original.NewComputePoliciesClient(subscriptionID)
@@ -204,11 +204,35 @@ func NewComputePoliciesClient(subscriptionID string) ComputePoliciesClient {
 func NewComputePoliciesClientWithBaseURI(baseURI string, subscriptionID string) ComputePoliciesClient {
 	return original.NewComputePoliciesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewComputePolicyListResultIterator(page ComputePolicyListResultPage) ComputePolicyListResultIterator {
+	return original.NewComputePolicyListResultIterator(page)
+}
+func NewComputePolicyListResultPage(getNextPage func(context.Context, ComputePolicyListResult) (ComputePolicyListResult, error)) ComputePolicyListResultPage {
+	return original.NewComputePolicyListResultPage(getNextPage)
+}
+func NewDataLakeAnalyticsAccountListResultIterator(page DataLakeAnalyticsAccountListResultPage) DataLakeAnalyticsAccountListResultIterator {
+	return original.NewDataLakeAnalyticsAccountListResultIterator(page)
+}
+func NewDataLakeAnalyticsAccountListResultPage(getNextPage func(context.Context, DataLakeAnalyticsAccountListResult) (DataLakeAnalyticsAccountListResult, error)) DataLakeAnalyticsAccountListResultPage {
+	return original.NewDataLakeAnalyticsAccountListResultPage(getNextPage)
+}
+func NewDataLakeStoreAccountInformationListResultIterator(page DataLakeStoreAccountInformationListResultPage) DataLakeStoreAccountInformationListResultIterator {
+	return original.NewDataLakeStoreAccountInformationListResultIterator(page)
+}
+func NewDataLakeStoreAccountInformationListResultPage(getNextPage func(context.Context, DataLakeStoreAccountInformationListResult) (DataLakeStoreAccountInformationListResult, error)) DataLakeStoreAccountInformationListResultPage {
+	return original.NewDataLakeStoreAccountInformationListResultPage(getNextPage)
+}
 func NewDataLakeStoreAccountsClient(subscriptionID string) DataLakeStoreAccountsClient {
 	return original.NewDataLakeStoreAccountsClient(subscriptionID)
 }
 func NewDataLakeStoreAccountsClientWithBaseURI(baseURI string, subscriptionID string) DataLakeStoreAccountsClient {
 	return original.NewDataLakeStoreAccountsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewFirewallRuleListResultIterator(page FirewallRuleListResultPage) FirewallRuleListResultIterator {
+	return original.NewFirewallRuleListResultIterator(page)
+}
+func NewFirewallRuleListResultPage(getNextPage func(context.Context, FirewallRuleListResult) (FirewallRuleListResult, error)) FirewallRuleListResultPage {
+	return original.NewFirewallRuleListResultPage(getNextPage)
 }
 func NewFirewallRulesClient(subscriptionID string) FirewallRulesClient {
 	return original.NewFirewallRulesClient(subscriptionID)
@@ -221,6 +245,39 @@ func NewLocationsClient(subscriptionID string) LocationsClient {
 }
 func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string) LocationsClient {
 	return original.NewLocationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSasTokenInformationListResultIterator(page SasTokenInformationListResultPage) SasTokenInformationListResultIterator {
+	return original.NewSasTokenInformationListResultIterator(page)
+}
+func NewSasTokenInformationListResultPage(getNextPage func(context.Context, SasTokenInformationListResult) (SasTokenInformationListResult, error)) SasTokenInformationListResultPage {
+	return original.NewSasTokenInformationListResultPage(getNextPage)
+}
+func NewStorageAccountInformationListResultIterator(page StorageAccountInformationListResultPage) StorageAccountInformationListResultIterator {
+	return original.NewStorageAccountInformationListResultIterator(page)
+}
+func NewStorageAccountInformationListResultPage(getNextPage func(context.Context, StorageAccountInformationListResult) (StorageAccountInformationListResult, error)) StorageAccountInformationListResultPage {
+	return original.NewStorageAccountInformationListResultPage(getNextPage)
+}
+func NewStorageAccountsClient(subscriptionID string) StorageAccountsClient {
+	return original.NewStorageAccountsClient(subscriptionID)
+}
+func NewStorageAccountsClientWithBaseURI(baseURI string, subscriptionID string) StorageAccountsClient {
+	return original.NewStorageAccountsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewStorageContainerListResultIterator(page StorageContainerListResultPage) StorageContainerListResultIterator {
+	return original.NewStorageContainerListResultIterator(page)
+}
+func NewStorageContainerListResultPage(getNextPage func(context.Context, StorageContainerListResult) (StorageContainerListResult, error)) StorageContainerListResultPage {
+	return original.NewStorageContainerListResultPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleAADObjectTypeValues() []AADObjectType {
 	return original.PossibleAADObjectTypeValues()
@@ -245,18 +302,6 @@ func PossibleSubscriptionStateValues() []SubscriptionState {
 }
 func PossibleTierTypeValues() []TierType {
 	return original.PossibleTierTypeValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewStorageAccountsClient(subscriptionID string) StorageAccountsClient {
-	return original.NewStorageAccountsClient(subscriptionID)
-}
-func NewStorageAccountsClientWithBaseURI(baseURI string, subscriptionID string) StorageAccountsClient {
-	return original.NewStorageAccountsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

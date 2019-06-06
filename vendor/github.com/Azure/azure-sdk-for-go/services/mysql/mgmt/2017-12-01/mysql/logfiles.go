@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewLogFilesClientWithBaseURI(baseURI string, subscriptionID string) LogFile
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client LogFilesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result LogFileListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LogFilesClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "mysql.LogFilesClient", "ListByServer", nil, "Failure preparing request")

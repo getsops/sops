@@ -19,10 +19,10 @@ putBucketAcl <params>
 ```
 
 ```sh
-go run -tags example putObjectAcl.go 
-	-bucket <bucket> 
-	-key <key> 
-	-owner-name <name> 
+go run -tags example putObjectAcl.go
+	-bucket <bucket>
+	-key <key>
+	-owner-name <name>
 	-owner-id <id>
 	-grantee-type <some type>
 	-user-id <user-id>

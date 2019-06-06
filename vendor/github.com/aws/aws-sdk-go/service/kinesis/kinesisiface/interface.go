@@ -173,6 +173,10 @@ type KinesisAPI interface {
 	StopStreamEncryptionWithContext(aws.Context, *kinesis.StopStreamEncryptionInput, ...request.Option) (*kinesis.StopStreamEncryptionOutput, error)
 	StopStreamEncryptionRequest(*kinesis.StopStreamEncryptionInput) (*request.Request, *kinesis.StopStreamEncryptionOutput)
 
+	SubscribeToShard(*kinesis.SubscribeToShardInput) (*kinesis.SubscribeToShardOutput, error)
+	SubscribeToShardWithContext(aws.Context, *kinesis.SubscribeToShardInput, ...request.Option) (*kinesis.SubscribeToShardOutput, error)
+	SubscribeToShardRequest(*kinesis.SubscribeToShardInput) (*request.Request, *kinesis.SubscribeToShardOutput)
+
 	UpdateShardCount(*kinesis.UpdateShardCountInput) (*kinesis.UpdateShardCountOutput, error)
 	UpdateShardCountWithContext(aws.Context, *kinesis.UpdateShardCountInput, ...request.Option) (*kinesis.UpdateShardCountOutput, error)
 	UpdateShardCountRequest(*kinesis.UpdateShardCountInput) (*request.Request, *kinesis.UpdateShardCountOutput)

@@ -85,7 +85,9 @@ func TestClientDisableIMDS(t *testing.T) {
 
 	os.Setenv("AWS_EC2_METADATA_DISABLED", "true")
 
-	svc := ec2metadata.New(unit.Session)
+	svc := ec2metadata.New(unit.Session, &aws.Config{
+		LogLevel: aws.LogLevel(aws.LogDebugWithHTTPBody),
+	})
 	resp, err := svc.Region()
 	if err == nil {
 		t.Fatalf("expect error, got none")

@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/mediaservices/mgmt/2015-10-01/media"
+
 // EntityNameUnavailabilityReason enumerates the values for entity name unavailability reason.
 type EntityNameUnavailabilityReason string
 
@@ -104,7 +107,7 @@ type CheckNameAvailabilityOutput struct {
 
 // Operation a Media Services REST API operation
 type Operation struct {
-	// Name - Operation name: {provider}/{resource}/{operation}
+	// Name - READ-ONLY; Operation name: {provider}/{resource}/{operation}
 	Name *string `json:"name,omitempty"`
 	// Display - The object that represents the operation.
 	Display *OperationDisplay `json:"display,omitempty"`
@@ -112,20 +115,20 @@ type Operation struct {
 
 // OperationDisplay the object that represents the operation.
 type OperationDisplay struct {
-	// Provider - Service provider: Microsoft.Media
+	// Provider - READ-ONLY; Service provider: Microsoft.Media
 	Provider *string `json:"provider,omitempty"`
-	// Resource - Resource on which the operation is performed: Invoice, etc.
+	// Resource - READ-ONLY; Resource on which the operation is performed: Invoice, etc.
 	Resource *string `json:"resource,omitempty"`
-	// Operation - Operation type: Read, write, delete, etc.
+	// Operation - READ-ONLY; Operation type: Read, write, delete, etc.
 	Operation *string `json:"operation,omitempty"`
 }
 
 // OperationListResult result of the request to list Media Services operations.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
-	// Value - List of Media Services operations supported by the Microsoft.Media resource provider.
+	// Value - READ-ONLY; List of Media Services operations supported by the Microsoft.Media resource provider.
 	Value *[]Operation `json:"value,omitempty"`
-	// NextLink - URL to get the next set of operation list results if there are any.
+	// NextLink - READ-ONLY; URL to get the next set of operation list results if there are any.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -144,11 +147,11 @@ type RegenerateKeyOutput struct {
 
 // Resource the Azure Resource Manager resource.
 type Resource struct {
-	// ID - The id of the resource.
+	// ID - READ-ONLY; The id of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource
+	// Type - READ-ONLY; The type of the resource
 	Type *string `json:"type,omitempty"`
 	// Location - The geographic location of the resource. This must be one of the supported and registered Azure Geo Regions (for example, West US, East US, Southeast Asia, and so forth).
 	Location *string `json:"location,omitempty"`
@@ -159,15 +162,6 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}
@@ -182,11 +176,11 @@ type Service struct {
 	autorest.Response `json:"-"`
 	// ServiceProperties - The additional properties of a Media Service resource.
 	*ServiceProperties `json:"properties,omitempty"`
-	// ID - The id of the resource.
+	// ID - READ-ONLY; The id of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - The name of the resource.
+	// Name - READ-ONLY; The name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - The type of the resource
+	// Type - READ-ONLY; The type of the resource
 	Type *string `json:"type,omitempty"`
 	// Location - The geographic location of the resource. This must be one of the supported and registered Azure Geo Regions (for example, West US, East US, Southeast Asia, and so forth).
 	Location *string `json:"location,omitempty"`
@@ -199,15 +193,6 @@ func (s Service) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if s.ServiceProperties != nil {
 		objectMap["properties"] = s.ServiceProperties
-	}
-	if s.ID != nil {
-		objectMap["id"] = s.ID
-	}
-	if s.Name != nil {
-		objectMap["name"] = s.Name
-	}
-	if s.Type != nil {
-		objectMap["type"] = s.Type
 	}
 	if s.Location != nil {
 		objectMap["location"] = s.Location
@@ -311,7 +296,7 @@ type ServiceKeys struct {
 
 // ServiceProperties the additional properties of a Media Service resource.
 type ServiceProperties struct {
-	// APIEndpoints - Read-only property that lists the Media Services REST API endpoints for this resource. If supplied on a PUT or PATCH, the value will be ignored.
+	// APIEndpoints - READ-ONLY; Read-only property that lists the Media Services REST API endpoints for this resource. If supplied on a PUT or PATCH, the value will be ignored.
 	APIEndpoints *[]APIEndpoint `json:"apiEndpoints,omitempty"`
 	// StorageAccounts - The storage accounts for this resource.
 	StorageAccounts *[]StorageAccount `json:"storageAccounts,omitempty"`

@@ -18,7 +18,7 @@
 // you can use GetAttributeValues to see what values are available for an attribute.
 // With the service code and an attribute name and value, you can use GetProducts
 // to find specific products that you're interested in, such as an AmazonEC2
-// instance, with a Provisioned IOPSvolumeType.
+// instance, with a Provisioned IOPS volumeType.
 //
 // Service Endpoint
 //

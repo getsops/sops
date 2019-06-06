@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opCheckDomainAvailability = "CheckDomainAvailability"
@@ -16,7 +18,7 @@ const opCheckDomainAvailability = "CheckDomainAvailability"
 // CheckDomainAvailabilityRequest generates a "aws/request.Request" representing the
 // client's request for the CheckDomainAvailability operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -102,7 +104,7 @@ const opCheckDomainTransferability = "CheckDomainTransferability"
 // CheckDomainTransferabilityRequest generates a "aws/request.Request" representing the
 // client's request for the CheckDomainTransferability operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -186,7 +188,7 @@ const opDeleteTagsForDomain = "DeleteTagsForDomain"
 // DeleteTagsForDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTagsForDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -220,6 +222,7 @@ func (c *Route53Domains) DeleteTagsForDomainRequest(input *DeleteTagsForDomainIn
 
 	output = &DeleteTagsForDomainOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -277,7 +280,7 @@ const opDisableDomainAutoRenew = "DisableDomainAutoRenew"
 // DisableDomainAutoRenewRequest generates a "aws/request.Request" representing the
 // client's request for the DisableDomainAutoRenew operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -311,6 +314,7 @@ func (c *Route53Domains) DisableDomainAutoRenewRequest(input *DisableDomainAutoR
 
 	output = &DisableDomainAutoRenewOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -362,7 +366,7 @@ const opDisableDomainTransferLock = "DisableDomainTransferLock"
 // DisableDomainTransferLockRequest generates a "aws/request.Request" representing the
 // client's request for the DisableDomainTransferLock operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -462,7 +466,7 @@ const opEnableDomainAutoRenew = "EnableDomainAutoRenew"
 // EnableDomainAutoRenewRequest generates a "aws/request.Request" representing the
 // client's request for the EnableDomainAutoRenew operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -496,6 +500,7 @@ func (c *Route53Domains) EnableDomainAutoRenewRequest(input *EnableDomainAutoRen
 
 	output = &EnableDomainAutoRenewOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -558,7 +563,7 @@ const opEnableDomainTransferLock = "EnableDomainTransferLock"
 // EnableDomainTransferLockRequest generates a "aws/request.Request" representing the
 // client's request for the EnableDomainTransferLock operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -656,7 +661,7 @@ const opGetContactReachabilityStatus = "GetContactReachabilityStatus"
 // GetContactReachabilityStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetContactReachabilityStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -749,7 +754,7 @@ const opGetDomainDetail = "GetDomainDetail"
 // GetDomainDetailRequest generates a "aws/request.Request" representing the
 // client's request for the GetDomainDetail operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -835,7 +840,7 @@ const opGetDomainSuggestions = "GetDomainSuggestions"
 // GetDomainSuggestionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetDomainSuggestions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -921,7 +926,7 @@ const opGetOperationDetail = "GetOperationDetail"
 // GetOperationDetailRequest generates a "aws/request.Request" representing the
 // client's request for the GetOperationDetail operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1002,7 +1007,7 @@ const opListDomains = "ListDomains"
 // ListDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDomains operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1096,7 +1101,7 @@ func (c *Route53Domains) ListDomainsWithContext(ctx aws.Context, input *ListDoma
 //    // Example iterating over at most 3 pages of a ListDomains operation.
 //    pageNum := 0
 //    err := client.ListDomainsPages(params,
-//        func(page *ListDomainsOutput, lastPage bool) bool {
+//        func(page *route53domains.ListDomainsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1140,7 +1145,7 @@ const opListOperations = "ListOperations"
 // ListOperationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListOperations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1233,7 +1238,7 @@ func (c *Route53Domains) ListOperationsWithContext(ctx aws.Context, input *ListO
 //    // Example iterating over at most 3 pages of a ListOperations operation.
 //    pageNum := 0
 //    err := client.ListOperationsPages(params,
-//        func(page *ListOperationsOutput, lastPage bool) bool {
+//        func(page *route53domains.ListOperationsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1277,7 +1282,7 @@ const opListTagsForDomain = "ListTagsForDomain"
 // ListTagsForDomainRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1369,7 +1374,7 @@ const opRegisterDomain = "RegisterDomain"
 // RegisterDomainRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1493,7 +1498,7 @@ const opRenewDomain = "RenewDomain"
 // RenewDomainRequest generates a "aws/request.Request" representing the
 // client's request for the RenewDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1594,7 +1599,7 @@ const opResendContactReachabilityEmail = "ResendContactReachabilityEmail"
 // ResendContactReachabilityEmailRequest generates a "aws/request.Request" representing the
 // client's request for the ResendContactReachabilityEmail operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1684,7 +1689,7 @@ const opRetrieveDomainAuthCode = "RetrieveDomainAuthCode"
 // RetrieveDomainAuthCodeRequest generates a "aws/request.Request" representing the
 // client's request for the RetrieveDomainAuthCode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1769,7 +1774,7 @@ const opTransferDomain = "TransferDomain"
 // TransferDomainRequest generates a "aws/request.Request" representing the
 // client's request for the TransferDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1891,7 +1896,7 @@ const opUpdateDomainContact = "UpdateDomainContact"
 // UpdateDomainContactRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDomainContact operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1992,7 +1997,7 @@ const opUpdateDomainContactPrivacy = "UpdateDomainContactPrivacy"
 // UpdateDomainContactPrivacyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDomainContactPrivacy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2096,7 +2101,7 @@ const opUpdateDomainNameservers = "UpdateDomainNameservers"
 // UpdateDomainNameserversRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDomainNameservers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2197,7 +2202,7 @@ const opUpdateTagsForDomain = "UpdateTagsForDomain"
 // UpdateTagsForDomainRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateTagsForDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2231,6 +2236,7 @@ func (c *Route53Domains) UpdateTagsForDomainRequest(input *UpdateTagsForDomainIn
 
 	output = &UpdateTagsForDomainOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2288,7 +2294,7 @@ const opViewBilling = "ViewBilling"
 // ViewBillingRequest generates a "aws/request.Request" representing the
 // client's request for the ViewBilling operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2493,28 +2499,46 @@ type CheckDomainAvailabilityOutput struct {
 	//
 	// Valid values:
 	//
-	// AVAILABLEThe domain name is available.
+	// AVAILABLE
 	//
-	// AVAILABLE_RESERVEDThe domain name is reserved under specific conditions.
+	// The domain name is available.
 	//
-	// AVAILABLE_PREORDERThe domain name is available and can be preordered.
+	// AVAILABLE_RESERVED
 	//
-	// DONT_KNOWThe TLD registry didn't reply with a definitive answer about whether
-	// the domain name is available. Amazon Route 53 can return this response for
-	// a variety of reasons, for example, the registry is performing maintenance.
+	// The domain name is reserved under specific conditions.
+	//
+	// AVAILABLE_PREORDER
+	//
+	// The domain name is available and can be preordered.
+	//
+	// DONT_KNOW
+	//
+	// The TLD registry didn't reply with a definitive answer about whether the
+	// domain name is available. Amazon Route 53 can return this response for a
+	// variety of reasons, for example, the registry is performing maintenance.
 	// Try again later.
 	//
-	// PENDINGThe TLD registry didn't return a response in the expected amount of
-	// time. When the response is delayed, it usually takes just a few extra seconds.
+	// PENDING
+	//
+	// The TLD registry didn't return a response in the expected amount of time.
+	// When the response is delayed, it usually takes just a few extra seconds.
 	// You can resubmit the request immediately.
 	//
-	// RESERVEDThe domain name has been reserved for another person or organization.
+	// RESERVED
 	//
-	// UNAVAILABLEThe domain name is not available.
+	// The domain name has been reserved for another person or organization.
 	//
-	// UNAVAILABLE_PREMIUMThe domain name is not available.
+	// UNAVAILABLE
 	//
-	// UNAVAILABLE_RESTRICTEDThe domain name is forbidden.
+	// The domain name is not available.
+	//
+	// UNAVAILABLE_PREMIUM
+	//
+	// The domain name is not available.
+	//
+	// UNAVAILABLE_RESTRICTED
+	//
+	// The domain name is forbidden.
 	//
 	// Availability is a required field
 	Availability *string `type:"string" required:"true" enum:"DomainAvailability"`
@@ -2543,7 +2567,7 @@ type CheckDomainTransferabilityInput struct {
 	// If the registrar for the top-level domain (TLD) requires an authorization
 	// code to transfer the domain, the code that you got from the current registrar
 	// for the domain.
-	AuthCode *string `type:"string"`
+	AuthCode *string `type:"string" sensitive:"true"`
 
 	// The name of the domain that you want to transfer to Amazon Route 53.
 	//
@@ -2619,7 +2643,7 @@ func (s *CheckDomainTransferabilityOutput) SetTransferability(v *DomainTransfera
 
 // ContactDetail includes the following elements.
 type ContactDetail struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// First line of the contact's address.
 	AddressLine1 *string `type:"string"`
@@ -2983,28 +3007,46 @@ type DomainSuggestion struct {
 	//
 	// Valid values:
 	//
-	// AVAILABLEThe domain name is available.
+	// AVAILABLE
 	//
-	// AVAILABLE_RESERVEDThe domain name is reserved under specific conditions.
+	// The domain name is available.
 	//
-	// AVAILABLE_PREORDERThe domain name is available and can be preordered.
+	// AVAILABLE_RESERVED
 	//
-	// DONT_KNOWThe TLD registry didn't reply with a definitive answer about whether
-	// the domain name is available. Amazon Route 53 can return this response for
-	// a variety of reasons, for example, the registry is performing maintenance.
+	// The domain name is reserved under specific conditions.
+	//
+	// AVAILABLE_PREORDER
+	//
+	// The domain name is available and can be preordered.
+	//
+	// DONT_KNOW
+	//
+	// The TLD registry didn't reply with a definitive answer about whether the
+	// domain name is available. Amazon Route 53 can return this response for a
+	// variety of reasons, for example, the registry is performing maintenance.
 	// Try again later.
 	//
-	// PENDINGThe TLD registry didn't return a response in the expected amount of
-	// time. When the response is delayed, it usually takes just a few extra seconds.
+	// PENDING
+	//
+	// The TLD registry didn't return a response in the expected amount of time.
+	// When the response is delayed, it usually takes just a few extra seconds.
 	// You can resubmit the request immediately.
 	//
-	// RESERVEDThe domain name has been reserved for another person or organization.
+	// RESERVED
 	//
-	// UNAVAILABLEThe domain name is not available.
+	// The domain name has been reserved for another person or organization.
 	//
-	// UNAVAILABLE_PREMIUMThe domain name is not available.
+	// UNAVAILABLE
 	//
-	// UNAVAILABLE_RESTRICTEDThe domain name is forbidden.
+	// The domain name is not available.
+	//
+	// UNAVAILABLE_PREMIUM
+	//
+	// The domain name is not available.
+	//
+	// UNAVAILABLE_RESTRICTED
+	//
+	// The domain name is forbidden.
 	Availability *string `type:"string"`
 
 	// A suggested domain name.
@@ -3098,11 +3140,17 @@ type DomainTransferability struct {
 	//
 	// Valid values:
 	//
-	// TRANSFERABLEThe domain name can be transferred to Amazon Route 53.
+	// TRANSFERABLE
 	//
-	// UNTRANSFERRABLEThe domain name can't be transferred to Amazon Route 53.
+	// The domain name can be transferred to Amazon Route 53.
 	//
-	// DONT_KNOWReserved for future use.
+	// UNTRANSFERRABLE
+	//
+	// The domain name can't be transferred to Amazon Route 53.
+	//
+	// DONT_KNOW
+	//
+	// Reserved for future use.
 	Transferable *string `type:"string" enum:"Transferable"`
 }
 
@@ -3248,27 +3296,27 @@ type ExtraParam struct {
 	// the top-level domains that require additional parameters and which parameters
 	// they require:
 	//
-	//    * .com.au and .net.au:AU_ID_NUMBER and AU_ID_TYPE
+	//    * .com.au and .net.au: AU_ID_NUMBER and AU_ID_TYPE
 	//
-	//    * .ca:BRAND_NUMBER, CA_LEGAL_TYPE, and CA_BUSINESS_ENTITY_TYPE
+	//    * .ca: BRAND_NUMBER, CA_LEGAL_TYPE, and CA_BUSINESS_ENTITY_TYPE
 	//
-	//    * .es:ES_IDENTIFICATION, ES_IDENTIFICATION_TYPE, and ES_LEGAL_FORM
+	//    * .es: ES_IDENTIFICATION, ES_IDENTIFICATION_TYPE, and ES_LEGAL_FORM
 	//
-	//    * .fi:BIRTH_DATE_IN_YYYY_MM_DD, FI_BUSINESS_NUMBER, FI_ID_NUMBER, FI_NATIONALITY,
+	//    * .fi: BIRTH_DATE_IN_YYYY_MM_DD, FI_BUSINESS_NUMBER, FI_ID_NUMBER, FI_NATIONALITY,
 	//    and FI_ORGANIZATION_TYPE
 	//
-	//    * .fr:BRAND_NUMBER, BIRTH_DEPARTMENT, BIRTH_DATE_IN_YYYY_MM_DD, BIRTH_COUNTRY,
+	//    * .fr: BRAND_NUMBER, BIRTH_DEPARTMENT, BIRTH_DATE_IN_YYYY_MM_DD, BIRTH_COUNTRY,
 	//    and BIRTH_CITY
 	//
-	//    * .it:BIRTH_COUNTRY, IT_PIN, and IT_REGISTRANT_ENTITY_TYPE
+	//    * .it: BIRTH_COUNTRY, IT_PIN, and IT_REGISTRANT_ENTITY_TYPE
 	//
-	//    * .ru:BIRTH_DATE_IN_YYYY_MM_DD and RU_PASSPORT_DATA
+	//    * .ru: BIRTH_DATE_IN_YYYY_MM_DD and RU_PASSPORT_DATA
 	//
-	//    * .se:BIRTH_COUNTRY and SE_ID_NUMBER
+	//    * .se: BIRTH_COUNTRY and SE_ID_NUMBER
 	//
-	//    * .sg:SG_ID_NUMBER
+	//    * .sg: SG_ID_NUMBER
 	//
-	//    * .co.uk, .me.uk, and .org.uk:UK_CONTACT_TYPE and UK_COMPANY_NUMBER
+	//    * .co.uk, .me.uk, and .org.uk: UK_CONTACT_TYPE and UK_COMPANY_NUMBER
 	//
 	// In addition, many TLDs require VAT_NUMBER.
 	//
@@ -3352,11 +3400,17 @@ type GetContactReachabilityStatusOutput struct {
 
 	// Whether the registrant contact has responded. Values include the following:
 	//
-	// PENDINGWe sent the confirmation email and haven't received a response yet.
+	// PENDING
 	//
-	// DONEWe sent the email and got confirmation from the registrant contact.
+	// We sent the confirmation email and haven't received a response yet.
 	//
-	// EXPIREDThe time limit expired before the registrant contact responded.
+	// DONE
+	//
+	// We sent the email and got confirmation from the registrant contact.
+	//
+	// EXPIRED
+	//
+	// The time limit expired before the registrant contact responded.
 	Status *string `locationName:"status" type:"string" enum:"ReachabilityStatus"`
 }
 
@@ -3436,7 +3490,7 @@ type GetDomainDetailOutput struct {
 	// Provides details about the domain administrative contact.
 	//
 	// AdminContact is a required field
-	AdminContact *ContactDetail `type:"structure" required:"true"`
+	AdminContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// Specifies whether contact information is concealed from WHOIS queries. If
 	// the value is true, WHOIS ("who is") queries return contact information either
@@ -3472,7 +3526,7 @@ type GetDomainDetailOutput struct {
 	// Provides details about the domain registrant.
 	//
 	// RegistrantContact is a required field
-	RegistrantContact *ContactDetail `type:"structure" required:"true"`
+	RegistrantContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// Specifies whether contact information is concealed from WHOIS queries. If
 	// the value is true, WHOIS ("who is") queries return contact information either
@@ -3517,7 +3571,7 @@ type GetDomainDetailOutput struct {
 	// Provides details about the domain technical contact.
 	//
 	// TechContact is a required field
-	TechContact *ContactDetail `type:"structure" required:"true"`
+	TechContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// Specifies whether contact information is concealed from WHOIS queries. If
 	// the value is true, WHOIS ("who is") queries return contact information either
@@ -4231,7 +4285,7 @@ type RegisterDomainInput struct {
 	// Provides detailed contact information.
 	//
 	// AdminContact is a required field
-	AdminContact *ContactDetail `type:"structure" required:"true"`
+	AdminContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// Indicates whether the domain will be automatically renewed (true) or not
 	// (false). Autorenewal only takes effect after the account is charged.
@@ -4293,12 +4347,12 @@ type RegisterDomainInput struct {
 	// Provides detailed contact information.
 	//
 	// RegistrantContact is a required field
-	RegistrantContact *ContactDetail `type:"structure" required:"true"`
+	RegistrantContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// Provides detailed contact information.
 	//
 	// TechContact is a required field
-	TechContact *ContactDetail `type:"structure" required:"true"`
+	TechContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4654,7 +4708,7 @@ type RetrieveDomainAuthCodeOutput struct {
 	// The authorization code for the domain.
 	//
 	// AuthCode is a required field
-	AuthCode *string `type:"string" required:"true"`
+	AuthCode *string `type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4721,11 +4775,11 @@ type TransferDomainInput struct {
 	// Provides detailed contact information.
 	//
 	// AdminContact is a required field
-	AdminContact *ContactDetail `type:"structure" required:"true"`
+	AdminContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// The authorization code for the domain. You get this value from the current
 	// registrar.
-	AuthCode *string `type:"string"`
+	AuthCode *string `type:"string" sensitive:"true"`
 
 	// Indicates whether the domain will be automatically renewed (true) or not
 	// (false). Autorenewal only takes effect after the account is charged.
@@ -4788,12 +4842,12 @@ type TransferDomainInput struct {
 	// Provides detailed contact information.
 	//
 	// RegistrantContact is a required field
-	RegistrantContact *ContactDetail `type:"structure" required:"true"`
+	RegistrantContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 
 	// Provides detailed contact information.
 	//
 	// TechContact is a required field
-	TechContact *ContactDetail `type:"structure" required:"true"`
+	TechContact *ContactDetail `type:"structure" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -4963,7 +5017,7 @@ type UpdateDomainContactInput struct {
 	_ struct{} `type:"structure"`
 
 	// Provides detailed contact information.
-	AdminContact *ContactDetail `type:"structure"`
+	AdminContact *ContactDetail `type:"structure" sensitive:"true"`
 
 	// The name of the domain that you want to update contact information for.
 	//
@@ -4971,10 +5025,10 @@ type UpdateDomainContactInput struct {
 	DomainName *string `type:"string" required:"true"`
 
 	// Provides detailed contact information.
-	RegistrantContact *ContactDetail `type:"structure"`
+	RegistrantContact *ContactDetail `type:"structure" sensitive:"true"`
 
 	// Provides detailed contact information.
-	TechContact *ContactDetail `type:"structure"`
+	TechContact *ContactDetail `type:"structure" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -6337,11 +6391,17 @@ const (
 //
 // Valid values:
 //
-// TRANSFERABLEThe domain name can be transferred to Amazon Route 53.
+// TRANSFERABLE
 //
-// UNTRANSFERRABLEThe domain name can't be transferred to Amazon Route 53.
+// The domain name can be transferred to Amazon Route 53.
 //
-// DONT_KNOWReserved for future use.
+// UNTRANSFERRABLE
+//
+// The domain name can't be transferred to Amazon Route 53.
+//
+// DONT_KNOW
+//
+// Reserved for future use.
 const (
 	// TransferableTransferable is a Transferable enum value
 	TransferableTransferable = "TRANSFERABLE"

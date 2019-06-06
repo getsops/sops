@@ -204,7 +204,7 @@
               ]
             },
             "report": {
-              "description": "Report an individual error event.\n\nThis endpoint accepts **either** an OAuth token,\n**or** an [API key](https://support.google.com/cloud/answer/6158862)\nfor authentication. To use an API key, append it to the URL as the value of\na `key` parameter. For example:\n\n`POST https://clouderrorreporting.googleapis.com/v1beta1/projects/example-project/events:report?key=123ABC456`",
+              "description": "Report an individual error event.\n\nThis endpoint accepts **either** an OAuth token,\n**or** an [API key](https://support.google.com/cloud/answer/6158862)\nfor authentication. To use an API key, append it to the URL as the value of\na `key` parameter. For example:\n\n`POST\nhttps://clouderrorreporting.googleapis.com/v1beta1/projects/example-project/events:report?key=123ABC456`",
               "flatPath": "v1beta1/projects/{projectsId}/events:report",
               "httpMethod": "POST",
               "id": "clouderrorreporting.projects.events.report",
@@ -213,7 +213,7 @@
               ],
               "parameters": {
                 "projectName": {
-                  "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project ID](https://support.google.com/cloud/answer/6158840).\nExample: `projects/my-project-123`.",
+                  "description": "[Required] The resource name of the Google Cloud Platform project. Written\nas `projects/` plus the\n[Google Cloud Platform project\nID](https://support.google.com/cloud/answer/6158840). Example:\n`projects/my-project-123`.",
                   "location": "path",
                   "pattern": "^projects/[^/]+$",
                   "required": true,
@@ -401,7 +401,7 @@
       }
     }
   },
-  "revision": "20180706",
+  "revision": "20190411",
   "rootUrl": "https://clouderrorreporting.googleapis.com/",
   "schemas": {
     "DeleteEventsResponse": {
@@ -634,7 +634,7 @@
           "type": "string"
         },
         "message": {
-          "description": "[Required] The error message.\nIf no `context.reportLocation` is provided, the message must contain a\nheader (typically consisting of the exception type name and an error\nmessage) and an exception stack trace in one of the supported programming\nlanguages and formats.\nSupported languages are Java, Python, JavaScript, Ruby, C#, PHP, and Go.\nSupported stack trace formats are:\n\n* **Java**: Must be the return value of [`Throwable.printStackTrace()`](https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#printStackTrace%28%29).\n* **Python**: Must be the return value of [`traceback.format_exc()`](https://docs.python.org/2/library/traceback.html#traceback.format_exc).\n* **JavaScript**: Must be the value of [`error.stack`](https://github.com/v8/v8/wiki/Stack-Trace-API)\nas returned by V8.\n* **Ruby**: Must contain frames returned by [`Exception.backtrace`](https://ruby-doc.org/core-2.2.0/Exception.html#method-i-backtrace).\n* **C#**: Must be the return value of [`Exception.ToString()`](https://msdn.microsoft.com/en-us/library/system.exception.tostring.aspx).\n* **PHP**: Must start with `PHP (Notice|Parse error|Fatal error|Warning)`\nand contain the result of [`(string)$exception`](http://php.net/manual/en/exception.tostring.php).\n* **Go**: Must be the return value of [`runtime.Stack()`](https://golang.org/pkg/runtime/debug/#Stack).",
+          "description": "[Required] The error message.\nIf no `context.reportLocation` is provided, the message must contain a\nheader (typically consisting of the exception type name and an error\nmessage) and an exception stack trace in one of the supported programming\nlanguages and formats.\nSupported languages are Java, Python, JavaScript, Ruby, C#, PHP, and Go.\nSupported stack trace formats are:\n\n* **Java**: Must be the return value of\n[`Throwable.printStackTrace()`](https://docs.oracle.com/javase/7/docs/api/java/lang/Throwable.html#printStackTrace%28%29).\n* **Python**: Must be the return value of\n[`traceback.format_exc()`](https://docs.python.org/2/library/traceback.html#traceback.format_exc).\n* **JavaScript**: Must be the value of\n[`error.stack`](https://github.com/v8/v8/wiki/Stack-Trace-API) as returned\nby V8.\n* **Ruby**: Must contain frames returned by\n[`Exception.backtrace`](https://ruby-doc.org/core-2.2.0/Exception.html#method-i-backtrace).\n* **C#**: Must be the return value of\n[`Exception.ToString()`](https://msdn.microsoft.com/en-us/library/system.exception.tostring.aspx).\n* **PHP**: Must start with `PHP (Notice|Parse error|Fatal error|Warning)`\nand contain the result of\n[`(string)$exception`](http://php.net/manual/en/exception.tostring.php).\n* **Go**: Must be the return value of\n[`runtime.Stack()`](https://golang.org/pkg/runtime/debug/#Stack).",
           "type": "string"
         },
         "serviceContext": {

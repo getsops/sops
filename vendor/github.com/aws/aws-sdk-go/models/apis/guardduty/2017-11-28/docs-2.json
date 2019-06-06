@@ -371,6 +371,14 @@
         "UpdateFindingsFeedbackRequest$FindingIds" : "IDs of the findings that you want to mark as useful or not useful."
       }
     },
+    "FindingPublishingFrequency" : {
+      "base" : "A enum value that specifies how frequently customer got Finding updates published.",
+      "refs" : {
+        "CreateDetectorRequest$FindingPublishingFrequency" : "A enum value that specifies how frequently customer got Finding updates published.",
+        "GetDetectorResponse$FindingPublishingFrequency" : null,
+        "UpdateDetectorRequest$FindingPublishingFrequency" : "A enum value that specifies how frequently customer got Finding updates published."
+      }
+    },
     "FindingStatisticType" : {
       "base" : "The types of finding statistics.",
       "refs" : {
@@ -1041,7 +1049,10 @@
     "__stringMin0Max64" : {
       "base" : null,
       "refs" : {
-        "CreateFilterRequest$ClientToken" : "The idempotency token for the create request."
+        "CreateDetectorRequest$ClientToken" : "The idempotency token for the create request.",
+        "CreateFilterRequest$ClientToken" : "The idempotency token for the create request.",
+        "CreateIPSetRequest$ClientToken" : "The idempotency token for the create request.",
+        "CreateThreatIntelSetRequest$ClientToken" : "The idempotency token for the create request."
       }
     }
   }

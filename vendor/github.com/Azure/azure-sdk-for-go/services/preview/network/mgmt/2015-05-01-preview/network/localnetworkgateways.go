@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewLocalNetworkGatewaysClientWithBaseURI(baseURI string, subscriptionID str
 // parameters - parameters supplied to the Begin Create or update Local Network Gateway operation through
 // Network resource provider.
 func (client LocalNetworkGatewaysClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, localNetworkGatewayName string, parameters LocalNetworkGateway) (result LocalNetworkGatewaysCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocalNetworkGatewaysClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, localNetworkGatewayName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.LocalNetworkGatewaysClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -94,10 +105,6 @@ func (client LocalNetworkGatewaysClient) CreateOrUpdateSender(req *http.Request)
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -115,12 +122,22 @@ func (client LocalNetworkGatewaysClient) CreateOrUpdateResponder(resp *http.Resp
 	return
 }
 
-// Delete the Delete LocalNetworkGateway operation deletes the specifed local network Gateway through Network resource
+// Delete the Delete LocalNetworkGateway operation deletes the specified local network Gateway through Network resource
 // provider.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // localNetworkGatewayName - the name of the local network gateway.
 func (client LocalNetworkGatewaysClient) Delete(ctx context.Context, resourceGroupName string, localNetworkGatewayName string) (result LocalNetworkGatewaysDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocalNetworkGatewaysClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, localNetworkGatewayName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.LocalNetworkGatewaysClient", "Delete", nil, "Failure preparing request")
@@ -166,10 +183,6 @@ func (client LocalNetworkGatewaysClient) DeleteSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -192,6 +205,16 @@ func (client LocalNetworkGatewaysClient) DeleteResponder(resp *http.Response) (r
 // resourceGroupName - the name of the resource group.
 // localNetworkGatewayName - the name of the local network gateway.
 func (client LocalNetworkGatewaysClient) Get(ctx context.Context, resourceGroupName string, localNetworkGatewayName string) (result LocalNetworkGateway, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocalNetworkGatewaysClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, localNetworkGatewayName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.LocalNetworkGatewaysClient", "Get", nil, "Failure preparing request")
@@ -254,10 +277,20 @@ func (client LocalNetworkGatewaysClient) GetResponder(resp *http.Response) (resu
 	return
 }
 
-// List the List LocalNetworkGateways opertion retrieves all the local network gateways stored.
+// List the List LocalNetworkGateways operation retrieves all the local network gateways stored.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client LocalNetworkGatewaysClient) List(ctx context.Context, resourceGroupName string) (result LocalNetworkGatewayListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocalNetworkGatewaysClient.List")
+		defer func() {
+			sc := -1
+			if result.lnglr.Response.Response != nil {
+				sc = result.lnglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -321,8 +354,8 @@ func (client LocalNetworkGatewaysClient) ListResponder(resp *http.Response) (res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client LocalNetworkGatewaysClient) listNextResults(lastResults LocalNetworkGatewayListResult) (result LocalNetworkGatewayListResult, err error) {
-	req, err := lastResults.localNetworkGatewayListResultPreparer()
+func (client LocalNetworkGatewaysClient) listNextResults(ctx context.Context, lastResults LocalNetworkGatewayListResult) (result LocalNetworkGatewayListResult, err error) {
+	req, err := lastResults.localNetworkGatewayListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.LocalNetworkGatewaysClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -343,6 +376,16 @@ func (client LocalNetworkGatewaysClient) listNextResults(lastResults LocalNetwor
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client LocalNetworkGatewaysClient) ListComplete(ctx context.Context, resourceGroupName string) (result LocalNetworkGatewayListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocalNetworkGatewaysClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName)
 	return
 }

@@ -5,17 +5,15 @@
 package google_test
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"golang.org/x/oauth2/jwt"
-	"google.golang.org/appengine"
-	"google.golang.org/appengine/urlfetch"
 )
 
 func ExampleDefaultClient() {
@@ -122,27 +120,15 @@ func Example_serviceAccount() {
 	client.Get("...")
 }
 
-func ExampleAppEngineTokenSource() {
-	var req *http.Request // from the ServeHTTP handler
-	ctx := appengine.NewContext(req)
-	client := &http.Client{
-		Transport: &oauth2.Transport{
-			Source: google.AppEngineTokenSource(ctx, "https://www.googleapis.com/auth/bigquery"),
-			Base: &urlfetch.Transport{
-				Context: ctx,
-			},
-		},
-	}
-	client.Get("...")
-}
-
 func ExampleComputeTokenSource() {
 	client := &http.Client{
 		Transport: &oauth2.Transport{
 			// Fetch from Google Compute Engine's metadata server to retrieve
 			// an access token for the provided account.
 			// If no account is specified, "default" is used.
-			Source: google.ComputeTokenSource(""),
+			// If no scopes are specified, a set of default scopes
+			// are automatically granted.
+			Source: google.ComputeTokenSource("", "https://www.googleapis.com/auth/bigquery"),
 		},
 	}
 	client.Get("...")

@@ -1905,7 +1905,8 @@
         "enabled":{"shape":"Boolean"},
         "createdDate":{"shape":"Timestamp"},
         "lastUpdatedDate":{"shape":"Timestamp"},
-        "stageKeys":{"shape":"ListOfString"}
+        "stageKeys":{"shape":"ListOfString"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "ApiKeyIds":{
@@ -2045,7 +2046,8 @@
         "description":{"shape":"String"},
         "pemEncodedCertificate":{"shape":"String"},
         "createdDate":{"shape":"Timestamp"},
-        "expirationDate":{"shape":"Timestamp"}
+        "expirationDate":{"shape":"Timestamp"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "ClientCertificates":{
@@ -2089,7 +2091,8 @@
         "generateDistinctId":{"shape":"Boolean"},
         "value":{"shape":"String"},
         "stageKeys":{"shape":"ListOfStageKeys"},
-        "customerId":{"shape":"String"}
+        "customerId":{"shape":"String"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "CreateAuthorizerRequest":{
@@ -2198,7 +2201,8 @@
         "certificateArn":{"shape":"String"},
         "regionalCertificateName":{"shape":"String"},
         "regionalCertificateArn":{"shape":"String"},
-        "endpointConfiguration":{"shape":"EndpointConfiguration"}
+        "endpointConfiguration":{"shape":"EndpointConfiguration"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "CreateModelRequest":{
@@ -2267,7 +2271,8 @@
         "minimumCompressionSize":{"shape":"NullableInteger"},
         "apiKeySource":{"shape":"ApiKeySourceType"},
         "endpointConfiguration":{"shape":"EndpointConfiguration"},
-        "policy":{"shape":"String"}
+        "policy":{"shape":"String"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "CreateStageRequest":{
@@ -2320,7 +2325,8 @@
         "description":{"shape":"String"},
         "apiStages":{"shape":"ListOfApiStage"},
         "throttle":{"shape":"ThrottleSettings"},
-        "quota":{"shape":"QuotaSettings"}
+        "quota":{"shape":"QuotaSettings"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "CreateVpcLinkRequest":{
@@ -2332,7 +2338,8 @@
       "members":{
         "name":{"shape":"String"},
         "description":{"shape":"String"},
-        "targetArns":{"shape":"ListOfString"}
+        "targetArns":{"shape":"ListOfString"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "DeleteApiKeyRequest":{
@@ -2837,7 +2844,8 @@
         "regionalCertificateArn":{"shape":"String"},
         "distributionDomainName":{"shape":"String"},
         "distributionHostedZoneId":{"shape":"String"},
-        "endpointConfiguration":{"shape":"EndpointConfiguration"}
+        "endpointConfiguration":{"shape":"EndpointConfiguration"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "DomainNames":{
@@ -2968,7 +2976,8 @@
     "GenerateClientCertificateRequest":{
       "type":"structure",
       "members":{
-        "description":{"shape":"String"}
+        "description":{"shape":"String"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "GetAccountRequest":{
@@ -4156,11 +4165,6 @@
       "key":{"shape":"String"},
       "value":{"shape":"ThrottleSettings"}
     },
-    "MapOfHeaderValues":{
-      "type":"map",
-      "key":{"shape":"String"},
-      "value":{"shape":"String"}
-    },
     "MapOfIntegrationResponse":{
       "type":"map",
       "key":{"shape":"String"},
@@ -4579,7 +4583,8 @@
         "minimumCompressionSize":{"shape":"NullableInteger"},
         "apiKeySource":{"shape":"ApiKeySourceType"},
         "endpointConfiguration":{"shape":"EndpointConfiguration"},
-        "policy":{"shape":"String"}
+        "policy":{"shape":"String"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "RestApis":{
@@ -4668,6 +4673,7 @@
         "accessLogSettings":{"shape":"AccessLogSettings"},
         "canarySettings":{"shape":"CanarySettings"},
         "tracingEnabled":{"shape":"Boolean"},
+        "webAclArn":{"shape":"String"},
         "tags":{"shape":"MapOfStringToString"},
         "createdDate":{"shape":"Timestamp"},
         "lastUpdatedDate":{"shape":"Timestamp"}
@@ -4735,7 +4741,8 @@
           "location":"uri",
           "locationName":"authorizer_id"
         },
-        "headers":{"shape":"MapOfHeaderValues"},
+        "headers":{"shape":"MapOfStringToString"},
+        "multiValueHeaders":{"shape":"MapOfStringToList"},
         "pathWithQueryString":{"shape":"String"},
         "body":{"shape":"String"},
         "stageVariables":{"shape":"MapOfStringToString"},
@@ -4779,7 +4786,8 @@
         },
         "pathWithQueryString":{"shape":"String"},
         "body":{"shape":"String"},
-        "headers":{"shape":"MapOfHeaderValues"},
+        "headers":{"shape":"MapOfStringToString"},
+        "multiValueHeaders":{"shape":"MapOfStringToList"},
         "clientCertificateId":{"shape":"String"},
         "stageVariables":{"shape":"MapOfStringToString"}
       }
@@ -4789,7 +4797,8 @@
       "members":{
         "status":{"shape":"Integer"},
         "body":{"shape":"String"},
-        "headers":{"shape":"MapOfHeaderValues"},
+        "headers":{"shape":"MapOfStringToString"},
+        "multiValueHeaders":{"shape":"MapOfStringToList"},
         "log":{"shape":"String"},
         "latency":{"shape":"Long"}
       }
@@ -5286,7 +5295,8 @@
         "apiStages":{"shape":"ListOfApiStage"},
         "throttle":{"shape":"ThrottleSettings"},
         "quota":{"shape":"QuotaSettings"},
-        "productCode":{"shape":"String"}
+        "productCode":{"shape":"String"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "UsagePlanKey":{
@@ -5326,7 +5336,8 @@
         "description":{"shape":"String"},
         "targetArns":{"shape":"ListOfString"},
         "status":{"shape":"VpcLinkStatus"},
-        "statusMessage":{"shape":"String"}
+        "statusMessage":{"shape":"String"},
+        "tags":{"shape":"MapOfStringToString"}
       }
     },
     "VpcLinkStatus":{

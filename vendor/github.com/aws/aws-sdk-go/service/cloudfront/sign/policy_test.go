@@ -6,6 +6,7 @@ import (
 	"crypto/rsa"
 	"crypto/sha1"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"strings"
@@ -27,11 +28,31 @@ func TestEpochTimeMarshal(t *testing.T) {
 	}
 }
 
+func TestEpochTimeUnmarshal(t *testing.T) {
+	now := time.Now().Round(time.Second)
+	data := fmt.Sprintf(`{"AWS:EpochTime":%d}`, now.Unix())
+	var v AWSEpochTime
+	err := json.Unmarshal([]byte(data), &v)
+	if err != nil {
+		t.Fatalf("Unexpected error, %#v", err)
+	}
+
+	expected := now.UTC()
+	if v.Time != expected {
+		t.Errorf("Expected unmarshaled time to match, expect: %s, actual: %s",
+			expected, v.Time)
+	}
+}
+
 var testCreateResource = []struct {
 	scheme, u string
 	expect    string
 	errPrefix string
 }{
+	{
+		"https", "https://example.com/a?b=1&c=2",
+		"https://example.com/a?b=1&c=2", "",
+	},
 	{
 		"https", "https://example.com/a?b=1",
 		"https://example.com/a?b=1", "",
@@ -43,6 +64,10 @@ var testCreateResource = []struct {
 	{
 		"rtmp", "https://example.com/a?b=1",
 		"a?b=1", "",
+	},
+	{
+		"rtmp", "https://example.com/a?b=1&c=2",
+		"a?b=1&c=2", "",
 	},
 	{
 		"ftp", "ftp://example.com/a?b=1",
@@ -75,11 +100,33 @@ func TestCreateResource(t *testing.T) {
 
 var testTime = time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
 
-const expectedJSONPolicy = `{"Statement":[{"Resource":"https://example.com/a","Condition":{"DateLessThan":{"AWS:EpochTime":1257894000}}}]}`
-const expectedB64Policy = `eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9hIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxMjU3ODk0MDAwfX19XX0=`
-
 func TestEncodePolicy(t *testing.T) {
+	const (
+		expectedJSONPolicy = `{"Statement":[{"Resource":"https://example.com/a","Condition":{"DateLessThan":{"AWS:EpochTime":1257894000}}}]}`
+		expectedB64Policy  = `eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9hIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxMjU3ODk0MDAwfX19XX0=`
+	)
 	p := NewCannedPolicy("https://example.com/a", testTime)
+
+	b64Policy, jsonPolicy, err := encodePolicy(p)
+	if err != nil {
+		t.Fatalf("Unexpected error, %#v", err)
+	}
+
+	if string(jsonPolicy) != expectedJSONPolicy {
+		t.Errorf("Expected json encoding to match, \nexpect: %s\nactual: %s\n", expectedJSONPolicy, jsonPolicy)
+	}
+
+	if string(b64Policy) != expectedB64Policy {
+		t.Errorf("Expected b64 encoding to match, \nexpect: %s\nactual: %s\n", expectedB64Policy, b64Policy)
+	}
+}
+
+func TestEncodePolicyWithQueryParams(t *testing.T) {
+	const (
+		expectedJSONPolicy = `{"Statement":[{"Resource":"https://example.com/a?b=1&c=2","Condition":{"DateLessThan":{"AWS:EpochTime":1257894000}}}]}`
+		expectedB64Policy  = `eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9hP2I9MSZjPTIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjEyNTc4OTQwMDB9fX1dfQ==`
+	)
+	p := NewCannedPolicy("https://example.com/a?b=1&c=2", testTime)
 
 	b64Policy, jsonPolicy, err := encodePolicy(p)
 	if err != nil {

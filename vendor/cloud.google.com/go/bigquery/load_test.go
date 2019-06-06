@@ -22,7 +22,6 @@ import (
 	"cloud.google.com/go/internal/testutil"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -235,6 +234,41 @@ func TestLoad(t *testing.T) {
 				j.Configuration.Load.FieldDelimiter = "\t"
 				hyphen := "-"
 				j.Configuration.Load.Quote = &hyphen
+				return j
+			}(),
+		},
+		{
+			dst: c.Dataset("dataset-id").Table("table-id"),
+			src: func() *GCSReference {
+				g := NewGCSReference("uri")
+				g.SourceFormat = Avro
+				return g
+			}(),
+			config: LoadConfig{
+				UseAvroLogicalTypes: true,
+			},
+			want: func() *bq.Job {
+				j := defaultLoadJob()
+				j.Configuration.Load.SourceFormat = "AVRO"
+				j.Configuration.Load.UseAvroLogicalTypes = true
+				return j
+			}(),
+		},
+		{
+			dst: c.Dataset("dataset-id").Table("table-id"),
+			src: func() *ReaderSource {
+				r := NewReaderSource(strings.NewReader("foo"))
+				r.SourceFormat = Avro
+				return r
+			}(),
+			config: LoadConfig{
+				UseAvroLogicalTypes: true,
+			},
+			want: func() *bq.Job {
+				j := defaultLoadJob()
+				j.Configuration.Load.SourceUris = nil
+				j.Configuration.Load.SourceFormat = "AVRO"
+				j.Configuration.Load.UseAvroLogicalTypes = true
 				return j
 			}(),
 		},

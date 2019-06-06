@@ -42,7 +42,7 @@ type Event struct {
 func (esAPI *EventStreamAPI) ShapeDoc() string {
 	tmpl := template.Must(template.New("eventStreamShapeDoc").Parse(`
 {{- $.Name }} provides handling of EventStreams for
-the {{ $.Operation.ExportedName }} API. 
+the {{ $.Operation.ExportedName }} API.
 {{- if $.Inbound }}
 
 Use this type to receive {{ $.Inbound.Name }} events. The events
@@ -57,7 +57,7 @@ The events that can be received are:
 
 {{- if $.Outbound }}
 
-Use this type to send {{ $.Outbound.Name }} events. The events 
+Use this type to send {{ $.Outbound.Name }} events. The events
 can be sent with the Send method.
 
 The events that can be sent are:
@@ -233,14 +233,15 @@ func updateEventPayloadRef(parent *Shape) {
 
 func renderEventStreamAPIShape(w io.Writer, s *Shape) error {
 	// Imports needed by the EventStream APIs.
-	s.API.imports["fmt"] = true
-	s.API.imports["bytes"] = true
-	s.API.imports["io"] = true
-	s.API.imports["sync"] = true
-	s.API.imports["sync/atomic"] = true
-	s.API.imports["github.com/aws/aws-sdk-go/aws/awserr"] = true
-	s.API.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream"] = true
-	s.API.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi"] = true
+	s.API.AddImport("fmt")
+	s.API.AddImport("bytes")
+	s.API.AddImport("io")
+	s.API.AddImport("sync")
+	s.API.AddImport("sync/atomic")
+	s.API.AddSDKImport("aws")
+	s.API.AddSDKImport("aws/awserr")
+	s.API.AddSDKImport("private/protocol/eventstream")
+	s.API.AddSDKImport("private/protocol/eventstream/eventstreamapi")
 
 	return eventStreamAPIShapeTmpl.Execute(w, s)
 }
@@ -307,7 +308,7 @@ type {{ $.ShapeName }} struct {
 //
 // Close must be called when done using the EventStream API. Not calling Close
 // may result in resource leaks.
-func (es *{{ $.ShapeName }}) Close() (err error) { 
+func (es *{{ $.ShapeName }}) Close() (err error) {
 	{{- if $.EventStreamAPI.Inbound }}
 		es.Reader.Close()
 	{{ end -}}
@@ -320,7 +321,7 @@ func (es *{{ $.ShapeName }}) Close() (err error) {
 
 // Err returns any error that occurred while reading EventStream Events from
 // the service API's response. Returns nil if there were no errors.
-func (es *{{ $.ShapeName }}) Err() error { 
+func (es *{{ $.ShapeName }}) Err() error {
 	{{- if $.EventStreamAPI.Outbound }}
 		if err := es.Writer.Err(); err != nil {
 			return err
@@ -339,7 +340,7 @@ func (es *{{ $.ShapeName }}) Err() error {
 }
 
 {{ if $.EventStreamAPI.Inbound }}
-	// Events returns a channel to read EventStream Events from the 
+	// Events returns a channel to read EventStream Events from the
 	// {{ $.EventStreamAPI.Operation.ExportedName }} API.
 	//
 	// These events are:
@@ -391,7 +392,7 @@ type {{ $.ShapeName }}Reader interface {
 	// HTTP this will also close the HTTP connection.
 	Close() error
 
-	// Returns any error that has occured while reading from the event stream.
+	// Returns any error that has occurred while reading from the event stream.
 	Err() error
 }
 
@@ -705,21 +706,22 @@ func (a *API) APIEventStreamTestGoCode() string {
 	var buf bytes.Buffer
 
 	a.resetImports()
-	a.imports["bytes"] = true
-	a.imports["io/ioutil"] = true
-	a.imports["net/http"] = true
-	a.imports["reflect"] = true
-	a.imports["testing"] = true
-	a.imports["time"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/corehandlers"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/request"] = true
-	a.imports["github.com/aws/aws-sdk-go/aws/awserr"] = true
-	a.imports["github.com/aws/aws-sdk-go/awstesting/unit"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/"+a.ProtocolPackage()] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamapi"] = true
-	a.imports["github.com/aws/aws-sdk-go/private/protocol/eventstream/eventstreamtest"] = true
+	a.AddImport("bytes")
+	a.AddImport("io/ioutil")
+	a.AddImport("net/http")
+	a.AddImport("reflect")
+	a.AddImport("testing")
+	a.AddImport("time")
+	a.AddSDKImport("aws")
+	a.AddSDKImport("aws/corehandlers")
+	a.AddSDKImport("aws/request")
+	a.AddSDKImport("aws/awserr")
+	a.AddSDKImport("awstesting/unit")
+	a.AddSDKImport("private/protocol")
+	a.AddSDKImport("private/protocol/", a.ProtocolPackage())
+	a.AddSDKImport("private/protocol/eventstream")
+	a.AddSDKImport("private/protocol/eventstream/eventstreamapi")
+	a.AddSDKImport("private/protocol/eventstream/eventstreamtest")
 
 	unused := `
 	var _ time.Time
@@ -843,7 +845,7 @@ var eventStreamTestTmpl = template.Must(
 		"ValueForType":               valueForType,
 		"HasNonBlobPayloadMembers":   eventHasNonBlobPayloadMembers,
 		"SetEventHeaderValueForType": setEventHeaderValueForType,
-		"Map": templateMap,
+		"Map":                        templateMap,
 		"OptionalAddInt": func(do bool, a, b int) int {
 			if !do {
 				return a
@@ -901,13 +903,15 @@ func (c *loopReader) Read(p []byte) (int, error) {
 		}
 		defer resp.EventStream.Close()
 
-		{{- if and (eq $.Operation.API.Metadata.Protocol "json") (HasNonEventStreamMember $.Operation.OutputRef.Shape) }}
-			expectResp := expectEvents[0].(*{{ $.Operation.OutputRef.Shape.ShapeName }})
-			{{- range $name, $ref := $.Operation.OutputRef.Shape.MemberRefs }}
-				{{- if not $ref.Shape.IsEventStream }}
-					if e, a := expectResp.{{ $name }}, resp.{{ $name }}; !reflect.DeepEqual(e,a) {
-						t.Errorf("expect %v, got %v", e, a)
-					}
+		{{- if eq $.Operation.API.Metadata.Protocol "json" }}
+			{{- if HasNonEventStreamMember $.Operation.OutputRef.Shape }}
+				expectResp := expectEvents[0].(*{{ $.Operation.OutputRef.Shape.ShapeName }})
+				{{- range $name, $ref := $.Operation.OutputRef.Shape.MemberRefs }}
+					{{- if not $ref.Shape.IsEventStream }}
+						if e, a := expectResp.{{ $name }}, resp.{{ $name }}; !reflect.DeepEqual(e,a) {
+							t.Errorf("expect %v, got %v", e, a)
+						}
+					{{- end }}
 				{{- end }}
 			{{- end }}
 			// Trim off response output type pseudo event so only event messages remain.
@@ -1168,7 +1172,7 @@ func (c *loopReader) Read(p []byte) (int, error) {
 	{{- $payloadMemName := $.parentShape.PayloadRefName }}
 	{{- if HasNonBlobPayloadMembers $.parentShape }}
 		Payload: eventstreamtest.MarshalEventPayload(payloadMarshaler, expectEvents[{{ $.idx }}]),
-	{{- else if $payloadMemName }} 
+	{{- else if $payloadMemName }}
 		{{- $shapeType := (index $.parentShape.MemberRefs $payloadMemName).Shape.Type }}
 		{{- if eq $shapeType "blob" }}
 			Payload: expectEvents[{{ $.idx }}].({{ $.parentShape.GoType }}).{{ $payloadMemName }},

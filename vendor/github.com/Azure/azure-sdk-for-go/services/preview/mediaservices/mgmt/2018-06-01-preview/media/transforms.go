@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewTransformsClientWithBaseURI(baseURI string, subscriptionID string) Trans
 // transformName - the Transform name.
 // parameters - the request parameters
 func (client TransformsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, transformName string, parameters Transform) (result Transform, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.TransformProperties", Name: validation.Null, Rule: false,
@@ -125,6 +136,16 @@ func (client TransformsClient) CreateOrUpdateResponder(resp *http.Response) (res
 // accountName - the Media Services account name.
 // transformName - the Transform name.
 func (client TransformsClient) Delete(ctx context.Context, resourceGroupName string, accountName string, transformName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName, transformName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.TransformsClient", "Delete", nil, "Failure preparing request")
@@ -193,6 +214,16 @@ func (client TransformsClient) DeleteResponder(resp *http.Response) (result auto
 // accountName - the Media Services account name.
 // transformName - the Transform name.
 func (client TransformsClient) Get(ctx context.Context, resourceGroupName string, accountName string, transformName string) (result Transform, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName, transformName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.TransformsClient", "Get", nil, "Failure preparing request")
@@ -266,6 +297,16 @@ func (client TransformsClient) GetResponder(resp *http.Response) (result Transfo
 // skip - specifies a non-negative integer n that excludes the first n items of the queried collection from the
 // result. The service returns items starting at position n+1.
 func (client TransformsClient) List(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, skip *int32) (result TransformCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.List")
+		defer func() {
+			sc := -1
+			if result.tc.Response.Response != nil {
+				sc = result.tc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, accountName, filter, top, skip)
 	if err != nil {
@@ -339,8 +380,8 @@ func (client TransformsClient) ListResponder(resp *http.Response) (result Transf
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client TransformsClient) listNextResults(lastResults TransformCollection) (result TransformCollection, err error) {
-	req, err := lastResults.transformCollectionPreparer()
+func (client TransformsClient) listNextResults(ctx context.Context, lastResults TransformCollection) (result TransformCollection, err error) {
+	req, err := lastResults.transformCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.TransformsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -361,6 +402,16 @@ func (client TransformsClient) listNextResults(lastResults TransformCollection) 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TransformsClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, skip *int32) (result TransformCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, accountName, filter, top, skip)
 	return
 }
@@ -372,6 +423,16 @@ func (client TransformsClient) ListComplete(ctx context.Context, resourceGroupNa
 // transformName - the Transform name.
 // parameters - the request parameters
 func (client TransformsClient) Update(ctx context.Context, resourceGroupName string, accountName string, transformName string, parameters Transform) (result Transform, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, accountName, transformName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.TransformsClient", "Update", nil, "Failure preparing request")

@@ -18,13 +18,18 @@ package consumption
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/shopspring/decimal"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/consumption/mgmt/2018-01-31/consumption"
 
 // CategoryType enumerates the values for category type.
 type CategoryType string
@@ -94,13 +99,13 @@ func PossibleTimeGrainTypeValues() []TimeGrainType {
 type Budget struct {
 	autorest.Response `json:"-"`
 	*BudgetProperties `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// ETag - eTag of the resource. To handle concurrent update scenarion, this field will be used to determine whether the user is updating the latest version or not.
+	// ETag - eTag of the resource. To handle concurrent update scenario, this field will be used to determine whether the user is updating the latest version or not.
 	ETag *string `json:"eTag,omitempty"`
 }
 
@@ -109,15 +114,6 @@ func (b Budget) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if b.BudgetProperties != nil {
 		objectMap["properties"] = b.BudgetProperties
-	}
-	if b.ID != nil {
-		objectMap["id"] = b.ID
-	}
-	if b.Name != nil {
-		objectMap["name"] = b.Name
-	}
-	if b.Type != nil {
-		objectMap["type"] = b.Type
 	}
 	if b.ETag != nil {
 		objectMap["eTag"] = b.ETag
@@ -193,11 +189,11 @@ type BudgetProperties struct {
 	Amount *decimal.Decimal `json:"amount,omitempty"`
 	// TimeGrain - The time covered by a budget. Tracking of the amount will be reset based on the time grain. Possible values include: 'Monthly', 'Quarterly', 'Annually'
 	TimeGrain TimeGrainType `json:"timeGrain,omitempty"`
-	// TimePeriod - Has start and end date of the budget. The start date must be first of the month and should be less than the end date. Budget start date must be on or after June 1, 2017. Future start date should not be more than three months. Past start date should  be selected within the timegrain preiod. There are no restrictions on the end date.
+	// TimePeriod - Has start and end date of the budget. The start date must be first of the month and should be less than the end date. Budget start date must be on or after June 1, 2017. Future start date should not be more than three months. Past start date should  be selected within the timegrain period. There are no restrictions on the end date.
 	TimePeriod *BudgetTimePeriod `json:"timePeriod,omitempty"`
 	// Filters - May be used to filter budgets by resource group, resource, or meter.
 	Filters *Filters `json:"filters,omitempty"`
-	// CurrentSpend - The current amount of cost which is being tracked for a budget.
+	// CurrentSpend - READ-ONLY; The current amount of cost which is being tracked for a budget.
 	CurrentSpend *CurrentSpend `json:"currentSpend,omitempty"`
 	// Notifications - Dictionary of notifications associated with the budget. Budget can have up to five notifications.
 	Notifications map[string]*Notification `json:"notifications"`
@@ -221,21 +217,19 @@ func (bp BudgetProperties) MarshalJSON() ([]byte, error) {
 	if bp.Filters != nil {
 		objectMap["filters"] = bp.Filters
 	}
-	if bp.CurrentSpend != nil {
-		objectMap["currentSpend"] = bp.CurrentSpend
-	}
 	if bp.Notifications != nil {
 		objectMap["notifications"] = bp.Notifications
 	}
 	return json.Marshal(objectMap)
 }
 
-// BudgetsListResult result of listing budgets. It contains a list of available budgets in the scope provided.
+// BudgetsListResult result of listing budgets. It contains a list of available budgets in the scope
+// provided.
 type BudgetsListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The list of budgets.
+	// Value - READ-ONLY; The list of budgets.
 	Value *[]Budget `json:"value,omitempty"`
-	// NextLink - The link (url) to the next page of results.
+	// NextLink - READ-ONLY; The link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -245,20 +239,37 @@ type BudgetsListResultIterator struct {
 	page BudgetsListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *BudgetsListResultIterator) Next() error {
+func (iter *BudgetsListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BudgetsListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *BudgetsListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -280,6 +291,11 @@ func (iter BudgetsListResultIterator) Value() Budget {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the BudgetsListResultIterator type.
+func NewBudgetsListResultIterator(page BudgetsListResultPage) BudgetsListResultIterator {
+	return BudgetsListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (blr BudgetsListResult) IsEmpty() bool {
 	return blr.Value == nil || len(*blr.Value) == 0
@@ -287,11 +303,11 @@ func (blr BudgetsListResult) IsEmpty() bool {
 
 // budgetsListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (blr BudgetsListResult) budgetsListResultPreparer() (*http.Request, error) {
+func (blr BudgetsListResult) budgetsListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if blr.NextLink == nil || len(to.String(blr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(blr.NextLink)))
@@ -299,19 +315,36 @@ func (blr BudgetsListResult) budgetsListResultPreparer() (*http.Request, error) 
 
 // BudgetsListResultPage contains a page of Budget values.
 type BudgetsListResultPage struct {
-	fn  func(BudgetsListResult) (BudgetsListResult, error)
+	fn  func(context.Context, BudgetsListResult) (BudgetsListResult, error)
 	blr BudgetsListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *BudgetsListResultPage) Next() error {
-	next, err := page.fn(page.blr)
+func (page *BudgetsListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BudgetsListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.blr)
 	if err != nil {
 		return err
 	}
 	page.blr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *BudgetsListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -332,6 +365,11 @@ func (page BudgetsListResultPage) Values() []Budget {
 	return *page.blr.Value
 }
 
+// Creates a new instance of the BudgetsListResultPage type.
+func NewBudgetsListResultPage(getNextPage func(context.Context, BudgetsListResult) (BudgetsListResult, error)) BudgetsListResultPage {
+	return BudgetsListResultPage{fn: getNextPage}
+}
+
 // BudgetTimePeriod the start and end date for a budget.
 type BudgetTimePeriod struct {
 	// StartDate - The start date for the budget.
@@ -342,22 +380,22 @@ type BudgetTimePeriod struct {
 
 // CurrentSpend the current amount of cost which is being tracked for a budget.
 type CurrentSpend struct {
-	// Amount - The total amount of cost which is being tracked by the budget.
+	// Amount - READ-ONLY; The total amount of cost which is being tracked by the budget.
 	Amount *decimal.Decimal `json:"amount,omitempty"`
-	// Unit - The unit of measure for the budget amount.
+	// Unit - READ-ONLY; The unit of measure for the budget amount.
 	Unit *string `json:"unit,omitempty"`
 }
 
 // ErrorDetails the details of the error.
 type ErrorDetails struct {
-	// Code - Error code.
+	// Code - READ-ONLY; Error code.
 	Code *string `json:"code,omitempty"`
-	// Message - Error message indicating why the operation failed.
+	// Message - READ-ONLY; Error message indicating why the operation failed.
 	Message *string `json:"message,omitempty"`
 }
 
-// ErrorResponse error response indicates that the service is not able to process the incoming request. The reason
-// is provided in the error message.
+// ErrorResponse error response indicates that the service is not able to process the incoming request. The
+// reason is provided in the error message.
 type ErrorResponse struct {
 	// Error - The details of the error.
 	Error *ErrorDetails `json:"error,omitempty"`
@@ -376,13 +414,13 @@ type Filters struct {
 // Marketplace an marketplace resource.
 type Marketplace struct {
 	*MarketplaceProperties `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// Tags - Resource tags.
+	// Tags - READ-ONLY; Resource tags.
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -391,18 +429,6 @@ func (mVar Marketplace) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if mVar.MarketplaceProperties != nil {
 		objectMap["properties"] = mVar.MarketplaceProperties
-	}
-	if mVar.ID != nil {
-		objectMap["id"] = mVar.ID
-	}
-	if mVar.Name != nil {
-		objectMap["name"] = mVar.Name
-	}
-	if mVar.Type != nil {
-		objectMap["type"] = mVar.Type
-	}
-	if mVar.Tags != nil {
-		objectMap["tags"] = mVar.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -469,63 +495,63 @@ func (mVar *Marketplace) UnmarshalJSON(body []byte) error {
 
 // MarketplaceProperties the properties of the marketplace usage detail.
 type MarketplaceProperties struct {
-	// BillingPeriodID - The id of the billing period resource that the usage belongs to.
+	// BillingPeriodID - READ-ONLY; The id of the billing period resource that the usage belongs to.
 	BillingPeriodID *string `json:"billingPeriodId,omitempty"`
-	// UsageStart - The start of the date time range covered by the usage detail.
+	// UsageStart - READ-ONLY; The start of the date time range covered by the usage detail.
 	UsageStart *date.Time `json:"usageStart,omitempty"`
-	// UsageEnd - The end of the date time range covered by the usage detail.
+	// UsageEnd - READ-ONLY; The end of the date time range covered by the usage detail.
 	UsageEnd *date.Time `json:"usageEnd,omitempty"`
-	// ResourceRate - The marketplace resource rate.
+	// ResourceRate - READ-ONLY; The marketplace resource rate.
 	ResourceRate *decimal.Decimal `json:"resourceRate,omitempty"`
-	// OfferName - The type of offer.
+	// OfferName - READ-ONLY; The type of offer.
 	OfferName *string `json:"offerName,omitempty"`
-	// ResourceGroup - The name of resource group.
+	// ResourceGroup - READ-ONLY; The name of resource group.
 	ResourceGroup *string `json:"resourceGroup,omitempty"`
-	// OrderNumber - The order number.
+	// OrderNumber - READ-ONLY; The order number.
 	OrderNumber *string `json:"orderNumber,omitempty"`
-	// InstanceName - The name of the resource instance that the usage is about.
+	// InstanceName - READ-ONLY; The name of the resource instance that the usage is about.
 	InstanceName *string `json:"instanceName,omitempty"`
-	// InstanceID - The uri of the resource instance that the usage is about.
+	// InstanceID - READ-ONLY; The uri of the resource instance that the usage is about.
 	InstanceID *string `json:"instanceId,omitempty"`
-	// Currency - The ISO currency in which the meter is charged, for example, USD.
+	// Currency - READ-ONLY; The ISO currency in which the meter is charged, for example, USD.
 	Currency *string `json:"currency,omitempty"`
-	// ConsumedQuantity - The quantity of usage.
+	// ConsumedQuantity - READ-ONLY; The quantity of usage.
 	ConsumedQuantity *decimal.Decimal `json:"consumedQuantity,omitempty"`
-	// UnitOfMeasure - The unit of measure.
+	// UnitOfMeasure - READ-ONLY; The unit of measure.
 	UnitOfMeasure *string `json:"unitOfMeasure,omitempty"`
-	// PretaxCost - The amount of cost before tax.
+	// PretaxCost - READ-ONLY; The amount of cost before tax.
 	PretaxCost *decimal.Decimal `json:"pretaxCost,omitempty"`
-	// IsEstimated - The estimated usage is subject to change.
+	// IsEstimated - READ-ONLY; The estimated usage is subject to change.
 	IsEstimated *bool `json:"isEstimated,omitempty"`
-	// MeterID - The meter id.
+	// MeterID - READ-ONLY; The meter id.
 	MeterID *string `json:"meterId,omitempty"`
-	// SubscriptionGUID - Subscription guid.
+	// SubscriptionGUID - READ-ONLY; Subscription guid.
 	SubscriptionGUID *string `json:"subscriptionGuid,omitempty"`
-	// SubscriptionName - Subscription name.
+	// SubscriptionName - READ-ONLY; Subscription name.
 	SubscriptionName *string `json:"subscriptionName,omitempty"`
-	// AccountName - Account name.
+	// AccountName - READ-ONLY; Account name.
 	AccountName *string `json:"accountName,omitempty"`
-	// DepartmentName - Department name.
+	// DepartmentName - READ-ONLY; Department name.
 	DepartmentName *string `json:"departmentName,omitempty"`
-	// ConsumedService - Consumed service name.
+	// ConsumedService - READ-ONLY; Consumed service name.
 	ConsumedService *string `json:"consumedService,omitempty"`
-	// CostCenter - The cost center of this department if it is a department and a costcenter exists
+	// CostCenter - READ-ONLY; The cost center of this department if it is a department and a costcenter exists
 	CostCenter *string `json:"costCenter,omitempty"`
-	// AdditionalProperties - Additional details of this usage item. By default this is not populated, unless it's specified in $expand.
+	// AdditionalProperties - READ-ONLY; Additional details of this usage item. By default this is not populated, unless it's specified in $expand.
 	AdditionalProperties *string `json:"additionalProperties,omitempty"`
-	// PublisherName - The name of publisher.
+	// PublisherName - READ-ONLY; The name of publisher.
 	PublisherName *string `json:"publisherName,omitempty"`
-	// PlanName - The name of plan.
+	// PlanName - READ-ONLY; The name of plan.
 	PlanName *string `json:"planName,omitempty"`
 }
 
-// MarketplacesListResult result of listing marketplaces. It contains a list of available marketplaces in reverse
-// chronological order by billing period.
+// MarketplacesListResult result of listing marketplaces. It contains a list of available marketplaces in
+// reverse chronological order by billing period.
 type MarketplacesListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The list of marketplaces.
+	// Value - READ-ONLY; The list of marketplaces.
 	Value *[]Marketplace `json:"value,omitempty"`
-	// NextLink - The link (url) to the next page of results.
+	// NextLink - READ-ONLY; The link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -535,20 +561,37 @@ type MarketplacesListResultIterator struct {
 	page MarketplacesListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *MarketplacesListResultIterator) Next() error {
+func (iter *MarketplacesListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplacesListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *MarketplacesListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -570,6 +613,11 @@ func (iter MarketplacesListResultIterator) Value() Marketplace {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the MarketplacesListResultIterator type.
+func NewMarketplacesListResultIterator(page MarketplacesListResultPage) MarketplacesListResultIterator {
+	return MarketplacesListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (mlr MarketplacesListResult) IsEmpty() bool {
 	return mlr.Value == nil || len(*mlr.Value) == 0
@@ -577,11 +625,11 @@ func (mlr MarketplacesListResult) IsEmpty() bool {
 
 // marketplacesListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (mlr MarketplacesListResult) marketplacesListResultPreparer() (*http.Request, error) {
+func (mlr MarketplacesListResult) marketplacesListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if mlr.NextLink == nil || len(to.String(mlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(mlr.NextLink)))
@@ -589,19 +637,36 @@ func (mlr MarketplacesListResult) marketplacesListResultPreparer() (*http.Reques
 
 // MarketplacesListResultPage contains a page of Marketplace values.
 type MarketplacesListResultPage struct {
-	fn  func(MarketplacesListResult) (MarketplacesListResult, error)
+	fn  func(context.Context, MarketplacesListResult) (MarketplacesListResult, error)
 	mlr MarketplacesListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *MarketplacesListResultPage) Next() error {
-	next, err := page.fn(page.mlr)
+func (page *MarketplacesListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MarketplacesListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.mlr)
 	if err != nil {
 		return err
 	}
 	page.mlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *MarketplacesListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -622,21 +687,26 @@ func (page MarketplacesListResultPage) Values() []Marketplace {
 	return *page.mlr.Value
 }
 
+// Creates a new instance of the MarketplacesListResultPage type.
+func NewMarketplacesListResultPage(getNextPage func(context.Context, MarketplacesListResult) (MarketplacesListResult, error)) MarketplacesListResultPage {
+	return MarketplacesListResultPage{fn: getNextPage}
+}
+
 // MeterDetails the properties of the meter detail.
 type MeterDetails struct {
-	// MeterName - The name of the meter, within the given meter category
+	// MeterName - READ-ONLY; The name of the meter, within the given meter category
 	MeterName *string `json:"meterName,omitempty"`
-	// MeterCategory - The category of the meter, for example, 'Cloud services', 'Networking', etc..
+	// MeterCategory - READ-ONLY; The category of the meter, for example, 'Cloud services', 'Networking', etc..
 	MeterCategory *string `json:"meterCategory,omitempty"`
-	// MeterSubCategory - The subcategory of the meter, for example, 'A6 Cloud services', 'ExpressRoute (IXP)', etc..
+	// MeterSubCategory - READ-ONLY; The subcategory of the meter, for example, 'A6 Cloud services', 'ExpressRoute (IXP)', etc..
 	MeterSubCategory *string `json:"meterSubCategory,omitempty"`
-	// Unit - The unit in which the meter consumption is charged, for example, 'Hours', 'GB', etc.
+	// Unit - READ-ONLY; The unit in which the meter consumption is charged, for example, 'Hours', 'GB', etc.
 	Unit *string `json:"unit,omitempty"`
-	// MeterLocation - The location in which the Azure service is available.
+	// MeterLocation - READ-ONLY; The location in which the Azure service is available.
 	MeterLocation *string `json:"meterLocation,omitempty"`
-	// TotalIncludedQuantity - The total included quantity associated with the offer.
+	// TotalIncludedQuantity - READ-ONLY; The total included quantity associated with the offer.
 	TotalIncludedQuantity *decimal.Decimal `json:"totalIncludedQuantity,omitempty"`
-	// PretaxStandardRate - The pretax listing price.
+	// PretaxStandardRate - READ-ONLY; The pretax listing price.
 	PretaxStandardRate *decimal.Decimal `json:"pretaxStandardRate,omitempty"`
 }
 
@@ -658,7 +728,7 @@ type Notification struct {
 
 // Operation a Consumption REST API operation.
 type Operation struct {
-	// Name - Operation name: {provider}/{resource}/{operation}.
+	// Name - READ-ONLY; Operation name: {provider}/{resource}/{operation}.
 	Name *string `json:"name,omitempty"`
 	// Display - The object that represents the operation.
 	Display *OperationDisplay `json:"display,omitempty"`
@@ -666,21 +736,21 @@ type Operation struct {
 
 // OperationDisplay the object that represents the operation.
 type OperationDisplay struct {
-	// Provider - Service provider: Microsoft.Consumption.
+	// Provider - READ-ONLY; Service provider: Microsoft.Consumption.
 	Provider *string `json:"provider,omitempty"`
-	// Resource - Resource on which the operation is performed: UsageDetail, etc.
+	// Resource - READ-ONLY; Resource on which the operation is performed: UsageDetail, etc.
 	Resource *string `json:"resource,omitempty"`
-	// Operation - Operation type: Read, write, delete, etc.
+	// Operation - READ-ONLY; Operation type: Read, write, delete, etc.
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of listing consumption operations. It contains a list of operations and a URL link to
-// get the next set of results.
+// OperationListResult result of listing consumption operations. It contains a list of operations and a URL
+// link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
-	// Value - List of consumption operations supported by the Microsoft.Consumption resource provider.
+	// Value - READ-ONLY; List of consumption operations supported by the Microsoft.Consumption resource provider.
 	Value *[]Operation `json:"value,omitempty"`
-	// NextLink - URL to get the next set of operation list results if there are any.
+	// NextLink - READ-ONLY; URL to get the next set of operation list results if there are any.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -690,20 +760,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -725,6 +812,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -732,11 +824,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -744,19 +836,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -777,31 +886,36 @@ func (page OperationListResultPage) Values() []Operation {
 	return *page.olr.Value
 }
 
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
+}
+
 // PriceSheetModel price sheet result. It contains the pricesheet associated with billing period
 type PriceSheetModel struct {
-	// Pricesheets - Price sheet
+	// Pricesheets - READ-ONLY; Price sheet
 	Pricesheets *[]PriceSheetProperties `json:"pricesheets,omitempty"`
-	// NextLink - The link (url) to the next page of results.
+	// NextLink - READ-ONLY; The link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
 // PriceSheetProperties the properties of the price sheet.
 type PriceSheetProperties struct {
-	// BillingPeriodID - The id of the billing period resource that the usage belongs to.
+	// BillingPeriodID - READ-ONLY; The id of the billing period resource that the usage belongs to.
 	BillingPeriodID *string `json:"billingPeriodId,omitempty"`
-	// MeterID - The meter id
+	// MeterID - READ-ONLY; The meter id
 	MeterID *string `json:"meterId,omitempty"`
-	// MeterDetails - The details about the meter. By default this is not populated, unless it's specified in $expand.
+	// MeterDetails - READ-ONLY; The details about the meter. By default this is not populated, unless it's specified in $expand.
 	MeterDetails *MeterDetails `json:"meterDetails,omitempty"`
-	// UnitOfMeasure - Unit of measure
+	// UnitOfMeasure - READ-ONLY; Unit of measure
 	UnitOfMeasure *string `json:"unitOfMeasure,omitempty"`
-	// IncludedQuantity - Included quality for an offer
+	// IncludedQuantity - READ-ONLY; Included quality for an offer
 	IncludedQuantity *decimal.Decimal `json:"includedQuantity,omitempty"`
-	// PartNumber - Part Number
+	// PartNumber - READ-ONLY; Part Number
 	PartNumber *string `json:"partNumber,omitempty"`
-	// UnitPrice - Unit Price
+	// UnitPrice - READ-ONLY; Unit Price
 	UnitPrice *decimal.Decimal `json:"unitPrice,omitempty"`
-	// CurrencyCode - Currency Code
+	// CurrencyCode - READ-ONLY; Currency Code
 	CurrencyCode *string `json:"currencyCode,omitempty"`
 }
 
@@ -809,13 +923,13 @@ type PriceSheetProperties struct {
 type PriceSheetResult struct {
 	autorest.Response `json:"-"`
 	*PriceSheetModel  `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// Tags - Resource tags.
+	// Tags - READ-ONLY; Resource tags.
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -824,18 +938,6 @@ func (psr PriceSheetResult) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if psr.PriceSheetModel != nil {
 		objectMap["properties"] = psr.PriceSheetModel
-	}
-	if psr.ID != nil {
-		objectMap["id"] = psr.ID
-	}
-	if psr.Name != nil {
-		objectMap["name"] = psr.Name
-	}
-	if psr.Type != nil {
-		objectMap["type"] = psr.Type
-	}
-	if psr.Tags != nil {
-		objectMap["tags"] = psr.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -902,26 +1004,26 @@ func (psr *PriceSheetResult) UnmarshalJSON(body []byte) error {
 
 // ProxyResource the Resource model definition.
 type ProxyResource struct {
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// ETag - eTag of the resource. To handle concurrent update scenarion, this field will be used to determine whether the user is updating the latest version or not.
+	// ETag - eTag of the resource. To handle concurrent update scenario, this field will be used to determine whether the user is updating the latest version or not.
 	ETag *string `json:"eTag,omitempty"`
 }
 
 // ReservationDetails reservation details resource.
 type ReservationDetails struct {
 	*ReservationDetailsProperties `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// Tags - Resource tags.
+	// Tags - READ-ONLY; Resource tags.
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -930,18 +1032,6 @@ func (rd ReservationDetails) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if rd.ReservationDetailsProperties != nil {
 		objectMap["properties"] = rd.ReservationDetailsProperties
-	}
-	if rd.ID != nil {
-		objectMap["id"] = rd.ID
-	}
-	if rd.Name != nil {
-		objectMap["name"] = rd.Name
-	}
-	if rd.Type != nil {
-		objectMap["type"] = rd.Type
-	}
-	if rd.Tags != nil {
-		objectMap["tags"] = rd.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -1009,9 +1099,9 @@ func (rd *ReservationDetails) UnmarshalJSON(body []byte) error {
 // ReservationDetailsListResult result of listing reservation details.
 type ReservationDetailsListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The list of reservation details.
+	// Value - READ-ONLY; The list of reservation details.
 	Value *[]ReservationDetails `json:"value,omitempty"`
-	// NextLink - The link (url) to the next page of results.
+	// NextLink - READ-ONLY; The link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -1021,20 +1111,37 @@ type ReservationDetailsListResultIterator struct {
 	page ReservationDetailsListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ReservationDetailsListResultIterator) Next() error {
+func (iter *ReservationDetailsListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationDetailsListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ReservationDetailsListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1056,6 +1163,11 @@ func (iter ReservationDetailsListResultIterator) Value() ReservationDetails {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ReservationDetailsListResultIterator type.
+func NewReservationDetailsListResultIterator(page ReservationDetailsListResultPage) ReservationDetailsListResultIterator {
+	return ReservationDetailsListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rdlr ReservationDetailsListResult) IsEmpty() bool {
 	return rdlr.Value == nil || len(*rdlr.Value) == 0
@@ -1063,11 +1175,11 @@ func (rdlr ReservationDetailsListResult) IsEmpty() bool {
 
 // reservationDetailsListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rdlr ReservationDetailsListResult) reservationDetailsListResultPreparer() (*http.Request, error) {
+func (rdlr ReservationDetailsListResult) reservationDetailsListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if rdlr.NextLink == nil || len(to.String(rdlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rdlr.NextLink)))
@@ -1075,19 +1187,36 @@ func (rdlr ReservationDetailsListResult) reservationDetailsListResultPreparer() 
 
 // ReservationDetailsListResultPage contains a page of ReservationDetails values.
 type ReservationDetailsListResultPage struct {
-	fn   func(ReservationDetailsListResult) (ReservationDetailsListResult, error)
+	fn   func(context.Context, ReservationDetailsListResult) (ReservationDetailsListResult, error)
 	rdlr ReservationDetailsListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ReservationDetailsListResultPage) Next() error {
-	next, err := page.fn(page.rdlr)
+func (page *ReservationDetailsListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationDetailsListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rdlr)
 	if err != nil {
 		return err
 	}
 	page.rdlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ReservationDetailsListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1108,36 +1237,41 @@ func (page ReservationDetailsListResultPage) Values() []ReservationDetails {
 	return *page.rdlr.Value
 }
 
+// Creates a new instance of the ReservationDetailsListResultPage type.
+func NewReservationDetailsListResultPage(getNextPage func(context.Context, ReservationDetailsListResult) (ReservationDetailsListResult, error)) ReservationDetailsListResultPage {
+	return ReservationDetailsListResultPage{fn: getNextPage}
+}
+
 // ReservationDetailsProperties the properties of the reservation details.
 type ReservationDetailsProperties struct {
-	// ReservationOrderID - The reservation order ID is the identifier for a reservation purchase. Each reservation order ID represents a single purchase transaction. A reservation order contains reservations. The reservation order specifies the VM size and region for the reservations.
+	// ReservationOrderID - READ-ONLY; The reservation order ID is the identifier for a reservation purchase. Each reservation order ID represents a single purchase transaction. A reservation order contains reservations. The reservation order specifies the VM size and region for the reservations.
 	ReservationOrderID *string `json:"reservationOrderId,omitempty"`
-	// ReservationID - The reservation ID is the identifier of a reservation within a reservation order. Each reservation is the grouping for applying the benefit scope and also specifies the number of instances to which the reservation benefit can be applied to.
+	// ReservationID - READ-ONLY; The reservation ID is the identifier of a reservation within a reservation order. Each reservation is the grouping for applying the benefit scope and also specifies the number of instances to which the reservation benefit can be applied to.
 	ReservationID *string `json:"reservationId,omitempty"`
-	// SkuName - This is the ARM Sku name. It can be used to join with the servicetype field in additoinalinfo in usage records.
+	// SkuName - READ-ONLY; This is the ARM Sku name. It can be used to join with the serviceType field in additional info in usage records.
 	SkuName *string `json:"skuName,omitempty"`
-	// ReservedHours - This is the total hours reserved for the day. E.g. if reservation for 1 instance was made on 1 PM, this will be 11 hours for that day and 24 hours from subsequent days.
+	// ReservedHours - READ-ONLY; This is the total hours reserved for the day. E.g. if reservation for 1 instance was made on 1 PM, this will be 11 hours for that day and 24 hours from subsequent days.
 	ReservedHours *decimal.Decimal `json:"reservedHours,omitempty"`
-	// UsageDate - The date on which consumption occurred.
+	// UsageDate - READ-ONLY; The date on which consumption occurred.
 	UsageDate *date.Time `json:"usageDate,omitempty"`
-	// UsedHours - This is the total hours used by the instance.
+	// UsedHours - READ-ONLY; This is the total hours used by the instance.
 	UsedHours *decimal.Decimal `json:"usedHours,omitempty"`
-	// InstanceID - This identifier is the name of the resource or the fully qualified Resource ID.
+	// InstanceID - READ-ONLY; This identifier is the name of the resource or the fully qualified Resource ID.
 	InstanceID *string `json:"instanceId,omitempty"`
-	// TotalReservedQuantity - This is the total count of instances that are reserved for the reservationid.
+	// TotalReservedQuantity - READ-ONLY; This is the total count of instances that are reserved for the reservationId.
 	TotalReservedQuantity *decimal.Decimal `json:"totalReservedQuantity,omitempty"`
 }
 
 // ReservationSummaries reservation summaries resource.
 type ReservationSummaries struct {
 	*ReservationSummariesProperties `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// Tags - Resource tags.
+	// Tags - READ-ONLY; Resource tags.
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -1146,18 +1280,6 @@ func (rs ReservationSummaries) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if rs.ReservationSummariesProperties != nil {
 		objectMap["properties"] = rs.ReservationSummariesProperties
-	}
-	if rs.ID != nil {
-		objectMap["id"] = rs.ID
-	}
-	if rs.Name != nil {
-		objectMap["name"] = rs.Name
-	}
-	if rs.Type != nil {
-		objectMap["type"] = rs.Type
-	}
-	if rs.Tags != nil {
-		objectMap["tags"] = rs.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -1225,32 +1347,50 @@ func (rs *ReservationSummaries) UnmarshalJSON(body []byte) error {
 // ReservationSummariesListResult result of listing reservation summaries.
 type ReservationSummariesListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The list of reservation summaries.
+	// Value - READ-ONLY; The list of reservation summaries.
 	Value *[]ReservationSummaries `json:"value,omitempty"`
-	// NextLink - The link (url) to the next page of results.
+	// NextLink - READ-ONLY; The link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ReservationSummariesListResultIterator provides access to a complete listing of ReservationSummaries values.
+// ReservationSummariesListResultIterator provides access to a complete listing of ReservationSummaries
+// values.
 type ReservationSummariesListResultIterator struct {
 	i    int
 	page ReservationSummariesListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ReservationSummariesListResultIterator) Next() error {
+func (iter *ReservationSummariesListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationSummariesListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ReservationSummariesListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1272,6 +1412,11 @@ func (iter ReservationSummariesListResultIterator) Value() ReservationSummaries 
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ReservationSummariesListResultIterator type.
+func NewReservationSummariesListResultIterator(page ReservationSummariesListResultPage) ReservationSummariesListResultIterator {
+	return ReservationSummariesListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rslr ReservationSummariesListResult) IsEmpty() bool {
 	return rslr.Value == nil || len(*rslr.Value) == 0
@@ -1279,11 +1424,11 @@ func (rslr ReservationSummariesListResult) IsEmpty() bool {
 
 // reservationSummariesListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rslr ReservationSummariesListResult) reservationSummariesListResultPreparer() (*http.Request, error) {
+func (rslr ReservationSummariesListResult) reservationSummariesListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if rslr.NextLink == nil || len(to.String(rslr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rslr.NextLink)))
@@ -1291,19 +1436,36 @@ func (rslr ReservationSummariesListResult) reservationSummariesListResultPrepare
 
 // ReservationSummariesListResultPage contains a page of ReservationSummaries values.
 type ReservationSummariesListResultPage struct {
-	fn   func(ReservationSummariesListResult) (ReservationSummariesListResult, error)
+	fn   func(context.Context, ReservationSummariesListResult) (ReservationSummariesListResult, error)
 	rslr ReservationSummariesListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ReservationSummariesListResultPage) Next() error {
-	next, err := page.fn(page.rslr)
+func (page *ReservationSummariesListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReservationSummariesListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rslr)
 	if err != nil {
 		return err
 	}
 	page.rslr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ReservationSummariesListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1324,68 +1486,61 @@ func (page ReservationSummariesListResultPage) Values() []ReservationSummaries {
 	return *page.rslr.Value
 }
 
+// Creates a new instance of the ReservationSummariesListResultPage type.
+func NewReservationSummariesListResultPage(getNextPage func(context.Context, ReservationSummariesListResult) (ReservationSummariesListResult, error)) ReservationSummariesListResultPage {
+	return ReservationSummariesListResultPage{fn: getNextPage}
+}
+
 // ReservationSummariesProperties the properties of the reservation summaries.
 type ReservationSummariesProperties struct {
-	// ReservationOrderID - The reservation order ID is the identifier for a reservation purchase. Each reservation order ID represents a single purchase transaction. A reservation order contains reservations. The reservation order specifies the VM size and region for the reservations.
+	// ReservationOrderID - READ-ONLY; The reservation order ID is the identifier for a reservation purchase. Each reservation order ID represents a single purchase transaction. A reservation order contains reservations. The reservation order specifies the VM size and region for the reservations.
 	ReservationOrderID *string `json:"reservationOrderId,omitempty"`
-	// ReservationID - The reservation ID is the identifier of a reservation within a reservation order. Each reservation is the grouping for applying the benefit scope and also specifies the number of instances to which the reservation benefit can be applied to.
+	// ReservationID - READ-ONLY; The reservation ID is the identifier of a reservation within a reservation order. Each reservation is the grouping for applying the benefit scope and also specifies the number of instances to which the reservation benefit can be applied to.
 	ReservationID *string `json:"reservationId,omitempty"`
-	// SkuName - This is the ARM Sku name. It can be used to join with the servicetype field in additoinalinfo in usage records.
+	// SkuName - READ-ONLY; This is the ARM Sku name. It can be used to join with the serviceType field in additional info in usage records.
 	SkuName *string `json:"skuName,omitempty"`
-	// ReservedHours - This is the total hours reserved. E.g. if reservation for 1 instance was made on 1 PM, this will be 11 hours for that day and 24 hours from subsequent days
+	// ReservedHours - READ-ONLY; This is the total hours reserved. E.g. if reservation for 1 instance was made on 1 PM, this will be 11 hours for that day and 24 hours from subsequent days
 	ReservedHours *decimal.Decimal `json:"reservedHours,omitempty"`
-	// UsageDate - Data corresponding to the utilization record. If the grain of data is monthly, it will be first day of month.
+	// UsageDate - READ-ONLY; Data corresponding to the utilization record. If the grain of data is monthly, it will be first day of month.
 	UsageDate *date.Time `json:"usageDate,omitempty"`
-	// UsedHours - Total used hours by the reservation
+	// UsedHours - READ-ONLY; Total used hours by the reservation
 	UsedHours *decimal.Decimal `json:"usedHours,omitempty"`
-	// MinUtilizationPercentage - This is the minimum hourly utilization in the usage time (day or month). E.g. if usage record corresponds to 12/10/2017 and on that for hour 4 and 5, utilization was 10%, this field will return 10% for that day
+	// MinUtilizationPercentage - READ-ONLY; This is the minimum hourly utilization in the usage time (day or month). E.g. if usage record corresponds to 12/10/2017 and on that for hour 4 and 5, utilization was 10%, this field will return 10% for that day
 	MinUtilizationPercentage *decimal.Decimal `json:"minUtilizationPercentage,omitempty"`
-	// AvgUtilizationPercentage - This is average utilization for the entire time range. (day or month depending on the grain)
+	// AvgUtilizationPercentage - READ-ONLY; This is average utilization for the entire time range. (day or month depending on the grain)
 	AvgUtilizationPercentage *decimal.Decimal `json:"avgUtilizationPercentage,omitempty"`
-	// MaxUtilizationPercentage - This is the maximum hourly utilization in the usage time (day or month). E.g. if usage record corresponds to 12/10/2017 and on that for hour 4 and 5, utilization was 100%, this field will return 100% for that day.
+	// MaxUtilizationPercentage - READ-ONLY; This is the maximum hourly utilization in the usage time (day or month). E.g. if usage record corresponds to 12/10/2017 and on that for hour 4 and 5, utilization was 100%, this field will return 100% for that day.
 	MaxUtilizationPercentage *decimal.Decimal `json:"maxUtilizationPercentage,omitempty"`
 }
 
 // Resource the Resource model definition.
 type Resource struct {
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// Tags - Resource tags.
+	// Tags - READ-ONLY; Resource tags.
 	Tags map[string]*string `json:"tags"`
 }
 
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
-	if r.Tags != nil {
-		objectMap["tags"] = r.Tags
-	}
 	return json.Marshal(objectMap)
 }
 
 // UsageDetail an usage detail resource.
 type UsageDetail struct {
 	*UsageDetailProperties `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
-	// Tags - Resource tags.
+	// Tags - READ-ONLY; Resource tags.
 	Tags map[string]*string `json:"tags"`
 }
 
@@ -1394,18 +1549,6 @@ func (ud UsageDetail) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ud.UsageDetailProperties != nil {
 		objectMap["properties"] = ud.UsageDetailProperties
-	}
-	if ud.ID != nil {
-		objectMap["id"] = ud.ID
-	}
-	if ud.Name != nil {
-		objectMap["name"] = ud.Name
-	}
-	if ud.Type != nil {
-		objectMap["type"] = ud.Type
-	}
-	if ud.Tags != nil {
-		objectMap["tags"] = ud.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -1472,59 +1615,59 @@ func (ud *UsageDetail) UnmarshalJSON(body []byte) error {
 
 // UsageDetailProperties the properties of the usage detail.
 type UsageDetailProperties struct {
-	// BillingPeriodID - The id of the billing period resource that the usage belongs to.
+	// BillingPeriodID - READ-ONLY; The id of the billing period resource that the usage belongs to.
 	BillingPeriodID *string `json:"billingPeriodId,omitempty"`
-	// InvoiceID - The id of the invoice resource that the usage belongs to.
+	// InvoiceID - READ-ONLY; The id of the invoice resource that the usage belongs to.
 	InvoiceID *string `json:"invoiceId,omitempty"`
-	// UsageStart - The start of the date time range covered by the usage detail.
+	// UsageStart - READ-ONLY; The start of the date time range covered by the usage detail.
 	UsageStart *date.Time `json:"usageStart,omitempty"`
-	// UsageEnd - The end of the date time range covered by the usage detail.
+	// UsageEnd - READ-ONLY; The end of the date time range covered by the usage detail.
 	UsageEnd *date.Time `json:"usageEnd,omitempty"`
-	// InstanceName - The name of the resource instance that the usage is about.
+	// InstanceName - READ-ONLY; The name of the resource instance that the usage is about.
 	InstanceName *string `json:"instanceName,omitempty"`
-	// InstanceID - The uri of the resource instance that the usage is about.
+	// InstanceID - READ-ONLY; The uri of the resource instance that the usage is about.
 	InstanceID *string `json:"instanceId,omitempty"`
-	// InstanceLocation - The location of the resource instance that the usage is about.
+	// InstanceLocation - READ-ONLY; The location of the resource instance that the usage is about.
 	InstanceLocation *string `json:"instanceLocation,omitempty"`
-	// Currency - The ISO currency in which the meter is charged, for example, USD.
+	// Currency - READ-ONLY; The ISO currency in which the meter is charged, for example, USD.
 	Currency *string `json:"currency,omitempty"`
-	// UsageQuantity - The quantity of usage.
+	// UsageQuantity - READ-ONLY; The quantity of usage.
 	UsageQuantity *decimal.Decimal `json:"usageQuantity,omitempty"`
-	// BillableQuantity - The billable usage quantity.
+	// BillableQuantity - READ-ONLY; The billable usage quantity.
 	BillableQuantity *decimal.Decimal `json:"billableQuantity,omitempty"`
-	// PretaxCost - The amount of cost before tax.
+	// PretaxCost - READ-ONLY; The amount of cost before tax.
 	PretaxCost *decimal.Decimal `json:"pretaxCost,omitempty"`
-	// IsEstimated - The estimated usage is subject to change.
+	// IsEstimated - READ-ONLY; The estimated usage is subject to change.
 	IsEstimated *bool `json:"isEstimated,omitempty"`
-	// MeterID - The meter id.
+	// MeterID - READ-ONLY; The meter id.
 	MeterID *string `json:"meterId,omitempty"`
-	// MeterDetails - The details about the meter. By default this is not populated, unless it's specified in $expand.
+	// MeterDetails - READ-ONLY; The details about the meter. By default this is not populated, unless it's specified in $expand.
 	MeterDetails *MeterDetails `json:"meterDetails,omitempty"`
-	// SubscriptionGUID - Subscription guid.
+	// SubscriptionGUID - READ-ONLY; Subscription guid.
 	SubscriptionGUID *string `json:"subscriptionGuid,omitempty"`
-	// SubscriptionName - Subscription name.
+	// SubscriptionName - READ-ONLY; Subscription name.
 	SubscriptionName *string `json:"subscriptionName,omitempty"`
-	// AccountName - Account name.
+	// AccountName - READ-ONLY; Account name.
 	AccountName *string `json:"accountName,omitempty"`
-	// DepartmentName - Department name.
+	// DepartmentName - READ-ONLY; Department name.
 	DepartmentName *string `json:"departmentName,omitempty"`
-	// Product - Product name.
+	// Product - READ-ONLY; Product name.
 	Product *string `json:"product,omitempty"`
-	// ConsumedService - Consumed service name.
+	// ConsumedService - READ-ONLY; Consumed service name.
 	ConsumedService *string `json:"consumedService,omitempty"`
-	// CostCenter - The cost center of this department if it is a department and a costcenter exists
+	// CostCenter - READ-ONLY; The cost center of this department if it is a department and a costcenter exists
 	CostCenter *string `json:"costCenter,omitempty"`
-	// AdditionalProperties - Additional details of this usage item. By default this is not populated, unless it's specified in $expand.
+	// AdditionalProperties - READ-ONLY; Additional details of this usage item. By default this is not populated, unless it's specified in $expand.
 	AdditionalProperties *string `json:"additionalProperties,omitempty"`
 }
 
-// UsageDetailsListResult result of listing usage details. It contains a list of available usage details in reverse
-// chronological order by billing period.
+// UsageDetailsListResult result of listing usage details. It contains a list of available usage details in
+// reverse chronological order by billing period.
 type UsageDetailsListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The list of usage details.
+	// Value - READ-ONLY; The list of usage details.
 	Value *[]UsageDetail `json:"value,omitempty"`
-	// NextLink - The link (url) to the next page of results.
+	// NextLink - READ-ONLY; The link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -1534,20 +1677,37 @@ type UsageDetailsListResultIterator struct {
 	page UsageDetailsListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *UsageDetailsListResultIterator) Next() error {
+func (iter *UsageDetailsListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *UsageDetailsListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1569,6 +1729,11 @@ func (iter UsageDetailsListResultIterator) Value() UsageDetail {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the UsageDetailsListResultIterator type.
+func NewUsageDetailsListResultIterator(page UsageDetailsListResultPage) UsageDetailsListResultIterator {
+	return UsageDetailsListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (udlr UsageDetailsListResult) IsEmpty() bool {
 	return udlr.Value == nil || len(*udlr.Value) == 0
@@ -1576,11 +1741,11 @@ func (udlr UsageDetailsListResult) IsEmpty() bool {
 
 // usageDetailsListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (udlr UsageDetailsListResult) usageDetailsListResultPreparer() (*http.Request, error) {
+func (udlr UsageDetailsListResult) usageDetailsListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if udlr.NextLink == nil || len(to.String(udlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(udlr.NextLink)))
@@ -1588,19 +1753,36 @@ func (udlr UsageDetailsListResult) usageDetailsListResultPreparer() (*http.Reque
 
 // UsageDetailsListResultPage contains a page of UsageDetail values.
 type UsageDetailsListResultPage struct {
-	fn   func(UsageDetailsListResult) (UsageDetailsListResult, error)
+	fn   func(context.Context, UsageDetailsListResult) (UsageDetailsListResult, error)
 	udlr UsageDetailsListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *UsageDetailsListResultPage) Next() error {
-	next, err := page.fn(page.udlr)
+func (page *UsageDetailsListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.udlr)
 	if err != nil {
 		return err
 	}
 	page.udlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *UsageDetailsListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1619,4 +1801,9 @@ func (page UsageDetailsListResultPage) Values() []UsageDetail {
 		return nil
 	}
 	return *page.udlr.Value
+}
+
+// Creates a new instance of the UsageDetailsListResultPage type.
+func NewUsageDetailsListResultPage(getNextPage func(context.Context, UsageDetailsListResult) (UsageDetailsListResult, error)) UsageDetailsListResultPage {
+	return UsageDetailsListResultPage{fn: getNextPage}
 }

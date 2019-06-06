@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewEndpointsClientWithBaseURI(baseURI string, subscriptionID string) Endpoi
 // endpointName - the name of the Traffic Manager endpoint to be created or updated.
 // parameters - the Traffic Manager endpoint parameters supplied to the CreateOrUpdate operation.
 func (client EndpointsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, profileName string, endpointType string, endpointName string, parameters Endpoint) (result Endpoint, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, profileName, endpointType, endpointName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "trafficmanager.EndpointsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -121,6 +132,16 @@ func (client EndpointsClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // endpointType - the type of the Traffic Manager endpoint to be deleted.
 // endpointName - the name of the Traffic Manager endpoint to be deleted.
 func (client EndpointsClient) Delete(ctx context.Context, resourceGroupName string, profileName string, endpointType string, endpointName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, profileName, endpointType, endpointName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "trafficmanager.EndpointsClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +212,16 @@ func (client EndpointsClient) DeleteResponder(resp *http.Response) (result autor
 // endpointType - the type of the Traffic Manager endpoint.
 // endpointName - the name of the Traffic Manager endpoint.
 func (client EndpointsClient) Get(ctx context.Context, resourceGroupName string, profileName string, endpointType string, endpointName string) (result Endpoint, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, profileName, endpointType, endpointName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "trafficmanager.EndpointsClient", "Get", nil, "Failure preparing request")
@@ -263,6 +294,16 @@ func (client EndpointsClient) GetResponder(resp *http.Response) (result Endpoint
 // endpointName - the name of the Traffic Manager endpoint to be updated.
 // parameters - the Traffic Manager endpoint parameters supplied to the Update operation.
 func (client EndpointsClient) Update(ctx context.Context, resourceGroupName string, profileName string, endpointType string, endpointName string, parameters Endpoint) (result Endpoint, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EndpointsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, profileName, endpointType, endpointName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "trafficmanager.EndpointsClient", "Update", nil, "Failure preparing request")

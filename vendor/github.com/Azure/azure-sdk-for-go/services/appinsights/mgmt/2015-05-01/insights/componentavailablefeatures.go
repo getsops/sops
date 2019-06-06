@@ -21,6 +21,8 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,9 +43,29 @@ func NewComponentAvailableFeaturesClientWithBaseURI(baseURI string, subscription
 
 // Get returns all available features of the application insights component.
 // Parameters:
-// resourceGroupName - the name of the resource group.
+// resourceGroupName - the name of the resource group. The name is case insensitive.
 // resourceName - the name of the Application Insights component resource.
 func (client ComponentAvailableFeaturesClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result ApplicationInsightsComponentAvailableFeatures, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ComponentAvailableFeaturesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: client.SubscriptionID,
+			Constraints: []validation.Constraint{{Target: "client.SubscriptionID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("insights.ComponentAvailableFeaturesClient", "Get", err.Error())
+	}
+
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "insights.ComponentAvailableFeaturesClient", "Get", nil, "Failure preparing request")

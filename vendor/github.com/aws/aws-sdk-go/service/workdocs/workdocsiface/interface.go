@@ -201,6 +201,10 @@ type WorkDocsAPI interface {
 	GetFolderPathWithContext(aws.Context, *workdocs.GetFolderPathInput, ...request.Option) (*workdocs.GetFolderPathOutput, error)
 	GetFolderPathRequest(*workdocs.GetFolderPathInput) (*request.Request, *workdocs.GetFolderPathOutput)
 
+	GetResources(*workdocs.GetResourcesInput) (*workdocs.GetResourcesOutput, error)
+	GetResourcesWithContext(aws.Context, *workdocs.GetResourcesInput, ...request.Option) (*workdocs.GetResourcesOutput, error)
+	GetResourcesRequest(*workdocs.GetResourcesInput) (*request.Request, *workdocs.GetResourcesOutput)
+
 	InitiateDocumentVersionUpload(*workdocs.InitiateDocumentVersionUploadInput) (*workdocs.InitiateDocumentVersionUploadOutput, error)
 	InitiateDocumentVersionUploadWithContext(aws.Context, *workdocs.InitiateDocumentVersionUploadInput, ...request.Option) (*workdocs.InitiateDocumentVersionUploadOutput, error)
 	InitiateDocumentVersionUploadRequest(*workdocs.InitiateDocumentVersionUploadInput) (*request.Request, *workdocs.InitiateDocumentVersionUploadOutput)

@@ -17,7 +17,7 @@
   "basePath": "",
   "baseUrl": "https://appengine.googleapis.com/",
   "batchPath": "batch",
-  "description": "The App Engine Admin API enables developers to provision and manage their App Engine applications.",
+  "description": "Provisions and manages developers' App Engine applications.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/appengine/docs/admin-api/",
   "icons": {
@@ -927,7 +927,7 @@
       }
     }
   },
-  "revision": "20180831",
+  "revision": "20181218",
   "rootUrl": "https://appengine.googleapis.com/",
   "schemas": {
     "ApiConfigHandler": {
@@ -2381,6 +2381,10 @@
         },
         "runtimeApiVersion": {
           "description": "The version of the API in the given runtime environment. Please see the app.yaml reference for valid values at https://cloud.google.com/appengine/docs/standard/\u003clanguage\u003e/config/appref",
+          "type": "string"
+        },
+        "runtimeMainExecutablePath": {
+          "description": "The path or name of the app's main executable.",
           "type": "string"
         },
         "servingStatus": {

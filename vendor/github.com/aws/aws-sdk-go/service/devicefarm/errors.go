@@ -47,4 +47,24 @@ const (
 	//
 	// There was a problem with the service account.
 	ErrCodeServiceAccountException = "ServiceAccountException"
+
+	// ErrCodeTagOperationException for service response error code
+	// "TagOperationException".
+	//
+	// The operation was not successful. Try again.
+	ErrCodeTagOperationException = "TagOperationException"
+
+	// ErrCodeTagPolicyException for service response error code
+	// "TagPolicyException".
+	//
+	// The request doesn't comply with the AWS Identity and Access Management (IAM)
+	// tag policy. Correct your request and then retry it.
+	ErrCodeTagPolicyException = "TagPolicyException"
+
+	// ErrCodeTooManyTagsException for service response error code
+	// "TooManyTagsException".
+	//
+	// The list of tags on the repository is over the limit. The maximum number
+	// of tags that can be applied to a repository is 50.
+	ErrCodeTooManyTagsException = "TooManyTagsException"
 )

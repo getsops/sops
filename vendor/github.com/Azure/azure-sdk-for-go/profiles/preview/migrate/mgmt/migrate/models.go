@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,18 +21,10 @@ package migrate
 
 import original "github.com/Azure/azure-sdk-for-go/services/migrate/mgmt/2018-02-02/migrate"
 
-type AssessedMachinesClient = original.AssessedMachinesClient
-type AssessmentOptionsClient = original.AssessmentOptionsClient
-type AssessmentsClient = original.AssessmentsClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type GroupsClient = original.GroupsClient
-type LocationClient = original.LocationClient
-type MachinesClient = original.MachinesClient
 type AssessmentSizingCriterion = original.AssessmentSizingCriterion
 
 const (
@@ -446,11 +438,15 @@ type AssessedDisk = original.AssessedDisk
 type AssessedMachine = original.AssessedMachine
 type AssessedMachineProperties = original.AssessedMachineProperties
 type AssessedMachineResultList = original.AssessedMachineResultList
+type AssessedMachinesClient = original.AssessedMachinesClient
 type AssessedNetworkAdapter = original.AssessedNetworkAdapter
 type Assessment = original.Assessment
+type AssessmentOptionsClient = original.AssessmentOptionsClient
 type AssessmentOptionsResultList = original.AssessmentOptionsResultList
 type AssessmentProperties = original.AssessmentProperties
 type AssessmentResultList = original.AssessmentResultList
+type AssessmentsClient = original.AssessmentsClient
+type BaseClient = original.BaseClient
 type CheckNameAvailabilityParameters = original.CheckNameAvailabilityParameters
 type CheckNameAvailabilityResult = original.CheckNameAvailabilityResult
 type CloudError = original.CloudError
@@ -460,21 +456,27 @@ type DownloadURL = original.DownloadURL
 type Group = original.Group
 type GroupProperties = original.GroupProperties
 type GroupResultList = original.GroupResultList
+type GroupsClient = original.GroupsClient
+type LocationClient = original.LocationClient
 type Machine = original.Machine
 type MachineProperties = original.MachineProperties
 type MachineResultList = original.MachineResultList
+type MachinesClient = original.MachinesClient
 type NetworkAdapter = original.NetworkAdapter
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationResultList = original.OperationResultList
+type OperationsClient = original.OperationsClient
 type Project = original.Project
 type ProjectKey = original.ProjectKey
 type ProjectProperties = original.ProjectProperties
 type ProjectResultList = original.ProjectResultList
-type VMFamily = original.VMFamily
-type OperationsClient = original.OperationsClient
 type ProjectsClient = original.ProjectsClient
+type VMFamily = original.VMFamily
 
+func New(subscriptionID string, acceptLanguage string) BaseClient {
+	return original.New(subscriptionID, acceptLanguage)
+}
 func NewAssessedMachinesClient(subscriptionID string, acceptLanguage string) AssessedMachinesClient {
 	return original.NewAssessedMachinesClient(subscriptionID, acceptLanguage)
 }
@@ -493,12 +495,6 @@ func NewAssessmentsClient(subscriptionID string, acceptLanguage string) Assessme
 func NewAssessmentsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) AssessmentsClient {
 	return original.NewAssessmentsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
-func New(subscriptionID string, acceptLanguage string) BaseClient {
-	return original.New(subscriptionID, acceptLanguage)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID, acceptLanguage)
-}
 func NewGroupsClient(subscriptionID string, acceptLanguage string) GroupsClient {
 	return original.NewGroupsClient(subscriptionID, acceptLanguage)
 }
@@ -516,6 +512,21 @@ func NewMachinesClient(subscriptionID string, acceptLanguage string) MachinesCli
 }
 func NewMachinesClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) MachinesClient {
 	return original.NewMachinesClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func NewOperationsClient(subscriptionID string, acceptLanguage string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID, acceptLanguage)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func NewProjectsClient(subscriptionID string, acceptLanguage string) ProjectsClient {
+	return original.NewProjectsClient(subscriptionID, acceptLanguage)
+}
+func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) ProjectsClient {
+	return original.NewProjectsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
 func PossibleAssessmentSizingCriterionValues() []AssessmentSizingCriterion {
 	return original.PossibleAssessmentSizingCriterionValues()
@@ -582,18 +593,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 }
 func PossibleTimeRangeValues() []TimeRange {
 	return original.PossibleTimeRangeValues()
-}
-func NewOperationsClient(subscriptionID string, acceptLanguage string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID, acceptLanguage)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
-}
-func NewProjectsClient(subscriptionID string, acceptLanguage string) ProjectsClient {
-	return original.NewProjectsClient(subscriptionID, acceptLanguage)
-}
-func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string, acceptLanguage string) ProjectsClient {
-	return original.NewProjectsClientWithBaseURI(baseURI, subscriptionID, acceptLanguage)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

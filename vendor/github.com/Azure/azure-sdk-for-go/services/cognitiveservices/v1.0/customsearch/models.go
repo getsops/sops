@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/customsearch"
+
 // ErrorCode enumerates the values for error code.
 type ErrorCode string
 
@@ -153,10 +156,11 @@ type BasicAnswer interface {
 
 // Answer ...
 type Answer struct {
+	// FollowUpQueries - READ-ONLY
 	FollowUpQueries *[]Query `json:"followUpQueries,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -207,15 +211,6 @@ func unmarshalBasicAnswerArray(body []byte) ([]BasicAnswer, error) {
 func (a Answer) MarshalJSON() ([]byte, error) {
 	a.Type = TypeAnswer
 	objectMap := make(map[string]interface{})
-	if a.FollowUpQueries != nil {
-		objectMap["followUpQueries"] = a.FollowUpQueries
-	}
-	if a.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = a.WebSearchURL
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
 	if a.Type != "" {
 		objectMap["_type"] = a.Type
 	}
@@ -320,22 +315,23 @@ type BasicCreativeWork interface {
 
 // CreativeWork ...
 type CreativeWork struct {
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Text     *string       `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Text - READ-ONLY
+	Text *string `json:"text,omitempty"`
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -382,33 +378,6 @@ func unmarshalBasicCreativeWorkArray(body []byte) ([]BasicCreativeWork, error) {
 func (cw CreativeWork) MarshalJSON() ([]byte, error) {
 	cw.Type = TypeCreativeWork
 	objectMap := make(map[string]interface{})
-	if cw.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = cw.ThumbnailURL
-	}
-	if cw.Provider != nil {
-		objectMap["provider"] = cw.Provider
-	}
-	if cw.Text != nil {
-		objectMap["text"] = cw.Text
-	}
-	if cw.Name != nil {
-		objectMap["name"] = cw.Name
-	}
-	if cw.URL != nil {
-		objectMap["url"] = cw.URL
-	}
-	if cw.Description != nil {
-		objectMap["description"] = cw.Description
-	}
-	if cw.BingID != nil {
-		objectMap["bingId"] = cw.BingID
-	}
-	if cw.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = cw.WebSearchURL
-	}
-	if cw.ID != nil {
-		objectMap["id"] = cw.ID
-	}
 	if cw.Type != "" {
 		objectMap["_type"] = cw.Type
 	}
@@ -613,15 +582,15 @@ func (cw *CreativeWork) UnmarshalJSON(body []byte) error {
 type Error struct {
 	// Code - The error code that identifies the category of error. Possible values include: 'None', 'ServerError', 'InvalidRequest', 'RateLimitExceeded', 'InvalidAuthorization', 'InsufficientAuthorization'
 	Code ErrorCode `json:"code,omitempty"`
-	// SubCode - The error code that further helps to identify the error. Possible values include: 'UnexpectedError', 'ResourceError', 'NotImplemented', 'ParameterMissing', 'ParameterInvalidValue', 'HTTPNotAllowed', 'Blocked', 'AuthorizationMissing', 'AuthorizationRedundancy', 'AuthorizationDisabled', 'AuthorizationExpired'
+	// SubCode - READ-ONLY; The error code that further helps to identify the error. Possible values include: 'UnexpectedError', 'ResourceError', 'NotImplemented', 'ParameterMissing', 'ParameterInvalidValue', 'HTTPNotAllowed', 'Blocked', 'AuthorizationMissing', 'AuthorizationRedundancy', 'AuthorizationDisabled', 'AuthorizationExpired'
 	SubCode ErrorSubCode `json:"subCode,omitempty"`
 	// Message - A description of the error.
 	Message *string `json:"message,omitempty"`
-	// MoreDetails - A description that provides additional information about the error.
+	// MoreDetails - READ-ONLY; A description that provides additional information about the error.
 	MoreDetails *string `json:"moreDetails,omitempty"`
-	// Parameter - The parameter in the request that caused the error.
+	// Parameter - READ-ONLY; The parameter in the request that caused the error.
 	Parameter *string `json:"parameter,omitempty"`
-	// Value - The parameter's value in the request that was not valid.
+	// Value - READ-ONLY; The parameter's value in the request that was not valid.
 	Value *string `json:"value,omitempty"`
 }
 
@@ -629,9 +598,9 @@ type Error struct {
 type ErrorResponse struct {
 	// Errors - A list of errors that describe the reasons why the request failed.
 	Errors *[]Error `json:"errors,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -643,12 +612,6 @@ func (er ErrorResponse) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if er.Errors != nil {
 		objectMap["errors"] = er.Errors
-	}
-	if er.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = er.WebSearchURL
-	}
-	if er.ID != nil {
-		objectMap["id"] = er.ID
 	}
 	if er.Type != "" {
 		objectMap["_type"] = er.Type
@@ -767,7 +730,7 @@ type BasicIdentifiable interface {
 
 // Identifiable defines the identity of a resource.
 type Identifiable struct {
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -846,9 +809,6 @@ func unmarshalBasicIdentifiableArray(body []byte) ([]BasicIdentifiable, error) {
 func (i Identifiable) MarshalJSON() ([]byte, error) {
 	i.Type = TypeIdentifiable
 	objectMap := make(map[string]interface{})
-	if i.ID != nil {
-		objectMap["id"] = i.ID
-	}
 	if i.Type != "" {
 		objectMap["_type"] = i.Type
 	}
@@ -949,22 +909,23 @@ func (i Identifiable) AsBasicResponseBase() (BasicResponseBase, bool) {
 type Query struct {
 	// Text - The query string. Use this string as the query term in a new search request.
 	Text *string `json:"text,omitempty"`
-	// DisplayText - The display version of the query term. This version of the query term may contain special characters that highlight the search term found in the query string. The string contains the highlighting characters only if the query enabled hit highlighting
+	// DisplayText - READ-ONLY; The display version of the query term. This version of the query term may contain special characters that highlight the search term found in the query string. The string contains the highlighting characters only if the query enabled hit highlighting
 	DisplayText *string `json:"displayText,omitempty"`
-	// WebSearchURL - The URL that takes the user to the Bing search results page for the query.Only related search results include this field.
+	// WebSearchURL - READ-ONLY; The URL that takes the user to the Bing search results page for the query.Only related search results include this field.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	SearchLink   *string `json:"searchLink,omitempty"`
+	// SearchLink - READ-ONLY
+	SearchLink *string `json:"searchLink,omitempty"`
 }
 
 // QueryContext defines the query context that Bing used for the request.
 type QueryContext struct {
 	// OriginalQuery - The query string as specified in the request.
 	OriginalQuery *string `json:"originalQuery,omitempty"`
-	// AlteredQuery - The query string used by Bing to perform the query. Bing uses the altered query string if the original query string contained spelling mistakes. For example, if the query string is "saling downwind", the altered query string will be "sailing downwind". This field is included only if the original query string contains a spelling mistake.
+	// AlteredQuery - READ-ONLY; The query string used by Bing to perform the query. Bing uses the altered query string if the original query string contained spelling mistakes. For example, if the query string is "saling downwind", the altered query string will be "sailing downwind". This field is included only if the original query string contains a spelling mistake.
 	AlteredQuery *string `json:"alteredQuery,omitempty"`
-	// AlterationOverrideQuery - The query string to use to force Bing to use the original string. For example, if the query string is "saling downwind", the override query string will be "+saling downwind". Remember to encode the query string which results in "%2Bsaling+downwind". This field is included only if the original query string contains a spelling mistake.
+	// AlterationOverrideQuery - READ-ONLY; The query string to use to force Bing to use the original string. For example, if the query string is "saling downwind", the override query string will be "+saling downwind". Remember to encode the query string which results in "%2Bsaling+downwind". This field is included only if the original query string contains a spelling mistake.
 	AlterationOverrideQuery *string `json:"alterationOverrideQuery,omitempty"`
-	// AdultIntent - A Boolean value that indicates whether the specified query has adult intent. The value is true if the query has adult intent; otherwise, false.
+	// AdultIntent - READ-ONLY; A Boolean value that indicates whether the specified query has adult intent. The value is true if the query has adult intent; otherwise, false.
 	AdultIntent *bool `json:"adultIntent,omitempty"`
 }
 
@@ -986,12 +947,12 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that could be returned at the root of a response should inherit from
-// this
+// Response defines a response. All schemas that could be returned at the root of a response should inherit
+// from this
 type Response struct {
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -1066,12 +1027,6 @@ func unmarshalBasicResponseArray(body []byte) ([]BasicResponse, error) {
 func (r Response) MarshalJSON() ([]byte, error) {
 	r.Type = TypeResponse
 	objectMap := make(map[string]interface{})
-	if r.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = r.WebSearchURL
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -1371,13 +1326,13 @@ func (rb ResponseBase) AsBasicResponseBase() (BasicResponseBase, bool) {
 // SearchResponse defines the top-level object that the response includes when the request succeeds.
 type SearchResponse struct {
 	autorest.Response `json:"-"`
-	// QueryContext - An object that contains the query string that Bing used for the request. This object contains the query string as entered by the user. It may also contain an altered query string that Bing used for the query if the query string contained a spelling mistake.
+	// QueryContext - READ-ONLY; An object that contains the query string that Bing used for the request. This object contains the query string as entered by the user. It may also contain an altered query string that Bing used for the query if the query string contained a spelling mistake.
 	QueryContext *QueryContext `json:"queryContext,omitempty"`
-	// WebPages - A list of webpages that are relevant to the search query.
+	// WebPages - READ-ONLY; A list of webpages that are relevant to the search query.
 	WebPages *WebWebAnswer `json:"webPages,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -1387,18 +1342,6 @@ type SearchResponse struct {
 func (sr SearchResponse) MarshalJSON() ([]byte, error) {
 	sr.Type = TypeSearchResponse
 	objectMap := make(map[string]interface{})
-	if sr.QueryContext != nil {
-		objectMap["queryContext"] = sr.QueryContext
-	}
-	if sr.WebPages != nil {
-		objectMap["webPages"] = sr.WebPages
-	}
-	if sr.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sr.WebSearchURL
-	}
-	if sr.ID != nil {
-		objectMap["id"] = sr.ID
-	}
 	if sr.Type != "" {
 		objectMap["_type"] = sr.Type
 	}
@@ -1503,14 +1446,17 @@ type BasicSearchResultsAnswer interface {
 
 // SearchResultsAnswer ...
 type SearchResultsAnswer struct {
+	// QueryContext - READ-ONLY
 	QueryContext *QueryContext `json:"queryContext,omitempty"`
-	// TotalEstimatedMatches - The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page the results.
-	TotalEstimatedMatches *int64   `json:"totalEstimatedMatches,omitempty"`
-	IsFamilyFriendly      *bool    `json:"isFamilyFriendly,omitempty"`
-	FollowUpQueries       *[]Query `json:"followUpQueries,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// TotalEstimatedMatches - READ-ONLY; The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page the results.
+	TotalEstimatedMatches *int64 `json:"totalEstimatedMatches,omitempty"`
+	// IsFamilyFriendly - READ-ONLY
+	IsFamilyFriendly *bool `json:"isFamilyFriendly,omitempty"`
+	// FollowUpQueries - READ-ONLY
+	FollowUpQueries *[]Query `json:"followUpQueries,omitempty"`
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -1557,24 +1503,6 @@ func unmarshalBasicSearchResultsAnswerArray(body []byte) ([]BasicSearchResultsAn
 func (sra SearchResultsAnswer) MarshalJSON() ([]byte, error) {
 	sra.Type = TypeSearchResultsAnswer
 	objectMap := make(map[string]interface{})
-	if sra.QueryContext != nil {
-		objectMap["queryContext"] = sra.QueryContext
-	}
-	if sra.TotalEstimatedMatches != nil {
-		objectMap["totalEstimatedMatches"] = sra.TotalEstimatedMatches
-	}
-	if sra.IsFamilyFriendly != nil {
-		objectMap["isFamilyFriendly"] = sra.IsFamilyFriendly
-	}
-	if sra.FollowUpQueries != nil {
-		objectMap["followUpQueries"] = sra.FollowUpQueries
-	}
-	if sra.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sra.WebSearchURL
-	}
-	if sra.ID != nil {
-		objectMap["id"] = sra.ID
-	}
 	if sra.Type != "" {
 		objectMap["_type"] = sra.Type
 	}
@@ -1681,17 +1609,17 @@ type BasicThing interface {
 
 // Thing ...
 type Thing struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -1742,24 +1670,6 @@ func unmarshalBasicThingArray(body []byte) ([]BasicThing, error) {
 func (t Thing) MarshalJSON() ([]byte, error) {
 	t.Type = TypeThing
 	objectMap := make(map[string]interface{})
-	if t.Name != nil {
-		objectMap["name"] = t.Name
-	}
-	if t.URL != nil {
-		objectMap["url"] = t.URL
-	}
-	if t.Description != nil {
-		objectMap["description"] = t.Description
-	}
-	if t.BingID != nil {
-		objectMap["bingId"] = t.BingID
-	}
-	if t.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = t.WebSearchURL
-	}
-	if t.ID != nil {
-		objectMap["id"] = t.ID
-	}
 	if t.Type != "" {
 		objectMap["_type"] = t.Type
 	}
@@ -1858,40 +1768,41 @@ func (t Thing) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // WebMetaTag defines a webpage's metadata.
 type WebMetaTag struct {
-	// Name - The metadata.
+	// Name - READ-ONLY; The metadata.
 	Name *string `json:"name,omitempty"`
-	// Content - The name of the metadata.
+	// Content - READ-ONLY; The name of the metadata.
 	Content *string `json:"content,omitempty"`
 }
 
 // WebPage defines a webpage that is relevant to the query.
 type WebPage struct {
-	// DisplayURL - The display URL of the webpage. The URL is meant for display purposes only and is not well formed.
+	// DisplayURL - READ-ONLY; The display URL of the webpage. The URL is meant for display purposes only and is not well formed.
 	DisplayURL *string `json:"displayUrl,omitempty"`
-	// Snippet - A snippet of text from the webpage that describes its contents.
+	// Snippet - READ-ONLY; A snippet of text from the webpage that describes its contents.
 	Snippet *string `json:"snippet,omitempty"`
-	// DeepLinks - A list of links to related content that Bing found in the website that contains this webpage. The Webpage object in this context includes only the name, url, urlPingSuffix, and snippet fields.
+	// DeepLinks - READ-ONLY; A list of links to related content that Bing found in the website that contains this webpage. The Webpage object in this context includes only the name, url, urlPingSuffix, and snippet fields.
 	DeepLinks *[]WebPage `json:"deepLinks,omitempty"`
-	// DateLastCrawled - The last time that Bing crawled the webpage. The date is in the form, YYYY-MM-DDTHH:MM:SS. For example, 2015-04-13T05:23:39.
+	// DateLastCrawled - READ-ONLY; The last time that Bing crawled the webpage. The date is in the form, YYYY-MM-DDTHH:MM:SS. For example, 2015-04-13T05:23:39.
 	DateLastCrawled *string `json:"dateLastCrawled,omitempty"`
-	// SearchTags - A list of search tags that the webpage owner specified on the webpage. The API returns only indexed search tags. The name field of the MetaTag object contains the indexed search tag. Search tags begin with search.* (for example, search.assetId). The content field contains the tag's value.
+	// SearchTags - READ-ONLY; A list of search tags that the webpage owner specified on the webpage. The API returns only indexed search tags. The name field of the MetaTag object contains the indexed search tag. Search tags begin with search.* (for example, search.assetId). The content field contains the tag's value.
 	SearchTags *[]WebMetaTag `json:"searchTags,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Text     *string       `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Text - READ-ONLY
+	Text *string `json:"text,omitempty"`
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -1901,48 +1812,6 @@ type WebPage struct {
 func (wp WebPage) MarshalJSON() ([]byte, error) {
 	wp.Type = TypeWebPage
 	objectMap := make(map[string]interface{})
-	if wp.DisplayURL != nil {
-		objectMap["displayUrl"] = wp.DisplayURL
-	}
-	if wp.Snippet != nil {
-		objectMap["snippet"] = wp.Snippet
-	}
-	if wp.DeepLinks != nil {
-		objectMap["deepLinks"] = wp.DeepLinks
-	}
-	if wp.DateLastCrawled != nil {
-		objectMap["dateLastCrawled"] = wp.DateLastCrawled
-	}
-	if wp.SearchTags != nil {
-		objectMap["searchTags"] = wp.SearchTags
-	}
-	if wp.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = wp.ThumbnailURL
-	}
-	if wp.Provider != nil {
-		objectMap["provider"] = wp.Provider
-	}
-	if wp.Text != nil {
-		objectMap["text"] = wp.Text
-	}
-	if wp.Name != nil {
-		objectMap["name"] = wp.Name
-	}
-	if wp.URL != nil {
-		objectMap["url"] = wp.URL
-	}
-	if wp.Description != nil {
-		objectMap["description"] = wp.Description
-	}
-	if wp.BingID != nil {
-		objectMap["bingId"] = wp.BingID
-	}
-	if wp.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = wp.WebSearchURL
-	}
-	if wp.ID != nil {
-		objectMap["id"] = wp.ID
-	}
 	if wp.Type != "" {
 		objectMap["_type"] = wp.Type
 	}
@@ -2192,16 +2061,19 @@ func (wp *WebPage) UnmarshalJSON(body []byte) error {
 type WebWebAnswer struct {
 	// Value - A list of webpages that are relevant to the query.
 	Value *[]WebPage `json:"value,omitempty"`
-	// SomeResultsRemoved - A Boolean value that indicates whether the response excluded some results from the answer. If Bing excluded some results, the value is true.
-	SomeResultsRemoved *bool         `json:"someResultsRemoved,omitempty"`
-	QueryContext       *QueryContext `json:"queryContext,omitempty"`
-	// TotalEstimatedMatches - The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page the results.
-	TotalEstimatedMatches *int64   `json:"totalEstimatedMatches,omitempty"`
-	IsFamilyFriendly      *bool    `json:"isFamilyFriendly,omitempty"`
-	FollowUpQueries       *[]Query `json:"followUpQueries,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
+	// SomeResultsRemoved - READ-ONLY; A Boolean value that indicates whether the response excluded some results from the answer. If Bing excluded some results, the value is true.
+	SomeResultsRemoved *bool `json:"someResultsRemoved,omitempty"`
+	// QueryContext - READ-ONLY
+	QueryContext *QueryContext `json:"queryContext,omitempty"`
+	// TotalEstimatedMatches - READ-ONLY; The estimated number of webpages that are relevant to the query. Use this number along with the count and offset query parameters to page the results.
+	TotalEstimatedMatches *int64 `json:"totalEstimatedMatches,omitempty"`
+	// IsFamilyFriendly - READ-ONLY
+	IsFamilyFriendly *bool `json:"isFamilyFriendly,omitempty"`
+	// FollowUpQueries - READ-ONLY
+	FollowUpQueries *[]Query `json:"followUpQueries,omitempty"`
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeWebPage', 'TypeWebWebAnswer', 'TypeSearchResponse', 'TypeResponse', 'TypeSearchResultsAnswer', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeAnswer', 'TypeThing', 'TypeCreativeWork'
 	Type Type `json:"_type,omitempty"`
@@ -2213,27 +2085,6 @@ func (wwa WebWebAnswer) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if wwa.Value != nil {
 		objectMap["value"] = wwa.Value
-	}
-	if wwa.SomeResultsRemoved != nil {
-		objectMap["someResultsRemoved"] = wwa.SomeResultsRemoved
-	}
-	if wwa.QueryContext != nil {
-		objectMap["queryContext"] = wwa.QueryContext
-	}
-	if wwa.TotalEstimatedMatches != nil {
-		objectMap["totalEstimatedMatches"] = wwa.TotalEstimatedMatches
-	}
-	if wwa.IsFamilyFriendly != nil {
-		objectMap["isFamilyFriendly"] = wwa.IsFamilyFriendly
-	}
-	if wwa.FollowUpQueries != nil {
-		objectMap["followUpQueries"] = wwa.FollowUpQueries
-	}
-	if wwa.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = wwa.WebSearchURL
-	}
-	if wwa.ID != nil {
-		objectMap["id"] = wwa.ID
 	}
 	if wwa.Type != "" {
 		objectMap["_type"] = wwa.Type

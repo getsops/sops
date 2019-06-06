@@ -15,7 +15,8 @@
 package bigquery
 
 import (
-	"golang.org/x/net/context"
+	"context"
+
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -61,10 +62,10 @@ func (c *CopyConfig) toBQ() *bq.JobConfiguration {
 
 func bqToCopyConfig(q *bq.JobConfiguration, c *Client) *CopyConfig {
 	cc := &CopyConfig{
-		Labels:            q.Labels,
-		CreateDisposition: TableCreateDisposition(q.Copy.CreateDisposition),
-		WriteDisposition:  TableWriteDisposition(q.Copy.WriteDisposition),
-		Dst:               bqToTable(q.Copy.DestinationTable, c),
+		Labels:                      q.Labels,
+		CreateDisposition:           TableCreateDisposition(q.Copy.CreateDisposition),
+		WriteDisposition:            TableWriteDisposition(q.Copy.WriteDisposition),
+		Dst:                         bqToTable(q.Copy.DestinationTable, c),
 		DestinationEncryptionConfig: bqToEncryptionConfig(q.Copy.DestinationEncryptionConfiguration),
 	}
 	for _, t := range q.Copy.SourceTables {

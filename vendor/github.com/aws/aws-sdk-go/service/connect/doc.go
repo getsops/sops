@@ -9,6 +9,18 @@
 // makes it easy to set up and manage a customer contact center and provide
 // reliable customer engagement at any scale.
 //
+// Throttling limits for the Amazon Connect API operations:
+//
+// For the GetMetricData and GetCurrentMetricData operations, a RateLimit of
+// 5 per second, and a BurstLimit of 8 per second.
+//
+// For all other operations, a RateLimit of 2 per second, and a BurstLimit of
+// 5 per second.
+//
+// You can request an increase to the throttling limits by submitting a Amazon
+// Connect service limits increase form (https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase).
+// You must be signed in to your AWS account to access the form.
+//
 // See https://docs.aws.amazon.com/goto/WebAPI/connect-2017-08-08 for more information on this service.
 //
 // See connect package documentation for more information.

@@ -84,14 +84,9 @@ func (r *lbManualResolver) ResolveNow(o resolver.ResolveNowOption) {
 // Close is a noop for Resolver.
 func (*lbManualResolver) Close() {}
 
-// NewAddress calls cc.NewAddress.
-func (r *lbManualResolver) NewAddress(addrs []resolver.Address) {
-	r.ccr.NewAddress(addrs)
-}
-
-// NewServiceConfig calls cc.NewServiceConfig.
-func (r *lbManualResolver) NewServiceConfig(sc string) {
-	r.ccr.NewServiceConfig(sc)
+// UpdateState calls cc.UpdateState.
+func (r *lbManualResolver) UpdateState(s resolver.State) {
+	r.ccr.UpdateState(s)
 }
 
 const subConnCacheTime = time.Second * 10

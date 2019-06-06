@@ -2,13 +2,13 @@
   "version": "2.0",
   "service": "<p/>",
   "operations": {
-    "CreateStream": "<p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href=\"http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html\">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>",
+    "CreateStream": "<p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href=\"https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html\">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>",
     "DeleteStream": "<p>Deletes a Kinesis video stream and the data contained in the stream. </p> <p>This method marks the stream for deletion, and makes the data in the stream inaccessible immediately.</p> <p> </p> <p> To ensure that you have the latest version of the stream before deleting it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p>This operation requires permission for the <code>KinesisVideo:DeleteStream</code> action.</p>",
     "DescribeStream": "<p>Returns the most current information about the specified stream. You must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>",
     "GetDataEndpoint": "<p>Gets an endpoint for a specified stream for either reading or writing. Use this endpoint in your application to read from the specified stream (using the <code>GetMedia</code> or <code>GetMediaForFragmentList</code> operations) or write to it (using the <code>PutMedia</code> operation). </p> <note> <p>The returned endpoint does not have the API name appended. The client needs to add the API name to the returned endpoint.</p> </note> <p>In the request, specify the stream either by <code>StreamName</code> or <code>StreamARN</code>.</p>",
     "ListStreams": "<p>Returns an array of <code>StreamInfo</code> objects. Each object describes a stream. To retrieve only streams that satisfy a specific condition, you can specify a <code>StreamNameCondition</code>. </p>",
     "ListTagsForStream": "<p>Returns a list of tags associated with the specified stream.</p> <p>In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p>",
-    "TagStream": "<p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href=\"http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>",
+    "TagStream": "<p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href=\"https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html\">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>",
     "UntagStream": "<p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>",
     "UpdateDataRetention": "<p> Increases or decreases the stream's data retention period by the value that you specify. To indicate whether you want to increase or decrease the data retention period, specify the <code>Operation</code> parameter in the request body. In the request, you must specify either the <code>StreamName</code> or the <code>StreamARN</code>. </p> <note> <p>The retention period that you specify replaces the current value.</p> </note> <p>This operation requires permission for the <code>KinesisVideo:UpdateDataRetention</code> action.</p> <p>Changing the data retention period affects the data in the stream as follows:</p> <ul> <li> <p>If the data retention period is increased, existing data is retained for the new retention period. For example, if the data retention period is increased from one hour to seven hours, all existing data is retained for seven hours.</p> </li> <li> <p>If the data retention period is decreased, existing data is retained for the new retention period. For example, if the data retention period is decreased from seven hours to one hour, all existing data is retained for one hour, and any data older than one hour is deleted immediately.</p> </li> </ul>",
     "UpdateStream": "<p>Updates stream metadata, such as the device name and media type.</p> <p>You must provide the stream name or the Amazon Resource Name (ARN) of the stream.</p> <p>To make sure that you have the latest version of the stream before updating it, you can specify the stream version. Kinesis Video Streams assigns a version to each stream. When you update a stream, Kinesis Video Streams assigns a new version number. To get the latest stream version, use the <code>DescribeStream</code> API. </p> <p> <code>UpdateStream</code> is an asynchronous operation, and takes time to complete.</p>"
@@ -55,7 +55,7 @@
     "DataRetentionChangeInHours": {
       "base": null,
       "refs": {
-        "UpdateDataRetentionInput$DataRetentionChangeInHours": "<p>The retention period, in hours. The value you specify replaces the current value.</p>"
+        "UpdateDataRetentionInput$DataRetentionChangeInHours": "<p>The retention period, in hours. The value you specify replaces the current value. The maximum value for this parameter is 87600 (ten years).</p>"
       }
     },
     "DataRetentionInHours": {
@@ -142,7 +142,7 @@
     "KmsKeyId": {
       "base": null,
       "refs": {
-        "CreateStreamInput$KmsKeyId": "<p>The ID of the AWS Key Management Service (AWS KMS) key that you want Kinesis Video Streams to use to encrypt stream data.</p> <p>If no key ID is specified, the default, Kinesis Video-managed key (<code>aws/kinesisvideo</code>) is used.</p> <p> For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters\">DescribeKey</a>. </p>",
+        "CreateStreamInput$KmsKeyId": "<p>The ID of the AWS Key Management Service (AWS KMS) key that you want Kinesis Video Streams to use to encrypt stream data.</p> <p>If no key ID is specified, the default, Kinesis Video-managed key (<code>aws/kinesisvideo</code>) is used.</p> <p> For more information, see <a href=\"https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters\">DescribeKey</a>. </p>",
         "StreamInfo$KmsKeyId": "<p>The ID of the AWS Key Management Service (AWS KMS) key that Kinesis Video Streams uses to encrypt data on the stream.</p>"
       }
     },
@@ -175,7 +175,7 @@
     "MediaType": {
       "base": null,
       "refs": {
-        "CreateStreamInput$MediaType": "<p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href=\"http://www.iana.org/assignments/media-types/media-types.xhtml\">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href=\"https://tools.ietf.org/html/rfc6838#section-4.2\">Naming Requirements</a> for guidelines.</p> <p>To play video on the console, the media must be H.264 encoded, and you need to specify this video type in this parameter as <code>video/h264</code>. </p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>",
+        "CreateStreamInput$MediaType": "<p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href=\"http://www.iana.org/assignments/media-types/media-types.xhtml\">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href=\"https://tools.ietf.org/html/rfc6838#section-4.2\">Naming Requirements</a> for guidelines.</p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>",
         "StreamInfo$MediaType": "<p>The <code>MediaType</code> of the stream. </p>",
         "UpdateStreamInput$MediaType": "<p>The stream's media type. Use <code>MediaType</code> to specify the type of content that the stream contains to the consumers of the stream. For more information about media types, see <a href=\"http://www.iana.org/assignments/media-types/media-types.xhtml\">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href=\"https://tools.ietf.org/html/rfc6838#section-4.2\">Naming Requirements</a>.</p> <p>To play video on the console, you must specify the correct video type. For example, if the video in the stream is H.264, specify <code>video/h264</code> as the <code>MediaType</code>.</p>"
       }
@@ -222,6 +222,7 @@
     "ResourceTags": {
       "base": null,
       "refs": {
+        "CreateStreamInput$Tags": "<p>A list of tags to associate with the specified stream. Each tag is a key-value pair (the value is optional).</p>",
         "ListTagsForStreamOutput$Tags": "<p>A map of tag keys and values associated with the specified stream.</p>",
         "TagStreamInput$Tags": "<p>A list of tags to associate with the specified stream. Each tag is a key-value pair (the value is optional).</p>"
       }
@@ -352,7 +353,7 @@
       }
     },
     "VersionMismatchException": {
-      "base": "<p>The stream version that you specified is not the latest version. To get the latest version, use the <a href=\"http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html\">DescribeStream</a> API.</p>",
+      "base": "<p>The stream version that you specified is not the latest version. To get the latest version, use the <a href=\"https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html\">DescribeStream</a> API.</p>",
       "refs": {
       }
     }

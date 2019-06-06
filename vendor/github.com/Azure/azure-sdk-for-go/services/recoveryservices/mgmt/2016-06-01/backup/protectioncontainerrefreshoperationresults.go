@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewProtectionContainerRefreshOperationResultsClientWithBaseURI(baseURI stri
 // fabricName - the fabric name associated with the container.
 // operationID - the operation ID used for this GET operation.
 func (client ProtectionContainerRefreshOperationResultsClient) Get(ctx context.Context, vaultName string, resourceGroupName string, fabricName string, operationID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainerRefreshOperationResultsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, vaultName, resourceGroupName, fabricName, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.ProtectionContainerRefreshOperationResultsClient", "Get", nil, "Failure preparing request")

@@ -27,7 +27,7 @@ CLI parameters
     -p=id partition id, e.g: aws
     -r=id region id, e.g: us-west-2
     -s=id service id, e.g: s3
-    
+
     -partitions Lists all partitions.
     -regions Lists all regions in a partition. Requires partition ID.
              If service ID is also provided will show endpoints for a service.

@@ -16,7 +16,7 @@ type logger struct {
 	w io.Writer
 }
 
-// LogDebug initialize's the debug logger for the componenets in the api
+// LogDebug initialize's the debug logger for the components in the api
 // package to log debug lines to.
 //
 // Panics if called multiple times.

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,11 +47,21 @@ func NewApplicationsClientWithBaseURI(baseURI string, subscriptionID string) App
 // applicationName - the name of the managed application.
 // parameters - parameters supplied to the create or update a managed application.
 func (client ApplicationsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, applicationName string, parameters Application) (result ApplicationsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applicationName,
 			Constraints: []validation.Constraint{{Target: "applicationName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applicationName", Name: validation.MinLength, Rule: 3, Chain: nil}}},
@@ -115,10 +126,6 @@ func (client ApplicationsClient) CreateOrUpdateSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -143,6 +150,16 @@ func (client ApplicationsClient) CreateOrUpdateResponder(resp *http.Response) (r
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/applications/{application-name}
 // parameters - parameters supplied to the create or update a managed application.
 func (client ApplicationsClient) CreateOrUpdateByID(ctx context.Context, applicationID string, parameters Application) (result ApplicationsCreateOrUpdateByIDFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.CreateOrUpdateByID")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ApplicationProperties", Name: validation.Null, Rule: true,
@@ -203,10 +220,6 @@ func (client ApplicationsClient) CreateOrUpdateByIDSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -229,11 +242,21 @@ func (client ApplicationsClient) CreateOrUpdateByIDResponder(resp *http.Response
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 // applicationName - the name of the managed application.
 func (client ApplicationsClient) Delete(ctx context.Context, resourceGroupName string, applicationName string) (result ApplicationsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applicationName,
 			Constraints: []validation.Constraint{{Target: "applicationName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applicationName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
@@ -285,10 +308,6 @@ func (client ApplicationsClient) DeleteSender(req *http.Request) (future Applica
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -311,6 +330,16 @@ func (client ApplicationsClient) DeleteResponder(resp *http.Response) (result au
 // and the managed application resource type. Use the format,
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/applications/{application-name}
 func (client ApplicationsClient) DeleteByID(ctx context.Context, applicationID string) (result ApplicationsDeleteByIDFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.DeleteByID")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteByIDPreparer(ctx, applicationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managedapplications.ApplicationsClient", "DeleteByID", nil, "Failure preparing request")
@@ -354,10 +383,6 @@ func (client ApplicationsClient) DeleteByIDSender(req *http.Request) (future App
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -379,11 +404,21 @@ func (client ApplicationsClient) DeleteByIDResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 // applicationName - the name of the managed application.
 func (client ApplicationsClient) Get(ctx context.Context, resourceGroupName string, applicationName string) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applicationName,
 			Constraints: []validation.Constraint{{Target: "applicationName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applicationName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
@@ -458,6 +493,16 @@ func (client ApplicationsClient) GetResponder(resp *http.Response) (result Appli
 // and the managed application resource type. Use the format,
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/applications/{application-name}
 func (client ApplicationsClient) GetByID(ctx context.Context, applicationID string) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.GetByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByIDPreparer(ctx, applicationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managedapplications.ApplicationsClient", "GetByID", nil, "Failure preparing request")
@@ -522,11 +567,21 @@ func (client ApplicationsClient) GetByIDResponder(resp *http.Response) (result A
 // Parameters:
 // resourceGroupName - the name of the resource group. The name is case insensitive.
 func (client ApplicationsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ApplicationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}}}); err != nil {
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("managedapplications.ApplicationsClient", "ListByResourceGroup", err.Error())
 	}
 
@@ -593,8 +648,8 @@ func (client ApplicationsClient) ListByResourceGroupResponder(resp *http.Respons
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ApplicationsClient) listByResourceGroupNextResults(lastResults ApplicationListResult) (result ApplicationListResult, err error) {
-	req, err := lastResults.applicationListResultPreparer()
+func (client ApplicationsClient) listByResourceGroupNextResults(ctx context.Context, lastResults ApplicationListResult) (result ApplicationListResult, err error) {
+	req, err := lastResults.applicationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "managedapplications.ApplicationsClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -615,12 +670,32 @@ func (client ApplicationsClient) listByResourceGroupNextResults(lastResults Appl
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ApplicationsClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ApplicationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription gets all the applications within a subscription.
 func (client ApplicationsClient) ListBySubscription(ctx context.Context) (result ApplicationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -683,8 +758,8 @@ func (client ApplicationsClient) ListBySubscriptionResponder(resp *http.Response
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client ApplicationsClient) listBySubscriptionNextResults(lastResults ApplicationListResult) (result ApplicationListResult, err error) {
-	req, err := lastResults.applicationListResultPreparer()
+func (client ApplicationsClient) listBySubscriptionNextResults(ctx context.Context, lastResults ApplicationListResult) (result ApplicationListResult, err error) {
+	req, err := lastResults.applicationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "managedapplications.ApplicationsClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -705,6 +780,16 @@ func (client ApplicationsClient) listBySubscriptionNextResults(lastResults Appli
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ApplicationsClient) ListBySubscriptionComplete(ctx context.Context) (result ApplicationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -715,11 +800,21 @@ func (client ApplicationsClient) ListBySubscriptionComplete(ctx context.Context)
 // applicationName - the name of the managed application.
 // parameters - parameters supplied to update an existing managed application.
 func (client ApplicationsClient) Update(ctx context.Context, resourceGroupName string, applicationName string, parameters *Application) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
 				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\p{L}\._\(\)\w]+$`, Chain: nil}}},
 		{TargetValue: applicationName,
 			Constraints: []validation.Constraint{{Target: "applicationName", Name: validation.MaxLength, Rule: 64, Chain: nil},
 				{Target: "applicationName", Name: validation.MinLength, Rule: 3, Chain: nil}}}}); err != nil {
@@ -801,6 +896,16 @@ func (client ApplicationsClient) UpdateResponder(resp *http.Response) (result Ap
 // /subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.Solutions/applications/{application-name}
 // parameters - parameters supplied to update an existing managed application.
 func (client ApplicationsClient) UpdateByID(ctx context.Context, applicationID string, parameters *Application) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationsClient.UpdateByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdateByIDPreparer(ctx, applicationID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managedapplications.ApplicationsClient", "UpdateByID", nil, "Failure preparing request")

@@ -1,6 +1,6 @@
 // Package adhybridhealthservice implements the Azure ARM Adhybridhealthservice service API version 2014-01-01.
 //
-// REST APIs for Azure Active Drectory Connect Health
+// REST APIs for Azure Active Directory Connect Health
 package adhybridhealthservice
 
 // Copyright (c) Microsoft and contributors.  All rights reserved.

@@ -26,9 +26,6 @@ import (
 // Entities with more than this many indexed properties will not be saved.
 const maxIndexedProperties = 20000
 
-// []byte fields more than 1 megabyte long will not be loaded or saved.
-const maxBlobLen = 1 << 20
-
 // Property is a name/value pair plus some metadata. A datastore entity's
 // contents are loaded and saved as a sequence of Properties. Each property
 // name must be unique within an entity.
@@ -331,7 +328,7 @@ func plsForSave(v reflect.Value) (PropertyLoadSaver, error) {
 func pls(v reflect.Value) (PropertyLoadSaver, error) {
 	if v.Kind() != reflect.Ptr {
 		if _, ok := v.Interface().(PropertyLoadSaver); ok {
-			return nil, fmt.Errorf("datastore: PropertyLoadSaver methods must be implemented on a pointer to %T.", v.Interface())
+			return nil, fmt.Errorf("datastore: PropertyLoadSaver methods must be implemented on a pointer to %T", v.Interface())
 		}
 
 		v = v.Addr()

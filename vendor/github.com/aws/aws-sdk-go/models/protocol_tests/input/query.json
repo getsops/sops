@@ -563,18 +563,18 @@
       "InputShape": {
         "type": "structure",
         "members": {
-          "BlobArgs": {
-            "shape": "BlobsType"
-          }
+		  "BlobArgs": {
+			"shape": "BlobsType"
+		  }
         }
       },
-      "BlobsType": {
+	  "BlobsType": {
         "type": "list",
         "member": {
           "shape": "BlobType"
         },
         "flattened": true
-      },
+	  },
       "BlobType": {
         "type": "blob"
       }
@@ -979,6 +979,82 @@
           "uri": "/",
           "headers": {},
           "body": "Action=OperationName&Version=2014-01-01"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Endpoint host trait",
+    "metadata": {
+      "protocol": "query",
+      "apiVersion": "2014-01-01"
+    },
+    "clientEndpoint": "https://service.region.amazonaws.com",
+    "shapes": {
+      "StaticInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType"
+          }
+        }
+      },
+      "MemberRefInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType",
+            "hostLabel": true
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "name": "StaticOp",
+          "input": {
+            "shape": "StaticInputShape"
+          },
+          "http": {
+            "method": "POST"
+          },
+          "endpoint":{
+              "hostPrefix": "data-"
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/",
+          "body": "Action=StaticOp&Version=2014-01-01&Name=myname",
+          "host": "data-service.region.amazonaws.com"
+        }
+      },
+      {
+        "given": {
+          "name": "MemberRefOp",
+          "input": {
+            "shape": "MemberRefInputShape"
+          },
+          "http": {
+            "method": "POST"
+          },
+          "endpoint":{
+              "hostPrefix": "foo-{Name}."
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/",
+          "body": "Action=MemberRefOp&Version=2014-01-01&Name=myname",
+          "host": "foo-myname.service.region.amazonaws.com"
         }
       }
     ]

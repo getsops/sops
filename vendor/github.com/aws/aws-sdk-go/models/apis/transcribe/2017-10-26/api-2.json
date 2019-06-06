@@ -28,6 +28,19 @@
         {"shape":"ConflictException"}
       ]
     },
+    "DeleteTranscriptionJob":{
+      "name":"DeleteTranscriptionJob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteTranscriptionJobRequest"},
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"BadRequestException"},
+        {"shape":"InternalFailureException"}
+      ]
+    },
     "DeleteVocabulary":{
       "name":"DeleteVocabulary",
       "http":{
@@ -152,13 +165,13 @@
       "type":"structure",
       "required":[
         "VocabularyName",
-        "LanguageCode",
-        "Phrases"
+        "LanguageCode"
       ],
       "members":{
         "VocabularyName":{"shape":"VocabularyName"},
         "LanguageCode":{"shape":"LanguageCode"},
-        "Phrases":{"shape":"Phrases"}
+        "Phrases":{"shape":"Phrases"},
+        "VocabularyFileUri":{"shape":"Uri"}
       }
     },
     "CreateVocabularyResponse":{
@@ -172,6 +185,13 @@
       }
     },
     "DateTime":{"type":"timestamp"},
+    "DeleteTranscriptionJobRequest":{
+      "type":"structure",
+      "required":["TranscriptionJobName"],
+      "members":{
+        "TranscriptionJobName":{"shape":"TranscriptionJobName"}
+      }
+    },
     "DeleteVocabularyRequest":{
       "type":"structure",
       "required":["VocabularyName"],
@@ -223,7 +243,19 @@
       "type":"string",
       "enum":[
         "en-US",
-        "es-US"
+        "es-US",
+        "en-AU",
+        "fr-CA",
+        "en-GB",
+        "de-DE",
+        "pt-BR",
+        "fr-FR",
+        "it-IT",
+        "ko-KR",
+        "es-ES",
+        "en-IN",
+        "hi-IN",
+        "ar-SA"
       ]
     },
     "LimitExceededException":{
@@ -418,13 +450,13 @@
       "type":"structure",
       "required":[
         "VocabularyName",
-        "LanguageCode",
-        "Phrases"
+        "LanguageCode"
       ],
       "members":{
         "VocabularyName":{"shape":"VocabularyName"},
         "LanguageCode":{"shape":"LanguageCode"},
-        "Phrases":{"shape":"Phrases"}
+        "Phrases":{"shape":"Phrases"},
+        "VocabularyFileUri":{"shape":"Uri"}
       }
     },
     "UpdateVocabularyResponse":{

@@ -50,6 +50,13 @@ have to be as careful about the error returned from Close).
     defer rep.Close()
     conn, err := grpc.Dial(serverAddress, rep.DialOptions()...)
 
+Since a real connection isn't necessary for replay, you can get a fake
+one from the replayer instead of calling grpc.Dial:
+
+    rep, err := rpcreplay.NewReplayer("service.replay")
+    if err != nil { ... }
+    defer rep.Close()
+    conn, err := rep.Connection()
 
 Initial State
 
@@ -75,18 +82,19 @@ On replay, get the bytes from Replayer.Initial:
    if err != nil { ... }
 
 
-Callbacks that modify what is saved and matched from the replay file
+Callbacks
 
-Recorders and replayers have support for running callbacks before messages are written/read
-from the replay file. A Recorder has a BeforeFunc that can modify a request or response
-before it is written to the replay file. The actual RPCs sent to the service during recording
-remain unaltered; only what is saved in the replay file can be changed.A Replayer has a
-BeforeFunc that can modify a request before it is sent for matching.
+Recorders and replayers have support for running callbacks before messages are
+written to or read from the replay file. A Recorder has a BeforeFunc that can modify
+a request or response before it is written to the replay file. The actual RPCs sent
+to the service during recording remain unaltered; only what is saved in the replay
+file can be changed. A Replayer has a BeforeFunc that can modify a request before it
+is sent for matching.
 
-Example uses for these callbacks include customized logging, or scrubbing data
-before RPCs are written to the replay file. If requests are modified by the callbacks during recording,
-it is important to perform the same modifications to the requests when replaying, or RPC
-matching on replay will fail.
+Example uses for these callbacks include customized logging, or scrubbing data before
+RPCs are written to the replay file. If requests are modified by the callbacks during
+recording, it is important to perform the same modifications to the requests when
+replaying, or RPC matching on replay will fail.
 
 A common way to analyze and modify the various messages is to use a type switch.
 
@@ -125,6 +133,10 @@ depending on the order of such RPCs probably has a race condition: since both th
 recorded sequence of RPCs and the sequence during replay are valid orderings, the
 program should behave the same under both.
 
+The same is not true of streaming RPCs. The replayer matches streams only by method
+name, since it has no other information at the time the stream is opened. Two streams
+with the same method name that are started concurrently may replay in the wrong
+order.
 
 Other Replayer Differences
 

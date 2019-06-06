@@ -3,18 +3,24 @@
   "service": "<p>AWS X-Ray provides APIs for managing debug traces and retrieving service maps and other data created by processing those traces.</p>",
   "operations": {
     "BatchGetTraces": "<p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>",
+    "CreateGroup": "<p>Creates a group resource with a name and a filter expression. </p>",
     "CreateSamplingRule": "<p>Creates a rule to control sampling behavior for instrumented applications. Services retrieve rules with <a>GetSamplingRules</a>, and evaluate each rule in ascending order of <i>priority</i> for each request. If a rule matches, the service records a trace, borrowing it from the reservoir size. After 10 seconds, the service reports back to X-Ray with <a>GetSamplingTargets</a> to get updated versions of each in-use rule. The updated rule contains a trace quota that the service can use instead of borrowing from the reservoir.</p>",
+    "DeleteGroup": "<p>Deletes a group resource.</p>",
     "DeleteSamplingRule": "<p>Deletes a sampling rule.</p>",
     "GetEncryptionConfig": "<p>Retrieves the current encryption configuration for X-Ray data.</p>",
+    "GetGroup": "<p>Retrieves group resource details.</p>",
+    "GetGroups": "<p>Retrieves all active group details.</p>",
     "GetSamplingRules": "<p>Retrieves all sampling rules.</p>",
     "GetSamplingStatisticSummaries": "<p>Retrieves information about recent sampling results for all sampling rules.</p>",
     "GetSamplingTargets": "<p>Requests a sampling quota for rules that the service is using to sample requests. </p>",
     "GetServiceGraph": "<p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>",
+    "GetTimeSeriesServiceStatistics": "<p>Get an aggregation of service statistics defined by a specific time range.</p>",
     "GetTraceGraph": "<p>Retrieves a service graph for one or more specific trace IDs.</p>",
-    "GetTraceSummaries": "<p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service(\"api.example.com\")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = \"12345\"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href=\"http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html\">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>",
+    "GetTraceSummaries": "<p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service(\"api.example.com\")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = \"12345\"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href=\"https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html\">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>",
     "PutEncryptionConfig": "<p>Updates the encryption configuration for X-Ray data.</p>",
     "PutTelemetryRecords": "<p>Used by the AWS X-Ray daemon to upload telemetry.</p>",
     "PutTraceSegments": "<p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href=\"https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html\">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class=\"title\"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace_id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start_time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end_time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end_time</code> or <code>in_progress</code>.</p> </li> <li> <p> <code>in_progress</code> - Set to <code>true</code> instead of specifying an <code>end_time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace_id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class=\"title\"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul>",
+    "UpdateGroup": "<p>Updates a group resource.</p>",
     "UpdateSamplingRule": "<p>Modifies a sampling rule's configuration.</p>"
   },
   "shapes": {
@@ -73,6 +79,12 @@
         "AttributeMap$value": null
       }
     },
+    "AvailabilityZoneDetail": {
+      "base": "<p>A list of availability zones corresponding to the segments in a trace.</p>",
+      "refs": {
+        "TraceAvailabilityZones$member": null
+      }
+    },
     "BackendConnectionErrors": {
       "base": "<p/>",
       "refs": {
@@ -89,6 +101,13 @@
       "refs": {
       }
     },
+    "Boolean": {
+      "base": null,
+      "refs": {
+        "GetServiceGraphResult$ContainsOldGroupVersions": "<p>A flag indicating whether the group's filter expression has been consistent, or if the returned service graph may show traces from an older version of the group's filter expression.</p>",
+        "GetTimeSeriesServiceStatisticsResult$ContainsOldGroupVersions": "<p>A flag indicating whether or not a group's filter expression has been consistent, or if a returned aggregation may show statistics from an older version of the group's filter expression.</p>"
+      }
+    },
     "BorrowCount": {
       "base": null,
       "refs": {
@@ -101,12 +120,32 @@
         "SamplingStatisticsDocument$ClientID": "<p>A unique identifier for the service in hexadecimal.</p>"
       }
     },
+    "CreateGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateGroupResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreateSamplingRuleRequest": {
       "base": null,
       "refs": {
       }
     },
     "CreateSamplingRuleResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteGroupResult": {
       "base": null,
       "refs": {
       }
@@ -149,7 +188,8 @@
     "EdgeStatistics": {
       "base": "<p>Response statistics for an edge.</p>",
       "refs": {
-        "Edge$SummaryStatistics": "<p>Response statistics for segments on the edge.</p>"
+        "Edge$SummaryStatistics": "<p>Response statistics for segments on the edge.</p>",
+        "TimeSeriesServiceStatistics$EdgeSummaryStatistics": null
       }
     },
     "EncryptionConfig": {
@@ -178,6 +218,12 @@
         "PutEncryptionConfigRequest$Type": "<p>The type of encryption. Set to <code>KMS</code> to use your own key for encryption. Set to <code>NONE</code> for default encryption.</p>"
       }
     },
+    "EntitySelectorExpression": {
+      "base": null,
+      "refs": {
+        "GetTimeSeriesServiceStatisticsRequest$EntitySelectorExpression": "<p>A filter expression defining entities that will be aggregated for statistics. Supports ID, service, and edge functions. If no selector expression is specified, edge statistics are returned. </p>"
+      }
+    },
     "ErrorMessage": {
       "base": null,
       "refs": {
@@ -186,11 +232,83 @@
         "ThrottledException$Message": null
       }
     },
+    "ErrorRootCause": {
+      "base": "<p>The root cause of a trace summary error.</p>",
+      "refs": {
+        "ErrorRootCauses$member": null
+      }
+    },
+    "ErrorRootCauseEntity": {
+      "base": "<p>A collection of segments and corresponding subsegments associated to a trace summary error.</p>",
+      "refs": {
+        "ErrorRootCauseEntityPath$member": null
+      }
+    },
+    "ErrorRootCauseEntityPath": {
+      "base": null,
+      "refs": {
+        "ErrorRootCauseService$EntityPath": "<p>The path of root cause entities found on the service. </p>"
+      }
+    },
+    "ErrorRootCauseService": {
+      "base": "<p>A collection of fields identifying the services in a trace summary error.</p>",
+      "refs": {
+        "ErrorRootCauseServices$member": null
+      }
+    },
+    "ErrorRootCauseServices": {
+      "base": null,
+      "refs": {
+        "ErrorRootCause$Services": "<p>A list of services corresponding to an error. A service identifies a segment and it contains a name, account ID, type, and inferred flag.</p>"
+      }
+    },
+    "ErrorRootCauses": {
+      "base": null,
+      "refs": {
+        "TraceSummary$ErrorRootCauses": "<p>A collection of ErrorRootCause structures corresponding to the trace segments.</p>"
+      }
+    },
     "ErrorStatistics": {
       "base": "<p>Information about requests that failed with a 4xx Client Error status code.</p>",
       "refs": {
         "EdgeStatistics$ErrorStatistics": "<p>Information about requests that failed with a 4xx Client Error status code.</p>",
         "ServiceStatistics$ErrorStatistics": "<p>Information about requests that failed with a 4xx Client Error status code.</p>"
+      }
+    },
+    "FaultRootCause": {
+      "base": "<p>The root cause information for a trace summary fault.</p>",
+      "refs": {
+        "FaultRootCauses$member": null
+      }
+    },
+    "FaultRootCauseEntity": {
+      "base": "<p>A collection of segments and corresponding subsegments associated to a trace summary fault error.</p>",
+      "refs": {
+        "FaultRootCauseEntityPath$member": null
+      }
+    },
+    "FaultRootCauseEntityPath": {
+      "base": null,
+      "refs": {
+        "FaultRootCauseService$EntityPath": "<p>The path of root cause entities found on the service. </p>"
+      }
+    },
+    "FaultRootCauseService": {
+      "base": "<p>A collection of fields identifying the services in a trace summary fault.</p>",
+      "refs": {
+        "FaultRootCauseServices$member": null
+      }
+    },
+    "FaultRootCauseServices": {
+      "base": null,
+      "refs": {
+        "FaultRootCause$Services": "<p>A list of corresponding services. A service identifies a segment and it contains a name, account ID, type, and inferred flag.</p>"
+      }
+    },
+    "FaultRootCauses": {
+      "base": null,
+      "refs": {
+        "TraceSummary$FaultRootCauses": "<p>A collection of FaultRootCause structures corresponding to the the trace segments.</p>"
       }
     },
     "FaultStatistics": {
@@ -203,7 +321,9 @@
     "FilterExpression": {
       "base": null,
       "refs": {
-        "GetTraceSummariesRequest$FilterExpression": "<p>Specify a filter expression to retrieve trace summaries for services or requests that meet certain requirements.</p>"
+        "CreateGroupRequest$FilterExpression": "<p>The filter expression defining criteria by which to group traces.</p>",
+        "GetTraceSummariesRequest$FilterExpression": "<p>Specify a filter expression to retrieve trace summaries for services or requests that meet certain requirements.</p>",
+        "UpdateGroupRequest$FilterExpression": "<p>The updated filter expression defining criteria by which to group traces.</p>"
       }
     },
     "FixedRate": {
@@ -218,6 +338,32 @@
       }
     },
     "GetEncryptionConfigResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetGroupResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetGroupsNextToken": {
+      "base": null,
+      "refs": {
+        "GetGroupsRequest$NextToken": "<p>Pagination token. Not used.</p>"
+      }
+    },
+    "GetGroupsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetGroupsResult": {
       "base": null,
       "refs": {
       }
@@ -262,6 +408,16 @@
       "refs": {
       }
     },
+    "GetTimeSeriesServiceStatisticsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetTimeSeriesServiceStatisticsResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "GetTraceGraphRequest": {
       "base": null,
       "refs": {
@@ -282,6 +438,47 @@
       "refs": {
       }
     },
+    "Group": {
+      "base": "<p>Details and metadata for a group.</p>",
+      "refs": {
+        "CreateGroupResult$Group": "<p>The group that was created. Contains the name of the group that was created, the ARN of the group that was generated based on the group name, and the filter expression that was assigned to the group.</p>",
+        "GetGroupResult$Group": "<p>The group that was requested. Contains the name of the group, the ARN of the group, and the filter expression that assigned to the group.</p>",
+        "UpdateGroupResult$Group": "<p>The group that was updated. Contains the name of the group that was updated, the ARN of the group that was updated, and the updated filter expression assigned to the group.</p>"
+      }
+    },
+    "GroupARN": {
+      "base": null,
+      "refs": {
+        "DeleteGroupRequest$GroupARN": "<p>The ARN of the group that was generated on creation.</p>",
+        "GetGroupRequest$GroupARN": "<p>The ARN of the group that was generated on creation.</p>",
+        "GetServiceGraphRequest$GroupARN": "<p>The ARN of a group to generate a graph based on.</p>",
+        "GetTimeSeriesServiceStatisticsRequest$GroupARN": "<p>The ARN of the group for which to pull statistics from.</p>",
+        "UpdateGroupRequest$GroupARN": "<p>The ARN that was generated upon creation.</p>"
+      }
+    },
+    "GroupName": {
+      "base": null,
+      "refs": {
+        "CreateGroupRequest$GroupName": "<p>The case-sensitive name of the new group. Default is a reserved name and names must be unique.</p>",
+        "DeleteGroupRequest$GroupName": "<p>The case-sensitive name of the group.</p>",
+        "GetGroupRequest$GroupName": "<p>The case-sensitive name of the group.</p>",
+        "GetServiceGraphRequest$GroupName": "<p>The name of a group to generate a graph based on.</p>",
+        "GetTimeSeriesServiceStatisticsRequest$GroupName": "<p>The case-sensitive name of the group for which to pull statistics from.</p>",
+        "UpdateGroupRequest$GroupName": "<p>The case-sensitive name of the group.</p>"
+      }
+    },
+    "GroupSummary": {
+      "base": "<p>Details for a group without metadata.</p>",
+      "refs": {
+        "GroupSummaryList$member": null
+      }
+    },
+    "GroupSummaryList": {
+      "base": null,
+      "refs": {
+        "GetGroupsResult$Groups": "<p>The collection of all active groups.</p>"
+      }
+    },
     "HTTPMethod": {
       "base": null,
       "refs": {
@@ -294,7 +491,8 @@
       "refs": {
         "Edge$ResponseTimeHistogram": "<p>A histogram that maps the spread of client response times on an edge.</p>",
         "Service$DurationHistogram": "<p>A histogram that maps the spread of service durations.</p>",
-        "Service$ResponseTimeHistogram": "<p>A histogram that maps the spread of service response times.</p>"
+        "Service$ResponseTimeHistogram": "<p>A histogram that maps the spread of service response times.</p>",
+        "TimeSeriesServiceStatistics$ResponseTimeHistogram": "<p>The response time histogram for the selected entities.</p>"
       }
     },
     "HistogramEntry": {
@@ -322,13 +520,20 @@
         "TraceSummary$Http": "<p>Information about the HTTP request served by the trace.</p>"
       }
     },
+    "InstanceIdDetail": {
+      "base": "<p>A list of EC2 instance IDs corresponding to the segments in a trace. </p>",
+      "refs": {
+        "TraceInstanceIds$member": null
+      }
+    },
     "Integer": {
       "base": null,
       "refs": {
         "HistogramEntry$Count": "<p>The prevalence of the entry.</p>",
         "SamplingStatisticSummary$RequestCount": "<p>The number of requests that matched the rule.</p>",
         "SamplingStatisticSummary$BorrowCount": "<p>The number of requests recorded with borrowed reservoir quota.</p>",
-        "SamplingStatisticSummary$SampledCount": "<p>The number of requests recorded.</p>"
+        "SamplingStatisticSummary$SampledCount": "<p>The number of requests recorded.</p>",
+        "TraceSummary$Revision": "<p>The revision number of a trace.</p>"
       }
     },
     "InvalidRequestException": {
@@ -340,7 +545,13 @@
       "base": null,
       "refs": {
         "AnnotationValue$BooleanValue": "<p>Value for a Boolean annotation.</p>",
+        "ErrorRootCauseEntity$Remote": "<p>A flag that denotes a remote subsegment.</p>",
+        "ErrorRootCauseService$Inferred": "<p>A Boolean value indicating if the service is inferred from the trace.</p>",
+        "FaultRootCauseEntity$Remote": "<p>A flag that denotes a remote subsegment.</p>",
+        "FaultRootCauseService$Inferred": "<p>A Boolean value indicating if the service is inferred from the trace.</p>",
         "GetTraceSummariesRequest$Sampling": "<p>Set to <code>true</code> to get summaries for only a subset of available traces.</p>",
+        "ResponseTimeRootCauseEntity$Remote": "<p>A flag that denotes a remote subsegment.</p>",
+        "ResponseTimeRootCauseService$Inferred": "<p>A Boolean value indicating if the service is inferred from the trace.</p>",
         "Service$Root": "<p>Indicates that the service was the first service to process a request.</p>",
         "TraceSummary$HasFault": "<p>One or more of the segment documents has a 500 series error.</p>",
         "TraceSummary$HasError": "<p>One or more of the segment documents has a 400 series error.</p>",
@@ -353,7 +564,9 @@
       "refs": {
         "AnnotationValue$NumberValue": "<p>Value for a Number annotation.</p>",
         "EdgeStatistics$TotalResponseTime": "<p>The aggregate response time of completed requests.</p>",
+        "ResponseTimeRootCauseEntity$Coverage": "<p>The types and messages of the exceptions.</p>",
         "SamplingRuleUpdate$FixedRate": "<p>The percentage of matching requests to instrument, after the reservoir is exhausted.</p>",
+        "SamplingStrategy$Value": "<p>The value of a sampling rule.</p>",
         "ServiceStatistics$TotalResponseTime": "<p>The aggregate response time of completed requests.</p>",
         "Trace$Duration": "<p>The length of time in seconds between the start time of the root segment and the end time of the last segment that completed.</p>",
         "TraceSummary$Duration": "<p>The length of time in seconds between the start time of the root segment and the end time of the last segment that completed.</p>",
@@ -370,6 +583,7 @@
         "BackendConnectionErrors$UnknownHostCount": "<p/>",
         "BackendConnectionErrors$OtherCount": "<p/>",
         "Edge$ReferenceId": "<p>Identifier of the edge. Unique within a service map.</p>",
+        "GetTimeSeriesServiceStatisticsRequest$Period": "<p>Aggregation period in seconds.</p>",
         "Http$HttpStatus": "<p>The response status.</p>",
         "SamplingRuleUpdate$Priority": "<p>The priority of the sampling rule.</p>",
         "SamplingRuleUpdate$ReservoirSize": "<p>A fixed number of matching requests to instrument per second, prior to applying the fixed rate. The reservoir is not used directly by services, but applies to all services using the rule collectively.</p>",
@@ -453,6 +667,61 @@
         "SamplingRuleUpdate$ResourceARN": "<p>Matches the ARN of the AWS resource on which the service runs.</p>"
       }
     },
+    "ResourceARNDetail": {
+      "base": "<p>A list of resources ARNs corresponding to the segments in a trace.</p>",
+      "refs": {
+        "TraceResourceARNs$member": null
+      }
+    },
+    "ResponseTimeRootCause": {
+      "base": "<p>The root cause information for a response time warning.</p>",
+      "refs": {
+        "ResponseTimeRootCauses$member": null
+      }
+    },
+    "ResponseTimeRootCauseEntity": {
+      "base": "<p>A collection of segments and corresponding subsegments associated to a response time warning.</p>",
+      "refs": {
+        "ResponseTimeRootCauseEntityPath$member": null
+      }
+    },
+    "ResponseTimeRootCauseEntityPath": {
+      "base": null,
+      "refs": {
+        "ResponseTimeRootCauseService$EntityPath": "<p>The path of root cause entities found on the service. </p>"
+      }
+    },
+    "ResponseTimeRootCauseService": {
+      "base": "<p>A collection of fields identifying the service in a response time warning.</p>",
+      "refs": {
+        "ResponseTimeRootCauseServices$member": null
+      }
+    },
+    "ResponseTimeRootCauseServices": {
+      "base": null,
+      "refs": {
+        "ResponseTimeRootCause$Services": "<p>A list of corresponding services. A service identifies a segment and contains a name, account ID, type, and inferred flag.</p>"
+      }
+    },
+    "ResponseTimeRootCauses": {
+      "base": null,
+      "refs": {
+        "TraceSummary$ResponseTimeRootCauses": "<p>A collection of ResponseTimeRootCause structures corresponding to the trace segments.</p>"
+      }
+    },
+    "RootCauseException": {
+      "base": "<p>The exception associated with a root cause.</p>",
+      "refs": {
+        "RootCauseExceptions$member": null
+      }
+    },
+    "RootCauseExceptions": {
+      "base": null,
+      "refs": {
+        "ErrorRootCauseEntity$Exceptions": "<p>The types and messages of the exceptions.</p>",
+        "FaultRootCauseEntity$Exceptions": "<p>The types and messages of the exceptions.</p>"
+      }
+    },
     "RuleLimitExceededException": {
       "base": "<p>You have reached the maximum number of sampling rules.</p>",
       "refs": {
@@ -524,6 +793,18 @@
         "GetSamplingTargetsRequest$SamplingStatisticsDocuments": "<p>Information about rules that the service is using to sample requests.</p>"
       }
     },
+    "SamplingStrategy": {
+      "base": "<p>The name and value of a sampling rule to apply to a trace summary.</p>",
+      "refs": {
+        "GetTraceSummariesRequest$SamplingStrategy": "<p>A paramater to indicate whether to enable sampling on trace summaries. Input parameters are Name and Value.</p>"
+      }
+    },
+    "SamplingStrategyName": {
+      "base": null,
+      "refs": {
+        "SamplingStrategy$Name": "<p>The name of a sampling rule.</p>"
+      }
+    },
     "SamplingTargetDocument": {
       "base": "<p>Temporary changes to a sampling rule configuration. To meet the global sampling target for a rule, X-Ray calculates a new reservoir for each service based on the recent sampling results of all services that called <a>GetSamplingTargets</a>.</p>",
       "refs": {
@@ -569,7 +850,8 @@
     "ServiceId": {
       "base": "<p/>",
       "refs": {
-        "ServiceIds$member": null
+        "ServiceIds$member": null,
+        "TraceSummary$EntryPoint": "<p>The root of a trace.</p>"
       }
     },
     "ServiceIds": {
@@ -597,6 +879,9 @@
     "ServiceNames": {
       "base": null,
       "refs": {
+        "ErrorRootCauseService$Names": "<p>A collection of associated service names.</p>",
+        "FaultRootCauseService$Names": "<p>A collection of associated service names.</p>",
+        "ResponseTimeRootCauseService$Names": "<p>A collection of associated service names.</p>",
         "Service$Names": "<p>A list of names for the service, including the canonical name.</p>",
         "ServiceId$Names": "<p/>"
       }
@@ -604,7 +889,8 @@
     "ServiceStatistics": {
       "base": "<p>Response statistics for a service.</p>",
       "refs": {
-        "Service$SummaryStatistics": "<p>Aggregated statistics for the service.</p>"
+        "Service$SummaryStatistics": "<p>Aggregated statistics for the service.</p>",
+        "TimeSeriesServiceStatistics$ServiceSummaryStatistics": null
       }
     },
     "ServiceType": {
@@ -621,25 +907,51 @@
         "Alias$Type": "<p>The type of the alias.</p>",
         "AliasNames$member": null,
         "AnnotationValue$StringValue": "<p>Value for a String annotation.</p>",
+        "AvailabilityZoneDetail$Name": "<p>The name of a corresponding availability zone.</p>",
         "BatchGetTracesRequest$NextToken": "<p>Pagination token. Not used.</p>",
         "BatchGetTracesResult$NextToken": "<p>Pagination token. Not used.</p>",
         "DeleteSamplingRuleRequest$RuleName": "<p>The name of the sampling rule. Specify a rule by either name or ARN, but not both.</p>",
         "DeleteSamplingRuleRequest$RuleARN": "<p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>",
         "EncryptionConfig$KeyId": "<p>The ID of the customer master key (CMK) used for encryption, if applicable.</p>",
+        "ErrorRootCauseEntity$Name": "<p>The name of the entity.</p>",
+        "ErrorRootCauseService$Name": "<p>The service name.</p>",
+        "ErrorRootCauseService$Type": "<p>The type associated to the service.</p>",
+        "ErrorRootCauseService$AccountId": "<p>The account ID associated to the service.</p>",
+        "FaultRootCauseEntity$Name": "<p>The name of the entity.</p>",
+        "FaultRootCauseService$Name": "<p>The service name.</p>",
+        "FaultRootCauseService$Type": "<p>The type associated to the service.</p>",
+        "FaultRootCauseService$AccountId": "<p>The account ID associated to the service.</p>",
+        "GetGroupsResult$NextToken": "<p>Pagination token. Not used.</p>",
         "GetSamplingRulesRequest$NextToken": "<p>Pagination token. Not used.</p>",
         "GetSamplingRulesResult$NextToken": "<p>Pagination token. Not used.</p>",
         "GetSamplingStatisticSummariesRequest$NextToken": "<p>Pagination token. Not used.</p>",
         "GetSamplingStatisticSummariesResult$NextToken": "<p>Pagination token. Not used.</p>",
         "GetServiceGraphRequest$NextToken": "<p>Pagination token. Not used.</p>",
         "GetServiceGraphResult$NextToken": "<p>Pagination token. Not used.</p>",
+        "GetTimeSeriesServiceStatisticsRequest$NextToken": "<p>Pagination token. Not used.</p>",
+        "GetTimeSeriesServiceStatisticsResult$NextToken": "<p>Pagination token. Not used.</p>",
         "GetTraceGraphRequest$NextToken": "<p>Pagination token. Not used.</p>",
         "GetTraceGraphResult$NextToken": "<p>Pagination token. Not used.</p>",
         "GetTraceSummariesRequest$NextToken": "<p>Specify the pagination token returned by a previous request to retrieve the next page of results.</p>",
         "GetTraceSummariesResult$NextToken": "<p>If the requested time frame contained more than one page of results, you can use this token to retrieve the next page. The first page contains the most most recent results, closest to the end of the time frame.</p>",
+        "Group$GroupName": "<p>The unique case-sensitive name of the group.</p>",
+        "Group$GroupARN": "<p>The ARN of the group generated based on the GroupName.</p>",
+        "Group$FilterExpression": "<p>The filter expression defining the parameters to include traces.</p>",
+        "GroupSummary$GroupName": "<p>The unique case-sensitive name of the group.</p>",
+        "GroupSummary$GroupARN": "<p>The ARN of the group generated based on the GroupName.</p>",
+        "GroupSummary$FilterExpression": "<p>The filter expression defining the parameters to include traces.</p>",
         "Http$HttpURL": "<p>The request URL.</p>",
         "Http$HttpMethod": "<p>The request method.</p>",
         "Http$UserAgent": "<p>The request's user agent string.</p>",
         "Http$ClientIp": "<p>The IP address of the requestor.</p>",
+        "InstanceIdDetail$Id": "<p>The ID of a corresponding EC2 instance.</p>",
+        "ResourceARNDetail$ARN": "<p>The ARN of a corresponding resource.</p>",
+        "ResponseTimeRootCauseEntity$Name": "<p>The name of the entity.</p>",
+        "ResponseTimeRootCauseService$Name": "<p>The service name.</p>",
+        "ResponseTimeRootCauseService$Type": "<p>The type associated to the service.</p>",
+        "ResponseTimeRootCauseService$AccountId": "<p>The account ID associated to the service.</p>",
+        "RootCauseException$Name": "<p>The name of the exception.</p>",
+        "RootCauseException$Message": "<p>The message of the exception.</p>",
         "SamplingRule$RuleARN": "<p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>",
         "SamplingRuleUpdate$RuleARN": "<p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>",
         "SamplingStatisticSummary$RuleName": "<p>The name of the sampling rule.</p>",
@@ -678,6 +990,24 @@
       "refs": {
       }
     },
+    "TimeRangeType": {
+      "base": null,
+      "refs": {
+        "GetTraceSummariesRequest$TimeRangeType": "<p>A parameter to indicate whether to query trace summaries by TraceId or Event time.</p>"
+      }
+    },
+    "TimeSeriesServiceStatistics": {
+      "base": "<p>A list of TimeSeriesStatistic structures.</p>",
+      "refs": {
+        "TimeSeriesServiceStatisticsList$member": null
+      }
+    },
+    "TimeSeriesServiceStatisticsList": {
+      "base": null,
+      "refs": {
+        "GetTimeSeriesServiceStatisticsResult$TimeSeriesServiceStatistics": "<p>The collection of statistics.</p>"
+      }
+    },
     "Timestamp": {
       "base": null,
       "refs": {
@@ -685,9 +1015,11 @@
         "Edge$EndTime": "<p>The end time of the last segment on the edge.</p>",
         "GetSamplingTargetsResult$LastRuleModification": "<p>The last time a user changed the sampling rule configuration. If the sampling rule configuration changed since the service last retrieved it, the service should call <a>GetSamplingRules</a> to get the latest version.</p>",
         "GetServiceGraphRequest$StartTime": "<p>The start of the time frame for which to generate a graph.</p>",
-        "GetServiceGraphRequest$EndTime": "<p>The end of the time frame for which to generate a graph.</p>",
+        "GetServiceGraphRequest$EndTime": "<p>The end of the timeframe for which to generate a graph.</p>",
         "GetServiceGraphResult$StartTime": "<p>The start of the time frame for which the graph was generated.</p>",
         "GetServiceGraphResult$EndTime": "<p>The end of the time frame for which the graph was generated.</p>",
+        "GetTimeSeriesServiceStatisticsRequest$StartTime": "<p>The start of the time frame for which to aggregate statistics.</p>",
+        "GetTimeSeriesServiceStatisticsRequest$EndTime": "<p>The end of the time frame for which to aggregate statistics.</p>",
         "GetTraceSummariesRequest$StartTime": "<p>The start of the time frame for which to retrieve traces.</p>",
         "GetTraceSummariesRequest$EndTime": "<p>The end of the time frame for which to retrieve traces.</p>",
         "GetTraceSummariesResult$ApproximateTime": "<p>The start time of this page of results.</p>",
@@ -698,13 +1030,21 @@
         "SamplingTargetDocument$ReservoirQuotaTTL": "<p>When the reservoir quota expires.</p>",
         "Service$StartTime": "<p>The start time of the first segment that the service generated.</p>",
         "Service$EndTime": "<p>The end time of the last segment that the service generated.</p>",
-        "TelemetryRecord$Timestamp": "<p/>"
+        "TelemetryRecord$Timestamp": "<p/>",
+        "TimeSeriesServiceStatistics$Timestamp": "<p>Timestamp of the window for which statistics are aggregated.</p>",
+        "TraceSummary$MatchedEventTime": "<p>The matched time stamp of a defined event.</p>"
       }
     },
     "Trace": {
       "base": "<p>A collection of segment documents with matching trace IDs.</p>",
       "refs": {
         "TraceList$member": null
+      }
+    },
+    "TraceAvailabilityZones": {
+      "base": null,
+      "refs": {
+        "TraceSummary$AvailabilityZones": "<p>A list of availability zones for any zone corresponding to the trace segments.</p>"
       }
     },
     "TraceId": {
@@ -723,10 +1063,22 @@
         "GetTraceGraphRequest$TraceIds": "<p>Trace IDs of requests for which to generate a service graph.</p>"
       }
     },
+    "TraceInstanceIds": {
+      "base": null,
+      "refs": {
+        "TraceSummary$InstanceIds": "<p>A list of EC2 instance IDs for any instance corresponding to the trace segments.</p>"
+      }
+    },
     "TraceList": {
       "base": null,
       "refs": {
         "BatchGetTracesResult$Traces": "<p>Full traces for the specified requests.</p>"
+      }
+    },
+    "TraceResourceARNs": {
+      "base": null,
+      "refs": {
+        "TraceSummary$ResourceARNs": "<p>A list of resource ARNs for any resource corresponding to the trace segments.</p>"
       }
     },
     "TraceSegmentDocument": {
@@ -800,6 +1152,16 @@
       "base": null,
       "refs": {
         "PutTraceSegmentsResult$UnprocessedTraceSegments": "<p>Segments that failed processing.</p>"
+      }
+    },
+    "UpdateGroupRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateGroupResult": {
+      "base": null,
+      "refs": {
       }
     },
     "UpdateSamplingRuleRequest": {

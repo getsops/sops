@@ -887,7 +887,7 @@
             "From": 53,
             "To": 53
           },
-          "Protocol": "udp",
+          "Protocol": "17",
           "RuleAction": "allow",
           "RuleNumber": 100
         },
@@ -4398,7 +4398,7 @@
             "From": 53,
             "To": 53
           },
-          "Protocol": "udp",
+          "Protocol": "17",
           "RuleAction": "allow",
           "RuleNumber": 100
         },

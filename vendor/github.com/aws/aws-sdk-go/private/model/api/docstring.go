@@ -3,15 +3,17 @@
 package api
 
 import (
-	"bytes"
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"html"
+	"io"
 	"os"
 	"regexp"
 	"strings"
 
 	xhtml "golang.org/x/net/html"
+	"golang.org/x/net/html/atom"
 )
 
 type apiDocumentation struct {
@@ -113,7 +115,6 @@ func docstring(doc string) string {
 	doc = html.UnescapeString(doc)
 
 	// Replace doc with full name if doc is empty.
-	doc = strings.TrimSpace(doc)
 	if len(doc) == 0 {
 		doc = fullname
 	}
@@ -124,17 +125,6 @@ func docstring(doc string) string {
 const (
 	indent = "   "
 )
-
-// style is what we want to prefix a string with.
-// For instance, <li>Foo</li><li>Bar</li>, will generate
-//    * Foo
-//    * Bar
-var style = map[string]string{
-	"ul":   indent + "* ",
-	"li":   indent + "* ",
-	"code": indent,
-	"pre":  indent,
-}
 
 // commentify converts a string to a Go comment
 func commentify(doc string) string {
@@ -160,257 +150,395 @@ func commentify(doc string) string {
 	return ""
 }
 
-// wrap returns a rewritten version of text to have line breaks
-// at approximately length characters. Line breaks will only be
-// inserted into whitespace.
-func wrap(text string, length int, isIndented bool) string {
-	var buf bytes.Buffer
-	var last rune
-	var lastNL bool
-	var col int
+func wrap(text string, length int) string {
+	var b strings.Builder
 
-	for _, c := range text {
-		switch c {
-		case '\r': // ignore this
-			continue // and also don't track `last`
-		case '\n': // ignore this too, but reset col
-			if col >= length || last == '\n' {
-				buf.WriteString("\n")
+	s := bufio.NewScanner(strings.NewReader(text))
+	for s.Scan() {
+		line := s.Text()
+
+		// cleanup the line's spaces
+		var i int
+		for i = 0; i < len(line); i++ {
+			c := line[i]
+			// Ignore leading spaces, e.g indents.
+			if !(c == ' ' || c == '\t') {
+				break
 			}
-			buf.WriteString("\n")
-			col = 0
-		case ' ', '\t': // opportunity to split
-			if col >= length {
-				buf.WriteByte('\n')
-				col = 0
-				if isIndented {
-					buf.WriteString(indent)
-					col += 3
-				}
-			} else {
-				// We only want to write a leading space if the col is greater than zero.
-				// This will provide the proper spacing for documentation.
-				buf.WriteRune(c)
-				col++ // count column
-			}
-		default:
-			buf.WriteRune(c)
-			col++
 		}
-		lastNL = c == '\n'
-		_ = lastNL
-		last = c
+		line = line[:i] + strings.Join(strings.Fields(line[i:]), " ")
+		splitLine(&b, line, length)
 	}
-	return buf.String()
+
+	return strings.TrimRight(b.String(), "\n")
 }
 
-type tagInfo struct {
-	tag        string
-	key        string
-	val        string
-	txt        string
-	raw        string
-	closingTag bool
+func splitLine(w stringWriter, line string, length int) {
+	leading := getLeadingWhitespace(line)
+
+	line = line[len(leading):]
+	length -= len(leading)
+
+	const splitOn = " "
+	for len(line) > length {
+		// Find the next whitespace to the length
+		idx := strings.Index(line[length:], splitOn)
+		if idx == -1 {
+			break
+		}
+		offset := length + idx
+
+		if v := line[offset+len(splitOn):]; len(v) == 1 && strings.ContainsAny(v, `,.!?'"`) {
+			// Workaround for long lines with space before the punctuation mark.
+			break
+		}
+
+		w.WriteString(leading)
+		w.WriteString(line[:offset])
+		w.WriteByte('\n')
+		line = strings.TrimLeft(line[offset+len(splitOn):], " \t")
+	}
+
+	if len(line) > 0 {
+		w.WriteString(leading)
+		w.WriteString(line)
+	}
+	// Add the newline back in that was stripped out by scanner.
+	w.WriteByte('\n')
+}
+
+func getLeadingWhitespace(v string) string {
+	var o strings.Builder
+	for _, c := range v {
+		if c == ' ' || c == '\t' {
+			o.WriteRune(c)
+		} else {
+			break
+		}
+	}
+
+	return o.String()
 }
 
 // generateDoc will generate the proper doc string for html encoded or plain text doc entries.
 func generateDoc(htmlSrc string) string {
 	tokenizer := xhtml.NewTokenizer(strings.NewReader(htmlSrc))
-	tokens := buildTokenArray(tokenizer)
-	scopes := findScopes(tokens)
-	return walk(scopes)
+	var builder strings.Builder
+	if err := encodeHTMLToText(&builder, tokenizer); err != nil {
+		panic(fmt.Sprintf("failed to generated docs, %v", err))
+	}
+
+	return wrap(strings.Trim(builder.String(), "\n"), 72)
 }
 
-func buildTokenArray(tokenizer *xhtml.Tokenizer) []tagInfo {
-	tokens := []tagInfo{}
-	for tt := tokenizer.Next(); tt != xhtml.ErrorToken; tt = tokenizer.Next() {
-		switch tt {
-		case xhtml.TextToken:
-			txt := string(tokenizer.Text())
-			if len(tokens) == 0 {
-				info := tagInfo{
-					raw: txt,
-				}
-				tokens = append(tokens, info)
-			}
-			tn, _ := tokenizer.TagName()
-			key, val, _ := tokenizer.TagAttr()
-			info := tagInfo{
-				tag: string(tn),
-				key: string(key),
-				val: string(val),
-				txt: txt,
-			}
-			tokens = append(tokens, info)
-		case xhtml.StartTagToken:
-			tn, _ := tokenizer.TagName()
-			key, val, _ := tokenizer.TagAttr()
-			info := tagInfo{
-				tag: string(tn),
-				key: string(key),
-				val: string(val),
-			}
-			tokens = append(tokens, info)
-		case xhtml.SelfClosingTagToken, xhtml.EndTagToken:
-			tn, _ := tokenizer.TagName()
-			key, val, _ := tokenizer.TagAttr()
-			info := tagInfo{
-				tag:        string(tn),
-				key:        string(key),
-				val:        string(val),
-				closingTag: true,
-			}
-			tokens = append(tokens, info)
-		}
-	}
-	return tokens
+type stringWriter interface {
+	Write([]byte) (int, error)
+	WriteByte(byte) error
+	WriteRune(rune) (int, error)
+	WriteString(string) (int, error)
 }
 
-// walk is used to traverse each scoped block. These scoped
-// blocks will act as blocked text where we do most of our
-// text manipulation.
-func walk(scopes [][]tagInfo) string {
-	doc := ""
-	// Documentation will be chunked by scopes.
-	// Meaning, for each scope will be divided by one or more newlines.
-	for _, scope := range scopes {
-		indentStr, isIndented := priorityIndentation(scope)
-		block := ""
-		href := ""
-		after := false
-		level := 0
-		lastTag := ""
-		for _, token := range scope {
-			if token.closingTag {
-				endl := closeTag(token, level)
-				block += endl
-				level--
-				lastTag = ""
-			} else if token.txt == "" {
-				if token.val != "" {
-					href, after = formatText(token, "")
-				}
-				if level == 1 && isIndented {
-					block += indentStr
-				}
-				level++
-				lastTag = token.tag
-			} else {
-				if token.txt != " " {
-					str, _ := formatText(token, lastTag)
-					block += str
-					if after {
-						block += href
-						after = false
-					}
-				} else {
-					fmt.Println(token.tag)
-					str, _ := formatText(tagInfo{}, lastTag)
-					block += str
-				}
+func encodeHTMLToText(w stringWriter, z *xhtml.Tokenizer) error {
+	encoder := newHTMLTokenEncoder(w)
+	defer encoder.Flush()
+
+	for {
+		tt := z.Next()
+		if tt == xhtml.ErrorToken {
+			if err := z.Err(); err == io.EOF {
+				return nil
+			} else if err != nil {
+				return err
 			}
 		}
-		if !isIndented {
-			block = strings.TrimPrefix(block, " ")
+
+		if err := encoder.Encode(z.Token()); err != nil {
+			return err
 		}
-		block = wrap(block, 72, isIndented)
-		doc += block
 	}
-	return doc
 }
 
-// closeTag will divide up the blocks of documentation to be formated properly.
-func closeTag(token tagInfo, level int) string {
-	switch token.tag {
-	case "pre", "li", "div":
-		return "\n"
-	case "p", "h1", "h2", "h3", "h4", "h5", "h6":
-		return "\n\n"
-	case "code":
-		// indented code is only at the 0th level.
-		if level == 0 {
-			return "\n"
-		}
-	}
-	return ""
+type htmlTokenHandler interface {
+	OnStartTagToken(xhtml.Token) htmlTokenHandler
+	OnEndTagToken(xhtml.Token, bool)
+	OnSelfClosingTagToken(xhtml.Token)
+	OnTextTagToken(xhtml.Token)
 }
 
-// formatText will format any sort of text based off of a tag. It will also return
-// a boolean to add the string after the text token.
-func formatText(token tagInfo, lastTag string) (string, bool) {
-	switch token.tag {
-	case "a":
-		if token.val != "" {
-			return fmt.Sprintf(" (%s)", token.val), true
-		}
-	}
-
-	// We don't care about a single space nor no text.
-	if len(token.txt) == 0 || token.txt == " " {
-		return "", false
-	}
-
-	// Here we want to indent code blocks that are newlines
-	if lastTag == "code" {
-		// Greater than one, because we don't care about newlines in the beginning
-		block := ""
-		if lines := strings.Split(token.txt, "\n"); len(lines) > 1 {
-			for _, line := range lines {
-				block += indent + line
-			}
-			block += "\n"
-			return block, false
-		}
-	}
-	return token.txt, false
+type htmlTokenEncoder struct {
+	w           stringWriter
+	depth       int
+	handlers    []tokenHandlerItem
+	baseHandler tokenHandlerItem
 }
 
-// This is a parser to check what type of indention is needed.
-func priorityIndentation(blocks []tagInfo) (string, bool) {
-	if len(blocks) == 0 {
-		return "", false
-	}
-
-	v, ok := style[blocks[0].tag]
-	return v, ok
+type tokenHandlerItem struct {
+	handler htmlTokenHandler
+	depth   int
 }
 
-// Divides into scopes based off levels.
-// For instance,
-// <p>Testing<code>123</code></p><ul><li>Foo</li></ul>
-// This has 2 scopes, the <p> and <ul>
-func findScopes(tokens []tagInfo) [][]tagInfo {
-	level := 0
-	scope := []tagInfo{}
-	scopes := [][]tagInfo{}
-	for _, token := range tokens {
-		// we will clear empty tagged tokens from the array
-		txt := strings.TrimSpace(token.txt)
-		tag := strings.TrimSpace(token.tag)
-		if len(txt) == 0 && len(tag) == 0 {
-			continue
+func newHTMLTokenEncoder(w stringWriter) *htmlTokenEncoder {
+	baseHandler := newBlockTokenHandler(w)
+	baseHandler.rootBlock = true
+
+	return &htmlTokenEncoder{
+		w: w,
+		baseHandler: tokenHandlerItem{
+			handler: baseHandler,
+		},
+	}
+}
+
+func (e *htmlTokenEncoder) Flush() error {
+	e.baseHandler.handler.OnEndTagToken(xhtml.Token{Type: xhtml.TextToken}, true)
+	return nil
+}
+
+func (e *htmlTokenEncoder) Encode(token xhtml.Token) error {
+	h := e.baseHandler
+	if len(e.handlers) != 0 {
+		h = e.handlers[len(e.handlers)-1]
+	}
+
+	switch token.Type {
+	case xhtml.StartTagToken:
+		e.depth++
+
+		next := h.handler.OnStartTagToken(token)
+		if next != nil {
+			e.handlers = append(e.handlers, tokenHandlerItem{
+				handler: next,
+				depth:   e.depth,
+			})
 		}
 
-		scope = append(scope, token)
+	case xhtml.EndTagToken:
+		handlerBlockClosing := e.depth == h.depth
 
-		// If it is a closing tag then we check what level
-		// we are on. If it is 0, then that means we have found a
-		// scoped block.
-		if token.closingTag {
-			level--
-			if level == 0 {
-				scopes = append(scopes, scope)
-				scope = []tagInfo{}
-			}
-			// Check opening tags and increment the level
-		} else if token.txt == "" {
-			level++
+		h.handler.OnEndTagToken(token, handlerBlockClosing)
+
+		// Remove all but the root handler as the handler is no longer needed.
+		if handlerBlockClosing {
+			e.handlers = e.handlers[:len(e.handlers)-1]
+		}
+		e.depth--
+
+	case xhtml.SelfClosingTagToken:
+		h.handler.OnSelfClosingTagToken(token)
+
+	case xhtml.TextToken:
+		h.handler.OnTextTagToken(token)
+	}
+
+	return nil
+}
+
+type baseTokenHandler struct {
+	w stringWriter
+}
+
+func (e *baseTokenHandler) OnStartTagToken(token xhtml.Token) htmlTokenHandler { return nil }
+func (e *baseTokenHandler) OnEndTagToken(token xhtml.Token, blockClosing bool) {}
+func (e *baseTokenHandler) OnSelfClosingTagToken(token xhtml.Token)            {}
+func (e *baseTokenHandler) OnTextTagToken(token xhtml.Token) {
+	e.w.WriteString(token.Data)
+}
+
+type blockTokenHandler struct {
+	baseTokenHandler
+
+	rootBlock  bool
+	origWriter stringWriter
+	strBuilder *strings.Builder
+
+	started                bool
+	newlineBeforeNextBlock bool
+}
+
+func newBlockTokenHandler(w stringWriter) *blockTokenHandler {
+	strBuilder := &strings.Builder{}
+	return &blockTokenHandler{
+		origWriter: w,
+		strBuilder: strBuilder,
+		baseTokenHandler: baseTokenHandler{
+			w: strBuilder,
+		},
+	}
+}
+func (e *blockTokenHandler) OnStartTagToken(token xhtml.Token) htmlTokenHandler {
+	e.started = true
+	if e.newlineBeforeNextBlock {
+		e.w.WriteString("\n")
+		e.newlineBeforeNextBlock = false
+	}
+
+	switch token.DataAtom {
+	case atom.A:
+		return newLinkTokenHandler(e.w, token)
+	case atom.Ul:
+		e.w.WriteString("\n")
+		e.newlineBeforeNextBlock = true
+		return newListTokenHandler(e.w)
+
+	case atom.Div, atom.Dt, atom.P, atom.H1, atom.H2, atom.H3, atom.H4, atom.H5, atom.H6:
+		e.w.WriteString("\n")
+		e.newlineBeforeNextBlock = true
+		return newBlockTokenHandler(e.w)
+
+	case atom.Pre, atom.Code:
+		if e.rootBlock {
+			e.w.WriteString("\n")
+			e.w.WriteString(indent)
+			e.newlineBeforeNextBlock = true
+		}
+		return newBlockTokenHandler(e.w)
+	}
+
+	return nil
+}
+func (e *blockTokenHandler) OnEndTagToken(token xhtml.Token, blockClosing bool) {
+	if !blockClosing {
+		return
+	}
+
+	e.origWriter.WriteString(e.strBuilder.String())
+	if e.newlineBeforeNextBlock {
+		e.origWriter.WriteString("\n")
+		e.newlineBeforeNextBlock = false
+	}
+
+	e.strBuilder.Reset()
+}
+
+func (e *blockTokenHandler) OnTextTagToken(token xhtml.Token) {
+	if e.newlineBeforeNextBlock {
+		e.w.WriteString("\n")
+		e.newlineBeforeNextBlock = false
+	}
+	if !e.started {
+		token.Data = strings.TrimLeft(token.Data, " \t\n")
+	}
+	if len(token.Data) != 0 {
+		e.started = true
+	}
+	e.baseTokenHandler.OnTextTagToken(token)
+}
+
+type linkTokenHandler struct {
+	baseTokenHandler
+	linkToken xhtml.Token
+}
+
+func newLinkTokenHandler(w stringWriter, token xhtml.Token) *linkTokenHandler {
+	return &linkTokenHandler{
+		baseTokenHandler: baseTokenHandler{
+			w: w,
+		},
+		linkToken: token,
+	}
+}
+func (e *linkTokenHandler) OnEndTagToken(token xhtml.Token, blockClosing bool) {
+	if !blockClosing {
+		return
+	}
+
+	if href, ok := getHTMLTokenAttr(e.linkToken.Attr, "href"); ok && len(href) != 0 {
+		fmt.Fprintf(e.w, " (%s)", strings.TrimSpace(href))
+	}
+}
+
+type listTokenHandler struct {
+	baseTokenHandler
+
+	items int
+}
+
+func newListTokenHandler(w stringWriter) *listTokenHandler {
+	return &listTokenHandler{
+		baseTokenHandler: baseTokenHandler{
+			w: w,
+		},
+	}
+}
+func (e *listTokenHandler) OnStartTagToken(token xhtml.Token) htmlTokenHandler {
+	switch token.DataAtom {
+	case atom.Li:
+		if e.items >= 1 {
+			e.w.WriteString("\n\n")
+		}
+		e.items++
+		return newListItemTokenHandler(e.w)
+	}
+	return nil
+}
+
+func (e *listTokenHandler) OnTextTagToken(token xhtml.Token) {
+	// Squash whitespace between list and items
+}
+
+type listItemTokenHandler struct {
+	baseTokenHandler
+
+	origWriter stringWriter
+	strBuilder *strings.Builder
+}
+
+func newListItemTokenHandler(w stringWriter) *listItemTokenHandler {
+	strBuilder := &strings.Builder{}
+	return &listItemTokenHandler{
+		origWriter: w,
+		strBuilder: strBuilder,
+		baseTokenHandler: baseTokenHandler{
+			w: strBuilder,
+		},
+	}
+}
+func (e *listItemTokenHandler) OnStartTagToken(token xhtml.Token) htmlTokenHandler {
+	switch token.DataAtom {
+	case atom.P:
+		return newBlockTokenHandler(e.w)
+	}
+	return nil
+}
+func (e *listItemTokenHandler) OnEndTagToken(token xhtml.Token, blockClosing bool) {
+	if !blockClosing {
+		return
+	}
+
+	e.origWriter.WriteString(indent + "* ")
+	e.origWriter.WriteString(strings.TrimSpace(e.strBuilder.String()))
+}
+
+type trimSpaceTokenHandler struct {
+	baseTokenHandler
+
+	origWriter stringWriter
+	strBuilder *strings.Builder
+}
+
+func newTrimSpaceTokenHandler(w stringWriter) *trimSpaceTokenHandler {
+	strBuilder := &strings.Builder{}
+	return &trimSpaceTokenHandler{
+		origWriter: w,
+		strBuilder: strBuilder,
+		baseTokenHandler: baseTokenHandler{
+			w: strBuilder,
+		},
+	}
+}
+func (e *trimSpaceTokenHandler) OnEndTagToken(token xhtml.Token, blockClosing bool) {
+	if !blockClosing {
+		return
+	}
+
+	e.origWriter.WriteString(strings.TrimSpace(e.strBuilder.String()))
+}
+
+func getHTMLTokenAttr(attr []xhtml.Attribute, name string) (string, bool) {
+	for _, a := range attr {
+		if strings.EqualFold(a.Key, name) {
+			return a.Val, true
 		}
 	}
-	// In this case, we did not run into a closing tag. This would mean
-	// we have plaintext for documentation.
-	if len(scopes) == 0 {
-		scopes = append(scopes, scope)
-	}
-	return scopes
+	return "", false
 }

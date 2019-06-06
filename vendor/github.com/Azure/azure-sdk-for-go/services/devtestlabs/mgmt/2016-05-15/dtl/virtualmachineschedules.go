@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewVirtualMachineSchedulesClientWithBaseURI(baseURI string, subscriptionID 
 // name - the name of the schedule.
 // schedule - a schedule.
 func (client VirtualMachineSchedulesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string, schedule Schedule) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: schedule,
 			Constraints: []validation.Constraint{{Target: "schedule.ScheduleProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -127,6 +138,16 @@ func (client VirtualMachineSchedulesClient) CreateOrUpdateResponder(resp *http.R
 // virtualMachineName - the name of the virtual machine.
 // name - the name of the schedule.
 func (client VirtualMachineSchedulesClient) Delete(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, labName, virtualMachineName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineSchedulesClient", "Delete", nil, "Failure preparing request")
@@ -197,6 +218,16 @@ func (client VirtualMachineSchedulesClient) DeleteResponder(resp *http.Response)
 // virtualMachineName - the name of the virtual machine.
 // name - the name of the schedule.
 func (client VirtualMachineSchedulesClient) Execute(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string) (result VirtualMachineSchedulesExecuteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.Execute")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ExecutePreparer(ctx, resourceGroupName, labName, virtualMachineName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineSchedulesClient", "Execute", nil, "Failure preparing request")
@@ -244,10 +275,6 @@ func (client VirtualMachineSchedulesClient) ExecuteSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -272,6 +299,16 @@ func (client VirtualMachineSchedulesClient) ExecuteResponder(resp *http.Response
 // name - the name of the schedule.
 // expand - specify the $expand query. Example: 'properties($select=status)'
 func (client VirtualMachineSchedulesClient) Get(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string, expand string) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, virtualMachineName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineSchedulesClient", "Get", nil, "Failure preparing request")
@@ -349,6 +386,16 @@ func (client VirtualMachineSchedulesClient) GetResponder(resp *http.Response) (r
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client VirtualMachineSchedulesClient) List(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationSchedulePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcs.Response.Response != nil {
+				sc = result.rwcs.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, virtualMachineName, expand, filter, top, orderby)
 	if err != nil {
@@ -426,8 +473,8 @@ func (client VirtualMachineSchedulesClient) ListResponder(resp *http.Response) (
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client VirtualMachineSchedulesClient) listNextResults(lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
-	req, err := lastResults.responseWithContinuationSchedulePreparer()
+func (client VirtualMachineSchedulesClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationSchedule) (result ResponseWithContinuationSchedule, err error) {
+	req, err := lastResults.responseWithContinuationSchedulePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.VirtualMachineSchedulesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -448,6 +495,16 @@ func (client VirtualMachineSchedulesClient) listNextResults(lastResults Response
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VirtualMachineSchedulesClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationScheduleIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, virtualMachineName, expand, filter, top, orderby)
 	return
 }
@@ -460,6 +517,16 @@ func (client VirtualMachineSchedulesClient) ListComplete(ctx context.Context, re
 // name - the name of the schedule.
 // schedule - a schedule.
 func (client VirtualMachineSchedulesClient) Update(ctx context.Context, resourceGroupName string, labName string, virtualMachineName string, name string, schedule ScheduleFragment) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualMachineSchedulesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, labName, virtualMachineName, name, schedule)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.VirtualMachineSchedulesClient", "Update", nil, "Failure preparing request")

@@ -30,6 +30,27 @@
         {"shape":"OperationNotPermittedException"}
       ]
     },
+    "BatchAssociateUserStack":{
+      "name":"BatchAssociateUserStack",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchAssociateUserStackRequest"},
+      "output":{"shape":"BatchAssociateUserStackResult"},
+      "errors":[
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
+    "BatchDisassociateUserStack":{
+      "name":"BatchDisassociateUserStack",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchDisassociateUserStackRequest"},
+      "output":{"shape":"BatchDisassociateUserStackResult"}
+    },
     "CopyImage":{
       "name":"CopyImage",
       "http":{
@@ -149,6 +170,34 @@
         {"shape":"InvalidParameterCombinationException"}
       ]
     },
+    "CreateUsageReportSubscription":{
+      "name":"CreateUsageReportSubscription",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateUsageReportSubscriptionRequest"},
+      "output":{"shape":"CreateUsageReportSubscriptionResult"},
+      "errors":[
+        {"shape":"InvalidAccountStatusException"}
+      ]
+    },
+    "CreateUser":{
+      "name":"CreateUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateUserRequest"},
+      "output":{"shape":"CreateUserResult"},
+      "errors":[
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"InvalidAccountStatusException"},
+        {"shape":"InvalidParameterCombinationException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"OperationNotPermittedException"}
+      ]
+    },
     "DeleteDirectoryConfig":{
       "name":"DeleteDirectoryConfig",
       "http":{
@@ -230,6 +279,31 @@
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ConcurrentModificationException"}
+      ]
+    },
+    "DeleteUsageReportSubscription":{
+      "name":"DeleteUsageReportSubscription",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteUsageReportSubscriptionRequest"},
+      "output":{"shape":"DeleteUsageReportSubscriptionResult"},
+      "errors":[
+        {"shape":"InvalidAccountStatusException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DeleteUser":{
+      "name":"DeleteUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteUserRequest"},
+      "output":{"shape":"DeleteUserResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "DescribeDirectoryConfigs":{
@@ -317,6 +391,56 @@
         {"shape":"ResourceNotFoundException"}
       ]
     },
+    "DescribeUsageReportSubscriptions":{
+      "name":"DescribeUsageReportSubscriptions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeUsageReportSubscriptionsRequest"},
+      "output":{"shape":"DescribeUsageReportSubscriptionsResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidAccountStatusException"}
+      ]
+    },
+    "DescribeUserStackAssociations":{
+      "name":"DescribeUserStackAssociations",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeUserStackAssociationsRequest"},
+      "output":{"shape":"DescribeUserStackAssociationsResult"},
+      "errors":[
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "DescribeUsers":{
+      "name":"DescribeUsers",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeUsersRequest"},
+      "output":{"shape":"DescribeUsersResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "DisableUser":{
+      "name":"DisableUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisableUserRequest"},
+      "output":{"shape":"DisableUserResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "DisassociateFleet":{
       "name":"DisassociateFleet",
       "http":{
@@ -329,6 +453,19 @@
         {"shape":"ResourceInUseException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ConcurrentModificationException"}
+      ]
+    },
+    "EnableUser":{
+      "name":"EnableUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"EnableUserRequest"},
+      "output":{"shape":"EnableUserResult"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidAccountStatusException"}
       ]
     },
     "ExpireSession":{
@@ -520,7 +657,8 @@
         {"shape":"LimitExceededException"},
         {"shape":"InvalidAccountStatusException"},
         {"shape":"IncompatibleImageException"},
-        {"shape":"OperationNotPermittedException"}
+        {"shape":"OperationNotPermittedException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     }
   },
@@ -625,6 +763,32 @@
       "max":5,
       "min":1
     },
+    "BatchAssociateUserStackRequest":{
+      "type":"structure",
+      "required":["UserStackAssociations"],
+      "members":{
+        "UserStackAssociations":{"shape":"UserStackAssociationList"}
+      }
+    },
+    "BatchAssociateUserStackResult":{
+      "type":"structure",
+      "members":{
+        "errors":{"shape":"UserStackAssociationErrorList"}
+      }
+    },
+    "BatchDisassociateUserStackRequest":{
+      "type":"structure",
+      "required":["UserStackAssociations"],
+      "members":{
+        "UserStackAssociations":{"shape":"UserStackAssociationList"}
+      }
+    },
+    "BatchDisassociateUserStackResult":{
+      "type":"structure",
+      "members":{
+        "errors":{"shape":"UserStackAssociationErrorList"}
+      }
+    },
     "Boolean":{"type":"boolean"},
     "BooleanObject":{"type":"boolean"},
     "ComputeCapacity":{
@@ -710,7 +874,9 @@
         "Description":{"shape":"Description"},
         "DisplayName":{"shape":"DisplayName"},
         "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
-        "DomainJoinInfo":{"shape":"DomainJoinInfo"}
+        "DomainJoinInfo":{"shape":"DomainJoinInfo"},
+        "Tags":{"shape":"Tags"},
+        "IdleDisconnectTimeoutInSeconds":{"shape":"Integer"}
       }
     },
     "CreateFleetResult":{
@@ -735,7 +901,8 @@
         "VpcConfig":{"shape":"VpcConfig"},
         "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
         "DomainJoinInfo":{"shape":"DomainJoinInfo"},
-        "AppstreamAgentVersion":{"shape":"AppstreamAgentVersion"}
+        "AppstreamAgentVersion":{"shape":"AppstreamAgentVersion"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreateImageBuilderResult":{
@@ -770,7 +937,8 @@
         "RedirectURL":{"shape":"RedirectURL"},
         "FeedbackURL":{"shape":"FeedbackURL"},
         "UserSettings":{"shape":"UserSettingList"},
-        "ApplicationSettings":{"shape":"ApplicationSettings"}
+        "ApplicationSettings":{"shape":"ApplicationSettings"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreateStackResult":{
@@ -800,6 +968,37 @@
       "members":{
         "StreamingURL":{"shape":"String"},
         "Expires":{"shape":"Timestamp"}
+      }
+    },
+    "CreateUsageReportSubscriptionRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "CreateUsageReportSubscriptionResult":{
+      "type":"structure",
+      "members":{
+        "S3BucketName":{"shape":"String"},
+        "Schedule":{"shape":"UsageReportSchedule"}
+      }
+    },
+    "CreateUserRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "AuthenticationType"
+      ],
+      "members":{
+        "UserName":{"shape":"Username"},
+        "MessageAction":{"shape":"MessageAction"},
+        "FirstName":{"shape":"UserAttributeValue"},
+        "LastName":{"shape":"UserAttributeValue"},
+        "AuthenticationType":{"shape":"AuthenticationType"}
+      }
+    },
+    "CreateUserResult":{
+      "type":"structure",
+      "members":{
       }
     },
     "DeleteDirectoryConfigRequest":{
@@ -876,6 +1075,32 @@
       }
     },
     "DeleteStackResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteUsageReportSubscriptionRequest":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteUsageReportSubscriptionResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteUserRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "AuthenticationType"
+      ],
+      "members":{
+        "UserName":{"shape":"Username"},
+        "AuthenticationType":{"shape":"AuthenticationType"}
+      }
+    },
+    "DeleteUserResult":{
       "type":"structure",
       "members":{
       }
@@ -1001,6 +1226,53 @@
         "NextToken":{"shape":"String"}
       }
     },
+    "DescribeUsageReportSubscriptionsRequest":{
+      "type":"structure",
+      "members":{
+        "MaxResults":{"shape":"Integer"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeUsageReportSubscriptionsResult":{
+      "type":"structure",
+      "members":{
+        "UsageReportSubscriptions":{"shape":"UsageReportSubscriptionList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeUserStackAssociationsRequest":{
+      "type":"structure",
+      "members":{
+        "StackName":{"shape":"String"},
+        "UserName":{"shape":"Username"},
+        "AuthenticationType":{"shape":"AuthenticationType"},
+        "MaxResults":{"shape":"MaxResults"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeUserStackAssociationsResult":{
+      "type":"structure",
+      "members":{
+        "UserStackAssociations":{"shape":"UserStackAssociationList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeUsersRequest":{
+      "type":"structure",
+      "required":["AuthenticationType"],
+      "members":{
+        "AuthenticationType":{"shape":"AuthenticationType"},
+        "MaxResults":{"shape":"Integer"},
+        "NextToken":{"shape":"String"}
+      }
+    },
+    "DescribeUsersResult":{
+      "type":"structure",
+      "members":{
+        "Users":{"shape":"UserList"},
+        "NextToken":{"shape":"String"}
+      }
+    },
     "Description":{
       "type":"string",
       "max":256
@@ -1023,6 +1295,22 @@
     "DirectoryNameList":{
       "type":"list",
       "member":{"shape":"DirectoryName"}
+    },
+    "DisableUserRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "AuthenticationType"
+      ],
+      "members":{
+        "UserName":{"shape":"Username"},
+        "AuthenticationType":{"shape":"AuthenticationType"}
+      }
+    },
+    "DisableUserResult":{
+      "type":"structure",
+      "members":{
+      }
     },
     "DisassociateFleetRequest":{
       "type":"structure",
@@ -1059,6 +1347,22 @@
       "type":"list",
       "member":{"shape":"Domain"},
       "max":10
+    },
+    "EnableUserRequest":{
+      "type":"structure",
+      "required":[
+        "UserName",
+        "AuthenticationType"
+      ],
+      "members":{
+        "UserName":{"shape":"Username"},
+        "AuthenticationType":{"shape":"AuthenticationType"}
+      }
+    },
+    "EnableUserResult":{
+      "type":"structure",
+      "members":{
+      }
     },
     "ErrorMessage":{"type":"string"},
     "ExpireSessionRequest":{
@@ -1103,7 +1407,8 @@
         "CreatedTime":{"shape":"Timestamp"},
         "FleetErrors":{"shape":"FleetErrors"},
         "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
-        "DomainJoinInfo":{"shape":"DomainJoinInfo"}
+        "DomainJoinInfo":{"shape":"DomainJoinInfo"},
+        "IdleDisconnectTimeoutInSeconds":{"shape":"Integer"}
       }
     },
     "FleetAttribute":{
@@ -1319,6 +1624,17 @@
       },
       "exception":true
     },
+    "LastReportGenerationExecutionError":{
+      "type":"structure",
+      "members":{
+        "ErrorCode":{"shape":"UsageReportExecutionErrorCode"},
+        "ErrorMessage":{"shape":"String"}
+      }
+    },
+    "LastReportGenerationExecutionErrors":{
+      "type":"list",
+      "member":{"shape":"LastReportGenerationExecutionError"}
+    },
     "LimitExceededException":{
       "type":"structure",
       "members":{
@@ -1375,6 +1691,13 @@
       "box":true,
       "max":500,
       "min":0
+    },
+    "MessageAction":{
+      "type":"string",
+      "enum":[
+        "SUPPRESS",
+        "RESEND"
+      ]
     },
     "Metadata":{
       "type":"map",
@@ -1502,9 +1825,19 @@
         "StackName":{"shape":"String"},
         "FleetName":{"shape":"String"},
         "State":{"shape":"SessionState"},
+        "ConnectionState":{"shape":"SessionConnectionState"},
+        "StartTime":{"shape":"Timestamp"},
+        "MaxExpirationTime":{"shape":"Timestamp"},
         "AuthenticationType":{"shape":"AuthenticationType"},
         "NetworkAccessConfiguration":{"shape":"NetworkAccessConfiguration"}
       }
+    },
+    "SessionConnectionState":{
+      "type":"string",
+      "enum":[
+        "CONNECTED",
+        "NOT_CONNECTED"
+      ]
     },
     "SessionList":{
       "type":"list",
@@ -1775,6 +2108,7 @@
         "DisplayName":{"shape":"DisplayName"},
         "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
         "DomainJoinInfo":{"shape":"DomainJoinInfo"},
+        "IdleDisconnectTimeoutInSeconds":{"shape":"Integer"},
         "AttributesToDelete":{"shape":"FleetAttributes"}
       }
     },
@@ -1827,10 +2161,59 @@
         "Stack":{"shape":"Stack"}
       }
     },
+    "UsageReportExecutionErrorCode":{
+      "type":"string",
+      "enum":[
+        "RESOURCE_NOT_FOUND",
+        "ACCESS_DENIED",
+        "INTERNAL_SERVICE_ERROR"
+      ]
+    },
+    "UsageReportSchedule":{
+      "type":"string",
+      "enum":["DAILY"]
+    },
+    "UsageReportSubscription":{
+      "type":"structure",
+      "members":{
+        "S3BucketName":{"shape":"String"},
+        "Schedule":{"shape":"UsageReportSchedule"},
+        "LastGeneratedReportDate":{"shape":"Timestamp"},
+        "SubscriptionErrors":{"shape":"LastReportGenerationExecutionErrors"}
+      }
+    },
+    "UsageReportSubscriptionList":{
+      "type":"list",
+      "member":{"shape":"UsageReportSubscription"}
+    },
+    "User":{
+      "type":"structure",
+      "required":["AuthenticationType"],
+      "members":{
+        "Arn":{"shape":"Arn"},
+        "UserName":{"shape":"Username"},
+        "Enabled":{"shape":"Boolean"},
+        "Status":{"shape":"String"},
+        "FirstName":{"shape":"UserAttributeValue"},
+        "LastName":{"shape":"UserAttributeValue"},
+        "CreatedTime":{"shape":"Timestamp"},
+        "AuthenticationType":{"shape":"AuthenticationType"}
+      }
+    },
+    "UserAttributeValue":{
+      "type":"string",
+      "max":2048,
+      "pattern":"^[A-Za-z0-9_\\-\\s]+$",
+      "sensitive":true
+    },
     "UserId":{
       "type":"string",
       "max":32,
       "min":2
+    },
+    "UserList":{
+      "type":"list",
+      "member":{"shape":"User"}
     },
     "UserSetting":{
       "type":"structure",
@@ -1847,6 +2230,53 @@
       "type":"list",
       "member":{"shape":"UserSetting"},
       "min":1
+    },
+    "UserStackAssociation":{
+      "type":"structure",
+      "required":[
+        "StackName",
+        "UserName",
+        "AuthenticationType"
+      ],
+      "members":{
+        "StackName":{"shape":"String"},
+        "UserName":{"shape":"Username"},
+        "AuthenticationType":{"shape":"AuthenticationType"},
+        "SendEmailNotification":{"shape":"Boolean"}
+      }
+    },
+    "UserStackAssociationError":{
+      "type":"structure",
+      "members":{
+        "UserStackAssociation":{"shape":"UserStackAssociation"},
+        "ErrorCode":{"shape":"UserStackAssociationErrorCode"},
+        "ErrorMessage":{"shape":"String"}
+      }
+    },
+    "UserStackAssociationErrorCode":{
+      "type":"string",
+      "enum":[
+        "STACK_NOT_FOUND",
+        "USER_NAME_NOT_FOUND",
+        "INTERNAL_ERROR"
+      ]
+    },
+    "UserStackAssociationErrorList":{
+      "type":"list",
+      "member":{"shape":"UserStackAssociationError"}
+    },
+    "UserStackAssociationList":{
+      "type":"list",
+      "member":{"shape":"UserStackAssociation"},
+      "max":25,
+      "min":1
+    },
+    "Username":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"[\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}]+",
+      "sensitive":true
     },
     "VisibilityType":{
       "type":"string",

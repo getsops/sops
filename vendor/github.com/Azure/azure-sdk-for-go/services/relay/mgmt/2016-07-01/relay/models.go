@@ -18,13 +18,18 @@ package relay
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/relay/mgmt/2016-07-01/relay"
 
 // AccessRights enumerates the values for access rights.
 type AccessRights string
@@ -101,11 +106,11 @@ type AuthorizationRule struct {
 	autorest.Response `json:"-"`
 	// AuthorizationRuleProperties - Authorization Rule properties
 	*AuthorizationRuleProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -114,15 +119,6 @@ func (ar AuthorizationRule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ar.AuthorizationRuleProperties != nil {
 		objectMap["properties"] = ar.AuthorizationRuleProperties
-	}
-	if ar.ID != nil {
-		objectMap["id"] = ar.ID
-	}
-	if ar.Name != nil {
-		objectMap["name"] = ar.Name
-	}
-	if ar.Type != nil {
-		objectMap["type"] = ar.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -208,20 +204,37 @@ type AuthorizationRuleListResultIterator struct {
 	page AuthorizationRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *AuthorizationRuleListResultIterator) Next() error {
+func (iter *AuthorizationRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *AuthorizationRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -243,6 +256,11 @@ func (iter AuthorizationRuleListResultIterator) Value() AuthorizationRule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the AuthorizationRuleListResultIterator type.
+func NewAuthorizationRuleListResultIterator(page AuthorizationRuleListResultPage) AuthorizationRuleListResultIterator {
+	return AuthorizationRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (arlr AuthorizationRuleListResult) IsEmpty() bool {
 	return arlr.Value == nil || len(*arlr.Value) == 0
@@ -250,11 +268,11 @@ func (arlr AuthorizationRuleListResult) IsEmpty() bool {
 
 // authorizationRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (arlr AuthorizationRuleListResult) authorizationRuleListResultPreparer() (*http.Request, error) {
+func (arlr AuthorizationRuleListResult) authorizationRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if arlr.NextLink == nil || len(to.String(arlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(arlr.NextLink)))
@@ -262,19 +280,36 @@ func (arlr AuthorizationRuleListResult) authorizationRuleListResultPreparer() (*
 
 // AuthorizationRuleListResultPage contains a page of AuthorizationRule values.
 type AuthorizationRuleListResultPage struct {
-	fn   func(AuthorizationRuleListResult) (AuthorizationRuleListResult, error)
+	fn   func(context.Context, AuthorizationRuleListResult) (AuthorizationRuleListResult, error)
 	arlr AuthorizationRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *AuthorizationRuleListResultPage) Next() error {
-	next, err := page.fn(page.arlr)
+func (page *AuthorizationRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AuthorizationRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.arlr)
 	if err != nil {
 		return err
 	}
 	page.arlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *AuthorizationRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -293,6 +328,11 @@ func (page AuthorizationRuleListResultPage) Values() []AuthorizationRule {
 		return nil
 	}
 	return *page.arlr.Value
+}
+
+// Creates a new instance of the AuthorizationRuleListResultPage type.
+func NewAuthorizationRuleListResultPage(getNextPage func(context.Context, AuthorizationRuleListResult) (AuthorizationRuleListResult, error)) AuthorizationRuleListResultPage {
+	return AuthorizationRuleListResultPage{fn: getNextPage}
 }
 
 // AuthorizationRuleProperties authorizationRule properties.
@@ -314,12 +354,12 @@ type CheckNameAvailabilityResult struct {
 	NameAvailable *bool `json:"nameAvailable,omitempty"`
 	// Reason - The reason for unavailability of a namespace. Possible values include: 'None', 'InvalidName', 'SubscriptionIsDisabled', 'NameInUse', 'NameInLockdown', 'TooManyNamespaceInCurrentSubscription'
 	Reason UnavailableReason `json:"reason,omitempty"`
-	// Message - The detailed info regarding the reason associated with the namespace.
+	// Message - READ-ONLY; The detailed info regarding the reason associated with the namespace.
 	Message *string `json:"message,omitempty"`
 }
 
-// ErrorResponse error reponse indicates Relay service is not able to process the incoming request. The reason is
-// provided in the error message.
+// ErrorResponse error reponse indicates Relay service is not able to process the incoming request. The
+// reason is provided in the error message.
 type ErrorResponse struct {
 	// Code - Error code.
 	Code *string `json:"code,omitempty"`
@@ -332,11 +372,11 @@ type HybridConnection struct {
 	autorest.Response `json:"-"`
 	// HybridConnectionProperties - Properties of HybridConnection
 	*HybridConnectionProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -345,15 +385,6 @@ func (hc HybridConnection) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if hc.HybridConnectionProperties != nil {
 		objectMap["properties"] = hc.HybridConnectionProperties
-	}
-	if hc.ID != nil {
-		objectMap["id"] = hc.ID
-	}
-	if hc.Name != nil {
-		objectMap["name"] = hc.Name
-	}
-	if hc.Type != nil {
-		objectMap["type"] = hc.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -424,20 +455,37 @@ type HybridConnectionListResultIterator struct {
 	page HybridConnectionListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *HybridConnectionListResultIterator) Next() error {
+func (iter *HybridConnectionListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *HybridConnectionListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -459,6 +507,11 @@ func (iter HybridConnectionListResultIterator) Value() HybridConnection {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the HybridConnectionListResultIterator type.
+func NewHybridConnectionListResultIterator(page HybridConnectionListResultPage) HybridConnectionListResultIterator {
+	return HybridConnectionListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (hclr HybridConnectionListResult) IsEmpty() bool {
 	return hclr.Value == nil || len(*hclr.Value) == 0
@@ -466,11 +519,11 @@ func (hclr HybridConnectionListResult) IsEmpty() bool {
 
 // hybridConnectionListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (hclr HybridConnectionListResult) hybridConnectionListResultPreparer() (*http.Request, error) {
+func (hclr HybridConnectionListResult) hybridConnectionListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if hclr.NextLink == nil || len(to.String(hclr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(hclr.NextLink)))
@@ -478,19 +531,36 @@ func (hclr HybridConnectionListResult) hybridConnectionListResultPreparer() (*ht
 
 // HybridConnectionListResultPage contains a page of HybridConnection values.
 type HybridConnectionListResultPage struct {
-	fn   func(HybridConnectionListResult) (HybridConnectionListResult, error)
+	fn   func(context.Context, HybridConnectionListResult) (HybridConnectionListResult, error)
 	hclr HybridConnectionListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *HybridConnectionListResultPage) Next() error {
-	next, err := page.fn(page.hclr)
+func (page *HybridConnectionListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/HybridConnectionListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.hclr)
 	if err != nil {
 		return err
 	}
 	page.hclr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *HybridConnectionListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -511,13 +581,18 @@ func (page HybridConnectionListResultPage) Values() []HybridConnection {
 	return *page.hclr.Value
 }
 
+// Creates a new instance of the HybridConnectionListResultPage type.
+func NewHybridConnectionListResultPage(getNextPage func(context.Context, HybridConnectionListResult) (HybridConnectionListResult, error)) HybridConnectionListResultPage {
+	return HybridConnectionListResultPage{fn: getNextPage}
+}
+
 // HybridConnectionProperties properties of the HybridConnection.
 type HybridConnectionProperties struct {
-	// CreatedAt - The time the HybridConnection was created.
+	// CreatedAt - READ-ONLY; The time the HybridConnection was created.
 	CreatedAt *date.Time `json:"createdAt,omitempty"`
-	// UpdatedAt - The time the namespace was updated.
+	// UpdatedAt - READ-ONLY; The time the namespace was updated.
 	UpdatedAt *date.Time `json:"updatedAt,omitempty"`
-	// ListenerCount - The number of listeners for this HybridConnection. min : 1 and max:25 supported
+	// ListenerCount - READ-ONLY; The number of listeners for this HybridConnection. min : 1 and max:25 supported
 	ListenerCount *int32 `json:"listenerCount,omitempty"`
 	// RequiresClientAuthorization - true if client authorization is needed for this HybridConnection; otherwise, false.
 	RequiresClientAuthorization *bool `json:"requiresClientAuthorization,omitempty"`
@@ -536,11 +611,11 @@ type Namespace struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -558,15 +633,6 @@ func (n Namespace) MarshalJSON() ([]byte, error) {
 	}
 	if n.Tags != nil {
 		objectMap["tags"] = n.Tags
-	}
-	if n.ID != nil {
-		objectMap["id"] = n.ID
-	}
-	if n.Name != nil {
-		objectMap["name"] = n.Name
-	}
-	if n.Type != nil {
-		objectMap["type"] = n.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -664,20 +730,37 @@ type NamespaceListResultIterator struct {
 	page NamespaceListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *NamespaceListResultIterator) Next() error {
+func (iter *NamespaceListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespaceListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *NamespaceListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -699,6 +782,11 @@ func (iter NamespaceListResultIterator) Value() Namespace {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the NamespaceListResultIterator type.
+func NewNamespaceListResultIterator(page NamespaceListResultPage) NamespaceListResultIterator {
+	return NamespaceListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (nlr NamespaceListResult) IsEmpty() bool {
 	return nlr.Value == nil || len(*nlr.Value) == 0
@@ -706,11 +794,11 @@ func (nlr NamespaceListResult) IsEmpty() bool {
 
 // namespaceListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (nlr NamespaceListResult) namespaceListResultPreparer() (*http.Request, error) {
+func (nlr NamespaceListResult) namespaceListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if nlr.NextLink == nil || len(to.String(nlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(nlr.NextLink)))
@@ -718,19 +806,36 @@ func (nlr NamespaceListResult) namespaceListResultPreparer() (*http.Request, err
 
 // NamespaceListResultPage contains a page of Namespace values.
 type NamespaceListResultPage struct {
-	fn  func(NamespaceListResult) (NamespaceListResult, error)
+	fn  func(context.Context, NamespaceListResult) (NamespaceListResult, error)
 	nlr NamespaceListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *NamespaceListResultPage) Next() error {
-	next, err := page.fn(page.nlr)
+func (page *NamespaceListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/NamespaceListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.nlr)
 	if err != nil {
 		return err
 	}
 	page.nlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *NamespaceListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -751,22 +856,27 @@ func (page NamespaceListResultPage) Values() []Namespace {
 	return *page.nlr.Value
 }
 
+// Creates a new instance of the NamespaceListResultPage type.
+func NewNamespaceListResultPage(getNextPage func(context.Context, NamespaceListResult) (NamespaceListResult, error)) NamespaceListResultPage {
+	return NamespaceListResultPage{fn: getNextPage}
+}
+
 // NamespaceProperties properties of the Namespace.
 type NamespaceProperties struct {
-	// ProvisioningState - Provisioning state of the namespace.
+	// ProvisioningState - READ-ONLY; Provisioning state of the namespace.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
-	// CreatedAt - The time the namespace was created.
+	// CreatedAt - READ-ONLY; The time the namespace was created.
 	CreatedAt *date.Time `json:"createdAt,omitempty"`
-	// UpdatedAt - The time the namespace was updated.
+	// UpdatedAt - READ-ONLY; The time the namespace was updated.
 	UpdatedAt *date.Time `json:"updatedAt,omitempty"`
-	// ServiceBusEndpoint - Endpoint you can use to perform Service Bus operations.
+	// ServiceBusEndpoint - READ-ONLY; Endpoint you can use to perform Service Bus operations.
 	ServiceBusEndpoint *string `json:"serviceBusEndpoint,omitempty"`
-	// MetricID - Identifier for Azure Insights metrics
+	// MetricID - READ-ONLY; Identifier for Azure Insights metrics
 	MetricID *string `json:"metricId,omitempty"`
 }
 
-// NamespacesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// NamespacesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type NamespacesCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -775,7 +885,7 @@ type NamespacesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *NamespacesCreateOrUpdateFuture) Result(client NamespacesClient) (n Namespace, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "relay.NamespacesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -794,7 +904,8 @@ func (future *NamespacesCreateOrUpdateFuture) Result(client NamespacesClient) (n
 	return
 }
 
-// NamespacesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// NamespacesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type NamespacesDeleteFuture struct {
 	azure.Future
 }
@@ -803,7 +914,7 @@ type NamespacesDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *NamespacesDeleteFuture) Result(client NamespacesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "relay.NamespacesDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -838,7 +949,7 @@ func (nup NamespaceUpdateParameter) MarshalJSON() ([]byte, error) {
 
 // Operation a EventHub REST API operation
 type Operation struct {
-	// Name - Operation name: {provider}/{resource}/{operation}
+	// Name - READ-ONLY; Operation name: {provider}/{resource}/{operation}
 	Name *string `json:"name,omitempty"`
 	// Display - The object that represents the operation.
 	Display *OperationDisplay `json:"display,omitempty"`
@@ -846,21 +957,21 @@ type Operation struct {
 
 // OperationDisplay the object that represents the operation.
 type OperationDisplay struct {
-	// Provider - Service provider: Microsoft.EventHub
+	// Provider - READ-ONLY; Service provider: Microsoft.EventHub
 	Provider *string `json:"provider,omitempty"`
-	// Resource - Resource on which the operation is performed: Invoice, etc.
+	// Resource - READ-ONLY; Resource on which the operation is performed: Invoice, etc.
 	Resource *string `json:"resource,omitempty"`
-	// Operation - Operation type: Read, write, delete, etc.
+	// Operation - READ-ONLY; Operation type: Read, write, delete, etc.
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list EventHub operations. It contains a list of operations and a
-// URL link to get the next set of results.
+// OperationListResult result of the request to list EventHub operations. It contains a list of operations
+// and a URL link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
-	// Value - List of EventHub operations supported by the Microsoft.EventHub resource provider.
+	// Value - READ-ONLY; List of EventHub operations supported by the Microsoft.EventHub resource provider.
 	Value *[]Operation `json:"value,omitempty"`
-	// NextLink - URL to get the next set of operation list results if there are any.
+	// NextLink - READ-ONLY; URL to get the next set of operation list results if there are any.
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -870,20 +981,37 @@ type OperationListResultIterator struct {
 	page OperationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListResultIterator) Next() error {
+func (iter *OperationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -905,6 +1033,11 @@ func (iter OperationListResultIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListResultIterator type.
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return OperationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (olr OperationListResult) IsEmpty() bool {
 	return olr.Value == nil || len(*olr.Value) == 0
@@ -912,11 +1045,11 @@ func (olr OperationListResult) IsEmpty() bool {
 
 // operationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (olr OperationListResult) operationListResultPreparer() (*http.Request, error) {
+func (olr OperationListResult) operationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if olr.NextLink == nil || len(to.String(olr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(olr.NextLink)))
@@ -924,19 +1057,36 @@ func (olr OperationListResult) operationListResultPreparer() (*http.Request, err
 
 // OperationListResultPage contains a page of Operation values.
 type OperationListResultPage struct {
-	fn  func(OperationListResult) (OperationListResult, error)
+	fn  func(context.Context, OperationListResult) (OperationListResult, error)
 	olr OperationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListResultPage) Next() error {
-	next, err := page.fn(page.olr)
+func (page *OperationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.olr)
 	if err != nil {
 		return err
 	}
 	page.olr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -957,6 +1107,11 @@ func (page OperationListResultPage) Values() []Operation {
 	return *page.olr.Value
 }
 
+// Creates a new instance of the OperationListResultPage type.
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return OperationListResultPage{fn: getNextPage}
+}
+
 // RegenerateKeysParameters parameters supplied to the Regenerate Authorization Rule operation.
 type RegenerateKeysParameters struct {
 	// PolicyKey - Key that needs to be regenerated. Possible values include: 'PrimaryKey', 'SecondaryKey'
@@ -965,11 +1120,11 @@ type RegenerateKeysParameters struct {
 
 // Resource the Resource definition
 type Resource struct {
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -987,11 +1142,11 @@ type TrackedResource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1004,15 +1159,6 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	if tr.Tags != nil {
 		objectMap["tags"] = tr.Tags
 	}
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -1021,11 +1167,11 @@ type WcfRelay struct {
 	autorest.Response `json:"-"`
 	// WcfRelayProperties - Properties of WcfRelay
 	*WcfRelayProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1034,15 +1180,6 @@ func (wr WcfRelay) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if wr.WcfRelayProperties != nil {
 		objectMap["properties"] = wr.WcfRelayProperties
-	}
-	if wr.ID != nil {
-		objectMap["id"] = wr.ID
-	}
-	if wr.Name != nil {
-		objectMap["name"] = wr.Name
-	}
-	if wr.Type != nil {
-		objectMap["type"] = wr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1102,17 +1239,17 @@ func (wr *WcfRelay) UnmarshalJSON(body []byte) error {
 type WcfRelayProperties struct {
 	// RelayType - WCFRelay Type. Possible values include: 'NetTCP', 'HTTP'
 	RelayType RelaytypeEnum `json:"relayType,omitempty"`
-	// CreatedAt - The time the WCFRelay was created.
+	// CreatedAt - READ-ONLY; The time the WCFRelay was created.
 	CreatedAt *date.Time `json:"createdAt,omitempty"`
-	// UpdatedAt - The time the namespace was updated.
+	// UpdatedAt - READ-ONLY; The time the namespace was updated.
 	UpdatedAt *date.Time `json:"updatedAt,omitempty"`
-	// ListenerCount - The number of listeners for this relay. min : 1 and max:25 supported
+	// ListenerCount - READ-ONLY; The number of listeners for this relay. min : 1 and max:25 supported
 	ListenerCount *int32 `json:"listenerCount,omitempty"`
 	// RequiresClientAuthorization - true if client authorization is needed for this relay; otherwise, false.
 	RequiresClientAuthorization *bool `json:"requiresClientAuthorization,omitempty"`
 	// RequiresTransportSecurity - true if transport security is needed for this relay; otherwise, false.
 	RequiresTransportSecurity *bool `json:"requiresTransportSecurity,omitempty"`
-	// IsDynamic - true if the relay is dynamic; otherwise, false.
+	// IsDynamic - READ-ONLY; true if the relay is dynamic; otherwise, false.
 	IsDynamic *bool `json:"isDynamic,omitempty"`
 	// UserMetadata - usermetadata is a placeholder to store user-defined string data for the HybridConnection endpoint.e.g. it can be used to store  descriptive data, such as list of teams and their contact information also user-defined configuration settings can be stored.
 	UserMetadata *string `json:"userMetadata,omitempty"`
@@ -1133,20 +1270,37 @@ type WcfRelaysListResultIterator struct {
 	page WcfRelaysListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *WcfRelaysListResultIterator) Next() error {
+func (iter *WcfRelaysListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WcfRelaysListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *WcfRelaysListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1168,6 +1322,11 @@ func (iter WcfRelaysListResultIterator) Value() WcfRelay {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the WcfRelaysListResultIterator type.
+func NewWcfRelaysListResultIterator(page WcfRelaysListResultPage) WcfRelaysListResultIterator {
+	return WcfRelaysListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (wrlr WcfRelaysListResult) IsEmpty() bool {
 	return wrlr.Value == nil || len(*wrlr.Value) == 0
@@ -1175,11 +1334,11 @@ func (wrlr WcfRelaysListResult) IsEmpty() bool {
 
 // wcfRelaysListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (wrlr WcfRelaysListResult) wcfRelaysListResultPreparer() (*http.Request, error) {
+func (wrlr WcfRelaysListResult) wcfRelaysListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if wrlr.NextLink == nil || len(to.String(wrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(wrlr.NextLink)))
@@ -1187,19 +1346,36 @@ func (wrlr WcfRelaysListResult) wcfRelaysListResultPreparer() (*http.Request, er
 
 // WcfRelaysListResultPage contains a page of WcfRelay values.
 type WcfRelaysListResultPage struct {
-	fn   func(WcfRelaysListResult) (WcfRelaysListResult, error)
+	fn   func(context.Context, WcfRelaysListResult) (WcfRelaysListResult, error)
 	wrlr WcfRelaysListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *WcfRelaysListResultPage) Next() error {
-	next, err := page.fn(page.wrlr)
+func (page *WcfRelaysListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WcfRelaysListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.wrlr)
 	if err != nil {
 		return err
 	}
 	page.wrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *WcfRelaysListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1218,4 +1394,9 @@ func (page WcfRelaysListResultPage) Values() []WcfRelay {
 		return nil
 	}
 	return *page.wrlr.Value
+}
+
+// Creates a new instance of the WcfRelaysListResultPage type.
+func NewWcfRelaysListResultPage(getNextPage func(context.Context, WcfRelaysListResult) (WcfRelaysListResult, error)) WcfRelaysListResultPage {
+	return WcfRelaysListResultPage{fn: getNextPage}
 }

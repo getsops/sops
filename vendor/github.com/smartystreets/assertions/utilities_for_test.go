@@ -50,6 +50,9 @@ func format(message string) string {
 	for strings.Contains(message, "  ") {
 		message = strings.Replace(message, "  ", " ", -1)
 	}
+	message = strings.Replace(message, "\x1b[32m", "", -1)
+	message = strings.Replace(message, "\x1b[31m", "", -1)
+	message = strings.Replace(message, "\x1b[0m", "", -1)
 	return message
 }
 

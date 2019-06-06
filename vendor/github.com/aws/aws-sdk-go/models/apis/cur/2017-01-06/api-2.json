@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"AWS Cost and Usage Report Service",
+    "serviceId":"Cost and Usage Report Service",
     "signatureVersion":"v4",
     "signingName":"cur",
     "targetPrefix":"AWSOrigamiServiceGatewayService",
@@ -64,14 +65,17 @@
         "eu-west-1",
         "ap-southeast-1",
         "ap-southeast-2",
-        "ap-northeast-1"
+        "ap-northeast-1",
+        "eu-north-1",
+        "ap-northeast-3"
       ]
     },
     "AdditionalArtifact":{
       "type":"string",
       "enum":[
         "REDSHIFT",
-        "QUICKSIGHT"
+        "QUICKSIGHT",
+        "ATHENA"
       ]
     },
     "AdditionalArtifactList":{
@@ -82,7 +86,8 @@
       "type":"string",
       "enum":[
         "ZIP",
-        "GZIP"
+        "GZIP",
+        "Parquet"
       ]
     },
     "DeleteReportDefinitionRequest":{
@@ -147,6 +152,10 @@
       "members":{
       }
     },
+    "RefreshClosedReports":{
+      "type":"boolean",
+      "box":true
+    },
     "ReportDefinition":{
       "type":"structure",
       "required":[
@@ -168,7 +177,9 @@
         "S3Bucket":{"shape":"S3Bucket"},
         "S3Prefix":{"shape":"S3Prefix"},
         "S3Region":{"shape":"AWSRegion"},
-        "AdditionalArtifacts":{"shape":"AdditionalArtifactList"}
+        "AdditionalArtifacts":{"shape":"AdditionalArtifactList"},
+        "RefreshClosedReports":{"shape":"RefreshClosedReports"},
+        "ReportVersioning":{"shape":"ReportVersioning"}
       }
     },
     "ReportDefinitionList":{
@@ -177,7 +188,10 @@
     },
     "ReportFormat":{
       "type":"string",
-      "enum":["textORcsv"]
+      "enum":[
+        "textORcsv",
+        "Parquet"
+      ]
     },
     "ReportLimitReachedException":{
       "type":"structure",
@@ -190,6 +204,13 @@
       "type":"string",
       "max":256,
       "pattern":"[0-9A-Za-z!\\-_.*\\'()]+"
+    },
+    "ReportVersioning":{
+      "type":"string",
+      "enum":[
+        "CREATE_NEW_REPORT",
+        "OVERWRITE_REPORT"
+      ]
     },
     "S3Bucket":{
       "type":"string",

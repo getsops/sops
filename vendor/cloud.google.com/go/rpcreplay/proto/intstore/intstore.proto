@@ -51,4 +51,7 @@ message Summary {
   int32 count = 1;
 }
 
-message ListItemsRequest {}
+message ListItemsRequest {
+  // Only list items whose value is greater than this.
+  int32 greaterThan = 1;
+}

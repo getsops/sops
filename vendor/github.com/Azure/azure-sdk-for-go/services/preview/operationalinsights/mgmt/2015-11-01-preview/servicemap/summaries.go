@@ -23,6 +23,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewSummariesClientWithBaseURI(baseURI string, subscriptionID string) Summar
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client SummariesClient) GetMachines(ctx context.Context, resourceGroupName string, workspaceName string, startTime *date.Time, endTime *date.Time) (result MachinesSummary, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SummariesClient.GetMachines")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},

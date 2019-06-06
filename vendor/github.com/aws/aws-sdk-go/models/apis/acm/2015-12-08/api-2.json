@@ -101,7 +101,10 @@
         "requestUri":"/"
       },
       "input":{"shape":"ListCertificatesRequest"},
-      "output":{"shape":"ListCertificatesResponse"}
+      "output":{"shape":"ListCertificatesResponse"},
+      "errors":[
+        {"shape":"InvalidArgsException"}
+      ]
     },
     "ListTagsForCertificate":{
       "name":"ListTagsForCertificate",
@@ -127,6 +130,18 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidArnException"},
         {"shape":"InvalidTagException"}
+      ]
+    },
+    "RenewCertificate":{
+      "name":"RenewCertificate",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RenewCertificateRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidArnException"}
       ]
     },
     "RequestCertificate":{
@@ -424,6 +439,7 @@
         "ADDITIONAL_VERIFICATION_REQUIRED",
         "DOMAIN_NOT_ALLOWED",
         "INVALID_PUBLIC_DOMAIN",
+        "DOMAIN_VALIDATION_DENIED",
         "CAA_ERROR",
         "PCA_LIMIT_EXCEEDED",
         "PCA_INVALID_ARN",
@@ -431,6 +447,8 @@
         "PCA_REQUEST_FAILED",
         "PCA_RESOURCE_NOT_FOUND",
         "PCA_INVALID_ARGS",
+        "PCA_INVALID_DURATION",
+        "PCA_ACCESS_DENIED",
         "OTHER"
       ]
     },
@@ -484,6 +502,13 @@
     "InUseList":{
       "type":"list",
       "member":{"shape":"String"}
+    },
+    "InvalidArgsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
+      },
+      "exception":true
     },
     "InvalidArnException":{
       "type":"structure",
@@ -639,6 +664,13 @@
         "Tags":{"shape":"TagList"}
       }
     },
+    "RenewCertificateRequest":{
+      "type":"structure",
+      "required":["CertificateArn"],
+      "members":{
+        "CertificateArn":{"shape":"Arn"}
+      }
+    },
     "RenewalEligibility":{
       "type":"string",
       "enum":[
@@ -659,11 +691,14 @@
       "type":"structure",
       "required":[
         "RenewalStatus",
-        "DomainValidationOptions"
+        "DomainValidationOptions",
+        "UpdatedAt"
       ],
       "members":{
         "RenewalStatus":{"shape":"RenewalStatus"},
-        "DomainValidationOptions":{"shape":"DomainValidationList"}
+        "DomainValidationOptions":{"shape":"DomainValidationList"},
+        "RenewalStatusReason":{"shape":"FailureReason"},
+        "UpdatedAt":{"shape":"TStamp"}
       }
     },
     "RequestCertificateRequest":{

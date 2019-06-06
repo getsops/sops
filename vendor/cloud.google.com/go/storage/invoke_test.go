@@ -15,10 +15,10 @@
 package storage
 
 import (
+	"context"
 	"errors"
 	"testing"
 
-	"golang.org/x/net/context"
 	"google.golang.org/api/googleapi"
 )
 

@@ -15,6 +15,7 @@
 package pubsub
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"runtime"
@@ -24,8 +25,7 @@ import (
 
 	"cloud.google.com/go/iam"
 	"github.com/golang/protobuf/proto"
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
+	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/support/bundler"
 	pb "google.golang.org/genproto/googleapis/pubsub/v1"
 	fmpb "google.golang.org/genproto/protobuf/field_mask"
@@ -34,14 +34,13 @@ import (
 )
 
 const (
-	// The maximum number of messages that can be in a single publish request, as
-	// determined by the PubSub service.
+	// MaxPublishRequestCount is the maximum number of messages that can be in
+	// a single publish request, as defined by the PubSub service.
 	MaxPublishRequestCount = 1000
 
-	// The maximum size of a single publish request in bytes, as determined by the PubSub service.
+	// MaxPublishRequestBytes is the maximum size of a single publish request
+	// in bytes, as defined by the PubSub service.
 	MaxPublishRequestBytes = 1e7
-
-	maxInt = int(^uint(0) >> 1)
 )
 
 // ErrOversizedMessage indicates that a message's size exceeds MaxPublishRequestBytes.
@@ -62,8 +61,6 @@ type Topic struct {
 	mu      sync.RWMutex
 	stopped bool
 	bundler *bundler.Bundler
-
-	wg sync.WaitGroup
 }
 
 // PublishSettings control the bundling of published messages.
@@ -85,6 +82,10 @@ type PublishSettings struct {
 
 	// The maximum time that the client will attempt to publish a bundle of messages.
 	Timeout time.Duration
+
+	// The maximum number of bytes that the Bundler will keep in memory before
+	// returning ErrOverflow.
+	BufferedByteLimit int
 }
 
 // DefaultPublishSettings holds the default values for topics' PublishSettings.
@@ -93,6 +94,10 @@ var DefaultPublishSettings = PublishSettings{
 	CountThreshold: 100,
 	ByteThreshold:  1e6,
 	Timeout:        60 * time.Second,
+	// By default, limit the bundler to 10 times the max message size. The number 10 is
+	// chosen as a reasonable amount of messages in the worst case whilst still
+	// capping the number to a low enough value to not OOM users.
+	BufferedByteLimit: 10 * MaxPublishRequestBytes,
 }
 
 // CreateTopic creates a new topic.
@@ -251,7 +256,7 @@ func (tps *TopicIterator) Next() (*Topic, error) {
 	return newTopic(tps.c, topicName), nil
 }
 
-// ID returns the unique idenfier of the topic within its project.
+// ID returns the unique identifier of the topic within its project.
 func (t *Topic) ID() string {
 	slash := strings.LastIndex(t.name, "/")
 	if slash == -1 {
@@ -286,6 +291,7 @@ func (t *Topic) Exists(ctx context.Context) (bool, error) {
 	return false, err
 }
 
+// IAM returns the topic's IAM handle.
 func (t *Topic) IAM() *iam.Handle {
 	return iam.InternalNewHandle(t.c.pubc.Connection(), t.name)
 }
@@ -333,9 +339,6 @@ func (t *Topic) Publish(ctx context.Context, msg *Message) *PublishResult {
 
 	// TODO(jba) [from bcmills] consider using a shared channel per bundle
 	// (requires Bundler API changes; would reduce allocations)
-	// The call to Add should never return an error because the bundler's
-	// BufferedByteLimit is set to maxInt; we do not perform any flow
-	// control in the client.
 	err := t.bundler.Add(&bundledMessage{msg, r}, msg.size)
 	if err != nil {
 		r.set("", err)
@@ -343,7 +346,7 @@ func (t *Topic) Publish(ctx context.Context, msg *Message) *PublishResult {
 	return r
 }
 
-// Send all remaining published messages and stop goroutines created for handling
+// Stop sends all remaining published messages and stop goroutines created for handling
 // publishing. Returns once all outstanding messages have been sent or have
 // failed to be sent.
 func (t *Topic) Stop() {
@@ -427,7 +430,9 @@ func (t *Topic) initBundler() {
 		t.bundler.BundleCountThreshold = MaxPublishRequestCount
 	}
 	t.bundler.BundleByteThreshold = t.PublishSettings.ByteThreshold
-	t.bundler.BufferedByteLimit = maxInt
+
+	t.bundler.BufferedByteLimit = t.PublishSettings.BufferedByteLimit
+
 	t.bundler.BundleByteLimit = MaxPublishRequestBytes
 	// Unless overridden, allow many goroutines per CPU to call the Publish RPC concurrently.
 	// The default value was determined via extensive load testing (see the loadtest subdirectory).

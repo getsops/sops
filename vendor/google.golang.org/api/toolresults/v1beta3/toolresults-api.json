@@ -15,7 +15,7 @@
   "description": "Reads and publishes results from Firebase Test Lab.",
   "discoveryVersion": "v1",
   "documentationLink": "https://firebase.google.com/docs/test-lab/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/ax1C5yBdX1XBiFdZQOZ4dU9xrEM\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/JTmZoC2nLuL_cjgyK29xhSrshLU\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -304,7 +304,7 @@
                   ]
                 },
                 "list": {
-                  "description": "Lists Histories for a given Project.\n\nThe executions are sorted by creation_time in descending order. The execution_id key will be used to order the executions with the same creation_time.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project - INVALID_ARGUMENT - if the request is malformed - NOT_FOUND - if the containing History does not exist",
+                  "description": "Lists Executions for a given History.\n\nThe executions are sorted by creation_time in descending order. The execution_id key will be used to order the executions with the same creation_time.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to read project - INVALID_ARGUMENT - if the request is malformed - NOT_FOUND - if the containing History does not exist",
                   "httpMethod": "GET",
                   "id": "toolresults.projects.histories.executions.list",
                   "parameterOrder": [
@@ -1093,6 +1093,116 @@
                         }
                       }
                     },
+                    "testCases": {
+                      "methods": {
+                        "get": {
+                          "description": "Gets details of a Test Case for a Step. Experimental test cases API. Still in active development.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project - INVALID_ARGUMENT - if the request is malformed - NOT_FOUND - if the containing Test Case does not exist",
+                          "httpMethod": "GET",
+                          "id": "toolresults.projects.histories.executions.steps.testCases.get",
+                          "parameterOrder": [
+                            "projectId",
+                            "historyId",
+                            "executionId",
+                            "stepId",
+                            "testCaseId"
+                          ],
+                          "parameters": {
+                            "executionId": {
+                              "description": "A Execution id\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "historyId": {
+                              "description": "A History id.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "description": "A Project id.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "stepId": {
+                              "description": "A Step id. Note: This step must include a TestExecutionStep.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "testCaseId": {
+                              "description": "A Test Case id.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            }
+                          },
+                          "path": "{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/testCases/{testCaseId}",
+                          "response": {
+                            "$ref": "TestCase"
+                          },
+                          "scopes": [
+                            "https://www.googleapis.com/auth/cloud-platform"
+                          ]
+                        },
+                        "list": {
+                          "description": "Lists Test Cases attached to a Step. Experimental test cases API. Still in active development.\n\nMay return any of the following canonical error codes:\n\n- PERMISSION_DENIED - if the user is not authorized to write to project - INVALID_ARGUMENT - if the request is malformed - NOT_FOUND - if the containing Step does not exist",
+                          "httpMethod": "GET",
+                          "id": "toolresults.projects.histories.executions.steps.testCases.list",
+                          "parameterOrder": [
+                            "projectId",
+                            "historyId",
+                            "executionId",
+                            "stepId"
+                          ],
+                          "parameters": {
+                            "executionId": {
+                              "description": "A Execution id\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "historyId": {
+                              "description": "A History id.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "pageSize": {
+                              "description": "The maximum number of TestCases to fetch.\n\nDefault value: 100. The server will use this default if the field is not set or has a value of 0.\n\nOptional.",
+                              "format": "int32",
+                              "location": "query",
+                              "type": "integer"
+                            },
+                            "pageToken": {
+                              "description": "A continuation token to resume the query at the next item.\n\nOptional.",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "projectId": {
+                              "description": "A Project id.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            },
+                            "stepId": {
+                              "description": "A Step id. Note: This step must include a TestExecutionStep.\n\nRequired.",
+                              "location": "path",
+                              "required": true,
+                              "type": "string"
+                            }
+                          },
+                          "path": "{projectId}/histories/{historyId}/executions/{executionId}/steps/{stepId}/testCases",
+                          "response": {
+                            "$ref": "ListTestCasesResponse"
+                          },
+                          "scopes": [
+                            "https://www.googleapis.com/auth/cloud-platform"
+                          ]
+                        }
+                      }
+                    },
                     "thumbnails": {
                       "methods": {
                         "list": {
@@ -1161,7 +1271,7 @@
       }
     }
   },
-  "revision": "20180904",
+  "revision": "20190530",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AndroidAppInfo": {
@@ -1482,6 +1592,7 @@
       "type": "object"
     },
     "FailureDetail": {
+      "description": "Details for an outcome with a FAILURE outcome summary.",
       "id": "FailureDetail",
       "properties": {
         "crashed": {
@@ -1646,6 +1757,7 @@
       "type": "object"
     },
     "InconclusiveDetail": {
+      "description": "Details for an outcome with an INCONCLUSIVE outcome summary.",
       "id": "InconclusiveDetail",
       "properties": {
         "abortedByUser": {
@@ -1655,6 +1767,44 @@
         "infrastructureFailure": {
           "description": "If the test runner could not determine success or failure because the test depends on a component other than the system under test which failed.\n\nFor example, a mobile test requires provisioning a device where the test executes, and that provisioning can fail.",
           "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "IndividualOutcome": {
+      "description": "Step Id and outcome of each individual step that was run as a group with other steps with the same configuration.",
+      "id": "IndividualOutcome",
+      "properties": {
+        "multistepNumber": {
+          "description": "Unique int given to each step. Ranges from 0(inclusive) to total number of steps(exclusive). The primary step is 0.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "outcomeSummary": {
+          "enum": [
+            "failure",
+            "flaky",
+            "inconclusive",
+            "skipped",
+            "success",
+            "unset"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "runDuration": {
+          "$ref": "Duration",
+          "description": "How long it took for this step to run."
+        },
+        "stepId": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -1772,6 +1922,23 @@
       },
       "type": "object"
     },
+    "ListTestCasesResponse": {
+      "description": "Response message for StepService.ListTestCases.",
+      "id": "ListTestCasesResponse",
+      "properties": {
+        "nextPageToken": {
+          "type": "string"
+        },
+        "testCases": {
+          "description": "List of test cases.",
+          "items": {
+            "$ref": "TestCase"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "MemoryInfo": {
       "id": "MemoryInfo",
       "properties": {
@@ -1783,6 +1950,26 @@
         "memoryTotalInKibibyte": {
           "description": "Total memory available on the device in KiB",
           "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MultiStep": {
+      "description": "Details when multiple steps are run with the same configuration as a group.",
+      "id": "MultiStep",
+      "properties": {
+        "multistepNumber": {
+          "description": "Unique int given to each step. Ranges from 0(inclusive) to total number of steps(exclusive). The primary step is 0.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "primaryStep": {
+          "$ref": "PrimaryStep",
+          "description": "Present if it is a primary (original) step."
+        },
+        "primaryStepId": {
+          "description": "Step Id of the primary (original) step, which might be this step.",
           "type": "string"
         }
       },
@@ -1812,12 +1999,14 @@
           "description": "The simplest way to interpret a result.\n\nRequired",
           "enum": [
             "failure",
+            "flaky",
             "inconclusive",
             "skipped",
             "success",
             "unset"
           ],
           "enumDescriptions": [
+            "",
             "",
             "",
             "",
@@ -1946,6 +2135,40 @@
       },
       "type": "object"
     },
+    "PrimaryStep": {
+      "description": "Stores rollup test status of multiple steps that were run as a group and outcome of each individual step.",
+      "id": "PrimaryStep",
+      "properties": {
+        "individualOutcome": {
+          "description": "Step Id and outcome of each individual step.",
+          "items": {
+            "$ref": "IndividualOutcome"
+          },
+          "type": "array"
+        },
+        "rollUp": {
+          "description": "Rollup test status of multiple steps that were run with the same configuration as a group.",
+          "enum": [
+            "failure",
+            "flaky",
+            "inconclusive",
+            "skipped",
+            "success",
+            "unset"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ProjectSettings": {
       "description": "Per-project settings for the Tool Results service.",
       "id": "ProjectSettings",
@@ -2023,6 +2246,7 @@
       "type": "object"
     },
     "SkippedDetail": {
+      "description": "Details for an outcome with a SKIPPED outcome summary.",
       "id": "SkippedDetail",
       "properties": {
         "incompatibleAppVersion": {
@@ -2063,7 +2287,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users - Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message, and error details. The error code should be an enum value of [google.rpc.Code][], but it may accept additional error codes if needed. The error message should be a developer-facing English message that helps developers *understand* and *resolve* the error. If a localized user-facing error message is needed, put the localized message in the error details or localize it in the client. The optional error details may contain arbitrary information about the error. There is a predefined set of error detail types in the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it is not necessarily the actual wire format. When the `Status` message is exposed in different client libraries and different wire protocols, it can be mapped differently. For example, it will likely be mapped to some exceptions in Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of environments, either with or without APIs, to provide a consistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client, it may embed the `Status` in the normal response to indicate the partial errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the `Status` message should be used directly inside batch response, one for each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation results in its response, the status of those operations should be represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "Status",
       "properties": {
         "code": {
@@ -2122,6 +2346,10 @@
             "$ref": "StepLabelsEntry"
           },
           "type": "array"
+        },
+        "multiStep": {
+          "$ref": "MultiStep",
+          "description": "Details when multiple steps are run with the same configuration as a group. These details can be used identify which group this step is part of. It also identifies the groups 'primary step' which indexes all the group members.\n\n- In response: present if previously set. - In create request: optional, set iff this step was performed more than once. - In update request: optional"
         },
         "name": {
           "description": "A short human-readable name to display in the UI. Maximum of 100 characters. For example: Clean build\n\nA PRECONDITION_FAILED will be returned upon creating a new step if it shares its name and dimension_value with an existing step. If two steps represent a similar action, but have different dimension values, they should share the same name. For instance, if the same set of tests is run on two different platforms, the two steps should have the same name.\n\n- In response: always set - In create request: always set - In update request: never set",
@@ -2191,11 +2419,68 @@
       "type": "object"
     },
     "SuccessDetail": {
+      "description": "Details for an outcome with a SUCCESS outcome summary.",
       "id": "SuccessDetail",
       "properties": {
         "otherNativeCrash": {
           "description": "If a native process other than the app crashed.",
           "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "TestCase": {
+      "id": "TestCase",
+      "properties": {
+        "endTime": {
+          "$ref": "Timestamp",
+          "description": "The end time of the test case.\n\nOptional."
+        },
+        "skippedMessage": {
+          "description": "Why the test case was skipped.\n\nPresent only for skipped test case",
+          "type": "string"
+        },
+        "stackTraces": {
+          "description": "The stack trace details if the test case failed or encountered an error.\n\nThe maximum size of the stack traces is 100KiB, beyond which the stack track will be truncated.\n\nZero if the test case passed.",
+          "items": {
+            "$ref": "StackTrace"
+          },
+          "type": "array"
+        },
+        "startTime": {
+          "$ref": "Timestamp",
+          "description": "The start time of the test case.\n\nOptional."
+        },
+        "status": {
+          "description": "The status of the test case.\n\nRequired.",
+          "enum": [
+            "error",
+            "failed",
+            "passed",
+            "skipped"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
+        "testCaseId": {
+          "description": "A unique identifier within a Step for this Test Case.",
+          "type": "string"
+        },
+        "testCaseReference": {
+          "$ref": "TestCaseReference",
+          "description": "Test case reference, e.g. name, class name and test suite name.\n\nRequired."
+        },
+        "toolOutputs": {
+          "description": "References to opaque files of any format output by the tool execution.",
+          "items": {
+            "$ref": "ToolOutputReference"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -2303,18 +2588,30 @@
             "encounteredNonAndroidUiWidgetScreen",
             "failedToInstall",
             "fatalException",
+            "inAppPurchases",
             "incompleteRoboScriptExecution",
+            "insufficientCoverage",
             "iosCrash",
             "iosException",
             "launcherActivityNotFound",
             "nativeCrash",
+            "nonSdkApiUsageReport",
             "nonSdkApiUsageViolation",
             "performedGoogleLogin",
+            "performedMonkeyActions",
             "startActivityNotFound",
             "unspecifiedType",
-            "unusedRoboDirective"
+            "unusedRoboDirective",
+            "usedRoboDirective",
+            "usedRoboIgnoreDirective"
           ],
           "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "",
             "",
             "",
@@ -2416,7 +2713,7 @@
       "type": "object"
     },
     "Timestamp": {
-      "description": "A Timestamp represents a point in time independent of any time zone or calendar, represented as seconds and fractions of seconds at nanosecond resolution in UTC Epoch time. It is encoded using the Proleptic Gregorian Calendar which extends the Gregorian calendar backwards to year one. It is encoded assuming all minutes are 60 seconds long, i.e. leap seconds are \"smeared\" so that no leap second table is needed for interpretation. Range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By restricting to that range, we ensure that we can convert to and from RFC 3339 date strings. See [https://www.ietf.org/rfc/rfc3339.txt](https://www.ietf.org/rfc/rfc3339.txt).\n\n# Examples\n\nExample 1: Compute Timestamp from POSIX `time()`.\n\nTimestamp timestamp; timestamp.set_seconds(time(NULL)); timestamp.set_nanos(0);\n\nExample 2: Compute Timestamp from POSIX `gettimeofday()`.\n\nstruct timeval tv; gettimeofday(\u0026tv, NULL);\n\nTimestamp timestamp; timestamp.set_seconds(tv.tv_sec); timestamp.set_nanos(tv.tv_usec * 1000);\n\nExample 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\nFILETIME ft; GetSystemTimeAsFileTime(\u0026ft); UINT64 ticks = (((UINT64)ft.dwHighDateTime) \u003c\u003c 32) | ft.dwLowDateTime;\n\n// A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z. Timestamp timestamp; timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL)); timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\nExample 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\nlong millis = System.currentTimeMillis();\n\nTimestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000) .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n\n\nExample 5: Compute Timestamp from current time in Python.\n\ntimestamp = Timestamp() timestamp.GetCurrentTime()\n\n# JSON Mapping\n\nIn JSON format, the Timestamp type is encoded as a string in the [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the format is \"{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z\" where {year} is always expressed using four digits while {month}, {day}, {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution), are optional. The \"Z\" suffix indicates the timezone (\"UTC\"); the timezone is required. A proto3 JSON serializer should always use UTC (as indicated by \"Z\") when printing the Timestamp type and a proto3 JSON parser should be able to accept both UTC and other timezones (as indicated by an offset).\n\nFor example, \"2017-01-15T01:30:15.01Z\" encodes 15.01 seconds past 01:30 UTC on January 15, 2017.\n\nIn JavaScript, one can convert a Date object to this format using the standard [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString] method. In Python, a standard `datetime.datetime` object can be converted to this format using [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use the Joda Time's [`ISODateTimeFormat.dateTime()`]( http://www.joda.org/joda-time/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime%2D%2D ) to obtain a formatter capable of generating timestamps in this format.",
+      "description": "A Timestamp represents a point in time independent of any time zone or local calendar, encoded as a count of seconds and fractions of seconds at nanosecond resolution. The count is relative to an epoch at UTC midnight on January 1, 1970, in the proleptic Gregorian calendar which extends the Gregorian calendar backwards to year one.\n\nAll minutes are 60 seconds long. Leap seconds are \"smeared\" so that no leap second table is needed for interpretation, using a [24-hour linear smear](https://developers.google.com/time/smear).\n\nThe range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By restricting to that range, we ensure that we can convert to and from [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) date strings.\n\n# Examples\n\nExample 1: Compute Timestamp from POSIX `time()`.\n\nTimestamp timestamp; timestamp.set_seconds(time(NULL)); timestamp.set_nanos(0);\n\nExample 2: Compute Timestamp from POSIX `gettimeofday()`.\n\nstruct timeval tv; gettimeofday(\u0026tv, NULL);\n\nTimestamp timestamp; timestamp.set_seconds(tv.tv_sec); timestamp.set_nanos(tv.tv_usec * 1000);\n\nExample 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\nFILETIME ft; GetSystemTimeAsFileTime(\u0026ft); UINT64 ticks = (((UINT64)ft.dwHighDateTime) \u003c\u003c 32) | ft.dwLowDateTime;\n\n// A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z. Timestamp timestamp; timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL)); timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\nExample 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\nlong millis = System.currentTimeMillis();\n\nTimestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000) .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n\n\nExample 5: Compute Timestamp from current time in Python.\n\ntimestamp = Timestamp() timestamp.GetCurrentTime()\n\n# JSON Mapping\n\nIn JSON format, the Timestamp type is encoded as a string in the [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the format is \"{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z\" where {year} is always expressed using four digits while {month}, {day}, {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution), are optional. The \"Z\" suffix indicates the timezone (\"UTC\"); the timezone is required. A proto3 JSON serializer should always use UTC (as indicated by \"Z\") when printing the Timestamp type and a proto3 JSON parser should be able to accept both UTC and other timezones (as indicated by an offset).\n\nFor example, \"2017-01-15T01:30:15.01Z\" encodes 15.01 seconds past 01:30 UTC on January 15, 2017.\n\nIn JavaScript, one can convert a Date object to this format using the standard [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString) method. In Python, a standard `datetime.datetime` object can be converted to this format using [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use the Joda Time's [`ISODateTimeFormat.dateTime()`]( http://www.joda.org/joda-time/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime%2D%2D ) to obtain a formatter capable of generating timestamps in this format.",
       "id": "Timestamp",
       "properties": {
         "nanos": {

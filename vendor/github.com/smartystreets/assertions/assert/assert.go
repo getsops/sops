@@ -7,8 +7,6 @@ import (
 	"reflect"
 	"runtime"
 	"strings"
-
-	"github.com/smartystreets/logging"
 )
 
 // Result contains a single assertion failure as an error.
@@ -20,7 +18,7 @@ type Result struct {
 	err        error
 
 	stdout io.Writer
-	logger *logging.Logger
+	logger *logger
 }
 
 // So is a convenience function (as opposed to an inconvenience function?)

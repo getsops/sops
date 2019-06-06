@@ -22,8 +22,11 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
-// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager name
-// operation.
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/trafficmanager/mgmt/2017-03-01/trafficmanager"
+
+// CheckTrafficManagerRelativeDNSNameAvailabilityParameters parameters supplied to check Traffic Manager
+// name operation.
 type CheckTrafficManagerRelativeDNSNameAvailabilityParameters struct {
 	// Name - Gets or sets the name of the resource.
 	Name *string `json:"name,omitempty"`
@@ -47,7 +50,7 @@ type CloudErrorBody struct {
 // DeleteOperationResult the result of the request or operation.
 type DeleteOperationResult struct {
 	autorest.Response `json:"-"`
-	// OperationResult - The result of the operation or request.
+	// OperationResult - READ-ONLY; The result of the operation or request.
 	OperationResult *bool `json:"boolean,omitempty"`
 }
 
@@ -57,7 +60,7 @@ type DNSConfig struct {
 	RelativeName *string `json:"relativeName,omitempty"`
 	// Fqdn - Gets or sets the fully-qualified domain name (FQDN) of the Traffic Manager profile.  This is formed from the concatenation of the RelativeName with the DNS domain used by Azure Traffic Manager.
 	Fqdn *string `json:"fqdn,omitempty"`
-	// TTL - Gets or sets the DNS Ttime-To-Live (TTL), in seconds.  This informs the local DNS resolvers and DNS clients how long to cache DNS responses provided by this Traffic Manager profile.
+	// TTL - Gets or sets the DNS Time-To-Live (TTL), in seconds.  This informs the local DNS resolvers and DNS clients how long to cache DNS responses provided by this Traffic Manager profile.
 	TTL *int64 `json:"ttl,omitempty"`
 }
 
@@ -164,15 +167,16 @@ type EndpointProperties struct {
 	GeoMapping *[]string `json:"geoMapping,omitempty"`
 }
 
-// GeographicHierarchy class representing the Geographic hierarchy used with the Geographic traffic routing method.
+// GeographicHierarchy class representing the Geographic hierarchy used with the Geographic traffic routing
+// method.
 type GeographicHierarchy struct {
 	autorest.Response              `json:"-"`
 	*GeographicHierarchyProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -185,15 +189,6 @@ func (gh GeographicHierarchy) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if gh.GeographicHierarchyProperties != nil {
 		objectMap["properties"] = gh.GeographicHierarchyProperties
-	}
-	if gh.ID != nil {
-		objectMap["id"] = gh.ID
-	}
-	if gh.Name != nil {
-		objectMap["name"] = gh.Name
-	}
-	if gh.Type != nil {
-		objectMap["type"] = gh.Type
 	}
 	if gh.Location != nil {
 		objectMap["location"] = gh.Location
@@ -273,8 +268,8 @@ func (gh *GeographicHierarchy) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// GeographicHierarchyProperties class representing the properties of the Geographic hierarchy used with the
-// Geographic traffic routing method.
+// GeographicHierarchyProperties class representing the properties of the Geographic hierarchy used with
+// the Geographic traffic routing method.
 type GeographicHierarchyProperties struct {
 	// GeographicHierarchy - The region at the root of the hierarchy from all the regions in the hierarchy can be retrieved.
 	GeographicHierarchy *Region `json:"geographicHierarchy,omitempty"`
@@ -311,11 +306,11 @@ type NameAvailability struct {
 type Profile struct {
 	autorest.Response  `json:"-"`
 	*ProfileProperties `json:"properties,omitempty"`
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -328,15 +323,6 @@ func (p Profile) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if p.ProfileProperties != nil {
 		objectMap["properties"] = p.ProfileProperties
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
-	}
-	if p.Name != nil {
-		objectMap["name"] = p.Name
-	}
-	if p.Type != nil {
-		objectMap["type"] = p.Type
 	}
 	if p.Location != nil {
 		objectMap["location"] = p.Location
@@ -437,7 +423,8 @@ type ProfileProperties struct {
 	Endpoints *[]Endpoint `json:"endpoints,omitempty"`
 }
 
-// Region class representing a region in the Geographic hierarchy used with the Geographic traffic routing method.
+// Region class representing a region in the Geographic hierarchy used with the Geographic traffic routing
+// method.
 type Region struct {
 	// Code - The code of the region
 	Code *string `json:"code,omitempty"`
@@ -449,11 +436,11 @@ type Region struct {
 
 // Resource the Resource model definition.
 type Resource struct {
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -464,15 +451,6 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}

@@ -86,7 +86,7 @@ func TestUtimesNanoAt(t *testing.T) {
 	defer chtmpdir(t)()
 
 	symlink := "symlink1"
-	os.Remove(symlink)
+	defer os.Remove(symlink)
 	err := os.Symlink("nonexisting", symlink)
 	if err != nil {
 		t.Fatal(err)
@@ -107,10 +107,10 @@ func TestUtimesNanoAt(t *testing.T) {
 		t.Fatalf("Lstat: %v", err)
 	}
 	if runtime.GOARCH == "ppc64" {
-		if int64(st.Atim.Sec) != int64(ts[0].Sec) || st.Atim.Nsec != int32(ts[0].Nsec) {
+		if int64(st.Atim.Sec) != int64(ts[0].Sec) || st.Atim.Nsec != ts[0].Nsec {
 			t.Errorf("UtimesNanoAt: wrong atime: %v", st.Atim)
 		}
-		if int64(st.Mtim.Sec) != int64(ts[1].Sec) || st.Mtim.Nsec != int32(ts[1].Nsec) {
+		if int64(st.Mtim.Sec) != int64(ts[1].Sec) || st.Mtim.Nsec != ts[1].Nsec {
 			t.Errorf("UtimesNanoAt: wrong mtime: %v", st.Mtim)
 		}
 	} else {
@@ -120,6 +120,26 @@ func TestUtimesNanoAt(t *testing.T) {
 		if int32(st.Mtim.Sec) != int32(ts[1].Sec) || int32(st.Mtim.Nsec) != int32(ts[1].Nsec) {
 			t.Errorf("UtimesNanoAt: wrong mtime: %v", st.Mtim)
 		}
+	}
+}
+
+func TestSelect(t *testing.T) {
+	_, err := unix.Select(0, nil, nil, nil, &unix.Timeval{Sec: 0, Usec: 0})
+	if err != nil {
+		t.Fatalf("Select: %v", err)
+	}
+
+	dur := 150 * time.Millisecond
+	tv := unix.NsecToTimeval(int64(dur))
+	start := time.Now()
+	_, err = unix.Select(0, nil, nil, nil, &tv)
+	took := time.Since(start)
+	if err != nil {
+		t.Fatalf("Select: %v", err)
+	}
+
+	if took < dur {
+		t.Errorf("Select: timeout should have been at least %v, got %v", dur, took)
 	}
 }
 
@@ -145,18 +165,4 @@ func TestPselect(t *testing.T) {
 	if took < dur {
 		t.Errorf("Pselect: timeout should have been at least %v, got %v", dur, took)
 	}
-}
-
-// stringsFromByteSlice converts a sequence of attributes to a []string.
-// On Linux, each entry is a NULL-terminated string.
-func stringsFromByteSlice(buf []byte) []string {
-	var result []string
-	off := 0
-	for i, b := range buf {
-		if b == 0 {
-			result = append(result, string(buf[off:i]))
-			off = i + 1
-		}
-	}
-	return result
 }

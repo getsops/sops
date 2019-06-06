@@ -5,6 +5,7 @@
     "endpointPrefix":"clouddirectory",
     "protocol":"rest-json",
     "serviceFullName":"Amazon CloudDirectory",
+    "serviceId":"CloudDirectory",
     "signatureVersion":"v4",
     "signingName":"clouddirectory",
     "uid":"clouddirectory-2017-01-11"
@@ -1579,9 +1580,9 @@
     },
     "AttributeName":{
       "type":"string",
-      "max":64,
+      "max":230,
       "min":1,
-      "pattern":"^[a-zA-Z0-9._-]*$"
+      "pattern":"^[a-zA-Z0-9._:-]*$"
     },
     "AttributeNameAndValue":{
       "type":"structure",
@@ -1958,6 +1959,22 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "BatchListObjectParents":{
+      "type":"structure",
+      "required":["ObjectReference"],
+      "members":{
+        "ObjectReference":{"shape":"ObjectReference"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{"shape":"NumberResults"}
+      }
+    },
+    "BatchListObjectParentsResponse":{
+      "type":"structure",
+      "members":{
+        "ParentLinks":{"shape":"ObjectIdentifierAndLinkNameList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "BatchListObjectPolicies":{
       "type":"structure",
       "required":["ObjectReference"],
@@ -2059,6 +2076,7 @@
         "ListObjectParentPaths":{"shape":"BatchListObjectParentPaths"},
         "GetObjectInformation":{"shape":"BatchGetObjectInformation"},
         "GetObjectAttributes":{"shape":"BatchGetObjectAttributes"},
+        "ListObjectParents":{"shape":"BatchListObjectParents"},
         "ListObjectPolicies":{"shape":"BatchListObjectPolicies"},
         "ListPolicyAttachments":{"shape":"BatchListPolicyAttachments"},
         "LookupPolicy":{"shape":"BatchLookupPolicy"},
@@ -2124,7 +2142,8 @@
         "ListIndex":{"shape":"BatchListIndexResponse"},
         "ListOutgoingTypedLinks":{"shape":"BatchListOutgoingTypedLinksResponse"},
         "ListIncomingTypedLinks":{"shape":"BatchListIncomingTypedLinksResponse"},
-        "GetLinkAttributes":{"shape":"BatchGetLinkAttributesResponse"}
+        "GetLinkAttributes":{"shape":"BatchGetLinkAttributesResponse"},
+        "ListObjectParents":{"shape":"BatchListObjectParentsResponse"}
       }
     },
     "BatchReferenceName":{"type":"string"},
@@ -3424,14 +3443,16 @@
           "shape":"ConsistencyLevel",
           "location":"header",
           "locationName":"x-amz-consistency-level"
-        }
+        },
+        "IncludeAllLinksToEachParent":{"shape":"Bool"}
       }
     },
     "ListObjectParentsResponse":{
       "type":"structure",
       "members":{
         "Parents":{"shape":"ObjectIdentifierToLinkNameMap"},
-        "NextToken":{"shape":"NextToken"}
+        "NextToken":{"shape":"NextToken"},
+        "ParentLinks":{"shape":"ObjectIdentifierAndLinkNameList"}
       }
     },
     "ListObjectPoliciesRequest":{
@@ -3686,6 +3707,17 @@
       "member":{"shape":"ObjectAttributeUpdate"}
     },
     "ObjectIdentifier":{"type":"string"},
+    "ObjectIdentifierAndLinkNameList":{
+      "type":"list",
+      "member":{"shape":"ObjectIdentifierAndLinkNameTuple"}
+    },
+    "ObjectIdentifierAndLinkNameTuple":{
+      "type":"structure",
+      "members":{
+        "ObjectIdentifier":{"shape":"ObjectIdentifier"},
+        "LinkName":{"shape":"LinkName"}
+      }
+    },
     "ObjectIdentifierList":{
       "type":"list",
       "member":{"shape":"ObjectIdentifier"}

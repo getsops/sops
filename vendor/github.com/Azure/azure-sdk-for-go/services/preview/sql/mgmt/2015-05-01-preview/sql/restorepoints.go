@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewRestorePointsClientWithBaseURI(baseURI string, subscriptionID string) Re
 // serverName - the name of the server.
 // databaseName - the name of the database to get available restore points.
 func (client RestorePointsClient) ListByDatabase(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result RestorePointListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RestorePointsClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByDatabasePreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.RestorePointsClient", "ListByDatabase", nil, "Failure preparing request")

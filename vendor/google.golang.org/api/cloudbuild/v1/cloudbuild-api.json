@@ -474,6 +474,17 @@
                 "projectId"
               ],
               "parameters": {
+                "pageSize": {
+                  "description": "Number of results to return in the list.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "Token to provide to skip to a particular spot in the list.",
+                  "location": "query",
+                  "type": "string"
+                },
                 "projectId": {
                   "description": "ID of the project for which to list BuildTriggers.",
                   "location": "path",
@@ -562,7 +573,7 @@
       }
     }
   },
-  "revision": "20180828",
+  "revision": "20190507",
   "rootUrl": "https://cloudbuild.googleapis.com/",
   "schemas": {
     "ArtifactObjects": {
@@ -780,6 +791,13 @@
           "format": "int64",
           "type": "string"
         },
+        "env": {
+          "description": "A list of global environment variable definitions that will exist for all\nbuild steps in this build. If a variable is defined in both globally and in\na build step, the variable will use the build step value.\n\nThe elements are of the form \"KEY=VALUE\" for the environment variable \"KEY\"\nbeing given the value \"VALUE\".",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "logStreamingOption": {
           "description": "Option to define build log streaming behavior to Google Cloud\nStorage.",
           "enum": [
@@ -791,6 +809,20 @@
             "Service may automatically determine build log streaming behavior.",
             "Build logs should be streamed to Google Cloud Storage.",
             "Build logs should not be streamed to Google Cloud Storage; they will be\nwritten when the build is completed."
+          ],
+          "type": "string"
+        },
+        "logging": {
+          "description": "Option to specify the logging mode, which determines where the logs are\nstored.",
+          "enum": [
+            "LOGGING_UNSPECIFIED",
+            "LEGACY",
+            "GCS_ONLY"
+          ],
+          "enumDescriptions": [
+            "The service determines the logging mode. The default is `LEGACY`. Do not\nrely on the default logging behavior as it may change in the future.",
+            "Stackdriver logging and Cloud Storage logging are enabled.",
+            "Only Cloud Storage logging is enabled."
           ],
           "type": "string"
         },
@@ -820,6 +852,13 @@
           ],
           "type": "string"
         },
+        "secretEnv": {
+          "description": "A list of global environment variables, which are encrypted using a Cloud\nKey Management Service crypto key. These values must be specified in the\nbuild's `Secret`. These variables will be available to all build steps\nin this build.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "sourceProvenanceHash": {
           "description": "Requested hash for SourceProvenance.",
           "enumDescriptions": [
@@ -847,6 +886,17 @@
             "Fails the build if error in substitutions checks, like missing\na substitution in the template or in the map.",
             "Do not fail the build if error in substitutions checks."
           ],
+          "type": "string"
+        },
+        "volumes": {
+          "description": "Global list of volumes to mount for ALL build steps\n\nEach volume is created as an empty volume prior to starting the build\nprocess. Upon completion of the build, volumes and their contents are\ndiscarded. Global volume names and paths cannot conflict with the volumes\ndefined a build step.\n\nUsing a global volume in a build with only one step is not valid as\nit is indicative of a build request with an incorrect configuration.",
+          "items": {
+            "$ref": "Volume"
+          },
+          "type": "array"
+        },
+        "workerPool": {
+          "description": "Option to specify a `WorkerPool` for the build. User specifies the pool\nwith the format \"[WORKERPOOL_PROJECT_ID]/[WORKERPOOL_NAME]\".\nThis is an experimental field.",
           "type": "string"
         }
       },
@@ -885,6 +935,10 @@
         "name": {
           "description": "Required. The name of the container image that will run this particular\nbuild step.\n\nIf the image is available in the host's Docker daemon's cache, it\nwill be run directly. If not, the host will attempt to pull the image\nfirst, using the builder service account's credentials if necessary.\n\nThe Docker daemon's cache will already have the latest versions of all of\nthe officially supported build steps\n([https://github.com/GoogleCloudPlatform/cloud-builders](https://github.com/GoogleCloudPlatform/cloud-builders)).\nThe Docker daemon will also have cached many of the layers for some popular\nimages, like \"ubuntu\", \"debian\", but they will be refreshed at the time you\nattempt to use them.\n\nIf you built an image in a previous build step, it will be stored in the\nhost's Docker daemon's cache and is available to use as the name for a\nlater build step.",
           "type": "string"
+        },
+        "pullTiming": {
+          "$ref": "TimeSpan",
+          "description": "Output only. Stores timing information for pulling this build step's\nbuilder image only."
         },
         "secretEnv": {
           "description": "A list of environment variables which are encrypted using a Cloud Key\nManagement Service crypto key. These values must be specified in the\nbuild's `Secret`.",
@@ -927,7 +981,7 @@
           "description": "Output only. Stores timing information for executing this build step."
         },
         "volumes": {
-          "description": "List of volumes to mount into the build step.\n\nEach volume will be created as an empty volume prior to execution of the\nbuild step. Upon completion of the build, volumes and their contents will\nbe discarded.\n\nUsing a named volume in only one step is not valid as it is indicative\nof a mis-configured build request.",
+          "description": "List of volumes to mount into the build step.\n\nEach volume is created as an empty volume prior to execution of the\nbuild step. Upon completion of the build, volumes and their contents are\ndiscarded.\n\nUsing a named volume in only one step is not valid as it is indicative\nof a build request with an incorrect configuration.",
           "items": {
             "$ref": "Volume"
           },
@@ -968,6 +1022,10 @@
           "description": "Path, from the source root, to a file whose contents is used for the\ntemplate.",
           "type": "string"
         },
+        "github": {
+          "$ref": "GitHubEventsConfig",
+          "description": "GitHubEventsConfig describes the configuration of a trigger that creates\na build whenever a GitHub event is received."
+        },
         "id": {
           "description": "Output only. Unique identifier of the trigger.",
           "type": "string"
@@ -992,6 +1050,13 @@
           },
           "description": "Substitutions data for Build resource.",
           "type": "object"
+        },
+        "tags": {
+          "description": "Tags for annotation of a `BuildTrigger`",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "triggerTemplate": {
           "$ref": "RepoSource",
@@ -1031,6 +1096,12 @@
       "properties": {},
       "type": "object"
     },
+    "CheckSuiteFilter": {
+      "description": "A CheckSuiteFilter is a filter that indicates that we should build on all\ncheck suite events.",
+      "id": "CheckSuiteFilter",
+      "properties": {},
+      "type": "object"
+    },
     "Empty": {
       "description": "A generic empty message that you can re-use to avoid defining duplicated\nempty messages in your APIs. A typical example is to use it as the request\nor the response type of an API method. For instance:\n\n    service Foo {\n      rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n    }\n\nThe JSON representation for `Empty` is empty JSON object `{}`.",
       "id": "Empty",
@@ -1047,6 +1118,38 @@
             "$ref": "Hash"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GitHubEventsConfig": {
+      "description": "GitHubEventsConfig describes the configuration of a trigger that creates a\nbuild whenever a GitHub event is received.\n\nThis message is experimental.",
+      "id": "GitHubEventsConfig",
+      "properties": {
+        "checkSuite": {
+          "$ref": "CheckSuiteFilter",
+          "description": "Output only. Indicates that a build was generated from a check suite\nevent."
+        },
+        "installationId": {
+          "description": "The installationID that emmits the GitHub event.",
+          "format": "int64",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the repository.",
+          "type": "string"
+        },
+        "owner": {
+          "description": "Owner of the repository.",
+          "type": "string"
+        },
+        "pullRequest": {
+          "$ref": "PullRequestFilter",
+          "description": "filter to match changes in pull requests."
+        },
+        "push": {
+          "$ref": "PushFilter",
+          "description": "filter to match changes in refs like branches, tags."
         }
       },
       "type": "object"
@@ -1081,6 +1184,10 @@
       "description": "Response containing existing `BuildTriggers`.",
       "id": "ListBuildTriggersResponse",
       "properties": {
+        "nextPageToken": {
+          "description": "Token to receive the next page of results.",
+          "type": "string"
+        },
         "triggers": {
           "description": "`BuildTriggers` for the project, sorted by `create_time` descending.",
           "items": {
@@ -1148,7 +1255,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -1158,6 +1265,44 @@
           },
           "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
           "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "PullRequestFilter": {
+      "description": "PullRequestFilter contains filter properties for matching GitHub Pull\nRequests.",
+      "id": "PullRequestFilter",
+      "properties": {
+        "branch": {
+          "description": "Regex of branches to match.\n\nThe syntax of the regular expressions accepted is the syntax accepted by\nRE2 and described at https://github.com/google/re2/wiki/Syntax",
+          "type": "string"
+        },
+        "commentControl": {
+          "description": "Whether to block builds on a \"/gcbrun\" comment from a repository owner or\ncollaborator.",
+          "enum": [
+            "COMMENTS_DISABLED",
+            "COMMENTS_ENABLED"
+          ],
+          "enumDescriptions": [
+            "Do not require comments on Pull Requests before builds are triggered.",
+            "Enforce that repository owners or collaborators must comment on Pull\nRequests before builds are triggered."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "PushFilter": {
+      "description": "Push contains filter properties for matching GitHub git pushes.",
+      "id": "PushFilter",
+      "properties": {
+        "branch": {
+          "description": "Regexes of branches to match.\n\nThe syntax of the regular expressions accepted is the syntax accepted by\nRE2 and described at https://github.com/google/re2/wiki/Syntax",
+          "type": "string"
+        },
+        "tag": {
+          "description": "Regexes of tags to match.\n\nThe syntax of the regular expressions accepted is the syntax accepted by\nRE2 and described at https://github.com/google/re2/wiki/Syntax",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1200,6 +1345,10 @@
         "artifactManifest": {
           "description": "Path to the artifact manifest. Only populated when artifacts are uploaded.",
           "type": "string"
+        },
+        "artifactTiming": {
+          "$ref": "TimeSpan",
+          "description": "Time to push all non-container artifacts."
         },
         "buildStepImages": {
           "description": "List of build step digests, in the order corresponding to build step\nindices.",
@@ -1250,7 +1399,7 @@
             "format": "byte",
             "type": "string"
           },
-          "description": "Map of environment variable name to its encrypted value.\n\nSecret environment variables must be unique across all of a build's\nsecrets, and must be used by at least one build step. Values can be at most\n1 KB in size. There can be at most ten secret values across all of a\nbuild's secrets.",
+          "description": "Map of environment variable name to its encrypted value.\n\nSecret environment variables must be unique across all of a build's\nsecrets, and must be used by at least one build step. Values can be at most\n64 KB in size. There can be at most 100 secret values across all of a\nbuild's secrets.",
           "type": "object"
         }
       },
@@ -1279,7 +1428,7 @@
           "additionalProperties": {
             "$ref": "FileHashes"
           },
-          "description": "Output only. Hash(es) of the build source, which can be used to verify that\nthe originalsource integrity was maintained in the build. Note that\n`FileHashes` willonly be populated if `BuildOptions` has requested a\n`SourceProvenanceHash`.\n\nThe keys to this map are file paths used as build source and the values\ncontain the hash values for those files.\n\nIf the build source came in a single package such as a gzipped tarfile\n(`.tar.gz`), the `FileHash` will be for the single path to that file.",
+          "description": "Output only. Hash(es) of the build source, which can be used to verify that\nthe original source integrity was maintained in the build. Note that\n`FileHashes` will only be populated if `BuildOptions` has requested a\n`SourceProvenanceHash`.\n\nThe keys to this map are file paths used as build source and the values\ncontain the hash values for those files.\n\nIf the build source came in a single package such as a gzipped tarfile\n(`.tar.gz`), the `FileHash` will be for the single path to that file.",
           "type": "object"
         },
         "resolvedRepoSource": {
@@ -1294,7 +1443,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {

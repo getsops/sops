@@ -15,23 +15,24 @@
 package firestore
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"time"
 
-	"google.golang.org/api/iterator"
-
-	vkit "cloud.google.com/go/firestore/apiv1beta1"
-
+	vkit "cloud.google.com/go/firestore/apiv1"
+	"cloud.google.com/go/internal/trace"
 	"cloud.google.com/go/internal/version"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
 	"github.com/golang/protobuf/ptypes"
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
+	gax "github.com/googleapis/gax-go/v2"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
+	"google.golang.org/api/transport"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -40,6 +41,15 @@ import (
 // resourcePrefixHeader is the name of the metadata header used to indicate
 // the resource being operated on.
 const resourcePrefixHeader = "google-cloud-resource-prefix"
+
+// DetectProjectID is a sentinel value that instructs NewClient to detect the
+// project ID. It is given in place of the projectID argument. NewClient will
+// use the project ID from the given credentials or the default credentials
+// (https://developers.google.com/accounts/docs/application-default-credentials)
+// if no credentials were provided. When providing credentials, not all
+// options will allow NewClient to extract the project ID. Specifically a JWT
+// does not have the project ID encoded.
+const DetectProjectID = "*detect-project-id*"
 
 // A Client provides access to the Firestore service.
 type Client struct {
@@ -50,7 +60,30 @@ type Client struct {
 
 // NewClient creates a new Firestore client that uses the given project.
 func NewClient(ctx context.Context, projectID string, opts ...option.ClientOption) (*Client, error) {
-	vc, err := vkit.NewClient(ctx, opts...)
+	var o []option.ClientOption
+	// Environment variables for gcloud emulator:
+	// https://cloud.google.com/sdk/gcloud/reference/beta/emulators/firestore/
+	if addr := os.Getenv("FIRESTORE_EMULATOR_HOST"); addr != "" {
+		conn, err := grpc.Dial(addr, grpc.WithInsecure())
+		if err != nil {
+			return nil, fmt.Errorf("firestore: dialing address from env var FIRESTORE_EMULATOR_HOST: %v", err)
+		}
+		o = []option.ClientOption{option.WithGRPCConn(conn)}
+	}
+	o = append(o, opts...)
+
+	if projectID == DetectProjectID {
+		creds, err := transport.Creds(ctx, o...)
+		if err != nil {
+			return nil, fmt.Errorf("fetching creds: %v", err)
+		}
+		if creds.ProjectID == "" {
+			return nil, errors.New("firestore: see the docs on DetectProjectID")
+		}
+		projectID = creds.ProjectID
+	}
+
+	vc, err := vkit.NewClient(ctx, o...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +133,19 @@ func (c *Client) Doc(path string) *DocumentRef {
 	return doc
 }
 
+// CollectionGroup creates a reference to a group of collections that include
+// the given ID, regardless of parent document.
+//
+// For example, consider:
+// France/Cities/Paris = {population: 100}
+// Canada/Cities/Montreal = {population: 90}
+//
+// CollectionGroup can be used to query across all "Cities" regardless of
+// its parent "Countries". See ExampleCollectionGroup for a complete example.
+func (c *Client) CollectionGroup(collectionID string) *CollectionGroupRef {
+	return newCollectionGroupRef(c, c.path(), collectionID)
+}
+
 func (c *Client) idsToRef(IDs []string, dbPath string) (*CollectionRef, *DocumentRef) {
 	if len(IDs) == 0 {
 		return nil, nil
@@ -127,10 +173,10 @@ func (c *Client) idsToRef(IDs []string, dbPath string) (*CollectionRef, *Documen
 // returned in the order of the given DocumentRefs.
 //
 // If a document is not present, the corresponding DocumentSnapshot's Exists method will return false.
-func (c *Client) GetAll(ctx context.Context, docRefs []*DocumentRef) ([]*DocumentSnapshot, error) {
-	if err := checkTransaction(ctx); err != nil {
-		return nil, err
-	}
+func (c *Client) GetAll(ctx context.Context, docRefs []*DocumentRef) (_ []*DocumentSnapshot, err error) {
+	ctx = trace.StartSpan(ctx, "cloud.google.com/go/firestore.GetAll")
+	defer func() { trace.EndSpan(ctx, err) }()
+
 	return c.getAll(ctx, docRefs, nil)
 }
 
@@ -201,11 +247,10 @@ func (c *Client) getAll(ctx context.Context, docRefs []*DocumentRef, tid []byte)
 // Collections returns an interator over the top-level collections.
 func (c *Client) Collections(ctx context.Context) *CollectionIterator {
 	it := &CollectionIterator{
-		err:    checkTransaction(ctx),
 		client: c,
 		it: c.c.ListCollectionIds(
 			withResourceHeader(ctx, c.path()),
-			&pb.ListCollectionIdsRequest{Parent: c.path()}),
+			&pb.ListCollectionIdsRequest{Parent: c.path() + "/documents"}),
 	}
 	it.pageInfo, it.nextFunc = iterator.NewPageInfo(
 		it.fetch,
@@ -221,9 +266,6 @@ func (c *Client) Batch() *WriteBatch {
 
 // commit calls the Commit RPC outside of a transaction.
 func (c *Client) commit(ctx context.Context, ws []*pb.Write) ([]*WriteResult, error) {
-	if err := checkTransaction(ctx); err != nil {
-		return nil, err
-	}
 	req := &pb.CommitRequest{
 		Database: c.path(),
 		Writes:   ws,

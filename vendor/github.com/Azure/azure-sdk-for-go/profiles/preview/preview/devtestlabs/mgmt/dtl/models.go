@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,22 +19,16 @@
 
 package dtl
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/devtestlabs/mgmt/2015-05-21-preview/dtl"
+import (
+	"context"
 
-type ArtifactClient = original.ArtifactClient
-type ArtifactSourceClient = original.ArtifactSourceClient
+	original "github.com/Azure/azure-sdk-for-go/services/preview/devtestlabs/mgmt/2015-05-21-preview/dtl"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type CostClient = original.CostClient
-type CostInsightClient = original.CostInsightClient
-type CustomImageClient = original.CustomImageClient
-type FormulaClient = original.FormulaClient
-type GalleryImageClient = original.GalleryImageClient
-type LabClient = original.LabClient
 type CostPropertyType = original.CostPropertyType
 
 const (
@@ -142,22 +136,28 @@ const (
 type ApplyArtifactsRequest = original.ApplyArtifactsRequest
 type ArmTemplateInfo = original.ArmTemplateInfo
 type Artifact = original.Artifact
+type ArtifactClient = original.ArtifactClient
 type ArtifactDeploymentStatusProperties = original.ArtifactDeploymentStatusProperties
 type ArtifactInstallProperties = original.ArtifactInstallProperties
 type ArtifactParameterProperties = original.ArtifactParameterProperties
 type ArtifactProperties = original.ArtifactProperties
 type ArtifactSource = original.ArtifactSource
+type ArtifactSourceClient = original.ArtifactSourceClient
 type ArtifactSourceProperties = original.ArtifactSourceProperties
+type BaseClient = original.BaseClient
 type CloudError = original.CloudError
 type CloudErrorBody = original.CloudErrorBody
 type Cost = original.Cost
+type CostClient = original.CostClient
 type CostInsight = original.CostInsight
+type CostInsightClient = original.CostInsightClient
 type CostInsightProperties = original.CostInsightProperties
 type CostInsightRefreshDataFuture = original.CostInsightRefreshDataFuture
 type CostPerDayProperties = original.CostPerDayProperties
 type CostProperties = original.CostProperties
 type CostRefreshDataFuture = original.CostRefreshDataFuture
 type CustomImage = original.CustomImage
+type CustomImageClient = original.CustomImageClient
 type CustomImageCreateOrUpdateResourceFuture = original.CustomImageCreateOrUpdateResourceFuture
 type CustomImageDeleteResourceFuture = original.CustomImageDeleteResourceFuture
 type CustomImageProperties = original.CustomImageProperties
@@ -168,10 +168,12 @@ type EvaluatePoliciesProperties = original.EvaluatePoliciesProperties
 type EvaluatePoliciesRequest = original.EvaluatePoliciesRequest
 type EvaluatePoliciesResponse = original.EvaluatePoliciesResponse
 type Formula = original.Formula
+type FormulaClient = original.FormulaClient
 type FormulaCreateOrUpdateResourceFuture = original.FormulaCreateOrUpdateResourceFuture
 type FormulaProperties = original.FormulaProperties
 type FormulaPropertiesFromVM = original.FormulaPropertiesFromVM
 type GalleryImage = original.GalleryImage
+type GalleryImageClient = original.GalleryImageClient
 type GalleryImageProperties = original.GalleryImageProperties
 type GalleryImageReference = original.GalleryImageReference
 type GenerateArmTemplateRequest = original.GenerateArmTemplateRequest
@@ -179,6 +181,7 @@ type GenerateUploadURIParameter = original.GenerateUploadURIParameter
 type GenerateUploadURIResponse = original.GenerateUploadURIResponse
 type HourDetails = original.HourDetails
 type Lab = original.Lab
+type LabClient = original.LabClient
 type LabCreateEnvironmentFuture = original.LabCreateEnvironmentFuture
 type LabCreateOrUpdateResourceFuture = original.LabCreateOrUpdateResourceFuture
 type LabDeleteResourceFuture = original.LabDeleteResourceFuture
@@ -189,7 +192,9 @@ type LabVirtualMachineProperties = original.LabVirtualMachineProperties
 type LinuxOsInfo = original.LinuxOsInfo
 type ParameterInfo = original.ParameterInfo
 type Policy = original.Policy
+type PolicyClient = original.PolicyClient
 type PolicyProperties = original.PolicyProperties
+type PolicySetClient = original.PolicySetClient
 type PolicySetResult = original.PolicySetResult
 type PolicyViolation = original.PolicyViolation
 type ResponseWithContinuationArtifact = original.ResponseWithContinuationArtifact
@@ -232,6 +237,7 @@ type ResponseWithContinuationVirtualNetwork = original.ResponseWithContinuationV
 type ResponseWithContinuationVirtualNetworkIterator = original.ResponseWithContinuationVirtualNetworkIterator
 type ResponseWithContinuationVirtualNetworkPage = original.ResponseWithContinuationVirtualNetworkPage
 type Schedule = original.Schedule
+type ScheduleClient = original.ScheduleClient
 type ScheduleCreateOrUpdateResourceFuture = original.ScheduleCreateOrUpdateResourceFuture
 type ScheduleDeleteResourceFuture = original.ScheduleDeleteResourceFuture
 type ScheduleExecuteFuture = original.ScheduleExecuteFuture
@@ -240,24 +246,24 @@ type Subnet = original.Subnet
 type SubnetOverride = original.SubnetOverride
 type SubscriptionNotification = original.SubscriptionNotification
 type SubscriptionNotificationProperties = original.SubscriptionNotificationProperties
+type VMCostProperties = original.VMCostProperties
 type VirtualMachineApplyArtifactsFuture = original.VirtualMachineApplyArtifactsFuture
+type VirtualMachineClient = original.VirtualMachineClient
 type VirtualMachineCreateOrUpdateResourceFuture = original.VirtualMachineCreateOrUpdateResourceFuture
 type VirtualMachineDeleteResourceFuture = original.VirtualMachineDeleteResourceFuture
 type VirtualMachineStartFuture = original.VirtualMachineStartFuture
 type VirtualMachineStopFuture = original.VirtualMachineStopFuture
 type VirtualNetwork = original.VirtualNetwork
+type VirtualNetworkClient = original.VirtualNetworkClient
 type VirtualNetworkCreateOrUpdateResourceFuture = original.VirtualNetworkCreateOrUpdateResourceFuture
 type VirtualNetworkDeleteResourceFuture = original.VirtualNetworkDeleteResourceFuture
 type VirtualNetworkProperties = original.VirtualNetworkProperties
-type VMCostProperties = original.VMCostProperties
 type WeekDetails = original.WeekDetails
 type WindowsOsInfo = original.WindowsOsInfo
-type PolicyClient = original.PolicyClient
-type PolicySetClient = original.PolicySetClient
-type ScheduleClient = original.ScheduleClient
-type VirtualMachineClient = original.VirtualMachineClient
-type VirtualNetworkClient = original.VirtualNetworkClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewArtifactClient(subscriptionID string) ArtifactClient {
 	return original.NewArtifactClient(subscriptionID)
 }
@@ -269,12 +275,6 @@ func NewArtifactSourceClient(subscriptionID string) ArtifactSourceClient {
 }
 func NewArtifactSourceClientWithBaseURI(baseURI string, subscriptionID string) ArtifactSourceClient {
 	return original.NewArtifactSourceClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewCostClient(subscriptionID string) CostClient {
 	return original.NewCostClient(subscriptionID)
@@ -311,6 +311,117 @@ func NewLabClient(subscriptionID string) LabClient {
 }
 func NewLabClientWithBaseURI(baseURI string, subscriptionID string) LabClient {
 	return original.NewLabClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPolicyClient(subscriptionID string) PolicyClient {
+	return original.NewPolicyClient(subscriptionID)
+}
+func NewPolicyClientWithBaseURI(baseURI string, subscriptionID string) PolicyClient {
+	return original.NewPolicyClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPolicySetClient(subscriptionID string) PolicySetClient {
+	return original.NewPolicySetClient(subscriptionID)
+}
+func NewPolicySetClientWithBaseURI(baseURI string, subscriptionID string) PolicySetClient {
+	return original.NewPolicySetClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewResponseWithContinuationArtifactIterator(page ResponseWithContinuationArtifactPage) ResponseWithContinuationArtifactIterator {
+	return original.NewResponseWithContinuationArtifactIterator(page)
+}
+func NewResponseWithContinuationArtifactPage(getNextPage func(context.Context, ResponseWithContinuationArtifact) (ResponseWithContinuationArtifact, error)) ResponseWithContinuationArtifactPage {
+	return original.NewResponseWithContinuationArtifactPage(getNextPage)
+}
+func NewResponseWithContinuationArtifactSourceIterator(page ResponseWithContinuationArtifactSourcePage) ResponseWithContinuationArtifactSourceIterator {
+	return original.NewResponseWithContinuationArtifactSourceIterator(page)
+}
+func NewResponseWithContinuationArtifactSourcePage(getNextPage func(context.Context, ResponseWithContinuationArtifactSource) (ResponseWithContinuationArtifactSource, error)) ResponseWithContinuationArtifactSourcePage {
+	return original.NewResponseWithContinuationArtifactSourcePage(getNextPage)
+}
+func NewResponseWithContinuationCostInsightIterator(page ResponseWithContinuationCostInsightPage) ResponseWithContinuationCostInsightIterator {
+	return original.NewResponseWithContinuationCostInsightIterator(page)
+}
+func NewResponseWithContinuationCostInsightPage(getNextPage func(context.Context, ResponseWithContinuationCostInsight) (ResponseWithContinuationCostInsight, error)) ResponseWithContinuationCostInsightPage {
+	return original.NewResponseWithContinuationCostInsightPage(getNextPage)
+}
+func NewResponseWithContinuationCostIterator(page ResponseWithContinuationCostPage) ResponseWithContinuationCostIterator {
+	return original.NewResponseWithContinuationCostIterator(page)
+}
+func NewResponseWithContinuationCostPage(getNextPage func(context.Context, ResponseWithContinuationCost) (ResponseWithContinuationCost, error)) ResponseWithContinuationCostPage {
+	return original.NewResponseWithContinuationCostPage(getNextPage)
+}
+func NewResponseWithContinuationCustomImageIterator(page ResponseWithContinuationCustomImagePage) ResponseWithContinuationCustomImageIterator {
+	return original.NewResponseWithContinuationCustomImageIterator(page)
+}
+func NewResponseWithContinuationCustomImagePage(getNextPage func(context.Context, ResponseWithContinuationCustomImage) (ResponseWithContinuationCustomImage, error)) ResponseWithContinuationCustomImagePage {
+	return original.NewResponseWithContinuationCustomImagePage(getNextPage)
+}
+func NewResponseWithContinuationFormulaIterator(page ResponseWithContinuationFormulaPage) ResponseWithContinuationFormulaIterator {
+	return original.NewResponseWithContinuationFormulaIterator(page)
+}
+func NewResponseWithContinuationFormulaPage(getNextPage func(context.Context, ResponseWithContinuationFormula) (ResponseWithContinuationFormula, error)) ResponseWithContinuationFormulaPage {
+	return original.NewResponseWithContinuationFormulaPage(getNextPage)
+}
+func NewResponseWithContinuationGalleryImageIterator(page ResponseWithContinuationGalleryImagePage) ResponseWithContinuationGalleryImageIterator {
+	return original.NewResponseWithContinuationGalleryImageIterator(page)
+}
+func NewResponseWithContinuationGalleryImagePage(getNextPage func(context.Context, ResponseWithContinuationGalleryImage) (ResponseWithContinuationGalleryImage, error)) ResponseWithContinuationGalleryImagePage {
+	return original.NewResponseWithContinuationGalleryImagePage(getNextPage)
+}
+func NewResponseWithContinuationLabIterator(page ResponseWithContinuationLabPage) ResponseWithContinuationLabIterator {
+	return original.NewResponseWithContinuationLabIterator(page)
+}
+func NewResponseWithContinuationLabPage(getNextPage func(context.Context, ResponseWithContinuationLab) (ResponseWithContinuationLab, error)) ResponseWithContinuationLabPage {
+	return original.NewResponseWithContinuationLabPage(getNextPage)
+}
+func NewResponseWithContinuationLabVhdIterator(page ResponseWithContinuationLabVhdPage) ResponseWithContinuationLabVhdIterator {
+	return original.NewResponseWithContinuationLabVhdIterator(page)
+}
+func NewResponseWithContinuationLabVhdPage(getNextPage func(context.Context, ResponseWithContinuationLabVhd) (ResponseWithContinuationLabVhd, error)) ResponseWithContinuationLabVhdPage {
+	return original.NewResponseWithContinuationLabVhdPage(getNextPage)
+}
+func NewResponseWithContinuationLabVirtualMachineIterator(page ResponseWithContinuationLabVirtualMachinePage) ResponseWithContinuationLabVirtualMachineIterator {
+	return original.NewResponseWithContinuationLabVirtualMachineIterator(page)
+}
+func NewResponseWithContinuationLabVirtualMachinePage(getNextPage func(context.Context, ResponseWithContinuationLabVirtualMachine) (ResponseWithContinuationLabVirtualMachine, error)) ResponseWithContinuationLabVirtualMachinePage {
+	return original.NewResponseWithContinuationLabVirtualMachinePage(getNextPage)
+}
+func NewResponseWithContinuationPolicyIterator(page ResponseWithContinuationPolicyPage) ResponseWithContinuationPolicyIterator {
+	return original.NewResponseWithContinuationPolicyIterator(page)
+}
+func NewResponseWithContinuationPolicyPage(getNextPage func(context.Context, ResponseWithContinuationPolicy) (ResponseWithContinuationPolicy, error)) ResponseWithContinuationPolicyPage {
+	return original.NewResponseWithContinuationPolicyPage(getNextPage)
+}
+func NewResponseWithContinuationScheduleIterator(page ResponseWithContinuationSchedulePage) ResponseWithContinuationScheduleIterator {
+	return original.NewResponseWithContinuationScheduleIterator(page)
+}
+func NewResponseWithContinuationSchedulePage(getNextPage func(context.Context, ResponseWithContinuationSchedule) (ResponseWithContinuationSchedule, error)) ResponseWithContinuationSchedulePage {
+	return original.NewResponseWithContinuationSchedulePage(getNextPage)
+}
+func NewResponseWithContinuationVirtualNetworkIterator(page ResponseWithContinuationVirtualNetworkPage) ResponseWithContinuationVirtualNetworkIterator {
+	return original.NewResponseWithContinuationVirtualNetworkIterator(page)
+}
+func NewResponseWithContinuationVirtualNetworkPage(getNextPage func(context.Context, ResponseWithContinuationVirtualNetwork) (ResponseWithContinuationVirtualNetwork, error)) ResponseWithContinuationVirtualNetworkPage {
+	return original.NewResponseWithContinuationVirtualNetworkPage(getNextPage)
+}
+func NewScheduleClient(subscriptionID string) ScheduleClient {
+	return original.NewScheduleClient(subscriptionID)
+}
+func NewScheduleClientWithBaseURI(baseURI string, subscriptionID string) ScheduleClient {
+	return original.NewScheduleClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewVirtualMachineClient(subscriptionID string) VirtualMachineClient {
+	return original.NewVirtualMachineClient(subscriptionID)
+}
+func NewVirtualMachineClientWithBaseURI(baseURI string, subscriptionID string) VirtualMachineClient {
+	return original.NewVirtualMachineClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewVirtualNetworkClient(subscriptionID string) VirtualNetworkClient {
+	return original.NewVirtualNetworkClient(subscriptionID)
+}
+func NewVirtualNetworkClientWithBaseURI(baseURI string, subscriptionID string) VirtualNetworkClient {
+	return original.NewVirtualNetworkClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleCostPropertyTypeValues() []CostPropertyType {
 	return original.PossibleCostPropertyTypeValues()
@@ -351,39 +462,9 @@ func PossibleUsagePermissionTypeValues() []UsagePermissionType {
 func PossibleWindowsOsStateValues() []WindowsOsState {
 	return original.PossibleWindowsOsStateValues()
 }
-func NewPolicyClient(subscriptionID string) PolicyClient {
-	return original.NewPolicyClient(subscriptionID)
-}
-func NewPolicyClientWithBaseURI(baseURI string, subscriptionID string) PolicyClient {
-	return original.NewPolicyClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewPolicySetClient(subscriptionID string) PolicySetClient {
-	return original.NewPolicySetClient(subscriptionID)
-}
-func NewPolicySetClientWithBaseURI(baseURI string, subscriptionID string) PolicySetClient {
-	return original.NewPolicySetClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewScheduleClient(subscriptionID string) ScheduleClient {
-	return original.NewScheduleClient(subscriptionID)
-}
-func NewScheduleClientWithBaseURI(baseURI string, subscriptionID string) ScheduleClient {
-	return original.NewScheduleClientWithBaseURI(baseURI, subscriptionID)
-}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewVirtualMachineClient(subscriptionID string) VirtualMachineClient {
-	return original.NewVirtualMachineClient(subscriptionID)
-}
-func NewVirtualMachineClientWithBaseURI(baseURI string, subscriptionID string) VirtualMachineClient {
-	return original.NewVirtualMachineClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewVirtualNetworkClient(subscriptionID string) VirtualNetworkClient {
-	return original.NewVirtualNetworkClient(subscriptionID)
-}
-func NewVirtualNetworkClientWithBaseURI(baseURI string, subscriptionID string) VirtualNetworkClient {
-	return original.NewVirtualNetworkClientWithBaseURI(baseURI, subscriptionID)
 }

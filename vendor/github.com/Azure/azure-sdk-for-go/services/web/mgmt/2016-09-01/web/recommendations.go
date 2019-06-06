@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewRecommendationsClientWithBaseURI(baseURI string, subscriptionID string) 
 // resourceGroupName - name of the resource group to which the resource belongs.
 // siteName - name of the app.
 func (client RecommendationsClient) DisableAllForWebApp(ctx context.Context, resourceGroupName string, siteName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.DisableAllForWebApp")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -120,6 +131,16 @@ func (client RecommendationsClient) DisableAllForWebAppResponder(resp *http.Resp
 // siteName - site name
 // name - rule name
 func (client RecommendationsClient) DisableRecommendationForSite(ctx context.Context, resourceGroupName string, siteName string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.DisableRecommendationForSite")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -195,6 +216,16 @@ func (client RecommendationsClient) DisableRecommendationForSiteResponder(resp *
 // Parameters:
 // name - rule name
 func (client RecommendationsClient) DisableRecommendationForSubscription(ctx context.Context, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.DisableRecommendationForSubscription")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DisableRecommendationForSubscriptionPreparer(ctx, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "DisableRecommendationForSubscription", nil, "Failure preparing request")
@@ -261,9 +292,19 @@ func (client RecommendationsClient) DisableRecommendationForSubscriptionResponde
 // siteName - name of the app.
 // name - name of the recommendation.
 // updateSeen - specify <code>true</code> to update the last-seen timestamp of the recommendation object.
-// recommendationID - the GUID of the recommedation object if you query an expired one. You don't need to
+// recommendationID - the GUID of the recommendation object if you query an expired one. You don't need to
 // specify it to query an active entry.
 func (client RecommendationsClient) GetRuleDetailsByWebApp(ctx context.Context, resourceGroupName string, siteName string, name string, updateSeen *bool, recommendationID string) (result RecommendationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.GetRuleDetailsByWebApp")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -349,6 +390,16 @@ func (client RecommendationsClient) GetRuleDetailsByWebAppResponder(resp *http.R
 // 'Notification' and startTime eq '2014-01-01T00:00:00Z' and endTime eq '2014-12-31T23:59:59Z' and timeGrain
 // eq duration'[PT1H|PT1M|P1D]
 func (client RecommendationsClient) List(ctx context.Context, featured *bool, filter string) (result RecommendationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.List")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, featured, filter)
 	if err != nil {
@@ -417,8 +468,8 @@ func (client RecommendationsClient) ListResponder(resp *http.Response) (result R
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client RecommendationsClient) listNextResults(lastResults RecommendationCollection) (result RecommendationCollection, err error) {
-	req, err := lastResults.recommendationCollectionPreparer()
+func (client RecommendationsClient) listNextResults(ctx context.Context, lastResults RecommendationCollection) (result RecommendationCollection, err error) {
+	req, err := lastResults.recommendationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.RecommendationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -439,6 +490,16 @@ func (client RecommendationsClient) listNextResults(lastResults RecommendationCo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RecommendationsClient) ListComplete(ctx context.Context, featured *bool, filter string) (result RecommendationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, featured, filter)
 	return
 }
@@ -451,6 +512,16 @@ func (client RecommendationsClient) ListComplete(ctx context.Context, featured *
 // 'Notification' and startTime eq '2014-01-01T00:00:00Z' and endTime eq '2014-12-31T23:59:59Z' and timeGrain
 // eq duration'[PT1H|PT1M|P1D]
 func (client RecommendationsClient) ListHistoryForWebApp(ctx context.Context, resourceGroupName string, siteName string, filter string) (result RecommendationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.ListHistoryForWebApp")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -526,8 +597,8 @@ func (client RecommendationsClient) ListHistoryForWebAppResponder(resp *http.Res
 }
 
 // listHistoryForWebAppNextResults retrieves the next set of results, if any.
-func (client RecommendationsClient) listHistoryForWebAppNextResults(lastResults RecommendationCollection) (result RecommendationCollection, err error) {
-	req, err := lastResults.recommendationCollectionPreparer()
+func (client RecommendationsClient) listHistoryForWebAppNextResults(ctx context.Context, lastResults RecommendationCollection) (result RecommendationCollection, err error) {
+	req, err := lastResults.recommendationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.RecommendationsClient", "listHistoryForWebAppNextResults", nil, "Failure preparing next results request")
 	}
@@ -548,6 +619,16 @@ func (client RecommendationsClient) listHistoryForWebAppNextResults(lastResults 
 
 // ListHistoryForWebAppComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RecommendationsClient) ListHistoryForWebAppComplete(ctx context.Context, resourceGroupName string, siteName string, filter string) (result RecommendationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.ListHistoryForWebApp")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListHistoryForWebApp(ctx, resourceGroupName, siteName, filter)
 	return
 }
@@ -561,6 +642,16 @@ func (client RecommendationsClient) ListHistoryForWebAppComplete(ctx context.Con
 // filter - return only channels specified in the filter. Filter is specified by using OData syntax. Example:
 // $filter=channels eq 'Api' or channel eq 'Notification'
 func (client RecommendationsClient) ListRecommendedRulesForWebApp(ctx context.Context, resourceGroupName string, siteName string, featured *bool, filter string) (result RecommendationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.ListRecommendedRulesForWebApp")
+		defer func() {
+			sc := -1
+			if result.rc.Response.Response != nil {
+				sc = result.rc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -639,8 +730,8 @@ func (client RecommendationsClient) ListRecommendedRulesForWebAppResponder(resp 
 }
 
 // listRecommendedRulesForWebAppNextResults retrieves the next set of results, if any.
-func (client RecommendationsClient) listRecommendedRulesForWebAppNextResults(lastResults RecommendationCollection) (result RecommendationCollection, err error) {
-	req, err := lastResults.recommendationCollectionPreparer()
+func (client RecommendationsClient) listRecommendedRulesForWebAppNextResults(ctx context.Context, lastResults RecommendationCollection) (result RecommendationCollection, err error) {
+	req, err := lastResults.recommendationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.RecommendationsClient", "listRecommendedRulesForWebAppNextResults", nil, "Failure preparing next results request")
 	}
@@ -661,12 +752,32 @@ func (client RecommendationsClient) listRecommendedRulesForWebAppNextResults(las
 
 // ListRecommendedRulesForWebAppComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RecommendationsClient) ListRecommendedRulesForWebAppComplete(ctx context.Context, resourceGroupName string, siteName string, featured *bool, filter string) (result RecommendationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.ListRecommendedRulesForWebApp")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListRecommendedRulesForWebApp(ctx, resourceGroupName, siteName, featured, filter)
 	return
 }
 
 // ResetAllFilters reset all recommendation opt-out settings for a subscription.
 func (client RecommendationsClient) ResetAllFilters(ctx context.Context) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.ResetAllFilters")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ResetAllFiltersPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "web.RecommendationsClient", "ResetAllFilters", nil, "Failure preparing request")
@@ -731,6 +842,16 @@ func (client RecommendationsClient) ResetAllFiltersResponder(resp *http.Response
 // resourceGroupName - name of the resource group to which the resource belongs.
 // siteName - name of the app.
 func (client RecommendationsClient) ResetAllFiltersForWebApp(ctx context.Context, resourceGroupName string, siteName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.ResetAllFiltersForWebApp")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

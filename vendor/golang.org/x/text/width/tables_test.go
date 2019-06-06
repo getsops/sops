@@ -45,7 +45,7 @@ func TestTables(t *testing.T) {
 	}
 }
 
-// TestAmbiguous verifies that that ambiguous runes with a mapping always map to
+// TestAmbiguous verifies that ambiguous runes with a mapping always map to
 // a halfwidth rune.
 func TestAmbiguous(t *testing.T) {
 	for r, m := range mapRunes {

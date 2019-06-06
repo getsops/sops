@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// +build darwin dragonfly freebsd linux netbsd openbsd plan9
+// +build aix darwin dragonfly freebsd linux netbsd openbsd plan9
 
 package test
 
@@ -306,7 +306,13 @@ func newServerForConfig(t *testing.T, config string, configVars map[string]strin
 	if err != nil {
 		t.Fatalf("user.Current: %v", err)
 	}
-	if u.Name == "root" {
+	uname := u.Name
+	if uname == "" {
+		// Check the value of u.Username as u.Name
+		// can be "" on some OSes like AIX.
+		uname = u.Username
+	}
+	if uname == "root" {
 		t.Skip("skipping test because current user is root")
 	}
 	dir, err := ioutil.TempDir("", "sshtest")

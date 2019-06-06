@@ -25,7 +25,8 @@
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidDeviceException"},
         {"shape":"InvalidArgumentException"},
-        {"shape":"ClientLimitExceededException"}
+        {"shape":"ClientLimitExceededException"},
+        {"shape":"TagsPerResourceExceededLimitException"}
       ]
     },
     "DeleteStream":{
@@ -40,7 +41,8 @@
         {"shape":"ClientLimitExceededException"},
         {"shape":"InvalidArgumentException"},
         {"shape":"ResourceNotFoundException"},
-        {"shape":"NotAuthorizedException"}
+        {"shape":"NotAuthorizedException"},
+        {"shape":"VersionMismatchException"}
       ]
     },
     "DescribeStream":{
@@ -209,7 +211,8 @@
         "StreamName":{"shape":"StreamName"},
         "MediaType":{"shape":"MediaType"},
         "KmsKeyId":{"shape":"KmsKeyId"},
-        "DataRetentionInHours":{"shape":"DataRetentionInHours"}
+        "DataRetentionInHours":{"shape":"DataRetentionInHours"},
+        "Tags":{"shape":"ResourceTags"}
       }
     },
     "CreateStreamOutput":{
@@ -351,7 +354,7 @@
       "type":"string",
       "max":128,
       "min":1,
-      "pattern":"[\\w\\-\\.\\+]+/[\\w\\-\\.\\+]+"
+      "pattern":"[\\w\\-\\.\\+]+/[\\w\\-\\.\\+]+(,[\\w\\-\\.\\+]+/[\\w\\-\\.\\+]+)*"
     },
     "NextToken":{
       "type":"string",

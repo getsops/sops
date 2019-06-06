@@ -27,7 +27,6 @@ func (m *myservice) Execute(args []string, r <-chan svc.ChangeRequest, changes c
 	slowtick := time.Tick(2 * time.Second)
 	tick := fasttick
 	changes <- svc.Status{State: svc.Running, Accepts: cmdsAccepted}
-	elog.Info(1, strings.Join(args, "-"))
 loop:
 	for {
 		select {
@@ -42,6 +41,10 @@ loop:
 				time.Sleep(100 * time.Millisecond)
 				changes <- c.CurrentStatus
 			case svc.Stop, svc.Shutdown:
+				// golang.org/x/sys/windows/svc.TestExample is verifying this output.
+				testOutput := strings.Join(args, "-")
+				testOutput += fmt.Sprintf("-%d", c.Context)
+				elog.Info(1, testOutput)
 				break loop
 			case svc.Pause:
 				changes <- svc.Status{State: svc.Paused, Accepts: cmdsAccepted}

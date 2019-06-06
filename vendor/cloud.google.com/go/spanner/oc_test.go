@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package spanner
 
 import (
+	"context"
 	"testing"
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
 	stestutil "cloud.google.com/go/spanner/internal/testutil"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 )

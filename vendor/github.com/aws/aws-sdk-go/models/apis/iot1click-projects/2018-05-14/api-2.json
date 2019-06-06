@@ -171,6 +171,48 @@
         {"shape":"InvalidRequestException"}
       ]
     },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"GET",
+        "requestUri":"/tags/{resourceArn}"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"InternalFailureException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/tags/{resourceArn}"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"InternalFailureException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/tags/{resourceArn}"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"InternalFailureException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "UpdatePlacement":{
       "name":"UpdatePlacement",
       "http":{
@@ -276,7 +318,8 @@
       "members":{
         "projectName":{"shape":"ProjectName"},
         "description":{"shape":"Description"},
-        "placementTemplate":{"shape":"PlacementTemplate"}
+        "placementTemplate":{"shape":"PlacementTemplate"},
+        "tags":{"shape":"TagMap"}
       }
     },
     "CreateProjectResponse":{
@@ -558,6 +601,23 @@
         "nextToken":{"shape":"NextToken"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["resourceArn"],
+      "members":{
+        "resourceArn":{
+          "shape":"ProjectArn",
+          "location":"uri",
+          "locationName":"resourceArn"
+        }
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "tags":{"shape":"TagMap"}
+      }
+    },
     "MaxResults":{
       "type":"integer",
       "max":250,
@@ -623,6 +683,10 @@
         "deviceTemplates":{"shape":"DeviceTemplateMap"}
       }
     },
+    "ProjectArn":{
+      "type":"string",
+      "pattern":"^arn:aws:iot1click:[A-Za-z0-9_/.-]{0,63}:\\d+:projects/[0-9A-Za-z_-]{1,128}$"
+    },
     "ProjectDescription":{
       "type":"structure",
       "required":[
@@ -631,11 +695,13 @@
         "updatedDate"
       ],
       "members":{
+        "arn":{"shape":"ProjectArn"},
         "projectName":{"shape":"ProjectName"},
         "description":{"shape":"Description"},
         "createdDate":{"shape":"Time"},
         "updatedDate":{"shape":"Time"},
-        "placementTemplate":{"shape":"PlacementTemplate"}
+        "placementTemplate":{"shape":"PlacementTemplate"},
+        "tags":{"shape":"TagMap"}
       }
     },
     "ProjectName":{
@@ -652,9 +718,11 @@
         "updatedDate"
       ],
       "members":{
+        "arn":{"shape":"ProjectArn"},
         "projectName":{"shape":"ProjectName"},
         "createdDate":{"shape":"Time"},
-        "updatedDate":{"shape":"Time"}
+        "updatedDate":{"shape":"Time"},
+        "tags":{"shape":"TagMap"}
       }
     },
     "ProjectSummaryList":{
@@ -687,6 +755,49 @@
       "error":{"httpStatusCode":404},
       "exception":true
     },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"^(?!aws:)[a-zA-Z+-=._:/]+$"
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "max":50,
+      "min":1
+    },
+    "TagMap":{
+      "type":"map",
+      "key":{"shape":"TagKey"},
+      "value":{"shape":"TagValue"},
+      "max":50,
+      "min":1
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceArn",
+        "tags"
+      ],
+      "members":{
+        "resourceArn":{
+          "shape":"ProjectArn",
+          "location":"uri",
+          "locationName":"resourceArn"
+        },
+        "tags":{"shape":"TagMap"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256
+    },
     "Time":{"type":"timestamp"},
     "TooManyRequestsException":{
       "type":"structure",
@@ -700,6 +811,30 @@
       },
       "error":{"httpStatusCode":429},
       "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceArn",
+        "tagKeys"
+      ],
+      "members":{
+        "resourceArn":{
+          "shape":"ProjectArn",
+          "location":"uri",
+          "locationName":"resourceArn"
+        },
+        "tagKeys":{
+          "shape":"TagKeyList",
+          "location":"querystring",
+          "locationName":"tagKeys"
+        }
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "UpdatePlacementRequest":{
       "type":"structure",

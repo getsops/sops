@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewRegistriesClientWithBaseURI(baseURI string, subscriptionID string) Regis
 // Parameters:
 // registryNameCheckRequest - the object containing information for the availability request.
 func (client RegistriesClient) CheckNameAvailability(ctx context.Context, registryNameCheckRequest RegistryNameCheckRequest) (result RegistryNameStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: registryNameCheckRequest,
 			Constraints: []validation.Constraint{{Target: "registryNameCheckRequest.Name", Name: validation.Null, Rule: true,
@@ -124,7 +135,19 @@ func (client RegistriesClient) CheckNameAvailabilityResponder(resp *http.Respons
 // registryName - the name of the container registry.
 // registryCreateParameters - the parameters for creating a container registry.
 func (client RegistriesClient) Create(ctx context.Context, resourceGroupName string, registryName string, registryCreateParameters RegistryCreateParameters) (result RegistriesCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -189,10 +212,6 @@ func (client RegistriesClient) CreateSender(req *http.Request) (future Registrie
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -215,7 +234,19 @@ func (client RegistriesClient) CreateResponder(resp *http.Response) (result Regi
 // resourceGroupName - the name of the resource group to which the container registry belongs.
 // registryName - the name of the container registry.
 func (client RegistriesClient) Delete(ctx context.Context, resourceGroupName string, registryName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -289,7 +320,19 @@ func (client RegistriesClient) DeleteResponder(resp *http.Response) (result auto
 // resourceGroupName - the name of the resource group to which the container registry belongs.
 // registryName - the name of the container registry.
 func (client RegistriesClient) Get(ctx context.Context, resourceGroupName string, registryName string) (result Registry, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -361,6 +404,16 @@ func (client RegistriesClient) GetResponder(resp *http.Response) (result Registr
 
 // List lists all the container registries under the specified subscription.
 func (client RegistriesClient) List(ctx context.Context) (result RegistryListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.List")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -423,8 +476,8 @@ func (client RegistriesClient) ListResponder(resp *http.Response) (result Regist
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client RegistriesClient) listNextResults(lastResults RegistryListResult) (result RegistryListResult, err error) {
-	req, err := lastResults.registryListResultPreparer()
+func (client RegistriesClient) listNextResults(ctx context.Context, lastResults RegistryListResult) (result RegistryListResult, err error) {
+	req, err := lastResults.registryListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -445,6 +498,16 @@ func (client RegistriesClient) listNextResults(lastResults RegistryListResult) (
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RegistriesClient) ListComplete(ctx context.Context) (result RegistryListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -453,6 +516,22 @@ func (client RegistriesClient) ListComplete(ctx context.Context) (result Registr
 // Parameters:
 // resourceGroupName - the name of the resource group to which the container registry belongs.
 func (client RegistriesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result RegistryListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("containerregistry.RegistriesClient", "ListByResourceGroup", err.Error())
+	}
+
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -516,8 +595,8 @@ func (client RegistriesClient) ListByResourceGroupResponder(resp *http.Response)
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client RegistriesClient) listByResourceGroupNextResults(lastResults RegistryListResult) (result RegistryListResult, err error) {
-	req, err := lastResults.registryListResultPreparer()
+func (client RegistriesClient) listByResourceGroupNextResults(ctx context.Context, lastResults RegistryListResult) (result RegistryListResult, err error) {
+	req, err := lastResults.registryListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "containerregistry.RegistriesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -538,6 +617,16 @@ func (client RegistriesClient) listByResourceGroupNextResults(lastResults Regist
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RegistriesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result RegistryListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -547,7 +636,19 @@ func (client RegistriesClient) ListByResourceGroupComplete(ctx context.Context, 
 // resourceGroupName - the name of the resource group to which the container registry belongs.
 // registryName - the name of the container registry.
 func (client RegistriesClient) ListCredentials(ctx context.Context, resourceGroupName string, registryName string) (result RegistryListCredentialsResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.ListCredentials")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -624,7 +725,19 @@ func (client RegistriesClient) ListCredentialsResponder(resp *http.Response) (re
 // regenerateCredentialParameters - specifies name of the password which should be regenerated -- password or
 // password2.
 func (client RegistriesClient) RegenerateCredential(ctx context.Context, resourceGroupName string, registryName string, regenerateCredentialParameters RegenerateCredentialParameters) (result RegistryListCredentialsResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.RegenerateCredential")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},
@@ -702,7 +815,19 @@ func (client RegistriesClient) RegenerateCredentialResponder(resp *http.Response
 // registryName - the name of the container registry.
 // registryUpdateParameters - the parameters for updating a container registry.
 func (client RegistriesClient) Update(ctx context.Context, resourceGroupName string, registryName string, registryUpdateParameters RegistryUpdateParameters) (result Registry, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistriesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: registryName,
 			Constraints: []validation.Constraint{{Target: "registryName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "registryName", Name: validation.MinLength, Rule: 5, Chain: nil},

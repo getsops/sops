@@ -31,6 +31,7 @@ func TestAssertionsAreAvailableFromConveyPackage(t *testing.T) {
 		So(true, ShouldBeTrue)
 		So(false, ShouldBeFalse)
 		So(0, ShouldBeZeroValue)
+		So(1, ShouldNotBeZeroValue)
 	})
 
 	Convey("Numeric comparison assertions should be accessible", t, func() {

@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/search/mgmt/2015-02-28/search"
+
 // ProvisioningState enumerates the values for provisioning state.
 type ProvisioningState string
 
@@ -82,34 +85,35 @@ func PossibleSkuTypeValues() []SkuType {
 // AdminKeyResult response containing the primary and secondary API keys for a given Azure Search service.
 type AdminKeyResult struct {
 	autorest.Response `json:"-"`
-	// PrimaryKey - The primary API key of the Search service.
+	// PrimaryKey - READ-ONLY; The primary API key of the Search service.
 	PrimaryKey *string `json:"primaryKey,omitempty"`
-	// SecondaryKey - The secondary API key of the Search service.
+	// SecondaryKey - READ-ONLY; The secondary API key of the Search service.
 	SecondaryKey *string `json:"secondaryKey,omitempty"`
 }
 
 // ListQueryKeysResult response containing the query API keys for a given Azure Search service.
 type ListQueryKeysResult struct {
 	autorest.Response `json:"-"`
-	// Value - The query keys for the Azure Search service.
+	// Value - READ-ONLY; The query keys for the Azure Search service.
 	Value *[]QueryKey `json:"value,omitempty"`
 }
 
-// QueryKey describes an API key for a given Azure Search service that has permissions for query operations only.
+// QueryKey describes an API key for a given Azure Search service that has permissions for query operations
+// only.
 type QueryKey struct {
-	// Name - The name of the query API key; may be empty.
+	// Name - READ-ONLY; The name of the query API key; may be empty.
 	Name *string `json:"name,omitempty"`
-	// Key - The value of the query API key.
+	// Key - READ-ONLY; The value of the query API key.
 	Key *string `json:"key,omitempty"`
 }
 
 // Resource ...
 type Resource struct {
-	// ID - Resource Id
+	// ID - READ-ONLY; Resource Id
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name
+	// Name - READ-ONLY; Resource name
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type
+	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -120,15 +124,6 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}
@@ -166,7 +161,7 @@ func (scoup ServiceCreateOrUpdateParameters) MarshalJSON() ([]byte, error) {
 // ServiceListResult response containing a list of Azure Search services for a given resource group.
 type ServiceListResult struct {
 	autorest.Response `json:"-"`
-	// Value - The Search services in the resource group.
+	// Value - READ-ONLY; The Search services in the resource group.
 	Value *[]ServiceResource `json:"value,omitempty"`
 }
 
@@ -182,11 +177,11 @@ type ServiceProperties struct {
 
 // ServiceReadableProperties defines all the properties of an Azure Search service.
 type ServiceReadableProperties struct {
-	// Status - The status of the Search service. Possible values include: 'ServiceStatusRunning', 'ServiceStatusProvisioning', 'ServiceStatusDeleting', 'ServiceStatusDegraded', 'ServiceStatusDisabled', 'ServiceStatusError'
+	// Status - READ-ONLY; The status of the Search service. Possible values include: 'ServiceStatusRunning', 'ServiceStatusProvisioning', 'ServiceStatusDeleting', 'ServiceStatusDegraded', 'ServiceStatusDisabled', 'ServiceStatusError'
 	Status ServiceStatus `json:"status,omitempty"`
-	// StatusDetails - The details of the Search service status.
+	// StatusDetails - READ-ONLY; The details of the Search service status.
 	StatusDetails *string `json:"statusDetails,omitempty"`
-	// ProvisioningState - The state of the last provisioning operation performed on the Search service. Possible values include: 'Succeeded', 'Provisioning', 'Failed'
+	// ProvisioningState - READ-ONLY; The state of the last provisioning operation performed on the Search service. Possible values include: 'Succeeded', 'Provisioning', 'Failed'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// Sku - The SKU of the Search Service, which determines price tier and capacity limits.
 	Sku *Sku `json:"sku,omitempty"`
@@ -199,7 +194,7 @@ type ServiceReadableProperties struct {
 // ServiceResource describes an Azure Search service and its current state.
 type ServiceResource struct {
 	autorest.Response `json:"-"`
-	// ID - The resource Id of the Azure Search service.
+	// ID - READ-ONLY; The resource Id of the Azure Search service.
 	ID *string `json:"id,omitempty"`
 	// Name - The name of the Search service.
 	Name *string `json:"name,omitempty"`
@@ -207,16 +202,13 @@ type ServiceResource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Tags to help categorize the Search service in the Azure Portal.
 	Tags map[string]*string `json:"tags"`
-	// Properties - Properties of the Search service.
+	// Properties - READ-ONLY; Properties of the Search service.
 	Properties *ServiceReadableProperties `json:"properties,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for ServiceResource.
 func (sr ServiceResource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if sr.ID != nil {
-		objectMap["id"] = sr.ID
-	}
 	if sr.Name != nil {
 		objectMap["name"] = sr.Name
 	}
@@ -225,9 +217,6 @@ func (sr ServiceResource) MarshalJSON() ([]byte, error) {
 	}
 	if sr.Tags != nil {
 		objectMap["tags"] = sr.Tags
-	}
-	if sr.Properties != nil {
-		objectMap["properties"] = sr.Properties
 	}
 	return json.Marshal(objectMap)
 }

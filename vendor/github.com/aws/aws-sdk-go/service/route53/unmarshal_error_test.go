@@ -1,130 +1,113 @@
-package route53_test
+// +build go1.8
+
+package route53
 
 import (
-	"bytes"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/awstesting/unit"
-	"github.com/aws/aws-sdk-go/service/route53"
 )
-
-func makeClientWithResponse(response string) *route53.Route53 {
-	r := route53.New(unit.Session)
-	r.Handlers.Send.Clear()
-	r.Handlers.Send.PushBack(func(r *request.Request) {
-		body := ioutil.NopCloser(bytes.NewReader([]byte(response)))
-		r.HTTPResponse = &http.Response{
-			ContentLength: int64(len(response)),
-			StatusCode:    400,
-			Status:        "Bad Request",
-			Body:          body,
-		}
-	})
-
-	return r
-}
-
-func TestUnmarshalStandardError(t *testing.T) {
-	const errorResponse = `<?xml version="1.0" encoding="UTF-8"?>
-<ErrorResponse xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
-  <Error>
-    <Code>InvalidDomainName</Code>
-    <Message>The domain name is invalid</Message>
-  </Error>
-  <RequestId>12345</RequestId>
-</ErrorResponse>
-`
-
-	r := makeClientWithResponse(errorResponse)
-
-	_, err := r.CreateHostedZone(&route53.CreateHostedZoneInput{
-		CallerReference: aws.String("test"),
-		Name:            aws.String("test_zone"),
-	})
-
-	if err == nil {
-		t.Error("expected error, but received none")
-	}
-
-	if e, a := "InvalidDomainName", err.(awserr.Error).Code(); e != a {
-		t.Errorf("expected %s, but received %s", e, a)
-	}
-
-	if e, a := "The domain name is invalid", err.(awserr.Error).Message(); e != a {
-		t.Errorf("expected %s, but received %s", e, a)
-	}
-}
 
 func TestUnmarshalInvalidChangeBatch(t *testing.T) {
 	const errorMessage = `
 Tried to create resource record set duplicate.example.com. type A,
 but it already exists
 `
-	const errorResponse = `<?xml version="1.0" encoding="UTF-8"?>
+
+	type batchError struct {
+		Code, Message string
+	}
+
+	cases := map[string]struct {
+		Request                  *request.Request
+		Code, Message, RequestID string
+		StatusCode               int
+		BatchErrors              []batchError
+	}{
+		"standard error": {
+			Request: &request.Request{
+				HTTPResponse: &http.Response{
+					StatusCode: 400,
+					Header:     http.Header{},
+					Body: ioutil.NopCloser(strings.NewReader(
+						`<?xml version="1.0" encoding="UTF-8"?>
+<ErrorResponse xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
+  <Error>
+	<Code>InvalidDomainName</Code>
+	<Message>The domain name is invalid</Message>
+  </Error>
+  <RequestId>12345</RequestId>
+</ErrorResponse>`)),
+				},
+			},
+			Code: "InvalidDomainName", Message: "The domain name is invalid",
+			StatusCode: 400, RequestID: "12345",
+		},
+		"batched error": {
+			Request: &request.Request{
+				HTTPResponse: &http.Response{
+					StatusCode: 400,
+					Header:     http.Header{},
+					Body: ioutil.NopCloser(strings.NewReader(
+						`<?xml version="1.0" encoding="UTF-8"?>
 <InvalidChangeBatch xmlns="https://route53.amazonaws.com/doc/2013-04-01/">
   <Messages>
-    <Message>` + errorMessage + `</Message>
+	<Message>` + errorMessage + `</Message>
   </Messages>
-</InvalidChangeBatch>
-`
-
-	r := makeClientWithResponse(errorResponse)
-
-	req := &route53.ChangeResourceRecordSetsInput{
-		HostedZoneId: aws.String("zoneId"),
-		ChangeBatch: &route53.ChangeBatch{
-			Changes: []*route53.Change{
-				{
-					Action: aws.String("CREATE"),
-					ResourceRecordSet: &route53.ResourceRecordSet{
-						Name: aws.String("domain"),
-						Type: aws.String("CNAME"),
-						TTL:  aws.Int64(120),
-						ResourceRecords: []*route53.ResourceRecord{
-							{
-								Value: aws.String("cname"),
-							},
-						},
-					},
+  <RequestId>12345</RequestId>
+</InvalidChangeBatch>`)),
 				},
+			},
+			Code: "InvalidChangeBatch", Message: "ChangeBatch errors occurred",
+			StatusCode: 400, RequestID: "12345",
+			BatchErrors: []batchError{
+				{Code: "InvalidChangeBatch", Message: errorMessage},
 			},
 		},
 	}
 
-	_, err := r.ChangeResourceRecordSets(req)
-	if err == nil {
-		t.Error("expected error, but received none")
-	}
+	for name, c := range cases {
+		t.Run(name, func(t *testing.T) {
+			unmarshalChangeResourceRecordSetsError(c.Request)
+			err := c.Request.Error
+			if err == nil {
+				t.Error("expected error, but received none")
+			}
 
-	if reqErr, ok := err.(awserr.RequestFailure); ok {
-		if reqErr == nil {
-			t.Error("expected error, but received none")
-		}
+			reqErr := err.(awserr.RequestFailure)
+			if e, a := c.StatusCode, reqErr.StatusCode(); e != a {
+				t.Errorf("expected %d status, got %d", e, a)
+			}
+			if e, a := c.Code, reqErr.Code(); e != a {
+				t.Errorf("expected %v code, got %v", e, a)
+			}
+			if e, a := c.Message, reqErr.Message(); e != a {
+				t.Errorf("expected %q message, got %q", e, a)
+			}
+			if e, a := c.RequestID, reqErr.RequestID(); e != a {
+				t.Errorf("expected %v request ID, got %v", e, a)
+			}
 
-		if e, a := 400, reqErr.StatusCode(); e != a {
-			t.Errorf("expected %d, but received %d", e, a)
-		}
-	} else {
-		t.Fatal("returned error is not a RequestFailure")
-	}
+			batchErr := err.(awserr.BatchedErrors)
+			batchedErrs := batchErr.OrigErrs()
 
-	if batchErr, ok := err.(awserr.BatchedErrors); ok {
-		errs := batchErr.OrigErrs()
-		if e, a := 1, len(errs); e != a {
-			t.Errorf("expected %d, but received %d", e, a)
-		}
-		if e, a := "InvalidChangeBatch", errs[0].(awserr.Error).Code(); e != a {
-			t.Errorf("expected %s, but received %s", e, a)
-		}
-		if e, a := errorMessage, errs[0].(awserr.Error).Message(); e != a {
-			t.Errorf("expected %s, but received %s", e, a)
-		}
-	} else {
-		t.Fatal("returned error is not a BatchedErrors")
+			if e, a := len(c.BatchErrors), len(batchedErrs); e != a {
+				t.Fatalf("expect %v batch errors, got %v", e, a)
+			}
+
+			for i, ee := range c.BatchErrors {
+				bErr := batchedErrs[i].(awserr.Error)
+				if e, a := ee.Code, bErr.Code(); e != a {
+					t.Errorf("expect %v code, got %v", e, a)
+				}
+				if e, a := ee.Message, bErr.Message(); e != a {
+					t.Errorf("expect %v message, got %v", e, a)
+				}
+			}
+		})
 	}
 }

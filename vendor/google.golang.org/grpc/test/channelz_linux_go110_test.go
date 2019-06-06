@@ -29,11 +29,10 @@ import (
 	"time"
 
 	"google.golang.org/grpc/internal/channelz"
-	"google.golang.org/grpc/internal/leakcheck"
 	testpb "google.golang.org/grpc/test/grpc_testing"
 )
 
-func TestCZSocketMetricsSocketOption(t *testing.T) {
+func (s) TestCZSocketMetricsSocketOption(t *testing.T) {
 	envs := []env{tcpClearRREnv, tcpTLSRREnv}
 	for _, e := range envs {
 		testCZSocketMetricsSocketOption(t, e)
@@ -41,8 +40,8 @@ func TestCZSocketMetricsSocketOption(t *testing.T) {
 }
 
 func testCZSocketMetricsSocketOption(t *testing.T, e env) {
-	defer leakcheck.Check(t)
-	channelz.NewChannelzStorage()
+	czCleanup := channelz.NewChannelzStorage()
+	defer czCleanupWrapper(czCleanup, t)
 	te := newTest(t, e)
 	te.startServer(&testServer{security: e.security})
 	defer te.tearDown()
@@ -51,7 +50,7 @@ func testCZSocketMetricsSocketOption(t *testing.T, e env) {
 	doSuccessfulUnaryCall(tc, t)
 
 	time.Sleep(10 * time.Millisecond)
-	ss, _ := channelz.GetServers(0)
+	ss, _ := channelz.GetServers(0, 0)
 	if len(ss) != 1 {
 		t.Fatalf("There should be one server, not %d", len(ss))
 	}
@@ -64,7 +63,7 @@ func testCZSocketMetricsSocketOption(t *testing.T, e env) {
 			t.Fatalf("Unable to get server listen socket options")
 		}
 	}
-	ns, _ := channelz.GetServerSockets(ss[0].ID, 0)
+	ns, _ := channelz.GetServerSockets(ss[0].ID, 0, 0)
 	if len(ns) != 1 {
 		t.Fatalf("There should be one server normal socket, not %d", len(ns))
 	}
@@ -72,7 +71,7 @@ func testCZSocketMetricsSocketOption(t *testing.T, e env) {
 		t.Fatalf("Unable to get server normal socket options")
 	}
 
-	tchan, _ := channelz.GetTopChannels(0)
+	tchan, _ := channelz.GetTopChannels(0, 0)
 	if len(tchan) != 1 {
 		t.Fatalf("There should only be one top channel, not %d", len(tchan))
 	}

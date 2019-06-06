@@ -15,12 +15,12 @@
 package bigquery_test
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
 
 	"cloud.google.com/go/bigquery"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 
@@ -521,26 +521,26 @@ func ExampleTable_Metadata() {
 	fmt.Println(md)
 }
 
-func ExampleTable_Uploader() {
+func ExampleTable_Inserter() {
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
-	u := client.Dataset("my_dataset").Table("my_table").Uploader()
-	_ = u // TODO: Use u.
+	ins := client.Dataset("my_dataset").Table("my_table").Inserter()
+	_ = ins // TODO: Use ins.
 }
 
-func ExampleTable_Uploader_options() {
+func ExampleTable_Inserter_options() {
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
-	u := client.Dataset("my_dataset").Table("my_table").Uploader()
-	u.SkipInvalidRows = true
-	u.IgnoreUnknownValues = true
-	_ = u // TODO: Use u.
+	ins := client.Dataset("my_dataset").Table("my_table").Inserter()
+	ins.SkipInvalidRows = true
+	ins.IgnoreUnknownValues = true
+	_ = ins // TODO: Use ins.
 }
 
 func ExampleTable_CopierFrom() {
@@ -737,33 +737,33 @@ func (i *Item) Save() (map[string]bigquery.Value, string, error) {
 	}, "", nil
 }
 
-func ExampleUploader_Put() {
+func ExampleInserter_Put() {
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
-	u := client.Dataset("my_dataset").Table("my_table").Uploader()
+	ins := client.Dataset("my_dataset").Table("my_table").Inserter()
 	// Item implements the ValueSaver interface.
 	items := []*Item{
 		{Name: "n1", Size: 32.6, Count: 7},
 		{Name: "n2", Size: 4, Count: 2},
 		{Name: "n3", Size: 101.5, Count: 1},
 	}
-	if err := u.Put(ctx, items); err != nil {
+	if err := ins.Put(ctx, items); err != nil {
 		// TODO: Handle error.
 	}
 }
 
 var schema bigquery.Schema
 
-func ExampleUploader_Put_structSaver() {
+func ExampleInserter_Put_structSaver() {
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
-	u := client.Dataset("my_dataset").Table("my_table").Uploader()
+	ins := client.Dataset("my_dataset").Table("my_table").Inserter()
 
 	type score struct {
 		Name string
@@ -776,18 +776,18 @@ func ExampleUploader_Put_structSaver() {
 		{Struct: score{Name: "n2", Num: 31}, Schema: schema, InsertID: "id2"},
 		{Struct: score{Name: "n3", Num: 7}, Schema: schema, InsertID: "id3"},
 	}
-	if err := u.Put(ctx, savers); err != nil {
+	if err := ins.Put(ctx, savers); err != nil {
 		// TODO: Handle error.
 	}
 }
 
-func ExampleUploader_Put_struct() {
+func ExampleInserter_Put_struct() {
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
-	u := client.Dataset("my_dataset").Table("my_table").Uploader()
+	ins := client.Dataset("my_dataset").Table("my_table").Inserter()
 
 	type score struct {
 		Name string
@@ -799,19 +799,19 @@ func ExampleUploader_Put_struct() {
 		{Name: "n3", Num: 7},
 	}
 	// Schema is inferred from the score type.
-	if err := u.Put(ctx, scores); err != nil {
+	if err := ins.Put(ctx, scores); err != nil {
 		// TODO: Handle error.
 	}
 }
 
-func ExampleUploader_Put_valuesSaver() {
+func ExampleInserter_Put_valuesSaver() {
 	ctx := context.Background()
 	client, err := bigquery.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
 
-	u := client.Dataset("my_dataset").Table("my_table").Uploader()
+	ins := client.Dataset("my_dataset").Table("my_table").Inserter()
 
 	var vss []*bigquery.ValuesSaver
 	for i, name := range []string{"n1", "n2", "n3"} {
@@ -823,7 +823,7 @@ func ExampleUploader_Put_valuesSaver() {
 		})
 	}
 
-	if err := u.Put(ctx, vss); err != nil {
+	if err := ins.Put(ctx, vss); err != nil {
 		// TODO: Handle error.
 	}
 }

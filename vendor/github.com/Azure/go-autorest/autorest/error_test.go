@@ -104,7 +104,7 @@ func TestNewErrorWithResponse_Forwards(t *testing.T) {
 	e2 := NewErrorWithResponse("packageType", "method", nil, "message %s", "arg")
 
 	if !reflect.DeepEqual(e1, e2) {
-		t.Fatal("autorest: NewError did not return an error equivelent to NewErrorWithError")
+		t.Fatal("autorest: NewError did not return an error equivalent to NewErrorWithError")
 	}
 }
 
@@ -113,7 +113,7 @@ func TestNewErrorWithError_Forwards(t *testing.T) {
 	e2 := NewErrorWithError(nil, "packageType", "method", nil, "message %s", "arg")
 
 	if !reflect.DeepEqual(e1, e2) {
-		t.Fatal("autorest: NewError did not return an error equivelent to NewErrorWithError")
+		t.Fatal("autorest: NewError did not return an error equivalent to NewErrorWithError")
 	}
 }
 

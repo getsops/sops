@@ -7,6 +7,7 @@
     "protocol":"json",
     "serviceAbbreviation":"CodeStar",
     "serviceFullName":"AWS CodeStar",
+    "serviceId":"CodeStar",
     "signatureVersion":"v4",
     "targetPrefix":"CodeStar_20170419",
     "uid":"codestar-2017-04-19"
@@ -299,11 +300,49 @@
         "clientRequestToken":{"shape":"ClientRequestToken"}
       }
     },
+    "BucketKey":{"type":"string"},
+    "BucketName":{
+      "type":"string",
+      "max":63,
+      "min":3
+    },
     "ClientRequestToken":{
       "type":"string",
       "max":256,
       "min":1,
       "pattern":"^[\\w:/-]+$"
+    },
+    "Code":{
+      "type":"structure",
+      "required":[
+        "source",
+        "destination"
+      ],
+      "members":{
+        "source":{"shape":"CodeSource"},
+        "destination":{"shape":"CodeDestination"}
+      }
+    },
+    "CodeCommitCodeDestination":{
+      "type":"structure",
+      "required":["name"],
+      "members":{
+        "name":{"shape":"RepositoryName"}
+      }
+    },
+    "CodeDestination":{
+      "type":"structure",
+      "members":{
+        "codeCommit":{"shape":"CodeCommitCodeDestination"},
+        "gitHub":{"shape":"GitHubCodeDestination"}
+      }
+    },
+    "CodeSource":{
+      "type":"structure",
+      "required":["s3"],
+      "members":{
+        "s3":{"shape":"S3Location"}
+      }
     },
     "ConcurrentModificationException":{
       "type":"structure",
@@ -321,7 +360,10 @@
         "name":{"shape":"ProjectName"},
         "id":{"shape":"ProjectId"},
         "description":{"shape":"ProjectDescription"},
-        "clientRequestToken":{"shape":"ClientRequestToken"}
+        "clientRequestToken":{"shape":"ClientRequestToken"},
+        "sourceCode":{"shape":"SourceCode"},
+        "toolchain":{"shape":"Toolchain"},
+        "tags":{"shape":"Tags"}
       }
     },
     "CreateProjectResult":{
@@ -412,7 +454,8 @@
         "clientRequestToken":{"shape":"ClientRequestToken"},
         "createdTimeStamp":{"shape":"CreatedTimestamp"},
         "stackId":{"shape":"StackId"},
-        "projectTemplateId":{"shape":"ProjectTemplateId"}
+        "projectTemplateId":{"shape":"ProjectTemplateId"},
+        "status":{"shape":"ProjectStatus"}
       }
     },
     "DescribeUserProfileRequest":{
@@ -459,6 +502,31 @@
       "max":128,
       "min":3,
       "pattern":"^[\\w-.+]+@[\\w-.+]+$",
+      "sensitive":true
+    },
+    "GitHubCodeDestination":{
+      "type":"structure",
+      "required":[
+        "name",
+        "type",
+        "owner",
+        "privateRepository",
+        "issuesEnabled",
+        "token"
+      ],
+      "members":{
+        "name":{"shape":"RepositoryName"},
+        "description":{"shape":"RepositoryDescription"},
+        "type":{"shape":"RepositoryType"},
+        "owner":{"shape":"RepositoryOwner"},
+        "privateRepository":{"shape":"RepositoryIsPrivate"},
+        "issuesEnabled":{"shape":"RepositoryEnableIssues"},
+        "token":{"shape":"GitHubPersonalToken"}
+      }
+    },
+    "GitHubPersonalToken":{
+      "type":"string",
+      "min":1,
       "sensitive":true
     },
     "InvalidNextTokenException":{
@@ -632,6 +700,14 @@
       },
       "exception":true
     },
+    "ProjectStatus":{
+      "type":"structure",
+      "required":["state"],
+      "members":{
+        "state":{"shape":"State"},
+        "reason":{"shape":"Reason"}
+      }
+    },
     "ProjectSummary":{
       "type":"structure",
       "members":{
@@ -642,13 +718,42 @@
     "ProjectTemplateId":{
       "type":"string",
       "min":1,
-      "pattern":"^arn:aws[^:\\s]{0,5}:codestar:[^:\\s]+::project-template\\/[a-z0-9-]+$"
+      "pattern":"^arn:aws[^:\\s]{0,5}:codestar:[^:\\s]+::project-template(\\/(github|codecommit))?\\/[a-z0-9-]+$"
     },
     "ProjectsList":{
       "type":"list",
       "member":{"shape":"ProjectSummary"}
     },
+    "Reason":{
+      "type":"string",
+      "max":1024,
+      "pattern":"^$|^\\S(.*\\S)?$"
+    },
     "RemoteAccessAllowed":{"type":"boolean"},
+    "RepositoryDescription":{
+      "type":"string",
+      "max":1000,
+      "min":1,
+      "pattern":"^\\S(.*\\S)?$"
+    },
+    "RepositoryEnableIssues":{"type":"boolean"},
+    "RepositoryIsPrivate":{"type":"boolean"},
+    "RepositoryName":{
+      "type":"string",
+      "max":100,
+      "min":1,
+      "pattern":"^\\S[\\w.-]*$"
+    },
+    "RepositoryOwner":{
+      "type":"string",
+      "max":100,
+      "min":1,
+      "pattern":"^\\S(.*\\S)?$"
+    },
+    "RepositoryType":{
+      "type":"string",
+      "pattern":"^(user|organization|User|Organization)$"
+    },
     "Resource":{
       "type":"structure",
       "required":["id"],
@@ -669,6 +774,22 @@
       "type":"string",
       "pattern":"^(Owner|Viewer|Contributor)$"
     },
+    "RoleArn":{
+      "type":"string",
+      "max":1224,
+      "min":1
+    },
+    "S3Location":{
+      "type":"structure",
+      "members":{
+        "bucketName":{"shape":"BucketName"},
+        "bucketKey":{"shape":"BucketKey"}
+      }
+    },
+    "SourceCode":{
+      "type":"list",
+      "member":{"shape":"Code"}
+    },
     "SshPublicKey":{
       "type":"string",
       "max":16384,
@@ -677,6 +798,10 @@
     "StackId":{
       "type":"string",
       "pattern":"^arn:aws[^:\\s]*:cloudformation:[^:\\s]+:[0-9]{12}:stack\\/[^:\\s]+\\/[^:\\s]+$"
+    },
+    "State":{
+      "type":"string",
+      "pattern":"^(CreateInProgress|CreateComplete|CreateFailed|DeleteComplete|DeleteFailed|DeleteInProgress|UpdateComplete|UpdateInProgress|UpdateFailed|Unknown)$"
     },
     "TagKey":{
       "type":"string",
@@ -745,6 +870,41 @@
     "TeamMemberResult":{
       "type":"list",
       "member":{"shape":"TeamMember"}
+    },
+    "TemplateParameterKey":{
+      "type":"string",
+      "max":30,
+      "min":1,
+      "pattern":"^\\S(.*\\S)?$"
+    },
+    "TemplateParameterMap":{
+      "type":"map",
+      "key":{"shape":"TemplateParameterKey"},
+      "value":{"shape":"TemplateParameterValue"},
+      "max":25
+    },
+    "TemplateParameterValue":{
+      "type":"string",
+      "max":100,
+      "min":1,
+      "pattern":"^\\S(.*\\S)?$",
+      "sensitive":true
+    },
+    "Toolchain":{
+      "type":"structure",
+      "required":["source"],
+      "members":{
+        "source":{"shape":"ToolchainSource"},
+        "roleArn":{"shape":"RoleArn"},
+        "stackParameters":{"shape":"TemplateParameterMap"}
+      }
+    },
+    "ToolchainSource":{
+      "type":"structure",
+      "required":["s3"],
+      "members":{
+        "s3":{"shape":"S3Location"}
+      }
     },
     "UntagProjectRequest":{
       "type":"structure",
@@ -841,7 +1001,8 @@
       "type":"string",
       "max":64,
       "min":1,
-      "pattern":"^\\S(.*\\S)?$"
+      "pattern":"^\\S(.*\\S)?$",
+      "sensitive":true
     },
     "UserProfileNotFoundException":{
       "type":"structure",

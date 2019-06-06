@@ -17,7 +17,7 @@
   "basePath": "",
   "baseUrl": "https://appengine.googleapis.com/",
   "batchPath": "batch",
-  "description": "The App Engine Admin API enables developers to provision and manage their App Engine applications.",
+  "description": "Provisions and manages developers' App Engine applications.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/appengine/docs/admin-api/",
   "icons": {
@@ -694,7 +694,7 @@
       }
     }
   },
-  "revision": "20180615",
+  "revision": "20190503",
   "rootUrl": "https://appengine.googleapis.com/",
   "schemas": {
     "AuthorizedCertificate": {
@@ -1039,7 +1039,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the name should have the format of operations/some/unique/name.",
+          "description": "The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the name should be a resource name ending with operations/{unique_id}.",
           "type": "string"
         },
         "response": {
@@ -1049,39 +1049,6 @@
           },
           "description": "The normal response of the operation in case of success. If the original method returns no data on success, such as Delete, the response is google.protobuf.Empty. If the original method is standard Get/Create/Update, the response should be the resource. For other methods, the response should have the type XxxResponse, where Xxx is the original method name. For example, if the original method name is TakeSnapshot(), the inferred response type is TakeSnapshotResponse.",
           "type": "object"
-        }
-      },
-      "type": "object"
-    },
-    "OperationMetadata": {
-      "description": "Metadata for the given google.longrunning.Operation.",
-      "id": "OperationMetadata",
-      "properties": {
-        "endTime": {
-          "description": "Timestamp that this operation completed.@OutputOnly",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "insertTime": {
-          "description": "Timestamp that this operation was created.@OutputOnly",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "method": {
-          "description": "API method that initiated this operation. Example: google.appengine.v1beta4.Version.CreateVersion.@OutputOnly",
-          "type": "string"
-        },
-        "operationType": {
-          "description": "Type of this operation. Deprecated, use method field instead. Example: \"create_version\".@OutputOnly",
-          "type": "string"
-        },
-        "target": {
-          "description": "Name of the resource that this operation is acting on. Example: apps/myapp/modules/default.@OutputOnly",
-          "type": "string"
-        },
-        "user": {
-          "description": "User who requested this operation.@OutputOnly",
-          "type": "string"
         }
       },
       "type": "object"
@@ -1211,35 +1178,6 @@
             "type": "string"
           },
           "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "OperationMetadataV1Beta5": {
-      "description": "Metadata for the given google.longrunning.Operation.",
-      "id": "OperationMetadataV1Beta5",
-      "properties": {
-        "endTime": {
-          "description": "Timestamp that this operation completed.@OutputOnly",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "insertTime": {
-          "description": "Timestamp that this operation was created.@OutputOnly",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "method": {
-          "description": "API method name that initiated this operation. Example: google.appengine.v1beta5.Version.CreateVersion.@OutputOnly",
-          "type": "string"
-        },
-        "target": {
-          "description": "Name of the resource that this operation is acting on. Example: apps/myapp/services/default.@OutputOnly",
-          "type": "string"
-        },
-        "user": {
-          "description": "User who requested this operation.@OutputOnly",
-          "type": "string"
         }
       },
       "type": "object"

@@ -23,6 +23,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewMachineGroupsClientWithBaseURI(baseURI string, subscriptionID string) Ma
 // workspaceName - OMS workspace containing the resources of interest.
 // machineGroup - machine Group resource to create.
 func (client MachineGroupsClient) Create(ctx context.Context, resourceGroupName string, workspaceName string, machineGroup MachineGroup) (result MachineGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineGroupsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -136,6 +147,16 @@ func (client MachineGroupsClient) CreateResponder(resp *http.Response) (result M
 // workspaceName - OMS workspace containing the resources of interest.
 // machineGroupName - machine Group resource name.
 func (client MachineGroupsClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string, machineGroupName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineGroupsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -223,6 +244,16 @@ func (client MachineGroupsClient) DeleteResponder(resp *http.Response) (result a
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client MachineGroupsClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, machineGroupName string, startTime *date.Time, endTime *date.Time) (result MachineGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineGroupsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -316,6 +347,16 @@ func (client MachineGroupsClient) GetResponder(resp *http.Response) (result Mach
 // endTime - UTC date and time specifying the end time of an interval. When not specified the service uses
 // DateTime.UtcNow
 func (client MachineGroupsClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, startTime *date.Time, endTime *date.Time) (result MachineGroupCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineGroupsClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.mgc.Response.Response != nil {
+				sc = result.mgc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -398,8 +439,8 @@ func (client MachineGroupsClient) ListByWorkspaceResponder(resp *http.Response) 
 }
 
 // listByWorkspaceNextResults retrieves the next set of results, if any.
-func (client MachineGroupsClient) listByWorkspaceNextResults(lastResults MachineGroupCollection) (result MachineGroupCollection, err error) {
-	req, err := lastResults.machineGroupCollectionPreparer()
+func (client MachineGroupsClient) listByWorkspaceNextResults(ctx context.Context, lastResults MachineGroupCollection) (result MachineGroupCollection, err error) {
+	req, err := lastResults.machineGroupCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicemap.MachineGroupsClient", "listByWorkspaceNextResults", nil, "Failure preparing next results request")
 	}
@@ -420,6 +461,16 @@ func (client MachineGroupsClient) listByWorkspaceNextResults(lastResults Machine
 
 // ListByWorkspaceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client MachineGroupsClient) ListByWorkspaceComplete(ctx context.Context, resourceGroupName string, workspaceName string, startTime *date.Time, endTime *date.Time) (result MachineGroupCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineGroupsClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByWorkspace(ctx, resourceGroupName, workspaceName, startTime, endTime)
 	return
 }
@@ -431,6 +482,16 @@ func (client MachineGroupsClient) ListByWorkspaceComplete(ctx context.Context, r
 // machineGroupName - machine Group resource name.
 // machineGroup - machine Group resource to update.
 func (client MachineGroupsClient) Update(ctx context.Context, resourceGroupName string, workspaceName string, machineGroupName string, machineGroup MachineGroup) (result MachineGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachineGroupsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 64, Chain: nil},

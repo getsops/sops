@@ -67,6 +67,10 @@ type RESTJSONServiceAPI interface {
 	GetEventStream(*restjsonservice.GetEventStreamInput) (*restjsonservice.GetEventStreamOutput, error)
 	GetEventStreamWithContext(aws.Context, *restjsonservice.GetEventStreamInput, ...request.Option) (*restjsonservice.GetEventStreamOutput, error)
 	GetEventStreamRequest(*restjsonservice.GetEventStreamInput) (*request.Request, *restjsonservice.GetEventStreamOutput)
+
+	OtherOperation(*restjsonservice.OtherOperationInput) (*restjsonservice.OtherOperationOutput, error)
+	OtherOperationWithContext(aws.Context, *restjsonservice.OtherOperationInput, ...request.Option) (*restjsonservice.OtherOperationOutput, error)
+	OtherOperationRequest(*restjsonservice.OtherOperationInput) (*request.Request, *restjsonservice.OtherOperationOutput)
 }
 
 var _ RESTJSONServiceAPI = (*restjsonservice.RESTJSONService)(nil)

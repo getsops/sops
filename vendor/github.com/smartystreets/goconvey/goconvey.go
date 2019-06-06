@@ -19,8 +19,6 @@ import (
 	"strings"
 	"time"
 
-	"go/build"
-
 	"github.com/smartystreets/goconvey/web/server/api"
 	"github.com/smartystreets/goconvey/web/server/contract"
 	"github.com/smartystreets/goconvey/web/server/executor"
@@ -38,7 +36,7 @@ func flags() {
 	flag.IntVar(&port, "port", 8080, "The port at which to serve http.")
 	flag.StringVar(&host, "host", "127.0.0.1", "The host at which to serve http.")
 	flag.DurationVar(&nap, "poll", quarterSecond, "The interval to wait between polling the file system for changes.")
-	flag.IntVar(&packages, "packages", 10, "The number of packages to test in parallel. Higher == faster but more costly in terms of computing.")
+	flag.IntVar(&parallelPackages, "packages", 10, "The number of packages to test in parallel. Higher == faster but more costly in terms of computing.")
 	flag.StringVar(&gobin, "gobin", "go", "The path to the 'go' binary (default: search on the PATH).")
 	flag.BoolVar(&cover, "cover", true, "Enable package-level coverage statistics. Requires Go 1.2+ and the go cover tool.")
 	flag.IntVar(&depth, "depth", -1, "The directory scanning depth. If -1, scan infinitely deep directory structures. 0: scan working directory. 1+: Scan into nested directories, limited to value.")
@@ -73,7 +71,7 @@ func main() {
 
 	parser := parser.NewParser(parser.ParsePackageResults)
 	tester := executor.NewConcurrentTester(shell)
-	tester.SetBatchSize(packages)
+	tester.SetBatchSize(parallelPackages)
 
 	longpollChan := make(chan chan string)
 	executor := executor.NewExecutor(tester, parser, longpollChan)
@@ -89,9 +87,9 @@ func main() {
 
 func browserCmd() (string, bool) {
 	browser := map[string]string{
-		"darwin": "open",
-		"linux":  "xdg-open",
-		"win32":  "start",
+		"darwin":  "open",
+		"linux":   "xdg-open",
+		"windows": "start",
 	}
 	cmd, ok := browser[runtime.GOOS]
 	return cmd, ok
@@ -129,7 +127,11 @@ func extractPackages(folderList messaging.Folders) []*contract.Package {
 	packageList := []*contract.Package{}
 	for _, folder := range folderList {
 		hasImportCycle := testFilesImportTheirOwnPackage(folder.Path)
-		packageList = append(packageList, contract.NewPackage(folder, hasImportCycle))
+		packageName := resolvePackageName(folder.Path)
+		packageList = append(
+			packageList,
+			contract.NewPackage(folder, packageName, hasImportCycle),
+		)
 	}
 	return packageList
 }
@@ -138,24 +140,6 @@ func extractRoot(folderList messaging.Folders, packageList []*contract.Package) 
 	path := packageList[0].Path
 	folder := folderList[path]
 	return folder.Root
-}
-
-// This method exists because of a bug in the go cover tool that
-// causes an infinite loop when you try to run `go test -cover`
-// on a package that has an import cycle defined in one of it's
-// test files. Yuck.
-func testFilesImportTheirOwnPackage(packagePath string) bool {
-	meta, err := build.ImportDir(packagePath, build.AllowBinary)
-	if err != nil {
-		return false
-	}
-
-	for _, dependency := range meta.TestImports {
-		if dependency == meta.ImportPath {
-			return true
-		}
-	}
-	return false
 }
 
 func createListener() net.Listener {
@@ -284,7 +268,7 @@ var (
 	host              string
 	gobin             string
 	nap               time.Duration
-	packages          int
+	parallelPackages  int
 	cover             bool
 	depth             int
 	timeout           string
@@ -304,4 +288,6 @@ const (
 	pleaseUpgradeGoVersion     = "Go version is less that 1.2 (%s), please upgrade to the latest stable version to enable coverage reporting.\n"
 	coverToolMissing           = "Go cover tool is not installed or not accessible: for Go < 1.5 run`go get golang.org/x/tools/cmd/cover`\n For >= Go 1.5 run `go install $GOROOT/src/cmd/cover`\n"
 	reportDirectoryUnavailable = "Could not find or create the coverage report directory (at: '%s'). You probably won't see any coverage statistics...\n"
+	separator                  = string(filepath.Separator)
+	endGoPath                  = separator + "src" + separator
 )

@@ -1,6 +1,6 @@
 # This filter is compiled to all_instructions.bpf by the `bpf_asm`
 # tool, which can be found in the linux kernel source tree under
-# tools/net.
+# tools/bpf.
 
 # Load immediate
 ld #42
@@ -60,7 +60,7 @@ xor x
 # !A
 neg
 
-# Jumps
+# Jump A <op> constant
 ja end
 jeq #42,prev,end
 jne #42,end
@@ -69,6 +69,15 @@ jle #42,end
 jgt #42,prev,end
 jge #42,prev,end
 jset #42,prev,end
+
+# Jump A <op> X
+jeq x,prev,end
+jne x,end
+jlt x,end
+jle x,end
+jgt x,prev,end
+jge x,prev,end
+jset x,prev,end
 
 # Register transfers
 tax

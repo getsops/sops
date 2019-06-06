@@ -345,36 +345,8 @@ EachPacket:
 
 		switch pkt := p.(type) {
 		case *packet.UserId:
-			// Make a new Identity object, that we might wind up throwing away.
-			// We'll only add it if we get a valid self-signature over this
-			// userID.
-			current := new(Identity)
-			current.Name = pkt.Id
-			current.UserId = pkt
-
-			for {
-				p, err = packets.Next()
-				if err == io.EOF {
-					break EachPacket
-				} else if err != nil {
-					return nil, err
-				}
-
-				sig, ok := p.(*packet.Signature)
-				if !ok {
-					packets.Unread(p)
-					continue EachPacket
-				}
-
-				if (sig.SigType == packet.SigTypePositiveCert || sig.SigType == packet.SigTypeGenericCert) && sig.IssuerKeyId != nil && *sig.IssuerKeyId == e.PrimaryKey.KeyId {
-					if err = e.PrimaryKey.VerifyUserIdSignature(pkt.Id, e.PrimaryKey, sig); err != nil {
-						return nil, errors.StructuralError("user ID self-signature invalid: " + err.Error())
-					}
-					current.SelfSignature = sig
-					e.Identities[pkt.Id] = current
-				} else {
-					current.Signatures = append(current.Signatures, sig)
-				}
+			if err := addUserID(e, packets, pkt); err != nil {
+				return nil, err
 			}
 		case *packet.Signature:
 			if pkt.SigType == packet.SigTypeKeyRevocation {
@@ -426,6 +398,42 @@ EachPacket:
 	return e, nil
 }
 
+func addUserID(e *Entity, packets *packet.Reader, pkt *packet.UserId) error {
+	// Make a new Identity object, that we might wind up throwing away.
+	// We'll only add it if we get a valid self-signature over this
+	// userID.
+	identity := new(Identity)
+	identity.Name = pkt.Id
+	identity.UserId = pkt
+
+	for {
+		p, err := packets.Next()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
+
+		sig, ok := p.(*packet.Signature)
+		if !ok {
+			packets.Unread(p)
+			break
+		}
+
+		if (sig.SigType == packet.SigTypePositiveCert || sig.SigType == packet.SigTypeGenericCert) && sig.IssuerKeyId != nil && *sig.IssuerKeyId == e.PrimaryKey.KeyId {
+			if err = e.PrimaryKey.VerifyUserIdSignature(pkt.Id, e.PrimaryKey, sig); err != nil {
+				return errors.StructuralError("user ID self-signature invalid: " + err.Error())
+			}
+			identity.SelfSignature = sig
+			e.Identities[pkt.Id] = identity
+		} else {
+			identity.Signatures = append(identity.Signatures, sig)
+		}
+	}
+
+	return nil
+}
+
 func addSubkey(e *Entity, packets *packet.Reader, pub *packet.PublicKey, priv *packet.PrivateKey) error {
 	var subKey Subkey
 	subKey.PublicKey = pub
@@ -457,7 +465,8 @@ func addSubkey(e *Entity, packets *packet.Reader, pub *packet.PublicKey, priv *p
 		case packet.SigTypeSubkeyRevocation:
 			subKey.Sig = sig
 		case packet.SigTypeSubkeyBinding:
-			if subKey.Sig == nil {
+
+			if shouldReplaceSubkeySig(subKey.Sig, sig) {
 				subKey.Sig = sig
 			}
 		}
@@ -472,6 +481,22 @@ func addSubkey(e *Entity, packets *packet.Reader, pub *packet.PublicKey, priv *p
 	return nil
 }
 
+func shouldReplaceSubkeySig(existingSig, potentialNewSig *packet.Signature) bool {
+	if potentialNewSig == nil {
+		return false
+	}
+
+	if existingSig == nil {
+		return true
+	}
+
+	if existingSig.SigType == packet.SigTypeSubkeyRevocation {
+		return false // never override a revocation signature
+	}
+
+	return potentialNewSig.CreationTime.After(existingSig.CreationTime)
+}
+
 const defaultRSAKeyBits = 2048
 
 // NewEntity returns an Entity that contains a fresh RSA/RSA keypair with a
@@ -479,7 +504,7 @@ const defaultRSAKeyBits = 2048
 // which may be empty but must not contain any of "()<>\x00".
 // If config is nil, sensible defaults will be used.
 func NewEntity(name, comment, email string, config *packet.Config) (*Entity, error) {
-	currentTime := config.Now()
+	creationTime := config.Now()
 
 	bits := defaultRSAKeyBits
 	if config != nil && config.RSABits != 0 {
@@ -500,8 +525,8 @@ func NewEntity(name, comment, email string, config *packet.Config) (*Entity, err
 	}
 
 	e := &Entity{
-		PrimaryKey: packet.NewRSAPublicKey(currentTime, &signingPriv.PublicKey),
-		PrivateKey: packet.NewRSAPrivateKey(currentTime, signingPriv),
+		PrimaryKey: packet.NewRSAPublicKey(creationTime, &signingPriv.PublicKey),
+		PrivateKey: packet.NewRSAPrivateKey(creationTime, signingPriv),
 		Identities: make(map[string]*Identity),
 	}
 	isPrimaryId := true
@@ -509,7 +534,7 @@ func NewEntity(name, comment, email string, config *packet.Config) (*Entity, err
 		Name:   uid.Id,
 		UserId: uid,
 		SelfSignature: &packet.Signature{
-			CreationTime: currentTime,
+			CreationTime: creationTime,
 			SigType:      packet.SigTypePositiveCert,
 			PubKeyAlgo:   packet.PubKeyAlgoRSA,
 			Hash:         config.Hash(),
@@ -538,10 +563,10 @@ func NewEntity(name, comment, email string, config *packet.Config) (*Entity, err
 
 	e.Subkeys = make([]Subkey, 1)
 	e.Subkeys[0] = Subkey{
-		PublicKey:  packet.NewRSAPublicKey(currentTime, &encryptingPriv.PublicKey),
-		PrivateKey: packet.NewRSAPrivateKey(currentTime, encryptingPriv),
+		PublicKey:  packet.NewRSAPublicKey(creationTime, &encryptingPriv.PublicKey),
+		PrivateKey: packet.NewRSAPrivateKey(creationTime, encryptingPriv),
 		Sig: &packet.Signature{
-			CreationTime:              currentTime,
+			CreationTime:              creationTime,
 			SigType:                   packet.SigTypeSubkeyBinding,
 			PubKeyAlgo:                packet.PubKeyAlgoRSA,
 			Hash:                      config.Hash(),

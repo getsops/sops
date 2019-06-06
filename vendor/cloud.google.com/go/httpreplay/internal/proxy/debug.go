@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package proxy
 
 import (
-	"bytes"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -51,13 +47,4 @@ func logHeaders(hs http.Header) {
 	for k, v := range hs {
 		log.Printf("    %s: %s", k, v)
 	}
-}
-
-func (r *requestBody) String() string {
-	buf := &bytes.Buffer{}
-	fmt.Fprintf(buf, "media type: %q\n", r.mediaType)
-	for i, p := range r.parts {
-		fmt.Fprintf(buf, "part #%d: %q\n", i, string(p))
-	}
-	return buf.String()
 }

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewStreamingPoliciesClientWithBaseURI(baseURI string, subscriptionID string
 // streamingPolicyName - the Streaming Policy name.
 // parameters - the request parameters
 func (client StreamingPoliciesClient) Create(ctx context.Context, resourceGroupName string, accountName string, streamingPolicyName string, parameters StreamingPolicy) (result StreamingPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingPoliciesClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.StreamingPolicyProperties", Name: validation.Null, Rule: false,
@@ -161,6 +172,16 @@ func (client StreamingPoliciesClient) CreateResponder(resp *http.Response) (resu
 // accountName - the Media Services account name.
 // streamingPolicyName - the Streaming Policy name.
 func (client StreamingPoliciesClient) Delete(ctx context.Context, resourceGroupName string, accountName string, streamingPolicyName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingPoliciesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, accountName, streamingPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.StreamingPoliciesClient", "Delete", nil, "Failure preparing request")
@@ -229,6 +250,16 @@ func (client StreamingPoliciesClient) DeleteResponder(resp *http.Response) (resu
 // accountName - the Media Services account name.
 // streamingPolicyName - the Streaming Policy name.
 func (client StreamingPoliciesClient) Get(ctx context.Context, resourceGroupName string, accountName string, streamingPolicyName string) (result StreamingPolicy, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, accountName, streamingPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "media.StreamingPoliciesClient", "Get", nil, "Failure preparing request")
@@ -299,8 +330,18 @@ func (client StreamingPoliciesClient) GetResponder(resp *http.Response) (result 
 // filter - restricts the set of items returned.
 // top - specifies a non-negative integer n that limits the number of items returned from a collection. The
 // service returns the number of available items up to but not greater than the specified value n.
-// orderby - specifies the the key by which the result collection should be ordered.
+// orderby - specifies the key by which the result collection should be ordered.
 func (client StreamingPoliciesClient) List(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, orderby string) (result StreamingPolicyCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingPoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.spc.Response.Response != nil {
+				sc = result.spc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, accountName, filter, top, orderby)
 	if err != nil {
@@ -374,8 +415,8 @@ func (client StreamingPoliciesClient) ListResponder(resp *http.Response) (result
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client StreamingPoliciesClient) listNextResults(lastResults StreamingPolicyCollection) (result StreamingPolicyCollection, err error) {
-	req, err := lastResults.streamingPolicyCollectionPreparer()
+func (client StreamingPoliciesClient) listNextResults(ctx context.Context, lastResults StreamingPolicyCollection) (result StreamingPolicyCollection, err error) {
+	req, err := lastResults.streamingPolicyCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "media.StreamingPoliciesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -396,6 +437,16 @@ func (client StreamingPoliciesClient) listNextResults(lastResults StreamingPolic
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client StreamingPoliciesClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, filter string, top *int32, orderby string) (result StreamingPolicyCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/StreamingPoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, accountName, filter, top, orderby)
 	return
 }

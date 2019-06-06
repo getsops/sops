@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,7 +48,18 @@ func NewAPIReleaseClientWithBaseURI(baseURI string, subscriptionID string) APIRe
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 // parameters - create parameters.
-func (client APIReleaseClient) Create(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string, parameters APIReleaseContract) (result APIReleaseContract, err error) {
+// ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
+func (client APIReleaseClient) Create(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string, parameters APIReleaseContract, ifMatch string) (result APIReleaseContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -56,15 +68,15 @@ func (client APIReleaseClient) Create(ctx context.Context, resourceGroupName str
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: releaseID,
 			Constraints: []validation.Constraint{{Target: "releaseID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "releaseID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "releaseID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "releaseID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIReleaseClient", "Create", err.Error())
 	}
 
-	req, err := client.CreatePreparer(ctx, resourceGroupName, serviceName, apiid, releaseID, parameters)
+	req, err := client.CreatePreparer(ctx, resourceGroupName, serviceName, apiid, releaseID, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.APIReleaseClient", "Create", nil, "Failure preparing request")
 		return
@@ -86,7 +98,7 @@ func (client APIReleaseClient) Create(ctx context.Context, resourceGroupName str
 }
 
 // CreatePreparer prepares the Create request.
-func (client APIReleaseClient) CreatePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string, parameters APIReleaseContract) (*http.Request, error) {
+func (client APIReleaseClient) CreatePreparer(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string, parameters APIReleaseContract, ifMatch string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"apiId":             autorest.Encode("path", apiid),
 		"releaseId":         autorest.Encode("path", releaseID),
@@ -107,6 +119,10 @@ func (client APIReleaseClient) CreatePreparer(ctx context.Context, resourceGroup
 		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases/{releaseId}", pathParameters),
 		autorest.WithJSON(parameters),
 		autorest.WithQueryParameters(queryParameters))
+	if len(ifMatch) > 0 {
+		preparer = autorest.DecoratePreparer(preparer,
+			autorest.WithHeader("If-Match", autorest.String(ifMatch)))
+	}
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
@@ -139,6 +155,16 @@ func (client APIReleaseClient) CreateResponder(resp *http.Response) (result APIR
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIReleaseClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -147,11 +173,11 @@ func (client APIReleaseClient) Delete(ctx context.Context, resourceGroupName str
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: releaseID,
 			Constraints: []validation.Constraint{{Target: "releaseID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "releaseID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "releaseID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "releaseID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIReleaseClient", "Delete", err.Error())
 	}
 
@@ -226,6 +252,16 @@ func (client APIReleaseClient) DeleteResponder(resp *http.Response) (result auto
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 func (client APIReleaseClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string) (result APIReleaseContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -234,11 +270,11 @@ func (client APIReleaseClient) Get(ctx context.Context, resourceGroupName string
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: releaseID,
 			Constraints: []validation.Constraint{{Target: "releaseID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "releaseID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "releaseID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "releaseID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIReleaseClient", "Get", err.Error())
 	}
 
@@ -313,6 +349,16 @@ func (client APIReleaseClient) GetResponder(resp *http.Response) (result APIRele
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // releaseID - release identifier within an API. Must be unique in the current API Management service instance.
 func (client APIReleaseClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -321,11 +367,11 @@ func (client APIReleaseClient) GetEntityTag(ctx context.Context, resourceGroupNa
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: releaseID,
 			Constraints: []validation.Constraint{{Target: "releaseID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "releaseID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "releaseID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "releaseID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIReleaseClient", "GetEntityTag", err.Error())
 	}
 
@@ -399,13 +445,23 @@ func (client APIReleaseClient) GetEntityTagResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // apiid - API identifier. Must be unique in the current API Management service instance.
-// filter - | Field | Supported operators    | Supported functions                         |
-// |-------|------------------------|---------------------------------------------|
-// | name  | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// |notes|ge le eq ne gt lt|substringof contains startswith endswith|
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |notes | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIReleaseClient) List(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIReleaseCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.List")
+		defer func() {
+			sc := -1
+			if result.arc.Response.Response != nil {
+				sc = result.arc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -414,7 +470,7 @@ func (client APIReleaseClient) List(ctx context.Context, resourceGroupName strin
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
@@ -498,8 +554,8 @@ func (client APIReleaseClient) ListResponder(resp *http.Response) (result APIRel
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client APIReleaseClient) listNextResults(lastResults APIReleaseCollection) (result APIReleaseCollection, err error) {
-	req, err := lastResults.aPIReleaseCollectionPreparer()
+func (client APIReleaseClient) listNextResults(ctx context.Context, lastResults APIReleaseCollection) (result APIReleaseCollection, err error) {
+	req, err := lastResults.aPIReleaseCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIReleaseClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -520,6 +576,16 @@ func (client APIReleaseClient) listNextResults(lastResults APIReleaseCollection)
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIReleaseClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIReleaseCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }
@@ -534,6 +600,16 @@ func (client APIReleaseClient) ListComplete(ctx context.Context, resourceGroupNa
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIReleaseClient) Update(ctx context.Context, resourceGroupName string, serviceName string, apiid string, releaseID string, parameters APIReleaseContract, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIReleaseClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -542,11 +618,11 @@ func (client APIReleaseClient) Update(ctx context.Context, resourceGroupName str
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "apiid", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "apiid", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "apiid", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: releaseID,
 			Constraints: []validation.Constraint{{Target: "releaseID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "releaseID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "releaseID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "releaseID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIReleaseClient", "Update", err.Error())
 	}
 

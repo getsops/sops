@@ -12,7 +12,7 @@
   "baseUrl": "https://abusiveexperiencereport.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Abusive Experience Report",
-  "description": "View Abusive Experience Report data, and get a list of sites that have a significant number of abusive experiences.",
+  "description": "Views Abusive Experience Report data, and gets a list of sites that have a significant number of abusive experiences.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/abusive-experience-report/",
   "fullyEncodeReservedExpansion": true,
@@ -153,11 +153,11 @@
       }
     }
   },
-  "revision": "20180807",
+  "revision": "20181017",
   "rootUrl": "https://abusiveexperiencereport.googleapis.com/",
   "schemas": {
     "SiteSummaryResponse": {
-      "description": "Response message for GetSiteSummary.\nDo not confuse with same message in google.ads.experiencereport.v1",
+      "description": "Response message for GetSiteSummary.",
       "id": "SiteSummaryResponse",
       "properties": {
         "abusiveStatus": {
