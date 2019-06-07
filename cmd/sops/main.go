@@ -120,7 +120,7 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				if c.Bool("verbose") {
+				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
 				configPath, err := config.FindConfigFile(".")
@@ -171,7 +171,7 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				if c.Bool("verbose") {
+				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
 				err := keyservicecmd.Run(keyservicecmd.Opts{

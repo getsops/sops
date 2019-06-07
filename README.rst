@@ -777,8 +777,6 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
 
 .. code:: yaml
 
-   creation_rules:
-      - pgp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
    destination_rules:
       - s3_bucket: "sops-secrets"
         path_regex: s3/*

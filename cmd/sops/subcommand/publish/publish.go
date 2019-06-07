@@ -51,7 +51,7 @@ func Run(opts Opts) error {
 		return err
 	}
 	if conf.Destination == nil {
-		return errors.New("No destination configured for this file.")
+		return errors.New("no destination configured for this file")
 	}
 
 	// Check that this is a sops-encrypted file
