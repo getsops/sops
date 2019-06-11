@@ -1,6 +1,22 @@
 Changelog
 =========
 
+3.3.1
+-----
+
+Bug fixes:
+
+* Make sure the pgp key fingerprint is longer than 16 characters before
+  slicing it. (#463)
+* Allow for `--set` value to be a string. (#461)
+
+Project changes:
+
+* Using `develop` as a staging branch to create releases off of. What
+  is in `master` is now the current stable release.
+* Upgrade to using Go 1.12 to build sops
+* Updated all vendored packages
+
 3.3.0
 -----
 
