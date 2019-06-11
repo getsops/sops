@@ -417,9 +417,6 @@ to refine the access control of a given KMS master key.
 When creating a new file, you can specify encryption context in the
 ``--encryption-context`` flag by comma separated list of key-value pairs:
 
-When creating a new file, you can specify encryption context in the
-``--encryption-context`` flag by comma separated list of key-value pairs:
-
 .. code:: bash
 
 	$ sops --encryption-context Environment:production,Role:web-server test.dev.yaml
